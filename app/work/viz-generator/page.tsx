@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import CaseHero from '@/components/case-study/CaseHero';
+import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
+import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
+import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
 import MetaInfo from '@/components/case-study/MetaInfo';
 import { getProjectBySlug } from '@/lib/projects';
@@ -17,12 +19,16 @@ export default function VizGeneratorPage() {
   }
 
   return (
-    <div>
-      <CaseHero
+    <CaseStudyWrapper>
+      <CaseHeroAnimated
+        coverImage={project.coverImage}
+        alt={project.title}
+      />
+
+      <CaseInfo
         title={project.title}
         role={project.role}
         timeline={project.timeline}
-        coverImage={project.coverImage}
         tags={project.tags}
       />
 
@@ -170,6 +176,6 @@ export default function VizGeneratorPage() {
           informed better design choices, and design thinking led to cleaner code architecture.
         </p>
       </CaseSection>
-    </div>
+    </CaseStudyWrapper>
   );
 }

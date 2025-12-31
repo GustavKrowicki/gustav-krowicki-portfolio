@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import CaseHero from '@/components/case-study/CaseHero';
+import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
+import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
+import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
 import MetaInfo from '@/components/case-study/MetaInfo';
 import ProcessStep from '@/components/case-study/ProcessStep';
@@ -19,12 +21,16 @@ export default function LegoPage() {
   }
 
   return (
-    <div>
-      <CaseHero
+    <CaseStudyWrapper>
+      <CaseHeroAnimated
+        coverImage={project.coverImage}
+        alt={project.title}
+      />
+
+      <CaseInfo
         title={project.title}
         role={project.role}
         timeline={project.timeline}
-        coverImage={project.coverImage}
         tags={project.tags}
       />
 
@@ -161,6 +167,6 @@ export default function LegoPage() {
           isn't confident, which paradoxically increases their overall trust in the system.
         </p>
       </CaseSection>
-    </div>
+    </CaseStudyWrapper>
   );
 }

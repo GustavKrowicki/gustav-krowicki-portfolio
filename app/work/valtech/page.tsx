@@ -1,5 +1,7 @@
 import { Metadata } from 'next';
-import CaseHero from '@/components/case-study/CaseHero';
+import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
+import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
+import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
 import MetaInfo from '@/components/case-study/MetaInfo';
 import QuoteBlock from '@/components/case-study/QuoteBlock';
@@ -18,12 +20,16 @@ export default function ValtechPage() {
   }
 
   return (
-    <div>
-      <CaseHero
+    <CaseStudyWrapper>
+      <CaseHeroAnimated
+        coverImage={project.coverImage}
+        alt={project.title}
+      />
+
+      <CaseInfo
         title={project.title}
         role={project.role}
         timeline={project.timeline}
-        coverImage={project.coverImage}
         tags={project.tags}
       />
 
@@ -146,6 +152,6 @@ export default function ValtechPage() {
           solutions that addressed real user needs while supporting strategic business objectives.
         </p>
       </CaseSection>
-    </div>
+    </CaseStudyWrapper>
   );
 }
