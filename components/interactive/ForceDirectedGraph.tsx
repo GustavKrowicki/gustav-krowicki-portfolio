@@ -15,6 +15,10 @@ export interface GraphLink {
   target: string;
 }
 
+// D3 simulation node type
+interface SimulationNode extends GraphNode, d3.SimulationNodeDatum {
+}
+
 interface ForceDirectedGraphProps {
   nodes: GraphNode[];
   links: GraphLink[];
@@ -39,7 +43,7 @@ export default function ForceDirectedGraph({
   const svgRef = useRef<SVGSVGElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
   const [dimensions, setDimensions] = useState({ width: 800, height: 600 });
-  const simulationRef = useRef<d3.Simulation<any, any> | null>(null);
+  const simulationRef = useRef<d3.Simulation<SimulationNode, undefined> | null>(null);
 
   useEffect(() => {
     // Handle responsive sizing
@@ -69,8 +73,8 @@ export default function ForceDirectedGraph({
     // Create container group
     const g = svg.append('g');
 
-    // Prepare nodes data
-    let allNodes = nodes.map(d => ({ ...d }));
+    // Prepare nodes data - cast to SimulationNode type
+    let allNodes: SimulationNode[] = nodes.map(d => ({ ...d }));
 
     // Add center node if needed
     if (showCenter && centerLabel) {
@@ -93,9 +97,9 @@ export default function ForceDirectedGraph({
     }
 
     // Create force simulation
-    const simulation = d3.forceSimulation(allNodes)
+    const simulation = d3.forceSimulation<SimulationNode>(allNodes)
       .force('link', d3.forceLink(linkData)
-        .id((d: any) => d.id)
+        .id((d) => (d as SimulationNode).id)
         .distance(showCenter ? 200 : 100)
         .strength(showCenter ? 0.5 : 0.3)
       )
@@ -122,17 +126,17 @@ export default function ForceDirectedGraph({
 
     // Create node groups
     const node = g.append('g')
-      .selectAll('g')
+      .selectAll<SVGGElement, SimulationNode>('g')
       .data(allNodes)
       .join('g')
-      .call(d3.drag<SVGGElement, any>()
+      .call(d3.drag<SVGGElement, SimulationNode>()
         .on('start', dragstarted)
         .on('drag', dragged)
         .on('end', dragended)
       );
 
     // Add circles or special styling for center node
-    node.each(function(d: any) {
+    node.each(function(d: SimulationNode) {
       const nodeGroup = d3.select(this);
 
       if (d.category === 'center') {
@@ -183,7 +187,7 @@ export default function ForceDirectedGraph({
     // Add hover effects
     node
       .style('cursor', 'grab')
-      .on('mouseenter', function(event, d: any) {
+      .on('mouseenter', function(event, d: SimulationNode) {
         const nodeGroup = d3.select(this);
 
         if (d.category === 'center') {
@@ -204,7 +208,7 @@ export default function ForceDirectedGraph({
             .attr('font-weight', '700');
         }
       })
-      .on('mouseleave', function(event, d: any) {
+      .on('mouseleave', function(event, d: SimulationNode) {
         const nodeGroup = d3.select(this);
 
         if (d.category === 'center') {
@@ -234,23 +238,23 @@ export default function ForceDirectedGraph({
         .attr('x2', (d: any) => d.target.x)
         .attr('y2', (d: any) => d.target.y);
 
-      node.attr('transform', (d: any) => `translate(${d.x},${d.y})`);
+      node.attr('transform', (d: SimulationNode) => `translate(${d.x},${d.y})`);
     });
 
     // Drag functions
-    function dragstarted(event: any, d: any) {
+    function dragstarted(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       if (!event.active) simulation.alphaTarget(0.3).restart();
       d.fx = d.x;
       d.fy = d.y;
       d3.select(event.sourceEvent.target.parentNode).style('cursor', 'grabbing');
     }
 
-    function dragged(event: any, d: any) {
+    function dragged(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       d.fx = event.x;
       d.fy = event.y;
     }
 
-    function dragended(event: any, d: any) {
+    function dragended(event: d3.D3DragEvent<SVGGElement, SimulationNode, SimulationNode>, d: SimulationNode) {
       if (!event.active) simulation.alphaTarget(0);
       // Keep nodes fixed where user dropped them
       // d.fx and d.fy are already set from dragged()
