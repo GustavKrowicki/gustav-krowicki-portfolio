@@ -2,6 +2,7 @@ import { Metadata } from 'next';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import InterestMap from '@/components/interactive/InterestMap';
+import Bookshelf3D from '@/components/interactive/Bookshelf3D';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -58,6 +59,15 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold mt-16 mb-6">Interests & Skills</h2>
 
           <InterestMap />
+
+          <h2 className="text-3xl font-bold mt-16 mb-6">Reading List</h2>
+
+          <p className="mb-8">
+            Books I've read recently. I'm interested in design, psychology, business strategy,
+            and how technology shapes our work and lives.
+          </p>
+
+          <Bookshelf3D />
 
           <div className="mt-16 pt-8 border-t border-neutral-200">
             <h2 className="text-2xl font-bold mb-4">Currently</h2>
