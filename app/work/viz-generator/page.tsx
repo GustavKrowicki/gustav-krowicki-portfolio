@@ -4,6 +4,7 @@ import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
 import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
 import MetaInfo from '@/components/case-study/MetaInfo';
+import WorkflowDiagram from '@/components/interactive/WorkflowDiagram';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
@@ -95,6 +96,10 @@ export default function VizGeneratorPage() {
           simple network diagrams. This kept the tool manageable while covering most
           common use cases.
         </p>
+      </CaseSection>
+
+      <CaseSection title="How It Works" maxWidth="container">
+        <WorkflowDiagram />
       </CaseSection>
 
       <CaseSection title="Technical Implementation" maxWidth="content" background="gray">

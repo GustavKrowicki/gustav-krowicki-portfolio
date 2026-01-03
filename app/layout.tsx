@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import "reactflow/dist/style.css";
 import LayoutContent from "@/components/ui/LayoutContent";
 
 const inter = Inter({

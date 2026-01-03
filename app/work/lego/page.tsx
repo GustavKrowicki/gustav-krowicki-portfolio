@@ -3,9 +3,9 @@ import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
 import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
-import MetaInfo from '@/components/case-study/MetaInfo';
 import ProcessStep from '@/components/case-study/ProcessStep';
 import QuoteBlock from '@/components/case-study/QuoteBlock';
+import ChallengeMap from '@/components/interactive/ChallengeMap';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
@@ -47,28 +47,8 @@ export default function LegoPage() {
         </p>
       </CaseSection>
 
-      <CaseSection background="gray">
-        <div className="grid md:grid-cols-3 gap-8">
-          <MetaInfo
-            role={project.role}
-            timeline={project.timeline}
-            tools={project.tools}
-            team={project.team}
-          />
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold mb-4">The Challenge</h3>
-            <p className="text-neutral-700 leading-relaxed mb-4">
-              Designing for ML-assisted tools requires balancing multiple constraints:
-              the uncertainty of algorithm outputs, the expectations of creative professionals,
-              stakeholder needs, and organizational priorities.
-            </p>
-            <p className="text-neutral-700 leading-relaxed">
-              This isn't a traditional interface design problem—it requires understanding
-              complex workflows, building trust in AI systems, and designing for scenarios
-              where the algorithm might fail or produce unexpected results.
-            </p>
-          </div>
-        </div>
+      <CaseSection title="Design Challenges" maxWidth="container" background="gray">
+        <ChallengeMap />
       </CaseSection>
 
       <CaseSection title="Research & Discovery" maxWidth="content">
@@ -123,29 +103,6 @@ export default function LegoPage() {
             description="Refined the interface based on user feedback, focusing on transparency, control, and trust-building. Designed for both successful predictions and edge cases where the algorithm struggles."
           />
         </div>
-      </CaseSection>
-
-      <CaseSection title="Design Approach" maxWidth="content">
-        <h3 className="text-2xl font-semibold mb-4">Transparency & Control</h3>
-        <p>
-          The interface makes ML recommendations visible but never automatic. Designers can
-          see why the algorithm made a suggestion, adjust parameters, and always maintain
-          final control over decisions.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Progressive Disclosure</h3>
-        <p>
-          Rather than overwhelming users with all ML capabilities at once, the interface
-          progressively reveals features as users gain confidence. This helps build trust
-          and prevents cognitive overload.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Graceful Degradation</h3>
-        <p>
-          The tool is designed to work even when ML predictions are uncertain or unavailable.
-          This ensures designers can continue their work without disruption while the system
-          learns and improves.
-        </p>
       </CaseSection>
 
       <CaseSection title="Impact & Learnings" maxWidth="content" background="gray">

@@ -1,6 +1,7 @@
 import { Metadata } from 'next';
 import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
+import InterestMap from '@/components/interactive/InterestMap';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -54,31 +55,9 @@ export default function AboutPage() {
             how these tools change workflows and what new patterns they enable.
           </p>
 
-          <h2 className="text-3xl font-bold mt-16 mb-6">Skills & Tools</h2>
+          <h2 className="text-3xl font-bold mt-16 mb-6">Interests & Skills</h2>
 
-          <div className="grid md:grid-cols-2 gap-8 mt-8">
-            <div>
-              <h3 className="font-semibold mb-3">Design</h3>
-              <ul className="space-y-2 text-neutral-600">
-                <li>User Research & Testing</li>
-                <li>Product Strategy</li>
-                <li>Interface Design</li>
-                <li>Prototyping</li>
-                <li>Design Systems</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold mb-3">Tools</h3>
-              <ul className="space-y-2 text-neutral-600">
-                <li>Figma</li>
-                <li>Miro</li>
-                <li>React / TypeScript</li>
-                <li>D3.js</li>
-                <li>Next.js</li>
-              </ul>
-            </div>
-          </div>
+          <InterestMap />
 
           <div className="mt-16 pt-8 border-t border-neutral-200">
             <h2 className="text-2xl font-bold mb-4">Currently</h2>
