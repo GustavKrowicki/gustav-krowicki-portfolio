@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export default function AboutPage() {
   return (
     <div className="py-24">
-      <Container maxWidth="content">
+      <Container maxWidth="container">
         <h1 className="text-5xl md:text-6xl font-bold mb-12">About</h1>
 
         <div className="space-y-8 text-lg leading-relaxed text-neutral-700">

@@ -1,15 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { AnimatePresence } from 'framer-motion';
 import Bookshelf3DScene from './Bookshelf3DScene';
-import BookDetailModal from './BookDetailModal';
 import { parseCSV } from '@/lib/utils/csvParser';
 import type { BookData } from '@/lib/utils/csvParser';
 
 export default function Bookshelf3D() {
   const [books, setBooks] = useState<BookData[]>([]);
-  const [selectedBook, setSelectedBook] = useState<BookData | null>(null);
+  const [expandedBookId, setExpandedBookId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -44,17 +42,17 @@ export default function Bookshelf3D() {
     loadBooks();
   }, []);
 
-  // Handle ESC key to close modal
+  // Handle ESC key to collapse expanded book
   useEffect(() => {
     function handleKeyDown(event: KeyboardEvent) {
-      if (event.key === 'Escape' && selectedBook) {
-        setSelectedBook(null);
+      if (event.key === 'Escape' && expandedBookId) {
+        setExpandedBookId(null);
       }
     }
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [selectedBook]);
+  }, [expandedBookId]);
 
   if (loading) {
     return (
@@ -91,14 +89,18 @@ export default function Bookshelf3D() {
       {/* Instructions */}
       <div className="mb-4 text-center">
         <p className="text-neutral-600 text-sm">
-          Scroll horizontally to browse • Click a book to view details • Hover for preview
+          Scroll horizontally to browse • Click a book to pull it out • Hover for preview
         </p>
       </div>
 
       {/* 3D Scene */}
       <Bookshelf3DScene
         books={books}
-        onBookClick={setSelectedBook}
+        expandedBookId={expandedBookId}
+        onBookClick={(book) => {
+          // Toggle: if same book clicked, collapse it; otherwise expand new book
+          setExpandedBookId(prev => prev === book.id ? null : book.id);
+        }}
       />
 
       {/* Book count */}
@@ -107,16 +109,6 @@ export default function Bookshelf3D() {
           {books.length} {books.length === 1 ? 'book' : 'books'} read
         </p>
       </div>
-
-      {/* Modal with AnimatePresence */}
-      <AnimatePresence>
-        {selectedBook && (
-          <BookDetailModal
-            book={selectedBook}
-            onClose={() => setSelectedBook(null)}
-          />
-        )}
-      </AnimatePresence>
     </div>
   );
 }

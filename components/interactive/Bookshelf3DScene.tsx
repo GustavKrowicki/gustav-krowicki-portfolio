@@ -5,33 +5,52 @@ import type { BookData } from '@/lib/utils/csvParser';
 
 interface Bookshelf3DSceneProps {
   books: BookData[];
+  expandedBookId: string | null;
   onBookClick: (book: BookData) => void;
 }
 
 export default function Bookshelf3DScene({
   books,
+  expandedBookId,
   onBookClick,
 }: Bookshelf3DSceneProps) {
   // Calculate total width needed for all books with spacing
   const bookSpacing = 0.7;
   const totalWidth = books.length * bookSpacing;
 
+  // Find the index of the expanded book
+  const selectedBookIndex = expandedBookId
+    ? books.findIndex(book => book.id === expandedBookId)
+    : null;
+
+  // Calculate horizontal offset for each book to make space for expanded book
+  const calculateOffset = (currentIndex: number, selectedIndex: number | null): number => {
+    if (selectedIndex === null) return 0;
+    const distance = Math.abs(currentIndex - selectedIndex);
+    if (distance === 0) return 0; // The selected book itself doesn't shift
+
+    const direction = currentIndex < selectedIndex ? -1 : 1;
+    const baseOffset = 0.8; // Base spacing to create room for rotated cover
+    const falloff = Math.pow(0.6, distance - 1); // Exponential falloff
+    return direction * baseOffset * falloff;
+  };
+
   return (
     <div className="w-full h-[600px] bg-gradient-to-b from-neutral-100 to-neutral-200 rounded-xl overflow-hidden">
       <Canvas
         camera={{
           position: [0, 0, 6],
-          fov: 45,
+          fov: 50,
         }}
         shadows
       >
         {/* Ambient light for overall scene illumination */}
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={0.8} />
 
         {/* Directional light for depth and shadows */}
         <directionalLight
           position={[5, 5, 5]}
-          intensity={0.8}
+          intensity={1.0}
           castShadow
           shadow-mapSize-width={2048}
           shadow-mapSize-height={2048}
@@ -59,13 +78,16 @@ export default function Bookshelf3DScene({
               const x = index * bookSpacing;
               const y = 0;
               const z = 0;
+              const isExpanded = expandedBookId === book.id;
+              const offsetX = calculateOffset(index, selectedBookIndex);
 
               return (
                 <Book3D
                   key={book.id}
                   book={book}
                   position={[x, y, z]}
-                  coverUrl={null}
+                  isExpanded={isExpanded}
+                  offsetX={offsetX}
                   onClick={() => onBookClick(book)}
                 />
               );

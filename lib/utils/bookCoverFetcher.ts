@@ -4,7 +4,7 @@ import type { BookData, CoverCache } from './csvParser';
  * Fetch a single book cover from Open Library API
  * Returns the cover URL if found, null otherwise
  */
-async function fetchBookCover(isbn13: string): Promise<string | null> {
+export async function fetchBookCover(isbn13: string): Promise<string | null> {
   if (!isbn13) return null;
 
   const url = `https://covers.openlibrary.org/b/isbn/${isbn13}-L.jpg`;
