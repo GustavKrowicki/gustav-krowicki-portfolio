@@ -2,11 +2,11 @@
 
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { Download } from 'lucide-react';
 import Container from './Container';
 import { cn } from '@/lib/utils';
 
 const navItems = [
-  { label: 'Work', href: '/work' },
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' }
 ];
@@ -42,6 +42,17 @@ export default function Header() {
                 </li>
               );
             })}
+            <li>
+              <a
+                href="/cv/CV-Gustav-Krowicki.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-2 text-base hover:opacity-70 transition-opacity"
+              >
+                <Download className="w-4 h-4" />
+                <span>Download CV</span>
+              </a>
+            </li>
           </ul>
         </nav>
       </Container>

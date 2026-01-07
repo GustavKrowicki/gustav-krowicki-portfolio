@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Download } from 'lucide-react';
 import Container from './Container';
 
 const socialLinks = [
@@ -7,9 +8,9 @@ const socialLinks = [
 ];
 
 const footerLinks = [
-  { label: 'Work', href: '/work' },
   { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' }
+  { label: 'Contact', href: '/contact' },
+  { label: 'Download CV', href: '/cv/CV-Gustav-Krowicki.pdf', external: true, icon: true }
 ];
 
 export default function Footer() {
@@ -31,12 +32,24 @@ export default function Footer() {
               <ul className="space-y-2">
                 {footerLinks.map((link) => (
                   <li key={link.href}>
-                    <Link
-                      href={link.href}
-                      className="text-neutral-600 hover:text-foreground transition-colors"
-                    >
-                      {link.label}
-                    </Link>
+                    {link.external ? (
+                      <a
+                        href={link.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 text-neutral-600 hover:text-foreground transition-colors"
+                      >
+                        {link.icon && <Download className="w-4 h-4" />}
+                        {link.label}
+                      </a>
+                    ) : (
+                      <Link
+                        href={link.href}
+                        className="text-neutral-600 hover:text-foreground transition-colors"
+                      >
+                        {link.label}
+                      </Link>
+                    )}
                   </li>
                 ))}
               </ul>
