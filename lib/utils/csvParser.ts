@@ -8,6 +8,7 @@ export interface BookData {
   pages: number;
   yearPublished: number;
   dateRead: string;
+  status: 'read' | 'currently-reading';
 }
 
 export interface CoverCache {
@@ -55,7 +56,7 @@ function cleanISBN(rawISBN: string): string {
 }
 
 /**
- * Parse Goodreads library export CSV and extract "read" books
+ * Parse Goodreads library export CSV and extract "read" and "currently-reading" books
  */
 export function parseCSV(csvText: string): BookData[] {
   const lines = csvText.split('\n').filter(line => line.trim());
@@ -68,8 +69,8 @@ export function parseCSV(csvText: string): BookData[] {
   const books: BookData[] = [];
 
   for (const line of dataLines) {
-    // Quick check if this is a "read" book
-    if (!line.includes(',read,')) continue;
+    // Quick check if this is a "read" or "currently-reading" book
+    if (!line.includes(',read,') && !line.includes(',currently-reading,')) continue;
 
     const values = parseCSVLine(line);
 
@@ -89,7 +90,7 @@ export function parseCSV(csvText: string): BookData[] {
     // 18: Exclusive Shelf
 
     const exclusiveShelf = values[18]?.trim();
-    if (exclusiveShelf !== 'read') continue;
+    if (exclusiveShelf !== 'read' && exclusiveShelf !== 'currently-reading') continue;
 
     const bookData: BookData = {
       id: values[0]?.trim() || '',
@@ -101,13 +102,19 @@ export function parseCSV(csvText: string): BookData[] {
       pages: parseInt(values[11]) || 0,
       yearPublished: parseInt(values[12]) || 0,
       dateRead: values[14]?.trim() || '',
+      status: exclusiveShelf as 'read' | 'currently-reading',
     };
 
     books.push(bookData);
   }
 
-  // Sort by date read (most recent first)
+  // Sort: currently-reading first, then by date read (most recent first)
   books.sort((a, b) => {
+    // Currently-reading books always come first
+    if (a.status === 'currently-reading' && b.status !== 'currently-reading') return -1;
+    if (a.status !== 'currently-reading' && b.status === 'currently-reading') return 1;
+
+    // For books with same status, sort by date read
     if (!a.dateRead) return 1;
     if (!b.dateRead) return -1;
     return new Date(b.dateRead).getTime() - new Date(a.dateRead).getTime();

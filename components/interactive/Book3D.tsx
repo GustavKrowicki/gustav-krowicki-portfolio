@@ -19,7 +19,10 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
   const groupRef = useRef<THREE.Group>(null);
   const meshRef = useRef<THREE.Mesh>(null);
   const [hovered, setHovered] = useState(false);
-  const [animationState, setAnimationState] = useState<AnimationState>('idle');
+  // Currently-reading books start in 'displayed' state, others start in 'idle'
+  const [animationState, setAnimationState] = useState<AnimationState>(
+    book.status === 'currently-reading' ? 'displayed' : 'idle'
+  );
   const [coverTexture, setCoverTexture] = useState<THREE.Texture | null>(null);
   const [coverLoading, setCoverLoading] = useState(false);
   const fallbackColor = generateColorFromTitle(book.title);
@@ -27,6 +30,9 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
 
   // Store the base position
   const basePosition = useRef(position);
+
+  // Track if this is a currently-reading book
+  const isCurrentlyReading = book.status === 'currently-reading';
 
   // Generate deterministic height variation (min: 2, max: 2.6)
   const bookHeight = (() => {
@@ -76,6 +82,18 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
   const targetRotationY = useRef(0);
   const targetEmissive = useRef(0);
   const targetOffsetX = useRef(0);
+
+  // Initialize position and rotation for currently-reading books on mount
+  useEffect(() => {
+    if (isCurrentlyReading && groupRef.current) {
+      // Position currently-reading books forward on the shelf with cover facing camera
+      groupRef.current.position.z = 3.5; // Further forward than expanded books
+      groupRef.current.position.y = 0; // On the shelf, same level as other books
+      // Rotate to show front cover directly facing camera
+      groupRef.current.rotation.y = -Math.PI / 2; // Front cover (+X face) faces forward
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Handle isExpanded state changes
   useEffect(() => {
@@ -153,24 +171,32 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
     if (!groupRef.current || !meshRef.current) return;
 
     // Set targets based on state
-    targetY.current = hovered && !isExpanded ? 0.3 : 0;
+    // Currently-reading books don't get hover lift
+    targetY.current = hovered && !isExpanded && !isCurrentlyReading ? 0.3 : 0;
     // Add loading pulse effect (no hover glow)
     const loadingPulse = coverLoading ? Math.sin(Date.now() * 0.003) * 0.1 + 0.1 : 0;
     targetEmissive.current = loadingPulse;
     targetOffsetX.current = offsetX;
 
-    // Z-axis pull forward animation
-    if (animationState === 'pulling' || animationState === 'rotating' || animationState === 'displayed') {
-      targetZ.current = 2.5; // Pull toward camera
-    } else if (animationState === 'returning' || animationState === 'idle') {
-      targetZ.current = 0; // Return to shelf
-    }
-
-    // Y-axis rotation animation
-    if (animationState === 'rotating' || animationState === 'displayed') {
-      targetRotationY.current = -Math.PI / 2; // -90 degrees - show front cover
+    // Currently-reading books maintain their special position
+    if (isCurrentlyReading) {
+      targetZ.current = 0.5; // Stay forward
+      targetRotationY.current = -Math.PI / 2; // Keep cover facing camera
+      targetY.current = 0; // Stay on shelf level
     } else {
-      targetRotationY.current = 0; // Show spine
+      // Z-axis pull forward animation for regular books
+      if (animationState === 'pulling' || animationState === 'rotating' || animationState === 'displayed') {
+        targetZ.current = 2.5; // Pull toward camera
+      } else if (animationState === 'returning' || animationState === 'idle') {
+        targetZ.current = 0; // Return to shelf
+      }
+
+      // Y-axis rotation animation for regular books
+      if (animationState === 'rotating' || animationState === 'displayed') {
+        targetRotationY.current = -Math.PI / 2; // -90 degrees - show front cover
+      } else {
+        targetRotationY.current = 0; // Show spine
+      }
     }
 
     // Animate horizontal offset for book spacing (base position + offset)
@@ -381,8 +407,8 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
           </group>
       )}
 
-      {/* Information display when book is expanded */}
-      {isExpanded && animationState === 'displayed' && (
+      {/* Information display when book is expanded (not for currently-reading books) */}
+      {isExpanded && animationState === 'displayed' && !isCurrentlyReading && (
         <group position={[0, (bookHeight - 2) / 2 + 2.5, 0]}>
           {/* Title */}
           <Text

@@ -16,16 +16,30 @@ export default function Bookshelf3DScene({
 }: Bookshelf3DSceneProps) {
   // Calculate total width needed for all books with spacing
   const bookSpacing = 0.7;
-  const totalWidth = books.length * bookSpacing;
+  const gapBetweenReadingAndRead = 1; // Extra space between currently-reading and read books
+
+  // Find the index where currently-reading books end
+  const lastCurrentlyReadingIndex = books.findIndex((book, index) =>
+    book.status === 'read' && (index === 0 || books[index - 1].status === 'currently-reading')
+  ) - 1;
+
+  const totalWidth = books.length * bookSpacing + (lastCurrentlyReadingIndex >= 0 ? gapBetweenReadingAndRead : 0);
 
   // Find the index of the expanded book
   const selectedBookIndex = expandedBookId
     ? books.findIndex(book => book.id === expandedBookId)
     : null;
 
+  // Check if the expanded book is currently-reading
+  const expandedBook = expandedBookId
+    ? books.find(book => book.id === expandedBookId)
+    : null;
+  const isExpandedBookCurrentlyReading = expandedBook?.status === 'currently-reading';
+
   // Calculate horizontal offset for each book to make space for expanded book
   const calculateOffset = (currentIndex: number, selectedIndex: number | null): number => {
-    if (selectedIndex === null) return 0;
+    // Don't apply offset if the expanded book is currently-reading
+    if (selectedIndex === null || isExpandedBookCurrentlyReading) return 0;
     const distance = Math.abs(currentIndex - selectedIndex);
     if (distance === 0) return 0; // The selected book itself doesn't shift
 
@@ -74,8 +88,13 @@ export default function Bookshelf3DScene({
           <Scroll>
             {/* Render all books in a horizontal line */}
             {books.map((book, index) => {
+              // Add extra spacing after currently-reading books
+              const extraSpacing = index > lastCurrentlyReadingIndex && lastCurrentlyReadingIndex >= 0
+                ? gapBetweenReadingAndRead
+                : 0;
+
               // Position books from 0 onwards, ScrollControls will translate them
-              const x = index * bookSpacing;
+              const x = index * bookSpacing + extraSpacing;
               const y = 0;
               const z = 0;
               const isExpanded = expandedBookId === book.id;
