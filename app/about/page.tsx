@@ -69,6 +69,37 @@ export default function AboutPage() {
 
           <Bookshelf3D />
 
+          <h2 className="text-3xl font-bold mt-16 mb-6">Music</h2>
+
+          <p className="mb-8">
+            Playlists I'm currently listening to. Music helps me focus and sets the mood for different types of work.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <iframe
+              data-testid="embed-iframe"
+              style={{borderRadius: '12px'}}
+              src="https://open.spotify.com/embed/playlist/43WEe56nhD7k22nUzpMn10?utm_source=generator&theme=0"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allowFullScreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+            <iframe
+              data-testid="embed-iframe"
+              style={{borderRadius: '12px'}}
+              src="https://open.spotify.com/embed/playlist/6rpgDVWQUR93MLJ5fuz3sC?utm_source=generator"
+              width="100%"
+              height="352"
+              frameBorder="0"
+              allowFullScreen
+              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+              loading="lazy"
+            />
+          </div>
+
           <div className="mt-16 pt-8 border-t border-neutral-200">
             <h2 className="text-2xl font-bold mb-4">Currently</h2>
             <p className="mb-6">
