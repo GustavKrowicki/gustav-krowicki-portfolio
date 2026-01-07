@@ -1,13 +1,12 @@
 import { Metadata } from 'next';
 import Container from '@/components/ui/Container';
-import Button from '@/components/ui/Button';
 import InterestMap from '@/components/interactive/InterestMap';
 import Bookshelf3D from '@/components/interactive/Bookshelf3D';
 import InterestCarousel from '@/components/interactive/InterestCarousel';
 
 export const metadata: Metadata = {
   title: 'About',
-  description: 'Product designer based in Copenhagen, Denmark, focused on research, ML/AI interfaces, and strategic thinking.',
+  description: 'Product designer based in Aarhus, Denmark, focused on research, ML/AI interfaces, and strategic thinking.',
 };
 
 export default function AboutPage() {
@@ -55,7 +54,7 @@ export default function AboutPage() {
 
         <div className="space-y-8 text-lg leading-relaxed text-neutral-700">
           <p>
-            I'm a product designer based in Copenhagen, Denmark. I'm driven by curiosity
+            I'm a product designer based in Aarhus, Denmark. I'm driven by curiosity
             about how people work and how technology can genuinely help them.
           </p>
 
@@ -147,23 +146,6 @@ export default function AboutPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
             <InterestCarousel title="Skiing" images={skiingImages} />
             <InterestCarousel title="Football" images={footballImages} />
-          </div>
-
-          <div className="mt-16 pt-8 border-t border-neutral-200">
-            <h2 className="text-2xl font-bold mb-4">Currently</h2>
-            <p className="mb-6">
-              I'm working full-time at LEGO but always happy to chat about design,
-              research, or interesting problems. Feel free to reach out.
-            </p>
-
-            <div className="flex flex-wrap gap-4">
-              <Button href="/contact" variant="primary">
-                Get in Touch
-              </Button>
-              <Button href="/cv/CV-Gustav-Krowicki.pdf" variant="secondary" external>
-                Download CV
-              </Button>
-            </div>
           </div>
         </div>
       </Container>

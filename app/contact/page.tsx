@@ -1,10 +1,11 @@
 import { Metadata } from 'next';
 import { Mail, Phone, Linkedin, MapPin } from 'lucide-react';
 import Container from '@/components/ui/Container';
+import Button from '@/components/ui/Button';
 
 export const metadata: Metadata = {
   title: 'Contact',
-  description: 'Get in touch with Gustav Krowicki - Product Designer based in Copenhagen, Denmark.',
+  description: 'Get in touch with Gustav Krowicki - Product Designer based in Aarhus, Denmark.',
 };
 
 const contactInfo = [
@@ -29,7 +30,7 @@ const contactInfo = [
   {
     icon: MapPin,
     label: 'Location',
-    value: 'Copenhagen, Denmark',
+    value: 'Denmark',
     href: null
   }
 ];
@@ -78,10 +79,13 @@ export default function ContactPage() {
 
         <div className="mt-16 pt-16 border-t border-neutral-200">
           <h2 className="text-2xl font-bold mb-4">Availability</h2>
-          <p className="text-lg text-neutral-700 leading-relaxed">
+          <p className="text-lg text-neutral-700 leading-relaxed mb-6">
             Currently working full-time at LEGO. Open to interesting conversations
             and potential future opportunities.
           </p>
+          <Button href="/cv/CV-Gustav-Krowicki.pdf" variant="secondary" external>
+            Download CV
+          </Button>
         </div>
       </Container>
     </div>
