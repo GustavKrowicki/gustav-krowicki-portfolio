@@ -3,6 +3,7 @@ import Container from '@/components/ui/Container';
 import Button from '@/components/ui/Button';
 import InterestMap from '@/components/interactive/InterestMap';
 import Bookshelf3D from '@/components/interactive/Bookshelf3D';
+import InterestCarousel from '@/components/interactive/InterestCarousel';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -10,6 +11,43 @@ export const metadata: Metadata = {
 };
 
 export default function AboutPage() {
+  // Placeholder images for interests
+  const skiingImages = [
+    {
+      src: '/images/interests/skiing/skiing-1.jpg',
+      alt: 'Skiing in the mountains',
+      caption: 'Skiing in the Alps',
+    },
+    {
+      src: '/images/interests/skiing/skiing-2.jpg',
+      alt: 'Powder skiing',
+      caption: 'Fresh powder day',
+    },
+    {
+      src: '/images/interests/skiing/skiing-3.jpg',
+      alt: 'Ski resort view',
+      caption: 'Mountain views',
+    },
+  ];
+
+  const footballImages = [
+    {
+      src: '/images/interests/football/football-1.jpg',
+      alt: 'BIF home game',
+      caption: 'BIF home match',
+    },
+    {
+      src: '/images/interests/football/football-2.jpg',
+      alt: 'Stadium atmosphere',
+      caption: 'Match day atmosphere',
+    },
+    {
+      src: '/images/interests/football/football-3.jpg',
+      alt: 'Celebrating with fans',
+      caption: 'Celebrating with the fans',
+    },
+  ];
+
   return (
     <div className="py-24">
       <Container maxWidth="container">
@@ -98,6 +136,17 @@ export default function AboutPage() {
               allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
               loading="lazy"
             />
+          </div>
+
+          <h2 className="text-3xl font-bold mt-16 mb-6">Beyond Work</h2>
+
+          <p className="mb-8">
+            When I'm not designing, you'll find me on the slopes or cheering for my local football team.
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
+            <InterestCarousel title="Skiing" images={skiingImages} />
+            <InterestCarousel title="Football" images={footballImages} />
           </div>
 
           <div className="mt-16 pt-8 border-t border-neutral-200">
