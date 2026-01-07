@@ -106,6 +106,7 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
 
             // Check if image has valid dimensions (not a 1x1 placeholder)
             if (img.naturalWidth > 10 && img.naturalHeight > 10) {
+              console.log(`✅ Cover loaded for "${book.title}" (${img.naturalWidth}x${img.naturalHeight})`);
               const texture = new THREE.Texture(img);
               texture.needsUpdate = true;
               texture.minFilter = THREE.LinearFilter;
@@ -119,12 +120,14 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
 
               setCoverLoading(false);
             } else {
+              console.warn(`⚠️ Cover image too small for "${book.title}" (${img.naturalWidth}x${img.naturalHeight}) - using fallback`);
               setCoverLoading(false);
             }
           };
 
           img.onerror = () => {
             clearTimeout(timeout);
+            console.warn(`❌ Failed to load cover for "${book.title}" - using fallback`);
             setCoverLoading(false);
           };
 
@@ -243,6 +246,7 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
 
   // Create materials array for different box faces - memoized to prevent recreation
   const materials = useMemo(() => {
+    console.log(`🎨 Creating materials for "${book.title}" - has texture: ${!!coverTexture}, spine color: ${spineColor}`);
     return [
       // Right side (+X) - front cover (shows after -90° rotation)
       new THREE.MeshStandardMaterial({
@@ -284,7 +288,7 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
         metalness: 0.1,
       }),
     ];
-  }, [coverTexture, spineColor, book.title]);
+  }, [coverTexture, spineColor]);
 
   // Handle click with debouncing (only allow clicks in idle or displayed states)
   const handleClick = () => {
