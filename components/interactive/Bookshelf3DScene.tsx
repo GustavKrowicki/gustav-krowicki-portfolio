@@ -1,5 +1,5 @@
 import { Canvas } from '@react-three/fiber';
-import { ScrollControls, Scroll } from '@react-three/drei';
+import { ScrollControls, Scroll, Text } from '@react-three/drei';
 import Book3D from './Book3D';
 import type { BookData } from '@/lib/utils/csvParser';
 
@@ -81,11 +81,25 @@ export default function Bookshelf3DScene({
 
         {/* Horizontal scroll controls */}
         <ScrollControls
-          pages={10} // Increased scroll distance to reach all 23 books
+          pages={5} // Increased scroll distance to reach all 23 books
           horizontal
           damping={0.2}
         >
           <Scroll>
+            {/* Currently Reading section label */}
+            {lastCurrentlyReadingIndex >= 0 && (
+              <Text
+                position={[(lastCurrentlyReadingIndex * bookSpacing) / 2, 2.1, 0]}
+                fontSize={0.25}
+                color="#404040"
+                anchorX="center"
+                anchorY="middle"
+                fontWeight="600"
+              >
+                Currently Reading
+              </Text>
+            )}
+
             {/* Render all books in a horizontal line */}
             {books.map((book, index) => {
               // Add extra spacing after currently-reading books
