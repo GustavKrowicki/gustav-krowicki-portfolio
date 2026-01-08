@@ -11,7 +11,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
   return (
     <>
       {!isProjectPage && <Header />}
-      <main className={isProjectPage ? '' : 'flex-1'}>
+      <main className={isProjectPage ? '' : 'flex-1 pt-20'}>
         {children}
       </main>
       {!isProjectPage && <Footer />}

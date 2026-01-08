@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Download } from 'lucide-react';
@@ -13,9 +14,52 @@ const navItems = [
 
 export default function Header() {
   const pathname = usePathname();
+  const [scrollY, setScrollY] = useState(0);
+  const [lastScrollY, setLastScrollY] = useState(0);
+  const [isScrollingUp, setIsScrollingUp] = useState(false);
+  const headerHeight = 80; // 80px (h-20 = 5rem = 80px)
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+
+      // Detect scroll direction
+      if (currentScrollY < lastScrollY) {
+        setIsScrollingUp(true);
+      } else if (currentScrollY > lastScrollY) {
+        setIsScrollingUp(false);
+      }
+
+      setScrollY(currentScrollY);
+      setLastScrollY(currentScrollY);
+    };
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
+
+  // Calculate header offset based on scroll position and direction
+  let headerOffset = 0;
+
+  if (scrollY < headerHeight) {
+    // In the first 80px, gradually hide as you scroll down
+    headerOffset = scrollY;
+  } else if (isScrollingUp || scrollY < 10) {
+    // Show header when scrolling up or at top
+    headerOffset = 0;
+  } else {
+    // Fully hidden when scrolled past header height and scrolling down
+    headerOffset = headerHeight;
+  }
 
   return (
-    <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-sm ">
+    <header
+      className="fixed top-0 left-0 right-0 z-50 bg-background transition-transform duration-200"
+      style={{ transform: `translateY(-${headerOffset}px)` }}
+    >
       <Container>
         <nav className="flex items-center justify-between h-20">
           <Link
