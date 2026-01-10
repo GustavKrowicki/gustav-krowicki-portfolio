@@ -1,10 +1,9 @@
 import { Metadata } from 'next';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
-import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
-import MetaInfo from '@/components/case-study/MetaInfo';
 import WorkflowDiagram from '@/components/interactive/WorkflowDiagram';
+import Container from '@/components/ui/Container';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
@@ -26,161 +25,89 @@ export default function VizGeneratorPage() {
         alt={project.title}
       />
 
-      <CaseInfo
-        title={project.title}
-        role={project.role}
-        timeline={project.timeline}
-        tags={project.tags}
-      />
-
-      <CaseSection title="The Problem" maxWidth="content">
-        <p>
-          Creating custom data visualizations often requires either design skills to use
-          tools like Figma or coding knowledge to work with libraries like D3.js. This
-          creates a barrier for people who have data insights they want to communicate
-          but lack the technical or design skills to visualize them effectively.
-        </p>
-        <p>
-          I wanted to build a tool that bridges this gap—allowing users to generate
-          professional-looking visualizations through an intuitive interface without
-          needing to code or master complex design software.
-        </p>
-      </CaseSection>
-
-      <CaseSection background="gray">
-        <div className="grid md:grid-cols-3 gap-8">
-          <MetaInfo
-            role={project.role}
-            timeline={project.timeline}
-            tools={project.tools}
-          />
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold mb-4">The Approach</h3>
-            <p className="text-neutral-700 leading-relaxed mb-4">
-              This project combined design thinking with technical implementation. I needed
-              to understand how people think about data visualization, design an interface
-              that made complex capabilities accessible, and build it using React and D3.js.
-            </p>
-            <p className="text-neutral-700 leading-relaxed">
-              The challenge was creating something flexible enough for diverse use cases
-              but simple enough that anyone could pick it up without a tutorial.
-            </p>
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
+        <Container maxWidth="container">
+          <div className="max-w-4xl">
+            <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+              {project.role}
+            </span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-8">
+              {project.title}
+            </h1>
           </div>
-        </div>
-      </CaseSection>
+        </Container>
+      </section>
 
-      <CaseSection title="Design Process" maxWidth="content">
-        <h3 className="text-2xl font-semibold mb-4">Understanding User Needs</h3>
+      {/* Needs Section */}
+      <CaseSection title="Needs" maxWidth="content">
         <p>
-          I started by interviewing people who regularly create visualizations—analysts,
-          researchers, students—to understand their workflows and pain points. Common
-          themes emerged around simplicity, customization, and export options.
+          Cate it needed a clear visual identity to establish trust in a marketplace
+          context—where the sender of every communication needs to be immediately
+          recognizable. I'd been curating a moodboard on Are.na with visual directions
+          that could work for the brand, but my illustration skills are limited.
         </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Interface Design</h3>
         <p>
-          The interface needed to balance power with simplicity. I organized controls
-          into logical groups (data input, visualization type, styling) and used
-          progressive disclosure to avoid overwhelming users with options upfront.
-        </p>
-
-        <p>
-          Live preview was crucial—users could see changes immediately as they adjusted
-          parameters, making the tool feel responsive and allowing for rapid iteration.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Visualization Types</h3>
-        <p>
-          Rather than supporting every possible chart type, I focused on a core set
-          of versatile visualizations: bar charts, line graphs, scatter plots, and
-          simple network diagrams. This kept the tool manageable while covering most
-          common use cases.
+          Rather than following the traditional approach, I saw an opportunity to
+          experiment with AI image generation models to create branded visuals, social
+          media content, and illustrations by mixing references from my moodboard.
         </p>
       </CaseSection>
 
-      <CaseSection title="How It Works" maxWidth="container">
+      {/* How It Works - Interactive Workflow */}
+      <CaseSection title="How It Works" maxWidth="container" background="gray">
         <WorkflowDiagram />
       </CaseSection>
 
-      <CaseSection title="Technical Implementation" maxWidth="content" background="gray">
-        <h3 className="text-2xl font-semibold mb-4">Tech Stack</h3>
+      {/* How I Built It Section */}
+      <CaseSection title="How I Built It" maxWidth="content">
         <p>
-          Built with React for the interface and D3.js for visualization rendering.
-          This combination provided flexibility—D3's powerful data manipulation and
-          SVG generation combined with React's component architecture and state management.
+          I started on Replit, an app builder that handles both front-end and back-end
+          infrastructure. I've worked with similar tools before (like Webflow for my
+          previous portfolio), but Replit's strength is integrations—which made connecting
+          to my Are.na moodboard straightforward. For image generation, I integrated
+          Google's models through Replit's built-in AI integration, which simplified billing.
         </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Data Processing</h3>
         <p>
-          Users could input data in multiple formats (CSV, JSON, manual entry). The tool
-          validates data, suggests appropriate visualization types based on data structure,
-          and handles common formatting issues gracefully.
+          With the integrations running, I focused on the interface. I've been interested
+          in node-based interactions lately, particularly for AI tools—I like working with
+          visual references, and nodes let me connect and compare multiple variations easily.
+          I used React Flow to build the interface on Replit.
         </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Export Options</h3>
         <p>
-          Visualizations can be exported as PNG images or SVG files, making them suitable
-          for presentations, reports, or further editing in design tools. This flexibility
-          was essential for practical use.
-        </p>
-      </CaseSection>
-
-      <CaseSection title="Key Features" maxWidth="content">
-        <div className="space-y-6">
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Real-time Preview</h3>
-            <p className="text-neutral-700">
-              All changes are reflected immediately in the preview, allowing users to
-              experiment and iterate quickly without waiting for renders.
-            </p>
-          </div>
-
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Smart Defaults</h3>
-            <p className="text-neutral-700">
-              The tool suggests appropriate visualization types based on data structure
-              and applies sensible default styling, reducing the decisions users need
-              to make.
-            </p>
-          </div>
-
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Customization Controls</h3>
-            <p className="text-neutral-700">
-              Users can adjust colors, labels, axes, and styling to match their needs
-              or brand guidelines without writing code.
-            </p>
-          </div>
-
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Responsive Output</h3>
-            <p className="text-neutral-700">
-              Visualizations adapt to different screen sizes, ensuring they look good
-              whether viewed on mobile, desktop, or printed.
-            </p>
-          </div>
-        </div>
-      </CaseSection>
-
-      <CaseSection title="Learnings & Outcomes" maxWidth="content" background="gray">
-        <p>
-          This project reinforced that good tool design requires deep understanding of
-          both the domain and the users. Data visualization has its own vocabulary and
-          conventions—respecting these while making them accessible was key.
-        </p>
-
-        <p>
-          Balancing flexibility with simplicity is always a challenge. I learned to
-          identify the 20% of features that deliver 80% of value and focus there,
-          rather than trying to support every edge case from day one.
-        </p>
-
-        <p>
-          Most importantly, combining design and development skills allowed me to iterate
-          quickly and make holistic decisions. Understanding the technical constraints
-          informed better design choices, and design thinking led to cleaner code architecture.
+          The tool worked, but I didn't want to keep paying $25/month for Replit hosting.
+          I used Claude Code to restructure the architecture and migrate the app to my own
+          infrastructure—my own database, my own Google AI Studio billing, my own hosting.
+          I wanted to own the tool, not depend on a platform.
         </p>
       </CaseSection>
+
+      {/* Gallery Section */}
+      <section className="py-16 md:py-24 bg-neutral-50">
+        <Container maxWidth="container">
+          <h2 className="text-3xl md:text-4xl font-bold mb-12">Generated visuals</h2>
+          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 1</span>
+            </div>
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 2</span>
+            </div>
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 3</span>
+            </div>
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 4</span>
+            </div>
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 5</span>
+            </div>
+            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image 6</span>
+            </div>
+          </div>
+        </Container>
+      </section>
     </CaseStudyWrapper>
   );
 }

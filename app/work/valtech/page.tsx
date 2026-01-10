@@ -1,15 +1,15 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
-import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
-import MetaInfo from '@/components/case-study/MetaInfo';
-import QuoteBlock from '@/components/case-study/QuoteBlock';
+import RecommendationsSection from '@/components/case-study/RecommendationsSection';
+import Container from '@/components/ui/Container';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
-  title: 'Valtech Internship Projects',
-  description: 'Client work on digital solutions including research, prototyping, and design systems',
+  title: 'Valtech Internship - UX Design',
+  description: 'UX design internship at Valtech working on Vestas customer-facing digital solutions',
 };
 
 export default function ValtechPage() {
@@ -26,132 +26,166 @@ export default function ValtechPage() {
         alt={project.title}
       />
 
-      <CaseInfo
-        title={project.title}
-        role={project.role}
-        timeline={project.timeline}
-        tags={project.tags}
-      />
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
+        <Container maxWidth="container">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16">
+            {/* Left - Title and Description */}
+            <div>
+              <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+                UX Design Intern
+              </span>
+              <h1 className="text-4xl md:text-5xl font-bold mb-8">
+                Valtech
+              </h1>
+              <p className="text-lg leading-relaxed text-neutral-700">
+                During my internship as a UX designer at Valtech, Aarhus, I spent my time mainly
+                on two projects within Vestas's customer facing digital solutions. In both parts
+                I was lucky to be involved from the start of the project, to handoff.
+              </p>
+            </div>
 
-      <CaseSection title="Overview" maxWidth="content">
-        <p>
-          During my internship at Valtech, I worked on multiple client projects spanning
-          research, design, and prototyping. This experience gave me exposure to enterprise
-          product development, cross-functional collaboration, and the consultancy approach
-          to solving complex business challenges.
-        </p>
-        <p>
-          My primary project was supporting digital solutions for Vestas, a global leader
-          in wind energy. I contributed across multiple workstreams—from early research
-          to interface design and prototyping.
-        </p>
-      </CaseSection>
-
-      <CaseSection background="gray">
-        <div className="grid md:grid-cols-3 gap-8">
-          <MetaInfo
-            role={project.role}
-            timeline={project.timeline}
-            tools={project.tools}
-            team={project.team}
-          />
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold mb-4">The Context</h3>
-            <p className="text-neutral-700 leading-relaxed mb-4">
-              Working at a consultancy meant balancing client needs, stakeholder expectations,
-              and technical constraints while maintaining quality design standards. Projects
-              moved quickly, requiring adaptability and clear communication.
-            </p>
-            <p className="text-neutral-700 leading-relaxed">
-              I learned to navigate complex stakeholder landscapes, present work effectively,
-              and contribute meaningfully to projects I joined mid-stream.
-            </p>
+            {/* Right - Meta Info */}
+            <div className="space-y-6">
+              <div>
+                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Team</h3>
+                <p className="text-neutral-700">Johannes Wigh-Poulsen</p>
+                <p className="text-neutral-700">Sune Depping Jeppesen</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Tools</h3>
+                <p className="text-neutral-700">Miro, Figma, Google Analytics</p>
+              </div>
+              <div>
+                <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Timeline</h3>
+                <p className="text-neutral-700">August 2023 - December 2023</p>
+              </div>
+            </div>
           </div>
-        </div>
-      </CaseSection>
+        </Container>
+      </section>
 
-      <CaseSection title="Key Activities" maxWidth="content">
-        <h3 className="text-2xl font-semibold mb-4">User Research</h3>
+      {/* Full-width Image 1 */}
+      <section className="py-8">
+        <Container maxWidth="container">
+          <div className="relative rounded-2xl overflow-hidden">
+            <Image
+              src="/images/valtech/vestas 1.png"
+              alt="Vestas project interface"
+              width={1920}
+              height={1080}
+              className="w-full h-auto"
+            />
+          </div>
+        </Container>
+      </section>
+
+      {/* Description Section */}
+      <CaseSection maxWidth="content">
         <p>
-          Conducted interviews with field technicians and operations managers to understand
-          their workflows and pain points. This research informed our understanding of how
-          digital tools could better support their daily work.
+          Furthermore I participated actively in design crits at Valtech, had an active role
+          helping my peers with their projects. I also contributed to plan and execute research
+          and workshops.
         </p>
         <p>
-          I learned to synthesize insights from diverse user groups and translate them into
-          actionable design requirements that resonated with both users and stakeholders.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Journey Mapping</h3>
-        <p>
-          Created detailed journey maps documenting current-state workflows and identifying
-          opportunities for improvement. These artifacts became crucial alignment tools,
-          helping stakeholders visualize the user experience and prioritize features.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Wireframing & Prototyping</h3>
-        <p>
-          Developed wireframes and interactive prototypes to explore different solutions
-          and gather feedback. I learned to balance fidelity with speed—knowing when rough
-          sketches were sufficient vs. when polished prototypes helped communicate ideas.
-        </p>
-
-        <QuoteBlock
-          quote="Gustav quickly understood our complex domain and contributed meaningful insights that shaped the product direction."
-          author="Senior Design Lead, Valtech"
-        />
-      </CaseSection>
-
-      <CaseSection title="Projects & Contributions" maxWidth="content" background="gray">
-        <h3 className="text-2xl font-semibold mb-4">Vestas Digital Solutions</h3>
-        <p>
-          Supported design work for internal tools used by wind turbine technicians and
-          operations teams. Focused on making complex technical information accessible
-          and creating mobile-friendly interfaces for field use.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Design System Work</h3>
-        <p>
-          Contributed to evolving the design system, creating component documentation
-          and ensuring consistency across multiple product workstreams. This taught me
-          the importance of systematic thinking and design at scale.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Stakeholder Workshops</h3>
-        <p>
-          Participated in and helped facilitate workshops with client stakeholders to
-          align on product vision, gather requirements, and validate design directions.
-          These sessions taught me how to navigate different perspectives and build
-          consensus.
+          I was in charge of designing a design guide for a CMS website ensuring a cohesive
+          product experience, across branding and product. Furthermore I worked with smaller
+          design tasks, that required a switch in the day to day mind.
         </p>
       </CaseSection>
 
-      <CaseSection title="Learnings" maxWidth="content">
-        <p>
-          Working at Valtech showed me the consultancy side of product design—how to quickly
-          understand new domains, work effectively with client teams, and deliver value
-          within tight timelines.
-        </p>
+      {/* Two Images Side by Side */}
+      <section className="py-8">
+        <Container maxWidth="container">
+          <div className="grid md:grid-cols-2 gap-6">
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/valtech/vestas drawer.png"
+                alt="Vestas drawer interface"
+                width={800}
+                height={600}
+                className="w-full h-auto"
+              />
+            </div>
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/valtech/vestas drawer 2.png"
+                alt="Vestas drawer interface detail"
+                width={800}
+                height={600}
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
 
-        <p>
-          I learned that enterprise products have unique constraints: legacy systems, complex
-          stakeholder landscapes, and diverse user groups with sometimes conflicting needs.
-          Good design in this context requires diplomacy, clear communication, and strategic
-          thinking about what's feasible.
-        </p>
+      {/* Context & Problem Discovery Section */}
+      <section className="py-16 md:py-24 bg-neutral-50">
+        <Container maxWidth="container">
+          <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
+            {/* Left - Content */}
+            <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+              <h2 className="text-3xl md:text-4xl font-bold text-black">Context</h2>
+              <p>
+                In the development of the two projects I actively participated in design sprint
+                sessions with stakeholders to gather feedback and improve upon ongoing projects.
+              </p>
+              <p>
+                Conducted user research, used both qualitative and quantitative methods like
+                contextual inquiry, interview, and web analytics.
+              </p>
 
-        <p>
-          The experience also reinforced the value of research and documentation. In fast-paced
-          projects with rotating team members, clear artifacts (journey maps, research findings,
-          design systems) become essential for maintaining continuity and alignment.
-        </p>
+              <ul className="space-y-3 mt-6">
+                <li className="flex gap-3">
+                  <span className="text-neutral-400">•</span>
+                  <span>Mapping the research</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-neutral-400">•</span>
+                  <span>Journey mapping</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-neutral-400">•</span>
+                  <span>Wireframing</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-neutral-400">•</span>
+                  <span>Prototyping</span>
+                </li>
+                <li className="flex gap-3">
+                  <span className="text-neutral-400">•</span>
+                  <span>Validating the wireframes and different concepts to customers and stakeholders</span>
+                </li>
+              </ul>
+            </div>
 
-        <p>
-          Most importantly, I saw how design can create business value when aligned with
-          organizational goals. The best designs weren't just beautiful interfaces—they were
-          solutions that addressed real user needs while supporting strategic business objectives.
-        </p>
-      </CaseSection>
+            {/* Right - Image */}
+            <div className="relative rounded-2xl overflow-hidden">
+              <Image
+                src="/images/valtech/vestas 2.png"
+                alt="Vestas project work"
+                width={800}
+                height={600}
+                className="w-full h-auto"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <RecommendationsSection
+        recommendations={[
+          {
+            name: 'Johannes Wigh-Poulsen',
+            pdfUrl: '/recommendations/reccomendation from Johannes Wigh-Poulsen.pdf',
+          },
+          {
+            name: 'Helle Jensen',
+            pdfUrl: '/recommendations/Recommendation from Helle Jensen.pdf',
+          },
+        ]}
+      />
     </CaseStudyWrapper>
   );
 }

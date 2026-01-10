@@ -68,7 +68,7 @@ export default function CaseHeroAnimated({
         }}
       >
         <div
-          className="relative aspect-[16/9] bg-neutral-200 overflow-hidden transition-all duration-100 ease-out"
+          className="relative aspect-[16/9] overflow-hidden transition-all duration-100 ease-out"
           style={{
             transform: `scale(${scale})`,
             borderRadius: `${borderRadius}px`,
@@ -78,7 +78,7 @@ export default function CaseHeroAnimated({
             src={coverImage}
             alt={alt}
             fill
-            className="object-cover"
+            className="object-contain"
             priority
           />
         </div>

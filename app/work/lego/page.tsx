@@ -1,16 +1,15 @@
 import { Metadata } from 'next';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
-import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
-import ProcessStep from '@/components/case-study/ProcessStep';
-import QuoteBlock from '@/components/case-study/QuoteBlock';
+import TwoColumn from '@/components/case-study/TwoColumn';
 import ChallengeMap from '@/components/interactive/ChallengeMap';
+import Container from '@/components/ui/Container';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
-  title: 'ML-Assisted Internal Product - LEGO',
-  description: 'Conducted research and designed interfaces for an ML-powered tool at LEGO',
+  title: 'Designing for Autonomy in a Supervised System - LEGO',
+  description: 'Designing an ML-assisted recommendation tool that protects user expertise while satisfying organizational oversight needs.',
 };
 
 export default function LegoPage() {
@@ -27,102 +26,122 @@ export default function LegoPage() {
         alt={project.title}
       />
 
-      <CaseInfo
-        title={project.title}
-        role={project.role}
-        timeline={project.timeline}
-        tags={project.tags}
-      />
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
+        <Container maxWidth="container">
+          <div className="max-w-4xl">
+            <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+              Contribution
+            </span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-12">
+              Designing for autonomy in a supervised system
+            </h1>
 
-      <CaseSection title="Overview" maxWidth="content">
-        <p>
-          At LEGO, I'm designing an internal tool that uses machine learning to assist
-          product designers in their creative work. This project sits at the intersection
-          of AI capabilities, creative workflows, and organizational constraints.
-        </p>
-        <p>
-          The challenge isn't just about making ML accessible—it's about understanding
-          how designers work, what they need from AI assistance, and how to build trust
-          in algorithmic recommendations within a highly iterative creative process.
-        </p>
-      </CaseSection>
+            <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
+              <div className="space-y-4 text-lg leading-relaxed text-neutral-700">
+                <p>
+                  I worked on an ML-assisted recommendation tool where users generate
+                  customer-specific recommendations while their supervisors generate
+                  parallel lists with broader parameters.
+                </p>
+                <p>
+                  The challenge wasn't just making ML understandable—it was designing
+                  an interface that protected user expertise while satisfying
+                  organizational oversight needs.
+                </p>
+              </div>
+              <div className="space-y-4 text-lg leading-relaxed text-neutral-700">
+                <p>
+                  Users have direct customer knowledge that supervisors don't. The system
+                  measures deviation between user and supervisor recommendations, creating
+                  tension between individual expertise and organizational conformity.
+                </p>
+              </div>
+            </div>
+          </div>
+        </Container>
+      </section>
 
-      <CaseSection title="Design Challenges" maxWidth="container" background="gray">
+      <CaseSection title="Challenges" maxWidth="container" background="gray">
         <ChallengeMap />
       </CaseSection>
 
-      <CaseSection title="Research & Discovery" maxWidth="content">
+      <CaseSection title="The political problem in the interface" maxWidth="content">
         <p>
-          I started by conducting user interviews with product designers across different
-          teams to understand their current workflows, pain points, and attitudes toward
-          AI-assisted tools.
+          Senior stakeholders wanted supervisor recommendations shown first, assuming
+          users would take inspiration from them. But our research showed this would
+          undermine the tool's value. Priming users with the supervisor's list would
+          push them toward generic recommendations requiring more manual adjustment.
         </p>
+        <p>
+          We designed a solution where both recommendations generate simultaneously
+          from the same action, removing the implicit hierarchy. We visually de-emphasized
+          the supervisor's list and introduced it later in the workflow, after users
+          engaged with their own recommendations.
+        </p>
+        <p>
+          The compromise wasn't removing information—it was about timing and emphasis.
+        </p>
+      </CaseSection>
 
-        <QuoteBlock
-          quote="I don't want the tool to design for me. I want it to help me explore possibilities faster."
-          author="Senior Product Designer"
+      <CaseSection title="Continuous feedback" maxWidth="content" background="gray">
+        <TwoColumn
+          left={
+            <p>
+              Through multiple conversations with stakeholders, we demonstrated that
+              their goal (organizational alignment) and users' goal (customer-specific
+              recommendations) could supplement each other if we sequenced information
+              correctly.
+            </p>
+          }
+          right={
+            <p>
+              The design work meant constant translation between research insights and
+              stakeholder concerns. We prototyped solutions that gave ground to each
+              side, making the case for designs prioritizing long-term user value over
+              short-term organizational comfort.
+            </p>
+          }
         />
+      </CaseSection>
 
+      <CaseSection title="Complexity" maxWidth="content">
         <p>
-          Key insights emerged around trust, control, and transparency. Designers were
-          open to ML assistance but skeptical about 'black box' systems. They needed to
-          understand why the algorithm made certain suggestions and maintain control over
-          the final decisions.
+          The model operates across multiple formats simultaneously—adjusting
+          recommendations up and down a hierarchy depending on settings—but users
+          only see one format at a time. This created a fundamental disconnect
+          between how the model worked and what users could observe.
         </p>
-
         <p>
-          I also spent time with ML engineers to understand the capabilities and limitations
-          of the underlying models. This helped me design interfaces that set appropriate
-          expectations and gracefully handle edge cases.
+          We designed around this mismatch by surfacing the right level of information
+          at each step. Users needed to understand why they were seeing certain
+          recommendations without grasping the entire system's complexity.
+        </p>
+        <p>
+          The interface made the model's behavior legible without overwhelming users
+          with everything happening behind the scenes.
         </p>
       </CaseSection>
 
-      <CaseSection title="Process" maxWidth="content" background="gray">
-        <div className="space-y-8">
-          <ProcessStep
-            number={1}
-            title="User Research"
-            description="Conducted interviews with 12 product designers to understand workflows, pain points, and attitudes toward AI assistance. Shadowed designers to observe their creative process and identify opportunities for ML support."
-          />
-
-          <ProcessStep
-            number={2}
-            title="Technical Discovery"
-            description="Worked closely with ML engineers to understand model capabilities, limitations, and failure modes. This informed realistic interface design and appropriate user expectations."
-          />
-
-          <ProcessStep
-            number={3}
-            title="Concept Exploration"
-            description="Created multiple interface concepts exploring different approaches to surfacing ML recommendations. Tested these with users through rapid prototyping and feedback sessions."
-          />
-
-          <ProcessStep
-            number={4}
-            title="Iterative Design"
-            description="Refined the interface based on user feedback, focusing on transparency, control, and trust-building. Designed for both successful predictions and edge cases where the algorithm struggles."
-          />
-        </div>
-      </CaseSection>
-
-      <CaseSection title="Impact & Learnings" maxWidth="content" background="gray">
-        <p>
-          This project reinforced that designing for ML isn't about hiding complexity—it's
-          about making it understandable and controllable. Creative professionals want tools
-          that augment their thinking, not replace it.
-        </p>
-
-        <p>
-          Working across disciplines (design, engineering, product) highlighted the importance
-          of shared language and mental models. Many challenges came from misaligned expectations
-          about what the tool should do and how users would interact with it.
-        </p>
-
-        <p>
-          The most valuable insight: building trust in AI tools requires transparency about
-          both capabilities and limitations. Users appreciate honesty about when the algorithm
-          isn't confident, which paradoxically increases their overall trust in the system.
-        </p>
+      <CaseSection title="Guiding input without restricting freedom" maxWidth="content" background="gray">
+        <TwoColumn
+          left={
+            <p>
+              We redesigned how users set parameters before generating recommendations.
+              Early research showed users' settings often differed significantly from
+              their supervisors'—not wrong, but leading to more deviation and manual
+              adjustment later.
+            </p>
+          }
+          right={
+            <p>
+              The goal was getting users as far as possible with the initial
+              recommendation, minimizing post-generation work. We focused on deliberate
+              defaults, constraints, and explanations without removing the flexibility
+              users needed to apply their expertise.
+            </p>
+          }
+        />
       </CaseSection>
     </CaseStudyWrapper>
   );

@@ -3,14 +3,11 @@
 import ForceDirectedGraph, { GraphNode } from './ForceDirectedGraph';
 
 const challenges: GraphNode[] = [
-  { id: 'trust', label: 'Building Trust in AI' },
-  { id: 'uncertainty', label: 'Algorithm Uncertainty' },
-  { id: 'expectations', label: 'Creative Expectations' },
-  { id: 'stakeholders', label: 'Stakeholder Alignment' },
-  { id: 'complexity', label: 'Workflow Complexity' },
-  { id: 'transparency', label: 'Transparency & Control' },
-  { id: 'failure', label: 'Failure Mode Design' },
-  { id: 'disclosure', label: 'Progressive Disclosure' },
+  { id: 'data-quality', label: 'Data quality' },
+  { id: 'algorithm', label: 'Algorithm behavior' },
+  { id: 'stakeholders', label: 'Stakeholders' },
+  { id: 'org-priorities', label: 'Organizational priorities' },
+  { id: 'autonomy', label: 'User autonomy' },
 ];
 
 const instructions = `

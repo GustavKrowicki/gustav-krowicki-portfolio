@@ -1,15 +1,16 @@
 import { Metadata } from 'next';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
-import CaseInfo from '@/components/case-study/CaseInfo';
 import CaseSection from '@/components/case-study/CaseSection';
-import MetaInfo from '@/components/case-study/MetaInfo';
-import QuoteBlock from '@/components/case-study/QuoteBlock';
+import TwoColumn from '@/components/case-study/TwoColumn';
+import InsightCards from '@/components/case-study/InsightCards';
+import StrategicDecisions from '@/components/case-study/StrategicDecisions';
+import Container from '@/components/ui/Container';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
-  title: 'Cate it - Food Catering Platform',
-  description: 'Co-founded and designed a platform connecting customers with local caterers',
+  title: 'Building a Two-Sided Marketplace - Cate it',
+  description: 'Co-founded and designed a platform connecting event planners with food trucks',
 };
 
 export default function CateItPage() {
@@ -26,148 +27,180 @@ export default function CateItPage() {
         alt={project.title}
       />
 
-      <CaseInfo
-        title={project.title}
-        role={project.role}
-        timeline={project.timeline}
-        tags={project.tags}
-      />
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
+        <Container maxWidth="container">
+          <div className="max-w-4xl">
+            <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+              Co-founder, Product Designer
+            </span>
+            <h1 className="text-5xl md:text-6xl font-bold mb-8">
+              Building a two-sided marketplace with real constraints
+            </h1>
 
-      <CaseSection title="The Vision" maxWidth="content">
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-lg text-neutral-600 mb-12">
+              <div>
+                <span className="font-medium">Team:</span> Anders (Front-end), Johannes (Full-stack)
+              </div>
+            </div>
+
+            <div className="space-y-4 text-lg leading-relaxed text-neutral-700 max-w-2xl">
+              <p>
+                Food truck owners struggle to get booked for events. Event planners don't
+                have a reliable way to find and book food trucks. Existing solutions are
+                either generic event platforms or require upfront subscriptions that don't
+                work for seasonal small businesses.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <CaseSection title="Why existing solutions don't work for food truck owners" maxWidth="content" background="gray">
         <p>
-          Cate it started from a simple observation: ordering catering for events is
-          unnecessarily complicated. Small businesses and individuals struggle to find
-          reliable local caterers, compare offerings, and build trust with vendors
-          they've never worked with before.
-        </p>
-        <p>
-          My co-founder and I set out to build a platform that would make catering
-          accessible and trustworthy—connecting customers with local caterers while
-          solving the core challenges of a two-sided marketplace.
+          Food truck businesses are highly seasonal. Revenue drops significantly in winter
+          months. Any fixed monthly cost—like a subscription—becomes a real burden when
+          cash flow is tight. Existing platforms don't account for this reality, making
+          them unattractive to the very people they're trying to serve.
         </p>
       </CaseSection>
 
-      <CaseSection background="gray">
-        <div className="grid md:grid-cols-3 gap-8">
-          <MetaInfo
-            role={project.role}
-            timeline={project.timeline}
-            tools={project.tools}
-            team={project.team}
-          />
-          <div className="md:col-span-2">
-            <h3 className="text-2xl font-semibold mb-4">The Challenge</h3>
-            <p className="text-neutral-700 leading-relaxed mb-4">
-              Building a marketplace requires solving chicken-and-egg problems: customers
-              won't use a platform without caterers, and caterers won't join without
-              customers. Beyond that, we had to establish trust, handle payments securely,
-              and design an experience that worked for both sides.
-            </p>
-            <p className="text-neutral-700 leading-relaxed">
-              As a bootstrapped startup, every decision had to balance user needs with
-              technical constraints and business viability.
-            </p>
-          </div>
-        </div>
-      </CaseSection>
-
-      <CaseSection title="Research & Insights" maxWidth="content">
-        <p>
-          We conducted interviews with both potential customers and caterers to understand
-          their pain points and needs. Three key themes emerged:
-        </p>
-
-        <div className="my-8 space-y-6">
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Trust & Transparency</h3>
-            <p className="text-neutral-700">
-              Customers needed social proof and clear information before committing. Reviews,
-              photos of previous work, and transparent pricing were essential for building
-              confidence.
-            </p>
-          </div>
-
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Commitment & Communication</h3>
-            <p className="text-neutral-700">
-              Both sides wanted clear expectations around booking, changes, and cancellations.
-              Good communication tools reduced uncertainty and improved the experience.
-            </p>
-          </div>
-
-          <div className="bg-neutral-50 p-6 rounded-lg">
-            <h3 className="font-semibold text-xl mb-2">Payment Security</h3>
-            <p className="text-neutral-700">
-              Handling money was sensitive for both parties. Customers wanted protection
-              until service delivery; caterers wanted guarantee of payment for confirmed
-              bookings.
-            </p>
-          </div>
-        </div>
-      </CaseSection>
-
-      <CaseSection title="Product Strategy" maxWidth="content" background="gray">
-        <h3 className="text-2xl font-semibold mb-4">MVP Focus</h3>
-        <p>
-          Rather than building everything at once, we focused on the core transaction flow:
-          browsing caterers, requesting quotes, and confirming bookings. This let us validate
-          the concept quickly and learn from real users.
-        </p>
-
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Business Model</h3>
-        <p>
-          We chose a commission-based model that only charged caterers when they completed
-          bookings. This aligned incentives—we only succeeded when they succeeded—and made
-          it easy for caterers to try the platform without upfront costs.
-        </p>
-
-        <QuoteBlock
-          quote="Starting with an MVP taught me the importance of ruthless prioritization. Every feature idea had to justify itself against our limited resources."
+      <CaseSection 
+        title="Research and insights" 
+        maxWidth="container"
+        className="bg-[#2C2929] [&_h2]:text-white"
+      >
+        <InsightCards
+          cards={[
+            {
+              header: 'Seasonality is a real concern',
+              text: 'Eight conversations with food truck owners revealed consistent patterns. January and February are slow months. Any fat in the budget during winter is a problem. Fixed costs don\'t work for this business model.',
+              backgroundColor: 'yellow',
+            },
+            {
+              header: 'The community is welcoming',
+              text: 'Food truck owners remember what it\'s like starting out. They\'re happy to refer you to others in the space. This openness gave us access to more conversations and validated that there\'s genuine interest in solving this problem.',
+              backgroundColor: 'orange',
+            },
+            {
+              header: 'They\'re okay with manual processes',
+              text: 'Food truck owners were surprisingly comfortable with bookings going through their email rather than a fancy platform. This insight let us de-risk the launch with a simpler MVP.',
+              backgroundColor: 'cream',
+            },
+          ]}
         />
       </CaseSection>
 
-      <CaseSection title="Design Decisions" maxWidth="content">
-        <h3 className="text-2xl font-semibold mb-4">Building Trust</h3>
-        <p>
-          We prominently featured caterer profiles with photos, menus, reviews, and
-          clear pricing. This transparency helped customers make informed decisions
-          and reduced pre-booking anxiety.
-        </p>
+      <section className="py-16 md:py-24">
+        <Container maxWidth="container">
+          <StrategicDecisions
+            header="STRATEGIC DECISIONS"
+            leftTitle="How we learned"
+            leftText="We initially planned a subscription model—predictable revenue for us, clear value prop for them. But research with food truck owners showed this wouldn't work given their seasonal cash flow."
+            rightTitle="The insight and choice we made"
+            rightText="We pivoted to a percentage fee per booking, charged to both food truck owners and event planners. No fixed costs. The platform only makes money when they make money. This aligns our incentives with theirs and removes the barrier that would've prevented sign-ups."
+          />
+        </Container>
+      </section>
 
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Quote-Based Flow</h3>
-        <p>
-          Instead of instant booking, we designed a quote-request flow that gave caterers
-          flexibility to customize offerings and pricing. This matched how catering actually
-          works—each event is somewhat unique—while still providing structure and clarity.
-        </p>
+      <section className="py-16 md:py-24">
+        <Container maxWidth="container">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left Column - Content */}
+            <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+              <h2 className="text-3xl md:text-4xl font-bold text-black">Design solution</h2>
+              <p>
+                We built a simple email form that redirects booking information to the food
+                truck owner's inbox. No complex booking flow yet. No payment processing. Just
+                enough to test if the value proposition works.
+              </p>
+              <p>
+                The site is live at cateit.com with four food trucks signed up. We're focusing
+                on supply-side first—getting food trucks on the platform before pushing hard
+                on event planner acquisition.
+              </p>
 
-        <h3 className="text-2xl font-semibold mb-4 mt-8">Mobile-First</h3>
-        <p>
-          Many customers browsed on mobile while planning events, and caterers needed to
-          respond to requests quickly. We designed mobile-first, ensuring core flows worked
-          well on small screens.
-        </p>
-      </CaseSection>
+              <div className="mt-8">
+                <h3 className="font-semibold text-xl mb-4">Design compromises we made</h3>
+                <ul className="space-y-3 text-neutral-700">
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>The site uses a modular system limited to five components across all pages—faster to build, but limits flexibility</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>Food truck editing is in a modal instead of a drawer</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>Landing page is more generic than ideal—we cut location-specific carousels to ship faster</span>
+                  </li>
+                </ul>
+              </div>
 
-      <CaseSection title="Learnings & Reflections" maxWidth="content" background="gray">
-        <p>
-          Co-founding Cate it taught me as much about business strategy and resource
-          constraints as it did about design. Every decision involved trade-offs: what
-          could we build quickly vs. what would users really need? How could we grow
-          both sides of the marketplace simultaneously?
-        </p>
+              <p className="mt-8">
+                More interested? Take a look at{' '}
+                <a
+                  href="https://cateit.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 hover:underline"
+                >
+                  cateit.com
+                </a>
+              </p>
+            </div>
 
-        <p>
-          The experience reinforced that good product design isn't just about interfaces—it's
-          about understanding the business model, the market dynamics, and how all the pieces
-          fit together. It's okay to start simple and iterate based on real user feedback.
-        </p>
+            {/* Right Column - Image Placeholder */}
+            <div className="bg-neutral-100 rounded-2xl aspect-[4/3] flex items-center justify-center">
+              <span className="text-neutral-400 text-sm">Image placeholder</span>
+            </div>
+          </div>
+        </Container>
+      </section>
 
-        <p>
-          Most importantly, I learned that constraints can be clarifying. Limited resources
-          forced us to focus on what truly mattered, resulting in a leaner, more focused
-          product than if we'd tried to build everything at once.
-        </p>
+      <CaseSection title="Current status" maxWidth="content" background="gray">
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-semibold text-xl mb-3">Where we are now (pre soft-launch)</h3>
+            <p>
+              Site is live with food trucks listed. We haven't done the marketing push yet.
+              Next step is building out the full booking flow and onboarding more trucks.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-xl mb-3">What we've learned about launching</h3>
+            <p>
+              Building a marketplace part-time across three cities is hard. We've had to
+              align three different motivations: one person wants it on their CV, one sees
+              it as a hobby, and I want it to become my job. We've learned where to cut
+              corners and where not to.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-xl mb-3">Next priorities</h3>
+            <ul className="space-y-2 text-neutral-700">
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Complete the booking flow with payment processing</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Validate pricing through early bookings</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Push marketing to get more food trucks on board</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Test whether we can generate enough demand to make the marketplace viable</span>
+              </li>
+            </ul>
+          </div>
+        </div>
       </CaseSection>
     </CaseStudyWrapper>
   );

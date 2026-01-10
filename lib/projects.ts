@@ -57,7 +57,7 @@ export const projects: Project[] = [
     tools: ['React', 'D3.js', 'Figma', 'TypeScript'],
     tags: ['Data Visualization', 'Tool Design', 'Development'],
     featured: false,
-    coverImage: '/images/viz-generator/cover.svg',
+    coverImage: '/images/viz-generator/Screenshot 2026-01-10 at 11.12.18.png',
     order: 4
   }
 ];

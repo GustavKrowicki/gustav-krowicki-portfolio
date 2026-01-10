@@ -19,12 +19,12 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
       <Link href={`/work/${project.slug}`} className="group block">
-        <div className="relative aspect-[16/10] bg-neutral-200 mb-6 overflow-hidden">
+        <div className="relative aspect-[16/10] mb-6 overflow-hidden">
           <Image
             src={project.coverImage}
             alt={project.title}
             fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
+            className="object-contain group-hover:scale-105 transition-transform duration-300"
           />
         </div>
 
