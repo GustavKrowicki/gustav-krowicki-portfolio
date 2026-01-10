@@ -13,7 +13,7 @@ export const projects: Project[] = [
     tools: ['Figma', 'Miro', 'User Research', 'Prototyping'],
     tags: ['Research', 'ML/AI', 'Enterprise', 'Product Design'],
     featured: true,
-    coverImage: '/images/lego/cover.svg',
+    coverImage: '/images/lego/LEGO cover.png',
     order: 1
   },
   {
@@ -28,7 +28,7 @@ export const projects: Project[] = [
     tools: ['Figma', 'User Research', 'Business Strategy', 'MVP Design'],
     tags: ['Entrepreneurship', 'Strategy', 'UX Design', 'Marketplace'],
     featured: true,
-    coverImage: '/images/cate-it/cover.svg',
+    coverImage: '/images/cate-it/cate it cover2.png',
     order: 2
   },
   {

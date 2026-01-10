@@ -24,6 +24,7 @@ export default function LegoPage() {
       <CaseHeroAnimated
         coverImage={project.coverImage}
         alt={project.title}
+        objectFit="cover"
       />
 
       {/* Hero Info Section */}

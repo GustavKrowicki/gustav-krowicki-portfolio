@@ -25,6 +25,7 @@ export default function CateItPage() {
       <CaseHeroAnimated
         coverImage={project.coverImage}
         alt={project.title}
+        objectFit="cover"
       />
 
       {/* Hero Info Section */}
