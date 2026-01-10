@@ -6,11 +6,13 @@ import { useEffect, useState, useRef } from 'react';
 interface CaseHeroAnimatedProps {
   coverImage: string;
   alt: string;
+  objectFit?: 'contain' | 'cover';
 }
 
 export default function CaseHeroAnimated({
   coverImage,
-  alt
+  alt,
+  objectFit = 'contain'
 }: CaseHeroAnimatedProps) {
   const [scrollProgress, setScrollProgress] = useState(0);
   const heroRef = useRef<HTMLDivElement>(null);
@@ -78,7 +80,7 @@ export default function CaseHeroAnimated({
             src={coverImage}
             alt={alt}
             fill
-            className="object-contain"
+            className={objectFit === 'cover' ? 'object-cover object-top' : 'object-contain'}
             priority
           />
         </div>

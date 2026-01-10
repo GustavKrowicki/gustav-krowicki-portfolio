@@ -43,7 +43,7 @@ export const projects: Project[] = [
     tools: ['Figma', 'Miro', 'User Research', 'Journey Mapping', 'Prototyping'],
     tags: ['Client Work', 'Research', 'Prototyping', 'Design Systems'],
     featured: false,
-    coverImage: '/images/valtech/cover.svg',
+    coverImage: '/images/valtech/valtech cover.png',
     order: 3
   },
   {
