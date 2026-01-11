@@ -48,14 +48,14 @@ export const projects: Project[] = [
   },
   {
     id: '4',
-    title: 'Data Visualization Generator',
+    title: 'Visual asset generator',
     slug: 'viz-generator',
-    shortDescription: 'Built a tool to generate custom data visualizations from user inputs',
+    shortDescription: 'Built a tool to generate custom visualizations for cate it branding',
     fullDescription: 'Designed and developed an interactive tool that generates data visualizations based on user-defined parameters. Combined design thinking with technical implementation.',
     role: 'Designer & Developer',
     timeline: '2024',
     tools: ['React', 'D3.js', 'Figma', 'TypeScript'],
-    tags: ['Data Visualization', 'Tool Design', 'Development'],
+    tags: ['Branding', 'Tool Design', 'Development'],
     featured: false,
     coverImage: '/images/viz-generator/Screenshot 2026-01-10 at 11.12.18.png',
     order: 4

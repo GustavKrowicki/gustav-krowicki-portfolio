@@ -41,13 +41,12 @@ export default function FeaturedProjects() {
                   </div>
 
                   <div className="space-y-3">
-                    <div className="flex items-start justify-between gap-4">
+                    <div className="flex items-baseline justify-between gap-4">
                       <h3 className="text-2xl font-semibold">
                         {project.title}
                       </h3>
+                      <p className="text-sm text-neutral-500">{project.role}</p>
                     </div>
-
-                    <p className="text-sm text-neutral-500">{project.role}</p>
 
                     <p className="text-neutral-600 leading-relaxed">
                       {project.shortDescription}
