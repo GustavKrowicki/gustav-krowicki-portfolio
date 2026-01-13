@@ -50,50 +50,46 @@ export default function AboutPage() {
   return (
     <div className="py-24">
       <Container maxWidth="container">
-        <h1 className="text-5xl md:text-6xl font-bold mb-12">About</h1>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16 mb-16">
+          <div>
+            <h1 className="text-5xl md:text-6xl font-bold mb-8">About</h1>
+            <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+              <p>
+                I'm a product designer based in Aarhus, Denmark. I'm driven by curiosity
+                about how people work and how technology can genuinely help them.
+              </p>
+
+              <p>
+                Currently, I'm at LEGO designing internal tools that use machine learning
+                to support creative work. This involves understanding complex workflows,
+                translating ML capabilities into intuitive interfaces, and balancing
+                stakeholder needs with technical constraints.
+              </p>
+
+            </div>
+          </div>
+
+          <div>
+            <h2 className="text-5xl md:text-6xl font-bold mb-8">My Approach</h2>
+            <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+              <p>
+                I believe good design starts with understanding the problem deeply.
+                I spend time with users, ask questions, and look for patterns. I think
+                strategically about business goals and technical constraints. And I try
+                to keep solutions simple and focused.
+              </p>
+
+              <p>
+                I'm particularly interested in the intersection of design and emerging
+                technologies—not just making AI interfaces look good, but thinking through
+                how these tools change workflows and what new patterns they enable.
+              </p>
+            </div>
+          </div>
+        </div>
 
         <div className="space-y-8 text-lg leading-relaxed text-neutral-700">
-          <p>
-            I'm a product designer based in Aarhus, Denmark. I'm driven by curiosity
-            about how people work and how technology can genuinely help them.
-          </p>
-
-          <p>
-            Currently, I'm at LEGO designing internal tools that use machine learning
-            to support creative work. This involves understanding complex workflows,
-            translating ML capabilities into intuitive interfaces, and balancing
-            stakeholder needs with technical constraints.
-          </p>
-
-          <p>
-            Before LEGO, I co-founded Cate it, a platform connecting customers with
-            local caterers. Building a product from zero taught me about marketplace
-            dynamics, trust-building in two-sided platforms, and making strategic
-            decisions with limited resources.
-          </p>
-
-          <p>
-            I've also worked at Valtech on client projects including digital solutions
-            for Vestas, where I contributed to research, journey mapping, and prototyping
-            across multiple workstreams.
-          </p>
-
-          <h2 className="text-3xl font-bold mt-16 mb-6">My Approach</h2>
-
-          <p>
-            I believe good design starts with understanding the problem deeply.
-            I spend time with users, ask questions, and look for patterns. I think
-            strategically about business goals and technical constraints. And I try
-            to keep solutions simple and focused.
-          </p>
-
-          <p>
-            I'm particularly interested in the intersection of design and emerging
-            technologies—not just making AI interfaces look good, but thinking through
-            how these tools change workflows and what new patterns they enable.
-          </p>
-
-          <h2 className="text-3xl font-bold mt-16 mb-6">Interests & Skills</h2>
+          <h2 className="text-3xl font-bold mb-8">Interests & Skills</h2>
 
           <InterestMap />
 
@@ -106,7 +102,7 @@ export default function AboutPage() {
 
           <Bookshelf3D />
 
-          <h2 className="text-3xl font-bold mt-16 mb-6">Music</h2>
+          <h2 className="text-3xl font-bold mt-16 mb-4">Music</h2>
 
           <p className="mb-8">
             Playlists I'm currently listening to. Music helps me focus and sets the mood for different types of work.

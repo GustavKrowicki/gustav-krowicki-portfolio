@@ -47,9 +47,9 @@ export default function LinkedInPosts() {
     <section className="py-24 bg-neutral-50">
       <Container>
         <div className="mb-12">
-          <h2 className="text-4xl md:text-5xl font-bold mb-4">Recent Posts</h2>
-          <p className="text-lg text-neutral-600">
-            Thoughts on design, research, and product development
+          <h2 className="text-4xl md:text-5xl font-bold mb-4">Sharings from my education</h2>
+          <p className="text-lg text-neutral-600 max-w-2xl">
+            I've been through the last two years studying IT & product design at southern university of Denmark, in Kolding. A study that where, we've had a great focus on designing real solutions with stakeholders across different industries. Below you can see some of the projects I've worked on during my studies.
           </p>
         </div>
 

@@ -15,8 +15,9 @@ export default function Hero() {
           className="max-w-4xl"
         >
           <div className="flex items-center gap-4 mb-6">
-            <h1 className="text-3xl md:text-4xl font-bold">
-              Hello, I am Gustav
+            <h1 className="text-3xl md:text-4xl">
+              <span className="font-semibold">Hello,</span>{' '}
+              <span className="font-regular">I am Gustav</span>
             </h1>
             <div className="shrink-0">
               <Image
