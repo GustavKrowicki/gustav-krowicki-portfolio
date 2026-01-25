@@ -14,7 +14,13 @@ export const projects: Project[] = [
     tags: ['Research', 'ML/AI', 'Enterprise', 'Product Design'],
     featured: true,
     coverImage: '/images/lego/LEGO cover.png',
-    order: 1
+    order: 1,
+    city: {
+      district: 'corporate',
+      buildingSprite: 'building-lego',
+      position: { x: 100, y: 100 },
+      dialogContent: 'Leading ML interface design at LEGO',
+    },
   },
   {
     id: '2',
@@ -29,7 +35,13 @@ export const projects: Project[] = [
     tags: ['Entrepreneurship', 'Strategy', 'UX Design', 'Marketplace'],
     featured: true,
     coverImage: '/images/cate-it/cate it cover2.png',
-    order: 2
+    order: 2,
+    city: {
+      district: 'startup',
+      buildingSprite: 'building-cateit',
+      position: { x: 150, y: 400 },
+      dialogContent: 'Co-founded a food catering marketplace',
+    },
   },
   {
     id: '3',
@@ -44,7 +56,13 @@ export const projects: Project[] = [
     tags: ['Client Work', 'Research', 'Prototyping', 'Design Systems'],
     featured: false,
     coverImage: '/images/valtech/valtech cover.png',
-    order: 3
+    order: 3,
+    city: {
+      district: 'corporate',
+      buildingSprite: 'building-valtech',
+      position: { x: 250, y: 150 },
+      dialogContent: 'Design internship at a global agency',
+    },
   },
   {
     id: '4',
@@ -58,8 +76,14 @@ export const projects: Project[] = [
     tags: ['Branding', 'Tool Design', 'Development'],
     featured: false,
     coverImage: '/images/viz-generator/Screenshot 2026-01-10 at 11.12.18.png',
-    order: 4
-  }
+    order: 4,
+    city: {
+      district: 'personal',
+      buildingSprite: 'building-home',
+      position: { x: 500, y: 450 },
+      dialogContent: 'Personal project combining design and code',
+    },
+  },
 ];
 
 export const getFeaturedProjects = (): Project[] => {
