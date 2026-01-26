@@ -13,37 +13,37 @@ export default function AboutPage() {
   // Placeholder images for interests
   const skiingImages = [
     {
-      src: '/images/interests/skiing/skiing-1.jpg',
+      src: '/images/about/Ski 1.PNG',
       alt: 'Skiing in the mountains',
       caption: 'Skiing in the Alps',
     },
     {
-      src: '/images/interests/skiing/skiing-2.jpg',
-      alt: 'Powder skiing',
-      caption: 'Fresh powder day',
+      src: '/images/about/Ski 2.jpg',
+      alt: 'Skiing adventure',
+      caption: 'On the slopes',
     },
     {
-      src: '/images/interests/skiing/skiing-3.jpg',
-      alt: 'Ski resort view',
+      src: '/images/about/Ski 3.png',
+      alt: 'Ski trip',
       caption: 'Mountain views',
     },
   ];
 
   const footballImages = [
     {
-      src: '/images/interests/football/football-1.jpg',
-      alt: 'BIF home game',
-      caption: 'BIF home match',
+      src: '/images/about/AGF 1.jpg',
+      alt: 'AGF match day',
+      caption: 'AGF home match',
     },
     {
-      src: '/images/interests/football/football-2.jpg',
-      alt: 'Stadium atmosphere',
-      caption: 'Match day atmosphere',
+      src: '/images/about/drengene i parken.jpg',
+      alt: 'Drengene i Parken',
+      caption: 'Drengene i Parken',
     },
     {
-      src: '/images/interests/football/football-3.jpg',
-      alt: 'Celebrating with fans',
-      caption: 'Celebrating with the fans',
+      src: '/images/about/Dortmund.png',
+      alt: 'Dortmund trip',
+      caption: 'Away day in Dortmund',
     },
   ];
 
@@ -86,7 +86,7 @@ export default function AboutPage() {
             <h2 className="text-5xl md:text-3xl font-bold mb-8">My Approach</h2>
             <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
               <p>
-             I thrive in complexity. I'm drawn to systems thinking—understanding not just surface interactions, but the underlying structures and connections that shape experiences. I see how parts relate to the whole, how workflows connect, and where leverage points for change exist. I spend time understanding users and business goals deeply, using whatever method fits best: sometimes qualitative conversations and observation, sometimes quantitative analysis and pattern-finding.
+             I thrive in complexity. I'm drawn to systems thinking, understanding not just surface interactions, but the underlying structures and connections that shape experiences. I see how parts relate to the whole, how workflows connect, and where leverage points for change exist. I spend my time understanding users and business goals, using whatever method fits best: sometimes qualitative conversations and observation, sometimes quantitative analysis and pattern-finding.
              </p>
              <p>
 I'm particularly interested in the intersection of design and emerging technologies. Not just making AI interfaces look good, but thinking through how these tools reshape workflows, what new interaction patterns they enable, and what problems they actually solve. I try to stay open—open to complexity, open to different ways of understanding a problem, and open to solutions that might not fit conventional patterns. With two semesters abroad, three internships, and studies at three universities in Denmark, I'm certain that there's not only one way to reach the goal.
