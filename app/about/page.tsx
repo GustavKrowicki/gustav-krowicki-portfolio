@@ -18,14 +18,14 @@ export default function AboutPage() {
       caption: 'Skiing in the Alps',
     },
     {
-      src: '/images/about/Ski 2.jpg',
-      alt: 'Skiing adventure',
-      caption: 'On the slopes',
+      src: '/images/about/lunch ski.jpg',
+      alt: 'Lunch break on the mountain',
+      caption: 'Lunch on the slopes',
     },
     {
-      src: '/images/about/Ski 3.png',
-      alt: 'Ski trip',
-      caption: 'Mountain views',
+      src: '/images/about/Cheese.png',
+      alt: 'Raclette after skiing',
+      caption: 'Cheese break',
     },
   ];
 
