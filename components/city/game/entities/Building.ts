@@ -24,9 +24,13 @@ export class Building {
     // Create building sprite at isometric position
     this.sprite = scene.add.sprite(this.isoX, this.isoY, data.sprite);
 
-    // Make interactive
+    // Make interactive with explicit hit area (96x96 is the building texture size)
     if (data.interactable) {
-      this.sprite.setInteractive({ useHandCursor: true });
+      this.sprite.setInteractive(
+        new Phaser.Geom.Rectangle(0, 0, 96, 96),
+        Phaser.Geom.Rectangle.Contains
+      );
+      this.sprite.input!.cursor = 'pointer';
     }
 
     // Set depth based on isometric y position

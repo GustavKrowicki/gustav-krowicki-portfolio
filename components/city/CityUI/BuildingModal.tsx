@@ -39,7 +39,7 @@ export default function BuildingModal({ building, onClose }: BuildingModalProps)
     return () => document.removeEventListener('keydown', handleKeyDown);
   }, [onClose]);
 
-  // Close on click outside
+  // Close on click outside (with delay to prevent immediate close from opening click)
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (modalRef.current && !modalRef.current.contains(e.target as Node)) {
@@ -47,8 +47,15 @@ export default function BuildingModal({ building, onClose }: BuildingModalProps)
       }
     };
 
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    // Small delay to let the opening click event finish
+    const timeoutId = setTimeout(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+    }, 100);
+
+    return () => {
+      clearTimeout(timeoutId);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
   }, [onClose]);
 
   return (

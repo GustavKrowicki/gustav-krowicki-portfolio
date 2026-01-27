@@ -52,10 +52,13 @@ export class MainScene extends Phaser.Scene {
     // Set up input
     this.setupInput();
 
-    // Set up click-to-walk
+    // Set up click-to-walk (only on empty space)
     this.input.on('pointerdown', this.handlePointerDown, this);
 
-    // Set up building interaction
+    // Set up building click detection via game object events
+    this.input.on('gameobjectdown', this.handleGameObjectDown, this);
+
+    // Set up building interaction via keyboard
     this.input.keyboard?.on('keydown-E', this.interactWithBuilding, this);
     this.input.keyboard?.on('keydown-ENTER', this.interactWithBuilding, this);
 
@@ -146,7 +149,7 @@ export class MainScene extends Phaser.Scene {
       const building = new Building(this, data, this.worldWidth);
       this.buildings.push(building);
 
-      // Make buildings interactive
+      // Make buildings interactive (hover effects)
       building.sprite.on('pointerover', () => {
         this.highlightedBuilding = building;
         building.highlight(true);
@@ -157,10 +160,6 @@ export class MainScene extends Phaser.Scene {
           this.highlightedBuilding = null;
         }
         building.highlight(false);
-      });
-
-      building.sprite.on('pointerdown', () => {
-        this.emitBuildingClick(building);
       });
     });
   }
@@ -177,7 +176,27 @@ export class MainScene extends Phaser.Scene {
     };
   }
 
+  private clickedOnBuilding = false;
+
+  private handleGameObjectDown(
+    _pointer: Phaser.Input.Pointer,
+    gameObject: Phaser.GameObjects.GameObject
+  ) {
+    // Check if clicked object is a building
+    const building = this.buildings.find((b) => b.sprite === gameObject);
+    if (building) {
+      this.clickedOnBuilding = true;
+      this.emitBuildingClick(building);
+    }
+  }
+
   private handlePointerDown(pointer: Phaser.Input.Pointer) {
+    // If we just clicked on a building, don't move
+    if (this.clickedOnBuilding) {
+      this.clickedOnBuilding = false;
+      return;
+    }
+
     // Get world position from pointer
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
 
