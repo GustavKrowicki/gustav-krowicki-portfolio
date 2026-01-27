@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
+import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import "reactflow/dist/style.css";
 import LayoutContent from "@/components/ui/LayoutContent";
@@ -86,7 +87,7 @@ export const metadata: Metadata = {
     default: "Gustav Krowicki - Product Designer",
     template: "%s | Gustav Krowicki"
   },
-  description: "Product designer focused on research, ML/AI interfaces, and strategic thinking. Based in Copenhagen, Denmark.",
+  description: "Product designer focused on research, ML/AI interfaces, and strategic thinking. Based in Denmark.",
   keywords: ["Product Design", "UX Design", "User Research", "ML/AI", "Portfolio"],
   authors: [{ name: "Gustav Krowicki" }],
   creator: "Gustav Krowicki",
@@ -110,6 +111,7 @@ export default function RootLayout({
         <LayoutContent>
           {children}
         </LayoutContent>
+        <Analytics />
       </body>
     </html>
   );
