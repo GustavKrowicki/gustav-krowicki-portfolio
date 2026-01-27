@@ -69,7 +69,8 @@ export default function Header() {
             Gustav Krowicki
           </Link>
 
-          <ul className="flex items-center gap-8">
+          {/* Desktop navigation - hidden on mobile */}
+          <ul className="hidden md:flex items-center gap-8">
             {navItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (
