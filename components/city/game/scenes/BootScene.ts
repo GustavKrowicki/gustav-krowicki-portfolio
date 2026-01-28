@@ -29,6 +29,20 @@ export class BootScene extends Phaser.Scene {
 
     // Load actual sprites
     this.load.image('building-lego', '/game/sprites/LEGO HQ-96px S.png');
+    this.load.image('building-valtech', '/game/sprites/Valtech-96px.png');
+
+    // Education district
+    this.load.image('building-sdu', '/game/sprites/SDU kolding-96px.png');
+    this.load.image('building-melbourne', '/game/sprites/Melbourne uni .png');
+    this.load.image('building-berlin', '/game/sprites/Berlin uni-96px.png');
+    this.load.image('building-aarhus', '/game/sprites/erhvervsakademiet -96px.png');
+
+    // Personal district
+    this.load.image('building-library', '/game/sprites/Library dokk1-96px.png');
+    this.load.image('building-agf', '/game/sprites/stadium new-south-96px.png');
+    this.load.image('building-tree-skiing', '/game/sprites/tree skiing-96px.png');
+    this.load.image('building-ski-chute', '/game/sprites/ski chute-96px.png');
+    this.load.image('building-concert', '/game/sprites/concert-96px.png');
 
     // Load placeholder assets for buildings without sprites yet
     this.createPlaceholderTextures();
@@ -48,10 +62,7 @@ export class BootScene extends Phaser.Scene {
 
     // Building placeholders (isometric-ish) - only for buildings without real sprites
     const buildingColors: Record<string, number> = {
-      'building-valtech': 0x3b82f6, // blue
-      'building-sdu': 0x10b981, // green
       'building-cateit': 0xf59e0b, // amber
-      'building-home': 0x8b5cf6, // purple
     };
 
     Object.entries(buildingColors).forEach(([key, color]) => {
