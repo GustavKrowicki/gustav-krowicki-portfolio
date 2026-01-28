@@ -2,7 +2,16 @@ import Phaser from 'phaser';
 import { Player } from '../entities/Player';
 import { Building } from '../entities/Building';
 import { buildings as buildingData } from '@/lib/data/buildings';
-import { TILE_SIZE } from '../config';
+import {
+  GRID_WIDTH,
+  GRID_HEIGHT,
+  TILE_WIDTH,
+  TILE_HEIGHT,
+  GRID_OFFSET_X,
+  GRID_OFFSET_Y,
+  GAME_WIDTH,
+  GAME_HEIGHT,
+} from '../config';
 
 export class MainScene extends Phaser.Scene {
   public player!: Player;
@@ -12,21 +21,50 @@ export class MainScene extends Phaser.Scene {
   private highlightedBuilding: Building | null = null;
   private touchInput = { dx: 0, dy: 0 };
 
-  // Map dimensions (in tiles)
-  private mapWidth = 20;
-  private mapHeight = 15;
-  private worldWidth = 0;
-  private worldHeight = 0;
-
   constructor() {
     super({ key: 'MainScene' });
   }
 
-  create() {
-    // Calculate world dimensions
-    this.worldWidth = this.mapWidth * TILE_SIZE;
-    this.worldHeight = this.mapHeight * TILE_SIZE;
+  // Convert grid coordinates to isometric screen coordinates
+  private gridToIso(gridX: number, gridY: number): { x: number; y: number } {
+    return {
+      x: (gridX - gridY) * (TILE_WIDTH / 2) + GRID_OFFSET_X,
+      y: (gridX + gridY) * (TILE_HEIGHT / 2) + GRID_OFFSET_Y,
+    };
+  }
 
+  // Convert isometric screen coordinates back to grid coordinates
+  private isoToGrid(isoX: number, isoY: number): { x: number; y: number } {
+    const relX = isoX - GRID_OFFSET_X;
+    const relY = isoY - GRID_OFFSET_Y;
+    return {
+      x: (relX / (TILE_WIDTH / 2) + relY / (TILE_HEIGHT / 2)) / 2,
+      y: (relY / (TILE_HEIGHT / 2) - relX / (TILE_WIDTH / 2)) / 2,
+    };
+  }
+
+  // Check if a screen position is within the isometric grid bounds
+  private isWithinGridBounds(isoX: number, isoY: number): boolean {
+    const grid = this.isoToGrid(isoX, isoY);
+    const margin = 0.5; // Allow half a tile margin at edges
+    return (
+      grid.x >= -margin &&
+      grid.x <= GRID_WIDTH - 1 + margin &&
+      grid.y >= -margin &&
+      grid.y <= GRID_HEIGHT - 1 + margin
+    );
+  }
+
+  // Clamp a position to stay within grid bounds
+  private clampToGridBounds(isoX: number, isoY: number): { x: number; y: number } {
+    const grid = this.isoToGrid(isoX, isoY);
+    const margin = 0.5;
+    const clampedGridX = Math.max(-margin, Math.min(GRID_WIDTH - 1 + margin, grid.x));
+    const clampedGridY = Math.max(-margin, Math.min(GRID_HEIGHT - 1 + margin, grid.y));
+    return this.gridToIso(clampedGridX, clampedGridY);
+  }
+
+  create() {
     // Create ground tiles
     this.createGround();
 
@@ -34,20 +72,14 @@ export class MainScene extends Phaser.Scene {
     this.createBuildings();
 
     // Create player at center of isometric grid
-    const centerGridX = this.mapWidth / 2;
-    const centerGridY = this.mapHeight / 2;
-    const playerStartX = (centerGridX - centerGridY) * (TILE_SIZE / 2) + this.worldWidth / 2;
-    const playerStartY = (centerGridX + centerGridY) * (TILE_SIZE / 4) + 100;
-    this.player = new Player(this, playerStartX, playerStartY);
+    const centerPos = this.gridToIso(GRID_WIDTH / 2, GRID_HEIGHT / 2);
+    this.player = new Player(this, centerPos.x, centerPos.y);
 
-    // Set up camera to follow player
-    this.cameras.main.startFollow(this.player.sprite, true, 0.1, 0.1);
-    this.cameras.main.setZoom(1.5); // Zoom in a bit for better view
+    // Center camera on the canvas (no scrolling - entire world fits)
+    this.cameras.main.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
 
-    // Set camera bounds to cover the isometric area
-    const isoBounds = this.getIsometricBounds();
-    this.cameras.main.setBounds(isoBounds.x, isoBounds.y, isoBounds.width, isoBounds.height);
-    this.physics.world.setBounds(isoBounds.x, isoBounds.y, isoBounds.width, isoBounds.height);
+    // Disable camera from following anything
+    this.cameras.main.stopFollow();
 
     // Set up input
     this.setupInput();
@@ -71,38 +103,26 @@ export class MainScene extends Phaser.Scene {
   }
 
   private handleResize() {
-    // Update camera bounds on resize
-    const isoBounds = this.getIsometricBounds();
-    this.cameras.main.setBounds(isoBounds.x, isoBounds.y, isoBounds.width, isoBounds.height);
+    // Re-center camera on resize
+    this.cameras.main.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
   }
 
   private getIsometricBounds() {
-    // Calculate the bounding box of the isometric diamond
-    // Grid corners and their isometric positions:
-    // Top (0,0): center of diamond top
-    // Right (mapWidth-1, 0): right corner
-    // Bottom (mapWidth-1, mapHeight-1): bottom corner
-    // Left (0, mapHeight-1): left corner
+    // Calculate the bounding box of the isometric grid
+    // The four corners of the isometric grid:
+    const topCorner = this.gridToIso(0, 0);           // Top point
+    const rightCorner = this.gridToIso(GRID_WIDTH - 1, 0);  // Right point
+    const bottomCorner = this.gridToIso(GRID_WIDTH - 1, GRID_HEIGHT - 1); // Bottom point
+    const leftCorner = this.gridToIso(0, GRID_HEIGHT - 1);  // Left point
 
-    const halfTile = TILE_SIZE / 2;
-    const quarterTile = TILE_SIZE / 4;
-    const offsetX = this.worldWidth / 2;
-    const offsetY = 100;
-
-    // Calculate corner positions
-    const topY = offsetY; // grid (0,0)
-    const rightX = ((this.mapWidth - 1) - 0) * halfTile + offsetX; // grid (mapWidth-1, 0)
-    const bottomY = ((this.mapWidth - 1) + (this.mapHeight - 1)) * quarterTile + offsetY; // grid (mapWidth-1, mapHeight-1)
-    const leftX = (0 - (this.mapHeight - 1)) * halfTile + offsetX; // grid (0, mapHeight-1)
-
-    // Add generous padding
-    const padding = 200;
+    // Add half tile size for tile extent
+    const margin = TILE_WIDTH / 2;
 
     return {
-      x: leftX - padding,
-      y: topY - padding,
-      width: (rightX - leftX) + padding * 2,
-      height: (bottomY - topY) + padding * 2,
+      x: leftCorner.x - margin,
+      y: topCorner.y - TILE_HEIGHT / 2,
+      width: rightCorner.x - leftCorner.x + margin * 2,
+      height: bottomCorner.y - topCorner.y + TILE_HEIGHT,
     };
   }
 
@@ -117,18 +137,17 @@ export class MainScene extends Phaser.Scene {
 
   private createGround() {
     // Create isometric ground grid with district coloring
-    for (let y = 0; y < this.mapHeight; y++) {
-      for (let x = 0; x < this.mapWidth; x++) {
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
         // Convert grid position to isometric screen position
-        const isoX = (x - y) * (TILE_SIZE / 2) + this.worldWidth / 2;
-        const isoY = (x + y) * (TILE_SIZE / 4) + 100;
+        const pos = this.gridToIso(x, y);
 
         // Create tile
-        const tile = this.add.image(isoX, isoY, 'tile-ground').setDepth(0);
+        const tile = this.add.image(pos.x, pos.y, 'tile-ground').setDepth(0);
 
         // Tint based on district (using grid quadrants)
-        const isLeft = x < this.mapWidth / 2;
-        const isTop = y < this.mapHeight / 2;
+        const isLeft = x < GRID_WIDTH / 2;
+        const isTop = y < GRID_HEIGHT / 2;
 
         if (isLeft && isTop) {
           tile.setTint(0x3B82F6); // Corporate - blue
@@ -146,7 +165,7 @@ export class MainScene extends Phaser.Scene {
 
   private createBuildings() {
     buildingData.forEach((data) => {
-      const building = new Building(this, data, this.worldWidth);
+      const building = new Building(this, data);
       this.buildings.push(building);
 
       // Make buildings interactive (hover effects)
@@ -174,6 +193,15 @@ export class MainScene extends Phaser.Scene {
       S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
       D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
     };
+
+    // Prevent arrow keys from scrolling the page
+    this.input.keyboard.addCapture([
+      Phaser.Input.Keyboard.KeyCodes.UP,
+      Phaser.Input.Keyboard.KeyCodes.DOWN,
+      Phaser.Input.Keyboard.KeyCodes.LEFT,
+      Phaser.Input.Keyboard.KeyCodes.RIGHT,
+      Phaser.Input.Keyboard.KeyCodes.SPACE,
+    ]);
   }
 
   private clickedOnBuilding = false;
@@ -200,13 +228,19 @@ export class MainScene extends Phaser.Scene {
     // Get world position from pointer
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
 
-    // Move player towards clicked position
-    this.player.moveTo(worldPoint.x, worldPoint.y);
+    // Only move if clicked within grid bounds
+    if (this.isWithinGridBounds(worldPoint.x, worldPoint.y)) {
+      this.player.moveTo(worldPoint.x, worldPoint.y);
+    } else {
+      // Clamp to nearest valid position within grid
+      const clamped = this.clampToGridBounds(worldPoint.x, worldPoint.y);
+      this.player.moveTo(clamped.x, clamped.y);
+    }
   }
 
   private interactWithBuilding() {
-    // Find closest building within interaction range
-    const interactionRange = 80;
+    // Find closest building within interaction range (scaled for smaller world)
+    const interactionRange = 35;
     let closestBuilding: Building | null = null;
     let closestDistance = Infinity;
 
@@ -274,6 +308,14 @@ export class MainScene extends Phaser.Scene {
     // Update player
     this.player.update();
 
+    // Enforce isometric grid bounds (diamond shape)
+    const playerPos = this.player.getPosition();
+    if (!this.isWithinGridBounds(playerPos.x, playerPos.y)) {
+      const clamped = this.clampToGridBounds(playerPos.x, playerPos.y);
+      this.player.setPosition(clamped.x, clamped.y);
+      this.player.forceStop();
+    }
+
     // Sort buildings by y position for proper depth
     this.buildings.forEach((building) => {
       building.sprite.setDepth(building.sprite.y);
@@ -288,9 +330,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   private checkCurrentDistrict() {
-    // Determine district based on player position relative to world center
-    const isLeft = this.player.sprite.x < this.worldWidth / 2;
-    const isTop = this.player.sprite.y < this.worldHeight / 2;
+    // Determine district based on player position relative to canvas center
+    const isLeft = this.player.sprite.x < GAME_WIDTH / 2;
+    const isTop = this.player.sprite.y < GAME_HEIGHT / 2;
 
     let district: { id: string; name: string; color: string };
 
@@ -308,7 +350,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private checkNearbyBuildings() {
-    const proximityRange = 100;
+    const proximityRange = 45; // Scaled for smaller world
     let nearestBuilding: Building | null = null;
     let nearestDistance = Infinity;
 

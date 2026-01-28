@@ -1,23 +1,23 @@
 import Phaser from 'phaser';
+import { TILE_WIDTH } from '../config';
 
 export class Player {
   public sprite: Phaser.Physics.Arcade.Sprite;
-  private scene: Phaser.Scene;
-  private speed = 150;
+  private speed = 100;
   private targetPosition: { x: number; y: number } | null = null;
   private isMovingToTarget = false;
 
   constructor(scene: Phaser.Scene, x: number, y: number) {
-    this.scene = scene;
-
-    // Create player sprite
     this.sprite = scene.physics.add.sprite(x, y, 'player');
-    this.sprite.setCollideWorldBounds(true);
     this.sprite.setDepth(10);
 
-    // Set up physics body
-    this.sprite.body?.setSize(24, 16);
-    this.sprite.body?.setOffset(4, 32);
+    // Scale player to fit tile size (original sprite is 32x48)
+    const playerScale = TILE_WIDTH / 48;
+    this.sprite.setScale(playerScale);
+
+    // Set up physics body (scaled)
+    this.sprite.body?.setSize(24 * playerScale, 16 * playerScale);
+    this.sprite.body?.setOffset(4 * playerScale, 32 * playerScale);
   }
 
   moveDirection(dx: number, dy: number) {
@@ -44,6 +44,13 @@ export class Player {
     if (!this.isMovingToTarget) {
       this.sprite.setVelocity(0, 0);
     }
+  }
+
+  forceStop() {
+    // Cancel all movement including click-to-walk
+    this.targetPosition = null;
+    this.isMovingToTarget = false;
+    this.sprite.setVelocity(0, 0);
   }
 
   update() {

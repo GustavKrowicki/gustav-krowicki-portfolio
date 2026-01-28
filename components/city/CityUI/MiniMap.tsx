@@ -15,9 +15,10 @@ interface WorldBounds {
 interface MiniMapProps {
   playerPosition: { x: number; y: number };
   worldBounds: WorldBounds | null;
+  inline?: boolean;
 }
 
-export default function MiniMap({ playerPosition, worldBounds }: MiniMapProps) {
+export default function MiniMap({ playerPosition, worldBounds, inline = false }: MiniMapProps) {
   const { setMode } = usePortfolioMode();
   const miniMapWidth = 160;
   const miniMapHeight = 110;
@@ -42,7 +43,7 @@ export default function MiniMap({ playerPosition, worldBounds }: MiniMapProps) {
   const playerMiniPos = worldToMinimap(playerPosition.x, playerPosition.y);
 
   return (
-    <div className="absolute top-4 right-4 bg-slate-900/90 rounded-xl p-3 backdrop-blur-sm border border-slate-700 w-48">
+    <div className={`bg-slate-800 rounded-xl p-3 border border-slate-700 ${inline ? 'w-full' : 'absolute top-4 right-4 w-48'}`}>
       {/* Header with branding */}
       <div className="mb-3 pb-2 border-b border-slate-700">
         <h2 className="text-white font-semibold text-sm">Gustav Krowicki</h2>

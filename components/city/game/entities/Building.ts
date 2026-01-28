@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import { Building as BuildingData } from '@/lib/data/buildings';
-import { TILE_SIZE } from '../config';
+import { TILE_WIDTH, TILE_HEIGHT, GRID_OFFSET_X, GRID_OFFSET_Y } from '../config';
 
 export class Building {
   public sprite: Phaser.GameObjects.Sprite;
@@ -11,20 +11,24 @@ export class Building {
   private highlightSprite: Phaser.GameObjects.Sprite | null = null;
   private nameText: Phaser.GameObjects.Text | null = null;
 
-  constructor(scene: Phaser.Scene, data: BuildingData, worldWidth: number) {
+  constructor(scene: Phaser.Scene, data: BuildingData) {
     this.scene = scene;
     this.data = data;
 
     // Convert grid position to isometric screen position
     const gridX = data.gridPosition.x;
     const gridY = data.gridPosition.y;
-    this.isoX = (gridX - gridY) * (TILE_SIZE / 2) + worldWidth / 2;
-    this.isoY = (gridX + gridY) * (TILE_SIZE / 4) + 100;
+    this.isoX = (gridX - gridY) * (TILE_WIDTH / 2) + GRID_OFFSET_X;
+    this.isoY = (gridX + gridY) * (TILE_HEIGHT / 2) + GRID_OFFSET_Y;
 
     // Create building sprite at isometric position
     this.sprite = scene.add.sprite(this.isoX, this.isoY, data.sprite);
 
-    // Make interactive with explicit hit area (96x96 is the building texture size)
+    // Scale building to fit tile size (original sprites are 96px, scale to ~1.5 tiles wide)
+    const buildingScale = (TILE_WIDTH * 1.5) / 96;
+    this.sprite.setScale(buildingScale);
+
+    // Make interactive with explicit hit area
     if (data.interactable) {
       this.sprite.setInteractive(
         new Phaser.Geom.Rectangle(0, 0, 96, 96),

@@ -27,8 +27,10 @@ export class BootScene extends Phaser.Scene {
       }
     });
 
-    // Load placeholder assets
-    // In the future, these will be replaced with actual isometric sprites
+    // Load actual sprites
+    this.load.image('building-lego', '/game/sprites/LEGO HQ-96px S.png');
+
+    // Load placeholder assets for buildings without sprites yet
     this.createPlaceholderTextures();
   }
 
@@ -44,9 +46,8 @@ export class BootScene extends Phaser.Scene {
     graphics.fillCircle(16, 12, 10);
     graphics.generateTexture('player', 32, 48);
 
-    // Building placeholders (isometric-ish)
+    // Building placeholders (isometric-ish) - only for buildings without real sprites
     const buildingColors: Record<string, number> = {
-      'building-lego': 0xef4444, // red
       'building-valtech': 0x3b82f6, // blue
       'building-sdu': 0x10b981, // green
       'building-cateit': 0xf59e0b, // amber
@@ -78,29 +79,29 @@ export class BootScene extends Phaser.Scene {
       graphics.generateTexture(key, 96, 96);
     });
 
-    // Ground tile
+    // Ground tile (44x22 isometric diamond - 2:1 ratio)
     graphics.clear();
     graphics.fillStyle(0x334155, 1); // slate-700
     graphics.beginPath();
-    graphics.moveTo(32, 0);
-    graphics.lineTo(64, 16);
-    graphics.lineTo(32, 32);
-    graphics.lineTo(0, 16);
+    graphics.moveTo(22, 0);   // top
+    graphics.lineTo(44, 11);  // right
+    graphics.lineTo(22, 22);  // bottom
+    graphics.lineTo(0, 11);   // left
     graphics.closePath();
     graphics.fillPath();
-    graphics.generateTexture('tile-ground', 64, 32);
+    graphics.generateTexture('tile-ground', 44, 22);
 
     // Highlight tile
     graphics.clear();
     graphics.lineStyle(2, 0xfbbf24, 1); // amber-400
     graphics.beginPath();
-    graphics.moveTo(32, 2);
-    graphics.lineTo(62, 16);
-    graphics.lineTo(32, 30);
-    graphics.lineTo(2, 16);
+    graphics.moveTo(22, 1);
+    graphics.lineTo(43, 11);
+    graphics.lineTo(22, 21);
+    graphics.lineTo(1, 11);
     graphics.closePath();
     graphics.strokePath();
-    graphics.generateTexture('tile-highlight', 64, 32);
+    graphics.generateTexture('tile-highlight', 44, 22);
 
     graphics.destroy();
   }

@@ -139,32 +139,45 @@ function CityGameInner() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-900 relative">
+    <div className="min-h-screen bg-slate-900 flex items-center justify-center p-8">
       {isLoading && <CityLoader progress={loadProgress} />}
 
-      {/* Game container - full screen */}
-      <div
-        ref={containerRef}
-        className="w-full h-screen flex items-center justify-center"
-      />
+      <div className="flex gap-8 items-start max-w-6xl w-full">
+        {/* Left Panel - Info */}
+        <div className="hidden lg:block w-64 space-y-6">
+          <WelcomeBanner inline />
+          <DistrictIndicator district={currentDistrict} inline />
+        </div>
 
-      {/* UI Overlays */}
-      {!isLoading && (
-        <>
-          <WelcomeBanner />
-          <DistrictIndicator district={currentDistrict} />
+        {/* Center - Game Canvas (responsive) */}
+        <div className="flex-1 lg:flex-none">
+          <div
+            ref={containerRef}
+            className="w-full max-w-[870px] aspect-[870/535] rounded-xl overflow-hidden border-2 border-slate-700 shadow-2xl mx-auto"
+          />
+          {/* Mobile info below canvas */}
+          <div className="lg:hidden mt-4 space-y-4">
+            <DistrictIndicator district={currentDistrict} inline />
+          </div>
+        </div>
+
+        {/* Right Panel - Navigation & Controls */}
+        <div className="hidden lg:block w-64 space-y-6">
           <MiniMap
             playerPosition={playerPosition}
             worldBounds={worldBounds}
+            inline
           />
-          {!isMobile && <ControlsHint nearbyBuilding={nearbyBuilding} />}
-          {isMobile && (
-            <TouchControls
-              onMove={handleTouchMove}
-              onInteract={handleTouchInteract}
-            />
-          )}
-        </>
+          {!isMobile && <ControlsHint nearbyBuilding={nearbyBuilding} inline />}
+        </div>
+      </div>
+
+      {/* Mobile Touch Controls */}
+      {isMobile && !isLoading && (
+        <TouchControls
+          onMove={handleTouchMove}
+          onInteract={handleTouchInteract}
+        />
       )}
 
       {/* Building Modal */}

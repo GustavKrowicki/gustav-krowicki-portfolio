@@ -13,42 +13,7 @@ export default function TouchControls({ onMove, onInteract }: TouchControlsProps
   const isDragging = useRef(false);
   const centerRef = useRef({ x: 0, y: 0 });
 
-  const handleTouchStart = useCallback((e: TouchEvent) => {
-    if (!joystickRef.current || !knobRef.current) return;
-
-    const touch = e.touches[0];
-    const rect = joystickRef.current.getBoundingClientRect();
-    centerRef.current = {
-      x: rect.left + rect.width / 2,
-      y: rect.top + rect.height / 2,
-    };
-    isDragging.current = true;
-
-    // Calculate initial position
-    const dx = touch.clientX - centerRef.current.x;
-    const dy = touch.clientY - centerRef.current.y;
-    updateKnob(dx, dy);
-  }, []);
-
-  const handleTouchMove = useCallback((e: TouchEvent) => {
-    if (!isDragging.current || !knobRef.current) return;
-    e.preventDefault();
-
-    const touch = e.touches[0];
-    const dx = touch.clientX - centerRef.current.x;
-    const dy = touch.clientY - centerRef.current.y;
-    updateKnob(dx, dy);
-  }, []);
-
-  const handleTouchEnd = useCallback(() => {
-    isDragging.current = false;
-    if (knobRef.current) {
-      knobRef.current.style.transform = 'translate(-50%, -50%)';
-    }
-    onMove(0, 0);
-  }, [onMove]);
-
-  const updateKnob = (dx: number, dy: number) => {
+  const updateKnob = useCallback((dx: number, dy: number) => {
     if (!knobRef.current) return;
 
     const maxDistance = 40;
@@ -72,7 +37,42 @@ export default function TouchControls({ onMove, onInteract }: TouchControlsProps
     } else {
       onMove(0, 0);
     }
-  };
+  }, [onMove]);
+
+  const handleTouchStart = useCallback((e: TouchEvent) => {
+    if (!joystickRef.current || !knobRef.current) return;
+
+    const touch = e.touches[0];
+    const rect = joystickRef.current.getBoundingClientRect();
+    centerRef.current = {
+      x: rect.left + rect.width / 2,
+      y: rect.top + rect.height / 2,
+    };
+    isDragging.current = true;
+
+    // Calculate initial position
+    const dx = touch.clientX - centerRef.current.x;
+    const dy = touch.clientY - centerRef.current.y;
+    updateKnob(dx, dy);
+  }, [updateKnob]);
+
+  const handleTouchMove = useCallback((e: TouchEvent) => {
+    if (!isDragging.current || !knobRef.current) return;
+    e.preventDefault();
+
+    const touch = e.touches[0];
+    const dx = touch.clientX - centerRef.current.x;
+    const dy = touch.clientY - centerRef.current.y;
+    updateKnob(dx, dy);
+  }, [updateKnob]);
+
+  const handleTouchEnd = useCallback(() => {
+    isDragging.current = false;
+    if (knobRef.current) {
+      knobRef.current.style.transform = 'translate(-50%, -50%)';
+    }
+    onMove(0, 0);
+  }, [onMove]);
 
   useEffect(() => {
     const joystick = joystickRef.current;
