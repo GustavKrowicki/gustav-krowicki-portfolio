@@ -3,17 +3,14 @@
 import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
-import { PortfolioModeProvider, usePortfolioMode } from '@/contexts/PortfolioModeContext';
 
-function LayoutContentInner({ children }: { children: React.ReactNode }) {
+export default function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
-  const { mode, isHydrated } = usePortfolioMode();
   const isProjectPage = pathname.startsWith('/work/') && pathname !== '/work';
-  const isCityMode = isHydrated && mode === 'city';
+  const isCityPage = pathname.startsWith('/city');
 
-  // Hide header/footer in City mode for full immersion
-  const showHeader = !isProjectPage && !isCityMode;
-  const showFooter = !isProjectPage && !isCityMode;
+  const showHeader = !isProjectPage && !isCityPage;
+  const showFooter = !isProjectPage && !isCityPage;
 
   return (
     <>
@@ -23,13 +20,5 @@ function LayoutContentInner({ children }: { children: React.ReactNode }) {
       </main>
       {showFooter && <Footer />}
     </>
-  );
-}
-
-export default function LayoutContent({ children }: { children: React.ReactNode }) {
-  return (
-    <PortfolioModeProvider>
-      <LayoutContentInner>{children}</LayoutContentInner>
-    </PortfolioModeProvider>
   );
 }
