@@ -29,6 +29,7 @@ export const projects: Project[] = [
     tags: ['Entrepreneurship', 'Strategy', 'UX Design', 'Marketplace'],
     featured: true,
     coverImage: '/images/cate-it/cate it cover2.png',
+    link: 'https://cateit.com',
     order: 2
   },
   {
@@ -58,6 +59,7 @@ export const projects: Project[] = [
     tags: ['Branding', 'Tool Design', 'Development'],
     featured: false,
     coverImage: '/images/viz-generator/Screenshot 2026-01-10 at 11.12.18.png',
+    link: 'https://arena-connect.vercel.app',
     order: 4
   }
 ];
