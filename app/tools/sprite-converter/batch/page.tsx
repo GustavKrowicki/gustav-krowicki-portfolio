@@ -266,7 +266,7 @@ export default function BatchConverterPage() {
                 </label>
                 <input
                   type="range"
-                  min="0.3"
+                  min="0.05"
                   max="0.55"
                   step="0.01"
                   value={verticalOffset}

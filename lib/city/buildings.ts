@@ -149,6 +149,22 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
   },
+  "erhvervsakademiet": {
+    id: "erhvervsakademiet",
+    name: "Erhvervsakademiet",
+    category: "portfolio",
+    footprint: { width: 4, height: 3 },
+    sprites: {
+      south: "/game/pogicity/Building/landmark/erhvervsakademiet _south.png",
+      north: "/game/pogicity/Building/landmark/erhvervsakademiet _south.png",
+      east: "/game/pogicity/Building/landmark/erhvervsakademiet _south.png",
+      west: "/game/pogicity/Building/landmark/erhvervsakademiet _south.png",
+    },
+    icon: "🏫",
+    description: "Erhvervsakademiet",
+    interactable: false,
+    supportsRotation: false,
+  },
   "dokk1-library": {
     id: "dokk1-library",
     name: "Dokk1 Library",
