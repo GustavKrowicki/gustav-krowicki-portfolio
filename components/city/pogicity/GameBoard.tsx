@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useState, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import dynamic from "next/dynamic";
 import {
   GridCell,
@@ -50,6 +50,16 @@ export interface PhaserGameHandle {
   clearCars: () => void;
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
+  panToPosition: (gridX: number, gridY: number) => void;
+  highlightBuilding: (buildingId: string | null) => void;
+}
+
+// GameBoard handle exposed to parent components
+export interface GameBoardHandle {
+  spawnCharacter: () => boolean;
+  spawnCar: () => boolean;
+  panToPosition: (gridX: number, gridY: number) => void;
+  highlightBuilding: (buildingId: string | null) => void;
 }
 
 export interface GameSaveData {
@@ -78,12 +88,12 @@ function createEmptyGrid(): GridCell[][] {
   );
 }
 
-export default function GameBoard({
+const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard({
   editable = false,
   initialGrid,
   onBuildingClick,
   onSave,
-}: GameBoardProps) {
+}, ref) {
   const [grid, setGrid] = useState<GridCell[][]>(() => {
     // Check if initialGrid is valid (non-empty array with proper dimensions)
     if (initialGrid && initialGrid.length === GRID_HEIGHT && initialGrid[0]?.length === GRID_WIDTH) {
@@ -91,6 +101,37 @@ export default function GameBoard({
     }
     return createEmptyGrid();
   });
+
+  // Undo history - stores previous grid states
+  const [history, setHistory] = useState<GridCell[][][]>([]);
+  const MAX_HISTORY = 50; // Limit history to prevent memory issues
+
+  // Push current grid to history before making changes
+  const pushHistory = useCallback(() => {
+    setHistory((prev) => {
+      const newHistory = [...prev, grid.map((row) => row.map((cell) => ({ ...cell })))];
+      // Keep only the last MAX_HISTORY states
+      if (newHistory.length > MAX_HISTORY) {
+        return newHistory.slice(-MAX_HISTORY);
+      }
+      return newHistory;
+    });
+  }, [grid]);
+
+  // Undo last action
+  const undo = useCallback(() => {
+    if (history.length === 0) return;
+
+    setHistory((prev) => {
+      const newHistory = [...prev];
+      const previousGrid = newHistory.pop();
+      if (previousGrid) {
+        setGrid(previousGrid);
+      }
+      return newHistory;
+    });
+  }, [history]);
+
   const [selectedTool, setSelectedTool] = useState<ToolType>(
     editable ? ToolType.RoadNetwork : ToolType.None
   );
@@ -102,6 +143,18 @@ export default function GameBoard({
 
   const gameRef = useRef<PhaserGameHandle>(null);
 
+  // Expose methods to parent component via ref
+  useImperativeHandle(ref, () => ({
+    spawnCharacter: () => gameRef.current?.spawnCharacter() ?? false,
+    spawnCar: () => gameRef.current?.spawnCar() ?? false,
+    panToPosition: (gridX: number, gridY: number) => {
+      gameRef.current?.panToPosition(gridX, gridY);
+    },
+    highlightBuilding: (buildingId: string | null) => {
+      gameRef.current?.highlightBuilding(buildingId);
+    },
+  }), []);
+
   // Load initial grid if provided
   useEffect(() => {
     if (initialGrid) {
@@ -109,22 +162,29 @@ export default function GameBoard({
     }
   }, [initialGrid]);
 
-  // Rotate building on R key
+  // Keyboard shortcuts (R to rotate, Ctrl/Cmd+Z to undo)
   useEffect(() => {
     if (!editable) return;
 
     const handleKeyDown = (e: KeyboardEvent) => {
+      // Rotate building on R key
       if (e.key.toLowerCase() === "r" && selectedTool === ToolType.Building) {
         const orientations = [Direction.Down, Direction.Right, Direction.Up, Direction.Left];
         const currentIndex = orientations.indexOf(buildingOrientation);
         const nextIndex = (currentIndex + 1) % orientations.length;
         setBuildingOrientation(orientations[nextIndex]);
       }
+
+      // Undo on Ctrl+Z or Cmd+Z
+      if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "z") {
+        e.preventDefault();
+        undo();
+      }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [editable, selectedTool, buildingOrientation]);
+  }, [editable, selectedTool, buildingOrientation, undo]);
 
   // Handle tile click
   const handleTileClick = useCallback(
@@ -164,6 +224,7 @@ export default function GameBoard({
     (tiles: Array<{ x: number; y: number }>) => {
       if (!editable) return;
 
+      pushHistory();
       setGrid((prev) => {
         // Ensure grid is properly initialized
         if (!prev || prev.length !== GRID_HEIGHT || !prev[0] || prev[0].length !== GRID_WIDTH) {
@@ -201,7 +262,7 @@ export default function GameBoard({
 
       playBuildSound();
     },
-    [editable, selectedTool]
+    [editable, selectedTool, pushHistory]
   );
 
   // Handle road drag
@@ -209,6 +270,7 @@ export default function GameBoard({
     (segments: Array<{ x: number; y: number }>) => {
       if (!editable) return;
 
+      pushHistory();
       setGrid((prev) => {
         // Ensure grid is properly initialized
         if (!prev || prev.length !== GRID_HEIGHT || !prev[0] || prev[0].length !== GRID_WIDTH) {
@@ -288,7 +350,7 @@ export default function GameBoard({
 
       playBuildRoadSound();
     },
-    [editable]
+    [editable, pushHistory]
   );
 
   // Handle eraser drag
@@ -296,6 +358,7 @@ export default function GameBoard({
     (tiles: Array<{ x: number; y: number }>) => {
       if (!editable) return;
 
+      pushHistory();
       setGrid((prev) => {
         // Ensure grid is properly initialized
         if (!prev || prev.length !== GRID_HEIGHT || !prev[0] || prev[0].length !== GRID_WIDTH) {
@@ -359,7 +422,7 @@ export default function GameBoard({
 
       playDestructionSound();
     },
-    [editable]
+    [editable, pushHistory]
   );
 
   // Place building
@@ -392,6 +455,7 @@ export default function GameBoard({
         }
       }
 
+      pushHistory();
       setGrid((prev) => {
         // Ensure grid is properly initialized
         if (!prev || prev.length !== GRID_HEIGHT || !prev[0] || prev[0].length !== GRID_WIDTH) {
@@ -427,7 +491,7 @@ export default function GameBoard({
       playBuildSound();
       gameRef.current?.shakeScreen("y", 3, 150);
     },
-    [grid]
+    [grid, pushHistory]
   );
 
   // Erase tile
@@ -436,6 +500,7 @@ export default function GameBoard({
     if (!cell) return;
     if (cell.type === TileType.Grass) return;
 
+    pushHistory();
     setGrid((prev) => {
       // Ensure grid is properly initialized
       if (!prev || prev.length !== GRID_HEIGHT || !prev[0] || prev[0].length !== GRID_WIDTH) {
@@ -487,7 +552,7 @@ export default function GameBoard({
     });
 
     playDestructionSound();
-  }, [grid]);
+  }, [grid, pushHistory]);
 
   // Spawn character
   const handleSpawnCharacter = useCallback(() => {
@@ -580,6 +645,14 @@ export default function GameBoard({
           >
             {showToolWindow ? "Hide Tools" : "Show Tools"}
           </button>
+          <button
+            onClick={undo}
+            disabled={history.length === 0}
+            className="px-4 py-2 bg-yellow-600/80 text-white rounded hover:bg-yellow-700 font-mono disabled:opacity-50 disabled:cursor-not-allowed"
+            title="Undo (Ctrl+Z)"
+          >
+            Undo {history.length > 0 && `(${history.length})`}
+          </button>
           {onSave && (
             <button
               onClick={handleSave}
@@ -591,12 +664,8 @@ export default function GameBoard({
         </div>
       )}
 
-      {/* Viewer Mode Instructions */}
-      {!editable && (
-        <div className="absolute bottom-4 left-4 bg-black/50 text-white px-4 py-2 rounded font-mono text-sm">
-          Click and drag to pan • Scroll to zoom • Click buildings for info
-        </div>
-      )}
     </div>
   );
-}
+});
+
+export default GameBoard;

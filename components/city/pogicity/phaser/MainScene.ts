@@ -1136,6 +1136,116 @@ export class MainScene extends Phaser.Scene {
     this.showStats = show;
   }
 
+  // Tour navigation - smoothly pan camera to a grid position
+  panToPosition(gridX: number, gridY: number): void {
+    if (!this.isReady) return;
+
+    const camera = this.cameras.main;
+    const screenPos = this.gridToScreen(gridX, gridY);
+
+    // Calculate target scroll position to center the position on screen
+    const targetScrollX = screenPos.x - camera.width / 2;
+    const targetScrollY = screenPos.y - camera.height / 2;
+
+    // Animate the camera pan
+    this.tweens.add({
+      targets: this,
+      baseScrollX: targetScrollX,
+      baseScrollY: targetScrollY,
+      duration: 800,
+      ease: "Power2",
+      onUpdate: () => {
+        camera.setScroll(
+          Math.round(this.baseScrollX + (this.shakeAxis === "x" ? this.shakeOffset : 0)),
+          Math.round(this.baseScrollY + (this.shakeAxis === "y" ? this.shakeOffset : 0))
+        );
+      },
+    });
+  }
+
+  // Highlighted building for tour
+  private highlightedBuildingId: string | null = null;
+  private highlightSprite: Phaser.GameObjects.Graphics | null = null;
+
+  highlightBuilding(buildingId: string | null): void {
+    // Clear existing highlight
+    if (this.highlightSprite) {
+      this.highlightSprite.destroy();
+      this.highlightSprite = null;
+    }
+
+    this.highlightedBuildingId = buildingId;
+
+    if (!buildingId || !this.isReady) return;
+
+    // Find the building in the grid
+    let buildingOrigin: { x: number; y: number } | null = null;
+    let buildingCell: GridCell | null = null;
+
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (cell?.buildingId === buildingId && cell?.isOrigin) {
+          buildingOrigin = { x, y };
+          buildingCell = cell;
+          break;
+        }
+      }
+      if (buildingOrigin) break;
+    }
+
+    if (!buildingOrigin || !buildingCell) return;
+
+    const building = getBuilding(buildingId);
+    if (!building) return;
+
+    const footprint = getBuildingFootprint(building, buildingCell.buildingOrientation);
+
+    // Create highlight graphics
+    this.highlightSprite = this.add.graphics();
+    this.highlightSprite.setDepth(1_500_000);
+
+    // Draw pulsing highlight around the building footprint
+    const drawHighlight = (alpha: number) => {
+      if (!this.highlightSprite || !buildingOrigin) return;
+
+      this.highlightSprite.clear();
+      this.highlightSprite.lineStyle(3, 0x4f94ef, alpha);
+      this.highlightSprite.fillStyle(0x4f94ef, alpha * 0.15);
+
+      // Draw isometric diamond for each tile
+      for (let dy = 0; dy < footprint.height; dy++) {
+        for (let dx = 0; dx < footprint.width; dx++) {
+          const tilePos = this.gridToScreen(buildingOrigin.x + dx, buildingOrigin.y + dy);
+          this.highlightSprite.beginPath();
+          this.highlightSprite.moveTo(tilePos.x, tilePos.y);
+          this.highlightSprite.lineTo(tilePos.x + TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
+          this.highlightSprite.lineTo(tilePos.x, tilePos.y + TILE_HEIGHT);
+          this.highlightSprite.lineTo(tilePos.x - TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
+          this.highlightSprite.closePath();
+          this.highlightSprite.fillPath();
+          this.highlightSprite.strokePath();
+        }
+      }
+    };
+
+    // Initial draw
+    drawHighlight(0.8);
+
+    // Pulsing animation
+    this.tweens.add({
+      targets: { alpha: 0.8 },
+      alpha: 0.3,
+      duration: 800,
+      yoyo: true,
+      repeat: -1,
+      onUpdate: (tween) => {
+        const alpha = tween.getValue() ?? 0.8;
+        drawHighlight(alpha);
+      },
+    });
+  }
+
   // RENDERING
   private renderGrid(): void {
     this.tileSprites.forEach((sprite) => sprite.destroy());

@@ -24,6 +24,8 @@ export interface PhaserGameHandle {
   clearCars: () => void;
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
+  panToPosition: (gridX: number, gridY: number) => void;
+  highlightBuilding: (buildingId: string | null) => void;
 }
 
 interface PhaserGameProps {
@@ -130,6 +132,16 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           if (sceneRef.current) {
             zoomFromAtPoint.current = zoom;
             sceneRef.current.zoomAtPoint(zoom, screenX, screenY);
+          }
+        },
+        panToPosition: (gridX: number, gridY: number) => {
+          if (sceneRef.current) {
+            sceneRef.current.panToPosition(gridX, gridY);
+          }
+        },
+        highlightBuilding: (buildingId: string | null) => {
+          if (sceneRef.current) {
+            sceneRef.current.highlightBuilding(buildingId);
           }
         },
       }),
