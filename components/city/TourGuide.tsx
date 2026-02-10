@@ -118,13 +118,13 @@ export default function TourGuide({
     <AnimatePresence mode="wait">
       <motion.div
         key={currentStopIndex}
-        initial={{ opacity: 0, y: 50 }}
-        animate={{ opacity: 1, y: 0 }}
-        exit={{ opacity: 0, y: -30 }}
+        initial={{ opacity: 0, x: 50 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: 50 }}
         transition={{ duration: 0.3 }}
-        className="absolute bottom-0 left-0 right-0 z-40 p-4"
+        className="absolute top-4 right-4 z-40"
       >
-        <div className="max-w-2xl mx-auto">
+        <div className="w-[400px]">
           <div className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
             {/* Header */}
             <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
@@ -273,10 +273,10 @@ export default function TourGuide({
           </div>
 
           {/* Keyboard hints */}
-          <div className="flex justify-center gap-4 mt-2 text-gray-500 text-xs">
-            <span>← → Navigate</span>
-            <span>Space Skip</span>
-            <span>Esc End tour</span>
+          <div className="flex justify-end gap-3 mt-2 text-gray-500 text-xs px-2">
+            <span>← →</span>
+            <span>Space</span>
+            <span>Esc</span>
           </div>
         </div>
       </motion.div>

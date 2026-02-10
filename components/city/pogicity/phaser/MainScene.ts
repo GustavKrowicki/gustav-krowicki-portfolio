@@ -238,6 +238,16 @@ export class MainScene extends Phaser.Scene {
     this.statsText.setScrollFactor(0);
     this.statsText.setDepth(2_000_000);
     this.statsText.setOrigin(1, 0);
+
+    // Center the camera on the city grid
+    // With Scale.FIT mode, the entire game canvas scales to fit the viewport
+    const camera = this.cameras.main;
+    const gridCenterX = GRID_WIDTH / 2;
+    const gridCenterY = GRID_HEIGHT / 2;
+    const centerScreenPos = this.gridToScreen(gridCenterX, gridCenterY);
+    this.baseScrollX = centerScreenPos.x - camera.width / 2;
+    this.baseScrollY = centerScreenPos.y - camera.height / 2;
+    camera.setScroll(this.baseScrollX, this.baseScrollY);
   }
 
   private initializeGrid(): void {
@@ -1141,10 +1151,20 @@ export class MainScene extends Phaser.Scene {
     if (!this.isReady) return;
 
     const camera = this.cameras.main;
+
+    // Set a tour zoom level (1.4 = zoomed in, enables panning)
+    const tourZoom = 1.4;
+    if (this.zoomLevel < tourZoom) {
+      camera.setZoom(tourZoom);
+      this.zoomLevel = tourZoom;
+    }
+
     const screenPos = this.gridToScreen(gridX, gridY);
 
-    // Calculate target scroll position to center the position on screen
-    const targetScrollX = screenPos.x - camera.width / 2;
+    // Calculate target scroll position to center on the building
+    // Offset left by ~200px to account for the tour modal on the right side
+    const modalOffset = 200;
+    const targetScrollX = screenPos.x - camera.width / 2 - modalOffset;
     const targetScrollY = screenPos.y - camera.height / 2;
 
     // Animate the camera pan

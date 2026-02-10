@@ -137,7 +137,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   );
   const [selectedBuildingId, setSelectedBuildingId] = useState<string | null>(null);
   const [buildingOrientation, setBuildingOrientation] = useState<Direction>(Direction.Down);
-  const [zoom, setZoom] = useState(1);
+  const [zoom, setZoom] = useState(1); // Scale.FIT handles fitting the city to viewport
   const [showToolWindow, setShowToolWindow] = useState(editable);
   const [hoverTile, setHoverTile] = useState<{ x: number; y: number } | null>(null);
 

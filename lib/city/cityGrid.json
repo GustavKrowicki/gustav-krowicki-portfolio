@@ -2712,46 +2712,60 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 1,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 2,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 3,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 3,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 4,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 5,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 5,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 6,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 6,
+      "originY": 7
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 7,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 7,
+      "originY": 7
     },
     {
       "type": "grass",
@@ -3069,40 +3083,52 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 2,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 3,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 3,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 5,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 6,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
       "type": "grass",
@@ -3438,40 +3464,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
       "type": "grass",
@@ -3492,10 +3534,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 9,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -3790,40 +3836,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
       "type": "grass",
@@ -4113,40 +4175,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 9,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 8
     },
     {
       "type": "grass",
@@ -4305,10 +4383,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 11,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4415,40 +4497,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
       "type": "grass",
@@ -4463,10 +4561,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4546,10 +4648,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4564,10 +4670,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4576,10 +4686,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4588,10 +4702,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4618,10 +4736,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4630,10 +4752,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4648,10 +4774,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4660,10 +4790,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 12,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4716,40 +4850,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
       "type": "grass",
@@ -4985,10 +5135,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 13,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -4997,10 +5151,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 13,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 13,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     }
   ],
   [
@@ -5017,40 +5175,56 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 2,
+      "originY": 12,
+      "buildingId": "sf-yellow-victorian-apartments",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
       "type": "grass",
@@ -5071,10 +5245,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 14,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -5137,16 +5315,24 @@
       "originY": 12
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -5221,28 +5407,44 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 14,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -5307,52 +5509,76 @@
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 12
     },
     {
       "type": "grass",
@@ -5438,16 +5664,24 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -5525,29 +5759,41 @@
       "type": "building",
       "x": 34,
       "y": 15,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 34,
-      "originY": 15,
-      "buildingId": "victorian-bench",
+      "originY": 14,
+      "buildingId": "bookstore",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -5598,114 +5844,162 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 15,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 8,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 9,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 10,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 11,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 12,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 13,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 14,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 15,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
       "type": "road",
@@ -5732,7 +6026,7 @@
       "originY": 16
     },
     {
-      "type": "building",
+      "type": "road",
       "x": 19,
       "y": 16,
       "isOrigin": true,
@@ -5743,273 +6037,425 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 23,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 22,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 24,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 43,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 42,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 16,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 4,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 5,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 6,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 7,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 8,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 9,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 10,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 17,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
       "type": "road",
+      "x": 4,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 5,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 6,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 7,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 8,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 9,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 10,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 11,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 12,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 13,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 14,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 15,
+      "y": 17,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
       "x": 16,
       "y": 17,
       "isOrigin": false,
@@ -6041,281 +6487,425 @@
       "originY": 16
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 14,
+      "buildingId": "alternate-brownstone",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 22,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 23,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 22,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 24,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 24,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 28,
       "y": 17,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 28,
-      "originY": 17,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "left"
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 33,
       "y": 17,
-      "isOrigin": true,
-      "originX": 33,
-      "originY": 17,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "right"
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 16,
+      "buildingId": "martini-bar",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 14,
+      "buildingId": "bookstore",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 16,
+      "buildingId": "checkers",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 42,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 43,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 42,
+      "originY": 16,
+      "buildingId": "popeyes",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 16,
+      "buildingId": "dunkin",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 17,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 46,
+      "originY": 15,
+      "buildingId": "promptlayer-office",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 1,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 2,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 3,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 4,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 5,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 6,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 7,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 8,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 9,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 10,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 18,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 18,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
     },
     {
       "type": "building",
+      "x": 1,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
+    },
+    {
+      "type": "building",
+      "x": 2,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
+    },
+    {
+      "type": "building",
+      "x": 3,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 17,
+      "buildingId": "sf-yellow-painted-lady",
+      "buildingOrientation": "right"
+    },
+    {
+      "type": "road",
+      "x": 4,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 5,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 6,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 7,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 8,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 9,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 10,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 11,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 12,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 13,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 14,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
+      "x": 15,
+      "y": 18,
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
+    },
+    {
+      "type": "asphalt",
       "x": 16,
       "y": 18,
       "isOrigin": true,
@@ -6342,7 +6932,7 @@
       "originY": 16
     },
     {
-      "type": "building",
+      "type": "road",
       "x": 19,
       "y": 18,
       "isOrigin": true,
@@ -6353,172 +6943,255 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 21,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 27,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 30,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 33,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 34,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 35,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 35,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 36,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 37,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 39,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 18,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 18
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 18,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 18
     }
   ],
   [
@@ -6547,76 +7220,100 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 5,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 6,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 8,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 9,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 10,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 11,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 12,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 13,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 14,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 15,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 12,
+      "originY": 16
     },
     {
       "type": "road",
@@ -6643,7 +7340,7 @@
       "originY": 16
     },
     {
-      "type": "building",
+      "type": "road",
       "x": 19,
       "y": 19,
       "isOrigin": true,
@@ -6654,176 +7351,228 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 20,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 21,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 22,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 27,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 28,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 19
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 30,
       "y": 19,
       "isOrigin": true,
       "originX": 30,
-      "originY": 19,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "up"
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 33,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 34,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 35,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 35,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 36,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 37,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 38,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 39,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 19
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 19,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 19
     }
   ],
   [
@@ -6864,16 +7613,24 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 6,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 6,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 7,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 7,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -6882,10 +7639,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -6894,10 +7655,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -6906,10 +7671,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 13,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -6918,10 +7687,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 20,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "road",
@@ -6959,28 +7732,36 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 20,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 21,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 22,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 20
     },
     {
       "type": "grass",
@@ -7007,46 +7788,60 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 28,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 30,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 33,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 34,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 20
     },
     {
       "type": "grass",
@@ -7061,22 +7856,28 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 37,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 38,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 39,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 20
     },
     {
       "type": "grass",
@@ -7085,46 +7886,60 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 20
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 20,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 20
     }
   ],
   [
@@ -7618,22 +8433,28 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 30,
       "y": 22,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 22
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 22,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 22
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 22,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 22
     },
     {
       "type": "grass",
@@ -7892,10 +8713,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 23,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 23,
+      "buildingId": "tree-1",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -7928,10 +8753,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 23,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 23
     },
     {
       "type": "grass",
@@ -8068,28 +8895,44 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 7,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8190,10 +9033,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 24,
+      "buildingId": "tree-1",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8208,28 +9055,42 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 24
     },
     {
       "type": "grass",
@@ -8274,22 +9135,34 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8324,10 +9197,15 @@
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 0,
+      "originY": 25,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "grass",
@@ -8378,28 +9256,44 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 7,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8518,52 +9412,58 @@
       "isOrigin": true,
       "originX": 26,
       "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "buildingId": "tree-1",
+      "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 27,
       "y": 25,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "isOrigin": true
+    },
+    {
+      "type": "grass",
+      "x": 28,
+      "y": 25,
+      "isOrigin": true
     },
     {
       "type": "building",
-      "x": 28,
-      "y": 25,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
-    },
-    {
-      "type": "grass",
       "x": 29,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 25
     },
     {
       "type": "grass",
@@ -8608,22 +9508,34 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8638,30 +9550,47 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 0,
+      "originY": 26,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "grass",
@@ -8706,34 +9635,52 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 6,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 6,
+      "originY": 26
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 7,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8810,130 +9757,186 @@
       "originY": 24
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 23,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 26,
       "y": 26,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "originY": 26,
+      "buildingId": "tree-1",
+      "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 26,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 26
+    },
+    {
+      "type": "grass",
+      "x": 28,
+      "y": 26,
+      "isOrigin": true
     },
     {
       "type": "building",
-      "x": 28,
-      "y": 26,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
-    },
-    {
-      "type": "grass",
       "x": 29,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 29,
+      "originY": 24,
+      "buildingId": "melbourne-uni",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 26
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8942,22 +9945,34 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 40,
+      "originY": 24,
+      "buildingId": "berlin-uni",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -8972,42 +9987,63 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 0,
+      "originY": 27,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 1,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 27
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 2,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 27
     },
     {
       "type": "building",
@@ -9040,34 +10076,52 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 6,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 6,
+      "originY": 27
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 7,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 7,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -9144,154 +10198,214 @@
       "originY": 24
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 20,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 20,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 23,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 23,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 26,
       "y": 27,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "originY": 27,
+      "buildingId": "tree-1",
+      "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 27,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 27
+    },
+    {
+      "type": "tile",
+      "x": 28,
+      "y": 27,
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 27
+    },
+    {
+      "type": "tile",
+      "x": 29,
+      "y": 27,
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 27
+    },
+    {
+      "type": "tile",
+      "x": 30,
+      "y": 27,
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 27
+    },
+    {
+      "type": "tile",
+      "x": 31,
+      "y": 27,
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 27
+    },
+    {
+      "type": "tile",
+      "x": 32,
+      "y": 27,
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 27
     },
     {
       "type": "building",
-      "x": 28,
-      "y": 27,
-      "isOrigin": false,
-      "originX": 26,
-      "originY": 25,
-      "buildingId": "melbourne-uni",
-      "buildingOrientation": "left"
-    },
-    {
-      "type": "grass",
-      "x": 29,
-      "y": 27,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 30,
-      "y": 27,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 31,
-      "y": 27,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 32,
-      "y": 27,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
       "x": 33,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 33,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 36,
+      "originY": 26,
+      "buildingId": "row-houses",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 39,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 27
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 27
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 27
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 27
     },
     {
       "type": "grass",
@@ -9306,32 +10420,47 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 27,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 45,
+      "originY": 25,
+      "buildingId": "80s-apartment",
+      "buildingOrientation": "down"
     }
   ],
   [
     {
-      "type": "road",
+      "type": "building",
       "x": 0,
       "y": 28,
       "isOrigin": true,
       "originX": 0,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9366,7 +10495,7 @@
       "originY": 28
     },
     {
-      "type": "building",
+      "type": "road",
       "x": 5,
       "y": 28,
       "isOrigin": true,
@@ -9377,7 +10506,7 @@
       "underlyingTileType": "road"
     },
     {
-      "type": "building",
+      "type": "road",
       "x": 6,
       "y": 28,
       "isOrigin": true,
@@ -9475,12 +10604,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 16,
       "y": 28,
       "isOrigin": true,
       "originX": 16,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",
@@ -9499,12 +10631,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 28,
-      "isOrigin": false,
-      "originX": 16,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 28,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9515,12 +10650,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 21,
       "y": 28,
-      "isOrigin": false,
-      "originX": 20,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 28,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9542,17 +10680,18 @@
       "type": "road",
       "x": 24,
       "y": 28,
-      "isOrigin": true,
-      "originX": 24,
-      "originY": 28
+      "isOrigin": true
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 25,
       "y": 28,
-      "isOrigin": false,
-      "originX": 24,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 28,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9571,20 +10710,26 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 28,
       "y": 28,
       "isOrigin": true,
       "originX": 28,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 29,
       "y": 28,
       "isOrigin": false,
       "originX": 28,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9595,12 +10740,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 31,
       "y": 28,
-      "isOrigin": false,
-      "originX": 28,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 28,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9627,20 +10775,26 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 35,
       "y": 28,
-      "isOrigin": false,
-      "originX": 32,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 35,
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 36,
       "y": 28,
-      "isOrigin": true,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": false,
+      "originX": 35,
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9651,12 +10805,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 38,
       "y": 28,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 28,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9683,12 +10840,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 42,
       "y": 28,
-      "isOrigin": false,
-      "originX": 40,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 28,
+      "buildingId": "modern-bench",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9699,20 +10859,26 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 44,
       "y": 28,
       "isOrigin": true,
       "originX": 44,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 45,
       "y": 28,
       "isOrigin": false,
       "originX": 44,
-      "originY": 28
+      "originY": 28,
+      "buildingId": "bus-shelter",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -9723,22 +10889,28 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 47,
       "y": 28,
-      "isOrigin": false,
-      "originX": 44,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 28,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     }
   ],
   [
     {
-      "type": "road",
+      "type": "building",
       "x": 0,
       "y": 29,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 0,
-      "originY": 28
+      "originY": 29,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",
@@ -9765,12 +10937,10 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 4,
       "y": 29,
-      "isOrigin": false,
-      "originX": 4,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -9789,12 +10959,10 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 7,
       "y": 29,
-      "isOrigin": false,
-      "originX": 4,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -10013,7 +11181,7 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 35,
       "y": 29,
       "isOrigin": false,
@@ -10053,7 +11221,7 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 40,
       "y": 29,
       "isOrigin": false,
@@ -10109,22 +11277,28 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 47,
       "y": 29,
-      "isOrigin": false,
-      "originX": 44,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 29,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     }
   ],
   [
     {
-      "type": "road",
+      "type": "building",
       "x": 0,
       "y": 30,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 0,
-      "originY": 28
+      "originY": 30,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",
@@ -10151,12 +11325,10 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 4,
       "y": 30,
-      "isOrigin": false,
-      "originX": 4,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -10175,12 +11347,10 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 7,
       "y": 30,
-      "isOrigin": false,
-      "originX": 4,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -10399,7 +11569,7 @@
       "originY": 28
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 35,
       "y": 30,
       "isOrigin": false,
@@ -10434,12 +11604,10 @@
       "type": "asphalt",
       "x": 39,
       "y": 30,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": true
     },
     {
-      "type": "asphalt",
+      "type": "road",
       "x": 40,
       "y": 30,
       "isOrigin": false,
@@ -10495,46 +11663,52 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 47,
       "y": 30,
-      "isOrigin": false,
-      "originX": 44,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 30,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     }
   ],
   [
     {
-      "type": "road",
+      "type": "building",
       "x": 0,
       "y": 31,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 0,
-      "originY": 28
+      "originY": 31,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
-      "type": "road",
+      "type": "tile",
       "x": 1,
       "y": 31,
-      "isOrigin": false,
-      "originX": 0,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 31
     },
     {
-      "type": "road",
+      "type": "tile",
       "x": 2,
       "y": 31,
-      "isOrigin": false,
-      "originX": 0,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 2,
+      "originY": 31
     },
     {
-      "type": "road",
+      "type": "tile",
       "x": 3,
       "y": 31,
-      "isOrigin": false,
-      "originX": 0,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 3,
+      "originY": 31
     },
     {
       "type": "road",
@@ -10545,7 +11719,7 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "asphalt",
       "x": 5,
       "y": 31,
       "isOrigin": false,
@@ -10553,7 +11727,7 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "asphalt",
       "x": 6,
       "y": 31,
       "isOrigin": false,
@@ -10633,12 +11807,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 16,
       "y": 31,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 16,
-      "originY": 28
+      "originY": 31,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",
@@ -10657,12 +11834,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 31,
-      "isOrigin": false,
-      "originX": 16,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 31,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "road",
@@ -10804,33 +11984,25 @@
       "type": "road",
       "x": 37,
       "y": 31,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "road",
       "x": 38,
       "y": 31,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "road",
       "x": 39,
       "y": 31,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "road",
       "x": 40,
       "y": 31,
-      "isOrigin": false,
-      "originX": 40,
-      "originY": 28
+      "isOrigin": true
     },
     {
       "type": "road",
@@ -10881,12 +12053,15 @@
       "originY": 28
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 47,
       "y": 31,
-      "isOrigin": false,
-      "originX": 44,
-      "originY": 28
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 31,
+      "buildingId": "flower-bush",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     }
   ],
   [
@@ -10897,46 +12072,69 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 4,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 32,
+      "buildingId": "tree-2",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
       "type": "grass",
@@ -10981,10 +12179,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 15,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 32
     },
     {
       "type": "road",
@@ -11075,100 +12275,135 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 28,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 35,
       "y": 32,
-      "isOrigin": true,
-      "originX": 35,
+      "isOrigin": false,
+      "originX": 34,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 36,
       "y": 32,
-      "isOrigin": false,
-      "originX": 35,
+      "isOrigin": true,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 37,
       "y": 32,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 32,
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 32
     },
     {
       "type": "grass",
@@ -11215,46 +12450,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
       "type": "grass",
@@ -11299,10 +12554,15 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 33,
+      "buildingId": "victorian-bench",
+      "buildingOrientation": "right",
+      "underlyingTileType": "tile"
     },
     {
       "type": "road",
@@ -11370,118 +12630,166 @@
       "originY": 33
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 33
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 33
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 33
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 35,
       "y": 33,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 34,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 36,
       "y": 33,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 37,
       "y": 33,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 33
     },
     {
       "type": "grass",
@@ -11534,46 +12842,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
       "type": "grass",
@@ -11606,34 +12934,24 @@
       "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 13,
       "y": 34,
-      "isOrigin": true,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 14,
       "y": 34,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 15,
       "y": 34,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 34
     },
     {
       "type": "road",
@@ -11696,118 +13014,166 @@
       "originY": 34
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 34
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 34
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 34
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 30,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 32,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 34,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 35,
       "y": 34,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 34,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 36,
       "y": 34,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
       "type": "building",
       "x": 37,
       "y": 34,
       "isOrigin": false,
-      "originX": 35,
+      "originX": 36,
       "originY": 32,
-      "buildingId": "berlin-uni",
-      "buildingOrientation": "down"
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 38,
+      "originY": 32,
+      "buildingId": "brownstone",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 34
     },
     {
       "type": "grass",
@@ -11828,28 +13194,44 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     }
   ],
   [
@@ -11860,46 +13242,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 34,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 32
     },
     {
       "type": "grass",
@@ -11932,34 +13334,24 @@
       "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 13,
       "y": 35,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 14,
       "y": 35,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 15,
       "y": 35,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 35
     },
     {
       "type": "road",
@@ -12026,106 +13418,146 @@
       "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 26,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 27,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 26,
+      "originY": 33,
+      "buildingId": "sdu-kolding",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 30,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 33,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 34,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 35,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 35,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 36,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 37,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 38,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 39,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 35
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 35
     },
     {
       "type": "grass",
@@ -12146,28 +13578,44 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     }
   ],
   [
@@ -12178,46 +13626,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
       "type": "grass",
@@ -12250,34 +13718,27 @@
       "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 13,
       "y": 36,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 14,
       "y": 36,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "building",
       "x": 15,
       "y": 36,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 34,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 36,
+      "buildingId": "victorian-bench",
+      "buildingOrientation": "right",
+      "underlyingTileType": "tile"
     },
     {
       "type": "road",
@@ -12336,40 +13797,52 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 25,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 27,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 28,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 36
     },
     {
       "type": "grass",
@@ -12384,10 +13857,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 36
     },
     {
       "type": "grass",
@@ -12432,52 +13907,76 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 44,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 47,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 44,
+      "originY": 34,
+      "buildingId": "erhvervsakademiet",
+      "buildingOrientation": "right"
     }
   ],
   [
@@ -12488,52 +13987,77 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 36,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 4,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 37,
+      "buildingId": "tree-2",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 8,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 37
     },
     {
       "type": "grass",
@@ -12560,22 +14084,34 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -12634,10 +14170,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 24,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 37
     },
     {
       "type": "grass",
@@ -12676,16 +14214,20 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 31,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 31,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 37
     },
     {
       "type": "grass",
@@ -12718,10 +14260,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 37,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -12730,49 +14276,63 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 37
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 37,
       "isOrigin": true
@@ -12786,58 +14346,82 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 8,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 9,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 38
     },
     {
       "type": "grass",
@@ -12858,22 +14442,34 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -12914,10 +14510,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 38,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -12926,10 +14526,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 38
     },
     {
       "type": "grass",
@@ -12980,10 +14582,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 38
     },
     {
       "type": "grass",
@@ -12992,10 +14596,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 38,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13028,52 +14636,64 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 38,
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 38
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 38,
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 38
     }
   ],
   [
@@ -13084,94 +14704,136 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 38,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 36
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 8,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 9,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 10,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 11,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 12,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 13,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -13224,10 +14886,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 23,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 39,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -13236,10 +14902,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 25,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 39,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -13278,10 +14948,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 39
     },
     {
       "type": "grass",
@@ -13308,10 +14980,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 39,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13326,52 +15002,68 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 46,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 39
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 39,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 39
     }
   ],
   [
@@ -13382,94 +15074,130 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 8,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 9,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 10,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 11,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 12,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 13,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 13,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 14,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 14,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 15,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 40
     },
     {
       "type": "road",
@@ -13522,10 +15250,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 40
     },
     {
       "type": "grass",
@@ -13576,10 +15306,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 40
     },
     {
       "type": "grass",
@@ -13588,10 +15320,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 40,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13606,10 +15342,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 40,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13666,10 +15406,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 40
     }
   ],
   [
@@ -13680,94 +15422,139 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 40,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 4,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 41,
+      "buildingId": "tree-2",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 8,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 41,
+      "buildingId": "tree-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 10,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 11,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 12,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 13,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 13,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 14,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 14,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 41,
+      "buildingId": "tree-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "road",
@@ -13808,10 +15595,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 21,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 41,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -13826,10 +15617,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 41,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -13844,28 +15639,36 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 27,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 28,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 29,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 30,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 41
     },
     {
       "type": "grass",
@@ -13874,10 +15677,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 32,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 41
     },
     {
       "type": "grass",
@@ -13886,16 +15691,20 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 34,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 35,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 35,
+      "originY": 41
     },
     {
       "type": "grass",
@@ -13904,22 +15713,30 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 37,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 38,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 41
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 41,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13934,10 +15751,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 41,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -13964,10 +15785,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 41
     }
   ],
   [
@@ -13978,46 +15801,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
       "type": "grass",
@@ -14044,10 +15887,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 42,
+      "buildingId": "tree-2",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -14112,10 +15959,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 22,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 42
     },
     {
       "type": "grass",
@@ -14136,10 +15985,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 42
     },
     {
       "type": "grass",
@@ -14172,10 +16023,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 32,
+      "originY": 42,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14196,10 +16051,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 36,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 42
     },
     {
       "type": "grass",
@@ -14220,16 +16077,22 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 40,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 40,
+      "originY": 42
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 42,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14250,22 +16113,32 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 45,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 42,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 42,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 42
     }
   ],
   [
@@ -14276,46 +16149,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 42,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 40
     },
     {
       "type": "grass",
@@ -14422,10 +16315,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 43,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -14434,10 +16331,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 43
     },
     {
       "type": "grass",
@@ -14446,10 +16345,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 43,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14458,10 +16361,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 30,
+      "originY": 43,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14500,10 +16407,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 37,
+      "originY": 43,
+      "buildingId": "tree-1",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14524,10 +16435,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 43
     },
     {
       "type": "grass",
@@ -14560,10 +16473,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 43
     }
   ],
   [
@@ -14574,46 +16489,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -14622,10 +16557,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 44,
+      "buildingId": "tree-1",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -14708,16 +16647,20 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 22,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 23,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -14732,10 +16675,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -14780,10 +16725,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 34,
+      "originY": 44,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14804,10 +16753,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 38,
+      "originY": 44,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14822,10 +16775,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -14834,10 +16789,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 43,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 44,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -14858,10 +16817,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 44
     }
   ],
   [
@@ -14872,46 +16833,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 44,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -14938,10 +16919,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 12,
+      "originY": 45,
+      "buildingId": "tree-1",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -14950,10 +16935,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 14,
+      "originY": 45,
+      "buildingId": "tree-1",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -15006,10 +16995,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 45,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -15018,10 +17011,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 45,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -15030,10 +17027,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 45
     },
     {
       "type": "grass",
@@ -15120,10 +17119,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 41,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 45
     },
     {
       "type": "grass",
@@ -15156,10 +17157,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 45
     }
   ],
   [
@@ -15170,46 +17173,69 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 4,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 4,
+      "originY": 46,
+      "buildingId": "tree-2",
+      "buildingOrientation": "right",
+      "underlyingTileType": "road"
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 5,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "asphalt",
       "x": 6,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -15304,10 +17330,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 22,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 22,
+      "originY": 46,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -15328,10 +17358,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 46
     },
     {
       "type": "grass",
@@ -15346,10 +17378,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 46,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -15370,10 +17406,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 33,
+      "originY": 46,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -15418,46 +17458,64 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 41,
+      "originY": 46,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 42,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 42,
+      "originY": 46
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 43,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 43,
+      "originY": 46
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 44,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 44,
+      "originY": 46
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 45,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 45,
+      "originY": 46
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 46,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 46,
+      "originY": 46,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 47,
       "y": 46,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 47,
+      "originY": 46
     }
   ],
   [
@@ -15468,46 +17526,66 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 1,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 2,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 3,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 1,
+      "originY": 46,
+      "buildingId": "brownstone",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 4,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 5,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 6,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
-      "type": "grass",
+      "type": "road",
       "x": 7,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 4,
+      "originY": 44
     },
     {
       "type": "grass",
@@ -15516,10 +17594,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 9,
+      "originY": 47,
+      "buildingId": "tree-4",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -15528,10 +17610,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 11,
+      "originY": 47,
+      "buildingId": "tree-4",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -15540,16 +17626,24 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 13,
+      "originY": 47,
+      "buildingId": "tree-4",
+      "buildingOrientation": "right"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 14,
+      "originY": 47,
+      "buildingId": "tree-4",
+      "buildingOrientation": "right"
     },
     {
       "type": "grass",
@@ -15614,10 +17708,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 24,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 47,
+      "buildingId": "tree-3",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -15626,10 +17724,12 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "tile",
       "x": 26,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 47
     },
     {
       "type": "grass",
@@ -15686,10 +17786,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 36,
+      "originY": 47,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",
@@ -15704,10 +17808,14 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 39,
+      "originY": 47,
+      "buildingId": "tree-2",
+      "buildingOrientation": "up"
     },
     {
       "type": "grass",

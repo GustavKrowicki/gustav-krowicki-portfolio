@@ -81,6 +81,7 @@ export default function CityEditor({ initialGrid, onSave }: CityEditorProps) {
           <li>• Select building then click to place</li>
           <li>• Press R to rotate buildings</li>
           <li>• Use eraser to remove</li>
+          <li>• Ctrl/Cmd+Z to undo</li>
           <li>• Arrow keys / WASD to pan</li>
           <li>• Scroll to zoom</li>
         </ul>

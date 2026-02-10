@@ -1,5 +1,7 @@
 // Tour system data - defines stops and dialogue for the guided city tour
 
+import { getBuilding } from "./buildings";
+
 export interface TourStop {
   id: string;
   buildingId?: string;
@@ -144,7 +146,7 @@ export const CATEGORY_STYLES: Record<
   },
 };
 
-// Helper to find building position in grid
+// Helper to find building center position in grid
 export function findBuildingPosition(
   grid: any[][],
   buildingId: string
@@ -153,7 +155,14 @@ export function findBuildingPosition(
     for (let x = 0; x < grid[y].length; x++) {
       const cell = grid[y][x];
       if (cell.buildingId === buildingId && cell.isOrigin) {
-        return { x, y };
+        // Get building definition to find footprint
+        const building = getBuilding(buildingId);
+        const footprint = building?.footprint || { width: 1, height: 1 };
+        // Return center of the building instead of origin
+        return {
+          x: x + footprint.width / 2,
+          y: y + footprint.height / 2,
+        };
       }
     }
   }

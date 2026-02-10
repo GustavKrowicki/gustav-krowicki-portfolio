@@ -164,7 +164,8 @@ export default function SpriteConverterPage() {
       alpha: true,
       preserveDrawingBuffer: true,
     });
-    exportRenderer.setSize(spriteSize, spriteSize);
+    exportRenderer.setPixelRatio(1);
+    exportRenderer.setSize(spriteSize, spriteSize, false);
     exportRenderer.setClearColor(0x000000, transparentBg ? 0 : 1);
 
     // Create export camera with same settings
@@ -220,7 +221,8 @@ export default function SpriteConverterPage() {
       alpha: true,
       preserveDrawingBuffer: true,
     });
-    exportRenderer.setSize(spriteSize, spriteSize);
+    exportRenderer.setPixelRatio(1);
+    exportRenderer.setSize(spriteSize, spriteSize, false);
     exportRenderer.setClearColor(0x000000, transparentBg ? 0 : 1);
 
     const frustumSize = 5 / zoom;
@@ -298,8 +300,8 @@ export default function SpriteConverterPage() {
               <label className="block text-sm font-medium mb-2">
                 Sprite Size: {spriteSize}px
               </label>
-              <div className="flex gap-2">
-                {[128, 256, 512].map((size) => (
+              <div className="flex gap-2 flex-wrap">
+                {[128, 256, 384, 512].map((size) => (
                   <button
                     key={size}
                     onClick={() => setSpriteSize(size)}
@@ -312,6 +314,15 @@ export default function SpriteConverterPage() {
                     {size}px
                   </button>
                 ))}
+                <input
+                  type="number"
+                  min="64"
+                  max="1024"
+                  value={spriteSize}
+                  onChange={(e) => setSpriteSize(Math.max(64, Math.min(1024, Number(e.target.value))))}
+                  className="w-20 px-2 py-2 text-sm rounded bg-slate-700 text-white border border-slate-600 focus:border-blue-500 focus:outline-none"
+                  placeholder="Custom"
+                />
               </div>
             </div>
 

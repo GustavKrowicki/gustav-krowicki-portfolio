@@ -109,10 +109,16 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   }, []);
 
   // Handle tour stop changes - pan camera to building
+  // Skip zoom/pan for the Welcome step (first stop) - only start panning from step 2 onwards
   const handleStopChange = useCallback(
     (stop: TourStop) => {
       const gameBoard = gameBoardRef.current;
       if (!gameBoard) return;
+
+      // Skip zoom/pan for the Welcome step - keep showing whole city
+      if (stop.id === "welcome") {
+        return;
+      }
 
       let position: { x: number; y: number } | null = null;
 

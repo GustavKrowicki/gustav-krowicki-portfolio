@@ -32,8 +32,8 @@ export function createGameConfig(
     antialias: false,
     scene,
     scale: {
-      mode: Phaser.Scale.NONE,
-      autoCenter: Phaser.Scale.NO_CENTER,
+      mode: Phaser.Scale.ENVELOP,
+      autoCenter: Phaser.Scale.CENTER_BOTH,
     },
   };
 }
