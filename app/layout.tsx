@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
-import { Analytics } from "@vercel/analytics/react";
 import "./globals.css";
 import "reactflow/dist/style.css";
 import LayoutContent from "@/components/ui/LayoutContent";
+import AnalyticsWrapper from "@/components/AnalyticsWrapper";
 
 const gtStandard = localFont({
   src: [
@@ -111,7 +111,7 @@ export default function RootLayout({
         <LayoutContent>
           {children}
         </LayoutContent>
-        <Analytics />
+        <AnalyticsWrapper />
       </body>
     </html>
   );
