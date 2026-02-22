@@ -9,7 +9,8 @@ import {
 import Phaser from "phaser";
 import { MainScene, SceneEvents } from "./MainScene";
 import { createGameConfig } from "./gameConfig";
-import { GridCell, ToolType, Direction, Car } from "../types";
+import { GridCell, ToolType, Direction, Car, CharacterType, PlayerState } from "../types";
+import { TourStop } from "@/lib/city/tourStops";
 
 // Exposed methods for parent component
 export interface PhaserGameHandle {
@@ -26,6 +27,17 @@ export interface PhaserGameHandle {
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  // Adventure mode methods
+  startAdventureMode: (characterType: CharacterType) => void;
+  stopAdventureMode: () => void;
+  setPlayerInputDirection: (direction: Direction | null) => void;
+  walkPlayerToBuilding: (buildingId: string) => boolean;
+  markBuildingVisited: (buildingId: string) => void;
+  getVisitedBuildings: () => Set<string>;
+  isAdventureModeActive: () => boolean;
+  getPlayerState: () => PlayerState | null;
+  triggerInteraction: () => void;
+  getGameInstance: () => Phaser.Game | null;
 }
 
 interface PhaserGameProps {
@@ -143,6 +155,59 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           if (sceneRef.current) {
             sceneRef.current.highlightBuilding(buildingId);
           }
+        },
+        // Adventure mode methods
+        startAdventureMode: (characterType: CharacterType) => {
+          if (sceneRef.current) {
+            sceneRef.current.startAdventureMode(characterType);
+          }
+        },
+        stopAdventureMode: () => {
+          if (sceneRef.current) {
+            sceneRef.current.stopAdventureMode();
+          }
+        },
+        setPlayerInputDirection: (direction: Direction | null) => {
+          if (sceneRef.current) {
+            sceneRef.current.setPlayerInputDirection(direction);
+          }
+        },
+        walkPlayerToBuilding: (buildingId: string) => {
+          if (sceneRef.current) {
+            return sceneRef.current.walkPlayerToBuilding(buildingId);
+          }
+          return false;
+        },
+        markBuildingVisited: (buildingId: string) => {
+          if (sceneRef.current) {
+            sceneRef.current.markBuildingVisited(buildingId);
+          }
+        },
+        getVisitedBuildings: () => {
+          if (sceneRef.current) {
+            return sceneRef.current.getVisitedBuildings();
+          }
+          return new Set<string>();
+        },
+        isAdventureModeActive: () => {
+          if (sceneRef.current) {
+            return sceneRef.current.isAdventureModeActive();
+          }
+          return false;
+        },
+        getPlayerState: () => {
+          if (sceneRef.current) {
+            return sceneRef.current.getPlayerState();
+          }
+          return null;
+        },
+        triggerInteraction: () => {
+          if (sceneRef.current) {
+            sceneRef.current.triggerInteraction();
+          }
+        },
+        getGameInstance: () => {
+          return gameRef.current;
         },
       }),
       []

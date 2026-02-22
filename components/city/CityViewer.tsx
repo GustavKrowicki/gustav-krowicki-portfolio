@@ -2,12 +2,16 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { GridCell } from "./pogicity/types";
+import Phaser from "phaser";
+import { GridCell, CharacterType, Direction, PlayerState, GameMode } from "./pogicity/types";
 import { getBuilding, BuildingDefinition } from "@/lib/city/buildings";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import WelcomeOverlay from "./WelcomeOverlay";
 import TourGuide from "./TourGuide";
 import BuildingModal from "./BuildingModal";
+import RPGDialogBox from "./RPGDialogBox";
+import VirtualJoystick from "./VirtualJoystick";
+import AdventureHUD from "./AdventureHUD";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -30,13 +34,35 @@ export interface GameBoardHandle {
   spawnCar: () => boolean;
   panToPosition: (x: number, y: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  // Adventure mode methods
+  startAdventureMode: (characterType: CharacterType) => void;
+  stopAdventureMode: () => void;
+  setPlayerInputDirection: (direction: Direction | null) => void;
+  walkPlayerToBuilding: (buildingId: string) => boolean;
+  markBuildingVisited: (buildingId: string) => void;
+  getVisitedBuildings: () => Set<string>;
+  isAdventureModeActive: () => boolean;
+  getPlayerState: () => PlayerState | null;
+  triggerInteraction: () => void;
+  getGameInstance: () => Phaser.Game | null;
 }
 
 export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfolio }: CityViewerProps) {
-  // Tour state
+  // Mode state
   const [showWelcome, setShowWelcome] = useState(true);
+  const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
+
+  // Tour state (classic tour mode)
   const [isTourActive, setIsTourActive] = useState(false);
   const [currentTourStop, setCurrentTourStop] = useState(0);
+
+  // Adventure mode state
+  const [isAdventureActive, setIsAdventureActive] = useState(false);
+  const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
+  const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [isAutoWalking, setIsAutoWalking] = useState(false);
+  const [selectedCharacter, setSelectedCharacter] = useState<CharacterType>(CharacterType.Banana);
 
   // Building modal state
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingDefinition | null>(null);
@@ -81,17 +107,124 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   // Handle welcome overlay actions
   const handleStartTour = useCallback(() => {
     setShowWelcome(false);
+    setGameMode(GameMode.Viewer);
     setIsTourActive(true);
     setCurrentTourStop(0);
   }, []);
 
   const handleExploreFreely = useCallback(() => {
     setShowWelcome(false);
+    setGameMode(GameMode.Viewer);
     setIsTourActive(false);
   }, []);
 
-  // Tour navigation
+  // Start Adventure Mode
+  const handleStartAdventure = useCallback((characterType: CharacterType) => {
+    setShowWelcome(false);
+    setGameMode(GameMode.Adventure);
+    setIsAdventureActive(true);
+    setSelectedCharacter(characterType);
+    setVisitedBuildings(new Set());
+
+    // Start adventure mode in Phaser
+    const gameBoard = gameBoardRef.current;
+    if (gameBoard) {
+      gameBoard.startAdventureMode(characterType);
+
+      // Listen for Phaser events
+      const game = gameBoard.getGameInstance();
+      if (game) {
+        const scene = game.scene.getScene("MainScene");
+        if (scene) {
+          // Player entered trigger zone
+          scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
+            setCurrentEncounter(tourStop);
+          });
+
+          // Player exited trigger zone
+          scene.events.on("playerExitedZone", () => {
+            setCurrentEncounter(null);
+          });
+
+          // Interaction triggered (E pressed)
+          scene.events.on("interactionTriggered", ({ tourStop, buildingId }: { tourStop: TourStop; buildingId: string }) => {
+            setIsDialogOpen(true);
+          });
+
+          // Player position changed (for auto-walk state)
+          scene.events.on("playerPositionChanged", (data: { state: PlayerState }) => {
+            setIsAutoWalking(data.state === PlayerState.AutoWalking);
+          });
+
+          // Building visited
+          scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
+            setVisitedBuildings((prev) => new Set([...prev, buildingId]));
+          });
+        }
+      }
+    }
+  }, []);
+
+  // Stop Adventure Mode
+  const handleStopAdventure = useCallback(() => {
+    setIsAdventureActive(false);
+    setGameMode(GameMode.Viewer);
+    setCurrentEncounter(null);
+    setIsDialogOpen(false);
+
+    const gameBoard = gameBoardRef.current;
+    if (gameBoard) {
+      gameBoard.stopAdventureMode();
+    }
+  }, []);
+
+  // Handle dialog close
+  const handleDialogClose = useCallback(() => {
+    setIsDialogOpen(false);
+
+    // Mark building as visited
+    if (currentEncounter?.buildingId) {
+      gameBoardRef.current?.markBuildingVisited(currentEncounter.buildingId);
+      setVisitedBuildings((prev) => new Set([...prev, currentEncounter.buildingId!]));
+    }
+  }, [currentEncounter]);
+
+  // Handle "Next Stop" button in AdventureHUD
   const handleNextStop = useCallback(() => {
+    // Find next unvisited building
+    for (const stop of TOUR_STOPS) {
+      if (stop.buildingId && !visitedBuildings.has(stop.buildingId)) {
+        gameBoardRef.current?.walkPlayerToBuilding(stop.buildingId);
+        break;
+      }
+    }
+  }, [visitedBuildings]);
+
+  // Handle joystick direction change
+  const handleJoystickDirection = useCallback((direction: Direction | null) => {
+    gameBoardRef.current?.setPlayerInputDirection(direction);
+  }, []);
+
+  // Handle mobile interact button
+  const handleMobileInteract = useCallback(() => {
+    gameBoardRef.current?.triggerInteraction();
+  }, []);
+
+  // Handle view case study from dialog
+  const handleViewCaseStudy = useCallback((projectSlug: string) => {
+    setIsDialogOpen(false);
+
+    // Mark building as visited
+    if (currentEncounter?.buildingId) {
+      gameBoardRef.current?.markBuildingVisited(currentEncounter.buildingId);
+      setVisitedBuildings((prev) => new Set([...prev, currentEncounter.buildingId!]));
+    }
+
+    onProjectClick?.(projectSlug);
+  }, [currentEncounter, onProjectClick]);
+
+  // Tour navigation (classic mode)
+  const handleTourNextStop = useCallback(() => {
     if (currentTourStop < TOUR_STOPS.length - 1) {
       setCurrentTourStop((prev) => prev + 1);
     }
@@ -189,17 +322,55 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         isVisible={showWelcome}
         onStartTour={handleStartTour}
         onExploreFreely={handleExploreFreely}
+        onStartAdventure={handleStartAdventure}
       />
 
-      {/* Tour Guide */}
-      <TourGuide
-        isActive={isTourActive}
-        currentStopIndex={currentTourStop}
-        onNext={handleNextStop}
-        onPrevious={handlePreviousStop}
-        onEnd={handleEndTour}
-        onStopChange={handleStopChange}
-      />
+      {/* Tour Guide (classic tour mode) */}
+      {gameMode === GameMode.Viewer && (
+        <TourGuide
+          isActive={isTourActive}
+          currentStopIndex={currentTourStop}
+          onNext={handleTourNextStop}
+          onPrevious={handlePreviousStop}
+          onEnd={handleEndTour}
+          onStopChange={handleStopChange}
+        />
+      )}
+
+      {/* Adventure Mode UI */}
+      {isAdventureActive && (
+        <>
+          {/* Adventure HUD */}
+          <AdventureHUD
+            visitedBuildings={visitedBuildings}
+            currentTourStopIndex={0}
+            onNextStop={handleNextStop}
+            isAutoWalking={isAutoWalking}
+          />
+
+          {/* Virtual Joystick (mobile) */}
+          <VirtualJoystick
+            onDirectionChange={handleJoystickDirection}
+            onInteract={currentEncounter ? handleMobileInteract : undefined}
+          />
+
+          {/* RPG Dialog Box */}
+          <RPGDialogBox
+            tourStop={currentEncounter}
+            isVisible={isDialogOpen}
+            onClose={handleDialogClose}
+            onViewCaseStudy={handleViewCaseStudy}
+          />
+
+          {/* Exit adventure button */}
+          <button
+            onClick={handleStopAdventure}
+            className="absolute top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10"
+          >
+            Exit Adventure
+          </button>
+        </>
+      )}
 
       {/* Building Modal */}
       <BuildingModal
@@ -210,18 +381,27 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         onBackToPortfolio={onBackToPortfolio}
       />
 
-      {/* Tour restart button (when not in tour and welcome dismissed) */}
-      {!showWelcome && !isTourActive && (
-        <button
-          onClick={() => {
-            setIsTourActive(true);
-            setCurrentTourStop(0);
-          }}
-          className="absolute bottom-4 left-4 z-30 px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-white/20 transition-colors border border-white/10 text-sm flex items-center gap-2"
-        >
-          <span>🗺️</span>
-          Take Tour
-        </button>
+      {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
+      {!showWelcome && !isTourActive && !isAdventureActive && (
+        <div className="absolute bottom-4 left-4 z-30 flex gap-2">
+          <button
+            onClick={() => {
+              setIsTourActive(true);
+              setCurrentTourStop(0);
+            }}
+            className="px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-white/20 transition-colors border border-white/10 text-sm flex items-center gap-2"
+          >
+            <span>🗺️</span>
+            Take Tour
+          </button>
+          <button
+            onClick={() => handleStartAdventure(CharacterType.Banana)}
+            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-colors text-sm flex items-center gap-2"
+          >
+            <span>🎮</span>
+            Adventure
+          </button>
+        </div>
       )}
     </div>
   );

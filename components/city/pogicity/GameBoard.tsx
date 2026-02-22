@@ -2,6 +2,7 @@
 
 import { useState, useCallback, useEffect, useRef, forwardRef, useImperativeHandle } from "react";
 import dynamic from "next/dynamic";
+import Phaser from "phaser";
 import {
   GridCell,
   TileType,
@@ -9,6 +10,8 @@ import {
   Direction,
   GRID_WIDTH,
   GRID_HEIGHT,
+  CharacterType,
+  PlayerState,
 } from "./types";
 import {
   getRoadSegmentOrigin,
@@ -52,6 +55,17 @@ export interface PhaserGameHandle {
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  // Adventure mode methods
+  startAdventureMode: (characterType: CharacterType) => void;
+  stopAdventureMode: () => void;
+  setPlayerInputDirection: (direction: Direction | null) => void;
+  walkPlayerToBuilding: (buildingId: string) => boolean;
+  markBuildingVisited: (buildingId: string) => void;
+  getVisitedBuildings: () => Set<string>;
+  isAdventureModeActive: () => boolean;
+  getPlayerState: () => PlayerState | null;
+  triggerInteraction: () => void;
+  getGameInstance: () => Phaser.Game | null;
 }
 
 // GameBoard handle exposed to parent components
@@ -60,6 +74,17 @@ export interface GameBoardHandle {
   spawnCar: () => boolean;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  // Adventure mode methods
+  startAdventureMode: (characterType: CharacterType) => void;
+  stopAdventureMode: () => void;
+  setPlayerInputDirection: (direction: Direction | null) => void;
+  walkPlayerToBuilding: (buildingId: string) => boolean;
+  markBuildingVisited: (buildingId: string) => void;
+  getVisitedBuildings: () => Set<string>;
+  isAdventureModeActive: () => boolean;
+  getPlayerState: () => PlayerState | null;
+  triggerInteraction: () => void;
+  getGameInstance: () => Phaser.Game | null;
 }
 
 export interface GameSaveData {
@@ -152,6 +177,37 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     highlightBuilding: (buildingId: string | null) => {
       gameRef.current?.highlightBuilding(buildingId);
+    },
+    // Adventure mode methods
+    startAdventureMode: (characterType: CharacterType) => {
+      gameRef.current?.startAdventureMode(characterType);
+    },
+    stopAdventureMode: () => {
+      gameRef.current?.stopAdventureMode();
+    },
+    setPlayerInputDirection: (direction: Direction | null) => {
+      gameRef.current?.setPlayerInputDirection(direction);
+    },
+    walkPlayerToBuilding: (buildingId: string) => {
+      return gameRef.current?.walkPlayerToBuilding(buildingId) ?? false;
+    },
+    markBuildingVisited: (buildingId: string) => {
+      gameRef.current?.markBuildingVisited(buildingId);
+    },
+    getVisitedBuildings: () => {
+      return gameRef.current?.getVisitedBuildings() ?? new Set<string>();
+    },
+    isAdventureModeActive: () => {
+      return gameRef.current?.isAdventureModeActive() ?? false;
+    },
+    getPlayerState: () => {
+      return gameRef.current?.getPlayerState() ?? null;
+    },
+    triggerInteraction: () => {
+      gameRef.current?.triggerInteraction();
+    },
+    getGameInstance: () => {
+      return gameRef.current?.getGameInstance() ?? null;
     },
   }), []);
 

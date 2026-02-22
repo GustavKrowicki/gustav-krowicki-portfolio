@@ -10,6 +10,8 @@ export interface TourStop {
   dialogue: string;
   category: "work" | "education" | "startup" | "interests" | "contact";
   projectSlug?: string;
+  // Offset for NPC position relative to building center
+  npcOffset?: { x: number; y: number };
 }
 
 export const TOUR_STOPS: TourStop[] = [
@@ -29,6 +31,7 @@ export const TOUR_STOPS: TourStop[] = [
       "This is where I currently work at LEGO, designing ML-assisted tools that help our internal teams work smarter. It's a dream come true to work with such an iconic brand!",
     category: "work",
     projectSlug: "lego",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "valtech",
@@ -38,6 +41,7 @@ export const TOUR_STOPS: TourStop[] = [
       "I interned here at Valtech, learning design at scale and working on enterprise digital experiences. This is where I really grew as a designer.",
     category: "work",
     projectSlug: "valtech",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "sdu",
@@ -46,6 +50,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "SDU Kolding is where I studied IT Product Design. This unique program taught me to bridge the gap between technology and user experience.",
     category: "education",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "melbourne",
@@ -54,6 +59,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "I spent a semester abroad in Melbourne, Australia! It was an incredible experience studying design in a completely different culture and environment.",
     category: "education",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "berlin",
@@ -62,6 +68,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "Another exchange semester, this time in Berlin, Germany. The vibrant startup culture and design scene there really inspired my work.",
     category: "education",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "erhvervsakademiet",
@@ -70,6 +77,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "This is where my journey in multimedia design began. The practical, hands-on approach here gave me strong foundations in digital design.",
     category: "education",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "cate-it",
@@ -79,6 +87,7 @@ export const TOUR_STOPS: TourStop[] = [
       "This is my startup! Cate it is an AI-powered catering platform I co-founded. We're building the future of event catering with smart matching and seamless booking.",
     category: "startup",
     projectSlug: "cate-it",
+    npcOffset: { x: 1, y: 1 },
   },
   {
     id: "northside",
@@ -87,6 +96,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "I love music and festivals! Northside is one of my favorites - great music, great vibes, and always a source of creative inspiration.",
     category: "interests",
+    npcOffset: { x: 2, y: 2 },
   },
   {
     id: "skiing",
@@ -95,6 +105,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "When I'm not designing, you might find me on the ski slopes! There's nothing like the rush of skiing down a mountain.",
     category: "interests",
+    npcOffset: { x: 1, y: 3 },
   },
   {
     id: "stadium",
@@ -103,6 +114,7 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "Football is a big part of my life. I try to catch games at the stadium whenever I can - there's nothing like the atmosphere of a live match!",
     category: "interests",
+    npcOffset: { x: 3, y: 3 },
   },
   {
     id: "outro",

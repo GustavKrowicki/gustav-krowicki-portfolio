@@ -2,19 +2,23 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { CharacterType } from "./pogicity/types";
 
 interface WelcomeOverlayProps {
   onStartTour: () => void;
   onExploreFreely: () => void;
+  onStartAdventure?: (characterType: CharacterType) => void;
   isVisible: boolean;
 }
 
 export default function WelcomeOverlay({
   onStartTour,
   onExploreFreely,
+  onStartAdventure,
   isVisible,
 }: WelcomeOverlayProps) {
   const [showContent, setShowContent] = useState(false);
+  const [showCharacterSelect, setShowCharacterSelect] = useState(false);
 
   useEffect(() => {
     if (isVisible) {
@@ -22,8 +26,20 @@ export default function WelcomeOverlay({
       return () => clearTimeout(timer);
     } else {
       setShowContent(false);
+      setShowCharacterSelect(false);
     }
   }, [isVisible]);
+
+  const handleAdventureClick = () => {
+    if (onStartAdventure) {
+      setShowCharacterSelect(true);
+    }
+  };
+
+  const handleCharacterSelect = (characterType: CharacterType) => {
+    onStartAdventure?.(characterType);
+    setShowCharacterSelect(false);
+  };
 
   return (
     <AnimatePresence>
@@ -97,37 +113,93 @@ export default function WelcomeOverlay({
                   </motion.div>
 
                   {/* Buttons */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.6 }}
-                    className="flex flex-col sm:flex-row gap-3"
-                  >
-                    <button
-                      onClick={onStartTour}
-                      className="flex-1 px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                    >
-                      <span className="mr-2">🗺️</span>
-                      Start Tour
-                    </button>
-                    <button
-                      onClick={onExploreFreely}
-                      className="flex-1 px-6 py-3 bg-white/10 text-white rounded-xl font-semibold hover:bg-white/20 transition-all duration-200 border border-white/10"
-                    >
-                      <span className="mr-2">🔍</span>
-                      Explore Freely
-                    </button>
-                  </motion.div>
+                  <AnimatePresence mode="wait">
+                    {!showCharacterSelect ? (
+                      <motion.div
+                        key="main-buttons"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        transition={{ delay: 0.6 }}
+                        className="flex flex-col gap-3"
+                      >
+                        {/* Primary: Start Adventure */}
+                        {onStartAdventure && (
+                          <button
+                            onClick={handleAdventureClick}
+                            className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                          >
+                            <span className="mr-2">🎮</span>
+                            Start Adventure
+                          </button>
+                        )}
+
+                        {/* Secondary options */}
+                        <div className="flex gap-3">
+                          <button
+                            onClick={onStartTour}
+                            className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-all duration-200 border border-white/10 text-sm"
+                          >
+                            <span className="mr-1">🗺️</span>
+                            Guided Tour
+                          </button>
+                          <button
+                            onClick={onExploreFreely}
+                            className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-all duration-200 border border-white/10 text-sm"
+                          >
+                            <span className="mr-1">🔍</span>
+                            Free Explore
+                          </button>
+                        </div>
+                      </motion.div>
+                    ) : (
+                      <motion.div
+                        key="character-select"
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: -10 }}
+                        className="space-y-3"
+                      >
+                        <p className="text-gray-400 text-sm text-center">Choose your character:</p>
+                        <div className="flex gap-3 justify-center">
+                          <button
+                            onClick={() => handleCharacterSelect(CharacterType.Banana)}
+                            className="w-24 h-24 rounded-xl bg-yellow-500/20 border-2 border-yellow-500/50 hover:border-yellow-400 hover:bg-yellow-500/30 transition-all flex flex-col items-center justify-center gap-1"
+                          >
+                            <span className="text-3xl">🍌</span>
+                            <span className="text-white text-xs">Banana</span>
+                          </button>
+                          <button
+                            onClick={() => handleCharacterSelect(CharacterType.Apple)}
+                            className="w-24 h-24 rounded-xl bg-red-500/20 border-2 border-red-500/50 hover:border-red-400 hover:bg-red-500/30 transition-all flex flex-col items-center justify-center gap-1"
+                          >
+                            <span className="text-3xl">🍎</span>
+                            <span className="text-white text-xs">Apple</span>
+                          </button>
+                        </div>
+                        <button
+                          onClick={() => setShowCharacterSelect(false)}
+                          className="w-full text-gray-500 text-sm hover:text-gray-400 transition-colors"
+                        >
+                          ← Back
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
 
                   {/* Hint text */}
-                  <motion.p
-                    initial={{ opacity: 0 }}
-                    animate={{ opacity: 1 }}
-                    transition={{ delay: 0.8 }}
-                    className="text-gray-500 text-xs text-center mt-4"
-                  >
-                    Tip: Click on buildings to learn more about each project
-                  </motion.p>
+                  {!showCharacterSelect && (
+                    <motion.p
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ delay: 0.8 }}
+                      className="text-gray-500 text-xs text-center mt-4"
+                    >
+                      {onStartAdventure
+                        ? "Walk around and discover my portfolio!"
+                        : "Tip: Click on buildings to learn more about each project"}
+                    </motion.p>
+                  )}
                 </div>
               </motion.div>
             )}

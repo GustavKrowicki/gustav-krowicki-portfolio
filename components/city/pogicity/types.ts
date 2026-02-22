@@ -128,3 +128,53 @@ export function isoToGrid(
     y: (isoY / (TILE_HEIGHT / 2) - isoX / (TILE_WIDTH / 2)) / 2,
   };
 }
+
+// Adventure Mode Types
+export enum GameMode {
+  Viewer = "viewer",       // Classic tour mode with TourGuide panel
+  Adventure = "adventure", // Pokemon Go-style exploration
+}
+
+export enum PlayerState {
+  Idle = "idle",
+  Walking = "walking",
+  AutoWalking = "autoWalking",
+}
+
+export enum NPCState {
+  Idle = "idle",
+  Alert = "alert",
+  Talking = "talking",
+}
+
+export interface PlayerData {
+  gridX: number;
+  gridY: number;
+  worldX: number;
+  worldY: number;
+  direction: Direction;
+  state: PlayerState;
+  characterType: CharacterType;
+}
+
+export interface NPCData {
+  id: string;
+  buildingId: string;
+  gridX: number;
+  gridY: number;
+  state: NPCState;
+  tourStopIndex: number;
+}
+
+export interface TriggerZone {
+  buildingId: string;
+  centerX: number;
+  centerY: number;
+  radius: number;
+  tourStopIndex: number;
+}
+
+// Player movement constants
+export const PLAYER_SPEED = 0.08; // Faster than NPCs for responsive feel
+export const PLAYER_MOVE_LERP = 0.15; // Interpolation factor for smooth movement
+export const TRIGGER_ZONE_RADIUS = 3.5; // Tiles around landmark to trigger interaction

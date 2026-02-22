@@ -14,6 +14,11 @@ import {
   ToolType,
   CHARACTER_SPEED,
   CAR_SPEED,
+  GameMode,
+  PlayerState,
+  NPCState,
+  PlayerData,
+  TRIGGER_ZONE_RADIUS,
 } from "../types";
 import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import {
@@ -33,6 +38,10 @@ import {
   BuildingDefinition,
 } from "@/lib/city/buildings";
 import { loadGifAsAnimation, playGifAnimation } from "./GifLoader";
+import { PlayerController } from "./PlayerController";
+import { NPCManager } from "./NPCManager";
+import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
+import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -116,6 +125,8 @@ export class MainScene extends Phaser.Scene {
   // Debug flags
   private showPaths: boolean = false;
   private pathOverlaySprites: Phaser.GameObjects.Graphics | null = null;
+  private showWalkability: boolean = false;
+  private walkabilityOverlay: Phaser.GameObjects.Graphics | null = null;
 
   // Driving mode state
   private isPlayerDriving: boolean = false;
@@ -162,6 +173,15 @@ export class MainScene extends Phaser.Scene {
   private shakeIntensity: number = 0;
   private shakeElapsed: number = 0;
   private shakeCycles: number = 3;
+
+  // Adventure mode state
+  private gameMode: GameMode = GameMode.Viewer;
+  private playerController: PlayerController | null = null;
+  private npcManager: NPCManager | null = null;
+  private triggerZoneManager: TriggerZoneManager | null = null;
+  private visitedBuildings: Set<string> = new Set();
+  private isAdventureActive: boolean = false;
+  private cameraFollowPlayer: boolean = false;
 
   constructor() {
     super({ key: "MainScene" });
@@ -295,12 +315,81 @@ export class MainScene extends Phaser.Scene {
     this.renderCars();
     this.renderCharacters();
 
+    // Adventure mode updates
+    if (this.isAdventureActive) {
+      this.updateAdventureMode();
+    }
+
     if (this.gridDirty) {
       this.applyGridUpdates();
       this.gridDirty = false;
     }
 
     this.updateStatsDisplay();
+  }
+
+  private updateAdventureMode(): void {
+    if (!this.playerController || !this.triggerZoneManager || !this.npcManager) return;
+
+    // Update player
+    this.playerController.update();
+
+    // Get player position
+    const playerPos = this.playerController.getPosition();
+
+    // Check trigger zones
+    this.triggerZoneManager.checkPlayerPosition(playerPos.gridX, playerPos.gridY);
+
+    // Alert nearby NPCs
+    this.npcManager.alertNearbyNPCs(playerPos.gridX, playerPos.gridY, TRIGGER_ZONE_RADIUS + 1);
+
+    // Render player
+    this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
+
+    // Render NPCs (only if not visited)
+    this.npcManager.render(
+      this.visitedBuildings,
+      playerPos.gridX,
+      playerPos.gridY,
+      (x, y, offset) => this.depthFromSortPoint(x, y, offset),
+      this.gifsLoaded
+    );
+
+    // Render numbered markers
+    this.npcManager.renderMarkers(
+      this.visitedBuildings,
+      (x, y, offset) => this.depthFromSortPoint(x, y, offset)
+    );
+
+    // Camera follow player
+    if (this.cameraFollowPlayer) {
+      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY);
+    }
+  }
+
+  private updateCameraFollowPlayer(playerWorldX: number, playerWorldY: number): void {
+    const camera = this.cameras.main;
+
+    // Dead zone - only move camera when player gets near edge
+    const deadZoneX = camera.width * 0.2;
+    const deadZoneY = camera.height * 0.2;
+
+    // Calculate where player is on screen
+    const playerScreenX = playerWorldX - this.baseScrollX;
+    const playerScreenY = playerWorldY - this.baseScrollY;
+
+    // Check if player is outside dead zone
+    if (playerScreenX < deadZoneX) {
+      this.baseScrollX -= (deadZoneX - playerScreenX) * 0.1;
+    } else if (playerScreenX > camera.width - deadZoneX) {
+      this.baseScrollX += (playerScreenX - (camera.width - deadZoneX)) * 0.1;
+    }
+
+    if (playerScreenY < deadZoneY) {
+      this.baseScrollY -= (deadZoneY - playerScreenY) * 0.1;
+    } else if (playerScreenY > camera.height - deadZoneY) {
+      this.baseScrollY += (playerScreenY - (camera.height - deadZoneY)) * 0.1;
+    }
   }
 
   private updateStatsDisplay(): void {
@@ -349,27 +438,29 @@ export class MainScene extends Phaser.Scene {
       this.shakeOffset = 0;
     }
 
-    // Manual camera movement
-    const activeElement = document.activeElement;
-    const isTyping =
-      activeElement &&
-      (activeElement.tagName === "INPUT" ||
-        activeElement.tagName === "TEXTAREA" ||
-        (activeElement as HTMLElement)?.isContentEditable);
+    // Manual camera movement (disabled in adventure mode - player movement handles keys)
+    if (!this.isAdventureActive) {
+      const activeElement = document.activeElement;
+      const isTyping =
+        activeElement &&
+        (activeElement.tagName === "INPUT" ||
+          activeElement.tagName === "TEXTAREA" ||
+          (activeElement as HTMLElement)?.isContentEditable);
 
-    if (!isTyping) {
-      const speed = this.CAMERA_SPEED / camera.zoom;
-      if (this.cursors.left.isDown || this.wasd?.A.isDown) {
-        this.baseScrollX -= speed;
-      }
-      if (this.cursors.right.isDown || this.wasd?.D.isDown) {
-        this.baseScrollX += speed;
-      }
-      if (this.cursors.up.isDown || this.wasd?.W.isDown) {
-        this.baseScrollY -= speed;
-      }
-      if (this.cursors.down.isDown || this.wasd?.S.isDown) {
-        this.baseScrollY += speed;
+      if (!isTyping) {
+        const speed = this.CAMERA_SPEED / camera.zoom;
+        if (this.cursors.left.isDown || this.wasd?.A.isDown) {
+          this.baseScrollX -= speed;
+        }
+        if (this.cursors.right.isDown || this.wasd?.D.isDown) {
+          this.baseScrollX += speed;
+        }
+        if (this.cursors.up.isDown || this.wasd?.W.isDown) {
+          this.baseScrollY -= speed;
+        }
+        if (this.cursors.down.isDown || this.wasd?.S.isDown) {
+          this.baseScrollY += speed;
+        }
       }
     }
 
@@ -987,9 +1078,13 @@ export class MainScene extends Phaser.Scene {
 
   // SPAWN METHODS
   spawnCharacter(): boolean {
+    // Guard against uninitialized grid
+    if (!this.grid || this.grid.length === 0 || !this.grid[0]) return false;
+
     const roadTiles: { x: number; y: number }[] = [];
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
+        if (!this.grid[y]?.[x]) continue;
         const tileType = this.grid[y][x].type;
         if (tileType === TileType.Road || tileType === TileType.Tile) {
           roadTiles.push({ x, y });
@@ -1017,9 +1112,13 @@ export class MainScene extends Phaser.Scene {
   }
 
   spawnCar(): boolean {
+    // Guard against uninitialized grid
+    if (!this.grid || this.grid.length === 0 || !this.grid[0]) return false;
+
     const asphaltTiles: { x: number; y: number }[] = [];
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
+        if (!this.grid[y]?.[x]) continue;
         if (this.grid[y][x].type === TileType.Asphalt) {
           asphaltTiles.push({ x, y });
         }
@@ -1146,6 +1245,94 @@ export class MainScene extends Phaser.Scene {
     this.showStats = show;
   }
 
+  toggleWalkabilityOverlay(): void {
+    this.showWalkability = !this.showWalkability;
+    if (this.showWalkability) {
+      this.renderWalkabilityOverlay();
+    } else {
+      this.clearWalkabilityOverlay();
+    }
+  }
+
+  private renderWalkabilityOverlay(): void {
+    this.clearWalkabilityOverlay();
+
+    this.walkabilityOverlay = this.add.graphics();
+    this.walkabilityOverlay.setDepth(15_000_000); // Above all tiles and buildings
+
+    const walkableTypes = [TileType.Road, TileType.Tile, TileType.Grass, TileType.Snow, TileType.Asphalt];
+
+    // Helper to check if a cell is walkable (matches PlayerController logic)
+    const isWalkableCell = (x: number, y: number): boolean => {
+      if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
+      const cell = this.grid[y]?.[x];
+      if (!cell || !walkableTypes.includes(cell.type)) return false;
+      return true;
+    };
+
+    // Flood fill from spawn point to find reachable tiles
+    const spawnX = 15, spawnY = 30;
+    const reachable = new Set<string>();
+    const stack: [number, number][] = [[spawnX, spawnY]];
+
+    while (stack.length > 0) {
+      const [x, y] = stack.pop()!;
+      const key = `${x},${y}`;
+      if (reachable.has(key)) continue;
+      if (!isWalkableCell(x, y)) continue;
+
+      reachable.add(key);
+      stack.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
+    }
+
+    // Render overlay for each tile
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (!cell) continue;
+
+        const screenPos = this.gridToScreen(x, y);
+        const key = `${x},${y}`;
+        const canWalk = isWalkableCell(x, y);
+
+        let color: number;
+        let alpha: number;
+
+        if (reachable.has(key)) {
+          // Reachable - green
+          color = 0x00ff00;
+          alpha = 0.3;
+        } else if (canWalk) {
+          // Walkable but isolated - yellow/orange
+          color = 0xffaa00;
+          alpha = 0.5;
+        } else {
+          // Blocked - red
+          color = 0xff0000;
+          alpha = 0.2;
+        }
+
+        // Draw isometric diamond
+        this.walkabilityOverlay.fillStyle(color, alpha);
+        this.walkabilityOverlay.beginPath();
+        this.walkabilityOverlay.moveTo(screenPos.x, screenPos.y - TILE_HEIGHT / 2);
+        this.walkabilityOverlay.lineTo(screenPos.x + TILE_WIDTH / 2, screenPos.y);
+        this.walkabilityOverlay.lineTo(screenPos.x, screenPos.y + TILE_HEIGHT / 2);
+        this.walkabilityOverlay.lineTo(screenPos.x - TILE_WIDTH / 2, screenPos.y);
+        this.walkabilityOverlay.closePath();
+        this.walkabilityOverlay.fillPath();
+      }
+    }
+
+  }
+
+  private clearWalkabilityOverlay(): void {
+    if (this.walkabilityOverlay) {
+      this.walkabilityOverlay.destroy();
+      this.walkabilityOverlay = null;
+    }
+  }
+
   // Tour navigation - smoothly pan camera to a grid position
   panToPosition(gridX: number, gridY: number): void {
     if (!this.isReady) return;
@@ -1186,6 +1373,260 @@ export class MainScene extends Phaser.Scene {
   // Highlighted building for tour
   private highlightedBuildingId: string | null = null;
   private highlightSprite: Phaser.GameObjects.Graphics | null = null;
+
+  // ==================== ADVENTURE MODE PUBLIC API ====================
+
+  startAdventureMode(characterType: CharacterType): void {
+    if (this.isAdventureActive) return;
+
+    this.gameMode = GameMode.Adventure;
+    this.isAdventureActive = true;
+    this.visitedBuildings.clear();
+
+    // Initialize managers
+    this.npcManager = new NPCManager(this);
+    this.triggerZoneManager = new TriggerZoneManager(this);
+
+    // Create player controller
+    this.playerController = new PlayerController(this, this.grid);
+
+    // Set up trigger zone callbacks
+    this.triggerZoneManager.setCallbacks({
+      onEnterZone: (zone, tourStop) => {
+        this.events.emit("playerEnteredZone", { buildingId: zone.buildingId, tourStop });
+      },
+      onExitZone: (zone) => {
+        this.events.emit("playerExitedZone", { buildingId: zone.buildingId });
+      },
+    });
+
+    // Set up player position change callback
+    this.playerController.setOnPositionChange((data: PlayerData) => {
+      this.events.emit("playerPositionChanged", data);
+    });
+
+    // Helper to find building position
+    const getBuildingPosition = (buildingId: string): { x: number; y: number } | null => {
+      return findBuildingPosition(this.grid, buildingId);
+    };
+
+    // Spawn NPCs at landmarks
+    this.npcManager.spawnNPCs(TOUR_STOPS, getBuildingPosition);
+
+    // Set up trigger zones
+    this.triggerZoneManager.setupZones(TOUR_STOPS, getBuildingPosition);
+
+    // Find spawn position (on main road near Valtech area)
+    const spawnPos = this.findWalkableSpawnPosition(15, 30);
+
+    // Spawn player
+    this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
+
+    // Enable camera follow
+    this.cameraFollowPlayer = true;
+
+    // Set zoom for adventure mode
+    const camera = this.cameras.main;
+    camera.setZoom(1.5);
+    this.zoomLevel = 1.5;
+
+    // Center camera on player
+    const screenPos = this.gridToScreen(spawnPos.x, spawnPos.y);
+    this.baseScrollX = screenPos.x - camera.width / 2;
+    this.baseScrollY = screenPos.y - camera.height / 2;
+
+    // Set up keyboard handlers
+    this.setupAdventureKeyboardHandlers();
+
+    this.events.emit("adventureModeStarted");
+  }
+
+  private findWalkableSpawnPosition(preferX: number, preferY: number): { x: number; y: number } {
+    // Check if preferred position is walkable
+    if (this.isWalkable(preferX, preferY)) {
+      return { x: preferX, y: preferY };
+    }
+
+    // Search in expanding rings around preferred position
+    for (let radius = 1; radius < 10; radius++) {
+      for (let dx = -radius; dx <= radius; dx++) {
+        for (let dy = -radius; dy <= radius; dy++) {
+          const x = preferX + dx;
+          const y = preferY + dy;
+          if (this.isWalkable(x, y)) {
+            return { x, y };
+          }
+        }
+      }
+    }
+
+    // Fallback: find any walkable tile
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        if (this.isWalkable(x, y)) {
+          return { x, y };
+        }
+      }
+    }
+
+    return { x: preferX, y: preferY };
+  }
+
+  stopAdventureMode(): void {
+    if (!this.isAdventureActive) return;
+
+    this.isAdventureActive = false;
+    this.gameMode = GameMode.Viewer;
+    this.cameraFollowPlayer = false;
+
+    // Clean up
+    if (this.playerController) {
+      this.playerController.destroy();
+      this.playerController = null;
+    }
+
+    if (this.npcManager) {
+      this.npcManager.destroy();
+      this.npcManager = null;
+    }
+
+    if (this.triggerZoneManager) {
+      this.triggerZoneManager.destroy();
+      this.triggerZoneManager = null;
+    }
+
+    this.removeAdventureKeyboardHandlers();
+
+    this.events.emit("adventureModeStopped");
+  }
+
+  private adventureKeyDownHandler: ((e: KeyboardEvent) => void) | null = null;
+  private adventureKeyUpHandler: ((e: KeyboardEvent) => void) | null = null;
+
+  private setupAdventureKeyboardHandlers(): void {
+    this.adventureKeyDownHandler = (e: KeyboardEvent) => {
+      // Ignore if typing in an input
+      const activeElement = document.activeElement;
+      const isTyping =
+        activeElement &&
+        (activeElement.tagName === "INPUT" ||
+          activeElement.tagName === "TEXTAREA" ||
+          (activeElement as HTMLElement)?.isContentEditable);
+
+      if (isTyping) return;
+
+      // Handle interaction key
+      if (e.key === "e" || e.key === "E" || e.key === " ") {
+        const activeZone = this.triggerZoneManager?.getActiveZone();
+        const activeTourStop = this.triggerZoneManager?.getActiveTourStop();
+        if (activeZone && activeTourStop) {
+          e.preventDefault();
+          this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId });
+        }
+      }
+
+      // Toggle walkability debug overlay (G key)
+      if (e.key === "g" || e.key === "G") {
+        this.toggleWalkabilityOverlay();
+      }
+
+      // Handle movement keys
+      this.playerController?.handleKeyDown(e.key);
+    };
+
+    this.adventureKeyUpHandler = (e: KeyboardEvent) => {
+      this.playerController?.handleKeyUp(e.key);
+    };
+
+    window.addEventListener("keydown", this.adventureKeyDownHandler);
+    window.addEventListener("keyup", this.adventureKeyUpHandler);
+  }
+
+  private removeAdventureKeyboardHandlers(): void {
+    if (this.adventureKeyDownHandler) {
+      window.removeEventListener("keydown", this.adventureKeyDownHandler);
+      this.adventureKeyDownHandler = null;
+    }
+    if (this.adventureKeyUpHandler) {
+      window.removeEventListener("keyup", this.adventureKeyUpHandler);
+      this.adventureKeyUpHandler = null;
+    }
+  }
+
+  // Set player input direction (for mobile joystick)
+  setPlayerInputDirection(direction: Direction | null): void {
+    this.playerController?.setInputDirection(direction);
+  }
+
+  // Auto-walk player to building
+  walkPlayerToBuilding(buildingId: string): boolean {
+    if (!this.playerController) return false;
+
+    const position = findBuildingPosition(this.grid, buildingId);
+    if (!position) return false;
+
+    // Find walkable position near building - try to get as close as possible
+    // First try the building center, then adjacent tiles
+    const candidates = [
+      { x: Math.floor(position.x), y: Math.floor(position.y) },
+      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) },
+      { x: Math.floor(position.x), y: Math.floor(position.y) + 1 },
+      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) + 1 },
+      { x: Math.floor(position.x) - 1, y: Math.floor(position.y) },
+      { x: Math.floor(position.x), y: Math.floor(position.y) - 1 },
+    ];
+
+    for (const candidate of candidates) {
+      const targetPos = this.findWalkableSpawnPosition(candidate.x, candidate.y);
+      // Check if the found position is close enough to the building
+      const dist = Math.sqrt(
+        Math.pow(targetPos.x - position.x, 2) + Math.pow(targetPos.y - position.y, 2)
+      );
+      if (dist <= 3) {
+        return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
+      }
+    }
+
+    // Fallback to original behavior
+    const targetPos = this.findWalkableSpawnPosition(
+      Math.floor(position.x + 1),
+      Math.floor(position.y + 1)
+    );
+
+    return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
+  }
+
+  // Mark building as visited
+  markBuildingVisited(buildingId: string): void {
+    this.visitedBuildings.add(buildingId);
+    this.events.emit("buildingVisited", { buildingId });
+  }
+
+  // Get visited buildings
+  getVisitedBuildings(): Set<string> {
+    return new Set(this.visitedBuildings);
+  }
+
+  // Check if adventure mode is active
+  isAdventureModeActive(): boolean {
+    return this.isAdventureActive;
+  }
+
+  // Get player state
+  getPlayerState(): PlayerState | null {
+    return this.playerController?.getState() || null;
+  }
+
+  // Trigger interaction programmatically
+  triggerInteraction(): void {
+    const activeZone = this.triggerZoneManager?.getActiveZone();
+    const activeTourStop = this.triggerZoneManager?.getActiveTourStop();
+    if (activeZone && activeTourStop) {
+      this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId });
+    }
+  }
+
+  // ==================== END ADVENTURE MODE API ====================
 
   highlightBuilding(buildingId: string | null): void {
     // Clear existing highlight
