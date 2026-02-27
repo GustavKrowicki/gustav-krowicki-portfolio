@@ -47,7 +47,7 @@ export default function LegoPage() {
                   parallel lists with broader parameters.
                 </p>
                 <p>
-                  The challenge wasn't just making ML understandable—it was designing
+                  The challenge wasn't just making ML understandable, it was designing
                   an interface that protected user expertise while satisfying
                   organizational oversight needs.
                 </p>
@@ -86,7 +86,7 @@ export default function LegoPage() {
                 engaged with their own recommendations.
               </p>
               <p>
-                The compromise wasn't removing information—it was about timing and emphasis.
+                The compromise wasn't removing information, it was about timing and emphasis.
               </p>
             </div>
             <div className="relative rounded-2xl overflow-hidden">
@@ -129,7 +129,7 @@ export default function LegoPage() {
             <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
               <h2 className="text-3xl md:text-4xl font-bold text-black">Complexity</h2>
               <p>
-                The model operates across multiple formats simultaneously—adjusting
+                The model operates across multiple formats(child elements) simultaneously, adjusting
                 recommendations up and down a hierarchy depending on settings—but users
                 only see one format at a time. This created a fundamental disconnect
                 between how the model worked and what users could observe.
@@ -163,7 +163,7 @@ export default function LegoPage() {
             <p>
               We redesigned how users set parameters before generating recommendations.
               Early research showed users' settings often differed significantly from
-              their supervisors'—not wrong, but leading to more deviation and manual
+              their supervisors', not wrong, but leading to more deviation and manual
               adjustment later.
             </p>
           }
