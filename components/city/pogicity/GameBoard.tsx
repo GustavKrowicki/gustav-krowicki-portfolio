@@ -66,6 +66,15 @@ export interface PhaserGameHandle {
   getPlayerState: () => PlayerState | null;
   triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
+  // Logo overlay methods
+  getPortfolioBuildingPositions: () => Array<{
+    buildingId: string;
+    screenX: number;
+    screenY: number;
+    logoUrl: string;
+    logoOffset: { x: number; y: number };
+  }>;
+  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
 }
 
 // GameBoard handle exposed to parent components
@@ -85,6 +94,15 @@ export interface GameBoardHandle {
   getPlayerState: () => PlayerState | null;
   triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
+  // Logo overlay methods
+  getPortfolioBuildingPositions: () => Array<{
+    buildingId: string;
+    screenX: number;
+    screenY: number;
+    logoUrl: string;
+    logoOffset: { x: number; y: number };
+  }>;
+  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
 }
 
 export interface GameSaveData {
@@ -208,6 +226,13 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     getGameInstance: () => {
       return gameRef.current?.getGameInstance() ?? null;
+    },
+    // Logo overlay methods
+    getPortfolioBuildingPositions: () => {
+      return gameRef.current?.getPortfolioBuildingPositions() ?? [];
+    },
+    getCameraState: () => {
+      return gameRef.current?.getCameraState() ?? { scrollX: 0, scrollY: 0, zoom: 1, width: 0, height: 0 };
     },
   }), []);
 

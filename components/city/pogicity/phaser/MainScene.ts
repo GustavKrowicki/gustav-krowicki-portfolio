@@ -1628,6 +1628,76 @@ export class MainScene extends Phaser.Scene {
 
   // ==================== END ADVENTURE MODE API ====================
 
+  // ==================== LOGO OVERLAY API ====================
+
+  // Get portfolio building positions for 3D logo overlay
+  getPortfolioBuildingPositions(): Array<{
+    buildingId: string;
+    screenX: number;
+    screenY: number;
+    logoUrl: string;
+    logoOffset: { x: number; y: number };
+  }> {
+    const positions: Array<{
+      buildingId: string;
+      screenX: number;
+      screenY: number;
+      logoUrl: string;
+      logoOffset: { x: number; y: number };
+    }> = [];
+
+    if (!this.isReady || !this.grid) return positions;
+
+    // Find all portfolio buildings with logos
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (!cell || !cell.buildingId || !cell.isOrigin) continue;
+
+        const building = getBuilding(cell.buildingId);
+        if (!building || building.category !== "portfolio" || !building.logoUrl) continue;
+
+        // Get building footprint
+        const footprint = getBuildingFootprint(building, cell.buildingOrientation);
+
+        // Calculate center of building
+        const centerX = x + footprint.width / 2;
+        const centerY = y + footprint.height / 2;
+
+        // Convert to screen position
+        const screenPos = this.gridToScreen(centerX, centerY);
+
+        // Position logo above building (offset upward)
+        // The Y offset should place logo above the building sprite
+        const logoOffsetY = 100 * this.zoomLevel;
+
+        positions.push({
+          buildingId: cell.buildingId,
+          screenX: screenPos.x,
+          screenY: screenPos.y - logoOffsetY,
+          logoUrl: building.logoUrl,
+          logoOffset: building.logoOffset || { x: 0, y: 60 },
+        });
+      }
+    }
+
+    return positions;
+  }
+
+  // Get camera state for syncing with overlay
+  getCameraState(): { scrollX: number; scrollY: number; zoom: number; width: number; height: number } {
+    const camera = this.cameras.main;
+    return {
+      scrollX: this.baseScrollX,
+      scrollY: this.baseScrollY,
+      zoom: camera.zoom,
+      width: camera.width,
+      height: camera.height,
+    };
+  }
+
+  // ==================== END LOGO OVERLAY API ====================
+
   highlightBuilding(buildingId: string | null): void {
     // Clear existing highlight
     if (this.highlightSprite) {

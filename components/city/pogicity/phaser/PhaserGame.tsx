@@ -38,6 +38,15 @@ export interface PhaserGameHandle {
   getPlayerState: () => PlayerState | null;
   triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
+  // Logo overlay methods
+  getPortfolioBuildingPositions: () => Array<{
+    buildingId: string;
+    screenX: number;
+    screenY: number;
+    logoUrl: string;
+    logoOffset: { x: number; y: number };
+  }>;
+  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
 }
 
 interface PhaserGameProps {
@@ -208,6 +217,19 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
         },
         getGameInstance: () => {
           return gameRef.current;
+        },
+        // Logo overlay methods
+        getPortfolioBuildingPositions: () => {
+          if (sceneRef.current) {
+            return sceneRef.current.getPortfolioBuildingPositions();
+          }
+          return [];
+        },
+        getCameraState: () => {
+          if (sceneRef.current) {
+            return sceneRef.current.getCameraState();
+          }
+          return { scrollX: 0, scrollY: 0, zoom: 1, width: 0, height: 0 };
         },
       }),
       []

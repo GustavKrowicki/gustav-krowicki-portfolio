@@ -12,6 +12,7 @@ import BuildingModal from "./BuildingModal";
 import RPGDialogBox from "./RPGDialogBox";
 import VirtualJoystick from "./VirtualJoystick";
 import AdventureHUD from "./AdventureHUD";
+import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -45,6 +46,15 @@ export interface GameBoardHandle {
   getPlayerState: () => PlayerState | null;
   triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
+  // Logo overlay methods
+  getPortfolioBuildingPositions: () => Array<{
+    buildingId: string;
+    screenX: number;
+    screenY: number;
+    logoUrl: string;
+    logoOffset: { x: number; y: number };
+  }>;
+  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
 }
 
 export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfolio }: CityViewerProps) {
@@ -67,6 +77,16 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   // Building modal state
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingDefinition | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Logo overlay state
+  const [logoPositions, setLogoPositions] = useState<LogoPosition[]>([]);
+  const [cameraState, setCameraState] = useState({
+    scrollX: 0,
+    scrollY: 0,
+    zoom: 1,
+    width: 0,
+    height: 0,
+  });
 
   // Refs
   const gameBoardRef = useRef<GameBoardHandle>(null);
@@ -103,6 +123,59 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     const timer = setTimeout(spawnAmbientLife, 1000);
     return () => clearTimeout(timer);
   }, []);
+
+  // Update logo positions and camera state for 3D overlay
+  // Use refs to track previous values and avoid unnecessary state updates
+  const lastCameraRef = useRef({ scrollX: 0, scrollY: 0, zoom: 1, width: 0 });
+
+  useEffect(() => {
+    let intervalId: NodeJS.Timeout;
+
+    const updateLogosAndCamera = () => {
+      const gameBoard = gameBoardRef.current;
+      if (!gameBoard) return;
+
+      try {
+        const camera = gameBoard.getCameraState();
+
+        // Only update if camera has actually moved or dimensions changed
+        const lastCamera = lastCameraRef.current;
+        const hasCameraChanged =
+          Math.abs(camera.scrollX - lastCamera.scrollX) > 0.5 ||
+          Math.abs(camera.scrollY - lastCamera.scrollY) > 0.5 ||
+          Math.abs(camera.zoom - lastCamera.zoom) > 0.01 ||
+          camera.width !== lastCamera.width;
+
+        if (hasCameraChanged) {
+          lastCameraRef.current = {
+            scrollX: camera.scrollX,
+            scrollY: camera.scrollY,
+            zoom: camera.zoom,
+            width: camera.width
+          };
+          const positions = gameBoard.getPortfolioBuildingPositions();
+          setLogoPositions(positions);
+          setCameraState(camera);
+        }
+      } catch {
+        // Methods may not be available yet
+      }
+    };
+
+    // Initial update after game loads
+    const initialTimer = setTimeout(() => {
+      updateLogosAndCamera();
+      // Then poll at 30fps for camera changes
+      intervalId = setInterval(updateLogosAndCamera, 33);
+    }, 1500);
+
+    return () => {
+      clearTimeout(initialTimer);
+      if (intervalId) {
+        clearInterval(intervalId);
+      }
+    };
+  }, []); // Empty dependency - run once on mount
 
   // Handle welcome overlay actions
   const handleStartTour = useCallback(() => {
@@ -316,6 +389,18 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         initialGrid={initialGrid}
         onBuildingClick={handleBuildingClick}
       />
+
+      {/* 3D Spinning Logos Overlay */}
+      {!showWelcome && cameraState.width > 0 && (
+        <LogosOverlay
+          logos={logoPositions}
+          width={cameraState.width}
+          height={cameraState.height}
+          cameraX={cameraState.scrollX}
+          cameraY={cameraState.scrollY}
+          zoom={cameraState.zoom}
+        />
+      )}
 
       {/* Welcome Overlay */}
       <WelcomeOverlay
