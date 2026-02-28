@@ -3,7 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import Phaser from "phaser";
-import { GridCell, CharacterType, Direction, PlayerState, GameMode } from "./pogicity/types";
+import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding, BuildingDefinition } from "@/lib/city/buildings";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import WelcomeOverlay from "./WelcomeOverlay";
@@ -12,6 +12,7 @@ import BuildingModal from "./BuildingModal";
 import RPGDialogBox from "./RPGDialogBox";
 import VirtualJoystick from "./VirtualJoystick";
 import AdventureHUD from "./AdventureHUD";
+import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -72,6 +73,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAutoWalking, setIsAutoWalking] = useState(false);
+  const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
   const [selectedCharacter, setSelectedCharacter] = useState<CharacterType>(CharacterType.Banana);
 
   // Building modal state
@@ -224,9 +226,10 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
             setIsDialogOpen(true);
           });
 
-          // Player position changed (for auto-walk state)
-          scene.events.on("playerPositionChanged", (data: { state: PlayerState }) => {
+          // Player position changed (for auto-walk state + walkable directions)
+          scene.events.on("playerPositionChanged", (data: PlayerData) => {
             setIsAutoWalking(data.state === PlayerState.AutoWalking);
+            setWalkableDirections(data.walkableDirections ?? []);
           });
 
           // Building visited
@@ -432,6 +435,9 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
             onNextStop={handleNextStop}
             isAutoWalking={isAutoWalking}
           />
+
+          {/* Directional Compass */}
+          <DirectionalCompass walkableDirections={walkableDirections} />
 
           {/* Virtual Joystick (mobile) */}
           <VirtualJoystick

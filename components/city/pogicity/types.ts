@@ -155,6 +155,7 @@ export interface PlayerData {
   direction: Direction;
   state: PlayerState;
   characterType: CharacterType;
+  walkableDirections?: Direction[];
 }
 
 export interface NPCData {

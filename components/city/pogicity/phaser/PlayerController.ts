@@ -401,6 +401,17 @@ export class PlayerController {
     return Math.abs(x1 - x2) + Math.abs(y1 - y2);
   }
 
+  getWalkableDirections(): Direction[] {
+    const walkable: Direction[] = [];
+    for (const dir of [Direction.Up, Direction.Down, Direction.Left, Direction.Right]) {
+      const vec = directionVectors[dir];
+      if (this.isWalkable(this.gridX + vec.dx, this.gridY + vec.dy)) {
+        walkable.push(dir);
+      }
+    }
+    return walkable;
+  }
+
   private isWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     const cell = this.grid[y]?.[x];
@@ -455,6 +466,7 @@ export class PlayerController {
       direction: this.direction,
       state: this.state,
       characterType: this.characterType,
+      walkableDirections: this.getWalkableDirections(),
     });
   }
 
