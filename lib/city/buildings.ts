@@ -88,7 +88,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: true,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
-    logoOffset: { x: 0, y: 80 },
+    logoOffset: { x: 0, y: 100 },
   },
   "valtech-office": {
     id: "valtech-office",
@@ -107,7 +107,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: true,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/valtech-office.svg",
-    logoOffset: { x: 0, y: 70 },
+    logoOffset: { x: 20, y: 80 },
   },
   "melbourne-uni": {
     id: "melbourne-uni",
@@ -143,7 +143,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/berlin-uni.svg",
-    logoOffset: { x: 0, y: 80 },
+    logoOffset: { x: 0, y: 60 },
   },
   "sdu-kolding": {
     id: "sdu-kolding",
@@ -161,7 +161,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/sdu-kolding.svg",
-    logoOffset: { x: 0, y: 80 },
+    logoOffset: { x: 0, y: 10 },
   },
   "erhvervsakademiet": {
     id: "erhvervsakademiet",
@@ -179,7 +179,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/erhvervsakademiet.svg",
-    logoOffset: { x: 0, y: 90 },
+    logoOffset: { x: 20, y: 20 },
   },
   "dokk1-library": {
     id: "dokk1-library",
@@ -197,7 +197,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/dokk1-library.svg",
-    logoOffset: { x: 0, y: 70 },
+    logoOffset: { x: 0, y: 120 },
   },
   "aarhus-stadium": {
     id: "aarhus-stadium",
@@ -215,7 +215,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/aarhus-stadium.svg",
-    logoOffset: { x: 0, y: 100 },
+    logoOffset: { x: 0, y: 80 },
   },
   "aeroguest": {
     id: "aeroguest",
@@ -233,7 +233,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/aeroguest.svg",
-    logoOffset: { x: 0, y: 70 },
+    logoOffset: { x: 0, y: 150 },
   },
   "northside-stage": {
     id: "northside-stage",
