@@ -1,6 +1,6 @@
 'use client';
 
-import { Analytics } from '@vercel/analytics/react';
+import { Analytics } from '@vercel/analytics/next';
 import { useEffect, useState } from 'react';
 
 export default function AnalyticsWrapper() {
