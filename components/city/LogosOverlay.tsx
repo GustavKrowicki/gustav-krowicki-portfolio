@@ -37,8 +37,12 @@ export interface LogoPosition {
 
 interface LogosOverlayProps {
   logos: LogoPosition[];
-  width: number;
-  height: number;
+  viewportLeft: number;
+  viewportTop: number;
+  viewportWidth: number;
+  viewportHeight: number;
+  worldWidth: number;
+  worldHeight: number;
   cameraX: number;
   cameraY: number;
   zoom: number;
@@ -46,8 +50,12 @@ interface LogosOverlayProps {
 
 export default function LogosOverlay({
   logos,
-  width,
-  height,
+  viewportLeft,
+  viewportTop,
+  viewportWidth,
+  viewportHeight,
+  worldWidth,
+  worldHeight,
   cameraX,
   cameraY,
   zoom,
@@ -57,32 +65,23 @@ export default function LogosOverlay({
     return LOGO_CONFIG.baseSize * LOGO_CONFIG.sizeMultiplier * zoom;
   }, [zoom]);
 
-  // Convert world positions to Three.js screen-space coordinates
-  // The key insight:
-  // - logo.screenX/Y are in Phaser world coordinates
-  // - cameraX/Y (scrollX/Y) is the top-left of visible area in world coords
-  // - The visible world area is (width/zoom) x (height/zoom)
-  // - Camera center in world = scrollX + (width/zoom)/2
   const screenLogos = useMemo(() => {
-    // Calculate the center of the visible area in world coordinates
-    const visibleWorldWidth = width / zoom;
-    const visibleWorldHeight = height / zoom;
+    const visibleWorldWidth = worldWidth / zoom;
+    const visibleWorldHeight = worldHeight / zoom;
     const cameraCenterX = cameraX + visibleWorldWidth / 2;
     const cameraCenterY = cameraY + visibleWorldHeight / 2;
+    const displayScaleX = viewportWidth / worldWidth;
+    const displayScaleY = viewportHeight / worldHeight;
 
     return logos.map((logo) => {
-      // Calculate offset from camera center in world units
       const offsetWorldX = logo.screenX - cameraCenterX;
       const offsetWorldY = logo.screenY - cameraCenterY;
-
-      // Convert to screen pixels (multiply by zoom)
       const screenOffsetX = offsetWorldX * zoom;
       const screenOffsetY = offsetWorldY * zoom;
-
-      // Three.js uses Y-up, so negate Y
-      // Apply per-building offsets (scaled by zoom), fallback to global config
-      const threeX = screenOffsetX + (logo.logoOffset.x * zoom);
-      const threeY = -screenOffsetY + (logo.logoOffset.y * zoom);
+      const displayOffsetX = screenOffsetX * displayScaleX;
+      const displayOffsetY = screenOffsetY * displayScaleY;
+      const threeX = displayOffsetX + (logo.logoOffset.x * zoom * displayScaleX);
+      const threeY = -displayOffsetY + (logo.logoOffset.y * zoom * displayScaleY);
 
       return {
         ...logo,
@@ -90,16 +89,28 @@ export default function LogosOverlay({
         threeY,
       };
     });
-  }, [logos, cameraX, cameraY, zoom, width, height]);
+  }, [logos, cameraX, cameraY, zoom, viewportWidth, viewportHeight, worldWidth, worldHeight]);
 
-  if (logos.length === 0 || width === 0 || height === 0) {
+  if (
+    logos.length === 0 ||
+    viewportWidth === 0 ||
+    viewportHeight === 0 ||
+    worldWidth === 0 ||
+    worldHeight === 0
+  ) {
     return null;
   }
 
   return (
     <div
-      className="absolute inset-0 pointer-events-none"
-      style={{ zIndex: 20 }}
+      className="absolute pointer-events-none"
+      style={{
+        left: viewportLeft,
+        top: viewportTop,
+        width: viewportWidth,
+        height: viewportHeight,
+        zIndex: 20,
+      }}
     >
       <Canvas
         style={{ background: "transparent" }}
@@ -108,10 +119,10 @@ export default function LogosOverlay({
         <OrthographicCamera
           makeDefault
           position={[0, 0, 100]}
-          left={-width / 2}
-          right={width / 2}
-          top={height / 2}
-          bottom={-height / 2}
+          left={-viewportWidth / 2}
+          right={viewportWidth / 2}
+          top={viewportHeight / 2}
+          bottom={-viewportHeight / 2}
           near={0.1}
           far={1000}
         />

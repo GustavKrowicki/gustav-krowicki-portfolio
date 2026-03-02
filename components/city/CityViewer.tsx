@@ -20,7 +20,7 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
   ssr: false,
   loading: () => (
     <div className="w-full h-full flex items-center justify-center bg-[#3d5560]">
-      <div className="text-white font-mono text-xl">Loading Gustav's City...</div>
+      <div className="text-white font-mono text-xl">Loading Gustav&apos;s City...</div>
     </div>
   ),
 });
@@ -34,6 +34,7 @@ interface CityViewerProps {
 export interface GameBoardHandle {
   spawnCharacter: () => boolean;
   spawnCar: () => boolean;
+  fitCityView: () => void;
   panToPosition: (x: number, y: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
@@ -55,7 +56,13 @@ export interface GameBoardHandle {
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;
-  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
+  getCameraState: () => {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    worldWidth: number;
+    worldHeight: number;
+  };
 }
 
 export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfolio }: CityViewerProps) {
@@ -74,8 +81,6 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAutoWalking, setIsAutoWalking] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
-  const [selectedCharacter, setSelectedCharacter] = useState<CharacterType>(CharacterType.Banana);
-
   // Building modal state
   const [selectedBuilding, setSelectedBuilding] = useState<BuildingDefinition | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -86,11 +91,18 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     scrollX: 0,
     scrollY: 0,
     zoom: 1,
+    worldWidth: 0,
+    worldHeight: 0,
+  });
+  const [viewportRect, setViewportRect] = useState({
+    left: 0,
+    top: 0,
     width: 0,
     height: 0,
   });
 
   // Refs
+  const viewerRootRef = useRef<HTMLDivElement>(null);
   const gameBoardRef = useRef<GameBoardHandle>(null);
   const hasSpawnedAmbientLife = useRef(false);
 
@@ -128,50 +140,85 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
   // Update logo positions and camera state for 3D overlay
   // Use refs to track previous values and avoid unnecessary state updates
-  const lastCameraRef = useRef({ scrollX: 0, scrollY: 0, zoom: 1, width: 0 });
+  const lastCameraRef = useRef({
+    scrollX: 0,
+    scrollY: 0,
+    zoom: 1,
+    worldWidth: 0,
+    worldHeight: 0,
+  });
+  const lastViewportRef = useRef({ left: 0, top: 0, width: 0, height: 0 });
 
   useEffect(() => {
     let intervalId: NodeJS.Timeout;
 
     const updateLogosAndCamera = () => {
       const gameBoard = gameBoardRef.current;
-      if (!gameBoard) return;
+      const root = viewerRootRef.current;
+      if (!gameBoard || !root) return;
 
       try {
         const camera = gameBoard.getCameraState();
+        const canvas = root.querySelector("canvas");
+        if (!canvas) return;
+        const rootRect = root.getBoundingClientRect();
+        const canvasRect = canvas.getBoundingClientRect();
+        const nextViewport = {
+          left: canvasRect.left - rootRect.left,
+          top: canvasRect.top - rootRect.top,
+          width: canvasRect.width,
+          height: canvasRect.height,
+        };
 
-        // Only update if camera has actually moved or dimensions changed
         const lastCamera = lastCameraRef.current;
         const hasCameraChanged =
           Math.abs(camera.scrollX - lastCamera.scrollX) > 0.5 ||
           Math.abs(camera.scrollY - lastCamera.scrollY) > 0.5 ||
           Math.abs(camera.zoom - lastCamera.zoom) > 0.01 ||
-          camera.width !== lastCamera.width;
+          camera.worldWidth !== lastCamera.worldWidth ||
+          camera.worldHeight !== lastCamera.worldHeight;
 
-        if (hasCameraChanged) {
+        const lastViewport = lastViewportRef.current;
+        const hasViewportChanged =
+          Math.abs(nextViewport.left - lastViewport.left) > 0.5 ||
+          Math.abs(nextViewport.top - lastViewport.top) > 0.5 ||
+          Math.abs(nextViewport.width - lastViewport.width) > 0.5 ||
+          Math.abs(nextViewport.height - lastViewport.height) > 0.5;
+
+        if (hasCameraChanged || hasViewportChanged) {
           lastCameraRef.current = {
             scrollX: camera.scrollX,
             scrollY: camera.scrollY,
             zoom: camera.zoom,
-            width: camera.width
+            worldWidth: camera.worldWidth,
+            worldHeight: camera.worldHeight,
           };
+          lastViewportRef.current = nextViewport;
           const positions = gameBoard.getPortfolioBuildingPositions();
           setLogoPositions(positions);
           setCameraState(camera);
+          setViewportRect(nextViewport);
         }
       } catch {
         // Methods may not be available yet
       }
     };
 
+    const handleResize = () => {
+      updateLogosAndCamera();
+    };
+
     // Initial update after game loads
     const initialTimer = setTimeout(() => {
       updateLogosAndCamera();
-      // Then poll at 30fps for camera changes
+      // Phaser may update the fitted canvas on a later frame after resize; polling is the correctness fallback.
       intervalId = setInterval(updateLogosAndCamera, 33);
     }, 1500);
 
+    window.addEventListener("resize", handleResize);
+
     return () => {
+      window.removeEventListener("resize", handleResize);
       clearTimeout(initialTimer);
       if (intervalId) {
         clearInterval(intervalId);
@@ -198,7 +245,6 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     setShowWelcome(false);
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
-    setSelectedCharacter(characterType);
     setVisitedBuildings(new Set());
 
     // Start adventure mode in Phaser
@@ -212,7 +258,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         const scene = game.scene.getScene("MainScene");
         if (scene) {
           // Player entered trigger zone
-          scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
+          scene.events.on("playerEnteredZone", ({ tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
           });
 
@@ -222,7 +268,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
           });
 
           // Interaction triggered (E pressed)
-          scene.events.on("interactionTriggered", ({ tourStop, buildingId }: { tourStop: TourStop; buildingId: string }) => {
+          scene.events.on("interactionTriggered", () => {
             setIsDialogOpen(true);
           });
 
@@ -349,7 +395,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
   // Handle building click
   const handleBuildingClick = useCallback(
-    (buildingId: string, cell: GridCell) => {
+    (buildingId: string) => {
       const building = getBuilding(buildingId);
       if (!building) return;
 
@@ -385,7 +431,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
   );
 
   return (
-    <div className="relative w-full h-full">
+    <div ref={viewerRootRef} className="relative w-full h-full">
       <GameBoard
         ref={gameBoardRef}
         editable={false}
@@ -394,11 +440,15 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
       />
 
       {/* 3D Spinning Logos Overlay */}
-      {!showWelcome && cameraState.width > 0 && (
+      {!showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
           logos={logoPositions}
-          width={cameraState.width}
-          height={cameraState.height}
+          viewportLeft={viewportRect.left}
+          viewportTop={viewportRect.top}
+          viewportWidth={viewportRect.width}
+          viewportHeight={viewportRect.height}
+          worldWidth={cameraState.worldWidth}
+          worldHeight={cameraState.worldHeight}
           cameraX={cameraState.scrollX}
           cameraY={cameraState.scrollY}
           zoom={cameraState.zoom}
@@ -456,7 +506,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
           {/* Exit adventure button */}
           <button
             onClick={handleStopAdventure}
-            className="absolute top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10"
+            className="fixed top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10"
           >
             Exit Adventure
           </button>
@@ -474,7 +524,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
       {!showWelcome && !isTourActive && !isAdventureActive && (
-        <div className="absolute bottom-4 left-4 z-30 flex gap-2">
+        <div className="fixed bottom-4 left-4 z-30 flex gap-2">
           <button
             onClick={() => {
               setIsTourActive(true);

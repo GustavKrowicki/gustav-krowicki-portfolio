@@ -156,7 +156,7 @@ export default function BuildingModal({
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 20 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="absolute top-4 right-4 z-50 w-80"
+            className="fixed top-4 right-4 z-50 w-80"
           >
             <div
               className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-2xl"

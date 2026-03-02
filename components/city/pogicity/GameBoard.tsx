@@ -10,6 +10,7 @@ import {
   Direction,
   GRID_WIDTH,
   GRID_HEIGHT,
+  Car,
   CharacterType,
   PlayerState,
 } from "./types";
@@ -45,7 +46,7 @@ export interface PhaserGameHandle {
   spawnCharacter: () => boolean;
   spawnCar: () => boolean;
   setDrivingState: (isDriving: boolean) => void;
-  getPlayerCar: () => any;
+  getPlayerCar: () => Car | null;
   isPlayerDriving: () => boolean;
   getCharacterCount: () => number;
   getCarCount: () => number;
@@ -53,6 +54,7 @@ export interface PhaserGameHandle {
   clearCars: () => void;
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
+  fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
@@ -74,13 +76,20 @@ export interface PhaserGameHandle {
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;
-  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
+  getCameraState: () => {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    worldWidth: number;
+    worldHeight: number;
+  };
 }
 
 // GameBoard handle exposed to parent components
 export interface GameBoardHandle {
   spawnCharacter: () => boolean;
   spawnCar: () => boolean;
+  fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
@@ -102,7 +111,13 @@ export interface GameBoardHandle {
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;
-  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
+  getCameraState: () => {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    worldWidth: number;
+    worldHeight: number;
+  };
 }
 
 export interface GameSaveData {
@@ -182,14 +197,15 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   const [buildingOrientation, setBuildingOrientation] = useState<Direction>(Direction.Down);
   const [zoom, setZoom] = useState(1); // Scale.FIT handles fitting the city to viewport
   const [showToolWindow, setShowToolWindow] = useState(editable);
-  const [hoverTile, setHoverTile] = useState<{ x: number; y: number } | null>(null);
-
   const gameRef = useRef<PhaserGameHandle>(null);
 
   // Expose methods to parent component via ref
   useImperativeHandle(ref, () => ({
     spawnCharacter: () => gameRef.current?.spawnCharacter() ?? false,
     spawnCar: () => gameRef.current?.spawnCar() ?? false,
+    fitCityView: () => {
+      gameRef.current?.fitCityView();
+    },
     panToPosition: (gridX: number, gridY: number) => {
       gameRef.current?.panToPosition(gridX, gridY);
     },
@@ -232,15 +248,25 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
       return gameRef.current?.getPortfolioBuildingPositions() ?? [];
     },
     getCameraState: () => {
-      return gameRef.current?.getCameraState() ?? { scrollX: 0, scrollY: 0, zoom: 1, width: 0, height: 0 };
+      return gameRef.current?.getCameraState() ?? {
+        scrollX: 0,
+        scrollY: 0,
+        zoom: 1,
+        worldWidth: 0,
+        worldHeight: 0,
+      };
     },
   }), []);
 
   // Load initial grid if provided
   useEffect(() => {
-    if (initialGrid) {
+    if (!initialGrid) return;
+
+    const timer = setTimeout(() => {
       setGrid(initialGrid);
-    }
+    }, 0);
+
+    return () => clearTimeout(timer);
   }, [initialGrid]);
 
   // Keyboard shortcuts (R to rotate, Ctrl/Cmd+Z to undo)
@@ -266,39 +292,6 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
   }, [editable, selectedTool, buildingOrientation, undo]);
-
-  // Handle tile click
-  const handleTileClick = useCallback(
-    (x: number, y: number) => {
-      const cell = grid[y]?.[x];
-      if (!cell) return;
-
-      // In viewer mode, handle building clicks
-      if (!editable) {
-        if (cell.type === TileType.Building && cell.buildingId) {
-          onBuildingClick?.(cell.buildingId, cell);
-        }
-        return;
-      }
-
-      // Editor mode - handle tool actions
-      if (selectedTool === ToolType.Building && selectedBuildingId) {
-        placeBuilding(x, y, selectedBuildingId, buildingOrientation);
-      } else if (selectedTool === ToolType.Eraser) {
-        eraseTile(x, y);
-      }
-    },
-    [grid, editable, selectedTool, selectedBuildingId, buildingOrientation, onBuildingClick]
-  );
-
-  // Handle tile hover
-  const handleTileHover = useCallback((x: number | null, y: number | null) => {
-    if (x === null || y === null) {
-      setHoverTile(null);
-    } else {
-      setHoverTile({ x, y });
-    }
-  }, []);
 
   // Handle tiles drag (snow/tile placement)
   const handleTilesDrag = useCallback(
@@ -635,6 +628,37 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     playDestructionSound();
   }, [grid, pushHistory]);
 
+  // Handle tile click
+  const handleTileClick = useCallback(
+    (x: number, y: number) => {
+      const cell = grid[y]?.[x];
+      if (!cell) return;
+
+      if (!editable) {
+        if (cell.type === TileType.Building && cell.buildingId) {
+          onBuildingClick?.(cell.buildingId, cell);
+        }
+        return;
+      }
+
+      if (selectedTool === ToolType.Building && selectedBuildingId) {
+        placeBuilding(x, y, selectedBuildingId, buildingOrientation);
+      } else if (selectedTool === ToolType.Eraser) {
+        eraseTile(x, y);
+      }
+    },
+    [
+      buildingOrientation,
+      editable,
+      eraseTile,
+      grid,
+      onBuildingClick,
+      placeBuilding,
+      selectedBuildingId,
+      selectedTool,
+    ]
+  );
+
   // Spawn character
   const handleSpawnCharacter = useCallback(() => {
     gameRef.current?.spawnCharacter();
@@ -678,7 +702,6 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
         buildingOrientation={buildingOrientation}
         zoom={zoom}
         onTileClick={handleTileClick}
-        onTileHover={handleTileHover}
         onTilesDrag={handleTilesDrag}
         onEraserDrag={handleEraserDrag}
         onRoadDrag={handleRoadDrag}
@@ -702,7 +725,13 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
       )}
 
       {/* Zoom Controls */}
-      <div className="absolute bottom-4 right-4 flex flex-col gap-2 z-50">
+      <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
+        <button
+          onClick={() => gameRef.current?.fitCityView()}
+          className="min-w-[3.5rem] h-10 px-2 bg-black/50 text-white rounded hover:bg-black/70 font-mono text-xs"
+        >
+          Fit
+        </button>
         <button
           onClick={() => setZoom((z) => Math.min(4, z * 2))}
           className="w-10 h-10 bg-black/50 text-white rounded hover:bg-black/70 font-mono text-xl"

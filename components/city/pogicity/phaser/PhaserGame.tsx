@@ -10,7 +10,6 @@ import Phaser from "phaser";
 import { MainScene, SceneEvents } from "./MainScene";
 import { createGameConfig } from "./gameConfig";
 import { GridCell, ToolType, Direction, Car, CharacterType, PlayerState } from "../types";
-import { TourStop } from "@/lib/city/tourStops";
 
 // Exposed methods for parent component
 export interface PhaserGameHandle {
@@ -25,6 +24,7 @@ export interface PhaserGameHandle {
   clearCars: () => void;
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
+  fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
@@ -46,7 +46,13 @@ export interface PhaserGameHandle {
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;
-  getCameraState: () => { scrollX: number; scrollY: number; zoom: number; width: number; height: number };
+  getCameraState: () => {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    worldWidth: number;
+    worldHeight: number;
+  };
 }
 
 interface PhaserGameProps {
@@ -88,6 +94,14 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
     const gameRef = useRef<Phaser.Game | null>(null);
     const sceneRef = useRef<MainScene | null>(null);
     const zoomFromAtPoint = useRef<number | null>(null);
+    const callbackRefs = useRef({
+      onTileClick,
+      onTileHover,
+      onTilesDrag,
+      onEraserDrag,
+      onRoadDrag,
+      onZoomChange,
+    });
 
     // Expose methods to parent via ref
     useImperativeHandle(
@@ -154,6 +168,9 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
             zoomFromAtPoint.current = zoom;
             sceneRef.current.zoomAtPoint(zoom, screenX, screenY);
           }
+        },
+        fitCityView: () => {
+          sceneRef.current?.fitCityView();
         },
         panToPosition: (gridX: number, gridY: number) => {
           if (sceneRef.current) {
@@ -229,7 +246,7 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           if (sceneRef.current) {
             return sceneRef.current.getCameraState();
           }
-          return { scrollX: 0, scrollY: 0, zoom: 1, width: 0, height: 0 };
+          return { scrollX: 0, scrollY: 0, zoom: 1, worldWidth: 0, worldHeight: 0 };
         },
       }),
       []
@@ -239,35 +256,58 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
     useEffect(() => {
       if (!containerRef.current || gameRef.current) return;
 
+      const container = containerRef.current;
+      const handleContextMenu = (event: MouseEvent) => {
+        event.preventDefault();
+      };
+      const handleWheel = (event: WheelEvent) => {
+        event.preventDefault();
+      };
+      container.addEventListener("contextmenu", handleContextMenu);
+      container.addEventListener("wheel", handleWheel, { passive: false });
+
       const scene = new MainScene();
       sceneRef.current = scene;
 
-      const config = createGameConfig(containerRef.current, scene);
+      const config = createGameConfig(container, scene);
       const game = new Phaser.Game(config);
       gameRef.current = game;
 
       // Wait for the game to boot and scene to be ready
       game.events.once("ready", () => {
         const events: SceneEvents = {
-          onTileClick: (x, y) => onTileClick(x, y),
-          onTileHover: (x, y) => onTileHover?.(x, y),
-          onTilesDrag: (tiles) => onTilesDrag?.(tiles),
-          onEraserDrag: (tiles) => onEraserDrag?.(tiles),
-          onRoadDrag: (segments) => onRoadDrag?.(segments),
+          onTileClick: (x, y) => callbackRefs.current.onTileClick(x, y),
+          onTileHover: (x, y) => callbackRefs.current.onTileHover?.(x, y),
+          onTilesDrag: (tiles) => callbackRefs.current.onTilesDrag?.(tiles),
+          onEraserDrag: (tiles) => callbackRefs.current.onEraserDrag?.(tiles),
+          onRoadDrag: (segments) => callbackRefs.current.onRoadDrag?.(segments),
         };
         scene.setEventCallbacks(events);
 
         scene.events.on("zoomChanged", (newZoom: number) => {
-          onZoomChange?.(newZoom);
+          callbackRefs.current.onZoomChange?.(newZoom);
         });
       });
 
       return () => {
+        container.removeEventListener("contextmenu", handleContextMenu);
+        container.removeEventListener("wheel", handleWheel);
         gameRef.current?.destroy(true);
         gameRef.current = null;
         sceneRef.current = null;
       };
     }, []);
+
+    useEffect(() => {
+      callbackRefs.current = {
+        onTileClick,
+        onTileHover,
+        onTilesDrag,
+        onEraserDrag,
+        onRoadDrag,
+        onZoomChange,
+      };
+    }, [onTileClick, onTileHover, onTilesDrag, onEraserDrag, onRoadDrag, onZoomChange]);
 
     // Update grid when it changes
     useEffect(() => {
@@ -323,27 +363,17 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
       }
     }, [showStats]);
 
-    // Update event callbacks when they change
-    useEffect(() => {
-      if (sceneRef.current) {
-        const events: SceneEvents = {
-          onTileClick: (x, y) => onTileClick(x, y),
-          onTileHover: (x, y) => onTileHover?.(x, y),
-          onTilesDrag: (tiles) => onTilesDrag?.(tiles),
-          onEraserDrag: (tiles) => onEraserDrag?.(tiles),
-          onRoadDrag: (segments) => onRoadDrag?.(segments),
-        };
-        sceneRef.current.setEventCallbacks(events);
-      }
-    }, [onTileClick, onTileHover, onTilesDrag, onEraserDrag, onRoadDrag]);
-
     return (
       <div
         ref={containerRef}
+        onWheel={(event) => event.preventDefault()}
+        onContextMenu={(event) => event.preventDefault()}
         style={{
           width: "100%",
           height: "100%",
-          overflow: "auto",
+          overflow: "hidden",
+          touchAction: "none",
+          overscrollBehavior: "none",
         }}
       >
         <style jsx global>{`

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback } from "react";
 import dynamic from "next/dynamic";
 import { GridCell } from "./pogicity/types";
 
@@ -84,6 +84,8 @@ export default function CityEditor({ initialGrid, onSave }: CityEditorProps) {
           <li>• Ctrl/Cmd+Z to undo</li>
           <li>• Arrow keys / WASD to pan</li>
           <li>• Scroll to zoom</li>
+          <li>• Right-drag to pan</li>
+          <li>• Fit resets the city view</li>
         </ul>
       </div>
     </div>

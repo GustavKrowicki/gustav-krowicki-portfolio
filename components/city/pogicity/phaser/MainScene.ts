@@ -20,7 +20,7 @@ import {
   PlayerData,
   TRIGGER_ZONE_RADIUS,
 } from "../types";
-import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
+import { GAME_HEIGHT, GAME_WIDTH, GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import {
   ROAD_SEGMENT_SIZE,
   getRoadSegmentOrigin,
@@ -159,10 +159,15 @@ export class MainScene extends Phaser.Scene {
 
   // Camera panning state
   private isPanning: boolean = false;
+  private panPointerButton: "left" | "right" | null = null;
   private panStartX: number = 0;
   private panStartY: number = 0;
   private cameraStartX: number = 0;
   private cameraStartY: number = 0;
+  private lastManualCameraInteractionAt: number | null = null;
+  private readonly MANUAL_CAMERA_FOLLOW_COOLDOWN_MS = 4000;
+  private readonly FIT_CITY_PADDING_X = 120;
+  private readonly FIT_CITY_PADDING_Y = 120;
   private baseScrollX: number = 0;
   private baseScrollY: number = 0;
 
@@ -182,6 +187,7 @@ export class MainScene extends Phaser.Scene {
   private visitedBuildings: Set<string> = new Set();
   private isAdventureActive: boolean = false;
   private cameraFollowPlayer: boolean = false;
+  private manualCameraOverrideInAdventure: boolean = false;
 
   constructor() {
     super({ key: "MainScene" });
@@ -259,8 +265,7 @@ export class MainScene extends Phaser.Scene {
     this.statsText.setDepth(2_000_000);
     this.statsText.setOrigin(1, 0);
 
-    // Center the camera on the city grid
-    // With Scale.FIT mode, the entire game canvas scales to fit the viewport
+    // Center the camera on the city grid. With Scale.FIT, the full internal canvas stays visible.
     const camera = this.cameras.main;
     const gridCenterX = GRID_WIDTH / 2;
     const gridCenterY = GRID_HEIGHT / 2;
@@ -362,7 +367,13 @@ export class MainScene extends Phaser.Scene {
     );
 
     // Camera follow player
-    if (this.cameraFollowPlayer) {
+    const playerState = this.playerController.getState();
+    const shouldFollowPlayer =
+      this.cameraFollowPlayer &&
+      !this.manualCameraOverrideInAdventure &&
+      playerState === PlayerState.AutoWalking;
+
+    if (shouldFollowPlayer) {
       this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY);
     }
   }
@@ -488,11 +499,16 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
-  private isWalkable(x: number, y: number): boolean {
+  private getGridCell(x: number, y: number): GridCell | null {
     const gx = Math.floor(x);
     const gy = Math.floor(y);
-    if (gx < 0 || gx >= GRID_WIDTH || gy < 0 || gy >= GRID_HEIGHT) return false;
-    const tileType = this.grid[gy][gx].type;
+    if (gx < 0 || gx >= GRID_WIDTH || gy < 0 || gy >= GRID_HEIGHT) return null;
+    return this.grid[gy]?.[gx] ?? null;
+  }
+
+  private isWalkable(x: number, y: number): boolean {
+    const tileType = this.getGridCell(x, y)?.type;
+    if (!tileType) return false;
     return tileType === TileType.Road || tileType === TileType.Tile;
   }
 
@@ -536,7 +552,8 @@ export class MainScene extends Phaser.Scene {
       const walkableTiles: { x: number; y: number }[] = [];
       for (let gy = 0; gy < GRID_HEIGHT; gy++) {
         for (let gx = 0; gx < GRID_WIDTH; gx++) {
-          const tileType = this.grid[gy][gx].type;
+          const tileType = this.getGridCell(gx, gy)?.type;
+          if (!tileType) continue;
           if (tileType === TileType.Road || tileType === TileType.Tile) {
             walkableTiles.push({ x: gx, y: gy });
           }
@@ -615,10 +632,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private isDrivable(x: number, y: number): boolean {
-    const gx = Math.floor(x);
-    const gy = Math.floor(y);
-    if (gx < 0 || gx >= GRID_WIDTH || gy < 0 || gy >= GRID_HEIGHT) return false;
-    return this.grid[gy][gx].type === TileType.Asphalt;
+    return this.getGridCell(x, y)?.type === TileType.Asphalt;
   }
 
   private getValidCarDirections(tileX: number, tileY: number): Direction[] {
@@ -642,7 +656,7 @@ export class MainScene extends Phaser.Scene {
       const asphaltTiles: { x: number; y: number }[] = [];
       for (let gy = 0; gy < GRID_HEIGHT; gy++) {
         for (let gx = 0; gx < GRID_WIDTH; gx++) {
-          if (this.grid[gy][gx].type === TileType.Asphalt) {
+          if (this.getGridCell(gx, gy)?.type === TileType.Asphalt) {
             asphaltTiles.push({ x: gx, y: gy });
           }
         }
@@ -733,12 +747,25 @@ export class MainScene extends Phaser.Scene {
   handlePointerMove(pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
 
-    if (this.isPanning && pointer.leftButtonDown()) {
+    if (this.isPanning) {
+      const activeButtonDown =
+        this.panPointerButton === "left"
+          ? pointer.leftButtonDown()
+          : this.panPointerButton === "right"
+            ? pointer.rightButtonDown()
+            : false;
+
+      if (!activeButtonDown) {
+        this.stopPanning();
+        return;
+      }
+
       const camera = this.cameras.main;
       const dx = (this.panStartX - pointer.x) / camera.zoom;
       const dy = (this.panStartY - pointer.y) / camera.zoom;
       this.baseScrollX = this.cameraStartX + dx;
       this.baseScrollY = this.cameraStartY + dy;
+      this.recordManualCameraInteraction();
       camera.setScroll(
         Math.round(this.baseScrollX + (this.shakeAxis === "x" ? this.shakeOffset : 0)),
         Math.round(this.baseScrollY + (this.shakeAxis === "y" ? this.shakeOffset : 0))
@@ -810,16 +837,17 @@ export class MainScene extends Phaser.Scene {
   handlePointerDown(pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
 
+    if (pointer.rightButtonDown()) {
+      this.startPanning(pointer, "right");
+      return;
+    }
+
     if (pointer.leftButtonDown()) {
       const shouldPan = this.selectedTool === ToolType.None ||
         (this.selectedTool === ToolType.Building && !this.hoverTile);
 
       if (shouldPan) {
-        this.isPanning = true;
-        this.panStartX = pointer.x;
-        this.panStartY = pointer.y;
-        this.cameraStartX = this.baseScrollX;
-        this.cameraStartY = this.baseScrollY;
+        this.startPanning(pointer, "left");
         return;
       }
 
@@ -854,7 +882,7 @@ export class MainScene extends Phaser.Scene {
     if (!this.isReady) return;
 
     if (this.isPanning) {
-      this.isPanning = false;
+      this.stopPanning();
     }
 
     if (this.isDragging) {
@@ -881,21 +909,58 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
+
   private static readonly ZOOM_LEVELS = [0.25, 0.5, 1, 2, 4];
   private wheelAccumulator = 0;
   private lastWheelDirection = 0;
+  private readonly TRACKPAD_PAN_DELTA_THRESHOLD = 100;
+  private readonly MOUSE_WHEEL_ZOOM_ACCUMULATOR_THRESHOLD = 100;
 
   handleWheel(
     pointer: Phaser.Input.Pointer,
     _gameObjects: Phaser.GameObjects.GameObject[],
-    _deltaX: number,
+    deltaX: number,
     deltaY: number,
-    _deltaZ: number
+    _deltaZ: number,
+    _eventData?: unknown
   ): void {
     if (!this.isReady) return;
 
     const camera = this.cameras.main;
-    const WHEEL_THRESHOLD = 100;
+    // Phaser stores the native DOM wheel event on pointer.event; the final callback arg is internal event data.
+    const nativeWheelEvent = pointer.event as WheelEvent | undefined;
+    nativeWheelEvent?.preventDefault();
+    nativeWheelEvent?.stopPropagation();
+    const isPinchZoom = nativeWheelEvent?.ctrlKey === true;
+    // Best-effort heuristic for trackpad panning on macOS; this is not a guaranteed device classifier.
+    const isTrackpadPan =
+      !isPinchZoom &&
+      (Math.abs(deltaX) > 0 || Math.abs(deltaY) < this.TRACKPAD_PAN_DELTA_THRESHOLD);
+
+    if (isPinchZoom) {
+      const zoomFactor = Math.exp(-deltaY * 0.0025);
+      const targetZoom = Phaser.Math.Clamp(
+        camera.zoom * zoomFactor,
+        MainScene.ZOOM_LEVELS[0],
+        MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+      );
+
+      if (Math.abs(targetZoom - camera.zoom) < 0.001) {
+        return;
+      }
+
+      this.applyZoomAtPointer(targetZoom, pointer.x, pointer.y);
+      this.recordManualCameraInteraction();
+      this.events.emit("zoomChanged", targetZoom);
+      return;
+    }
+
+    if (isTrackpadPan) {
+      this.baseScrollX += deltaX / camera.zoom;
+      this.baseScrollY += deltaY / camera.zoom;
+      this.recordManualCameraInteraction();
+      return;
+    }
 
     const direction = deltaY > 0 ? 1 : -1;
     if (this.lastWheelDirection !== 0 && this.lastWheelDirection !== direction) {
@@ -904,7 +969,7 @@ export class MainScene extends Phaser.Scene {
     this.lastWheelDirection = direction;
     this.wheelAccumulator += Math.abs(deltaY);
 
-    if (this.wheelAccumulator < WHEEL_THRESHOLD) return;
+    if (this.wheelAccumulator < this.MOUSE_WHEEL_ZOOM_ACCUMULATOR_THRESHOLD) return;
     this.wheelAccumulator = 0;
 
     const currentZoom = camera.zoom;
@@ -925,17 +990,9 @@ export class MainScene extends Phaser.Scene {
     const newZoom = MainScene.ZOOM_LEVELS[newIndex];
     if (newZoom === currentZoom) return;
 
-    const worldPoint = camera.getWorldPoint(pointer.x, pointer.y);
-    camera.zoom = newZoom;
-    camera.preRender();
-    const newWorldPoint = camera.getWorldPoint(pointer.x, pointer.y);
-    camera.scrollX -= newWorldPoint.x - worldPoint.x;
-    camera.scrollY -= newWorldPoint.y - worldPoint.y;
-
-    this.baseScrollX = camera.scrollX;
-    this.baseScrollY = camera.scrollY;
-    this.zoomLevel = newZoom;
+    this.applyZoomAtPointer(newZoom, pointer.x, pointer.y);
     this.zoomHandledInternally = true;
+    this.recordManualCameraInteraction();
 
     this.events.emit("zoomChanged", newZoom);
   }
@@ -1207,14 +1264,7 @@ export class MainScene extends Phaser.Scene {
 
     if (this.isReady) {
       const camera = this.cameras.main;
-      const centerX = camera.midPoint.x;
-      const centerY = camera.midPoint.y;
-      camera.setZoom(zoom);
-      camera.centerOn(centerX, centerY);
-      camera.scrollX = Math.round(camera.scrollX);
-      camera.scrollY = Math.round(camera.scrollY);
-      this.baseScrollX = camera.scrollX;
-      this.baseScrollY = camera.scrollY;
+      this.applyZoomAtPointer(zoom, camera.width / 2, camera.height / 2);
     }
     this.zoomLevel = zoom;
   }
@@ -1225,16 +1275,32 @@ export class MainScene extends Phaser.Scene {
       return;
     }
 
+    this.applyZoomAtPointer(zoom, screenX, screenY);
+  }
+
+  fitCityView(): void {
+    if (!this.isReady) return;
+
     const camera = this.cameras.main;
-    const worldPoint = camera.getWorldPoint(screenX, screenY);
-    camera.setZoom(zoom);
-    camera.preRender();
-    const newWorldPoint = camera.getWorldPoint(screenX, screenY);
-    camera.scrollX = Math.round(camera.scrollX - (newWorldPoint.x - worldPoint.x));
-    camera.scrollY = Math.round(camera.scrollY - (newWorldPoint.y - worldPoint.y));
+    const contentWidth = GAME_WIDTH + this.FIT_CITY_PADDING_X * 2;
+    const contentHeight = GAME_HEIGHT + this.FIT_CITY_PADDING_Y * 2;
+
+    const fitZoom = [...MainScene.ZOOM_LEVELS]
+      .sort((a, b) => b - a)
+      .find((candidateZoom) => (
+        camera.width / candidateZoom >= contentWidth &&
+        camera.height / candidateZoom >= contentHeight
+      )) ?? MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1];
+
+    camera.setZoom(fitZoom);
+    camera.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
+    camera.scrollX = Math.round(camera.scrollX);
+    camera.scrollY = Math.round(camera.scrollY);
     this.baseScrollX = camera.scrollX;
     this.baseScrollY = camera.scrollY;
-    this.zoomLevel = zoom;
+    this.zoomLevel = fitZoom;
+    this.recordManualCameraInteraction();
+    this.events.emit("zoomChanged", fitZoom);
   }
 
   setShowPaths(show: boolean): void {
@@ -1382,6 +1448,7 @@ export class MainScene extends Phaser.Scene {
     this.gameMode = GameMode.Adventure;
     this.isAdventureActive = true;
     this.visitedBuildings.clear();
+    this.manualCameraOverrideInAdventure = false;
 
     // Initialize managers
     this.npcManager = new NPCManager(this);
@@ -1422,18 +1489,9 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
-    // Enable camera follow
+    // Adventure starts from the user's current framing instead of forcing a recenter on spawn.
+    this.manualCameraOverrideInAdventure = true;
     this.cameraFollowPlayer = true;
-
-    // Set zoom for adventure mode
-    const camera = this.cameras.main;
-    camera.setZoom(1.5);
-    this.zoomLevel = 1.5;
-
-    // Center camera on player
-    const screenPos = this.gridToScreen(spawnPos.x, spawnPos.y);
-    this.baseScrollX = screenPos.x - camera.width / 2;
-    this.baseScrollY = screenPos.y - camera.height / 2;
 
     // Set up keyboard handlers
     this.setupAdventureKeyboardHandlers();
@@ -1478,6 +1536,7 @@ export class MainScene extends Phaser.Scene {
     this.isAdventureActive = false;
     this.gameMode = GameMode.Viewer;
     this.cameraFollowPlayer = false;
+    this.manualCameraOverrideInAdventure = false;
 
     // Clean up
     if (this.playerController) {
@@ -1583,6 +1642,8 @@ export class MainScene extends Phaser.Scene {
         Math.pow(targetPos.x - position.x, 2) + Math.pow(targetPos.y - position.y, 2)
       );
       if (dist <= 3) {
+        this.manualCameraOverrideInAdventure = false;
+        this.cameraFollowPlayer = true;
         return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
       }
     }
@@ -1593,6 +1654,8 @@ export class MainScene extends Phaser.Scene {
       Math.floor(position.y + 1)
     );
 
+    this.manualCameraOverrideInAdventure = false;
+    this.cameraFollowPlayer = true;
     return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
   }
 
@@ -1667,14 +1730,10 @@ export class MainScene extends Phaser.Scene {
         // Convert to screen position
         const screenPos = this.gridToScreen(centerX, centerY);
 
-        // Position logo above building (offset upward)
-        // The Y offset should place logo above the building sprite
-        const logoOffsetY = 100 * this.zoomLevel;
-
         positions.push({
           buildingId: cell.buildingId,
           screenX: screenPos.x,
-          screenY: screenPos.y - logoOffsetY,
+          screenY: screenPos.y,
           logoUrl: building.logoUrl,
           logoOffset: building.logoOffset || { x: 0, y: 60 },
         });
@@ -1685,15 +1744,56 @@ export class MainScene extends Phaser.Scene {
   }
 
   // Get camera state for syncing with overlay
-  getCameraState(): { scrollX: number; scrollY: number; zoom: number; width: number; height: number } {
+  getCameraState(): {
+    scrollX: number;
+    scrollY: number;
+    zoom: number;
+    worldWidth: number;
+    worldHeight: number;
+  } {
     const camera = this.cameras.main;
     return {
       scrollX: this.baseScrollX,
       scrollY: this.baseScrollY,
       zoom: camera.zoom,
-      width: camera.width,
-      height: camera.height,
+      worldWidth: camera.width,
+      worldHeight: camera.height,
     };
+  }
+
+  private startPanning(pointer: Phaser.Input.Pointer, button: "left" | "right"): void {
+    this.isPanning = true;
+    this.panPointerButton = button;
+    this.panStartX = pointer.x;
+    this.panStartY = pointer.y;
+    this.cameraStartX = this.baseScrollX;
+    this.cameraStartY = this.baseScrollY;
+    this.recordManualCameraInteraction();
+  }
+
+  private stopPanning(): void {
+    this.isPanning = false;
+    this.panPointerButton = null;
+  }
+
+  private recordManualCameraInteraction(): void {
+    this.lastManualCameraInteractionAt = this.time.now;
+    if (this.isAdventureActive) {
+      this.manualCameraOverrideInAdventure = true;
+    }
+  }
+
+  private applyZoomAtPointer(zoom: number, screenX: number, screenY: number): void {
+    const camera = this.cameras.main;
+    const worldPoint = camera.getWorldPoint(screenX, screenY);
+    camera.setZoom(zoom);
+    camera.preRender();
+    const newWorldPoint = camera.getWorldPoint(screenX, screenY);
+    camera.scrollX = Math.round(camera.scrollX - (newWorldPoint.x - worldPoint.x));
+    camera.scrollY = Math.round(camera.scrollY - (newWorldPoint.y - worldPoint.y));
+    this.baseScrollX = camera.scrollX;
+    this.baseScrollY = camera.scrollY;
+    this.zoomLevel = zoom;
   }
 
   // ==================== END LOGO OVERLAY API ====================

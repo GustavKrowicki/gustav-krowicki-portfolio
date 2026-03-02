@@ -122,7 +122,7 @@ export default function TourGuide({
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: 50 }}
         transition={{ duration: 0.3 }}
-        className="absolute top-4 right-4 z-40"
+        className="fixed top-4 right-4 z-40"
       >
         <div className="w-[400px]">
           <div className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
