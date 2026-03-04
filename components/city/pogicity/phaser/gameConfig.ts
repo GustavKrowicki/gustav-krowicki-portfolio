@@ -35,7 +35,7 @@ export function createGameConfig(
       activePointers: 2,
     },
     scale: {
-      mode: Phaser.Scale.FIT,
+      mode: window.innerWidth < 768 ? Phaser.Scale.ENVELOP : Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
   };

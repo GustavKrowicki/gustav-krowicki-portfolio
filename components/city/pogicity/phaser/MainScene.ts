@@ -169,6 +169,8 @@ export class MainScene extends Phaser.Scene {
   private readonly MANUAL_CAMERA_FOLLOW_COOLDOWN_MS = 4000;
   private readonly FIT_CITY_PADDING_X = 120;
   private readonly FIT_CITY_PADDING_Y = 120;
+  private readonly MOBILE_FIT_ZOOM_MULTIPLIER = 1.5;
+  private readonly MOBILE_ADVENTURE_ZOOM = 2;
   private baseScrollX: number = 0;
   private baseScrollY: number = 0;
   private lastPinchDist: number | null = null;
@@ -407,38 +409,48 @@ export class MainScene extends Phaser.Scene {
 
     // Camera follow player
     const playerState = this.playerController.getState();
+    const isMobile = this.isMobileViewport();
     const shouldFollowPlayer =
       this.cameraFollowPlayer &&
       !this.manualCameraOverrideInAdventure &&
-      playerState === PlayerState.AutoWalking;
+      (playerState === PlayerState.AutoWalking ||
+       (isMobile && playerState === PlayerState.Walking));
 
     if (shouldFollowPlayer) {
-      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY);
+      const isMobileJoystick = isMobile && playerState === PlayerState.Walking;
+      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY, isMobileJoystick);
     }
   }
 
-  private updateCameraFollowPlayer(playerWorldX: number, playerWorldY: number): void {
+  private updateCameraFollowPlayer(playerWorldX: number, playerWorldY: number, isMobileJoystick = false): void {
     const camera = this.cameras.main;
 
-    // Dead zone - only move camera when player gets near edge
-    const deadZoneX = camera.width * 0.2;
-    const deadZoneY = camera.height * 0.2;
+    if (isMobileJoystick) {
+      // Pokémon-style: smoothly lerp camera toward centering the player.
+      // Phaser's centerOn formula is scrollX = worldX - camera.width/2, which correctly
+      // centers at any zoom (camera.worldView accounts for zoom offset internally).
+      const targetScrollX = playerWorldX - camera.width / 2;
+      const targetScrollY = playerWorldY - camera.height / 2;
+      this.baseScrollX += (targetScrollX - this.baseScrollX) * 0.12;
+      this.baseScrollY += (targetScrollY - this.baseScrollY) * 0.12;
+    } else {
+      // Dead zone follow for auto-walk.
+      // Use camera.worldView which Phaser computes correctly for any zoom level.
+      const wv = camera.worldView;
+      const deadZoneX = wv.width * 0.20;
+      const deadZoneY = wv.height * 0.20;
 
-    // Calculate where player is on screen
-    const playerScreenX = playerWorldX - this.baseScrollX;
-    const playerScreenY = playerWorldY - this.baseScrollY;
+      if (playerWorldX < wv.left + deadZoneX) {
+        this.baseScrollX -= (wv.left + deadZoneX - playerWorldX) * 0.1;
+      } else if (playerWorldX > wv.right - deadZoneX) {
+        this.baseScrollX += (playerWorldX - (wv.right - deadZoneX)) * 0.1;
+      }
 
-    // Check if player is outside dead zone
-    if (playerScreenX < deadZoneX) {
-      this.baseScrollX -= (deadZoneX - playerScreenX) * 0.1;
-    } else if (playerScreenX > camera.width - deadZoneX) {
-      this.baseScrollX += (playerScreenX - (camera.width - deadZoneX)) * 0.1;
-    }
-
-    if (playerScreenY < deadZoneY) {
-      this.baseScrollY -= (deadZoneY - playerScreenY) * 0.1;
-    } else if (playerScreenY > camera.height - deadZoneY) {
-      this.baseScrollY += (playerScreenY - (camera.height - deadZoneY)) * 0.1;
+      if (playerWorldY < wv.top + deadZoneY) {
+        this.baseScrollY -= (wv.top + deadZoneY - playerWorldY) * 0.1;
+      } else if (playerWorldY > wv.bottom - deadZoneY) {
+        this.baseScrollY += (playerWorldY - (wv.bottom - deadZoneY)) * 0.1;
+      }
     }
   }
 
@@ -1345,15 +1357,23 @@ export class MainScene extends Phaser.Scene {
         camera.height / candidateZoom >= contentHeight
       )) ?? MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1];
 
-    camera.setZoom(fitZoom);
+    const finalZoom = this.isMobileViewport()
+      ? Phaser.Math.Clamp(
+          fitZoom * this.MOBILE_FIT_ZOOM_MULTIPLIER,
+          MainScene.ZOOM_LEVELS[0],
+          MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+        )
+      : fitZoom;
+
+    camera.setZoom(finalZoom);
     camera.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
     camera.scrollX = Math.round(camera.scrollX);
     camera.scrollY = Math.round(camera.scrollY);
     this.baseScrollX = camera.scrollX;
     this.baseScrollY = camera.scrollY;
-    this.zoomLevel = fitZoom;
+    this.zoomLevel = finalZoom;
     this.recordManualCameraInteraction();
-    this.events.emit("zoomChanged", fitZoom);
+    this.events.emit("zoomChanged", finalZoom);
   }
 
   setShowPaths(show: boolean): void {
@@ -1543,9 +1563,16 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
-    // Adventure starts from the user's current framing instead of forcing a recenter on spawn.
-    this.manualCameraOverrideInAdventure = true;
-    this.cameraFollowPlayer = true;
+    if (this.isMobileViewport()) {
+      const playerPos = this.playerController.getPosition();
+      this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
+      this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
+    } else {
+      // Adventure starts from the user's current framing instead of forcing a recenter on spawn.
+      this.manualCameraOverrideInAdventure = true;
+      this.cameraFollowPlayer = true;
+    }
 
     // Set up keyboard handlers
     this.setupAdventureKeyboardHandlers();
@@ -1668,6 +1695,9 @@ export class MainScene extends Phaser.Scene {
 
   // Set player input direction (for mobile joystick)
   setPlayerInputDirection(direction: Direction | null): void {
+    if (direction !== null && this.isAdventureActive && this.isMobileViewport()) {
+      this.manualCameraOverrideInAdventure = false;
+    }
     this.playerController?.setInputDirection(direction);
   }
 
@@ -1833,7 +1863,23 @@ export class MainScene extends Phaser.Scene {
   }
 
   private isMobileViewport(): boolean {
-    return this.scale.displaySize.width < 768;
+    return window.innerWidth < 768;
+  }
+
+  private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {
+    const camera = this.cameras.main;
+    const zoom = Math.max(camera.zoom, this.MOBILE_ADVENTURE_ZOOM);
+
+    camera.setZoom(zoom);
+    camera.scrollX = Math.round(playerWorldX - camera.width / 2);
+    camera.scrollY = Math.round(playerWorldY - camera.height / 2);
+    this.baseScrollX = camera.scrollX;
+    this.baseScrollY = camera.scrollY;
+    this.zoomLevel = zoom;
+    // Prevent React's zoom useEffect from re-applying the zoom via applyZoomAtPointer,
+    // which would corrupt the scroll using a stale camera render matrix.
+    this.zoomHandledInternally = true;
+    this.events.emit("zoomChanged", zoom);
   }
 
   private recordManualCameraInteraction(): void {
