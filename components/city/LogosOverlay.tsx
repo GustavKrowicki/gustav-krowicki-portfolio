@@ -36,6 +36,7 @@ export interface LogoPosition {
 }
 
 interface LogosOverlayProps {
+  isMobile: boolean;
   logos: LogoPosition[];
   viewportLeft: number;
   viewportTop: number;
@@ -49,6 +50,7 @@ interface LogosOverlayProps {
 }
 
 export default function LogosOverlay({
+  isMobile,
   logos,
   viewportLeft,
   viewportTop,
@@ -62,8 +64,9 @@ export default function LogosOverlay({
 }: LogosOverlayProps) {
   // Memoize logo size based on zoom and config
   const logoSize = useMemo(() => {
-    return LOGO_CONFIG.baseSize * LOGO_CONFIG.sizeMultiplier * zoom;
-  }, [zoom]);
+    const mobileScale = isMobile ? 0.72 : 1;
+    return LOGO_CONFIG.baseSize * LOGO_CONFIG.sizeMultiplier * mobileScale * zoom;
+  }, [isMobile, zoom]);
 
   const screenLogos = useMemo(() => {
     const visibleWorldWidth = worldWidth / zoom;
@@ -135,7 +138,7 @@ export default function LogosOverlay({
               x={logo.threeX}
               y={logo.threeY}
               size={logoSize}
-              rotationSpeed={LOGO_CONFIG.rotationSpeed}
+              rotationSpeed={isMobile ? LOGO_CONFIG.rotationSpeed * 0.75 : LOGO_CONFIG.rotationSpeed}
             />
           ))}
         </Suspense>

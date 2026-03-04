@@ -1,14 +1,16 @@
 "use client";
 
-import { useState, useRef, useCallback, useEffect } from "react";
+import { useState, useRef, useCallback } from "react";
 import { Direction } from "./pogicity/types";
 
 interface VirtualJoystickProps {
+  isMobile: boolean;
   onDirectionChange: (direction: Direction | null) => void;
   onInteract?: () => void;
 }
 
 export default function VirtualJoystick({
+  isMobile,
   onDirectionChange,
   onInteract,
 }: VirtualJoystickProps) {
@@ -89,34 +91,18 @@ export default function VirtualJoystick({
     onDirectionChange(null);
   }, [onDirectionChange]);
 
-  // Detect mobile device
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(
-        "ontouchstart" in window ||
-        navigator.maxTouchPoints > 0 ||
-        window.innerWidth < 768
-      );
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
   if (!isMobile) return null;
 
   return (
-    <div className="fixed bottom-4 left-4 z-40 flex gap-4">
+    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 flex gap-4">
       {/* Joystick */}
       <div
         ref={containerRef}
         onTouchStart={handleTouchStart}
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
-        className="relative w-28 h-28 touch-none"
+        onTouchCancel={handleTouchEnd}
+        className="relative w-32 h-32 touch-none"
       >
         {/* Background ring */}
         <div className="absolute inset-0 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/20" />
@@ -145,7 +131,7 @@ export default function VirtualJoystick({
 
         {/* Movable thumb */}
         <div
-          className="absolute top-1/2 left-1/2 w-12 h-12 rounded-full bg-white/80 shadow-lg transition-transform"
+          className="absolute top-1/2 left-1/2 w-14 h-14 rounded-full bg-white/80 shadow-lg transition-transform"
           style={{
             transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`,
             transitionDuration: isActive ? "0ms" : "150ms",
@@ -160,9 +146,10 @@ export default function VirtualJoystick({
             e.preventDefault();
             onInteract();
           }}
-          className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 text-white font-bold text-lg shadow-lg active:scale-95 transition-transform border-2 border-white/30 self-end"
+          onTouchCancel={handleTouchEnd}
+          className="min-w-18 h-18 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 px-4 text-white font-semibold text-sm shadow-lg active:scale-95 transition-transform border-2 border-white/30 self-end flex items-center justify-center"
         >
-          E
+          Talk
         </button>
       )}
     </div>

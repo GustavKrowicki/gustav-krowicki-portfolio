@@ -34,6 +34,7 @@ interface CityViewerProps {
 export interface GameBoardHandle {
   spawnCharacter: () => boolean;
   spawnCar: () => boolean;
+  zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
   panToPosition: (x: number, y: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
@@ -100,11 +101,30 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     width: 0,
     height: 0,
   });
+  const [isMobile, setIsMobile] = useState(false);
 
   // Refs
   const viewerRootRef = useRef<HTMLDivElement>(null);
   const gameBoardRef = useRef<GameBoardHandle>(null);
   const hasSpawnedAmbientLife = useRef(false);
+  const hasManualViewportInteraction = useRef(false);
+  const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
+
+  useEffect(() => {
+    const checkIsMobile = () => {
+      setIsMobile(
+        window.matchMedia("(max-width: 767px)").matches ||
+        navigator.maxTouchPoints > 0
+      );
+    };
+
+    checkIsMobile();
+    window.addEventListener("resize", checkIsMobile);
+
+    return () => {
+      window.removeEventListener("resize", checkIsMobile);
+    };
+  }, []);
 
   // Spawn ambient city life on load
   useEffect(() => {
@@ -203,6 +223,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         // Methods may not be available yet
       }
     };
+    updateLogosAndCameraRef.current = updateLogosAndCamera;
 
     const handleResize = () => {
       updateLogosAndCamera();
@@ -223,8 +244,27 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
       if (intervalId) {
         clearInterval(intervalId);
       }
+      updateLogosAndCameraRef.current = null;
     };
   }, []); // Empty dependency - run once on mount
+
+  useEffect(() => {
+    const handleOrientationChange = () => {
+      window.setTimeout(() => {
+        updateLogosAndCameraRef.current?.();
+
+        if (showWelcome || !hasManualViewportInteraction.current) {
+          gameBoardRef.current?.fitCityView();
+        }
+      }, 300);
+    };
+
+    window.addEventListener("orientationchange", handleOrientationChange);
+
+    return () => {
+      window.removeEventListener("orientationchange", handleOrientationChange);
+    };
+  }, [showWelcome]);
 
   // Handle welcome overlay actions
   const handleStartTour = useCallback(() => {
@@ -385,6 +425,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
       if (position) {
         gameBoard.panToPosition(position.x, position.y);
+        hasManualViewportInteraction.current = true;
       }
 
       // Highlight the building if it exists
@@ -442,6 +483,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
       {/* 3D Spinning Logos Overlay */}
       {!showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
+          isMobile={isMobile}
           logos={logoPositions}
           viewportLeft={viewportRect.left}
           viewportTop={viewportRect.top}
@@ -457,6 +499,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
       {/* Welcome Overlay */}
       <WelcomeOverlay
+        isMobile={isMobile}
         isVisible={showWelcome}
         onStartTour={handleStartTour}
         onExploreFreely={handleExploreFreely}
@@ -466,6 +509,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
       {/* Tour Guide (classic tour mode) */}
       {gameMode === GameMode.Viewer && (
         <TourGuide
+          isMobile={isMobile}
           isActive={isTourActive}
           currentStopIndex={currentTourStop}
           onNext={handleTourNextStop}
@@ -480,23 +524,25 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
         <>
           {/* Adventure HUD */}
           <AdventureHUD
+            isMobile={isMobile}
             visitedBuildings={visitedBuildings}
-            currentTourStopIndex={0}
             onNextStop={handleNextStop}
             isAutoWalking={isAutoWalking}
           />
 
           {/* Directional Compass */}
-          <DirectionalCompass walkableDirections={walkableDirections} />
+          <DirectionalCompass isMobile={isMobile} walkableDirections={walkableDirections} />
 
           {/* Virtual Joystick (mobile) */}
           <VirtualJoystick
+            isMobile={isMobile}
             onDirectionChange={handleJoystickDirection}
             onInteract={currentEncounter ? handleMobileInteract : undefined}
           />
 
           {/* RPG Dialog Box */}
           <RPGDialogBox
+            isMobile={isMobile}
             tourStop={currentEncounter}
             isVisible={isDialogOpen}
             onClose={handleDialogClose}
@@ -506,7 +552,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
           {/* Exit adventure button */}
           <button
             onClick={handleStopAdventure}
-            className="fixed top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10"
+            className="fixed top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10 md:top-4 top-[max(1rem,env(safe-area-inset-top))]"
           >
             Exit Adventure
           </button>
@@ -515,6 +561,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
       {/* Building Modal */}
       <BuildingModal
+        isMobile={isMobile}
         building={selectedBuilding}
         isOpen={isModalOpen}
         onClose={handleCloseModal}
@@ -524,7 +571,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
       {!showWelcome && !isTourActive && !isAdventureActive && (
-        <div className="fixed bottom-4 left-4 z-30 flex gap-2">
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2 flex-wrap max-w-[calc(100vw-7rem)] sm:max-w-none">
           <button
             onClick={() => {
               setIsTourActive(true);
@@ -541,6 +588,51 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
           >
             <span>🎮</span>
             Adventure
+          </button>
+        </div>
+      )}
+
+      {isMobile && !showWelcome && !isAdventureActive && !isDialogOpen && !isModalOpen && (
+        <div className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-col gap-2">
+          <button
+            onClick={() => {
+              hasManualViewportInteraction.current = true;
+              const nextZoom = Math.min(cameraState.zoom * 1.25, 4);
+              gameBoardRef.current?.zoomAtPoint(
+                nextZoom,
+                viewportRect.width / 2,
+                viewportRect.height / 2
+              );
+            }}
+            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-2xl border border-white/10"
+            aria-label="Zoom in"
+          >
+            +
+          </button>
+          <button
+            onClick={() => {
+              hasManualViewportInteraction.current = true;
+              const nextZoom = Math.max(cameraState.zoom / 1.25, 0.25);
+              gameBoardRef.current?.zoomAtPoint(
+                nextZoom,
+                viewportRect.width / 2,
+                viewportRect.height / 2
+              );
+            }}
+            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-2xl border border-white/10"
+            aria-label="Zoom out"
+          >
+            −
+          </button>
+          <button
+            onClick={() => {
+              hasManualViewportInteraction.current = false;
+              gameBoardRef.current?.fitCityView();
+            }}
+            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-sm border border-white/10"
+            aria-label="Fit city to view"
+          >
+            Fit
           </button>
         </div>
       )}

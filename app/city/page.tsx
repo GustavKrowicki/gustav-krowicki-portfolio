@@ -13,7 +13,7 @@ const CityViewer = dynamic(
     loading: () => (
       <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
         <div className="text-white font-mono text-xl animate-pulse">
-          Loading Gustav's City...
+          Loading Gustav&apos;s City...
         </div>
       </div>
     ),
@@ -32,7 +32,7 @@ export default function CityPage() {
   };
 
   return (
-    <div className="w-full h-screen bg-[#3d5560]">
+    <div className="w-full h-[100dvh] bg-[#3d5560]">
       {/* City Viewer */}
       <CityViewer
         initialGrid={initialGrid as GridCell[][]}

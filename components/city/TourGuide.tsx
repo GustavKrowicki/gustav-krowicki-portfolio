@@ -6,6 +6,7 @@ import { TOUR_STOPS, CATEGORY_STYLES, TourStop } from "@/lib/city/tourStops";
 import { useRouter } from "next/navigation";
 
 interface TourGuideProps {
+  isMobile: boolean;
   isActive: boolean;
   currentStopIndex: number;
   onNext: () => void;
@@ -15,6 +16,7 @@ interface TourGuideProps {
 }
 
 export default function TourGuide({
+  isMobile,
   isActive,
   currentStopIndex,
   onNext,
@@ -118,27 +120,27 @@ export default function TourGuide({
     <AnimatePresence mode="wait">
       <motion.div
         key={currentStopIndex}
-        initial={{ opacity: 0, x: 50 }}
-        animate={{ opacity: 1, x: 0 }}
-        exit={{ opacity: 0, x: 50 }}
+        initial={isMobile ? { opacity: 0, y: 40 } : { opacity: 0, x: 50 }}
+        animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+        exit={isMobile ? { opacity: 0, y: 40 } : { opacity: 0, x: 50 }}
         transition={{ duration: 0.3 }}
-        className="fixed top-4 right-4 z-40"
+        className={`fixed z-40 ${isMobile ? "bottom-0 left-0 right-0" : "top-4 right-4"}`}
       >
-        <div className="w-[400px]">
-          <div className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl overflow-hidden">
+        <div className={isMobile ? "w-full" : "w-[400px]"}>
+          <div className={`bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 shadow-2xl overflow-hidden ${isMobile ? "rounded-t-2xl max-h-[min(52dvh,30rem)]" : "rounded-2xl"}`}>
             {/* Header */}
-            <div className="flex items-center justify-between px-5 py-3 border-b border-white/5">
+            <div className="flex items-center justify-between px-4 sm:px-5 py-3 border-b border-white/5">
               <div className="flex items-center gap-3">
                 {/* Category badge */}
                 {categoryStyle && (
                   <span
-                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${categoryStyle.bgColor} ${categoryStyle.color}`}
+                    className={`px-2.5 py-1 rounded-full text-xs font-medium ${categoryStyle.bgColor} ${categoryStyle.color} hidden sm:inline-flex`}
                   >
                     {categoryStyle.label}
                   </span>
                 )}
                 {/* Title */}
-                <h3 className="text-white font-bold text-lg">
+                <h3 className="text-white font-bold text-base sm:text-lg">
                   {currentStop.title}
                 </h3>
               </div>
@@ -172,7 +174,7 @@ export default function TourGuide({
 
             {/* Content */}
             <div
-              className="px-5 py-4 min-h-[100px] cursor-pointer"
+              className={`px-4 sm:px-5 py-4 min-h-[100px] cursor-pointer ${isMobile ? "max-h-40 overflow-y-auto" : ""}`}
               onClick={handleSkipTyping}
             >
               <p className="text-gray-300 leading-relaxed">
@@ -184,9 +186,9 @@ export default function TourGuide({
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between px-5 py-3 border-t border-white/5 bg-white/[0.02]">
+            <div className={`px-4 sm:px-5 py-3 border-t border-white/5 bg-white/[0.02] ${isMobile ? "space-y-3" : "flex items-center justify-between"}`}>
               {/* Left actions */}
-              <div className="flex items-center gap-2">
+              <div className={`flex items-center gap-2 ${isMobile ? "flex-wrap" : ""}`}>
                 {currentStop.projectSlug && (
                   <button
                     onClick={handleViewProject}
@@ -200,17 +202,17 @@ export default function TourGuide({
                     onClick={handleContact}
                     className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg text-sm font-medium hover:from-blue-600 hover:to-purple-700 transition-colors"
                   >
-                    Let's Connect
+                    Let&apos;s Connect
                   </button>
                 )}
               </div>
 
               {/* Navigation */}
-              <div className="flex items-center gap-2">
+              <div className={`flex items-center gap-2 ${isMobile ? "justify-between" : ""}`}>
                 {!isFirstStop && (
                   <button
                     onClick={onPrevious}
-                    className="px-4 py-2 bg-white/5 text-gray-300 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-1"
+                    className={`px-4 py-2 bg-white/5 text-gray-300 rounded-lg text-sm font-medium hover:bg-white/10 transition-colors flex items-center gap-1 ${isMobile ? "flex-1 justify-center" : ""}`}
                   >
                     <svg
                       className="w-4 h-4"
@@ -231,7 +233,7 @@ export default function TourGuide({
                 {!isLastStop ? (
                   <button
                     onClick={() => (isTyping ? handleSkipTyping() : onNext())}
-                    className="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1"
+                    className={`px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-medium hover:bg-white/20 transition-colors flex items-center gap-1 ${isMobile ? "flex-1 justify-center" : ""}`}
                   >
                     Next
                     <svg
@@ -251,7 +253,7 @@ export default function TourGuide({
                 ) : (
                   <button
                     onClick={onEnd}
-                    className="px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-medium hover:bg-white/20 transition-colors"
+                    className={`px-4 py-2 bg-white/10 text-white rounded-lg text-sm font-medium hover:bg-white/20 transition-colors ${isMobile ? "flex-1" : ""}`}
                   >
                     Finish Tour
                   </button>
@@ -273,7 +275,7 @@ export default function TourGuide({
           </div>
 
           {/* Keyboard hints */}
-          <div className="flex justify-end gap-3 mt-2 text-gray-500 text-xs px-2">
+          <div className={`justify-end gap-3 mt-2 text-gray-500 text-xs px-2 ${isMobile ? "hidden" : "flex"}`}>
             <span>← →</span>
             <span>Space</span>
             <span>Esc</span>

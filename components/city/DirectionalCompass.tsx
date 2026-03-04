@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { Direction } from "./pogicity/types";
 
 interface DirectionalCompassProps {
+  isMobile: boolean;
   walkableDirections: Direction[];
 }
 
@@ -15,8 +16,11 @@ const keys = [
 ] as const;
 
 export default function DirectionalCompass({
+  isMobile,
   walkableDirections,
 }: DirectionalCompassProps) {
+  if (isMobile) return null;
+
   const isWalkable = (dir: Direction) => walkableDirections.includes(dir);
 
   return (

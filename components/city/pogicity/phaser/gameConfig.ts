@@ -31,6 +31,9 @@ export function createGameConfig(
     roundPixels: true,
     antialias: false,
     scene,
+    input: {
+      activePointers: 2,
+    },
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

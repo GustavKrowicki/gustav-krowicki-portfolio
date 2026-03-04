@@ -89,6 +89,7 @@ export interface PhaserGameHandle {
 export interface GameBoardHandle {
   spawnCharacter: () => boolean;
   spawnCar: () => boolean;
+  zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
   highlightBuilding: (buildingId: string | null) => void;
@@ -203,6 +204,9 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   useImperativeHandle(ref, () => ({
     spawnCharacter: () => gameRef.current?.spawnCharacter() ?? false,
     spawnCar: () => gameRef.current?.spawnCar() ?? false,
+    zoomAtPoint: (zoom: number, screenX: number, screenY: number) => {
+      gameRef.current?.zoomAtPoint(zoom, screenX, screenY);
+    },
     fitCityView: () => {
       gameRef.current?.fitCityView();
     },

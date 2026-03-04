@@ -5,15 +5,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TourStop, CATEGORY_STYLES, TOUR_STOPS } from "@/lib/city/tourStops";
 
 interface AdventureHUDProps {
+  isMobile: boolean;
   visitedBuildings: Set<string>;
-  currentTourStopIndex: number;
   onNextStop: () => void;
   isAutoWalking: boolean;
 }
 
 export default function AdventureHUD({
+  isMobile,
   visitedBuildings,
-  currentTourStopIndex,
   onNextStop,
   isAutoWalking,
 }: AdventureHUDProps) {
@@ -43,7 +43,7 @@ export default function AdventureHUD({
     <motion.div
       initial={{ x: -100, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
-      className="fixed top-4 left-4 z-40"
+      className={`fixed z-40 ${isMobile ? "top-[max(1rem,env(safe-area-inset-top))] left-3 right-20" : "top-4 left-4"}`}
     >
       <AnimatePresence mode="wait">
         {isMinimized ? (
@@ -63,7 +63,7 @@ export default function AdventureHUD({
             initial={{ scale: 0.95, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-black/50 backdrop-blur-sm rounded-lg border border-white/20 overflow-hidden min-w-[200px]"
+            className={`bg-black/50 backdrop-blur-sm rounded-lg border border-white/20 overflow-hidden ${isMobile ? "w-full" : "min-w-[200px]"}`}
           >
             {/* Header */}
             <div className="flex items-center justify-between px-3 py-2 border-b border-white/10">
@@ -151,7 +151,7 @@ export default function AdventureHUD({
             {/* Controls hint */}
             <div className="px-3 pb-2 border-t border-white/10 pt-2">
               <p className="text-gray-500 text-[10px] text-center">
-                WASD to move • E to interact
+                {isMobile ? "Joystick to move • Tap Talk" : "WASD to move • E to interact"}
               </p>
             </div>
           </motion.div>

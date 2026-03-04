@@ -1,10 +1,11 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { CharacterType } from "./pogicity/types";
 
 interface WelcomeOverlayProps {
+  isMobile: boolean;
   onStartTour: () => void;
   onExploreFreely: () => void;
   onStartAdventure?: (characterType: CharacterType) => void;
@@ -12,23 +13,13 @@ interface WelcomeOverlayProps {
 }
 
 export default function WelcomeOverlay({
+  isMobile,
   onStartTour,
   onExploreFreely,
   onStartAdventure,
   isVisible,
 }: WelcomeOverlayProps) {
-  const [showContent, setShowContent] = useState(false);
   const [showCharacterSelect, setShowCharacterSelect] = useState(false);
-
-  useEffect(() => {
-    if (isVisible) {
-      const timer = setTimeout(() => setShowContent(true), 500);
-      return () => clearTimeout(timer);
-    } else {
-      setShowContent(false);
-      setShowCharacterSelect(false);
-    }
-  }, [isVisible]);
 
   const handleAdventureClick = () => {
     if (onStartAdventure) {
@@ -56,21 +47,21 @@ export default function WelcomeOverlay({
 
           {/* Content card */}
           <AnimatePresence>
-            {showContent && (
+            {
               <motion.div
                 initial={{ opacity: 0, y: 30, scale: 0.95 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
                 exit={{ opacity: 0, y: -20, scale: 0.95 }}
-                transition={{ duration: 0.4, ease: "easeOut" }}
-                className="relative z-10 max-w-lg mx-4"
+                transition={{ duration: 0.4, ease: "easeOut", delay: 0.15 }}
+                className="relative z-10 max-w-lg mx-4 w-full"
               >
-                <div className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl p-8 shadow-2xl">
+                <div className={`bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl shadow-2xl max-h-[calc(100dvh-2rem)] overflow-y-auto ${isMobile ? "p-5" : "p-8"}`}>
                   {/* Avatar/Icon */}
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
                     transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                    className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-4xl shadow-lg"
+                    className={`${isMobile ? "w-14 h-14 mb-4 text-3xl" : "w-20 h-20 mb-6 text-4xl"} mx-auto rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-lg`}
                   >
                     <span role="img" aria-label="waving hand">
                       👋
@@ -84,7 +75,7 @@ export default function WelcomeOverlay({
                     transition={{ delay: 0.3 }}
                     className="text-white text-2xl font-bold text-center mb-2"
                   >
-                    Welcome to Gustav's City!
+                    Welcome to Gustav&apos;s City!
                   </motion.h2>
 
                   {/* Subtitle */}
@@ -94,7 +85,7 @@ export default function WelcomeOverlay({
                     transition={{ delay: 0.4 }}
                     className="text-gray-400 text-center mb-6"
                   >
-                    I'm a product designer who builds digital experiences.
+                    I&apos;m a product designer who builds digital experiences.
                     <br />
                     Explore my portfolio in this isometric city!
                   </motion.p>
@@ -107,8 +98,8 @@ export default function WelcomeOverlay({
                     className="bg-white/5 rounded-xl p-4 mb-6 border border-white/5"
                   >
                     <p className="text-gray-300 text-sm italic text-center">
-                      "Each building tells a story - from my work at LEGO to my
-                      education across 3 countries. Want me to show you around?"
+                      &ldquo;Each building tells a story - from my work at LEGO to my
+                      education across 3 countries. Want me to show you around?&rdquo;
                     </p>
                   </motion.div>
 
@@ -123,26 +114,25 @@ export default function WelcomeOverlay({
                         transition={{ delay: 0.6 }}
                         className="flex flex-col gap-3"
                       >
-                        {/* Primary: Start Adventure */}
-                        {onStartAdventure && (
-                          <button
-                            onClick={handleAdventureClick}
-                            className="w-full px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
-                          >
-                            <span className="mr-2">🎮</span>
-                            Start Adventure
-                          </button>
-                        )}
-
-                        {/* Secondary options */}
-                        <div className="flex gap-3">
+                        <div className={`grid gap-3 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}>
                           <button
                             onClick={onStartTour}
-                            className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-all duration-200 border border-white/10 text-sm"
+                            className="px-4 py-3 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-all duration-200 border border-white/10 text-sm"
                           >
                             <span className="mr-1">🗺️</span>
                             Guided Tour
                           </button>
+                          {onStartAdventure && (
+                            <button
+                              onClick={handleAdventureClick}
+                              className="px-6 py-3 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-200 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+                            >
+                              <span className="mr-2">🎮</span>
+                              Start Adventure
+                            </button>
+                          )}
+                        </div>
+                        <div className="flex gap-3">
                           <button
                             onClick={onExploreFreely}
                             className="flex-1 px-4 py-2.5 bg-white/10 text-white rounded-xl font-medium hover:bg-white/20 transition-all duration-200 border border-white/10 text-sm"
@@ -196,13 +186,13 @@ export default function WelcomeOverlay({
                       className="text-gray-500 text-xs text-center mt-4"
                     >
                       {onStartAdventure
-                        ? "Walk around and discover my portfolio!"
-                        : "Tip: Click on buildings to learn more about each project"}
+                        ? "Walk around and discover my portfolio."
+                        : "Tip: Tap buildings to learn more about each project."}
                     </motion.p>
                   )}
                 </div>
               </motion.div>
-            )}
+            }
           </AnimatePresence>
         </motion.div>
       )}

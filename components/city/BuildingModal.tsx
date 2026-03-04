@@ -5,6 +5,7 @@ import { BuildingDefinition } from "@/lib/city/buildings";
 import Image from "next/image";
 
 interface BuildingModalProps {
+  isMobile: boolean;
   building: BuildingDefinition | null;
   isOpen: boolean;
   onClose: () => void;
@@ -135,6 +136,7 @@ const BUILDING_METADATA: Record<
 };
 
 export default function BuildingModal({
+  isMobile,
   building,
   isOpen,
   onClose,
@@ -150,20 +152,19 @@ export default function BuildingModal({
     <AnimatePresence>
       {isOpen && (
         <>
-          {/* Modal - Top Right Corner */}
           <motion.div
-            initial={{ opacity: 0, x: 20 }}
-            animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: 20 }}
+            initial={isMobile ? { opacity: 0, y: 80 } : { opacity: 0, x: 20 }}
+            animate={isMobile ? { opacity: 1, y: 0 } : { opacity: 1, x: 0 }}
+            exit={isMobile ? { opacity: 0, y: 80 } : { opacity: 0, x: 20 }}
             transition={{ type: "spring", damping: 20, stiffness: 300 }}
-            className="fixed top-4 right-4 z-50 w-80"
+            className={`fixed z-50 ${isMobile ? "bottom-0 left-0 right-0" : "top-4 right-4 w-80"}`}
           >
             <div
-              className="bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+              className={`bg-[#1a1f2e]/95 backdrop-blur-md border border-white/10 overflow-hidden shadow-2xl ${isMobile ? "rounded-t-2xl max-h-[80vh] overflow-y-auto" : "rounded-2xl"}`}
               onClick={(e) => e.stopPropagation()}
             >
               {/* Header with building sprite */}
-              <div className="relative bg-gradient-to-b from-white/5 to-transparent p-6">
+              <div className={`relative bg-gradient-to-b from-white/5 to-transparent ${isMobile ? "p-5" : "p-6"}`}>
                 {/* Close button */}
                 <button
                   onClick={onClose}
@@ -185,8 +186,8 @@ export default function BuildingModal({
                 </button>
 
                 {/* Building sprite preview */}
-                <div className="flex items-center gap-4">
-                  <div className="relative w-24 h-24 bg-white/5 rounded-xl overflow-hidden flex items-center justify-center">
+                <div className={`flex gap-4 ${isMobile ? "items-start" : "items-center"}`}>
+                  <div className={`relative bg-white/5 rounded-xl overflow-hidden flex items-center justify-center ${isMobile ? "w-20 h-20" : "w-24 h-24"}`}>
                     {building.sprites.south && (
                       <Image
                         src={building.sprites.south}
@@ -223,7 +224,7 @@ export default function BuildingModal({
               </div>
 
               {/* Content */}
-              <div className="px-6 pb-6">
+              <div className={`${isMobile ? "px-5 pb-[max(1.25rem,env(safe-area-inset-bottom))]" : "px-6 pb-6"}`}>
                 {/* Description */}
                 {building.description && (
                   <p className="text-gray-300 mb-4">{building.description}</p>
@@ -258,7 +259,7 @@ export default function BuildingModal({
                       View Case Study
                     </button>
                   )}
-                  <div className="flex gap-2">
+                  <div className={`flex gap-2 ${isMobile ? "flex-col" : ""}`}>
                     {onBackToPortfolio && (
                       <button
                         onClick={onBackToPortfolio}

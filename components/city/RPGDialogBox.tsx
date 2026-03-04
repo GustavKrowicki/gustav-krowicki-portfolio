@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TourStop, CATEGORY_STYLES } from "@/lib/city/tourStops";
 
 interface RPGDialogBoxProps {
+  isMobile: boolean;
   tourStop: TourStop | null;
   isVisible: boolean;
   onClose: () => void;
@@ -12,6 +13,7 @@ interface RPGDialogBoxProps {
 }
 
 export default function RPGDialogBox({
+  isMobile,
   tourStop,
   isVisible,
   onClose,
@@ -91,7 +93,7 @@ export default function RPGDialogBox({
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-8 pointer-events-none"
+          className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-[max(2rem,env(safe-area-inset-bottom))] pointer-events-none"
         >
           {/* Dialog Box */}
           <motion.div
@@ -100,7 +102,7 @@ export default function RPGDialogBox({
             exit={{ y: 50, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
             onClick={skipTyping}
-            className="relative w-full max-w-2xl pointer-events-auto cursor-pointer"
+            className={`relative w-full pointer-events-auto cursor-pointer ${isMobile ? "max-w-none" : "max-w-2xl"}`}
           >
             {/* Pixel art border effect using CSS */}
             <div className="relative">
@@ -129,12 +131,12 @@ export default function RPGDialogBox({
                   )`,
                 }}
               >
-                <div className="flex gap-4">
+                <div className={`flex gap-4 ${isMobile ? "items-start" : ""}`}>
                   {/* Portrait */}
                   <div className="flex-shrink-0">
-                    <div className="w-20 h-20 rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-600/30 border-2 border-gray-600 overflow-hidden flex items-center justify-center">
+                    <div className={`${isMobile ? "w-16 h-16" : "w-20 h-20"} rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-600/30 border-2 border-gray-600 overflow-hidden flex items-center justify-center`}>
                       {/* Placeholder portrait - Gustav silhouette */}
-                      <div className="w-16 h-16 rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white text-2xl font-bold">
+                      <div className={`${isMobile ? "w-12 h-12 text-xl" : "w-16 h-16 text-2xl"} rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold`}>
                         G
                       </div>
                     </div>
@@ -160,7 +162,9 @@ export default function RPGDialogBox({
                     {/* Dialogue */}
                     <div className="min-h-[60px]">
                       <p className="text-gray-200 text-sm leading-relaxed font-mono">
-                        "{displayedText}"
+                        <span>&ldquo;</span>
+                        {displayedText}
+                        <span>&rdquo;</span>
                         {isTyping && (
                           <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
                         )}
@@ -192,7 +196,7 @@ export default function RPGDialogBox({
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="flex justify-end gap-3 mt-4 pt-3 border-t border-gray-700"
+                    className={`mt-4 pt-3 border-t border-gray-700 ${isMobile ? "grid gap-3" : "flex justify-end gap-3"}`}
                   >
                     {tourStop.projectSlug && (
                       <button
@@ -221,7 +225,7 @@ export default function RPGDialogBox({
 
             {/* Hint text */}
             <p className="text-center text-gray-500 text-xs mt-2 font-mono">
-              Press Space/Enter to continue • ESC to close
+              {isMobile ? "Tap to continue" : "Press Space/Enter to continue • ESC to close"}
             </p>
           </motion.div>
         </motion.div>

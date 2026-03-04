@@ -162,6 +162,7 @@ export class MainScene extends Phaser.Scene {
   private panPointerButton: "left" | "right" | null = null;
   private panStartX: number = 0;
   private panStartY: number = 0;
+  private panDragDistance: number = 0;
   private cameraStartX: number = 0;
   private cameraStartY: number = 0;
   private lastManualCameraInteractionAt: number | null = null;
@@ -170,6 +171,8 @@ export class MainScene extends Phaser.Scene {
   private readonly FIT_CITY_PADDING_Y = 120;
   private baseScrollX: number = 0;
   private baseScrollY: number = 0;
+  private lastPinchDist: number | null = null;
+  private readonly TAP_DRAG_THRESHOLD = 8;
 
   // Screen shake
   private shakeAxis: "x" | "y" = "y";
@@ -314,6 +317,8 @@ export class MainScene extends Phaser.Scene {
   update(_time: number, delta: number): void {
     if (!this.isReady) return;
 
+    this.updatePinchZoom();
+
     this.updateCharacters();
     this.updateCars();
     this.updateCamera(delta);
@@ -331,6 +336,40 @@ export class MainScene extends Phaser.Scene {
     }
 
     this.updateStatsDisplay();
+  }
+
+  private updatePinchZoom(): void {
+    const ptr1 = this.input.pointer1;
+    const ptr2 = this.input.pointer2;
+
+    if (!(ptr1.isDown && ptr2.isDown)) {
+      this.lastPinchDist = null;
+      return;
+    }
+
+    const currentDist = Phaser.Math.Distance.Between(ptr1.x, ptr1.y, ptr2.x, ptr2.y);
+    if (currentDist <= 0) return;
+
+    if (this.lastPinchDist !== null) {
+      const camera = this.cameras.main;
+      const scale = currentDist / this.lastPinchDist;
+      const midpointX = (ptr1.x + ptr2.x) / 2;
+      const midpointY = (ptr1.y + ptr2.y) / 2;
+      const targetZoom = Phaser.Math.Clamp(
+        camera.zoom * scale,
+        MainScene.ZOOM_LEVELS[0],
+        MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+      );
+
+      if (Math.abs(targetZoom - camera.zoom) >= 0.001) {
+        this.applyZoomAtPointer(targetZoom, midpointX, midpointY);
+        this.zoomLevel = targetZoom;
+        this.recordManualCameraInteraction();
+        this.events.emit("zoomChanged", targetZoom);
+      }
+    }
+
+    this.lastPinchDist = currentDist;
   }
 
   private updateAdventureMode(): void {
@@ -748,6 +787,11 @@ export class MainScene extends Phaser.Scene {
     if (!this.isReady) return;
 
     if (this.isPanning) {
+      if (this.input.pointer1.isDown && this.input.pointer2.isDown) {
+        this.stopPanning();
+        return;
+      }
+
       const activeButtonDown =
         this.panPointerButton === "left"
           ? pointer.leftButtonDown()
@@ -761,6 +805,10 @@ export class MainScene extends Phaser.Scene {
       }
 
       const camera = this.cameras.main;
+      this.panDragDistance = Math.max(
+        this.panDragDistance,
+        Phaser.Math.Distance.Between(this.panStartX, this.panStartY, pointer.x, pointer.y)
+      );
       const dx = (this.panStartX - pointer.x) / camera.zoom;
       const dy = (this.panStartY - pointer.y) / camera.zoom;
       this.baseScrollX = this.cameraStartX + dx;
@@ -882,7 +930,12 @@ export class MainScene extends Phaser.Scene {
     if (!this.isReady) return;
 
     if (this.isPanning) {
+      const shouldTriggerTap = this.panPointerButton === "left";
+      const wasTap = this.panDragDistance < this.TAP_DRAG_THRESHOLD;
       this.stopPanning();
+      if (shouldTriggerTap && wasTap && this.hoverTile) {
+        this.events_.onTileClick(this.hoverTile.x, this.hoverTile.y);
+      }
     }
 
     if (this.isDragging) {
@@ -1414,11 +1467,12 @@ export class MainScene extends Phaser.Scene {
 
     const screenPos = this.gridToScreen(gridX, gridY);
 
-    // Calculate target scroll position to center on the building
-    // Offset left by ~200px to account for the tour modal on the right side
-    const modalOffset = 200;
-    const targetScrollX = screenPos.x - camera.width / 2 - modalOffset;
-    const targetScrollY = screenPos.y - camera.height / 2;
+    const isMobileViewport = this.isMobileViewport();
+    const isPortraitViewport = camera.height >= camera.width;
+    const modalOffsetX = isMobileViewport ? 0 : 200;
+    const modalOffsetY = isMobileViewport && isPortraitViewport ? camera.height * 0.18 : 0;
+    const targetScrollX = screenPos.x - camera.width / 2 - modalOffsetX;
+    const targetScrollY = screenPos.y - camera.height / 2 - modalOffsetY;
 
     // Animate the camera pan
     this.tweens.add({
@@ -1766,6 +1820,7 @@ export class MainScene extends Phaser.Scene {
     this.panPointerButton = button;
     this.panStartX = pointer.x;
     this.panStartY = pointer.y;
+    this.panDragDistance = 0;
     this.cameraStartX = this.baseScrollX;
     this.cameraStartY = this.baseScrollY;
     this.recordManualCameraInteraction();
@@ -1774,6 +1829,11 @@ export class MainScene extends Phaser.Scene {
   private stopPanning(): void {
     this.isPanning = false;
     this.panPointerButton = null;
+    this.panDragDistance = 0;
+  }
+
+  private isMobileViewport(): boolean {
+    return this.scale.displaySize.width < 768;
   }
 
   private recordManualCameraInteraction(): void {
