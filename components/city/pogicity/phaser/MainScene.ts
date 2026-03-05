@@ -1350,20 +1350,27 @@ export class MainScene extends Phaser.Scene {
     const contentWidth = GAME_WIDTH + this.FIT_CITY_PADDING_X * 2;
     const contentHeight = GAME_HEIGHT + this.FIT_CITY_PADDING_Y * 2;
 
+    // With Scale.ENVELOP on mobile the canvas overflows the viewport horizontally.
+    // Only window.innerWidth / displaySize.width of the canvas is visible, so we
+    // must use the visible game-pixel dimensions to compute the correct fit zoom.
+    const isMobile = this.isMobileViewport();
+    const displayW = this.scale.displaySize.width;
+    const displayH = this.scale.displaySize.height;
+    const effectiveW = isMobile ? camera.width * (window.innerWidth / displayW) : camera.width;
+    const effectiveH = isMobile ? camera.height * (window.innerHeight / displayH) : camera.height;
+
     const fitZoom = [...MainScene.ZOOM_LEVELS]
       .sort((a, b) => b - a)
       .find((candidateZoom) => (
-        camera.width / candidateZoom >= contentWidth &&
-        camera.height / candidateZoom >= contentHeight
-      )) ?? MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1];
+        effectiveW / candidateZoom >= contentWidth &&
+        effectiveH / candidateZoom >= contentHeight
+      )) ?? MainScene.ZOOM_LEVELS[0];
 
-    const finalZoom = this.isMobileViewport()
-      ? Phaser.Math.Clamp(
-          fitZoom * this.MOBILE_FIT_ZOOM_MULTIPLIER,
-          MainScene.ZOOM_LEVELS[0],
-          MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
-        )
-      : fitZoom;
+    const finalZoom = Phaser.Math.Clamp(
+      fitZoom,
+      MainScene.ZOOM_LEVELS[0],
+      MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+    );
 
     camera.setZoom(finalZoom);
     camera.centerOn(GAME_WIDTH / 2, GAME_HEIGHT / 2);
