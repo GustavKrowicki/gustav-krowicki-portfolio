@@ -414,21 +414,24 @@ export class MainScene extends Phaser.Scene {
       this.cameraFollowPlayer &&
       !this.manualCameraOverrideInAdventure &&
       (playerState === PlayerState.AutoWalking ||
-       (isMobile && playerState === PlayerState.Walking));
+       (isMobile && (playerState === PlayerState.Walking || playerState === PlayerState.Idle)));
 
     if (shouldFollowPlayer) {
-      const isMobileJoystick = isMobile && playerState === PlayerState.Walking;
-      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY, isMobileJoystick);
+      // Always lerp in adventure mode. Dead-zone follow is zoom-dependent: at low zoom
+      // (e.g. fit view = 0.25) the dead-zone spans the entire game world and the camera
+      // never reacts. Lerp correctly centers the player regardless of zoom level.
+      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY, true);
     }
   }
 
-  private updateCameraFollowPlayer(playerWorldX: number, playerWorldY: number, isMobileJoystick = false): void {
+  private updateCameraFollowPlayer(playerWorldX: number, playerWorldY: number, useLerp = false): void {
     const camera = this.cameras.main;
 
-    if (isMobileJoystick) {
-      // Pokémon-style: smoothly lerp camera toward centering the player.
+    if (useLerp) {
+      // Lerp camera toward centering the player (Pokémon-style).
       // Phaser's centerOn formula is scrollX = worldX - camera.width/2, which correctly
       // centers at any zoom (camera.worldView accounts for zoom offset internally).
+      // With Scale.ENVELOP, the canvas center IS the viewport center, so this is correct.
       const targetScrollX = playerWorldX - camera.width / 2;
       const targetScrollY = playerWorldY - camera.height / 2;
       this.baseScrollX += (targetScrollX - this.baseScrollX) * 0.12;
