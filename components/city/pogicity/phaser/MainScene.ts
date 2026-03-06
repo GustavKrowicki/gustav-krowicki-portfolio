@@ -417,8 +417,11 @@ export class MainScene extends Phaser.Scene {
        (isMobile && playerState === PlayerState.Walking));
 
     if (shouldFollowPlayer) {
-      const isMobileJoystick = isMobile && playerState === PlayerState.Walking;
-      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY, isMobileJoystick);
+      // On mobile, always use smooth lerp follow (joystick AND auto-walk).
+      // Dead zone follow is for desktop only — on mobile at zoom=2 the dead zone
+      // spans most of the screen, so the camera appears frozen during auto-walk.
+      const useLerp = isMobile || playerState === PlayerState.Walking;
+      this.updateCameraFollowPlayer(playerPos.worldX, playerPos.worldY, useLerp);
     }
   }
 
@@ -1702,9 +1705,6 @@ export class MainScene extends Phaser.Scene {
 
   // Set player input direction (for mobile joystick)
   setPlayerInputDirection(direction: Direction | null): void {
-    if (direction !== null && this.isAdventureActive && this.isMobileViewport()) {
-      this.manualCameraOverrideInAdventure = false;
-    }
     this.playerController?.setInputDirection(direction);
   }
 
