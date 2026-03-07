@@ -2,6 +2,13 @@
 
 import { useState, useRef, useCallback } from "react";
 import { Direction } from "./pogicity/types";
+import {
+  PIXEL_INSET_CLIP,
+  pixelButtonClass,
+  pixelHintClass,
+  pixelPanelInnerClass,
+  pixelPanelOuterClass,
+} from "./pixelModalStyles";
 
 interface VirtualJoystickProps {
   isMobile: boolean;
@@ -94,7 +101,10 @@ export default function VirtualJoystick({
   if (!isMobile) return null;
 
   return (
-    <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 flex gap-4">
+    <div
+      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 flex gap-4"
+      data-testid="city-joystick"
+    >
       {/* Joystick */}
       <div
         ref={containerRef}
@@ -102,55 +112,60 @@ export default function VirtualJoystick({
         onTouchMove={handleTouchMove}
         onTouchEnd={handleTouchEnd}
         onTouchCancel={handleTouchEnd}
-        className="relative w-32 h-32 touch-none"
+        className="relative h-32 w-32 touch-none"
       >
-        {/* Background ring */}
-        <div className="absolute inset-0 rounded-full bg-black/30 backdrop-blur-sm border-2 border-white/20" />
+        <div className={`${pixelPanelOuterClass} absolute inset-0`} style={PIXEL_INSET_CLIP}>
+          <div className={`${pixelPanelInnerClass} h-full w-full bg-[#5f5a4c]`} style={PIXEL_INSET_CLIP}>
+            <div className="absolute inset-3 border-[3px] border-[#14181b] bg-[#3d3a31]">
+              <div className="absolute left-1/2 top-0 h-full w-[3px] -translate-x-1/2 bg-[#5f7a59]" />
+              <div className="absolute top-1/2 left-0 h-[3px] w-full -translate-y-1/2 bg-[#5f7a59]" />
+            </div>
+          </div>
+        </div>
 
-        {/* Direction indicators */}
         <div className="absolute inset-0 flex items-center justify-center">
           <div className="w-16 h-16 relative">
-            {/* Up arrow */}
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 text-white/40">
+            <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1 font-mono text-[#cfc6ac]">
               ▲
             </div>
-            {/* Down arrow */}
-            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 text-white/40">
+            <div className="absolute bottom-0 left-1/2 -translate-x-1/2 translate-y-1 font-mono text-[#cfc6ac]">
               ▼
             </div>
-            {/* Left arrow */}
-            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 text-white/40">
+            <div className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 font-mono text-[#cfc6ac]">
               ◀
             </div>
-            {/* Right arrow */}
-            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 text-white/40">
+            <div className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 font-mono text-[#cfc6ac]">
               ▶
             </div>
           </div>
         </div>
 
-        {/* Movable thumb */}
         <div
-          className="absolute top-1/2 left-1/2 w-14 h-14 rounded-full bg-white/80 shadow-lg transition-transform"
+          className="absolute left-1/2 top-1/2 h-12 w-12 border-[3px] border-[#17201d] bg-[#88a07e] shadow-[inset_0_-3px_0_#31473b] transition-transform"
           style={{
             transform: `translate(calc(-50% + ${position.x}px), calc(-50% + ${position.y}px))`,
             transitionDuration: isActive ? "0ms" : "150ms",
+            ...PIXEL_INSET_CLIP,
           }}
         />
       </div>
 
-      {/* Interact button */}
       {onInteract && (
-        <button
-          onTouchStart={(e) => {
-            e.preventDefault();
-            onInteract();
-          }}
-          onTouchCancel={handleTouchEnd}
-          className="min-w-18 h-18 rounded-2xl bg-gradient-to-br from-blue-500 to-purple-600 px-4 text-white font-semibold text-sm shadow-lg active:scale-95 transition-transform border-2 border-white/30 self-end flex items-center justify-center"
-        >
-          Talk
-        </button>
+        <div className="self-end">
+          <button
+            onTouchStart={(e) => {
+              e.preventDefault();
+              onInteract();
+            }}
+            onTouchCancel={handleTouchEnd}
+            className={`min-h-[5.5rem] min-w-[7rem] self-end ${pixelButtonClass("primary")}`}
+            style={PIXEL_INSET_CLIP}
+            data-testid="city-talk-button"
+          >
+            Talk
+          </button>
+          <p className={`mt-2 w-fit ${pixelHintClass}`}>Interact</p>
+        </div>
       )}
     </div>
   );

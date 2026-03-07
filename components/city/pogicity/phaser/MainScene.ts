@@ -1750,6 +1750,46 @@ export class MainScene extends Phaser.Scene {
     return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
   }
 
+  movePlayerToBuilding(buildingId: string): boolean {
+    if (!this.playerController) return false;
+
+    const position = findBuildingPosition(this.grid, buildingId);
+    if (!position) return false;
+
+    const candidates = [
+      { x: Math.floor(position.x), y: Math.floor(position.y) },
+      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) },
+      { x: Math.floor(position.x), y: Math.floor(position.y) + 1 },
+      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) + 1 },
+      { x: Math.floor(position.x) - 1, y: Math.floor(position.y) },
+      { x: Math.floor(position.x), y: Math.floor(position.y) - 1 },
+    ];
+
+    for (const candidate of candidates) {
+      const targetPos = this.findWalkableSpawnPosition(candidate.x, candidate.y);
+      const dist = Math.sqrt(
+        Math.pow(targetPos.x - position.x, 2) + Math.pow(targetPos.y - position.y, 2)
+      );
+
+      if (dist <= 3) {
+        this.manualCameraOverrideInAdventure = false;
+        this.cameraFollowPlayer = true;
+        this.playerController.moveTo(targetPos.x, targetPos.y);
+        return true;
+      }
+    }
+
+    const targetPos = this.findWalkableSpawnPosition(
+      Math.floor(position.x + 1),
+      Math.floor(position.y + 1)
+    );
+
+    this.manualCameraOverrideInAdventure = false;
+    this.cameraFollowPlayer = true;
+    this.playerController.moveTo(targetPos.x, targetPos.y);
+    return true;
+  }
+
   // Mark building as visited
   markBuildingVisited(buildingId: string): void {
     this.visitedBuildings.add(buildingId);

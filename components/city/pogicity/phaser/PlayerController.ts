@@ -305,6 +305,25 @@ export class PlayerController {
     return true;
   }
 
+  moveTo(gridX: number, gridY: number): void {
+    this.cancelAutoWalk();
+
+    this.gridX = gridX;
+    this.gridY = gridY;
+    this.targetGridX = gridX;
+    this.targetGridY = gridY;
+
+    const screenPos = this.gridToScreen(gridX, gridY);
+    this.worldX = screenPos.x;
+    this.worldY = screenPos.y + TILE_HEIGHT / 2;
+    this.targetWorldX = this.worldX;
+    this.targetWorldY = this.worldY;
+
+    this.isMoving = false;
+    this.state = PlayerState.Idle;
+    this.emitPositionChange();
+  }
+
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
     this.autoWalkPath = [];

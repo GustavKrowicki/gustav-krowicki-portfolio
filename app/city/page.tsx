@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import initialGrid from "@/lib/city/cityGrid.json";
 import { GridCell } from "@/components/city/pogicity/types";
@@ -22,6 +22,8 @@ const CityViewer = dynamic(
 
 export default function CityPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const e2eMode = searchParams.get("e2e") === "1";
 
   const handleProjectClick = (projectSlug: string) => {
     router.push(`/work/${projectSlug}`);
@@ -38,6 +40,7 @@ export default function CityPage() {
         initialGrid={initialGrid as GridCell[][]}
         onProjectClick={handleProjectClick}
         onBackToPortfolio={handleBackToPortfolio}
+        e2eMode={e2eMode}
       />
     </div>
   );

@@ -14,6 +14,7 @@ import VirtualJoystick from "./VirtualJoystick";
 import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
+import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -29,6 +30,31 @@ interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
   onBackToPortfolio?: () => void;
+  e2eMode?: boolean;
+}
+
+type CityE2ECharacter = "banana" | "apple";
+
+interface CityE2EApi {
+  dismissWelcome: () => void;
+  focusBuilding: (buildingId: string) => boolean;
+  openBuildingModal: (buildingId: string) => boolean;
+  closeBuildingModal: () => void;
+  startAdventure: (characterType?: CityE2ECharacter) => boolean;
+  walkToBuilding: (buildingId: string) => Promise<boolean>;
+  openEncounter: (stopId: string) => boolean;
+  closeEncounter: () => void;
+  getPlayerState: () => PlayerState | null;
+  getCurrentEncounterId: () => string | null;
+  getVisitedBuildings: () => string[];
+  setVisitedBuildings: (buildingIds: string[]) => void;
+  stopAdventure: () => void;
+}
+
+declare global {
+  interface Window {
+    __CITY_E2E__?: CityE2EApi;
+  }
 }
 
 export interface GameBoardHandle {
@@ -43,6 +69,7 @@ export interface GameBoardHandle {
   stopAdventureMode: () => void;
   setPlayerInputDirection: (direction: Direction | null) => void;
   walkPlayerToBuilding: (buildingId: string) => boolean;
+  movePlayerToBuilding: (buildingId: string) => boolean;
   markBuildingVisited: (buildingId: string) => void;
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
@@ -66,7 +93,12 @@ export interface GameBoardHandle {
   };
 }
 
-export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfolio }: CityViewerProps) {
+export default function CityViewer({
+  initialGrid,
+  onProjectClick,
+  onBackToPortfolio,
+  e2eMode = false,
+}: CityViewerProps) {
   // Mode state
   const [showWelcome, setShowWelcome] = useState(true);
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
@@ -128,6 +160,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
 
   // Spawn ambient city life on load
   useEffect(() => {
+    if (e2eMode) return;
     if (hasSpawnedAmbientLife.current) return;
 
     const spawnAmbientLife = () => {
@@ -156,7 +189,7 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     // Delay to allow game to initialize
     const timer = setTimeout(spawnAmbientLife, 1000);
     return () => clearTimeout(timer);
-  }, []);
+  }, [e2eMode]);
 
   // Update logo positions and camera state for 3D overlay
   // Use refs to track previous values and avoid unnecessary state updates
@@ -471,17 +504,149 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
     [onProjectClick]
   );
 
+  useEffect(() => {
+    if (!e2eMode || typeof window === "undefined") return;
+
+    const startAdventureForTest = (characterType: CityE2ECharacter = "banana") => {
+      if (isAdventureActive) {
+        return true;
+      }
+
+      const character =
+        characterType === "apple" ? CharacterType.Apple : CharacterType.Banana;
+      handleStartAdventure(character);
+      return true;
+    };
+
+    const waitForPlayerReadyForTest = async () => {
+      for (let attempt = 0; attempt < 20; attempt += 1) {
+        const playerState = gameBoardRef.current?.getPlayerState();
+        if (playerState) {
+          return true;
+        }
+
+        await new Promise((resolve) => window.setTimeout(resolve, 100));
+      }
+
+      return false;
+    };
+
+    window.__CITY_E2E__ = {
+      dismissWelcome: () => {
+        handleExploreFreely();
+      },
+      focusBuilding: (buildingId: string) => {
+        const building = getBuilding(buildingId);
+        if (!building) return false;
+
+        setShowWelcome(false);
+        setIsTourActive(false);
+        setGameMode(GameMode.Viewer);
+        gameBoardRef.current?.highlightBuilding(buildingId);
+
+        const position = findBuildingPosition(initialGrid, buildingId);
+        if (position) {
+          gameBoardRef.current?.panToPosition(position.x, position.y);
+          hasManualViewportInteraction.current = true;
+        }
+
+        return true;
+      },
+      openBuildingModal: (buildingId: string) => {
+        const building = getBuilding(buildingId);
+        if (!building) return false;
+
+        setShowWelcome(false);
+        setIsTourActive(false);
+        setGameMode(GameMode.Viewer);
+        setSelectedBuilding(building);
+        setIsModalOpen(true);
+        return true;
+      },
+      closeBuildingModal: () => {
+        handleCloseModal();
+      },
+      startAdventure: (characterType = "banana") => {
+        return startAdventureForTest(characterType);
+      },
+      walkToBuilding: async (buildingId: string) => {
+        startAdventureForTest("banana");
+
+        const isPlayerReady = await waitForPlayerReadyForTest();
+        if (!isPlayerReady) {
+          return false;
+        }
+
+        for (let attempt = 0; attempt < 20; attempt += 1) {
+          const didStartWalking =
+            gameBoardRef.current?.walkPlayerToBuilding(buildingId) ?? false;
+
+          if (didStartWalking) {
+            return true;
+          }
+
+          await new Promise((resolve) => window.setTimeout(resolve, 100));
+        }
+
+        return gameBoardRef.current?.movePlayerToBuilding(buildingId) ?? false;
+      },
+      openEncounter: (stopId: string) => {
+        const stop = TOUR_STOPS.find((tourStop) => tourStop.id === stopId);
+        if (!stop) return false;
+
+        startAdventureForTest("banana");
+        setCurrentEncounter(stop);
+        setIsDialogOpen(true);
+        return true;
+      },
+      closeEncounter: () => {
+        setIsDialogOpen(false);
+        setCurrentEncounter(null);
+      },
+      getPlayerState: () => {
+        return gameBoardRef.current?.getPlayerState() ?? null;
+      },
+      getCurrentEncounterId: () => {
+        return currentEncounter?.id ?? null;
+      },
+      getVisitedBuildings: () => {
+        return Array.from(visitedBuildings);
+      },
+      setVisitedBuildings: (buildingIds: string[]) => {
+        setVisitedBuildings(new Set(buildingIds));
+      },
+      stopAdventure: () => {
+        handleStopAdventure();
+      },
+    };
+
+    return () => {
+      delete window.__CITY_E2E__;
+    };
+  }, [
+    e2eMode,
+    currentEncounter?.id,
+    handleCloseModal,
+    handleExploreFreely,
+    handleStartAdventure,
+    handleStopAdventure,
+    initialGrid,
+    isAdventureActive,
+    visitedBuildings,
+  ]);
+
   return (
-    <div ref={viewerRootRef} className="relative w-full h-full">
+    <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
       <GameBoard
         ref={gameBoardRef}
         editable={false}
         initialGrid={initialGrid}
         onBuildingClick={handleBuildingClick}
+        testId="city-canvas"
       />
 
       {/* 3D Spinning Logos Overlay */}
-      {!showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
+      {!e2eMode && !showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
           isMobile={isMobile}
           logos={logoPositions}
@@ -547,12 +712,15 @@ export default function CityViewer({ initialGrid, onProjectClick, onBackToPortfo
             isVisible={isDialogOpen}
             onClose={handleDialogClose}
             onViewCaseStudy={handleViewCaseStudy}
+            disableTypingAnimation={e2eMode}
           />
 
           {/* Exit adventure button */}
           <button
             onClick={handleStopAdventure}
-            className="fixed top-4 right-4 z-40 px-3 py-1.5 bg-black/50 backdrop-blur-sm text-white rounded-lg text-sm hover:bg-black/70 transition-colors border border-white/10 md:top-4 top-[max(1rem,env(safe-area-inset-top))]"
+            className={`fixed right-4 z-40 md:top-4 top-[max(1rem,env(safe-area-inset-top))] ${pixelButtonClass("ghost")}`}
+            style={PIXEL_INSET_CLIP}
+            data-testid="city-exit-adventure"
           >
             Exit Adventure
           </button>

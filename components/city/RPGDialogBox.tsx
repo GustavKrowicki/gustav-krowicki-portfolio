@@ -3,6 +3,15 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TourStop, CATEGORY_STYLES } from "@/lib/city/tourStops";
+import {
+  PIXEL_INSET_CLIP,
+  PIXEL_PANEL_CLIP,
+  pixelButtonClass,
+  pixelHintClass,
+  pixelPanelInnerClass,
+  pixelPanelOuterClass,
+  pixelSpriteFrameClass,
+} from "./pixelModalStyles";
 
 interface RPGDialogBoxProps {
   isMobile: boolean;
@@ -10,6 +19,7 @@ interface RPGDialogBoxProps {
   isVisible: boolean;
   onClose: () => void;
   onViewCaseStudy?: (projectSlug: string) => void;
+  disableTypingAnimation?: boolean;
 }
 
 export default function RPGDialogBox({
@@ -18,6 +28,7 @@ export default function RPGDialogBox({
   isVisible,
   onClose,
   onViewCaseStudy,
+  disableTypingAnimation = false,
 }: RPGDialogBoxProps) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -28,6 +39,13 @@ export default function RPGDialogBox({
     if (!isVisible || !tourStop) {
       setDisplayedText("");
       setIsTyping(true);
+      return;
+    }
+
+    if (disableTypingAnimation) {
+      setDisplayedText(tourStop.dialogue);
+      setIsTyping(false);
+      setShowContinueIndicator(true);
       return;
     }
 
@@ -49,7 +67,7 @@ export default function RPGDialogBox({
     }, 20); // 20ms per character
 
     return () => clearInterval(interval);
-  }, [isVisible, tourStop]);
+  }, [disableTypingAnimation, isVisible, tourStop]);
 
   // Skip typing animation on click/keypress
   const skipTyping = useCallback(() => {
@@ -84,6 +102,13 @@ export default function RPGDialogBox({
   if (!tourStop) return null;
 
   const categoryStyle = CATEGORY_STYLES[tourStop.category];
+  const categoryClassMap: Record<TourStop["category"], string> = {
+    work: "border-[#20333d] bg-[#6c8790] text-[#10181b]",
+    education: "border-[#22311e] bg-[#7f9465] text-[#11160f]",
+    startup: "border-[#5b2918] bg-[#bb6b3c] text-[#1f120b]",
+    interests: "border-[#66460c] bg-[#d2a23c] text-[#221706]",
+    contact: "border-[#692f2a] bg-[#c36d5e] text-[#210f0d]",
+  };
 
   return (
     <AnimatePresence>
@@ -94,6 +119,7 @@ export default function RPGDialogBox({
           exit={{ opacity: 0 }}
           transition={{ duration: 0.2 }}
           className="fixed inset-0 z-50 flex items-end justify-center p-4 pb-[max(2rem,env(safe-area-inset-bottom))] pointer-events-none"
+          data-testid="city-rpg-dialog"
         >
           {/* Dialog Box */}
           <motion.div
@@ -103,85 +129,60 @@ export default function RPGDialogBox({
             transition={{ duration: 0.3, ease: "easeOut" }}
             onClick={skipTyping}
             className={`relative w-full pointer-events-auto cursor-pointer ${isMobile ? "max-w-none" : "max-w-2xl"}`}
+            data-testid="city-rpg-dialog-panel"
           >
-            {/* Pixel art border effect using CSS */}
-            <div className="relative">
-              {/* Outer border (pixel effect) */}
-              <div
-                className="absolute inset-0 bg-gradient-to-b from-gray-600 to-gray-800"
-                style={{
-                  clipPath: `polygon(
-                    0 4px, 4px 4px, 4px 0,
-                    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
-                    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
-                    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
-                  )`,
-                }}
-              />
-
-              {/* Inner content area */}
-              <div
-                className="relative bg-[#1a1a2e] m-[4px] p-4"
-                style={{
-                  clipPath: `polygon(
-                    0 4px, 4px 4px, 4px 0,
-                    calc(100% - 4px) 0, calc(100% - 4px) 4px, 100% 4px,
-                    100% calc(100% - 4px), calc(100% - 4px) calc(100% - 4px), calc(100% - 4px) 100%,
-                    4px 100%, 4px calc(100% - 4px), 0 calc(100% - 4px)
-                  )`,
-                }}
-              >
+            <div className={pixelPanelOuterClass} style={PIXEL_PANEL_CLIP}>
+              <div className={`${pixelPanelInnerClass} p-4`} style={PIXEL_INSET_CLIP}>
                 <div className={`flex gap-4 ${isMobile ? "items-start" : ""}`}>
-                  {/* Portrait */}
                   <div className="flex-shrink-0">
-                    <div className={`${isMobile ? "w-16 h-16" : "w-20 h-20"} rounded-lg bg-gradient-to-br from-blue-500/30 to-purple-600/30 border-2 border-gray-600 overflow-hidden flex items-center justify-center`}>
-                      {/* Placeholder portrait - Gustav silhouette */}
-                      <div className={`${isMobile ? "w-12 h-12 text-xl" : "w-16 h-16 text-2xl"} rounded-full bg-gradient-to-br from-blue-400 to-purple-500 flex items-center justify-center text-white font-bold`}>
+                    <div
+                      className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16" : "h-20 w-20"} flex items-center justify-center`}
+                      style={PIXEL_INSET_CLIP}
+                    >
+                      <div
+                        className={`${isMobile ? "h-10 w-10 text-lg" : "h-12 w-12 text-xl"} flex items-center justify-center border-[3px] border-[#17201d] bg-[#88a07e] font-mono text-[#112117]`}
+                      >
                         G
                       </div>
                     </div>
-                    <p className="text-center text-xs text-gray-400 mt-1 font-mono">
+                    <p className="mt-1 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-[#d8cfb6]">
                       Gustav
                     </p>
                   </div>
 
-                  {/* Content */}
-                  <div className="flex-1 min-w-0">
-                    {/* Title and Category */}
-                    <div className="flex items-center gap-2 mb-2">
-                      <h3 className="text-white font-bold text-lg font-mono truncate">
+                  <div className="min-w-0 flex-1">
+                    <div className={`mb-3 ${isMobile ? "space-y-2" : "flex items-center gap-2"}`}>
+                      <h3 className="truncate font-mono text-lg uppercase tracking-[0.08em] text-[#f5ecd2]">
                         {tourStop.title}
                       </h3>
                       <span
-                        className={`px-2 py-0.5 rounded text-xs font-medium ${categoryStyle.bgColor} ${categoryStyle.color}`}
+                        className={`inline-flex border-2 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.1em] ${categoryClassMap[tourStop.category]}`}
                       >
                         {categoryStyle.label}
                       </span>
                     </div>
 
-                    {/* Dialogue */}
-                    <div className="min-h-[60px]">
-                      <p className="text-gray-200 text-sm leading-relaxed font-mono">
+                    <div className="min-h-[72px] border-[3px] border-[#171a1d] bg-[#77715f] px-3 py-3 shadow-[inset_0_3px_0_#98917c]">
+                      <p className="font-mono text-sm leading-relaxed text-[#171411]">
                         <span>&ldquo;</span>
                         {displayedText}
                         <span>&rdquo;</span>
                         {isTyping && (
-                          <span className="inline-block w-2 h-4 bg-white ml-1 animate-pulse" />
+                          <span className="ml-1 inline-block h-4 w-2 animate-pulse bg-[#171411]" />
                         )}
                       </p>
                     </div>
 
-                    {/* Continue indicator */}
                     {showContinueIndicator && (
                       <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
-                        className="flex justify-end mt-2"
+                        className="mt-2 flex justify-end"
                       >
                         <motion.span
                           animate={{ y: [0, 4, 0] }}
                           transition={{ duration: 0.6, repeat: Infinity }}
-                          className="text-white text-lg"
+                          className="font-mono text-lg text-[#e7bb56]"
                         >
                           ▼
                         </motion.span>
@@ -190,13 +191,12 @@ export default function RPGDialogBox({
                   </div>
                 </div>
 
-                {/* Action buttons */}
                 {!isTyping && (
                   <motion.div
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className={`mt-4 pt-3 border-t border-gray-700 ${isMobile ? "grid gap-3" : "flex justify-end gap-3"}`}
+                    className={`mt-4 border-t-[3px] border-[#474438] pt-4 ${isMobile ? "grid gap-3" : "flex justify-end gap-3"}`}
                   >
                     {tourStop.projectSlug && (
                       <button
@@ -204,7 +204,7 @@ export default function RPGDialogBox({
                           e.stopPropagation();
                           onViewCaseStudy?.(tourStop.projectSlug!);
                         }}
-                        className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded font-mono text-sm hover:from-blue-600 hover:to-purple-700 transition-all"
+                        className={pixelButtonClass("primary")}
                       >
                         View Case Study
                       </button>
@@ -214,7 +214,7 @@ export default function RPGDialogBox({
                         e.stopPropagation();
                         onClose();
                       }}
-                      className="px-4 py-2 bg-gray-700 text-white rounded font-mono text-sm hover:bg-gray-600 transition-colors"
+                      className={pixelButtonClass("ghost")}
                     >
                       Continue
                     </button>
@@ -223,8 +223,7 @@ export default function RPGDialogBox({
               </div>
             </div>
 
-            {/* Hint text */}
-            <p className="text-center text-gray-500 text-xs mt-2 font-mono">
+            <p className={`mx-auto mt-2 w-fit ${pixelHintClass}`}>
               {isMobile ? "Tap to continue" : "Press Space/Enter to continue • ESC to close"}
             </p>
           </motion.div>

@@ -62,6 +62,7 @@ export interface PhaserGameHandle {
   stopAdventureMode: () => void;
   setPlayerInputDirection: (direction: Direction | null) => void;
   walkPlayerToBuilding: (buildingId: string) => boolean;
+  movePlayerToBuilding: (buildingId: string) => boolean;
   markBuildingVisited: (buildingId: string) => void;
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
@@ -98,6 +99,7 @@ export interface GameBoardHandle {
   stopAdventureMode: () => void;
   setPlayerInputDirection: (direction: Direction | null) => void;
   walkPlayerToBuilding: (buildingId: string) => boolean;
+  movePlayerToBuilding: (buildingId: string) => boolean;
   markBuildingVisited: (buildingId: string) => void;
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
@@ -134,6 +136,7 @@ interface GameBoardProps {
   initialGrid?: GridCell[][];
   onBuildingClick?: (buildingId: string, cell: GridCell) => void;
   onSave?: (data: GameSaveData) => void;
+  testId?: string;
 }
 
 function createEmptyGrid(): GridCell[][] {
@@ -152,6 +155,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   initialGrid,
   onBuildingClick,
   onSave,
+  testId,
 }, ref) {
   const [grid, setGrid] = useState<GridCell[][]>(() => {
     // Check if initialGrid is valid (non-empty array with proper dimensions)
@@ -228,6 +232,9 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     walkPlayerToBuilding: (buildingId: string) => {
       return gameRef.current?.walkPlayerToBuilding(buildingId) ?? false;
+    },
+    movePlayerToBuilding: (buildingId: string) => {
+      return gameRef.current?.movePlayerToBuilding(buildingId) ?? false;
     },
     markBuildingVisited: (buildingId: string) => {
       gameRef.current?.markBuildingVisited(buildingId);
@@ -697,7 +704,10 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   }, [grid, zoom, onSave]);
 
   return (
-    <div className="relative w-full h-full overflow-hidden bg-[#3d5560]">
+    <div
+      className="relative w-full h-full overflow-hidden bg-[#3d5560]"
+      data-testid={testId}
+    >
       <PhaserGame
         ref={gameRef}
         grid={grid}

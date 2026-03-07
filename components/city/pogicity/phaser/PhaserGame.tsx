@@ -32,6 +32,7 @@ export interface PhaserGameHandle {
   stopAdventureMode: () => void;
   setPlayerInputDirection: (direction: Direction | null) => void;
   walkPlayerToBuilding: (buildingId: string) => boolean;
+  movePlayerToBuilding: (buildingId: string) => boolean;
   markBuildingVisited: (buildingId: string) => void;
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
@@ -201,6 +202,12 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
         walkPlayerToBuilding: (buildingId: string) => {
           if (sceneRef.current) {
             return sceneRef.current.walkPlayerToBuilding(buildingId);
+          }
+          return false;
+        },
+        movePlayerToBuilding: (buildingId: string) => {
+          if (sceneRef.current) {
+            return sceneRef.current.movePlayerToBuilding(buildingId);
           }
           return false;
         },
