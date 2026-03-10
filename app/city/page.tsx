@@ -34,7 +34,7 @@ export default function CityPage() {
   };
 
   return (
-    <div className="w-full h-[100dvh] bg-[#3d5560]">
+    <div className="w-full h-[100dvh] bg-[#3d5560]" style={{ overscrollBehavior: "none" }}>
       {/* City Viewer */}
       <CityViewer
         initialGrid={initialGrid as GridCell[][]}

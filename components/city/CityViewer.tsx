@@ -360,6 +360,11 @@ export default function CityViewer({
     }
   }, []);
 
+  const handleLogoClick = useCallback((buildingId: string) => {
+    hasManualViewportInteraction.current = true;
+    gameBoardRef.current?.panToBuildingById(buildingId);
+  }, []);
+
   // Stop Adventure Mode
   const handleStopAdventure = useCallback(() => {
     setIsAdventureActive(false);
@@ -659,6 +664,7 @@ export default function CityViewer({
           cameraX={cameraState.scrollX}
           cameraY={cameraState.scrollY}
           zoom={cameraState.zoom}
+          onLogoClick={handleLogoClick}
         />
       )}
 

@@ -26,6 +26,7 @@ export interface PhaserGameHandle {
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
+  panToBuildingById: (buildingId: string) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -178,6 +179,9 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
             sceneRef.current.panToPosition(gridX, gridY);
           }
         },
+        panToBuildingById: (buildingId: string) => {
+          sceneRef.current?.panToBuildingById(buildingId);
+        },
         highlightBuilding: (buildingId: string | null) => {
           if (sceneRef.current) {
             sceneRef.current.highlightBuilding(buildingId);
@@ -270,6 +274,7 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
       const handleWheel = (event: WheelEvent) => {
         event.preventDefault();
       };
+
       container.addEventListener("contextmenu", handleContextMenu);
       container.addEventListener("wheel", handleWheel, { passive: false });
 

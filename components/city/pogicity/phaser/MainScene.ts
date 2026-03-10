@@ -359,8 +359,8 @@ export class MainScene extends Phaser.Scene {
       const midpointY = (ptr1.y + ptr2.y) / 2;
       const targetZoom = Phaser.Math.Clamp(
         camera.zoom * scale,
-        MainScene.ZOOM_LEVELS[0],
-        MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+        MainScene.MIN_ZOOM,
+        MainScene.MAX_ZOOM
       );
 
       if (Math.abs(targetZoom - camera.zoom) >= 0.001) {
@@ -978,11 +978,23 @@ export class MainScene extends Phaser.Scene {
   }
 
 
-  private static readonly ZOOM_LEVELS = [0.25, 0.5, 1, 2, 4];
-  private wheelAccumulator = 0;
-  private lastWheelDirection = 0;
-  private readonly TRACKPAD_PAN_DELTA_THRESHOLD = 100;
-  private readonly MOUSE_WHEEL_ZOOM_ACCUMULATOR_THRESHOLD = 100;
+  private static readonly MIN_ZOOM = 0.25;
+  private static readonly MAX_ZOOM = 4;
+
+  private applyWheelZoom(deltaY: number, sensitivity: number, pointer: Phaser.Input.Pointer): void {
+    const camera = this.cameras.main;
+    const zoomFactor = Math.exp(-deltaY * sensitivity);
+    const targetZoom = Phaser.Math.Clamp(
+      camera.zoom * zoomFactor,
+      MainScene.MIN_ZOOM,
+      MainScene.MAX_ZOOM
+    );
+    if (Math.abs(targetZoom - camera.zoom) < 0.001) return;
+    this.applyZoomAtPointer(targetZoom, pointer.x, pointer.y);
+    this.zoomHandledInternally = true;
+    this.recordManualCameraInteraction();
+    this.events.emit("zoomChanged", targetZoom);
+  }
 
   handleWheel(
     pointer: Phaser.Input.Pointer,
@@ -994,75 +1006,29 @@ export class MainScene extends Phaser.Scene {
   ): void {
     if (!this.isReady) return;
 
-    const camera = this.cameras.main;
-    // Phaser stores the native DOM wheel event on pointer.event; the final callback arg is internal event data.
     const nativeWheelEvent = pointer.event as WheelEvent | undefined;
     nativeWheelEvent?.preventDefault();
     nativeWheelEvent?.stopPropagation();
     const isPinchZoom = nativeWheelEvent?.ctrlKey === true;
-    // Best-effort heuristic for trackpad panning on macOS; this is not a guaranteed device classifier.
-    const isTrackpadPan =
-      !isPinchZoom &&
-      (Math.abs(deltaX) > 0 || Math.abs(deltaY) < this.TRACKPAD_PAN_DELTA_THRESHOLD);
+    // Trackpad pan: only when there's horizontal movement (two-finger diagonal/horizontal scroll).
+    // Pure vertical scroll (mouse wheel or trackpad) → zoom instead.
+    const isTrackpadPan = !isPinchZoom && Math.abs(deltaX) > 1;
 
     if (isPinchZoom) {
-      const zoomFactor = Math.exp(-deltaY * 0.0025);
-      const targetZoom = Phaser.Math.Clamp(
-        camera.zoom * zoomFactor,
-        MainScene.ZOOM_LEVELS[0],
-        MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
-      );
-
-      if (Math.abs(targetZoom - camera.zoom) < 0.001) {
-        return;
-      }
-
-      this.applyZoomAtPointer(targetZoom, pointer.x, pointer.y);
-      this.recordManualCameraInteraction();
-      this.events.emit("zoomChanged", targetZoom);
+      this.applyWheelZoom(deltaY, 0.0025, pointer);
       return;
     }
 
     if (isTrackpadPan) {
+      const camera = this.cameras.main;
       this.baseScrollX += deltaX / camera.zoom;
       this.baseScrollY += deltaY / camera.zoom;
       this.recordManualCameraInteraction();
       return;
     }
 
-    const direction = deltaY > 0 ? 1 : -1;
-    if (this.lastWheelDirection !== 0 && this.lastWheelDirection !== direction) {
-      this.wheelAccumulator = 0;
-    }
-    this.lastWheelDirection = direction;
-    this.wheelAccumulator += Math.abs(deltaY);
-
-    if (this.wheelAccumulator < this.MOUSE_WHEEL_ZOOM_ACCUMULATOR_THRESHOLD) return;
-    this.wheelAccumulator = 0;
-
-    const currentZoom = camera.zoom;
-    let currentIndex = MainScene.ZOOM_LEVELS.indexOf(currentZoom);
-    if (currentIndex === -1) {
-      currentIndex = MainScene.ZOOM_LEVELS.reduce((closest, z, i) =>
-        Math.abs(z - currentZoom) < Math.abs(MainScene.ZOOM_LEVELS[closest] - currentZoom)
-          ? i
-          : closest,
-        0
-      );
-    }
-
-    const newIndex = direction > 0
-      ? Math.max(0, currentIndex - 1)
-      : Math.min(MainScene.ZOOM_LEVELS.length - 1, currentIndex + 1);
-
-    const newZoom = MainScene.ZOOM_LEVELS[newIndex];
-    if (newZoom === currentZoom) return;
-
-    this.applyZoomAtPointer(newZoom, pointer.x, pointer.y);
-    this.zoomHandledInternally = true;
-    this.recordManualCameraInteraction();
-
-    this.events.emit("zoomChanged", newZoom);
+    // Mouse wheel: continuous zoom at pointer (Google Maps style)
+    this.applyWheelZoom(deltaY, 0.003, pointer);
   }
 
   setEventCallbacks(events: SceneEvents): void {
@@ -1362,17 +1328,12 @@ export class MainScene extends Phaser.Scene {
     const effectiveW = isMobile ? camera.width * (window.innerWidth / displayW) : camera.width;
     const effectiveH = isMobile ? camera.height * (window.innerHeight / displayH) : camera.height;
 
-    const fitZoom = [...MainScene.ZOOM_LEVELS]
-      .sort((a, b) => b - a)
-      .find((candidateZoom) => (
-        effectiveW / candidateZoom >= contentWidth &&
-        effectiveH / candidateZoom >= contentHeight
-      )) ?? MainScene.ZOOM_LEVELS[0];
+    const fitZoom = Math.min(effectiveW / contentWidth, effectiveH / contentHeight);
 
     const finalZoom = Phaser.Math.Clamp(
       fitZoom,
-      MainScene.ZOOM_LEVELS[0],
-      MainScene.ZOOM_LEVELS[MainScene.ZOOM_LEVELS.length - 1]
+      MainScene.MIN_ZOOM,
+      MainScene.MAX_ZOOM
     );
 
     camera.setZoom(finalZoom);
@@ -1518,6 +1479,59 @@ export class MainScene extends Phaser.Scene {
         );
       },
     });
+  }
+
+  private panTween: Phaser.Tweens.Tween | null = null;
+
+  panToBuildingById(buildingId: string): void {
+    if (!this.isReady || !this.grid) return;
+
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (cell?.buildingId === buildingId && cell?.isOrigin) {
+          const building = getBuilding(buildingId);
+          if (!building) return;
+          const footprint = getBuildingFootprint(building, cell.buildingOrientation);
+          const centerX = x + footprint.width / 2;
+          const centerY = y + footprint.height / 2;
+
+          const camera = this.cameras.main;
+          const screenPos = this.gridToScreen(centerX, centerY);
+          const targetZoom = Math.max(camera.zoom, 1.4);
+          const targetScrollX = screenPos.x - camera.width / 2;
+          const targetScrollY = screenPos.y - camera.height / 2;
+
+          // Cancel any existing pan tween before starting a new one
+          if (this.panTween) {
+            this.panTween.stop();
+            this.panTween = null;
+          }
+
+          this.panTween = this.tweens.add({
+            targets: this,
+            baseScrollX: targetScrollX,
+            baseScrollY: targetScrollY,
+            zoomLevel: targetZoom,
+            duration: 800,
+            ease: "Power2",
+            onUpdate: () => {
+              camera.setZoom(this.zoomLevel);
+              camera.setScroll(
+                Math.round(this.baseScrollX + (this.shakeAxis === "x" ? this.shakeOffset : 0)),
+                Math.round(this.baseScrollY + (this.shakeAxis === "y" ? this.shakeOffset : 0))
+              );
+            },
+            onComplete: () => {
+              this.zoomHandledInternally = true;
+              this.events.emit("zoomChanged", this.zoomLevel);
+              this.panTween = null;
+            },
+          });
+          return;
+        }
+      }
+    }
   }
 
   // Highlighted building for tour

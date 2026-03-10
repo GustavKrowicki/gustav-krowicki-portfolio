@@ -56,6 +56,7 @@ export interface PhaserGameHandle {
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
+  panToBuildingById: (buildingId: string) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -93,6 +94,7 @@ export interface GameBoardHandle {
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
   panToPosition: (gridX: number, gridY: number) => void;
+  panToBuildingById: (buildingId: string) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -216,6 +218,9 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     panToPosition: (gridX: number, gridY: number) => {
       gameRef.current?.panToPosition(gridX, gridY);
+    },
+    panToBuildingById: (buildingId: string) => {
+      gameRef.current?.panToBuildingById(buildingId);
     },
     highlightBuilding: (buildingId: string | null) => {
       gameRef.current?.highlightBuilding(buildingId);
