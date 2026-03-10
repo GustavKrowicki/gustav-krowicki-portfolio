@@ -19,9 +19,10 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { shouldReduceMotion } from '@/lib/utils';
 import {
   Upload,
-  Settings,
-  BarChart3,
+  Sparkles,
   Download,
+  FileType,
+  Pen,
   Play
 } from 'lucide-react';
 
@@ -168,31 +169,38 @@ const nodeTypes = {
 const steps = [
   {
     id: 'input',
-    title: 'Input Data',
-    description: 'User uploads or connects data source',
-    details: 'Users can import CSV files, paste data directly, or connect to live data sources. The system automatically detects data types and suggests appropriate visualizations.',
+    title: 'Input References',
+    description: 'Select moodboard images and write a prompt',
+    details: 'Pick visual references from the Are.na moodboard and combine them with a text prompt describing the asset you need. The node-based interface lets you connect and compare multiple references easily.',
     icon: Upload
-  },
-  {
-    id: 'configure',
-    title: 'Configure',
-    description: 'Set visualization type and parameters',
-    details: 'Choose chart types, adjust colors, set axis labels, and fine-tune visual properties through an intuitive interface. Real-time preview updates as you adjust settings.',
-    icon: Settings
   },
   {
     id: 'generate',
     title: 'Generate',
-    description: 'Tool processes and creates the visualization',
-    details: 'The engine processes your data and configuration to generate a polished, interactive visualization. Advanced algorithms optimize layout and presentation for clarity.',
-    icon: BarChart3
+    description: 'AI creates the visual asset',
+    details: 'The image generation model processes your references and prompt to produce a visual asset. You can generate multiple variations and iterate until you get the right result.',
+    icon: Sparkles
   },
   {
     id: 'export',
-    title: 'Export',
-    description: 'Download or embed the result',
-    details: 'Export as PNG, SVG, or interactive HTML. Get embed codes for websites or download publication-ready graphics. All outputs are optimized for your use case.',
+    title: 'Export PNG',
+    description: 'Download the generated asset',
+    details: 'Export the final generation as a PNG file from the tool, ready for the next step in the pipeline.',
     icon: Download
+  },
+  {
+    id: 'convert',
+    title: 'Convert to SVG',
+    description: 'Vectorize with Adobe PNG to SVG converter',
+    details: 'Run the exported PNG through Adobe\'s PNG to SVG converter to get a clean vector version of the asset, making it scalable and editable.',
+    icon: FileType
+  },
+  {
+    id: 'retouch',
+    title: 'Retouch in Figma',
+    description: 'Polish and finalize in Figma Design',
+    details: 'Import the SVG into Figma Design for final retouching—adjusting colors, cleaning up paths, aligning elements, and ensuring the asset fits the brand system.',
+    icon: Pen
   }
 ];
 
