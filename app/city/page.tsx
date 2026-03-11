@@ -1,26 +1,31 @@
 "use client";
 
+import { Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
 import initialGrid from "@/lib/city/cityGrid.json";
 import { GridCell } from "@/components/city/pogicity/types";
+
+function CityLoadingFallback() {
+  return (
+    <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
+      <div className="text-white font-mono text-xl animate-pulse">
+        Loading Gustav&apos;s City...
+      </div>
+    </div>
+  );
+}
 
 // Dynamically import CityViewer to avoid SSR issues with Phaser
 const CityViewer = dynamic(
   () => import("@/components/city/CityViewer"),
   {
     ssr: false,
-    loading: () => (
-      <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
-        <div className="text-white font-mono text-xl animate-pulse">
-          Loading Gustav&apos;s City...
-        </div>
-      </div>
-    ),
+    loading: () => <CityLoadingFallback />,
   }
 );
 
-export default function CityPage() {
+function CityPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const e2eMode = searchParams.get("e2e") === "1";
@@ -35,7 +40,6 @@ export default function CityPage() {
 
   return (
     <div className="w-full h-[100dvh] bg-[#3d5560]" style={{ overscrollBehavior: "none" }}>
-      {/* City Viewer */}
       <CityViewer
         initialGrid={initialGrid as GridCell[][]}
         onProjectClick={handleProjectClick}
@@ -43,5 +47,13 @@ export default function CityPage() {
         e2eMode={e2eMode}
       />
     </div>
+  );
+}
+
+export default function CityPage() {
+  return (
+    <Suspense fallback={<CityLoadingFallback />}>
+      <CityPageContent />
+    </Suspense>
   );
 }

@@ -2,7 +2,6 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import Phaser from "phaser";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding, BuildingDefinition } from "@/lib/city/buildings";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
@@ -15,6 +14,7 @@ import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
+import type { GameBoardHandle } from "./pogicity/GameBoard";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -49,48 +49,6 @@ interface CityE2EApi {
   getVisitedBuildings: () => string[];
   setVisitedBuildings: (buildingIds: string[]) => void;
   stopAdventure: () => void;
-}
-
-declare global {
-  interface Window {
-    __CITY_E2E__?: CityE2EApi;
-  }
-}
-
-export interface GameBoardHandle {
-  spawnCharacter: () => boolean;
-  spawnCar: () => boolean;
-  zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
-  fitCityView: () => void;
-  panToPosition: (x: number, y: number) => void;
-  highlightBuilding: (buildingId: string | null) => void;
-  // Adventure mode methods
-  startAdventureMode: (characterType: CharacterType) => void;
-  stopAdventureMode: () => void;
-  setPlayerInputDirection: (direction: Direction | null) => void;
-  walkPlayerToBuilding: (buildingId: string) => boolean;
-  movePlayerToBuilding: (buildingId: string) => boolean;
-  markBuildingVisited: (buildingId: string) => void;
-  getVisitedBuildings: () => Set<string>;
-  isAdventureModeActive: () => boolean;
-  getPlayerState: () => PlayerState | null;
-  triggerInteraction: () => void;
-  getGameInstance: () => Phaser.Game | null;
-  // Logo overlay methods
-  getPortfolioBuildingPositions: () => Array<{
-    buildingId: string;
-    screenX: number;
-    screenY: number;
-    logoUrl: string;
-    logoOffset: { x: number; y: number };
-  }>;
-  getCameraState: () => {
-    scrollX: number;
-    scrollY: number;
-    zoom: number;
-    worldWidth: number;
-    worldHeight: number;
-  };
 }
 
 export default function CityViewer({
@@ -536,7 +494,7 @@ export default function CityViewer({
       return false;
     };
 
-    window.__CITY_E2E__ = {
+    (window as any).__CITY_E2E__ = ({
       dismissWelcome: () => {
         handleExploreFreely();
       },
@@ -571,7 +529,7 @@ export default function CityViewer({
       closeBuildingModal: () => {
         handleCloseModal();
       },
-      startAdventure: (characterType = "banana") => {
+      startAdventure: (characterType: CityE2ECharacter = "banana") => {
         return startAdventureForTest(characterType);
       },
       walkToBuilding: async (buildingId: string) => {
@@ -623,10 +581,10 @@ export default function CityViewer({
       stopAdventure: () => {
         handleStopAdventure();
       },
-    };
+    }) satisfies CityE2EApi;
 
     return () => {
-      delete window.__CITY_E2E__;
+      delete (window as any).__CITY_E2E__;
     };
   }, [
     e2eMode,
