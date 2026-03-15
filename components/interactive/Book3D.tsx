@@ -95,14 +95,14 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // Handle isExpanded state changes
+  // Handle isExpanded state changes (currently-reading books stay displayed)
   useEffect(() => {
     if (isExpanded && animationState === 'idle') {
       setAnimationState('pulling');
-    } else if (!isExpanded && animationState === 'displayed') {
+    } else if (!isExpanded && animationState === 'displayed' && !isCurrentlyReading) {
       setAnimationState('returning');
     }
-  }, [isExpanded, animationState]);
+  }, [isExpanded, animationState, isCurrentlyReading]);
 
   // Load cover texture immediately on mount
   useEffect(() => {
@@ -371,39 +371,60 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
       {/* Fallback cover when no texture is available */}
       {!coverTexture && (animationState === 'rotating' || animationState === 'displayed') && (
           <group position={[0.21, (bookHeight - 2) / 2, 0]} rotation={[0, Math.PI / 2, 0]}>
-            {/* Dark semi-transparent overlay for contrast */}
-            <mesh position={[0, 0, 0]}>
+            {/* Solid dark background for contrast */}
+            <mesh position={[0, 0, 0.005]}>
               <planeGeometry args={[1.28, bookHeight]} />
               <meshStandardMaterial
-                color="#000000"
+                color="#1a1a1a"
                 transparent={true}
-                opacity={0.3}
+                opacity={0.6}
               />
             </mesh>
 
-            {/* Title - at the top */}
+            {/* Decorative top line */}
+            <mesh position={[0, bookHeight / 2 - 0.12, 0.01]}>
+              <planeGeometry args={[0.8, 0.02]} />
+              <meshStandardMaterial color="#ffffff" transparent opacity={0.5} />
+            </mesh>
+
+            {/* Title - centered, larger */}
             <Text
-              position={[0, bookHeight / 2 - 0.2, 0.01]}
-              fontSize={0.18}
+              position={[0, 0.15, 0.015]}
+              fontSize={0.16}
               color="#ffffff"
               anchorX="center"
-              anchorY="top"
-              maxWidth={1.1}
+              anchorY="middle"
+              maxWidth={1.0}
+              fontWeight="700"
+              textAlign="center"
             >
               {book.title}
             </Text>
 
-            {/* Author - at the bottom */}
+            {/* Decorative divider */}
+            <mesh position={[0, -0.25, 0.01]}>
+              <planeGeometry args={[0.4, 0.01]} />
+              <meshStandardMaterial color="#ffffff" transparent opacity={0.4} />
+            </mesh>
+
+            {/* Author - below divider */}
             <Text
-              position={[0, -bookHeight / 2 + 0.15, 0.01]}
-              fontSize={0.11}
-              color="#ffffff"
+              position={[0, -0.42, 0.015]}
+              fontSize={0.1}
+              color="#cccccc"
               anchorX="center"
-              anchorY="bottom"
-              maxWidth={1.1}
+              anchorY="middle"
+              maxWidth={1.0}
+              textAlign="center"
             >
-              by {truncateText(book.author, 35)}
+              {book.author}
             </Text>
+
+            {/* Decorative bottom line */}
+            <mesh position={[0, -bookHeight / 2 + 0.12, 0.01]}>
+              <planeGeometry args={[0.8, 0.02]} />
+              <meshStandardMaterial color="#ffffff" transparent opacity={0.5} />
+            </mesh>
           </group>
       )}
 
