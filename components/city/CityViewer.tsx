@@ -656,6 +656,7 @@ export default function CityViewer({
             isMobile={isMobile}
             visitedBuildings={visitedBuildings}
             onNextStop={handleNextStop}
+            onExitAdventure={handleStopAdventure}
             isAutoWalking={isAutoWalking}
           />
 
@@ -675,19 +676,11 @@ export default function CityViewer({
             tourStop={currentEncounter}
             isVisible={isDialogOpen}
             onClose={handleDialogClose}
+            onContinue={() => { handleDialogClose(); handleNextStop(); }}
             onViewCaseStudy={handleViewCaseStudy}
             disableTypingAnimation={e2eMode}
           />
 
-          {/* Exit adventure button */}
-          <button
-            onClick={handleStopAdventure}
-            className={`fixed right-4 z-40 md:top-4 top-[max(1rem,env(safe-area-inset-top))] ${pixelButtonClass("ghost")}`}
-            style={PIXEL_INSET_CLIP}
-            data-testid="city-exit-adventure"
-          >
-            Exit Adventure
-          </button>
         </>
       )}
 
@@ -724,50 +717,13 @@ export default function CityViewer({
         </div>
       )}
 
+      {/* Mobile zoom controls hidden for now
       {isMobile && !showWelcome && !isAdventureActive && !isDialogOpen && !isModalOpen && (
         <div className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-col gap-2">
-          <button
-            onClick={() => {
-              hasManualViewportInteraction.current = true;
-              const nextZoom = Math.min(cameraState.zoom * 1.25, 4);
-              gameBoardRef.current?.zoomAtPoint(
-                nextZoom,
-                viewportRect.width / 2,
-                viewportRect.height / 2
-              );
-            }}
-            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-2xl border border-white/10"
-            aria-label="Zoom in"
-          >
-            +
-          </button>
-          <button
-            onClick={() => {
-              hasManualViewportInteraction.current = true;
-              const nextZoom = Math.max(cameraState.zoom / 1.25, 0.25);
-              gameBoardRef.current?.zoomAtPoint(
-                nextZoom,
-                viewportRect.width / 2,
-                viewportRect.height / 2
-              );
-            }}
-            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-2xl border border-white/10"
-            aria-label="Zoom out"
-          >
-            −
-          </button>
-          <button
-            onClick={() => {
-              hasManualViewportInteraction.current = false;
-              gameBoardRef.current?.fitCityView();
-            }}
-            className="h-12 w-12 rounded-xl bg-black/50 backdrop-blur-sm text-white text-sm border border-white/10"
-            aria-label="Fit city to view"
-          >
-            Fit
-          </button>
+          ...
         </div>
       )}
+      */}
     </div>
   );
 }

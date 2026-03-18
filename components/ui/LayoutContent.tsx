@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
+import { Agentation } from 'agentation';
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -19,6 +20,7 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
         {children}
       </main>
       {showFooter && <Footer />}
+      {process.env.NODE_ENV === 'development' && <Agentation endpoint="http://localhost:4747" />}
     </>
   );
 }

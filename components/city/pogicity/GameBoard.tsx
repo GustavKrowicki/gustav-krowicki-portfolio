@@ -743,27 +743,11 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
         />
       )}
 
-      {/* Zoom Controls */}
+      {/* Zoom Controls - hidden for now
       <div className="fixed bottom-4 right-4 flex flex-col gap-2 z-50">
-        <button
-          onClick={() => gameRef.current?.fitCityView()}
-          className="min-w-[3.5rem] h-10 px-2 bg-black/50 text-white rounded hover:bg-black/70 font-mono text-xs"
-        >
-          Fit
-        </button>
-        <button
-          onClick={() => setZoom((z) => Math.min(4, z * 2))}
-          className="w-10 h-10 bg-black/50 text-white rounded hover:bg-black/70 font-mono text-xl"
-        >
-          +
-        </button>
-        <button
-          onClick={() => setZoom((z) => Math.max(0.25, z / 2))}
-          className="w-10 h-10 bg-black/50 text-white rounded hover:bg-black/70 font-mono text-xl"
-        >
-          −
-        </button>
+        ...
       </div>
+      */}
 
       {/* Editor Controls */}
       {editable && (

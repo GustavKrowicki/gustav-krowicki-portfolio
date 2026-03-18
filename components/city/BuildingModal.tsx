@@ -2,7 +2,9 @@
 
 import { motion, AnimatePresence } from "framer-motion";
 import { BuildingDefinition } from "@/lib/city/buildings";
+import { getBuildingVideo } from "@/lib/city/buildingVideos";
 import Image from "next/image";
+import VideoThumbnail from "./VideoThumbnail";
 import {
   PIXEL_INSET_CLIP,
   PIXEL_PANEL_CLIP,
@@ -159,6 +161,7 @@ export default function BuildingModal({
 
   const metadata = BUILDING_METADATA[building.id] || {};
   const hasProject = building.projectSlug && building.interactable;
+  const video = getBuildingVideo(building.id);
 
   return (
     <AnimatePresence>
@@ -239,6 +242,12 @@ export default function BuildingModal({
                 </div>
 
                 <div className={`${isMobile ? "px-4 pb-[max(1rem,env(safe-area-inset-bottom))]" : "px-5 pb-5"}`}>
+                  {video && (
+                    <div className="mb-4">
+                      <VideoThumbnail video={video} isActive={isOpen} />
+                    </div>
+                  )}
+
                   <div className="bg-[#7a7567] px-4 py-4 text-[#161411] shadow-[inset_0_3px_0_#9b9687]">
                     {building.description && (
                       <p className="font-mono text-sm leading-relaxed text-[#161411]">

@@ -3,6 +3,8 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TourStop, CATEGORY_STYLES } from "@/lib/city/tourStops";
+import { getBuildingVideo } from "@/lib/city/buildingVideos";
+import VideoThumbnail from "./VideoThumbnail";
 import {
   PIXEL_INSET_CLIP,
   PIXEL_PANEL_CLIP,
@@ -10,7 +12,6 @@ import {
   pixelHintClass,
   pixelPanelInnerClass,
   pixelPanelOuterClass,
-  pixelSpriteFrameClass,
 } from "./pixelModalStyles";
 
 interface RPGDialogBoxProps {
@@ -18,6 +19,7 @@ interface RPGDialogBoxProps {
   tourStop: TourStop | null;
   isVisible: boolean;
   onClose: () => void;
+  onContinue?: () => void;
   onViewCaseStudy?: (projectSlug: string) => void;
   disableTypingAnimation?: boolean;
 }
@@ -27,12 +29,12 @@ export default function RPGDialogBox({
   tourStop,
   isVisible,
   onClose,
+  onContinue,
   onViewCaseStudy,
   disableTypingAnimation = false,
 }: RPGDialogBoxProps) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
-  const [showContinueIndicator, setShowContinueIndicator] = useState(false);
 
   // Typewriter effect
   useEffect(() => {
@@ -45,16 +47,14 @@ export default function RPGDialogBox({
     if (disableTypingAnimation) {
       setDisplayedText(tourStop.dialogue);
       setIsTyping(false);
-      setShowContinueIndicator(true);
-      return;
+            return;
     }
 
     const text = tourStop.dialogue;
     let index = 0;
     setDisplayedText("");
     setIsTyping(true);
-    setShowContinueIndicator(false);
-
+    
     const interval = setInterval(() => {
       if (index < text.length) {
         setDisplayedText(text.slice(0, index + 1));
@@ -62,8 +62,7 @@ export default function RPGDialogBox({
       } else {
         clearInterval(interval);
         setIsTyping(false);
-        setShowContinueIndicator(true);
-      }
+              }
     }, 20); // 20ms per character
 
     return () => clearInterval(interval);
@@ -74,8 +73,7 @@ export default function RPGDialogBox({
     if (isTyping && tourStop) {
       setDisplayedText(tourStop.dialogue);
       setIsTyping(false);
-      setShowContinueIndicator(true);
-    }
+          }
   }, [isTyping, tourStop]);
 
   // Handle keyboard input
@@ -90,14 +88,14 @@ export default function RPGDialogBox({
         if (isTyping) {
           skipTyping();
         } else {
-          onClose();
+          (onContinue ?? onClose)();
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isVisible, isTyping, skipTyping, onClose]);
+  }, [isVisible, isTyping, skipTyping, onClose, onContinue]);
 
   if (!tourStop) return null;
 
@@ -132,94 +130,65 @@ export default function RPGDialogBox({
             data-testid="city-rpg-dialog-panel"
           >
             <div className={pixelPanelOuterClass} style={PIXEL_PANEL_CLIP}>
-              <div className={`${pixelPanelInnerClass} p-4`} style={PIXEL_INSET_CLIP}>
-                <div className={`flex gap-4 ${isMobile ? "items-start" : ""}`}>
-                  <div className="flex-shrink-0">
-                    <div
-                      className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16" : "h-20 w-20"} flex items-center justify-center`}
-                      style={PIXEL_INSET_CLIP}
-                    >
-                      <div
-                        className={`${isMobile ? "h-10 w-10 text-lg" : "h-12 w-12 text-xl"} flex items-center justify-center border-[3px] border-[#17201d] bg-[#88a07e] font-mono text-[#112117]`}
-                      >
-                        G
-                      </div>
-                    </div>
-                    <p className="mt-1 text-center font-mono text-[11px] uppercase tracking-[0.08em] text-[#d8cfb6]">
-                      Gustav
-                    </p>
-                  </div>
-
-                  <div className="min-w-0 flex-1">
-                    <div className={`mb-3 ${isMobile ? "space-y-2" : "flex items-center gap-2"}`}>
-                      <h3 className="truncate font-mono text-lg uppercase tracking-[0.08em] text-[#f5ecd2]">
-                        {tourStop.title}
-                      </h3>
-                      <span
-                        className={`inline-flex border-2 px-2 py-1 font-mono text-[11px] uppercase tracking-[0.1em] ${categoryClassMap[tourStop.category]}`}
-                      >
-                        {categoryStyle.label}
-                      </span>
-                    </div>
-
-                    <div className="min-h-[72px] border-[3px] border-[#171a1d] bg-[#77715f] px-3 py-3 shadow-[inset_0_3px_0_#98917c]">
-                      <p className="font-mono text-sm leading-relaxed text-[#171411]">
-                        <span>&ldquo;</span>
-                        {displayedText}
-                        <span>&rdquo;</span>
-                        {isTyping && (
-                          <span className="ml-1 inline-block h-4 w-2 animate-pulse bg-[#171411]" />
-                        )}
-                      </p>
-                    </div>
-
-                    {showContinueIndicator && (
-                      <motion.div
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        className="mt-2 flex justify-end"
-                      >
-                        <motion.span
-                          animate={{ y: [0, 4, 0] }}
-                          transition={{ duration: 0.6, repeat: Infinity }}
-                          className="font-mono text-lg text-[#e7bb56]"
-                        >
-                          ▼
-                        </motion.span>
-                      </motion.div>
-                    )}
-                  </div>
-                </div>
-
-                {!isTyping && (
-                  <motion.div
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className={`mt-4 border-t-[3px] border-[#474438] pt-4 ${isMobile ? "grid gap-3" : "flex justify-end gap-3"}`}
+              <div className={`${pixelPanelInnerClass} p-3`} style={PIXEL_INSET_CLIP}>
+                <div className={`mb-2 flex items-center gap-2 ${isMobile ? "flex-wrap" : ""}`}>
+                  <h3 className="truncate font-mono text-base uppercase tracking-[0.08em] text-[#f5ecd2]">
+                    {tourStop.title}
+                  </h3>
+                  <span
+                    className={`inline-flex rounded-sm px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-widest opacity-70 ${categoryClassMap[tourStop.category]}`}
+                    style={{ borderWidth: 0 }}
                   >
-                    {tourStop.projectSlug && (
+                    {categoryStyle.label}
+                  </span>
+                  <div className={`ml-auto flex items-center gap-1.5 ${isTyping ? "opacity-0" : "opacity-100"} transition-opacity`}>
+                    {!isTyping && tourStop.projectSlug && (
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           onViewCaseStudy?.(tourStop.projectSlug!);
                         }}
-                        className={pixelButtonClass("primary")}
+                        className="border-[2px] border-[#111518] bg-[#d78432] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#21160a] shadow-[inset_0_-2px_0_#8a4717] transition-transform duration-100 active:translate-y-px"
                       >
                         View Case Study
                       </button>
                     )}
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        onClose();
-                      }}
-                      className={pixelButtonClass("ghost")}
-                    >
-                      Continue
-                    </button>
-                  </motion.div>
-                )}
+                    {!isTyping && (
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          (onContinue ?? onClose)();
+                        }}
+                        className="border-[2px] border-[#111518] bg-[#3f3b31] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#d8cfb6] shadow-[inset_0_-2px_0_#26231d] transition-transform duration-100 active:translate-y-px"
+                      >
+                        Continue
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                <div className="flex gap-3">
+                  <div className="flex-1 border-[3px] border-[#171a1d] bg-[#77715f] px-3 py-2 shadow-[inset_0_3px_0_#98917c]">
+                    <p className="font-mono text-sm leading-relaxed text-[#171411]">
+                      <span>&ldquo;</span>
+                      {displayedText}
+                      <span>&rdquo;</span>
+                      {isTyping && (
+                        <span className="ml-1 inline-block h-4 w-2 animate-pulse bg-[#171411]" />
+                      )}
+                    </p>
+                  </div>
+
+                  {tourStop.buildingId && getBuildingVideo(tourStop.buildingId) && (
+                    <div className="h-16 w-16 flex-shrink-0 self-start [&>div]:!h-16 [&>div]:!border-0 [&>div]:!shadow-none [&>div]:!bg-transparent">
+                      <VideoThumbnail
+                        video={getBuildingVideo(tourStop.buildingId)!}
+                        isActive={isVisible}
+                        compact
+                      />
+                    </div>
+                  )}
+                </div>
               </div>
             </div>
 
