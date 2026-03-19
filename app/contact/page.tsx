@@ -80,7 +80,7 @@ export default function ContactPage() {
         <div className="mt-16 pt-16 border-t border-neutral-200">
           <h2 className="text-2xl font-bold mb-4">Availability</h2>
           <p className="text-lg text-neutral-700 leading-relaxed mb-6">
-            Currently working full-time at LEGO. Open to interesting conversations
+            Currently working as a student worker at The LEGO Group. Open to interesting conversations
             and potential future opportunities.
           </p>
           <Button href="/cv/CV-Gustav-Krowicki.pdf" variant="secondary" external>

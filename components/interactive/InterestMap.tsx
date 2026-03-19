@@ -13,7 +13,7 @@ const interests: GraphNode[] = [
   { id: 'trust', label: 'Trust & Transparency', category: 'domain' },
   { id: 'emerging', label: 'Emerging Tech', category: 'domain' },
   { id: 'react', label: 'React/TypeScript', category: 'tech' },
-  { id: 'd3', label: 'Data Visualization', category: 'tech' },
+  { id: 'd3', label: 'Visual asset generation', category: 'tech' },
   { id: 'thinking', label: 'Strategic Thinking', category: 'design' },
 ];
 
