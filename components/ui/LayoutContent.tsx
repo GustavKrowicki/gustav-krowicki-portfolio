@@ -3,6 +3,7 @@
 import { usePathname } from 'next/navigation';
 import Header from './Header';
 import Footer from './Footer';
+import MobileNavbar from './MobileNavbar';
 import { Agentation } from 'agentation';
 
 export default function LayoutContent({ children }: { children: React.ReactNode }) {
@@ -16,10 +17,11 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
   return (
     <>
       {showHeader && <Header />}
-      <main className={showHeader ? 'flex-1 pt-20' : 'flex-1'}>
+      <main className={showHeader ? 'flex-1 pt-20 pb-16 md:pb-0' : 'flex-1'}>
         {children}
       </main>
       {showFooter && <Footer />}
+      {showFooter && <MobileNavbar />}
       {process.env.NODE_ENV === 'development' && <Agentation endpoint="http://localhost:4747" />}
     </>
   );

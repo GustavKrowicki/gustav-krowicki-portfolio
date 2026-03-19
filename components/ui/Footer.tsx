@@ -22,7 +22,7 @@ export default function Footer() {
         <div className="flex flex-col md:flex-row justify-between gap-8">
           <div className="space-y-4">
             <p className="text-lg font-semibold">Gustav Krowicki</p>
-            <p className="text-neutral-600">Product Designer</p>
+            <p className="text-neutral-600">Digital product designer</p>
             <p className="text-neutral-600">Denmark</p>
           </div>
 

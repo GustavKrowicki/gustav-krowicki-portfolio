@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { ExternalLink } from 'lucide-react';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
 import CaseSection from '@/components/case-study/CaseSection';
@@ -35,9 +36,22 @@ export default function CateItPage() {
             <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
               Co-founder, Product Designer
             </span>
-            <h1 className="text-5xl md:text-6xl font-bold mb-8">
-              Building a two-sided marketplace with real constraints
-            </h1>
+            <div className="flex items-start gap-4 mb-8">
+              <h1 className="text-5xl md:text-6xl font-bold">
+                Building a two-sided marketplace with real constraints
+              </h1>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 mt-3 flex items-center gap-2 px-4 py-2 rounded-full bg-black hover:bg-neutral-800 transition-colors text-white"
+                >
+                  <span className="text-sm font-medium">Check it out</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
 
             <div className="flex flex-wrap gap-x-8 gap-y-2 text-lg text-neutral-600 mb-12">
               <div>

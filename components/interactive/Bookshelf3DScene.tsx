@@ -15,7 +15,8 @@ export default function Bookshelf3DScene({
   onBookClick,
 }: Bookshelf3DSceneProps) {
   // Calculate total width needed for all books with spacing
-  const bookSpacing = 0.7;
+  const readBookSpacing = 0.7;
+  const currentlyReadingSpacing = 1.5; // Wider spacing for face-forward books
   const gapBetweenReadingAndRead = 1; // Extra space between currently-reading and read books
 
   // Find the index where currently-reading books end
@@ -23,7 +24,9 @@ export default function Bookshelf3DScene({
     book.status === 'read' && (index === 0 || books[index - 1].status === 'currently-reading')
   ) - 1;
 
-  const totalWidth = books.length * bookSpacing + (lastCurrentlyReadingIndex >= 0 ? gapBetweenReadingAndRead : 0);
+  const currentlyReadingCount = lastCurrentlyReadingIndex >= 0 ? lastCurrentlyReadingIndex + 1 : 0;
+  const readCount = books.length - currentlyReadingCount;
+  const totalWidth = currentlyReadingCount * currentlyReadingSpacing + readCount * readBookSpacing + (lastCurrentlyReadingIndex >= 0 ? gapBetweenReadingAndRead : 0);
 
   // Find the index of the expanded book
   const selectedBookIndex = expandedBookId
@@ -89,7 +92,7 @@ export default function Bookshelf3DScene({
             {/* Currently Reading section label */}
             {lastCurrentlyReadingIndex >= 0 && (
               <Text
-                position={[(lastCurrentlyReadingIndex * bookSpacing) / 2, 2.1, 0]}
+                position={[(lastCurrentlyReadingIndex * currentlyReadingSpacing) / 2, 2.1, 0]}
                 fontSize={0.25}
                 color="#404040"
                 anchorX="center"
@@ -102,13 +105,15 @@ export default function Bookshelf3DScene({
 
             {/* Render all books in a horizontal line */}
             {books.map((book, index) => {
-              // Add extra spacing after currently-reading books
-              const extraSpacing = index > lastCurrentlyReadingIndex && lastCurrentlyReadingIndex >= 0
-                ? gapBetweenReadingAndRead
-                : 0;
-
-              // Position books from 0 onwards, ScrollControls will translate them
-              const x = index * bookSpacing + extraSpacing;
+              // Calculate x position with different spacing for currently-reading vs read books
+              let x = 0;
+              for (let i = 0; i < index; i++) {
+                x += books[i].status === 'currently-reading' ? currentlyReadingSpacing : readBookSpacing;
+              }
+              // Add extra gap after currently-reading section
+              if (index > lastCurrentlyReadingIndex && lastCurrentlyReadingIndex >= 0) {
+                x += gapBetweenReadingAndRead;
+              }
               const y = 0;
               const z = 0;
               const isExpanded = expandedBookId === book.id;

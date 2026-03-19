@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import { ExternalLink } from 'lucide-react';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
 import CaseSection from '@/components/case-study/CaseSection';
@@ -7,8 +8,8 @@ import Container from '@/components/ui/Container';
 import { getProjectBySlug } from '@/lib/projects';
 
 export const metadata: Metadata = {
-  title: 'Data Visualization Generator',
-  description: 'Built a tool to generate custom data visualizations from user inputs',
+  title: 'Visual asset generator',
+  description: 'Built a tool to generate custom visual assets for cate it branding',
 };
 
 export default function VizGeneratorPage() {
@@ -32,9 +33,22 @@ export default function VizGeneratorPage() {
             <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
               {project.role}
             </span>
-            <h1 className="text-5xl md:text-6xl font-bold mb-8">
-              {project.title}
-            </h1>
+            <div className="flex items-start gap-4 mb-8">
+              <h1 className="text-5xl md:text-6xl font-bold">
+                {project.title}
+              </h1>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 mt-3 flex items-center gap-2 px-4 py-2 rounded-full bg-black hover:bg-neutral-800 transition-colors text-white"
+                >
+                  <span className="text-sm font-medium">Check it out</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
           </div>
         </Container>
       </section>

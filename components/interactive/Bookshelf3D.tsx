@@ -18,7 +18,7 @@ export default function Bookshelf3D() {
         setLoading(true);
 
         // Fetch and parse CSV
-        const response = await fetch('/Books/goodreads_library_export-2.csv');
+        const response = await fetch('/Books/goodreads_library_export-3.csv');
         if (!response.ok) {
           throw new Error('Failed to load books CSV');
         }
