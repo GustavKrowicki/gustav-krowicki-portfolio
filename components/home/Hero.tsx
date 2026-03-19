@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import Container from '@/components/ui/Container';
+import PortfolioModeToggle from '@/components/ui/PortfolioModeToggle';
 
 export default function Hero() {
   return (
@@ -28,6 +29,7 @@ export default function Hero() {
                 className="rounded-full"
               />
             </div>
+            <PortfolioModeToggle activeMode="classic" />
           </div>
           <p className="text-lg md:text-xl text-neutral-700 leading-relaxed max-w-3xl">
             I design digital products with a focus on user research, strategic thinking,

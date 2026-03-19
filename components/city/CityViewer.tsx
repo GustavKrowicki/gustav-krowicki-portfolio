@@ -14,6 +14,7 @@ import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
+import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -321,6 +322,12 @@ export default function CityViewer({
   const handleLogoClick = useCallback((buildingId: string) => {
     hasManualViewportInteraction.current = true;
     gameBoardRef.current?.panToBuildingById(buildingId);
+
+    const stop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
+    if (stop) {
+      setCurrentEncounter(stop);
+      setIsDialogOpen(true);
+    }
   }, []);
 
   // Stop Adventure Mode
@@ -608,6 +615,13 @@ export default function CityViewer({
         testId="city-canvas"
       />
 
+      {/* Portfolio mode toggle */}
+      {!showWelcome && !isAdventureActive && (
+        <div className="fixed z-40 md:top-4 md:left-4 top-[max(0.75rem,env(safe-area-inset-top))] left-1/2 md:left-4 md:translate-x-0 -translate-x-1/2">
+          <PortfolioModeToggle activeMode="city" showIdentity />
+        </div>
+      )}
+
       {/* 3D Spinning Logos Overlay */}
       {!e2eMode && !showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
@@ -670,19 +684,19 @@ export default function CityViewer({
             onInteract={currentEncounter ? handleMobileInteract : undefined}
           />
 
-          {/* RPG Dialog Box */}
-          <RPGDialogBox
-            isMobile={isMobile}
-            tourStop={currentEncounter}
-            isVisible={isDialogOpen}
-            onClose={handleDialogClose}
-            onContinue={() => { handleDialogClose(); handleNextStop(); }}
-            onViewCaseStudy={handleViewCaseStudy}
-            disableTypingAnimation={e2eMode}
-          />
-
         </>
       )}
+
+      {/* RPG Dialog Box - shown in adventure mode and on logo click */}
+      <RPGDialogBox
+        isMobile={isMobile}
+        tourStop={currentEncounter}
+        isVisible={isDialogOpen}
+        onClose={handleDialogClose}
+        onContinue={isAdventureActive ? () => { handleDialogClose(); handleNextStop(); } : undefined}
+        onViewCaseStudy={handleViewCaseStudy}
+        disableTypingAnimation={e2eMode}
+      />
 
       {/* Building Modal */}
       <BuildingModal
@@ -696,22 +710,22 @@ export default function CityViewer({
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
       {!showWelcome && !isTourActive && !isAdventureActive && (
-        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2 flex-wrap max-w-[calc(100vw-7rem)] sm:max-w-none">
+        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
           <button
             onClick={() => {
               setIsTourActive(true);
               setCurrentTourStop(0);
             }}
-            className="px-4 py-2 bg-white/10 backdrop-blur-sm text-white rounded-lg font-medium hover:bg-white/20 transition-colors border border-white/10 text-sm flex items-center gap-2"
+            className={pixelButtonClass("ghost")}
+            style={PIXEL_INSET_CLIP}
           >
-            <span>🗺️</span>
             Take Tour
           </button>
           <button
             onClick={() => handleStartAdventure(CharacterType.Banana)}
-            className="px-4 py-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg font-medium hover:from-blue-600 hover:to-purple-700 transition-colors text-sm flex items-center gap-2"
+            className={pixelButtonClass("primary")}
+            style={PIXEL_INSET_CLIP}
           >
-            <span>🎮</span>
             Adventure
           </button>
         </div>

@@ -10,7 +10,6 @@ import { cn } from '@/lib/utils';
 const navItems = [
   { label: 'About', href: '/about' },
   { label: 'Contact', href: '/contact' },
-  { label: 'City', href: '/city' }
 ];
 
 export default function Header() {
