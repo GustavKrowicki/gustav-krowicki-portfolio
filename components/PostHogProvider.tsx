@@ -15,6 +15,7 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         capture_pageview: true,
         capture_pageleave: true,
       });
+      (window as any).posthog = posthog;
     }
   }, []);
 
