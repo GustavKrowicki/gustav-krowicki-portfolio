@@ -16,6 +16,12 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         capture_pageleave: true,
       });
       (window as any).posthog = posthog;
+
+      const params = new URLSearchParams(window.location.search);
+      const identifyAs = params.get('identify');
+      if (identifyAs) {
+        posthog.identify(identifyAs, { is_internal: true });
+      }
     }
   }, []);
 
