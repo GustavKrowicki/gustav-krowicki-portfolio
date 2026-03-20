@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "reactflow/dist/style.css";
 import LayoutContent from "@/components/ui/LayoutContent";
-import AnalyticsWrapper from "@/components/AnalyticsWrapper";
+import PostHogProvider from "@/components/PostHogProvider";
 
 const gtStandard = localFont({
   src: [
@@ -108,10 +108,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={gtStandard.variable}>
       <body className="antialiased min-h-screen flex flex-col">
-        <LayoutContent>
-          {children}
-        </LayoutContent>
-        <AnalyticsWrapper />
+        <PostHogProvider>
+          <LayoutContent>
+            {children}
+          </LayoutContent>
+        </PostHogProvider>
       </body>
     </html>
   );
