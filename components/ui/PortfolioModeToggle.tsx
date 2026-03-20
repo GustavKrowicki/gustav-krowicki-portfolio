@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
+import { trackModeSwitched } from '@/lib/analytics';
 
 interface PortfolioModeToggleProps {
   activeMode: 'classic' | 'city';
@@ -29,7 +30,7 @@ export default function PortfolioModeToggle({ activeMode, showIdentity = false }
       )}
       <div className="flex rounded-full border border-neutral-200 bg-neutral-100 p-0.5 text-sm">
         <button
-          onClick={() => activeMode !== 'classic' && router.push('/')}
+          onClick={() => { if (activeMode !== 'classic') { trackModeSwitched('city', 'classic'); router.push('/'); } }}
           className={`rounded-full px-3 py-1 transition-colors ${
             activeMode === 'classic'
               ? 'bg-white font-medium text-neutral-900 shadow-sm'
@@ -39,7 +40,7 @@ export default function PortfolioModeToggle({ activeMode, showIdentity = false }
           Classic
         </button>
         <button
-          onClick={() => activeMode !== 'city' && router.push('/city')}
+          onClick={() => { if (activeMode !== 'city') { trackModeSwitched('classic', 'city'); router.push('/city'); } }}
           className={`rounded-full px-3 py-1 transition-colors ${
             activeMode === 'city'
               ? 'bg-white font-medium text-neutral-900 shadow-sm'

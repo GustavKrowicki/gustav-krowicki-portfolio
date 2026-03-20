@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { Download } from 'lucide-react';
 import Container from './Container';
 import { cn } from '@/lib/utils';
+import { trackCvDownloaded } from '@/lib/analytics';
 
 const navItems = [
   { label: 'About', href: '/about' },
@@ -88,6 +89,7 @@ export default function Header() {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex items-center gap-2 text-base hover:opacity-70 transition-opacity"
+                onClick={() => trackCvDownloaded('header')}
               >
                 <Download className="w-4 h-4" />
                 <span>Download CV</span>

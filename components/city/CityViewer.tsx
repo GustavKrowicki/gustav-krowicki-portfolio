@@ -16,6 +16,17 @@ import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
+import {
+  trackModeSelected,
+  trackBuildingInteracted,
+  trackProjectOpened,
+  trackAdventureCompleted,
+  trackAdventureExited,
+  trackCityExited,
+  trackTourStopViewed,
+  trackTourCompleted,
+  trackTourExited,
+} from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -32,6 +43,7 @@ interface CityViewerProps {
   onProjectClick?: (projectSlug: string) => void;
   onBackToPortfolio?: () => void;
   e2eMode?: boolean;
+  cityEntryTimeRef?: React.RefObject<number | null>;
 }
 
 type CityE2ECharacter = "banana" | "apple";
@@ -57,6 +69,7 @@ export default function CityViewer({
   onProjectClick,
   onBackToPortfolio,
   e2eMode = false,
+  cityEntryTimeRef,
 }: CityViewerProps) {
   // Mode state
   const [showWelcome, setShowWelcome] = useState(true);
@@ -100,6 +113,10 @@ export default function CityViewer({
   const hasSpawnedAmbientLife = useRef(false);
   const hasManualViewportInteraction = useRef(false);
   const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
+  const adventureStartTimeRef = useRef<number | null>(null);
+  const tourStartTimeRef = useRef<number | null>(null);
+  const hasTrackedAdventureCompletionRef = useRef(false);
+  const maxTourStopViewedRef = useRef(0);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -264,12 +281,16 @@ export default function CityViewer({
     setGameMode(GameMode.Viewer);
     setIsTourActive(true);
     setCurrentTourStop(0);
+    trackModeSelected('tour');
+    tourStartTimeRef.current = Date.now();
+    maxTourStopViewedRef.current = 0;
   }, []);
 
   const handleExploreFreely = useCallback(() => {
     setShowWelcome(false);
     setGameMode(GameMode.Viewer);
     setIsTourActive(false);
+    trackModeSelected('explore');
   }, []);
 
   // Start Adventure Mode
@@ -278,6 +299,10 @@ export default function CityViewer({
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
+    const characterName = characterType === CharacterType.Apple ? 'apple' : 'banana';
+    trackModeSelected('adventure', characterName);
+    adventureStartTimeRef.current = Date.now();
+    hasTrackedAdventureCompletionRef.current = false;
 
     // Start adventure mode in Phaser
     const gameBoard = gameBoardRef.current;
@@ -299,9 +324,12 @@ export default function CityViewer({
             setCurrentEncounter(null);
           });
 
-          // Interaction triggered (E pressed)
-          scene.events.on("interactionTriggered", () => {
+          // Interaction triggered (E pressed / mobile button)
+          scene.events.on("interactionTriggered", ({ tourStop, method }: { tourStop: TourStop; method?: string }) => {
             setIsDialogOpen(true);
+            if (tourStop.title) {
+              trackBuildingInteracted(tourStop.title, 'adventure', (method as 'keyboard' | 'mobile_button') || 'keyboard');
+            }
           });
 
           // Player position changed (for auto-walk state + walkable directions)
@@ -325,13 +353,19 @@ export default function CityViewer({
 
     const stop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
     if (stop) {
+      trackBuildingInteracted(stop.title, gameMode, 'logo_click');
       setCurrentEncounter(stop);
       setIsDialogOpen(true);
     }
-  }, []);
+  }, [gameMode]);
 
   // Stop Adventure Mode
   const handleStopAdventure = useCallback(() => {
+    if (adventureStartTimeRef.current && !hasTrackedAdventureCompletionRef.current) {
+      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
+      trackAdventureExited(duration, visitedBuildings.size);
+    }
+
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
@@ -341,7 +375,7 @@ export default function CityViewer({
     if (gameBoard) {
       gameBoard.stopAdventureMode();
     }
-  }, []);
+  }, [visitedBuildings.size]);
 
   // Handle dialog close
   const handleDialogClose = useCallback(() => {
@@ -378,6 +412,7 @@ export default function CityViewer({
   // Handle view case study from dialog
   const handleViewCaseStudy = useCallback((projectSlug: string) => {
     setIsDialogOpen(false);
+    trackProjectOpened(projectSlug, 'city');
 
     // Mark building as visited
     if (currentEncounter?.buildingId) {
@@ -391,7 +426,13 @@ export default function CityViewer({
   // Tour navigation (classic mode)
   const handleTourNextStop = useCallback(() => {
     if (currentTourStop < TOUR_STOPS.length - 1) {
-      setCurrentTourStop((prev) => prev + 1);
+      const nextIndex = currentTourStop + 1;
+      setCurrentTourStop(nextIndex);
+      const stop = TOUR_STOPS[nextIndex];
+      if (stop) {
+        trackTourStopViewed(stop.title, nextIndex);
+        maxTourStopViewedRef.current = Math.max(maxTourStopViewedRef.current, nextIndex);
+      }
     }
   }, [currentTourStop]);
 
@@ -402,9 +443,18 @@ export default function CityViewer({
   }, [currentTourStop]);
 
   const handleEndTour = useCallback(() => {
+    if (tourStartTimeRef.current) {
+      const duration = Math.round((Date.now() - tourStartTimeRef.current) / 1000);
+      const isLastStop = currentTourStop >= TOUR_STOPS.length - 1;
+      if (isLastStop) {
+        trackTourCompleted(duration);
+      } else {
+        trackTourExited(duration, maxTourStopViewedRef.current + 1);
+      }
+    }
     setIsTourActive(false);
     setCurrentTourStop(0);
-  }, []);
+  }, [currentTourStop]);
 
   // Handle tour stop changes - pan camera to building
   // Skip zoom/pan for the Welcome step (first stop) - only start panning from step 2 onwards
@@ -446,6 +496,8 @@ export default function CityViewer({
       // If in tour mode, don't show modal
       if (isTourActive) return;
 
+      trackBuildingInteracted(building.name, gameMode, 'click');
+
       if (building.interactable && building.projectSlug) {
         // Navigate to project page
         onProjectClick?.(building.projectSlug);
@@ -455,7 +507,7 @@ export default function CityViewer({
         setIsModalOpen(true);
       }
     },
-    [onProjectClick, isTourActive]
+    [onProjectClick, isTourActive, gameMode]
   );
 
   // Handle modal close
@@ -469,6 +521,7 @@ export default function CityViewer({
     (projectSlug: string) => {
       setIsModalOpen(false);
       setSelectedBuilding(null);
+      trackProjectOpened(projectSlug, 'city');
       onProjectClick?.(projectSlug);
     },
     [onProjectClick]
@@ -605,6 +658,30 @@ export default function CityViewer({
     visitedBuildings,
   ]);
 
+  // Track adventure completion when all buildings are visited
+  const adventureBuildingCount = TOUR_STOPS.filter((s) => s.buildingId).length;
+  useEffect(() => {
+    if (
+      isAdventureActive &&
+      visitedBuildings.size >= adventureBuildingCount &&
+      !hasTrackedAdventureCompletionRef.current &&
+      adventureStartTimeRef.current
+    ) {
+      hasTrackedAdventureCompletionRef.current = true;
+      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
+      trackAdventureCompleted(duration, visitedBuildings.size);
+    }
+  }, [isAdventureActive, visitedBuildings.size, adventureBuildingCount]);
+
+  // Wrap onBackToPortfolio with city_exited tracking
+  const handleBackToPortfolio = useCallback(() => {
+    if (cityEntryTimeRef?.current) {
+      const duration = Math.round((Date.now() - cityEntryTimeRef.current) / 1000);
+      trackCityExited(duration, gameMode, visitedBuildings.size);
+    }
+    onBackToPortfolio?.();
+  }, [cityEntryTimeRef, gameMode, visitedBuildings.size, onBackToPortfolio]);
+
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
       <GameBoard
@@ -705,7 +782,7 @@ export default function CityViewer({
         isOpen={isModalOpen}
         onClose={handleCloseModal}
         onViewProject={handleViewProject}
-        onBackToPortfolio={onBackToPortfolio}
+        onBackToPortfolio={handleBackToPortfolio}
       />
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}

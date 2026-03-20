@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
 import { Project } from '@/lib/types';
+import { trackProjectCardClicked } from '@/lib/analytics';
 
 interface ProjectCardProps {
   project: Project;
@@ -18,7 +19,7 @@ export default function ProjectCard({ project, index }: ProjectCardProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.5, delay: index * 0.1 }}
     >
-      <Link href={`/work/${project.slug}`} className="group block">
+      <Link href={`/work/${project.slug}`} className="group block" onClick={() => trackProjectCardClicked(project.slug, 'work')}>
         <div className="relative aspect-[16/10] mb-6 overflow-hidden">
           <Image
             src={project.coverImage}

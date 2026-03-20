@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { User, Mail, Download } from 'lucide-react';
 import { cn } from '@/lib/utils';
+import { trackCvDownloaded } from '@/lib/analytics';
 
 const navItems = [
   { label: 'About', href: '/about', icon: User },
@@ -41,6 +42,7 @@ export default function MobileNavbar() {
             target="_blank"
             rel="noopener noreferrer"
             className="flex flex-col items-center gap-1 px-3 py-2 text-neutral-600 transition-colors"
+            onClick={() => trackCvDownloaded('mobile_nav')}
           >
             <Download className="w-5 h-5" />
             <span className="text-xs">CV</span>

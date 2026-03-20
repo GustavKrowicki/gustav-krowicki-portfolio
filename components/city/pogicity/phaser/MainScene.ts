@@ -1685,7 +1685,7 @@ export class MainScene extends Phaser.Scene {
         const activeTourStop = this.triggerZoneManager?.getActiveTourStop();
         if (activeZone && activeTourStop) {
           e.preventDefault();
-          this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId });
+          this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId, method: 'keyboard' });
         }
       }
 
@@ -1830,7 +1830,7 @@ export class MainScene extends Phaser.Scene {
     const activeZone = this.triggerZoneManager?.getActiveZone();
     const activeTourStop = this.triggerZoneManager?.getActiveTourStop();
     if (activeZone && activeTourStop) {
-      this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId });
+      this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId, method: 'mobile_button' });
     }
   }
 

@@ -5,6 +5,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Container from '@/components/ui/Container';
 import { getAllProjects } from '@/lib/projects';
+import { trackProjectCardClicked } from '@/lib/analytics';
 
 export default function FeaturedProjects() {
   const projects = getAllProjects();
@@ -30,6 +31,7 @@ export default function FeaturedProjects() {
                 <Link
                   href={`/work/${project.slug}`}
                   className="group block"
+                  onClick={() => trackProjectCardClicked(project.slug, 'home')}
                 >
                   <div className="relative aspect-[16/10] mb-6 overflow-hidden rounded-lg">
                     <Image

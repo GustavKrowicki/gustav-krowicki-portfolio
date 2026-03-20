@@ -1,7 +1,8 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
+import { Suspense, useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import { trackCityEntered } from "@/lib/analytics";
 import dynamic from "next/dynamic";
 import initialGrid from "@/lib/city/cityGrid.json";
 import { GridCell } from "@/components/city/pogicity/types";
@@ -29,6 +30,14 @@ function CityPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const e2eMode = searchParams.get("e2e") === "1";
+  const cityEntryTimeRef = useRef<number | null>(null);
+
+  // Track city entry on mount
+  useEffect(() => {
+    cityEntryTimeRef.current = Date.now();
+    const isMobile = window.innerWidth < 768;
+    trackCityEntered(isMobile ? 'mobile' : 'desktop');
+  }, []);
 
   // Prevent macOS trackpad two-finger swipe from triggering browser back/forward.
   // Setting overflow:hidden on html/body removes the scrollable context so Chrome
@@ -74,6 +83,7 @@ function CityPageContent() {
         onProjectClick={handleProjectClick}
         onBackToPortfolio={handleBackToPortfolio}
         e2eMode={e2eMode}
+        cityEntryTimeRef={cityEntryTimeRef}
       />
     </div>
   );
