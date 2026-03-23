@@ -56,10 +56,10 @@ export default function Bookshelf3D() {
 
   if (loading) {
     return (
-      <div className="w-full h-[600px] bg-gradient-to-b from-neutral-100 to-neutral-200 rounded-xl flex items-center justify-center">
+      <div className="w-full h-[600px] bg-[#386AF5] rounded-xl flex items-center justify-center">
         <div className="text-center">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-neutral-300 border-t-neutral-900 mb-4"></div>
-          <p className="text-neutral-600 font-medium">Loading bookshelf...</p>
+          <div className="inline-block animate-spin rounded-full h-12 w-12 border-4 border-white/30 border-t-white mb-4"></div>
+          <p className="text-white/80 font-medium">Loading bookshelf...</p>
         </div>
       </div>
     );
@@ -67,10 +67,10 @@ export default function Bookshelf3D() {
 
   if (error) {
     return (
-      <div className="w-full h-[600px] bg-gradient-to-b from-neutral-100 to-neutral-200 rounded-xl flex items-center justify-center">
+      <div className="w-full h-[600px] bg-[#386AF5] rounded-xl flex items-center justify-center">
         <div className="text-center max-w-md mx-auto p-6">
-          <p className="text-red-600 font-semibold mb-2">Error loading bookshelf</p>
-          <p className="text-neutral-600 text-sm">{error}</p>
+          <p className="text-white font-semibold mb-2">Error loading bookshelf</p>
+          <p className="text-white/70 text-sm">{error}</p>
         </div>
       </div>
     );
@@ -78,8 +78,8 @@ export default function Bookshelf3D() {
 
   if (books.length === 0) {
     return (
-      <div className="w-full h-[600px] bg-gradient-to-b from-neutral-100 to-neutral-200 rounded-xl flex items-center justify-center">
-        <p className="text-neutral-600">No books found</p>
+      <div className="w-full h-[600px] bg-[#386AF5] rounded-xl flex items-center justify-center">
+        <p className="text-white/70">No books found</p>
       </div>
     );
   }
@@ -88,7 +88,7 @@ export default function Bookshelf3D() {
     <div role="region" aria-label="Interactive 3D bookshelf">
       {/* Instructions */}
       <div className="mb-4 text-center">
-        <p className="text-neutral-600 text-sm">
+        <p className="text-neutral-500 text-sm">
           Scroll horizontally to browse • Click a book to pull it out • Hover for preview
         </p>
       </div>
@@ -105,7 +105,7 @@ export default function Bookshelf3D() {
 
       {/* Book count */}
       <div className="mt-4 text-center">
-        <p className="text-neutral-500 text-sm">
+        <p className="text-neutral-400 text-sm">
           {books.length} {books.length === 1 ? 'book' : 'books'} read
         </p>
       </div>

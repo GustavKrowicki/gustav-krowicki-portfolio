@@ -53,7 +53,7 @@ export default function Bookshelf3DScene({
   };
 
   return (
-    <div className="w-full h-[600px] bg-gradient-to-b from-neutral-100 to-neutral-200 rounded-xl overflow-hidden">
+    <div className="w-full h-[600px] rounded-xl overflow-hidden" style={{ backgroundColor: '#386AF5' }}>
       <Canvas
         camera={{
           position: [0, 0, 6],
@@ -61,6 +61,9 @@ export default function Bookshelf3DScene({
         }}
         shadows
       >
+        {/* Blue background matching container */}
+        <color attach="background" args={['#386AF5']} />
+
         {/* Ambient light for overall scene illumination */}
         <ambientLight intensity={0.8} />
 
@@ -94,7 +97,7 @@ export default function Bookshelf3DScene({
               <Text
                 position={[(lastCurrentlyReadingIndex * currentlyReadingSpacing) / 2, 2.1, 0]}
                 fontSize={0.25}
-                color="#404040"
+                color="#ffffff"
                 anchorX="center"
                 anchorY="middle"
                 fontWeight="600"
@@ -133,8 +136,8 @@ export default function Bookshelf3DScene({
 
             {/* Shelf moves with books */}
             <mesh position={[totalWidth / 2, -1.2, 0]} receiveShadow>
-              <boxGeometry args={[totalWidth + 4, 0.2, 2]} />
-              <meshStandardMaterial color="#8B4513" roughness={0.8} />
+              <boxGeometry args={[totalWidth + 4, 0.06, 2]} />
+              <meshStandardMaterial color="#c0c0c0" roughness={0.3} metalness={0.6} />
             </mesh>
           </Scroll>
         </ScrollControls>

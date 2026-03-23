@@ -5,6 +5,36 @@ import * as THREE from 'three';
 import { generateColorFromTitle, fetchBookCover } from '@/lib/utils/bookCoverFetcher';
 import type { BookData } from '@/lib/utils/csvParser';
 
+/**
+ * Generate a grain/noise texture for that risograph book-cover feel.
+ * Returns a canvas-based THREE.Texture with subtle noise baked in.
+ */
+function createGrainTexture(baseColor: string, width = 128, height = 256): THREE.Texture {
+  const canvas = document.createElement('canvas');
+  canvas.width = width;
+  canvas.height = height;
+  const ctx = canvas.getContext('2d')!;
+
+  // Fill with base color
+  ctx.fillStyle = baseColor;
+  ctx.fillRect(0, 0, width, height);
+
+  // Overlay noise
+  const imageData = ctx.getImageData(0, 0, width, height);
+  const data = imageData.data;
+  for (let i = 0; i < data.length; i += 4) {
+    const noise = (Math.random() - 0.5) * 30; // subtle grain intensity
+    data[i]     = Math.min(255, Math.max(0, data[i] + noise));
+    data[i + 1] = Math.min(255, Math.max(0, data[i + 1] + noise));
+    data[i + 2] = Math.min(255, Math.max(0, data[i + 2] + noise));
+  }
+  ctx.putImageData(imageData, 0, 0);
+
+  const texture = new THREE.CanvasTexture(canvas);
+  texture.needsUpdate = true;
+  return texture;
+}
+
 type AnimationState = 'idle' | 'pulling' | 'rotating' | 'displayed' | 'returning';
 
 interface Book3DProps {
@@ -27,6 +57,9 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
   const [coverLoading, setCoverLoading] = useState(false);
   const fallbackColor = generateColorFromTitle(book.title);
   const [spineColor, setSpineColor] = useState(fallbackColor);
+
+  // Generate grain texture for spine and covers (risograph feel)
+  const grainTexture = useMemo(() => createGrainTexture(spineColor), [spineColor]);
 
   // Store the base position
   const basePosition = useRef(position);
@@ -158,14 +191,13 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [book.isbn13]);
 
-  // Clean up texture on unmount
+  // Clean up textures on unmount
   useEffect(() => {
     return () => {
-      if (coverTexture) {
-        coverTexture.dispose();
-      }
+      coverTexture?.dispose();
+      grainTexture?.dispose();
     };
-  }, [coverTexture]);
+  }, [coverTexture, grainTexture]);
 
   useFrame(() => {
     if (!groupRef.current || !meshRef.current) return;
@@ -272,49 +304,48 @@ export default function Book3D({ book, position, isExpanded, offsetX, onClick }:
 
   // Create materials array for different box faces - memoized to prevent recreation
   const materials = useMemo(() => {
-    console.log(`🎨 Creating materials for "${book.title}" - has texture: ${!!coverTexture}, spine color: ${spineColor}`);
     return [
       // Right side (+X) - front cover (shows after -90° rotation)
       new THREE.MeshStandardMaterial({
-        map: coverTexture || null,
-        color: coverTexture ? '#ffffff' : spineColor,
-        roughness: 0.3,
+        map: coverTexture || grainTexture,
+        color: coverTexture ? '#ffffff' : '#ffffff',
+        roughness: coverTexture ? 0.3 : 0.6,
         metalness: 0.0,
       }),
       // Left side (-X) - back cover
       new THREE.MeshStandardMaterial({
-        color: spineColor,
+        map: grainTexture,
         roughness: 0.7,
-        metalness: 0.1
+        metalness: 0.05,
       }),
       // Top (+Y) - page edges
       new THREE.MeshStandardMaterial({
-        color: '#e5e5e5',
-        roughness: 0.8,
-        metalness: 0.1
+        color: '#e8e4de',
+        roughness: 0.9,
+        metalness: 0.0,
       }),
       // Bottom (-Y) - page edges
       new THREE.MeshStandardMaterial({
-        color: '#e5e5e5',
-        roughness: 0.8,
-        metalness: 0.1
+        color: '#e8e4de',
+        roughness: 0.9,
+        metalness: 0.0,
       }),
       // Front (+Z) - spine (visible when not rotated)
       new THREE.MeshStandardMaterial({
-        color: spineColor,
+        map: grainTexture,
         emissive: '#2563eb',
         emissiveIntensity: 0,
-        roughness: 0.7,
-        metalness: 0.1,
+        roughness: 0.6,
+        metalness: 0.05,
       }),
       // Back (-Z) - spine back
       new THREE.MeshStandardMaterial({
-        color: spineColor,
+        map: grainTexture,
         roughness: 0.7,
-        metalness: 0.1,
+        metalness: 0.05,
       }),
     ];
-  }, [coverTexture, spineColor]);
+  }, [coverTexture, grainTexture]);
 
   // Handle click with debouncing (only allow clicks in idle or displayed states)
   const handleClick = () => {

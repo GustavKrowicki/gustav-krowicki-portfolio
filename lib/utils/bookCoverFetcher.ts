@@ -55,18 +55,30 @@ export async function fetchAllCovers(books: BookData[]): Promise<CoverCache> {
 }
 
 /**
- * Generate a consistent color from a book title for fallback spines
+ * Generate a consistent color from a book title for fallback spines.
+ * Palette inspired by warm/dusty book spine tones — oranges, olives,
+ * teals, corals, and muted tones that pop against a blue background.
  */
 export function generateColorFromTitle(title: string): string {
   const colors = [
-    '#525252', // neutral-600
-    '#737373', // neutral-500
-    '#a3a3a3', // neutral-400
-    '#2563eb', // blue-600
-    '#dc2626', // red-600
-    '#16a34a', // green-600
-    '#ea580c', // orange-600
-    '#7c3aed', // violet-600
+    '#D4875B', // warm peach/orange
+    '#E8956A', // salmon
+    '#C4694A', // terracotta
+    '#4A6741', // olive green
+    '#3B5238', // dark olive
+    '#2D6B6B', // deep teal
+    '#377A7A', // sea green
+    '#1E3A5F', // navy blue
+    '#7B4B8A', // dusty purple
+    '#C94C7C', // magenta/pink
+    '#D4536A', // dusty rose
+    '#C2A65A', // mustard gold
+    '#8B7355', // warm khaki
+    '#6B8E8E', // sage teal
+    '#A45B4A', // burnt sienna
+    '#E6D5B8', // cream/off-white
+    '#5C7FA3', // dusty blue
+    '#D4A574', // warm tan
   ];
 
   // Generate hash from title
