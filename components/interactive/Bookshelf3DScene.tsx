@@ -53,7 +53,7 @@ export default function Bookshelf3DScene({
   };
 
   return (
-    <div className="w-full h-[600px] rounded-xl overflow-hidden" style={{ backgroundColor: '#386AF5' }}>
+    <div className="w-full h-[600px] rounded-xl overflow-hidden" style={{ backgroundColor: '#BEBAB0' }}>
       <Canvas
         camera={{
           position: [0, 0, 6],
@@ -62,7 +62,7 @@ export default function Bookshelf3DScene({
         shadows
       >
         {/* Blue background matching container */}
-        <color attach="background" args={['#386AF5']} />
+        <color attach="background" args={['#BEBAB0']} />
 
         {/* Ambient light for overall scene illumination */}
         <ambientLight intensity={0.8} />
@@ -97,7 +97,7 @@ export default function Bookshelf3DScene({
               <Text
                 position={[(lastCurrentlyReadingIndex * currentlyReadingSpacing) / 2, 2.1, 0]}
                 fontSize={0.25}
-                color="#ffffff"
+                color="#3a3a3a"
                 anchorX="center"
                 anchorY="middle"
                 fontWeight="600"
