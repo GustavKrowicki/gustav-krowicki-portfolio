@@ -32,7 +32,7 @@ import {
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#3d5560]">
+    <div className="w-full h-full flex items-center justify-center bg-[#73645F]">
       <div className="text-white font-mono text-xl">Loading Gustav&apos;s City...</div>
     </div>
   ),
@@ -773,6 +773,7 @@ export default function CityViewer({
         onContinue={isAdventureActive ? () => { handleDialogClose(); handleNextStop(); } : undefined}
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}
+        logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
       {/* Building Modal */}

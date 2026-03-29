@@ -9,7 +9,7 @@ import { GridCell } from "@/components/city/pogicity/types";
 
 function CityLoadingFallback() {
   return (
-    <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
+    <div className="w-full h-screen flex items-center justify-center bg-[#73645F]">
       <div className="text-white font-mono text-xl animate-pulse">
         Loading Gustav&apos;s City...
       </div>
@@ -77,7 +77,7 @@ function CityPageContent() {
   };
 
   return (
-    <div className="w-full h-[100dvh] bg-[#3d5560]" style={{ overscrollBehavior: "none" }}>
+    <div className="w-full h-[100dvh] bg-[#73645F]" style={{ overscrollBehavior: "none" }}>
       <CityViewer
         initialGrid={initialGrid as GridCell[][]}
         onProjectClick={handleProjectClick}

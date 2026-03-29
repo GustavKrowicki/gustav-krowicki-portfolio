@@ -17,6 +17,7 @@ import {
   pixelPanelOuterClass,
   pixelSpriteFrameClass,
 } from "./pixelModalStyles";
+import SpotifyPlayer, { NORTHSIDE_PLAYLIST_URL } from "./SpotifyPlayer";
 
 interface BuildingModalProps {
   isMobile: boolean;
@@ -245,6 +246,12 @@ export default function BuildingModal({
                   {video && (
                     <div className="mb-4">
                       <VideoThumbnail video={video} isActive={isOpen} />
+                    </div>
+                  )}
+
+                  {building.id === "northside-stage" && (
+                    <div className="mb-4">
+                      <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} />
                     </div>
                   )}
 

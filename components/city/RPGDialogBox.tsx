@@ -13,6 +13,7 @@ import {
   pixelPanelInnerClass,
   pixelPanelOuterClass,
 } from "./pixelModalStyles";
+import SpotifyPlayer, { NORTHSIDE_PLAYLIST_URL } from "./SpotifyPlayer";
 
 interface RPGDialogBoxProps {
   isMobile: boolean;
@@ -22,6 +23,7 @@ interface RPGDialogBoxProps {
   onContinue?: () => void;
   onViewCaseStudy?: (projectSlug: string) => void;
   disableTypingAnimation?: boolean;
+  logoUrl?: string | null;
 }
 
 export default function RPGDialogBox({
@@ -32,6 +34,7 @@ export default function RPGDialogBox({
   onContinue,
   onViewCaseStudy,
   disableTypingAnimation = false,
+  logoUrl,
 }: RPGDialogBoxProps) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(true);
@@ -132,6 +135,13 @@ export default function RPGDialogBox({
             <div className={pixelPanelOuterClass} style={PIXEL_PANEL_CLIP}>
               <div className={`${pixelPanelInnerClass} p-3`} style={PIXEL_INSET_CLIP}>
                 <div className={`mb-2 flex items-center gap-2 ${isMobile ? "flex-wrap" : ""}`}>
+                  {logoUrl && (
+                    <img
+                      src={logoUrl}
+                      alt=""
+                      className="h-6 w-6 object-contain"
+                    />
+                  )}
                   <h3 className="truncate font-mono text-base uppercase tracking-[0.08em] text-[#f5ecd2]">
                     {tourStop.title}
                   </h3>
@@ -189,6 +199,12 @@ export default function RPGDialogBox({
                     </div>
                   )}
                 </div>
+
+                {tourStop.buildingId === "northside-stage" && (
+                  <div className="mt-2">
+                    <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} />
+                  </div>
+                )}
               </div>
             </div>
 

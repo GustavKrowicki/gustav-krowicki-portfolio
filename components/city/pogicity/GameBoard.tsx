@@ -33,7 +33,7 @@ import { playBuildSound, playBuildRoadSound, playDestructionSound } from "@/lib/
 const PhaserGame = dynamic(() => import("./phaser/PhaserGame"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#3d5560]">
+    <div className="w-full h-full flex items-center justify-center bg-[#73645F]">
       <div className="text-white font-mono">Loading city...</div>
     </div>
   ),
@@ -710,7 +710,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
 
   return (
     <div
-      className="relative w-full h-full overflow-hidden bg-[#3d5560]"
+      className="relative w-full h-full overflow-hidden bg-[#73645F]"
       data-testid={testId}
     >
       <PhaserGame

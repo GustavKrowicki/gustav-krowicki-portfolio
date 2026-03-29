@@ -8,7 +8,7 @@ import { GridCell } from "./pogicity/types";
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
   ssr: false,
   loading: () => (
-    <div className="w-full h-full flex items-center justify-center bg-[#3d5560]">
+    <div className="w-full h-full flex items-center justify-center bg-[#73645F]">
       <div className="text-white font-mono text-xl">Loading City Editor...</div>
     </div>
   ),

@@ -12,7 +12,7 @@ const CityEditor = dynamic(
   {
     ssr: false,
     loading: () => (
-      <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
+      <div className="w-full h-screen flex items-center justify-center bg-[#73645F]">
         <div className="text-white font-mono text-xl animate-pulse">
           Loading City Editor...
         </div>
@@ -45,7 +45,7 @@ export default function CityEditorPage() {
 
   if (isChecking) {
     return (
-      <div className="w-full h-screen flex items-center justify-center bg-[#3d5560]">
+      <div className="w-full h-screen flex items-center justify-center bg-[#73645F]">
         <div className="text-white font-mono text-xl animate-pulse">
           Checking authorization...
         </div>
@@ -58,7 +58,7 @@ export default function CityEditorPage() {
   }
 
   return (
-    <div className="w-full h-screen bg-[#3d5560]">
+    <div className="w-full h-screen bg-[#73645F]">
       {/* Header */}
       <div className="absolute top-0 left-0 right-0 z-50 bg-gradient-to-b from-black/70 to-transparent p-4">
         <div className="max-w-7xl mx-auto flex items-center justify-between">

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { TOUR_STOPS, CATEGORY_STYLES, TourStop } from "@/lib/city/tourStops";
 import { getBuildingVideo } from "@/lib/city/buildingVideos";
 import VideoThumbnail from "./VideoThumbnail";
+import SpotifyPlayer, { NORTHSIDE_PLAYLIST_URL } from "./SpotifyPlayer";
 import { useRouter } from "next/navigation";
 import {
   PIXEL_INSET_CLIP,
@@ -206,6 +207,12 @@ export default function TourGuide({
                   </div>
                 )}
               </div>
+
+              {currentStop.buildingId === "northside-stage" && (
+                <div className="mt-2">
+                  <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} />
+                </div>
+              )}
 
               {/* Action buttons — shown after typing completes */}
               <div className={`mt-2 flex items-center gap-1.5 ${isTyping ? "opacity-0" : "opacity-100"} transition-opacity`}>
