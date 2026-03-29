@@ -39,7 +39,7 @@ test.describe("city visual regression", () => {
     );
 
     await gotoCityE2E(page);
-    await startAdventure(page, "banana");
+    await startAdventure(page);
     await openEncounter(page, "lego");
 
     await expect(page.getByTestId("city-adventure-hud")).toHaveScreenshot(

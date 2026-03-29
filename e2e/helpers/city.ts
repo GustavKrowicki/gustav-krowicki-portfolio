@@ -1,13 +1,11 @@
 import { expect, Page } from "@playwright/test";
 
-type CityE2ECharacter = "banana" | "apple";
-
 type CityE2EApi = {
   dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   openBuildingModal: (buildingId: string) => boolean;
   closeBuildingModal: () => void;
-  startAdventure: (characterType?: CityE2ECharacter) => boolean;
+  startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
   openEncounter: (stopId: string) => boolean;
   closeEncounter: () => void;
@@ -58,9 +56,9 @@ export async function dismissWelcome(page: Page) {
   await expect(page.getByTestId("city-welcome-overlay")).toBeHidden();
 }
 
-export async function startAdventure(page: Page, character: CityE2ECharacter = "banana") {
+export async function startAdventure(page: Page) {
   await waitForCityHarness(page);
-  await callCityHook(page, "startAdventure", character);
+  await callCityHook(page, "startAdventure");
   await expect(page.getByTestId("city-adventure-hud")).toBeVisible();
   await expect.poll(() => getPlayerState(page)).toBeTruthy();
 }

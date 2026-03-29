@@ -9,8 +9,8 @@ import {
   GRID_HEIGHT,
   TILE_WIDTH,
   TILE_HEIGHT,
-  PLAYER_SPEED,
   PLAYER_MOVE_LERP,
+  DIRECTION_TO_COMPASS,
   GridCell,
 } from "../types";
 import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
@@ -70,7 +70,7 @@ export class PlayerController {
   // Movement state
   private direction: Direction = Direction.Down;
   private state: PlayerState = PlayerState.Idle;
-  private characterType: CharacterType = CharacterType.Banana;
+  private characterType: CharacterType = CharacterType.Gustav;
   private isMoving: boolean = false;
 
   // Input state
@@ -467,13 +467,7 @@ export class PlayerController {
   }
 
   private getTextureKey(): string {
-    const dirMap: Record<Direction, string> = {
-      [Direction.Up]: "north",
-      [Direction.Down]: "south",
-      [Direction.Left]: "west",
-      [Direction.Right]: "east",
-    };
-    return `${this.characterType}_${dirMap[this.direction]}`;
+    return `${this.characterType}_${DIRECTION_TO_COMPASS[this.direction]}`;
   }
 
   private emitPositionChange(): void {
@@ -528,7 +522,7 @@ export class PlayerController {
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
       // Position pointer above player (with bounce)
-      const pointerY = this.worldY - 50 - this.pointerBounceOffset;
+      const pointerY = this.worldY - 80 - this.pointerBounceOffset;
       this.pointer.setPosition(this.worldX, pointerY);
       this.pointer.setDepth(20_000_000); // Always on top
     }

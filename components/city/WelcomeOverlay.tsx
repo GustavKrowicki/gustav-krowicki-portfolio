@@ -1,8 +1,6 @@
 "use client";
 
-import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { CharacterType } from "./pogicity/types";
 import {
   PIXEL_INSET_CLIP,
   PIXEL_PANEL_CLIP,
@@ -18,7 +16,7 @@ interface WelcomeOverlayProps {
   isMobile: boolean;
   onStartTour: () => void;
   onExploreFreely: () => void;
-  onStartAdventure?: (characterType: CharacterType) => void;
+  onStartAdventure?: () => void;
   isVisible: boolean;
 }
 
@@ -29,21 +27,6 @@ export default function WelcomeOverlay({
   onStartAdventure,
   isVisible,
 }: WelcomeOverlayProps) {
-  const [showCharacterSelect, setShowCharacterSelect] = useState(false);
-
-  const handleAdventureClick = () => {
-    if (onStartAdventure) {
-      setShowCharacterSelect(true);
-    }
-  };
-
-  const handleCharacterSelect = (characterType: CharacterType) => {
-    onStartAdventure?.(characterType);
-    setShowCharacterSelect(false);
-  };
-
-  const characterButtonClass =
-    "flex h-24 w-24 flex-col items-center justify-center gap-1 border-[3px] font-mono text-xs uppercase tracking-[0.08em] transition-transform duration-100 active:translate-y-px";
 
   return (
     <AnimatePresence>
@@ -134,93 +117,51 @@ export default function WelcomeOverlay({
                         </p>
                       </motion.div>
 
-                      <AnimatePresence mode="wait">
-                        {!showCharacterSelect ? (
-                          <motion.div
-                            key="main-buttons"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            transition={{ delay: 0.6 }}
-                            className="mt-5 flex flex-col gap-3"
+                      <motion.div
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.6 }}
+                        className="mt-5 flex flex-col gap-3"
+                      >
+                        <div className={`grid gap-3 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}>
+                          <button
+                            onClick={onStartTour}
+                            className={pixelButtonClass("ghost")}
+                            data-testid="city-welcome-tour"
                           >
-                            <div className={`grid gap-3 ${isMobile ? "grid-cols-1" : "grid-cols-2"}`}>
-                              <button
-                                onClick={onStartTour}
-                                className={pixelButtonClass("ghost")}
-                                data-testid="city-welcome-tour"
-                              >
-                                Map Tour
-                              </button>
-                              {onStartAdventure && (
-                                <button
-                                  onClick={handleAdventureClick}
-                                  className={pixelButtonClass("primary")}
-                                  data-testid="city-welcome-adventure"
-                                >
-                                  Start Adventure
-                                </button>
-                              )}
-                            </div>
-                            <div className="flex gap-3">
-                              <button
-                                onClick={onExploreFreely}
-                                className={`flex-1 ${pixelButtonClass("secondary")}`}
-                                data-testid="city-welcome-free-explore"
-                              >
-                                Free Explore
-                              </button>
-                            </div>
-                          </motion.div>
-                        ) : (
-                          <motion.div
-                            key="character-select"
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -10 }}
-                            className="mt-5 space-y-4"
-                          >
-                            <p className="text-center font-mono text-xs uppercase tracking-[0.08em] text-[#2a261f]">
-                              Choose your character
-                            </p>
-                            <div className="flex justify-center gap-3">
-                              <button
-                                onClick={() => handleCharacterSelect(CharacterType.Banana)}
-                                className={`${characterButtonClass} border-[#6a5a11] bg-[#d0b447] text-[#181102] shadow-[inset_0_-3px_0_#8f741f] hover:bg-[#d9bc52]`}
-                              >
-                                <span className="text-3xl">🍌</span>
-                                <span>Banana</span>
-                              </button>
-                              <button
-                                onClick={() => handleCharacterSelect(CharacterType.Apple)}
-                                className={`${characterButtonClass} border-[#6a2419] bg-[#c66d56] text-[#1b0907] shadow-[inset_0_-3px_0_#8b4334] hover:bg-[#cf7862]`}
-                              >
-                                <span className="text-3xl">🍎</span>
-                                <span>Apple</span>
-                              </button>
-                            </div>
+                            Map Tour
+                          </button>
+                          {onStartAdventure && (
                             <button
-                              onClick={() => setShowCharacterSelect(false)}
-                              className={`w-full ${pixelButtonClass("ghost")}`}
+                              onClick={onStartAdventure}
+                              className={pixelButtonClass("primary")}
+                              data-testid="city-welcome-adventure"
                             >
-                              Back
+                              Start Adventure
                             </button>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
+                          )}
+                        </div>
+                        <div className="flex gap-3">
+                          <button
+                            onClick={onExploreFreely}
+                            className={`flex-1 ${pixelButtonClass("secondary")}`}
+                            data-testid="city-welcome-free-explore"
+                          >
+                            Free Explore
+                          </button>
+                        </div>
+                      </motion.div>
 
-                      {!showCharacterSelect && (
-                        <motion.p
-                          initial={{ opacity: 0 }}
-                          animate={{ opacity: 1 }}
-                          transition={{ delay: 0.8 }}
-                          className={`mx-auto mt-4 w-fit ${pixelHintClass}`}
-                        >
-                          {onStartAdventure
-                            ? "Walk around and discover my portfolio."
-                            : "Tap buildings to learn more about each project."}
-                        </motion.p>
-                      )}
+                      <motion.p
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.8 }}
+                        className={`mx-auto mt-4 w-fit ${pixelHintClass}`}
+                      >
+                        {onStartAdventure
+                          ? "Walk around and discover my portfolio."
+                          : "Tap buildings to learn more about each project."}
+                      </motion.p>
                     </div>
                   </div>
                 </div>

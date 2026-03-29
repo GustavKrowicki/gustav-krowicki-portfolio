@@ -41,6 +41,21 @@ export enum Direction {
   Right = "right",
 }
 
+// Isometric direction-to-compass mappings for sprite textures
+export const DIRECTION_TO_COMPASS: Record<Direction, string> = {
+  [Direction.Up]: "west",
+  [Direction.Down]: "east",
+  [Direction.Left]: "south",
+  [Direction.Right]: "north",
+};
+
+export const DIRECTION_TO_SHORT_COMPASS: Record<Direction, string> = {
+  [Direction.Up]: "w",
+  [Direction.Down]: "e",
+  [Direction.Left]: "s",
+  [Direction.Right]: "n",
+};
+
 export enum LightingType {
   Day = "day",
   Night = "night",
@@ -57,6 +72,7 @@ export interface VisualSettings {
 export enum CharacterType {
   Banana = "banana",
   Apple = "apple",
+  Gustav = "gustav",
 }
 
 export interface Character {

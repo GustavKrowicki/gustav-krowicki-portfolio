@@ -46,14 +46,13 @@ interface CityViewerProps {
   cityEntryTimeRef?: React.RefObject<number | null>;
 }
 
-type CityE2ECharacter = "banana" | "apple";
 
 interface CityE2EApi {
   dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   openBuildingModal: (buildingId: string) => boolean;
   closeBuildingModal: () => void;
-  startAdventure: (characterType?: CityE2ECharacter) => boolean;
+  startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
   openEncounter: (stopId: string) => boolean;
   closeEncounter: () => void;
@@ -294,20 +293,19 @@ export default function CityViewer({
   }, []);
 
   // Start Adventure Mode
-  const handleStartAdventure = useCallback((characterType: CharacterType) => {
+  const handleStartAdventure = useCallback(() => {
     setShowWelcome(false);
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
-    const characterName = characterType === CharacterType.Apple ? 'apple' : 'banana';
-    trackModeSelected('adventure', characterName);
+    trackModeSelected('adventure', 'gustav');
     adventureStartTimeRef.current = Date.now();
     hasTrackedAdventureCompletionRef.current = false;
 
     // Start adventure mode in Phaser
     const gameBoard = gameBoardRef.current;
     if (gameBoard) {
-      gameBoard.startAdventureMode(characterType);
+      gameBoard.startAdventureMode(CharacterType.Gustav);
 
       // Listen for Phaser events
       const game = gameBoard.getGameInstance();
@@ -537,14 +535,12 @@ export default function CityViewer({
   useEffect(() => {
     if (!e2eMode || typeof window === "undefined") return;
 
-    const startAdventureForTest = (characterType: CityE2ECharacter = "banana") => {
+    const startAdventureForTest = () => {
       if (isAdventureActive) {
         return true;
       }
 
-      const character =
-        characterType === "apple" ? CharacterType.Apple : CharacterType.Banana;
-      handleStartAdventure(character);
+      handleStartAdventure();
       return true;
     };
 
@@ -596,11 +592,11 @@ export default function CityViewer({
       closeBuildingModal: () => {
         handleCloseModal();
       },
-      startAdventure: (characterType: CityE2ECharacter = "banana") => {
-        return startAdventureForTest(characterType);
+      startAdventure: () => {
+        return startAdventureForTest();
       },
       walkToBuilding: async (buildingId: string) => {
-        startAdventureForTest("banana");
+        startAdventureForTest();
 
         const isPlayerReady = await waitForPlayerReadyForTest();
         if (!isPlayerReady) {
@@ -624,7 +620,7 @@ export default function CityViewer({
         const stop = TOUR_STOPS.find((tourStop) => tourStop.id === stopId);
         if (!stop) return false;
 
-        startAdventureForTest("banana");
+        startAdventureForTest();
         setCurrentEncounter(stop);
         setIsDialogOpen(true);
         return true;
@@ -807,7 +803,7 @@ export default function CityViewer({
             Take Tour
           </button>
           <button
-            onClick={() => handleStartAdventure(CharacterType.Banana)}
+            onClick={handleStartAdventure}
             className={pixelButtonClass("primary")}
             style={PIXEL_INSET_CLIP}
           >

@@ -19,6 +19,8 @@ import {
   NPCState,
   PlayerData,
   TRIGGER_ZONE_RADIUS,
+  DIRECTION_TO_COMPASS,
+  DIRECTION_TO_SHORT_COMPASS,
 } from "../types";
 import { GAME_HEIGHT, GAME_WIDTH, GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import {
@@ -292,7 +294,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private async loadCharacterAnimations(): Promise<void> {
-    const charTypes = ["banana", "apple"];
+    const charTypes = ["banana", "apple", "gustav"];
     const charDirs = ["north", "south", "east", "west"];
 
     const loadPromises: Promise<void>[] = [];
@@ -2206,13 +2208,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private getCarTextureKey(carType: CarType, direction: Direction): string {
-    const dirMap: Record<Direction, string> = {
-      [Direction.Up]: "n",
-      [Direction.Down]: "s",
-      [Direction.Left]: "w",
-      [Direction.Right]: "e",
-    };
-    return `${carType}_${dirMap[direction]}`;
+    return `${carType}_${DIRECTION_TO_SHORT_COMPASS[direction]}`;
   }
 
   private renderCharacters(): void {
@@ -2253,13 +2249,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private getCharacterTextureKey(charType: CharacterType, direction: Direction): string {
-    const dirMap: Record<Direction, string> = {
-      [Direction.Up]: "north",
-      [Direction.Down]: "south",
-      [Direction.Left]: "west",
-      [Direction.Right]: "east",
-    };
-    return `${charType}_${dirMap[direction]}`;
+    return `${charType}_${DIRECTION_TO_COMPASS[direction]}`;
   }
 
   private clearPreview(): void {

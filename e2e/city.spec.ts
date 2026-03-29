@@ -82,7 +82,7 @@ test.describe("city flows", () => {
     );
 
     await gotoCityE2E(page);
-    await startAdventure(page, "banana");
+    await startAdventure(page);
     await openEncounter(page, "lego");
 
     await expect(page.getByTestId("city-talk-button")).toBeVisible();
@@ -111,7 +111,7 @@ test.describe("city flows", () => {
     page,
   }) => {
     await gotoCityE2E(page);
-    await startAdventure(page, "banana");
+    await startAdventure(page);
 
     await expect
       .poll(() => getPlayerState(page))
@@ -128,7 +128,7 @@ test.describe("city flows", () => {
     page,
   }) => {
     await gotoCityE2E(page);
-    await startAdventure(page, "banana");
+    await startAdventure(page);
     await walkToBuilding(page, "lego-hq");
 
     await expect
