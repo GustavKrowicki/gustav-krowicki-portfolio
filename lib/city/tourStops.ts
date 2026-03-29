@@ -97,7 +97,6 @@ export const TOUR_STOPS: TourStop[] = [
       "I'm a big reader! I try to always have a book going — mostly non-fiction, biographies, and anything that makes me think differently about design and technology.",
     category: "interests",
     npcOffset: { x: 2, y: 2 },
-    gridPosition: { x: 5.5, y: 7 },
   },
   {
     id: "northside",

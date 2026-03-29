@@ -55,8 +55,8 @@ export interface PhaserGameHandle {
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
-  panToPosition: (gridX: number, gridY: number) => void;
-  panToBuildingById: (buildingId: string) => void;
+  panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
+  panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -93,8 +93,8 @@ export interface GameBoardHandle {
   spawnCar: () => boolean;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
-  panToPosition: (gridX: number, gridY: number) => void;
-  panToBuildingById: (buildingId: string) => void;
+  panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
+  panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -216,11 +216,11 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     fitCityView: () => {
       gameRef.current?.fitCityView();
     },
-    panToPosition: (gridX: number, gridY: number) => {
-      gameRef.current?.panToPosition(gridX, gridY);
+    panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => {
+      gameRef.current?.panToPosition(gridX, gridY, options);
     },
-    panToBuildingById: (buildingId: string) => {
-      gameRef.current?.panToBuildingById(buildingId);
+    panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => {
+      gameRef.current?.panToBuildingById(buildingId, options);
     },
     highlightBuilding: (buildingId: string | null) => {
       gameRef.current?.highlightBuilding(buildingId);

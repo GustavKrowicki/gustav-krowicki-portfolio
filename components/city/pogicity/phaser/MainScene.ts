@@ -1444,7 +1444,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   // Tour navigation - smoothly pan camera to a grid position
-  panToPosition(gridX: number, gridY: number): void {
+  panToPosition(gridX: number, gridY: number, options?: { dialogVisible?: boolean }): void {
     if (!this.isReady) return;
 
     const camera = this.cameras.main;
@@ -1460,16 +1460,28 @@ export class MainScene extends Phaser.Scene {
 
     const isMobileViewport = this.isMobileViewport();
     const isPortraitViewport = camera.height >= camera.width;
+    const hasDialog = options?.dialogVisible ?? false;
     const modalOffsetX = isMobileViewport ? 0 : 200;
-    const modalOffsetY = isMobileViewport && isPortraitViewport ? camera.height * 0.18 : 0;
+    let modalOffsetY: number;
+    if (hasDialog) {
+      modalOffsetY = isMobileViewport && isPortraitViewport
+        ? camera.height * 0.15
+        : camera.height * 0.18;
+    } else {
+      modalOffsetY = isMobileViewport && isPortraitViewport ? camera.height * 0.18 : 0;
+    }
     const targetScrollX = screenPos.x - camera.width / 2 - modalOffsetX;
     const targetScrollY = screenPos.y - camera.height / 2 - modalOffsetY;
+
+    // Clamp to prevent showing empty space past the world edges
+    const minScrollY = -this.FIT_CITY_PADDING_Y;
+    const clampedScrollY = Math.max(minScrollY, targetScrollY);
 
     // Animate the camera pan
     this.tweens.add({
       targets: this,
       baseScrollX: targetScrollX,
-      baseScrollY: targetScrollY,
+      baseScrollY: clampedScrollY,
       duration: 800,
       ease: "Power2",
       onUpdate: () => {
@@ -1483,7 +1495,7 @@ export class MainScene extends Phaser.Scene {
 
   private panTween: Phaser.Tweens.Tween | null = null;
 
-  panToBuildingById(buildingId: string): void {
+  panToBuildingById(buildingId: string, options?: { dialogVisible?: boolean }): void {
     if (!this.isReady || !this.grid) return;
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
@@ -1499,8 +1511,21 @@ export class MainScene extends Phaser.Scene {
           const camera = this.cameras.main;
           const screenPos = this.gridToScreen(centerX, centerY);
           const targetZoom = Math.max(camera.zoom, 1.4);
+          const hasDialog = options?.dialogVisible ?? false;
+          const isMobileViewport = this.isMobileViewport();
+          const isPortraitViewport = camera.height >= camera.width;
+          let dialogOffsetY = 0;
+          if (hasDialog) {
+            dialogOffsetY = isMobileViewport && isPortraitViewport
+              ? camera.height * 0.15
+              : camera.height * 0.18;
+          }
           const targetScrollX = screenPos.x - camera.width / 2;
-          const targetScrollY = screenPos.y - camera.height / 2;
+          const targetScrollY = screenPos.y - camera.height / 2 - dialogOffsetY;
+
+          // Clamp to prevent showing empty space past the world edges
+          const minScrollY = -this.FIT_CITY_PADDING_Y;
+          const clampedScrollY = Math.max(minScrollY, targetScrollY);
 
           // Cancel any existing pan tween before starting a new one
           if (this.panTween) {
@@ -1511,7 +1536,7 @@ export class MainScene extends Phaser.Scene {
           this.panTween = this.tweens.add({
             targets: this,
             baseScrollX: targetScrollX,
-            baseScrollY: targetScrollY,
+            baseScrollY: clampedScrollY,
             zoomLevel: targetZoom,
             duration: 800,
             ease: "Power2",

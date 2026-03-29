@@ -25,8 +25,8 @@ export interface PhaserGameHandle {
   shakeScreen: (axis?: "x" | "y", intensity?: number, duration?: number) => void;
   zoomAtPoint: (zoom: number, screenX: number, screenY: number) => void;
   fitCityView: () => void;
-  panToPosition: (gridX: number, gridY: number) => void;
-  panToBuildingById: (buildingId: string) => void;
+  panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
+  panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
@@ -174,13 +174,13 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
         fitCityView: () => {
           sceneRef.current?.fitCityView();
         },
-        panToPosition: (gridX: number, gridY: number) => {
+        panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => {
           if (sceneRef.current) {
-            sceneRef.current.panToPosition(gridX, gridY);
+            sceneRef.current.panToPosition(gridX, gridY, options);
           }
         },
-        panToBuildingById: (buildingId: string) => {
-          sceneRef.current?.panToBuildingById(buildingId);
+        panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => {
+          sceneRef.current?.panToBuildingById(buildingId, options);
         },
         highlightBuilding: (buildingId: string | null) => {
           if (sceneRef.current) {

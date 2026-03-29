@@ -349,7 +349,7 @@ export default function CityViewer({
 
   const handleLogoClick = useCallback((buildingId: string) => {
     hasManualViewportInteraction.current = true;
-    gameBoardRef.current?.panToBuildingById(buildingId);
+    gameBoardRef.current?.panToBuildingById(buildingId, { dialogVisible: true });
 
     const stop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
     if (stop) {
@@ -470,14 +470,14 @@ export default function CityViewer({
 
       let position: { x: number; y: number } | null = null;
 
-      if (stop.gridPosition) {
-        position = stop.gridPosition;
-      } else if (stop.buildingId) {
+      if (stop.buildingId) {
         position = findBuildingPosition(initialGrid, stop.buildingId);
+      } else if (stop.gridPosition) {
+        position = stop.gridPosition;
       }
 
       if (position) {
-        gameBoard.panToPosition(position.x, position.y);
+        gameBoard.panToPosition(position.x, position.y, { dialogVisible: true });
         hasManualViewportInteraction.current = true;
       }
 
@@ -505,6 +505,7 @@ export default function CityViewer({
         // Check if building has a tour stop — show RPG dialog instead of building modal
         const tourStop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
         if (tourStop) {
+          gameBoardRef.current?.panToBuildingById(buildingId, { dialogVisible: true });
           setCurrentEncounter(tourStop);
           setIsDialogOpen(true);
         } else {
