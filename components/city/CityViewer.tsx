@@ -470,10 +470,10 @@ export default function CityViewer({
 
       let position: { x: number; y: number } | null = null;
 
-      if (stop.buildingId) {
-        position = findBuildingPosition(initialGrid, stop.buildingId);
-      } else if (stop.gridPosition) {
+      if (stop.gridPosition) {
         position = stop.gridPosition;
+      } else if (stop.buildingId) {
+        position = findBuildingPosition(initialGrid, stop.buildingId);
       }
 
       if (position) {
@@ -502,9 +502,15 @@ export default function CityViewer({
         // Navigate to project page
         onProjectClick?.(building.projectSlug);
       } else {
-        // Show building info modal
-        setSelectedBuilding(building);
-        setIsModalOpen(true);
+        // Check if building has a tour stop — show RPG dialog instead of building modal
+        const tourStop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
+        if (tourStop) {
+          setCurrentEncounter(tourStop);
+          setIsDialogOpen(true);
+        } else {
+          setSelectedBuilding(building);
+          setIsModalOpen(true);
+        }
       }
     },
     [onProjectClick, isTourActive, gameMode]

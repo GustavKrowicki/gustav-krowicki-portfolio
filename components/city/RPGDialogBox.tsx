@@ -14,6 +14,7 @@ import {
   pixelPanelOuterClass,
 } from "./pixelModalStyles";
 import SpotifyPlayer, { NORTHSIDE_PLAYLIST_URL } from "./SpotifyPlayer";
+import BookShelf from "./BookShelf";
 
 interface RPGDialogBoxProps {
   isMobile: boolean;
@@ -203,6 +204,12 @@ export default function RPGDialogBox({
                 {tourStop.buildingId === "northside-stage" && (
                   <div className="mt-2">
                     <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} />
+                  </div>
+                )}
+
+                {tourStop.buildingId === "dokk1-library" && (
+                  <div className="mt-2">
+                    <BookShelf />
                   </div>
                 )}
               </div>

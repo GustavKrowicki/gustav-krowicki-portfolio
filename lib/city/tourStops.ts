@@ -90,6 +90,16 @@ export const TOUR_STOPS: TourStop[] = [
     npcOffset: { x: 1, y: 1 },
   },
   {
+    id: "dokk1",
+    buildingId: "dokk1-library",
+    title: "Dokk1 Library",
+    dialogue:
+      "I'm a big reader! I try to always have a book going — mostly non-fiction, biographies, and anything that makes me think differently about design and technology.",
+    category: "interests",
+    npcOffset: { x: 2, y: 2 },
+    gridPosition: { x: 5.5, y: 7 },
+  },
+  {
     id: "northside",
     buildingId: "northside-stage",
     title: "Northside Festival",

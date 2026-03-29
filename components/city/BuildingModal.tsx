@@ -100,7 +100,7 @@ const BUILDING_METADATA: Record<
   },
   "dokk1-library": {
     role: "Personal Interest",
-    highlights: ["Reading", "Learning", "Continuous growth"],
+    highlights: ["Non-fiction", "Biographies", "Design thinking"],
     emoji: "📚",
   },
   "aarhus-stadium": {
