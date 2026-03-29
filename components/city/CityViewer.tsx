@@ -3,11 +3,10 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
-import { getBuilding, BuildingDefinition } from "@/lib/city/buildings";
+import { getBuilding } from "@/lib/city/buildings";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import WelcomeOverlay from "./WelcomeOverlay";
 import TourGuide from "./TourGuide";
-import BuildingModal from "./BuildingModal";
 import RPGDialogBox from "./RPGDialogBox";
 import VirtualJoystick from "./VirtualJoystick";
 import AdventureHUD from "./AdventureHUD";
@@ -22,7 +21,6 @@ import {
   trackProjectOpened,
   trackAdventureCompleted,
   trackAdventureExited,
-  trackCityExited,
   trackTourStopViewed,
   trackTourCompleted,
   trackTourExited,
@@ -41,17 +39,13 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
 interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
-  onBackToPortfolio?: () => void;
   e2eMode?: boolean;
-  cityEntryTimeRef?: React.RefObject<number | null>;
 }
 
 
 interface CityE2EApi {
   dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
-  openBuildingModal: (buildingId: string) => boolean;
-  closeBuildingModal: () => void;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
   openEncounter: (stopId: string) => boolean;
@@ -66,9 +60,7 @@ interface CityE2EApi {
 export default function CityViewer({
   initialGrid,
   onProjectClick,
-  onBackToPortfolio,
   e2eMode = false,
-  cityEntryTimeRef,
 }: CityViewerProps) {
   // Mode state
   const [showWelcome, setShowWelcome] = useState(true);
@@ -85,9 +77,6 @@ export default function CityViewer({
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [isAutoWalking, setIsAutoWalking] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
-  // Building modal state
-  const [selectedBuilding, setSelectedBuilding] = useState<BuildingDefinition | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   // Logo overlay state
   const [logoPositions, setLogoPositions] = useState<LogoPosition[]>([]);
@@ -491,46 +480,24 @@ export default function CityViewer({
       const building = getBuilding(buildingId);
       if (!building) return;
 
-      // If in tour mode, don't show modal
       if (isTourActive) return;
 
       trackBuildingInteracted(building.name, gameMode, 'click');
 
       if (building.interactable && building.projectSlug) {
-        // Navigate to project page
         onProjectClick?.(building.projectSlug);
       } else {
-        // Check if building has a tour stop — show RPG dialog instead of building modal
         const tourStop = TOUR_STOPS.find((s) => s.buildingId === buildingId);
         if (tourStop) {
           gameBoardRef.current?.panToBuildingById(buildingId, { dialogVisible: true });
           setCurrentEncounter(tourStop);
           setIsDialogOpen(true);
-        } else {
-          setSelectedBuilding(building);
-          setIsModalOpen(true);
         }
       }
     },
     [onProjectClick, isTourActive, gameMode]
   );
 
-  // Handle modal close
-  const handleCloseModal = useCallback(() => {
-    setIsModalOpen(false);
-    setSelectedBuilding(null);
-  }, []);
-
-  // Handle view project from modal
-  const handleViewProject = useCallback(
-    (projectSlug: string) => {
-      setIsModalOpen(false);
-      setSelectedBuilding(null);
-      trackProjectOpened(projectSlug, 'city');
-      onProjectClick?.(projectSlug);
-    },
-    [onProjectClick]
-  );
 
   useEffect(() => {
     if (!e2eMode || typeof window === "undefined") return;
@@ -577,20 +544,6 @@ export default function CityViewer({
         }
 
         return true;
-      },
-      openBuildingModal: (buildingId: string) => {
-        const building = getBuilding(buildingId);
-        if (!building) return false;
-
-        setShowWelcome(false);
-        setIsTourActive(false);
-        setGameMode(GameMode.Viewer);
-        setSelectedBuilding(building);
-        setIsModalOpen(true);
-        return true;
-      },
-      closeBuildingModal: () => {
-        handleCloseModal();
       },
       startAdventure: () => {
         return startAdventureForTest();
@@ -652,7 +605,6 @@ export default function CityViewer({
   }, [
     e2eMode,
     currentEncounter?.id,
-    handleCloseModal,
     handleExploreFreely,
     handleStartAdventure,
     handleStopAdventure,
@@ -676,14 +628,6 @@ export default function CityViewer({
     }
   }, [isAdventureActive, visitedBuildings.size, adventureBuildingCount]);
 
-  // Wrap onBackToPortfolio with city_exited tracking
-  const handleBackToPortfolio = useCallback(() => {
-    if (cityEntryTimeRef?.current) {
-      const duration = Math.round((Date.now() - cityEntryTimeRef.current) / 1000);
-      trackCityExited(duration, gameMode, visitedBuildings.size);
-    }
-    onBackToPortfolio?.();
-  }, [cityEntryTimeRef, gameMode, visitedBuildings.size, onBackToPortfolio]);
 
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
@@ -777,16 +721,6 @@ export default function CityViewer({
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
-      />
-
-      {/* Building Modal */}
-      <BuildingModal
-        isMobile={isMobile}
-        building={selectedBuilding}
-        isOpen={isModalOpen}
-        onClose={handleCloseModal}
-        onViewProject={handleViewProject}
-        onBackToPortfolio={handleBackToPortfolio}
       />
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}

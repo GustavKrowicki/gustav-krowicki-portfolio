@@ -1,6 +1,6 @@
 "use client";
 
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { trackCityEntered } from "@/lib/analytics";
 import dynamic from "next/dynamic";
@@ -30,11 +30,8 @@ function CityPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const e2eMode = searchParams.get("e2e") === "1";
-  const cityEntryTimeRef = useRef<number | null>(null);
-
   // Track city entry on mount
   useEffect(() => {
-    cityEntryTimeRef.current = Date.now();
     const isMobile = window.innerWidth < 768;
     trackCityEntered(isMobile ? 'mobile' : 'desktop');
   }, []);
@@ -72,18 +69,12 @@ function CityPageContent() {
     router.push(`/work/${projectSlug}`);
   };
 
-  const handleBackToPortfolio = () => {
-    router.push("/");
-  };
-
   return (
     <div className="w-full h-[100dvh] bg-[#73645F]" style={{ overscrollBehavior: "none" }}>
       <CityViewer
         initialGrid={initialGrid as GridCell[][]}
         onProjectClick={handleProjectClick}
-        onBackToPortfolio={handleBackToPortfolio}
         e2eMode={e2eMode}
-        cityEntryTimeRef={cityEntryTimeRef}
       />
     </div>
   );

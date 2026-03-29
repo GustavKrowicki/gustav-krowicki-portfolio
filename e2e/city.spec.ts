@@ -6,7 +6,6 @@ import {
   getPlayerState,
   getVisitedBuildings,
   gotoCityE2E,
-  openBuildingModal,
   openEncounter,
   setVisitedBuildings,
   startAdventure,
@@ -35,30 +34,6 @@ test.describe("city flows", () => {
 
     await page.getByTestId("city-exit-adventure").click();
     await expect(page.getByTestId("city-adventure-hud")).toBeHidden();
-  });
-
-  test("can open a non-project building modal through the city harness", async ({
-    page,
-  }) => {
-    await gotoCityE2E(page);
-    await openBuildingModal(page, "sdu-kolding");
-
-    await expect(
-      page.getByTestId("city-building-modal").getByRole("heading", {
-        name: /sdu kolding/i,
-      })
-    ).toBeVisible();
-    await expect(page.getByText(/building notes/i)).toBeVisible();
-  });
-
-  test("project building modal CTA navigates to the case study", async ({
-    page,
-  }) => {
-    await gotoCityE2E(page);
-    await openBuildingModal(page, "lego-hq");
-
-    await page.getByRole("button", { name: /view case study/i }).click();
-    await expect(page).toHaveURL(/\/work\/lego$/);
   });
 
   test("encounter dialog can be opened deterministically and dismissed", async ({
@@ -104,7 +79,6 @@ test.describe("city flows", () => {
     await focusBuilding(page, "lego-hq");
 
     await expect(page.getByTestId("city-welcome-overlay")).toBeHidden();
-    await expect(page.getByTestId("city-building-modal")).toBeHidden();
   });
 
   test("adventure hooks can expose Phaser player state and encounter identity", async ({

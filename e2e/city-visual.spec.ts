@@ -1,7 +1,6 @@
 import { expect, test } from "@playwright/test";
 import {
   gotoCityE2E,
-  openBuildingModal,
   openEncounter,
   startAdventure,
 } from "./helpers/city";
@@ -11,15 +10,6 @@ test.describe("city visual regression", () => {
     await gotoCityE2E(page);
     await expect(page.getByTestId("city-welcome-overlay")).toHaveScreenshot(
       "city-welcome-overlay.png"
-    );
-  });
-
-  test("building modal snapshot", async ({ page }) => {
-    await gotoCityE2E(page);
-    await openBuildingModal(page, "sdu-kolding");
-
-    await expect(page.getByTestId("city-building-modal")).toHaveScreenshot(
-      "city-building-modal.png"
     );
   });
 

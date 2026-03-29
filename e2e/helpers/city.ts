@@ -3,8 +3,6 @@ import { expect, Page } from "@playwright/test";
 type CityE2EApi = {
   dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
-  openBuildingModal: (buildingId: string) => boolean;
-  closeBuildingModal: () => void;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
   openEncounter: (stopId: string) => boolean;
@@ -61,13 +59,6 @@ export async function startAdventure(page: Page) {
   await callCityHook(page, "startAdventure");
   await expect(page.getByTestId("city-adventure-hud")).toBeVisible();
   await expect.poll(() => getPlayerState(page)).toBeTruthy();
-}
-
-export async function openBuildingModal(page: Page, buildingId: string) {
-  await waitForCityHarness(page);
-  const opened = await callCityHook<boolean>(page, "openBuildingModal", buildingId);
-  expect(opened).toBe(true);
-  await expect(page.getByTestId("city-building-modal")).toBeVisible();
 }
 
 export async function openEncounter(page: Page, stopId: string) {
