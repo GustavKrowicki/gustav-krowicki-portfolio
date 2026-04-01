@@ -464,7 +464,13 @@ export default function CityViewer({
       }
 
       if (position) {
-        gameBoard.panToPosition(position.x, position.y, { dialogVisible: true });
+        const isMobile = window.innerWidth < 768;
+        const offset = isMobile
+          ? (stop.cameraOffsetMobile ?? stop.cameraOffset)
+          : stop.cameraOffset;
+        const offsetX = offset?.x ?? 0;
+        const offsetY = offset?.y ?? 0;
+        gameBoard.panToPosition(position.x + offsetX, position.y + offsetY, { dialogVisible: true });
         hasManualViewportInteraction.current = true;
       }
 

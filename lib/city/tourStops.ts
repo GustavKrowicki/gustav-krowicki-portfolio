@@ -12,6 +12,10 @@ export interface TourStop {
   projectSlug?: string;
   // Offset for NPC position relative to building center
   npcOffset?: { x: number; y: number };
+  // Offset for camera position relative to building center (grid units)
+  cameraOffset?: { x: number; y: number };
+  // Separate mobile camera offset (uses cameraOffset as fallback if not set)
+  cameraOffsetMobile?: { x: number; y: number };
 }
 
 export const TOUR_STOPS: TourStop[] = [
@@ -31,7 +35,9 @@ export const TOUR_STOPS: TourStop[] = [
       "This is where I currently work at LEGO, designing ML-assisted tools that help our internal teams work smarter. It's a dream come true to work with such an iconic brand!",
     category: "work",
     projectSlug: "lego",
-    npcOffset: { x: 2, y: 2 },
+    npcOffset: { x: -6, y: -6 },
+    cameraOffset: { x: 6, y: 9 },
+    cameraOffsetMobile: { x: 15.8, y: 15.3 },
   },
   {
     id: "valtech",
@@ -42,6 +48,8 @@ export const TOUR_STOPS: TourStop[] = [
     category: "work",
     projectSlug: "valtech",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 10.6, y: 3.6 }, 
+    cameraOffsetMobile: { x: 20.5, y: 18.8 },
   },
   {
     id: "sdu",
@@ -51,6 +59,8 @@ export const TOUR_STOPS: TourStop[] = [
       "SDU Kolding is where I studied IT Product Design. This unique program taught me to bridge the gap between technology and user experience.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 11.5, y: 2.8 },
+    cameraOffsetMobile: { x: 15.5, y: 12.4 },
   },
   {
     id: "melbourne",
@@ -60,6 +70,8 @@ export const TOUR_STOPS: TourStop[] = [
       "I spent a semester abroad in Melbourne, Australia! It was an incredible experience studying design in a completely different culture and environment.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 11.7, y: 5.1 },
+    cameraOffsetMobile: { x: 15.9, y: 12.6 },
   },
   {
     id: "berlin",
@@ -69,6 +81,8 @@ export const TOUR_STOPS: TourStop[] = [
       "Another exchange semester, this time in Berlin, Germany. The vibrant startup culture and design scene there really inspired my work.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 10.4, y: 4 },
+    cameraOffsetMobile: { x: 17.4, y: 17.7 },
   },
   {
     id: "erhvervsakademiet",
@@ -78,6 +92,8 @@ export const TOUR_STOPS: TourStop[] = [
       "This is where my journey in multimedia design began. The practical, hands-on approach here gave me strong foundations in digital design.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 12.2, y: 2.1 },
+    cameraOffsetMobile: { x: 13, y: 13 },
   },
   {
     id: "cate-it",
@@ -88,6 +104,8 @@ export const TOUR_STOPS: TourStop[] = [
     category: "startup",
     projectSlug: "cate-it",
     npcOffset: { x: 1, y: 1 },
+    cameraOffset: { x: 13, y: 2.2 },
+    cameraOffsetMobile: { x: 19.3, y: 17.5 },
   },
   {
     id: "dokk1",
@@ -97,6 +115,8 @@ export const TOUR_STOPS: TourStop[] = [
       "I'm a big reader! I try to always have a book going — mostly non-fiction, biographies, and anything that makes me think differently about design and technology.",
     category: "interests",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 20, y: 9.9 },
+    cameraOffsetMobile: { x: 21.6, y: 20.9 },
   },
   {
     id: "northside",
@@ -106,15 +126,19 @@ export const TOUR_STOPS: TourStop[] = [
       "I love music and festivals! Northside is one of my favorites - great music, great vibes, and always a source of creative inspiration.",
     category: "interests",
     npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 20.7, y: 8.9 },
+    cameraOffsetMobile: { x: 28, y: 22.1 },
   },
   {
     id: "skiing",
-    buildingId: "ski-chute-1",
+    buildingId: "ski-chute-2",
     title: "Ski Slopes",
     dialogue:
       "When I'm not designing, you might find me on the ski slopes! There's nothing like the rush of skiing down a mountain.",
     category: "interests",
     npcOffset: { x: 1, y: 3 },
+    cameraOffset: { x: 2, y: -4 },
+    cameraOffsetMobile: { x: 15.8, y: 15.3 },
   },
   {
     id: "stadium",
@@ -124,6 +148,8 @@ export const TOUR_STOPS: TourStop[] = [
       "Football is a big part of my life. I try to catch games at the stadium whenever I can - there's nothing like the atmosphere of a live match!",
     category: "interests",
     npcOffset: { x: 3, y: 3 },
+    cameraOffset: { x: 12.3, y: 5.9 },
+    cameraOffsetMobile: { x: 15.1, y: 16.3 },
   },
   {
     id: "outro",
