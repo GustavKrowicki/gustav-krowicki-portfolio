@@ -5,7 +5,6 @@ import { Direction } from "./pogicity/types";
 import {
   PIXEL_INSET_CLIP,
   pixelButtonClass,
-  pixelHintClass,
   pixelPanelInnerClass,
   pixelPanelOuterClass,
 } from "./pixelModalStyles";
@@ -164,7 +163,6 @@ export default function VirtualJoystick({
           >
             Talk
           </button>
-          <p className={`mt-2 w-fit ${pixelHintClass}`}>Interact</p>
         </div>
       )}
     </div>

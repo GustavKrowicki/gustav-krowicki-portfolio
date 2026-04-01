@@ -21,7 +21,6 @@ interface RPGDialogBoxProps {
   tourStop: TourStop | null;
   isVisible: boolean;
   onClose: () => void;
-  onContinue?: () => void;
   onViewCaseStudy?: (projectSlug: string) => void;
   disableTypingAnimation?: boolean;
   logoUrl?: string | null;
@@ -32,7 +31,6 @@ export default function RPGDialogBox({
   tourStop,
   isVisible,
   onClose,
-  onContinue,
   onViewCaseStudy,
   disableTypingAnimation = false,
   logoUrl,
@@ -92,14 +90,14 @@ export default function RPGDialogBox({
         if (isTyping) {
           skipTyping();
         } else {
-          (onContinue ?? onClose)();
+          onClose();
         }
       }
     };
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, [isVisible, isTyping, skipTyping, onClose, onContinue]);
+  }, [isVisible, isTyping, skipTyping, onClose]);
 
   if (!tourStop) return null;
 
@@ -168,11 +166,11 @@ export default function RPGDialogBox({
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          (onContinue ?? onClose)();
+                          onClose();
                         }}
                         className="border-[2px] border-[#111518] bg-[#3f3b31] px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.08em] text-[#d8cfb6] shadow-[inset_0_-2px_0_#26231d] transition-transform duration-100 active:translate-y-px"
                       >
-                        Continue
+                        Close
                       </button>
                     )}
                   </div>
@@ -215,9 +213,11 @@ export default function RPGDialogBox({
               </div>
             </div>
 
-            <p className={`mx-auto mt-2 w-fit ${pixelHintClass}`}>
-              {isMobile ? "Tap to continue" : "Press Space/Enter to continue • ESC to close"}
-            </p>
+            {!isMobile && (
+              <p className={`mx-auto mt-2 w-fit ${pixelHintClass}`}>
+                Press Space/Enter to continue • ESC to close
+              </p>
+            )}
           </motion.div>
         </motion.div>
       )}

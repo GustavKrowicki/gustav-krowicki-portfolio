@@ -335,6 +335,11 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
+    if (isAdventureActive) {
+      gameBoardRef.current?.walkPlayerToBuilding(buildingId);
+      return;
+    }
+
     hasManualViewportInteraction.current = true;
     gameBoardRef.current?.panToBuildingById(buildingId, { dialogVisible: true });
 
@@ -344,7 +349,7 @@ export default function CityViewer({
       setCurrentEncounter(stop);
       setIsDialogOpen(true);
     }
-  }, [gameMode]);
+  }, [gameMode, isAdventureActive]);
 
   // Stop Adventure Mode
   const handleStopAdventure = useCallback(() => {
@@ -711,7 +716,7 @@ export default function CityViewer({
           <VirtualJoystick
             isMobile={isMobile}
             onDirectionChange={handleJoystickDirection}
-            onInteract={currentEncounter ? handleMobileInteract : undefined}
+            onInteract={currentEncounter && !isDialogOpen ? handleMobileInteract : undefined}
           />
 
         </>
@@ -723,7 +728,6 @@ export default function CityViewer({
         tourStop={currentEncounter}
         isVisible={isDialogOpen}
         onClose={handleDialogClose}
-        onContinue={isAdventureActive ? () => { handleDialogClose(); handleNextStop(); } : undefined}
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
