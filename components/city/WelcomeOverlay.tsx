@@ -5,8 +5,6 @@ import {
   PIXEL_INSET_CLIP,
   PIXEL_PANEL_CLIP,
   pixelButtonClass,
-  pixelChipClass,
-  pixelHintClass,
   pixelPanelInnerClass,
   pixelPanelOuterClass,
   pixelSpriteFrameClass,
@@ -72,15 +70,6 @@ export default function WelcomeOverlay({
                         >
                           👋
                         </span>
-                      </motion.div>
-
-                      <motion.div
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.25 }}
-                        className="mb-3 flex justify-center"
-                      >
-                        <span className={pixelChipClass}>City Entry</span>
                       </motion.div>
 
                       <motion.h2
@@ -151,16 +140,6 @@ export default function WelcomeOverlay({
                         </div>
                       </motion.div>
 
-                      <motion.p
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.8 }}
-                        className={`mx-auto mt-4 w-fit ${pixelHintClass}`}
-                      >
-                        {onStartAdventure
-                          ? "Walk around and discover my portfolio."
-                          : "Tap logos to learn more about each project."}
-                      </motion.p>
                     </div>
                   </div>
                 </div>

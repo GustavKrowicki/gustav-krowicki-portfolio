@@ -13,10 +13,10 @@ export default function PortfolioModeToggle({ activeMode, showIdentity = false }
   const router = useRouter();
 
   return (
-    <div className="flex items-center gap-3">
+    <div className={`flex items-center ${showIdentity ? 'justify-between w-full' : ''}`}>
       {showIdentity && (
-        <>
-          <span className="text-sm font-semibold text-white drop-shadow-md">
+        <div className="flex items-center gap-2">
+          <span className="text-sm font-semibold text-white drop-shadow-md whitespace-nowrap">
             Gustav Krowicki
           </span>
           <Image
@@ -26,7 +26,7 @@ export default function PortfolioModeToggle({ activeMode, showIdentity = false }
             height={36}
             className="rounded-full"
           />
-        </>
+        </div>
       )}
       <div className="flex rounded-full border border-neutral-200 bg-neutral-100 p-0.5 text-sm">
         <button

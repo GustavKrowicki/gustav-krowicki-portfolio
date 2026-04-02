@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Download } from 'lucide-react';
 import Container from './Container';
+import PortfolioModeToggle from './PortfolioModeToggle';
 import { cn } from '@/lib/utils';
 import { trackCvDownloaded } from '@/lib/analytics';
 
@@ -65,8 +66,15 @@ export default function Header() {
             Gustav Krowicki
           </Link>
 
+          <div className="md:hidden">
+            <PortfolioModeToggle activeMode="classic" />
+          </div>
+
           {/* Desktop navigation - hidden on mobile */}
           <ul className="hidden md:flex items-center gap-8">
+            <li>
+              <PortfolioModeToggle activeMode="classic" />
+            </li>
             {navItems.map((item) => {
               const isActive = pathname === item.href || pathname.startsWith(item.href + '/');
               return (

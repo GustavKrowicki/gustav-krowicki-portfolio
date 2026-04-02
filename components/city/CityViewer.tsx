@@ -652,7 +652,7 @@ export default function CityViewer({
 
       {/* Portfolio mode toggle */}
       {!showWelcome && !isAdventureActive && (
-        <div className="fixed z-40 md:top-4 md:left-4 top-[max(0.75rem,env(safe-area-inset-top))] left-1/2 md:left-4 md:translate-x-0 -translate-x-1/2">
+        <div className="fixed z-40 md:top-4 top-[max(0.75rem,env(safe-area-inset-top))] left-4 right-4">
           <PortfolioModeToggle activeMode="city" showIdentity />
         </div>
       )}
