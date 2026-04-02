@@ -193,5 +193,5 @@ export interface TriggerZone {
 
 // Player movement constants
 export const PLAYER_SPEED = 0.08; // Faster than NPCs for responsive feel
-export const PLAYER_MOVE_LERP = 0.15; // Interpolation factor for smooth movement
+export const PLAYER_MOVE_LERP = 0.20; // Interpolation factor for smooth movement
 export const TRIGGER_ZONE_RADIUS = 3.5; // Tiles around landmark to trigger interaction

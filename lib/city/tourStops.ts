@@ -50,7 +50,7 @@ export const TOUR_STOPS: TourStop[] = [
     projectSlug: "valtech",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 10.6, y: 3.6 }, 
-    cameraOffsetMobile: { x: 20.5, y: 18.8It },
+    cameraOffsetMobile: { x: 20.5, y: 18.8 },
   },
   {
     id: "sdu",
@@ -101,7 +101,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "cate-it",
     title: "Cate it",
     dialogue:
-      "This is side-project! Cate-it is a bookingplatform for food trucks, where you can book a food truck for your event. We are 3 persons on this project, and we are currently working on the MVP. Check out the case study!",
+      "This is side-project! Cate-it is a bookingplatform for food trucks, where you can book a food truck for your event. We are 3 persons on this project. Check out the case study!",
     category: "startup",
     projectSlug: "cate-it",
     npcOffset: { x: 1, y: 1 },

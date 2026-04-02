@@ -188,6 +188,7 @@ export default function RPGDialogBox({
                     </p>
                   </div>
 
+                  {/* Video thumbnail hidden for now
                   {tourStop.buildingId && getBuildingVideo(tourStop.buildingId) && (
                     <div className="h-16 w-16 flex-shrink-0 self-start [&>div]:!h-16 [&>div]:!border-0 [&>div]:!shadow-none [&>div]:!bg-transparent">
                       <VideoThumbnail
@@ -197,6 +198,7 @@ export default function RPGDialogBox({
                       />
                     </div>
                   )}
+                  */}
                 </div>
 
                 {tourStop.buildingId === "northside-stage" && (

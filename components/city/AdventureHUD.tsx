@@ -111,11 +111,6 @@ export default function AdventureHUD({
                 ) : null}
               </div>
 
-              <div className="border-t-[3px] border-[#474438] bg-[#5d584b] px-3 py-2">
-                <p className={`mx-auto w-fit ${pixelHintClass}`}>
-                  {isMobile ? "Joystick to move • Tap Talk" : "Arrow keys to move • E to interact"}
-                </p>
-              </div>
             </div>
       </div>
     </motion.div>
