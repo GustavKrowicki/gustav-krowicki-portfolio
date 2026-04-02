@@ -33,7 +33,7 @@ export default function LegoPage() {
         <Container maxWidth="container">
           <div className="max-w-4xl">
             <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
-              Contribution
+              Design student-worker and intern
             </span>
             <h1 className="text-5xl md:text-6xl font-bold mb-12">
               Designing for autonomy in a supervised system
@@ -72,7 +72,7 @@ export default function LegoPage() {
         <Container maxWidth="container">
           <div className="grid md:grid-cols-2 gap-12 lg:gap-16 items-start">
             <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
-              <h2 className="text-3xl md:text-4xl font-bold text-black">The political problem in the interface</h2>
+              <h2 className="text-3xl md:text-4xl font-bold text-black">The political challenge in the interface</h2>
               <p>
                 Senior stakeholders wanted supervisor recommendations shown first, assuming
                 users would take inspiration from them. But our research showed this would
