@@ -37,8 +37,8 @@ export default function AboutPage() {
     },
     {
       src: '/images/about/drengene i parken.jpg',
-      alt: 'Drengene i Parken',
-      caption: 'Drengene i Parken',
+      alt: 'Cup final in Parken',
+      caption: 'Cup final in Parken',
     },
     {
       src: '/images/about/Dortmund.png',
@@ -56,13 +56,10 @@ export default function AboutPage() {
             <h1 className="text-5xl md:text-3xl font-bold mb-8">About</h1>
             <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
               <p>
-                I'm a digital product designer based in Aarhus, Denmark. I'm driven by curiosity
-                about how people work and how technology can genuinely help them. Below you can learn a bit more about me and my approach to design.
+              I am a digital product designer currently based in Aarhus, Denmark. I am a  person, who likes to observe and discover, driven by a curious and positive mindset. I am finishing a master's in IT and Product Design at SDU in Kolding while working at the LEGO group on ML-assisted platform. My thesis argues that friction in interfaces is a design material worth keeping, a direct challenge to the assumption that easier is always better.
               </p>
 
-              <p>
-                Currently, I'm at LEGO within the digital design team working with assortment and management. Besides work, i do care a bit about skiing, which involves a few trips during the winter of 26. When the mind is not on skiing, I'm have my ups and downs following the local footbal team from Aarhus, AGF. 
-              </p>
+          
             </div>
           </div>
 
@@ -86,11 +83,13 @@ export default function AboutPage() {
             <h2 className="text-5xl md:text-3xl font-bold mb-8">My Approach</h2>
             <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
               <p>
-             I thrive in complexity. I'm drawn to systems thinking, understanding not just surface interactions, but the underlying structures and connections that shape experiences. I see how parts relate to the whole, how workflows connect, and where leverage points for change exist. I spend my time understanding users and business goals, using whatever method fits best: sometimes qualitative conversations and observation, sometimes quantitative analysis and pattern-finding.
-             </p>
-             <p>
-I'm particularly interested in the intersection of design and emerging technologies. Not just making AI interfaces look good, but thinking through how these tools reshape workflows, what new interaction patterns they enable, and what problems they actually solve. I try to stay open—open to complexity, open to different ways of understanding a problem, and open to solutions that might not fit conventional patterns. With two semesters abroad, three internships, and studies at three universities in Denmark, I'm certain that there's not only one way to reach the goal.
-             </p>
+              I thrive in complexity and systems thinking: understanding not just surface interactions, but the underlying structures that shape experiences. I spend my time understanding users and business goals, using whatever method fits best, qualitative or quantitative.
+              </p>
+
+              <p>Most of my projects have landed in places where things weren't settled yet. At LEGO I've been working inside the constraints of an ML-assisted product: data quality issues, algorithm behaviour, organisational priorities that shift mid-sprint. That kind of context forces you to get precise about what you actually know versus what you're assuming, and I've found I'm good at working in that gap.</p>
+
+              <p>I've studied at 3 universities in Denmark, done semesters in Melbourne and Berlin, and worked across internships at Valtech, LEGO, and my own co-founded side project. None of it was a straight line, and I think that's made me comfortable with ambiguity and skeptical of the idea that there's only one right way to reach the goal.</p>
+
             
 
             </div>
