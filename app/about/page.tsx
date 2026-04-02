@@ -110,14 +110,14 @@ export default function AboutPage() {
         </div>
 
         <div className="space-y-8 text-lg leading-relaxed text-neutral-700">
-          <h2 className="text-3xl font-bold mb-8">Interests & Skills</h2>
+          <h2 className="text-3xl font-bold mb-4">Interests & Skills</h2>
 
           <InterestMap />
 
           <h2 className="text-3xl font-bold mt-16 mb-6">Reading List</h2>
 
           <p className="mb-8">
-            Books I've read recently. I'm interested in design, psychology, business strategy,
+            Books I've read recently. I'm interested in design, psychology
             and how technology shapes our work and lives.
           </p>
 
@@ -126,7 +126,7 @@ export default function AboutPage() {
           <h2 className="text-3xl font-bold mt-16 mb-6">Beyond Work</h2>
 
           <p className="mb-8">
-            When I'm not designing, you'll find me on the slopes or cheering for my local football team.
+            When I'm not enjoying design, you'll find me on the slopes or on the stands cheering for my local football team.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">

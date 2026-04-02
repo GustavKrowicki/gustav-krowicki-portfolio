@@ -89,7 +89,7 @@ export default function Bookshelf3D() {
       {/* Instructions */}
       <div className="mb-4 text-center">
         <p className="text-neutral-500 text-sm">
-          Scroll horizontally to browse • Click a book to pull it out • Hover for preview
+          Scroll horizontally to browse • Click a book to pull it out 
         </p>
       </div>
 

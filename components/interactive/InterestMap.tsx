@@ -3,46 +3,59 @@
 import ForceDirectedGraph, { GraphNode, GraphLink } from './ForceDirectedGraph';
 
 const interests: GraphNode[] = [
-  { id: 'research', label: 'User Research', category: 'design' },
-  { id: 'strategy', label: 'Product Strategy', category: 'design' },
-  { id: 'interface', label: 'Interface Design', category: 'design' },
-  { id: 'prototyping', label: 'Prototyping', category: 'design' },
-  { id: 'systems', label: 'Design Systems', category: 'design' },
-  { id: 'ml', label: 'ML/AI Tools', category: 'domain' },
-  { id: 'workflows', label: 'Creative Workflows', category: 'domain' },
-  { id: 'trust', label: 'Trust & Transparency', category: 'domain' },
-  { id: 'emerging', label: 'Emerging Tech', category: 'domain' },
-  { id: 'react', label: 'React/TypeScript', category: 'tech' },
-  { id: 'd3', label: 'Visual asset generation', category: 'tech' },
-  { id: 'thinking', label: 'Strategic Thinking', category: 'design' },
+  // Personal
+  { id: 'football', label: 'Football', category: 'personal' },
+  { id: 'sports', label: 'Sports', category: 'personal' },
+  { id: 'skiing', label: 'Skiing', category: 'personal' },
+  { id: 'reading', label: 'Book Reading', category: 'personal' },
+  { id: 'concerts', label: 'Concerts', category: 'personal' },
+  { id: 'city-living', label: 'City Living', category: 'personal' },
+  { id: 'travelling', label: 'Travelling', category: 'personal' },
+  { id: 'cooking', label: 'Cooking', category: 'personal' },
+  { id: 'trail-running', label: 'Trail-Running', category: 'personal' },
+  // Professional
+  { id: 'interface', label: 'Interface Design', category: 'professional' },
+  { id: 'systems', label: 'Design Systems', category: 'professional' },
+  { id: 'prototyping', label: 'Prototyping', category: 'professional' },
+  { id: 'strategy', label: 'Product Strategy', category: 'professional' },
+  { id: 'strategic-thinking', label: 'Strategic Thinking', category: 'professional' },
+  { id: 'system-thinking', label: 'System Thinking', category: 'professional' },
+  { id: 'friction', label: 'Design Friction', category: 'professional' },
+  { id: 'human-ai', label: 'Human-AI Interaction', category: 'professional' },
 ];
 
 const links: GraphLink[] = [
-  { source: 'research', target: 'strategy' },
-  { source: 'research', target: 'interface' },
-  { source: 'strategy', target: 'thinking' },
-  { source: 'interface', target: 'prototyping' },
+  // Personal connections
+  { source: 'football', target: 'sports' },
+  { source: 'skiing', target: 'sports' },
+  { source: 'trail-running', target: 'sports' },
+  { source: 'city-living', target: 'concerts' },
+  { source: 'city-living', target: 'cooking' },
+  { source: 'travelling', target: 'city-living' },
+  { source: 'travelling', target: 'skiing' },
+  { source: 'reading', target: 'cooking' },
+  // Professional connections
   { source: 'interface', target: 'systems' },
-  { source: 'prototyping', target: 'react' },
-  { source: 'systems', target: 'react' },
-  { source: 'ml', target: 'emerging' },
-  { source: 'ml', target: 'workflows' },
-  { source: 'ml', target: 'trust' },
-  { source: 'd3', target: 'react' },
-  { source: 'd3', target: 'interface' },
-  { source: 'thinking', target: 'ml' },
+  { source: 'interface', target: 'prototyping' },
+  { source: 'strategy', target: 'strategic-thinking' },
+  { source: 'strategic-thinking', target: 'system-thinking' },
+  { source: 'system-thinking', target: 'friction' },
+  { source: 'human-ai', target: 'friction' },
+  { source: 'human-ai', target: 'interface' },
+  { source: 'prototyping', target: 'human-ai' },
+  // Cross-category connections
+  { source: 'reading', target: 'strategic-thinking' },
+  { source: 'travelling', target: 'system-thinking' },
 ];
 
-const categoryColors = {
-  design: '#525252',
-  tech: '#737373',
-  domain: '#a3a3a3',
+const categoryColors: Record<string, string> = {
+  personal: '#525252',
+  professional: '#a3a3a3',
 };
 
 const legendItems = [
-  { color: '#525252', label: 'Design' },
-  { color: '#737373', label: 'Technology' },
-  { color: '#a3a3a3', label: 'Domain' },
+  { color: '#525252', label: 'Personal' },
+  { color: '#a3a3a3', label: 'Professional' },
 ];
 
 const instructions = `

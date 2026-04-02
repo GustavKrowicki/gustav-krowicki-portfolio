@@ -230,8 +230,14 @@ export default function ForceDirectedGraph({
         }
       });
 
-    // Update positions on simulation tick
+    // Update positions on simulation tick, clamping to bounds
+    const padding = 60;
     simulation.on('tick', () => {
+      allNodes.forEach(d => {
+        d.x = Math.max(padding, Math.min(width - padding, d.x!));
+        d.y = Math.max(padding, Math.min(height - padding, d.y!));
+      });
+
       link
         .attr('x1', (d: any) => d.source.x)
         .attr('y1', (d: any) => d.source.y)
