@@ -23,19 +23,20 @@ export const TOUR_STOPS: TourStop[] = [
     id: "welcome",
     title: "Welcome!",
     dialogue:
-      "Welcome to my city! I'm Gustav, a product designer based in Denmark. Let me show you around my portfolio through this isometric world I've built.",
+      "Welcome to my city! I'm Gustav, a digital product designer based in Denmark. Let me show you around my portfolio through this 3d world I've built.",
     category: "work",
     gridPosition: { x: 24, y: 24 },
+    cameraOffset: { x: 0, y: 0 },
   },
   {
     id: "lego",
     buildingId: "lego-hq",
     title: "LEGO HQ",
     dialogue:
-      "This is where I currently work at LEGO, designing ML-assisted tools that help our internal teams work smarter. It's a dream come true to work with such an iconic brand!",
+      "The Lego Group is where I currently work as a student worker. I'm designing a machine learning-assisted tool that ensure the right product mix on the shelves. No doubt, that i  am proud giving back to brand that has given me so much joy growing up.",
     category: "work",
     projectSlug: "lego",
-    npcOffset: { x: -6, y: -6 },
+    npcOffset: { x: -6, y: -6 }, 
     cameraOffset: { x: 6, y: 9 },
     cameraOffsetMobile: { x: 15.8, y: 15.3 },
   },
@@ -44,19 +45,19 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "valtech-office",
     title: "Valtech Office",
     dialogue:
-      "I interned here at Valtech, learning design at scale and working on enterprise digital experiences. This is where I really grew as a designer.",
+      "I interned here at Valtech for 6 months, learning design at scale and working on enterprise digital experiences. This is where I really grew as a designer. ",
     category: "work",
     projectSlug: "valtech",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 10.6, y: 3.6 }, 
-    cameraOffsetMobile: { x: 20.5, y: 18.8 },
+    cameraOffsetMobile: { x: 20.5, y: 18.8It },
   },
   {
     id: "sdu",
     buildingId: "sdu-kolding",
     title: "SDU Kolding",
     dialogue:
-      "SDU Kolding is where I studied IT Product Design. This unique program taught me to bridge the gap between technology and user experience.",
+      "SDU Kolding is where i am currently finishing my studies in ITD product design here in the summer of 26. The studies are focused on bridging the gap between technology and user experience, from a physical product perspective.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 11.5, y: 2.8 },
@@ -67,7 +68,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "melbourne-uni",
     title: "University of Melbourne",
     dialogue:
-      "I spent a semester abroad in Melbourne, Australia! It was an incredible experience studying design in a completely different culture and environment.",
+      "I spent a semester abroad in Melbourne, Australia! My interests in physical design came from this experience, where I had heaps of fun during the courses design fundamentals and design prototyping. Long nights in the studio, and lots of fun nights out :)",
     category: "education",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 11.7, y: 5.1 },
@@ -78,7 +79,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "berlin-uni",
     title: "Berlin University",
     dialogue:
-      "Another exchange semester, this time in Berlin, Germany. The vibrant startup culture and design scene there really inspired my work.",
+      "An exchange semester in Berlin, Germany. I had big personal growth during this semester, and studied with a lot of interesting and good people from all over the world in a graphic design program.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 10.4, y: 4 },
@@ -89,7 +90,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "erhvervsakademiet",
     title: "Business Academy",
     dialogue:
-      "This is where my journey in multimedia design began. The practical, hands-on approach here gave me strong foundations in digital design.",
+      "This is where my journey in multimedia design began. The practical, hands-on approach here gave me strong foundations in digital design. Playing around with website design, learning html, css and APIs really opened my eyes to the possibilities of digital design.",
     category: "education",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 12.2, y: 2.1 },
@@ -100,7 +101,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "cate-it",
     title: "Cate it",
     dialogue:
-      "This is my startup! Cate it is an AI-powered catering platform I co-founded. We're building the future of event catering with smart matching and seamless booking.",
+      "This is side-project! Cate-it is a bookingplatform for food trucks, where you can book a food truck for your event. We are 3 persons on this project, and we are currently working on the MVP. Check out the case study!",
     category: "startup",
     projectSlug: "cate-it",
     npcOffset: { x: 1, y: 1 },
@@ -112,7 +113,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "dokk1-library",
     title: "Dokk1 Library",
     dialogue:
-      "I'm a big reader! I try to always have a book going — mostly non-fiction, biographies, and anything that makes me think differently about design and technology.",
+      "I like to read! I try to always have a book going, usally in the mix of fiction and non-fiction books. The library is a great place, so why not use it?",
     category: "interests",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 20, y: 9.9 },
@@ -123,7 +124,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "northside-stage",
     title: "Northside Festival",
     dialogue:
-      "I love music and festivals! Northside is one of my favorites - great music, great vibes, and always a source of creative inspiration.",
+      "I love music and festivals! Northside festival is one that I am looking forward to this summer. Check out some of the artists that are playing this year, and see you in the crowd then.",
     category: "interests",
     npcOffset: { x: 2, y: 2 },
     cameraOffset: { x: 20.7, y: 8.9 },
@@ -134,7 +135,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "ski-chute-2",
     title: "Ski Slopes",
     dialogue:
-      "When I'm not designing, you might find me on the ski slopes! There's nothing like the rush of skiing down a mountain.",
+      "When I'm not designing, you might find me on the ski slopes! There's nothing like the rush of skiing down a mountain in the fresh air.",
     category: "interests",
     npcOffset: { x: 1, y: 3 },
     cameraOffset: { x: 2, y: -4 },
@@ -145,7 +146,7 @@ export const TOUR_STOPS: TourStop[] = [
     buildingId: "aarhus-stadium",
     title: "Aarhus Stadium",
     dialogue:
-      "Football is a big part of my life. I try to catch games at the stadium whenever I can - there's nothing like the atmosphere of a live match!",
+      "I follow the ups-and-downs of the local football team AGF. I love to go the games, and support the team in the stands. Crossing my fingers for magical moments this summer!",
     category: "interests",
     npcOffset: { x: 3, y: 3 },
     cameraOffset: { x: 12.3, y: 5.9 },
@@ -155,9 +156,10 @@ export const TOUR_STOPS: TourStop[] = [
     id: "outro",
     title: "Let's Connect!",
     dialogue:
-      "Thanks for taking the tour! I'd love to hear from you. Whether you want to discuss a project, chat about design, or just say hello - feel free to reach out!",
+      "Thanks for taking the tour! Hope you had fun exploring my city. I'm always open for a chat, so feel free to reach out!",
     category: "contact",
     gridPosition: { x: 24, y: 24 },
+    cameraOffset: { x: 0, y: 0 },
   },
 ];
 

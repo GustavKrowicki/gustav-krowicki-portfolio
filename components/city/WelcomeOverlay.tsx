@@ -112,8 +112,7 @@ export default function WelcomeOverlay({
                         className="border-[3px] border-[#171a1d] bg-[#7b7462] px-4 py-4 shadow-[inset_0_3px_0_#98917c]"
                       >
                         <p className="text-center font-mono text-sm italic leading-relaxed text-[#181511]">
-                          &ldquo;Each building tells a story. From my work at LEGO to my
-                          education across 3 countries. Want me to show you around?&rdquo;
+                          &ldquo;Each building tells a story. From different work experiences, education in 3 countries and interests. Want me to show you around?&rdquo;
                         </p>
                       </motion.div>
 
@@ -160,7 +159,7 @@ export default function WelcomeOverlay({
                       >
                         {onStartAdventure
                           ? "Walk around and discover my portfolio."
-                          : "Tap buildings to learn more about each project."}
+                          : "Tap logos to learn more about each project."}
                       </motion.p>
                     </div>
                   </div>
