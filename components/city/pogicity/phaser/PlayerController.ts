@@ -89,6 +89,9 @@ export class PlayerController {
   private onPositionChange?: (data: PlayerData) => void;
   private onReachDestination?: (buildingId: string) => void;
 
+  // Tiles blocked by building collision padding
+  private blockedTiles: Set<string> = new Set();
+
   // Ready state
   private isReady: boolean = false;
 
@@ -99,6 +102,10 @@ export class PlayerController {
 
   setOnPositionChange(callback: (data: PlayerData) => void): void {
     this.onPositionChange = callback;
+  }
+
+  setBlockedTiles(tiles: Set<string>): void {
+    this.blockedTiles = tiles;
   }
 
   setOnReachDestination(callback: (buildingId: string) => void): void {
@@ -433,6 +440,7 @@ export class PlayerController {
 
   private isWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
+    if (this.blockedTiles.has(`${x},${y}`)) return false;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
 

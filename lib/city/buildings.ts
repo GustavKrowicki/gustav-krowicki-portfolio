@@ -24,6 +24,11 @@ export interface BuildingDefinition {
   };
   // For sprites that are visually larger than their footprint (e.g., trees)
   renderSize?: { width: number; height: number };
+  // Extra tiles beyond footprint that block player movement in adventure mode.
+  // Directions are in grid coords: top = lower y, left = lower x.
+  collisionPadding?: { top?: number; right?: number; bottom?: number; left?: number };
+  // Override trigger zone radius for this building (default: TRIGGER_ZONE_RADIUS = 3.5)
+  triggerZoneRadius?: number;
   sprites: {
     south: string;
     west?: string;
@@ -76,6 +81,8 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "LEGO HQ",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 2, top: 2 },
+    triggerZoneRadius: 5.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq_south.png",
       north: "/game/pogicity/Building/landmark/lego-hq_north.png",
@@ -95,6 +102,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Valtech Office",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 2, top: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/valtech-office_south.png",
       north: "/game/pogicity/Building/landmark/valtech-office_north.png",
@@ -132,6 +140,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Berlin University",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 2, top: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/berlin-uni_south.png",
       north: "/game/pogicity/Building/landmark/berlin-uni_north.png",
@@ -168,6 +177,8 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Erhvervsakademiet",
     category: "portfolio",
     footprint: { width: 4, height: 3 },
+    collisionPadding: { left: 2, top: 2 },
+    triggerZoneRadius: 5.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/erhvervsakademiet_south.png",
       north: "/game/pogicity/Building/landmark/erhvervsakademiet_north.png",
@@ -204,6 +215,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Aarhus Stadium",
     category: "portfolio",
     footprint: { width: 4, height: 4 },
+    collisionPadding: { left: 2, top: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/aarhus-stadium_south.png",
       north: "/game/pogicity/Building/landmark/aarhus-stadium_north.png",
@@ -222,6 +234,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Aeroguest",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 2, top: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/aeroguest_south.png",
       north: "/game/pogicity/Building/landmark/aeroguest_north.png",
@@ -324,6 +337,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Cate it",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { right: 2, top: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/cate-it_south.png",
       north: "/game/pogicity/Building/landmark/cate-it_north.png",

@@ -192,6 +192,7 @@ export class MainScene extends Phaser.Scene {
   private npcManager: NPCManager | null = null;
   private triggerZoneManager: TriggerZoneManager | null = null;
   private visitedBuildings: Set<string> = new Set();
+  private blockedTiles: Set<string> = new Set();
   private isAdventureActive: boolean = false;
   private cameraFollowPlayer: boolean = false;
   private manualCameraOverrideInAdventure: boolean = false;
@@ -1565,6 +1566,34 @@ export class MainScene extends Phaser.Scene {
   private highlightedBuildingId: string | null = null;
   private highlightSprite: Phaser.GameObjects.Graphics | null = null;
 
+  // Compute tiles blocked by building sprite overhang (collision padding)
+  private computeBlockedTiles(): Set<string> {
+    const blocked = new Set<string>();
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (!cell?.isOrigin || !cell.buildingId) continue;
+        const building = getBuilding(cell.buildingId);
+        if (!building?.collisionPadding) continue;
+
+        const fp = getBuildingFootprint(building, cell.buildingOrientation);
+        const pad = building.collisionPadding;
+
+        for (let dy = -(pad.top || 0); dy < fp.height + (pad.bottom || 0); dy++) {
+          for (let dx = -(pad.left || 0); dx < fp.width + (pad.right || 0); dx++) {
+            if (dx >= 0 && dx < fp.width && dy >= 0 && dy < fp.height) continue;
+            const bx = x + dx, by = y + dy;
+            if (bx < 0 || bx >= GRID_WIDTH || by < 0 || by >= GRID_HEIGHT) continue;
+            const tile = this.grid[by]?.[bx];
+            if (!tile || tile.type === TileType.Road) continue;
+            blocked.add(`${bx},${by}`);
+          }
+        }
+      }
+    }
+    return blocked;
+  }
+
   // ==================== ADVENTURE MODE PUBLIC API ====================
 
   startAdventureMode(characterType: CharacterType): void {
@@ -1581,6 +1610,10 @@ export class MainScene extends Phaser.Scene {
 
     // Create player controller
     this.playerController = new PlayerController(this, this.grid);
+
+    // Compute collision padding blocked tiles and pass to player controller
+    this.blockedTiles = this.computeBlockedTiles();
+    this.playerController.setBlockedTiles(this.blockedTiles);
 
     // Set up trigger zone callbacks
     this.triggerZoneManager.setCallbacks({
@@ -1753,15 +1786,16 @@ export class MainScene extends Phaser.Scene {
   // MainScene.isWalkable which is for car movement (Road, Tile only).
   private isPlayerWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
+    if (this.blockedTiles.has(`${x},${y}`)) return false;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
     const t = cell.type;
     return t === TileType.Road || t === TileType.Tile || t === TileType.Grass || t === TileType.Snow || t === TileType.Asphalt;
   }
 
-  private findWalkableTilesInZone(centerX: number, centerY: number): { x: number; y: number }[] {
-    const searchRadius = Math.ceil(TRIGGER_ZONE_RADIUS) + 1;
-    const radiusSq = TRIGGER_ZONE_RADIUS * TRIGGER_ZONE_RADIUS;
+  private findWalkableTilesInZone(centerX: number, centerY: number, zoneRadius: number = TRIGGER_ZONE_RADIUS): { x: number; y: number }[] {
+    const searchRadius = Math.ceil(zoneRadius) + 1;
+    const radiusSq = zoneRadius * zoneRadius;
     const candidates: { x: number; y: number; distSq: number }[] = [];
 
     for (let dx = -searchRadius; dx <= searchRadius; dx++) {
@@ -1793,7 +1827,9 @@ export class MainScene extends Phaser.Scene {
 
     // Try walkable tiles within the trigger zone, closest first.
     // Some tiles may be unreachable by A*, so try a few before falling back.
-    const candidates = this.findWalkableTilesInZone(position.x, position.y);
+    const building = getBuilding(buildingId);
+    const zoneRadius = building?.triggerZoneRadius ?? TRIGGER_ZONE_RADIUS;
+    const candidates = this.findWalkableTilesInZone(position.x, position.y, zoneRadius);
     const maxAttempts = Math.min(candidates.length, 5);
 
     for (let i = 0; i < maxAttempts; i++) {
@@ -1823,7 +1859,9 @@ export class MainScene extends Phaser.Scene {
     if (!position) return false;
 
     // Use the first walkable tile within the trigger zone (closest to center)
-    const candidates = this.findWalkableTilesInZone(position.x, position.y);
+    const bld = getBuilding(buildingId);
+    const zoneRadius = bld?.triggerZoneRadius ?? TRIGGER_ZONE_RADIUS;
+    const candidates = this.findWalkableTilesInZone(position.x, position.y, zoneRadius);
     const target = candidates[0] ?? this.findWalkableSpawnPosition(
       Math.floor(position.x + 1),
       Math.floor(position.y + 1)

@@ -7,6 +7,7 @@ import {
 } from "../types";
 import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import { TourStop } from "@/lib/city/tourStops";
+import { getBuilding, type BuildingDefinition } from "@/lib/city/buildings";
 
 export interface TriggerZoneCallbacks {
   onEnterZone: (zone: TriggerZone, tourStop: TourStop) => void;
@@ -50,11 +51,15 @@ export class TriggerZoneManager {
       const position = getBuildingPosition(stop.buildingId);
       if (!position) return;
 
+      // Use per-building trigger zone radius if set, otherwise default
+      const building = getBuilding(stop.buildingId);
+      const radius = building?.triggerZoneRadius ?? TRIGGER_ZONE_RADIUS;
+
       const zone: TriggerZone = {
         buildingId: stop.buildingId,
         centerX: position.x,
         centerY: position.y,
-        radius: TRIGGER_ZONE_RADIUS,
+        radius,
         tourStopIndex: index,
       };
 
