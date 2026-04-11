@@ -1749,46 +1749,71 @@ export class MainScene extends Phaser.Scene {
     this.playerController?.setInputDirection(direction);
   }
 
-  // Auto-walk player to building
+  // Uses player walkability rules (Road, Tile, Grass, Snow, Asphalt) rather than
+  // MainScene.isWalkable which is for car movement (Road, Tile only).
+  private isPlayerWalkable(x: number, y: number): boolean {
+    if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
+    const cell = this.grid[y]?.[x];
+    if (!cell) return false;
+    const t = cell.type;
+    return t === TileType.Road || t === TileType.Tile || t === TileType.Grass || t === TileType.Snow || t === TileType.Asphalt;
+  }
+
+  private findWalkableTilesInZone(centerX: number, centerY: number): { x: number; y: number }[] {
+    const searchRadius = Math.ceil(TRIGGER_ZONE_RADIUS) + 1;
+    const radiusSq = TRIGGER_ZONE_RADIUS * TRIGGER_ZONE_RADIUS;
+    const candidates: { x: number; y: number; distSq: number }[] = [];
+
+    for (let dx = -searchRadius; dx <= searchRadius; dx++) {
+      for (let dy = -searchRadius; dy <= searchRadius; dy++) {
+        const x = Math.floor(centerX) + dx;
+        const y = Math.floor(centerY) + dy;
+
+        if (!this.isPlayerWalkable(x, y)) continue;
+
+        const ex = x - centerX;
+        const ey = y - centerY;
+        const distSq = ex * ex + ey * ey;
+
+        if (distSq <= radiusSq) {
+          candidates.push({ x, y, distSq });
+        }
+      }
+    }
+
+    candidates.sort((a, b) => a.distSq - b.distSq);
+    return candidates;
+  }
+
   walkPlayerToBuilding(buildingId: string): boolean {
     if (!this.playerController) return false;
 
     const position = findBuildingPosition(this.grid, buildingId);
     if (!position) return false;
 
-    // Find walkable position near building - try to get as close as possible
-    // First try the building center, then adjacent tiles
-    const candidates = [
-      { x: Math.floor(position.x), y: Math.floor(position.y) },
-      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) },
-      { x: Math.floor(position.x), y: Math.floor(position.y) + 1 },
-      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) + 1 },
-      { x: Math.floor(position.x) - 1, y: Math.floor(position.y) },
-      { x: Math.floor(position.x), y: Math.floor(position.y) - 1 },
-    ];
+    // Try walkable tiles within the trigger zone, closest first.
+    // Some tiles may be unreachable by A*, so try a few before falling back.
+    const candidates = this.findWalkableTilesInZone(position.x, position.y);
+    const maxAttempts = Math.min(candidates.length, 5);
 
-    for (const candidate of candidates) {
-      const targetPos = this.findWalkableSpawnPosition(candidate.x, candidate.y);
-      // Check if the found position is close enough to the building
-      const dist = Math.sqrt(
-        Math.pow(targetPos.x - position.x, 2) + Math.pow(targetPos.y - position.y, 2)
-      );
-      if (dist <= 3) {
+    for (let i = 0; i < maxAttempts; i++) {
+      if (this.playerController.walkToBuilding(candidates[i].x, candidates[i].y, buildingId)) {
         this.manualCameraOverrideInAdventure = false;
         this.cameraFollowPlayer = true;
-        return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
+        return true;
       }
     }
 
-    // Fallback to original behavior
-    const targetPos = this.findWalkableSpawnPosition(
+    const fallback = this.findWalkableSpawnPosition(
       Math.floor(position.x + 1),
       Math.floor(position.y + 1)
     );
-
-    this.manualCameraOverrideInAdventure = false;
-    this.cameraFollowPlayer = true;
-    return this.playerController.walkToBuilding(targetPos.x, targetPos.y, buildingId);
+    if (this.playerController.walkToBuilding(fallback.x, fallback.y, buildingId)) {
+      this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
+      return true;
+    }
+    return false;
   }
 
   movePlayerToBuilding(buildingId: string): boolean {
@@ -1797,37 +1822,16 @@ export class MainScene extends Phaser.Scene {
     const position = findBuildingPosition(this.grid, buildingId);
     if (!position) return false;
 
-    const candidates = [
-      { x: Math.floor(position.x), y: Math.floor(position.y) },
-      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) },
-      { x: Math.floor(position.x), y: Math.floor(position.y) + 1 },
-      { x: Math.floor(position.x) + 1, y: Math.floor(position.y) + 1 },
-      { x: Math.floor(position.x) - 1, y: Math.floor(position.y) },
-      { x: Math.floor(position.x), y: Math.floor(position.y) - 1 },
-    ];
-
-    for (const candidate of candidates) {
-      const targetPos = this.findWalkableSpawnPosition(candidate.x, candidate.y);
-      const dist = Math.sqrt(
-        Math.pow(targetPos.x - position.x, 2) + Math.pow(targetPos.y - position.y, 2)
-      );
-
-      if (dist <= 3) {
-        this.manualCameraOverrideInAdventure = false;
-        this.cameraFollowPlayer = true;
-        this.playerController.moveTo(targetPos.x, targetPos.y);
-        return true;
-      }
-    }
-
-    const targetPos = this.findWalkableSpawnPosition(
+    // Use the first walkable tile within the trigger zone (closest to center)
+    const candidates = this.findWalkableTilesInZone(position.x, position.y);
+    const target = candidates[0] ?? this.findWalkableSpawnPosition(
       Math.floor(position.x + 1),
       Math.floor(position.y + 1)
     );
 
     this.manualCameraOverrideInAdventure = false;
     this.cameraFollowPlayer = true;
-    this.playerController.moveTo(targetPos.x, targetPos.y);
+    this.playerController.moveTo(target.x, target.y);
     return true;
   }
 

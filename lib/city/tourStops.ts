@@ -53,6 +53,17 @@ export const TOUR_STOPS: TourStop[] = [
     cameraOffsetMobile: { x: 20.5, y: 18.8 },
   },
   {
+    id: "aeroguest",
+    buildingId: "aeroguest",
+    title: "AeroGuest",
+    dialogue:
+      "AeroGuest is an aviation technology company where I worked on digital products for the travel industry. More details coming soon!",
+    category: "work",
+    npcOffset: { x: 2, y: 2 },
+    cameraOffset: { x: 10, y: 4 },
+    cameraOffsetMobile: { x: 17, y: 17 },
+  },
+  {
     id: "sdu",
     buildingId: "sdu-kolding",
     title: "SDU Kolding",

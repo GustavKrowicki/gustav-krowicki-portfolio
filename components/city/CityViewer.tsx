@@ -105,6 +105,9 @@ export default function CityViewer({
   const tourStartTimeRef = useRef<number | null>(null);
   const hasTrackedAdventureCompletionRef = useRef(false);
   const maxTourStopViewedRef = useRef(0);
+  const autoWalkTargetRef = useRef<string | null>(null);
+  const currentEncounterRef = useRef<TourStop | null>(null);
+  currentEncounterRef.current = currentEncounter;
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -301,9 +304,22 @@ export default function CityViewer({
       if (game) {
         const scene = game.scene.getScene("MainScene");
         if (scene) {
-          // Player entered trigger zone
-          scene.events.on("playerEnteredZone", ({ tourStop }: { buildingId: string; tourStop: TourStop }) => {
+          // Suppress dialog when passing through zones en route to a different target
+          scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
+
+            if (!autoWalkTargetRef.current) {
+              setIsDialogOpen(true);
+              if (tourStop.title) {
+                trackBuildingInteracted(tourStop.title, 'adventure', 'zone_entry');
+              }
+            } else if (autoWalkTargetRef.current === buildingId) {
+              autoWalkTargetRef.current = null;
+              setIsDialogOpen(true);
+              if (tourStop.title) {
+                trackBuildingInteracted(tourStop.title, 'adventure', 'auto_walk');
+              }
+            }
           });
 
           // Player exited trigger zone
@@ -321,6 +337,9 @@ export default function CityViewer({
 
           // Player position changed (for auto-walk state + walkable directions)
           scene.events.on("playerPositionChanged", (data: PlayerData) => {
+            if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
+              autoWalkTargetRef.current = null;
+            }
             setIsAutoWalking(data.state === PlayerState.AutoWalking);
             setWalkableDirections(data.walkableDirections ?? []);
           });
@@ -336,7 +355,13 @@ export default function CityViewer({
 
   const handleLogoClick = useCallback((buildingId: string) => {
     if (isAdventureActive) {
+      autoWalkTargetRef.current = buildingId;
       gameBoardRef.current?.walkPlayerToBuilding(buildingId);
+      // Player is already here; skip the walk
+      if (currentEncounterRef.current?.buildingId === buildingId) {
+        autoWalkTargetRef.current = null;
+        setIsDialogOpen(true);
+      }
       return;
     }
 
@@ -362,6 +387,7 @@ export default function CityViewer({
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
     setIsDialogOpen(false);
+    autoWalkTargetRef.current = null;
 
     const gameBoard = gameBoardRef.current;
     if (gameBoard) {
@@ -385,6 +411,7 @@ export default function CityViewer({
     // Find next unvisited building
     for (const stop of TOUR_STOPS) {
       if (stop.buildingId && !visitedBuildings.has(stop.buildingId)) {
+        autoWalkTargetRef.current = stop.buildingId;
         gameBoardRef.current?.walkPlayerToBuilding(stop.buildingId);
         break;
       }

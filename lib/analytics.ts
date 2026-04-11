@@ -16,7 +16,7 @@ export function trackModeSelected(mode: 'tour' | 'explore' | 'adventure', charac
 export function trackBuildingInteracted(
   buildingName: string,
   mode: string,
-  method: 'click' | 'keyboard' | 'mobile_button' | 'logo_click'
+  method: 'click' | 'keyboard' | 'mobile_button' | 'logo_click' | 'zone_entry' | 'auto_walk'
 ) {
   capture('building_interacted', { building_name: buildingName, mode, method });
 }
