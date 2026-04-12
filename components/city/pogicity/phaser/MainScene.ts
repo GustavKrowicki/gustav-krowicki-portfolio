@@ -229,6 +229,17 @@ export class MainScene extends Phaser.Scene {
   }
 
   create(): void {
+    // Load animated sprites for props with animatedSprite field
+    for (const building of Object.values(BUILDINGS)) {
+      if (building.animatedSprite) {
+        const key = `${building.id}_animated`;
+        loadGifAsAnimation(this, key, building.animatedSprite).then(() => {
+          // Re-render any placed instances of this building to use the animation
+          this.upgradeToAnimatedSprites(building.id);
+        });
+      }
+    }
+
     // Set up keyboard controls
     if (this.input.keyboard) {
       this.cursors = this.input.keyboard.createCursorKeys();
@@ -2179,23 +2190,59 @@ export class MainScene extends Phaser.Scene {
     const key = `building_${originX},${originY}`;
     const textureKey = this.getBuildingTextureKey(building, orientation);
 
-    if (!this.textures.exists(textureKey)) {
-      console.warn(`Texture not found: ${textureKey}`);
-      return;
-    }
-
     const footprint = getBuildingFootprint(building, orientation);
     const frontX = originX + footprint.width - 1;
     const frontY = originY + footprint.height - 1;
     const screenPos = this.gridToScreen(frontX, frontY);
     const bottomY = screenPos.y + TILE_HEIGHT;
+    const depth = this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05);
 
-    // Simple rendering (without slicing for performance)
+    // Check if this building has an animated sprite (GIF)
+    const animKey = `${building.id}_animated`;
+    if (building.animatedSprite && this.anims.exists(`${animKey}_anim`)) {
+      const animSprite = this.add.sprite(screenPos.x, bottomY, animKey);
+      animSprite.setOrigin(0.5, 1);
+      animSprite.setDepth(depth);
+      playGifAnimation(animSprite, animKey);
+      this.buildingSprites.set(key, animSprite);
+      return;
+    }
+
+    if (!this.textures.exists(textureKey)) {
+      console.warn(`Texture not found: ${textureKey}`);
+      return;
+    }
+
     const sprite = this.add.image(screenPos.x, bottomY, textureKey);
     sprite.setOrigin(0.5, 1);
-    sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
-
+    sprite.setDepth(depth);
     this.buildingSprites.set(key, sprite);
+  }
+
+  private upgradeToAnimatedSprites(buildingId: string): void {
+    // Find all placed instances of this building and swap static sprites for animated ones
+    const animKey = `${buildingId}_animated`;
+    if (!this.anims.exists(`${animKey}_anim`)) return;
+
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (cell?.buildingId === buildingId && cell.isOrigin) {
+          const key = `building_${x},${y}`;
+          const existing = this.buildingSprites.get(key);
+          if (existing) {
+            const pos = { x: existing.x, y: existing.y };
+            const depth = existing.depth;
+            existing.destroy();
+            const animSprite = this.add.sprite(pos.x, pos.y, animKey);
+            animSprite.setOrigin(0.5, 1);
+            animSprite.setDepth(depth);
+            playGifAnimation(animSprite, animKey);
+            this.buildingSprites.set(key, animSprite);
+          }
+        }
+      }
+    }
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
@@ -2218,6 +2265,17 @@ export class MainScene extends Phaser.Scene {
 
     const firstDir = Object.keys(building.sprites)[0];
     return `${building.id}_${firstDir}`;
+  }
+
+  private getBuildingSpritePath(building: BuildingDefinition, orientation?: Direction): string | undefined {
+    const dirMap: Record<Direction, string> = {
+      [Direction.Down]: "south",
+      [Direction.Up]: "north",
+      [Direction.Left]: "west",
+      [Direction.Right]: "east",
+    };
+    const dir = orientation ? dirMap[orientation] : "south";
+    return (building.sprites[dir as keyof typeof building.sprites] || building.sprites.south) as string | undefined;
   }
 
   private renderCars(): void {

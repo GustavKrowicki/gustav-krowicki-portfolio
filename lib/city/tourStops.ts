@@ -64,6 +64,39 @@ export const TOUR_STOPS: TourStop[] = [
     cameraOffsetMobile: { x: 17, y: 17 },
   },
   {
+    id: "book-cart",
+    buildingId: "book-cart",
+    title: "Book Cart",
+    dialogue:
+      "Books that changed how I think about design: 'The Design of Everyday Things' by Don Norman, 'Thinking, Fast and Slow' by Daniel Kahneman, and 'Creative Confidence' by Tom & David Kelley.",
+    category: "interests",
+    npcOffset: { x: 0, y: 0 },
+    cameraOffset: { x: 10, y: 4 },
+    cameraOffsetMobile: { x: 17, y: 17 },
+  },
+  {
+    id: "lego-shelf",
+    buildingId: "lego-shelf",
+    title: "LEGO Product Shelf",
+    dialogue:
+      "This shelf has 12 slots. The ML-assisted tool I built at LEGO evaluates thousands of product combinations to find the mix that maximizes sell-through for each store's demographic. Every shelf tells a different story.",
+    category: "work",
+    npcOffset: { x: 0, y: 0 },
+    cameraOffset: { x: 10, y: 4 },
+    cameraOffsetMobile: { x: 17, y: 17 },
+  },
+  {
+    id: "wind-turbine",
+    buildingId: "wind-turbine",
+    title: "Vestas Wind Turbine",
+    dialogue:
+      "This wind turbine is a nod to my work on Vestas digital solutions at Valtech. The project focused on making complex energy data accessible to customers operating 40,000+ turbines globally.",
+    category: "work",
+    npcOffset: { x: 0, y: 0 },
+    cameraOffset: { x: 10, y: 4 },
+    cameraOffsetMobile: { x: 17, y: 17 },
+  },
+  {
     id: "sdu",
     buildingId: "sdu-kolding",
     title: "SDU Kolding",

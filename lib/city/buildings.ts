@@ -27,6 +27,8 @@ export interface BuildingDefinition {
   // Extra tiles beyond footprint that block player movement in adventure mode.
   // Directions are in grid coords: top = lower y, left = lower x.
   collisionPadding?: { top?: number; right?: number; bottom?: number; left?: number };
+  // Animated GIF sprite used in adventure mode (static PNG in sprites is used for editor)
+  animatedSprite?: string;
   // Override trigger zone radius for this building (default: TRIGGER_ZONE_RADIUS = 3.5)
   triggerZoneRadius?: number;
   sprites: {
@@ -454,6 +456,51 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     icon: "🛋️",
     supportsRotation: true,
     isDecoration: true,
+  },
+  // ==================== ARTEFACTS ====================
+  "wind-turbine": {
+    id: "wind-turbine",
+    name: "Wind Turbine",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    sprites: {
+      south: "/game/pogicity/Props/artefacts/wind-turbine.png",
+    },
+    animatedSprite: "/game/pogicity/Props/artefacts/wind-turbine.gif",
+    icon: "🌬️",
+    description: "Vestas Wind Turbine",
+    isDecoration: true,
+    interactable: true,
+  },
+  "book-cart": {
+    id: "book-cart",
+    name: "Book Cart",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    sprites: {
+      south: "/game/pogicity/Props/artefacts/book-cart.png",
+    },
+    icon: "📚",
+    description: "Library Book Cart",
+    isDecoration: true,
+    interactable: true,
+  },
+  "lego-shelf": {
+    id: "lego-shelf",
+    name: "LEGO Shelf",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    sprites: {
+      south: "/game/pogicity/Props/artefacts/lego-shelf_south.png",
+      north: "/game/pogicity/Props/artefacts/lego-shelf_north.png",
+      east: "/game/pogicity/Props/artefacts/lego-shelf_east.png",
+      west: "/game/pogicity/Props/artefacts/lego-shelf_west.png",
+    },
+    supportsRotation: true,
+    icon: "🧱",
+    description: "LEGO Retail Display",
+    isDecoration: true,
+    interactable: true,
   },
   // Trees - 1x1 footprint but rendered as 4x4 for visual size
   "tree-1": {
