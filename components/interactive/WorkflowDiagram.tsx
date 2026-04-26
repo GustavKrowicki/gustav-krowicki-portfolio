@@ -50,14 +50,14 @@ function WorkflowNode({ data, selected }: NodeProps<WorkflowNodeData>) {
       />
 
       <motion.button
-        className="w-64 text-center bg-white rounded-2xl p-5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 cursor-move relative"
+        className="w-64 text-center bg-white rounded-2xl p-5 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 cursor-move relative"
         onClick={() => setIsExpanded(!isExpanded)}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{
           opacity: 1,
           scale: 1,
           boxShadow: selected
-            ? '0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(37, 99, 235, 0.15)'
+            ? '0 8px 24px -6px rgba(0, 0, 0, 0.15), 0 0 0 2px rgba(0, 0, 0, 0.15)'
             : '0 6px 20px -6px rgba(0, 0, 0, 0.12)',
         }}
         transition={{
@@ -72,20 +72,20 @@ function WorkflowNode({ data, selected }: NodeProps<WorkflowNodeData>) {
           boxShadow: { duration: 0.2 }
         }}
         style={{
-          border: selected ? '2px solid #2563eb' : '2px solid #e5e5e5'
+          border: selected ? '2px solid #000000' : '2px solid #e5e5e5'
         }}
       >
         {/* Icon */}
         <motion.div
           className="w-16 h-16 rounded-xl mx-auto mb-3 flex items-center justify-center pointer-events-none"
           animate={{
-            backgroundColor: isExpanded ? '#2563eb' : '#f5f5f5',
+            backgroundColor: isExpanded ? '#000000' : '#f5f5f5',
             scale: isExpanded ? 1.1 : 1
           }}
           transition={{ duration: reduceMotion ? 0 : 0.2 }}
         >
           <Icon
-            className={isExpanded ? 'text-white' : 'text-accent'}
+            className={isExpanded ? 'text-white' : 'text-black'}
             size={32}
           />
         </motion.div>
@@ -123,7 +123,7 @@ function WorkflowNode({ data, selected }: NodeProps<WorkflowNodeData>) {
             transition={{ duration: reduceMotion ? 0 : 0.3 }}
             className="overflow-hidden pointer-events-none"
           >
-            <div className="w-64 bg-white border-2 border-accent rounded-xl p-4 shadow-lg">
+            <div className="w-64 bg-white border-2 border-black rounded-xl p-4 shadow-lg">
               <p className="text-xs text-neutral-700 leading-relaxed">
                 {data.details}
               </p>
@@ -146,16 +146,16 @@ function StartNode() {
       animate={{ opacity: 1, scale: 1 }}
       transition={{ duration: reduceMotion ? 0 : 0.4 }}
     >
-      <div className="w-16 h-16 rounded-full bg-green-500 flex items-center justify-center shadow-lg">
-        <Play className="text-white fill-white" size={28} />
+      <div className="w-16 h-16 rounded-full bg-white border-2 border-neutral-200 flex items-center justify-center shadow-lg">
+        <Play className="text-black fill-black" size={28} />
       </div>
-      <span className="text-xs font-bold text-green-600 uppercase tracking-wider">Start</span>
+      <span className="text-xs font-bold text-black uppercase tracking-wider">Start</span>
 
       {/* Output handle (right side) */}
       <Handle
         type="source"
         position={Position.Right}
-        style={{ background: '#22c55e' }}
+        style={{ background: '#000000' }}
       />
     </motion.div>
   );
@@ -240,12 +240,12 @@ const initialEdges: Edge[] = [
     type: 'smoothstep',
     animated: true,
     style: {
-      stroke: '#22c55e',
+      stroke: '#000000',
       strokeWidth: 3,
     },
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      color: '#22c55e',
+      color: '#000000',
       width: 20,
       height: 20,
     },
@@ -258,12 +258,12 @@ const initialEdges: Edge[] = [
     type: 'smoothstep',
     animated: true,
     style: {
-      stroke: '#a3a3a3',
+      stroke: '#000000',
       strokeWidth: 2.5,
     },
     markerEnd: {
       type: MarkerType.ArrowClosed,
-      color: '#a3a3a3',
+      color: '#000000',
       width: 20,
       height: 20,
     },

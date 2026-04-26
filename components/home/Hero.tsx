@@ -31,7 +31,7 @@ export default function Hero() {
           </div>
           <p className="text-lg md:text-xl text-neutral-700 leading-relaxed max-w-3xl">
             I design digital products with a focus on user research, strategic thinking,
-            and emerging technologies. Currently working on ML-assisted tools at LEGO.
+            and emerging technologies. Currently working on ML-assisted tools at the LEGO group. Looking for new opurtunities in second half 2026.
           </p>
         </motion.div>
       </Container>
