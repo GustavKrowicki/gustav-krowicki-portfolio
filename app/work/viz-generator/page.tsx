@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
@@ -101,11 +102,21 @@ export default function VizGeneratorPage() {
         <Container maxWidth="container">
           <h2 className="text-3xl md:text-4xl font-bold mb-12">Generated visuals</h2>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 1</span>
+            <div className="relative rounded-xl aspect-square overflow-hidden">
+              <Image
+                src="/images/viz-generator/instagram direction 1.png"
+                alt="Generated Instagram visual direction"
+                fill
+                className="object-cover"
+              />
             </div>
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 2</span>
+            <div className="relative rounded-xl aspect-square overflow-hidden">
+              <Image
+                src="/images/viz-generator/cate it tables orange.png"
+                alt="Generated Cate it tables visual"
+                fill
+                className="object-cover"
+              />
             </div>
             <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
               <span className="text-neutral-400 text-sm">Image 3</span>

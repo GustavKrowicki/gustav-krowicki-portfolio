@@ -131,7 +131,7 @@ export default function CateItPage() {
               </p>
               <p>
                 The site is live at cateit.com with four food trucks signed up. We're focusing
-                on supply-side first—getting food trucks on the platform before pushing hard
+                on supply-side first, getting food trucks on the platform before pushing hard
                 on event planner acquisition.
               </p>
 
@@ -140,7 +140,7 @@ export default function CateItPage() {
                 <ul className="space-y-3 text-neutral-700">
                   <li className="flex gap-3">
                     <span className="text-neutral-400">•</span>
-                    <span>The site uses a modular system limited to five components across all pages—faster to build, but limits flexibility</span>
+                    <span>The site uses a modular system limited to five components across all pages, faster to build, but limits flexibility</span>
                   </li>
                   <li className="flex gap-3">
                     <span className="text-neutral-400">•</span>
@@ -148,7 +148,7 @@ export default function CateItPage() {
                   </li>
                   <li className="flex gap-3">
                     <span className="text-neutral-400">•</span>
-                    <span>Landing page is more generic than ideal—we cut location-specific carousels to ship faster</span>
+                    <span>Landing page is more generic than ideal we cut location-specific carousels to ship faster and with a clear structure</span>
                   </li>
                 </ul>
               </div>
@@ -159,7 +159,7 @@ export default function CateItPage() {
                   href="https://cateit.com"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-black underline hover:opacity-70"
                 >
                   cateit.com
                 </a>
@@ -185,12 +185,10 @@ export default function CateItPage() {
           </div>
 
           <div>
-            <h3 className="font-semibold text-xl mb-3">What we've learned about launching</h3>
+            <h3 className="font-semibold text-xl mb-3">What we've learned so far</h3>
             <p>
               Building a marketplace part-time across three cities is hard. We've had to
-              align three different motivations: one person wants it on their CV, one sees
-              it as a hobby, and I want it to become my job. We've learned where to cut
-              corners and where not to.
+              align three different motivations: Which has been clearly the hardest part, shipping something is easy, but agreeing on the scope is difficult.
             </p>
           </div>
 
@@ -199,16 +197,13 @@ export default function CateItPage() {
             <ul className="space-y-2 text-neutral-700">
               <li className="flex gap-3">
                 <span className="text-neutral-400">•</span>
-                <span>Complete the booking flow with payment processing</span>
+                <span>Onboard foodtruck owners</span>
               </li>
               <li className="flex gap-3">
                 <span className="text-neutral-400">•</span>
-                <span>Validate pricing through early bookings</span>
+                <span>Push on marketing strategy</span>
               </li>
-              <li className="flex gap-3">
-                <span className="text-neutral-400">•</span>
-                <span>Push marketing to get more food trucks on board</span>
-              </li>
+  
               <li className="flex gap-3">
                 <span className="text-neutral-400">•</span>
                 <span>Test whether we can generate enough demand to make the marketplace viable</span>
