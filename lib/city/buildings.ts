@@ -27,10 +27,6 @@ export interface BuildingDefinition {
   // Extra tiles beyond footprint that block player movement in adventure mode.
   // Directions are in grid coords: top = lower y, left = lower x.
   collisionPadding?: { top?: number; right?: number; bottom?: number; left?: number };
-  // Animated GIF sprite used in adventure mode (static PNG in sprites is used for editor)
-  animatedSprite?: string;
-  // Override trigger zone radius for this building (default: TRIGGER_ZONE_RADIUS = 3.5)
-  triggerZoneRadius?: number;
   sprites: {
     south: string;
     west?: string;
@@ -83,8 +79,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "LEGO HQ",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
-    triggerZoneRadius: 5.5,
+    collisionPadding: { left: 3, top: 3, bottom: 1okay, right: 2 },
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq_south.png",
       north: "/game/pogicity/Building/landmark/lego-hq_north.png",
@@ -104,7 +99,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Valtech Office",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/valtech-office_south.png",
       north: "/game/pogicity/Building/landmark/valtech-office_north.png",
@@ -124,6 +119,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Melbourne University",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/melbourne-uni_south.png",
       north: "/game/pogicity/Building/landmark/melbourne-uni_north.png",
@@ -142,7 +138,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Berlin University",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/berlin-uni_south.png",
       north: "/game/pogicity/Building/landmark/berlin-uni_north.png",
@@ -161,6 +157,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "SDU Kolding",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/SDU kolding_south.png",
       north: "/game/pogicity/Building/landmark/SDU kolding_north.png",
@@ -179,8 +176,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Erhvervsakademiet",
     category: "portfolio",
     footprint: { width: 4, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
-    triggerZoneRadius: 5.5,
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/erhvervsakademiet_south.png",
       north: "/game/pogicity/Building/landmark/erhvervsakademiet_north.png",
@@ -217,7 +213,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Aarhus Stadium",
     category: "portfolio",
     footprint: { width: 4, height: 4 },
-    collisionPadding: { left: 2, top: 2 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/aarhus-stadium_south.png",
       north: "/game/pogicity/Building/landmark/aarhus-stadium_north.png",
@@ -236,7 +232,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Aeroguest",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
+    collisionPadding: { left: 3, top: 3, bottom: 1, right: 1 },
     sprites: {
       south: "/game/pogicity/Building/landmark/aeroguest_south.png",
       north: "/game/pogicity/Building/landmark/aeroguest_north.png",
@@ -339,7 +335,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Cate it",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { right: 2, top: 2 },
+    collisionPadding: { left: 1, top: 3, bottom: 1, right: 3 },
     sprites: {
       south: "/game/pogicity/Building/landmark/cate-it_south.png",
       north: "/game/pogicity/Building/landmark/cate-it_north.png",
@@ -456,51 +452,6 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     icon: "🛋️",
     supportsRotation: true,
     isDecoration: true,
-  },
-  // ==================== ARTEFACTS ====================
-  "wind-turbine": {
-    id: "wind-turbine",
-    name: "Wind Turbine",
-    category: "props",
-    footprint: { width: 1, height: 1 },
-    sprites: {
-      south: "/game/pogicity/Props/artefacts/wind-turbine.png",
-    },
-    animatedSprite: "/game/pogicity/Props/artefacts/wind-turbine.gif",
-    icon: "🌬️",
-    description: "Vestas Wind Turbine",
-    isDecoration: true,
-    interactable: true,
-  },
-  "book-cart": {
-    id: "book-cart",
-    name: "Book Cart",
-    category: "props",
-    footprint: { width: 1, height: 1 },
-    sprites: {
-      south: "/game/pogicity/Props/artefacts/book-cart.png",
-    },
-    icon: "📚",
-    description: "Library Book Cart",
-    isDecoration: true,
-    interactable: true,
-  },
-  "lego-shelf": {
-    id: "lego-shelf",
-    name: "LEGO Shelf",
-    category: "props",
-    footprint: { width: 1, height: 1 },
-    sprites: {
-      south: "/game/pogicity/Props/artefacts/lego-shelf_south.png",
-      north: "/game/pogicity/Props/artefacts/lego-shelf_north.png",
-      east: "/game/pogicity/Props/artefacts/lego-shelf_east.png",
-      west: "/game/pogicity/Props/artefacts/lego-shelf_west.png",
-    },
-    supportsRotation: true,
-    icon: "🧱",
-    description: "LEGO Retail Display",
-    isDecoration: true,
-    interactable: true,
   },
   // Trees - 1x1 footprint but rendered as 4x4 for visual size
   "tree-1": {

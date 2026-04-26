@@ -37,7 +37,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.182.0",
-    "agentation": "^2.3.3",
+    "agentation": "^3.0.2",
     "canvas": "^3.2.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",

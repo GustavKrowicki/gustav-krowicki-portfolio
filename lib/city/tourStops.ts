@@ -97,6 +97,18 @@ export const TOUR_STOPS: TourStop[] = [
     cameraOffsetMobile: { x: 17, y: 17 },
   },
   {
+    id: "catering-setup",
+    buildingId: "catering-setup",
+    title: "Cate-it Catering",
+    dialogue:
+      "This is the Cate-it food truck in action! Our platform connects food trucks with event organizers. From booking to serving, we make event catering seamless. Check out the case study!",
+    category: "startup",
+    projectSlug: "cate-it",
+    npcOffset: { x: 0, y: 0 },
+    cameraOffset: { x: 10, y: 4 },
+    cameraOffsetMobile: { x: 17, y: 17 },
+  },
+  {
     id: "sdu",
     buildingId: "sdu-kolding",
     title: "SDU Kolding",

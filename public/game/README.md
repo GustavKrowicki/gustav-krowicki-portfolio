@@ -19,7 +19,7 @@ Based on the Pogicity workflow from @venturetwins:
 
 ### Step 1: Photo → Isometric View
 - Take/find photo of building (LEGO HQ, SDU campus, etc.)
-- Use **Nano Banana Pro** with prompt: "an isometric view of this building as a video game asset"
+- Use **Nano Banana Pro** with prompt: "an isometric view of this building as a video game asset as pixel art"
 - Remove any text from the image if needed
 
 ### Step 2: Isometric Image → 3D Model
