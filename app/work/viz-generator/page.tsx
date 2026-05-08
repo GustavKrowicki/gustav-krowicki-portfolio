@@ -97,38 +97,32 @@ export default function VizGeneratorPage() {
         </p>
       </CaseSection>
 
-      {/* Gallery Section */}
+      {/* Gallery Section — two images side by side on desktop, stacked on mobile */}
       <section className="py-16 md:py-24 bg-neutral-50">
         <Container maxWidth="container">
-          <h2 className="text-3xl md:text-4xl font-bold mb-12">Generated visuals</h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-            <div className="relative rounded-xl aspect-square overflow-hidden">
+          <h2 className="text-2xl md:text-3xl font-bold mb-8 md:mb-10">
+            Generated visuals
+          </h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="relative w-full">
               <Image
                 src="/images/viz-generator/instagram direction 1.png"
                 alt="Generated Instagram visual direction"
-                fill
-                className="object-cover"
+                width={1600}
+                height={1200}
+                className="w-full h-auto"
+                sizes="(min-width: 768px) 50vw, 100vw"
               />
             </div>
-            <div className="relative rounded-xl aspect-square overflow-hidden">
+            <div className="relative w-full">
               <Image
                 src="/images/viz-generator/cate it tables orange.png"
                 alt="Generated Cate it tables visual"
-                fill
-                className="object-cover"
+                width={1600}
+                height={1200}
+                className="w-full h-auto"
+                sizes="(min-width: 768px) 50vw, 100vw"
               />
-            </div>
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 3</span>
-            </div>
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 4</span>
-            </div>
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 5</span>
-            </div>
-            <div className="bg-neutral-200 rounded-xl aspect-square flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image 6</span>
             </div>
           </div>
         </Container>

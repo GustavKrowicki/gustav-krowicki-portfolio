@@ -1,4 +1,5 @@
 import { Metadata } from 'next';
+import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import CaseStudyWrapper from '@/components/case-study/CaseStudyWrapper';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
@@ -89,16 +90,43 @@ export default function CateItPage() {
           cards={[
             {
               header: 'Seasonality is a real concern',
+              illustration: (
+                <Image
+                  src="/images/cate-it/sun.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
               text: 'Eight conversations with food truck owners revealed consistent patterns. January and February are slow months. Any fat in the budget during winter is a problem. Fixed costs don\'t work for this business model.',
               backgroundColor: 'yellow',
             },
             {
               header: 'The community is welcoming',
+              illustration: (
+                <Image
+                  src="/images/cate-it/person-standing.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
               text: 'Food truck owners remember what it\'s like starting out. They\'re happy to refer you to others in the space. This openness gave us access to more conversations and validated that there\'s genuine interest in solving this problem.',
               backgroundColor: 'orange',
             },
             {
               header: 'They\'re okay with manual processes',
+              illustration: (
+                <Image
+                  src="/images/cate-it/ticket.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
               text: 'Food truck owners were surprisingly comfortable with bookings going through their email rather than a fancy platform. This insight let us de-risk the launch with a simpler MVP.',
               backgroundColor: 'cream',
             },
@@ -166,9 +194,16 @@ export default function CateItPage() {
               </p>
             </div>
 
-            {/* Right Column - Image Placeholder */}
-            <div className="bg-neutral-100 rounded-2xl aspect-[4/3] flex items-center justify-center">
-              <span className="text-neutral-400 text-sm">Image placeholder</span>
+            {/* Right Column - Design solution screenshot */}
+            <div className="relative w-full rounded-2xl overflow-hidden">
+              <Image
+                src="/images/cate-it/design-solution.png"
+                alt="Cate It design solution"
+                width={1600}
+                height={1200}
+                className="w-full h-auto"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
             </div>
           </div>
         </Container>
