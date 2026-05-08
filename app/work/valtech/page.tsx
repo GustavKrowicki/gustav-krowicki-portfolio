@@ -29,19 +29,7 @@ export default function ValtechPage() {
       <section className="pt-20 pb-24 md:pt-28 md:pb-32">
         <Container maxWidth="container">
           <div className="grid grid-cols-12 gap-x-6 md:gap-x-8 gap-y-10">
-            <div className="col-span-12 md:col-span-2">
-              <span className="text-xs uppercase tracking-[0.18em] text-neutral-500">
-                UX Design Intern
-              </span>
-            </div>
-            <div className="col-span-12 md:col-span-10">
-              <h1 className="text-6xl md:text-8xl lg:text-9xl font-light tracking-tight leading-[0.95]">
-                Valtech<span className="text-neutral-400">.</span>
-              </h1>
-            </div>
-
-            <div className="hidden md:block md:col-span-2" />
-            <div className="col-span-12 md:col-span-7">
+            <div className="col-span-12 md:col-span-9">
               <p className="text-2xl md:text-3xl leading-[1.4] font-light text-neutral-800">
                 During my internship as a UX designer at Valtech in Aarhus,
                 I spent my time mainly on two projects within Vestas&rsquo;s
@@ -54,6 +42,12 @@ export default function ValtechPage() {
             <div className="hidden md:block md:col-span-1" />
             <div className="col-span-12 md:col-span-2">
               <dl className="space-y-6 text-sm">
+                <div>
+                  <dt className="italic text-neutral-500 mb-1.5">Role</dt>
+                  <dd className="text-neutral-900 leading-relaxed">
+                    UX Design Intern
+                  </dd>
+                </div>
                 <div>
                   <dt className="italic text-neutral-500 mb-1.5">Team</dt>
                   <dd className="text-neutral-900 leading-relaxed">
@@ -84,11 +78,9 @@ export default function ValtechPage() {
 
       {/* Recommendations — moved up */}
       <RecommendationsSection
-        eyebrow="In their words"
         title={
           <>
-            Two letters of{' '}
-            <em className="italic font-light text-neutral-500">recommendation</em>.
+            Two letters of recommendation
           </>
         }
         recommendations={[
@@ -120,14 +112,6 @@ export default function ValtechPage() {
                   sizes="(min-width: 1024px) 1066px, 100vw"
                 />
               </div>
-              <figcaption className="mt-4 flex items-baseline gap-3">
-                <span className="text-xs uppercase tracking-[0.18em] text-neutral-500 shrink-0">
-                  Fig. 01
-                </span>
-                <span className="text-sm italic text-neutral-500">
-                  Vestas customer-facing digital solution — concept work.
-                </span>
-              </figcaption>
             </figure>
           </div>
         </Container>
@@ -150,8 +134,8 @@ export default function ValtechPage() {
               </p>
               <p className="mt-10 text-lg md:text-xl leading-[1.65] text-neutral-700 max-w-[60ch]">
                 I was in charge of designing a design guide for a CMS website,
-                ensuring a cohesive product experience across branding and
-                product. Alongside that I took on smaller design tasks that
+                ensuring a cohesive product experience across branding and marketing websites.
+                Alongside that I took on smaller design tasks that
                 required a switch in the day-to-day mindset.
               </p>
             </div>
@@ -174,14 +158,6 @@ export default function ValtechPage() {
                   sizes="(min-width: 768px) 720px, 100vw"
                 />
               </div>
-              <figcaption className="mt-4 flex items-baseline gap-3">
-                <span className="text-xs uppercase tracking-[0.18em] text-neutral-500 shrink-0">
-                  Fig. 02
-                </span>
-                <span className="text-sm italic text-neutral-500">
-                  Drawer pattern — surfacing details without breaking flow.
-                </span>
-              </figcaption>
             </figure>
             <figure className="col-span-12 md:col-span-5 md:mt-32">
               <div className="relative bg-neutral-50 overflow-hidden">
@@ -194,14 +170,6 @@ export default function ValtechPage() {
                   sizes="(min-width: 768px) 500px, 100vw"
                 />
               </div>
-              <figcaption className="mt-4 flex items-baseline gap-3">
-                <span className="text-xs uppercase tracking-[0.18em] text-neutral-500 shrink-0">
-                  Fig. 03
-                </span>
-                <span className="text-sm italic text-neutral-500">
-                  Detail — typographic rhythm inside the drawer.
-                </span>
-              </figcaption>
             </figure>
           </div>
         </Container>
@@ -274,14 +242,6 @@ export default function ValtechPage() {
                   sizes="(min-width: 1024px) 940px, 100vw"
                 />
               </div>
-              <figcaption className="mt-4 flex items-baseline gap-3">
-                <span className="text-xs uppercase tracking-[0.18em] text-neutral-500 shrink-0">
-                  Fig. 04
-                </span>
-                <span className="text-sm italic text-neutral-500">
-                  Project artefact — research synthesis on the wall.
-                </span>
-              </figcaption>
             </figure>
           </div>
         </Container>
