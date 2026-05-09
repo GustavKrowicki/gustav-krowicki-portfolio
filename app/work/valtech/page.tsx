@@ -25,52 +25,42 @@ export default function ValtechPage() {
         alt={project.title}
       />
 
-      {/* Editorial title spread */}
-      <section className="pt-20 pb-24 md:pt-28 md:pb-32">
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
         <Container maxWidth="container">
+          <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+            UX Design Intern
+          </span>
+          <h1 className="text-5xl md:text-6xl font-bold mb-12">
+            Valtech
+          </h1>
+
           <div className="grid grid-cols-12 gap-x-6 md:gap-x-8 gap-y-10">
             <div className="col-span-12 md:col-span-9">
-              <p className="text-2xl md:text-3xl leading-[1.4] font-light text-neutral-800">
+              <p className="text-lg leading-relaxed text-neutral-700">
                 During my internship as a UX designer at Valtech in Aarhus,
                 I spent my time mainly on two projects within Vestas&rsquo;s
-                customer-facing digital solutions —{' '}
-                <em className="italic text-neutral-500">
-                  involved from the start of each project, to handoff.
-                </em>
+                customer-facing digital solutions. In both, I was involved
+                from the start of each project to handoff.
               </p>
             </div>
             <div className="hidden md:block md:col-span-1" />
             <div className="col-span-12 md:col-span-2">
-              <dl className="space-y-6 text-sm">
+              <div className="space-y-6">
                 <div>
-                  <dt className="italic text-neutral-500 mb-1.5">Role</dt>
-                  <dd className="text-neutral-900 leading-relaxed">
-                    UX Design Intern
-                  </dd>
+                  <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Team</h3>
+                  <p className="text-neutral-700">Johannes Wigh-Poulsen</p>
+                  <p className="text-neutral-700">Sune Depping Jeppesen</p>
                 </div>
                 <div>
-                  <dt className="italic text-neutral-500 mb-1.5">Team</dt>
-                  <dd className="text-neutral-900 leading-relaxed">
-                    Johannes Wigh-Poulsen
-                    <br />
-                    Sune Depping Jeppesen
-                  </dd>
+                  <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Tools</h3>
+                  <p className="text-neutral-700">Miro, Figma, Google Analytics</p>
                 </div>
                 <div>
-                  <dt className="italic text-neutral-500 mb-1.5">Tools</dt>
-                  <dd className="text-neutral-900 leading-relaxed">
-                    Miro, Figma,
-                    <br />
-                    Google Analytics
-                  </dd>
+                  <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide mb-2">Timeline</h3>
+                  <p className="text-neutral-700">August 2023 – December 2023</p>
                 </div>
-                <div>
-                  <dt className="italic text-neutral-500 mb-1.5">Timeline</dt>
-                  <dd className="text-neutral-900 leading-relaxed">
-                    Aug — Dec 2023
-                  </dd>
-                </div>
-              </dl>
+              </div>
             </div>
           </div>
         </Container>
@@ -78,11 +68,7 @@ export default function ValtechPage() {
 
       {/* Recommendations — moved up */}
       <RecommendationsSection
-        title={
-          <>
-            Two letters of recommendation
-          </>
-        }
+        title="Recommendations"
         recommendations={[
           {
             name: 'Johannes Wigh-Poulsen',
@@ -117,27 +103,29 @@ export default function ValtechPage() {
         </Container>
       </section>
 
-      {/* Editorial body — practice */}
-      <section className="py-24 md:py-32">
+      {/* Practice */}
+      <section className="py-16 md:py-24">
         <Container maxWidth="container">
           <div className="grid grid-cols-12 gap-x-6 md:gap-x-8 gap-y-8">
             <div className="col-span-12 md:col-span-2">
-              <span className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+              <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
                 The practice
-              </span>
+              </h3>
             </div>
             <div className="col-span-12 md:col-span-8">
-              <p className="text-2xl md:text-[1.75rem] leading-[1.45] font-light text-neutral-900">
-                I participated actively in design crits at Valtech, took an
-                active role helping peers with their projects, and contributed
-                to plan and execute research and workshops.
-              </p>
-              <p className="mt-10 text-lg md:text-xl leading-[1.65] text-neutral-700 max-w-[60ch]">
-                I was in charge of designing a design guide for a CMS website,
-                ensuring a cohesive product experience across branding and marketing websites.
-                Alongside that I took on smaller design tasks that
-                required a switch in the day-to-day mindset.
-              </p>
+              <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+                <p>
+                  I participated actively in design crits at Valtech, took an
+                  active role helping peers with their projects, and contributed
+                  to plan and execute research and workshops.
+                </p>
+                <p>
+                  I was in charge of designing a design guide for a CMS website,
+                  ensuring a cohesive product experience across branding and
+                  marketing websites. Alongside that I took on smaller design
+                  tasks that required a switch in the day-to-day mindset.
+                </p>
+              </div>
             </div>
           </div>
         </Container>
@@ -175,22 +163,20 @@ export default function ValtechPage() {
         </Container>
       </section>
 
-      {/* Context — asymmetric body */}
-      <section className="py-24 md:py-32 mt-24 md:mt-32 bg-neutral-50">
+      {/* Context */}
+      <section className="py-16 md:py-24 mt-16 md:mt-24 bg-neutral-50">
         <Container maxWidth="container">
-          <div className="grid grid-cols-12 gap-x-6 md:gap-x-8 gap-y-12">
+          <div className="grid grid-cols-12 gap-x-6 md:gap-x-8 gap-y-10">
             <div className="col-span-12 md:col-span-2">
-              <span className="text-xs uppercase tracking-[0.18em] text-neutral-500">
+              <h3 className="text-sm font-medium text-neutral-500 uppercase tracking-wide">
                 Context
-              </span>
+              </h3>
             </div>
             <div className="col-span-12 md:col-span-8">
-              <h2 className="text-4xl md:text-6xl font-light leading-[1.05] tracking-tight mb-12 md:mb-16">
-                Research as the{' '}
-                <em className="italic font-light text-neutral-500">spine</em>{' '}
-                of every project.
+              <h2 className="text-3xl md:text-4xl font-bold text-black mb-8">
+                Research as the spine of every project
               </h2>
-              <p className="text-xl md:text-2xl leading-normal font-light text-neutral-900 max-w-[60ch]">
+              <p className="text-lg leading-relaxed text-neutral-700">
                 In both projects I actively participated in design sprint
                 sessions with stakeholders to gather feedback and improve
                 ongoing work. I conducted user research using both qualitative
@@ -201,24 +187,17 @@ export default function ValtechPage() {
 
             <div className="hidden md:block md:col-span-2" />
             <div className="col-span-12 md:col-span-8">
-              <ul className="divide-y divide-neutral-200 border-t border-b border-neutral-200">
+              <ul className="space-y-3 text-lg leading-relaxed text-neutral-700">
                 {[
                   'Mapping the research',
                   'Journey mapping',
                   'Wireframing',
                   'Prototyping',
                   'Validating wireframes and concepts with customers and stakeholders',
-                ].map((item, i) => (
-                  <li
-                    key={item}
-                    className="flex items-baseline gap-6 py-4 md:py-5"
-                  >
-                    <span className="text-xs tabular-nums text-neutral-400 w-8 shrink-0">
-                      {String(i + 1).padStart(2, '0')}
-                    </span>
-                    <span className="text-base md:text-lg text-neutral-800">
-                      {item}
-                    </span>
+                ].map((item) => (
+                  <li key={item} className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>{item}</span>
                   </li>
                 ))}
               </ul>
