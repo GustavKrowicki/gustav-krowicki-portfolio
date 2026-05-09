@@ -337,7 +337,8 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Cate it",
     category: "portfolio",
     footprint: { width: 3, height: 3 },
-    collisionPadding: { right: 2, top: 2 },
+    collisionPadding: { right: 0, top: 0 },
+    triggerZoneRadius: 3.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/cate-it_south.png",
       north: "/game/pogicity/Building/landmark/cate-it_north.png",
