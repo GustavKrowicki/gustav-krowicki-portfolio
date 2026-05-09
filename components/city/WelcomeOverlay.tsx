@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   PIXEL_INSET_CLIP,
@@ -60,16 +61,17 @@ export default function WelcomeOverlay({
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                        className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16 mb-4" : "h-20 w-20 mb-6"} mx-auto flex items-center justify-center`}
+                        className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16 mb-4" : "h-20 w-20 mb-6"} mx-auto flex items-center justify-center overflow-hidden`}
                         style={PIXEL_INSET_CLIP}
                       >
-                        <span
-                          role="img"
-                          aria-label="waving hand"
-                          className={`${isMobile ? "text-3xl" : "text-4xl"} flex h-10 w-10 items-center justify-center border-[3px] border-[#6e2e14] bg-[#d78432]`}
-                        >
-                          👋
-                        </span>
+                        <Image
+                          src="/images/about/me avatar.jpeg"
+                          alt="Gustav Krowicki"
+                          width={80}
+                          height={80}
+                          className="h-full w-full object-cover"
+                          priority
+                        />
                       </motion.div>
 
                       <motion.h2
@@ -87,9 +89,8 @@ export default function WelcomeOverlay({
                         transition={{ delay: 0.4 }}
                         className="mt-3 text-center font-mono text-sm leading-relaxed text-[#d7ceb8]"
                       >
-                        I&apos;m a product designer who builds digital experiences.
-                        <br />
-                        Explore my portfolio in this isometric city.
+                        I&apos;m a digitalproduct designer who builds digital experiences.
+                        Explore my portfolio in this city.
                       </motion.p>
                     </div>
 
