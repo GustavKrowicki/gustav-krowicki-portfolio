@@ -10,7 +10,7 @@ import {
   TILE_WIDTH,
   TILE_HEIGHT,
   PLAYER_MOVE_LERP,
-  DIRECTION_TO_COMPASS,
+  getCharacterTextureKey,
   GridCell,
 } from "../types";
 import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
@@ -475,7 +475,7 @@ export class PlayerController {
   }
 
   private getTextureKey(): string {
-    return `${this.characterType}_${DIRECTION_TO_COMPASS[this.direction]}`;
+    return getCharacterTextureKey(this.characterType, this.direction);
   }
 
   private emitPositionChange(): void {

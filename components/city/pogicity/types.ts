@@ -41,19 +41,28 @@ export enum Direction {
   Right = "right",
 }
 
-// Isometric direction-to-compass mappings for sprite textures
 export const DIRECTION_TO_COMPASS: Record<Direction, string> = {
+  [Direction.Up]: "north",
+  [Direction.Down]: "south",
+  [Direction.Left]: "west",
+  [Direction.Right]: "east",
+};
+
+export const DIRECTION_TO_SHORT_COMPASS: Record<Direction, string> = {
+  [Direction.Up]: "n",
+  [Direction.Down]: "s",
+  [Direction.Left]: "w",
+  [Direction.Right]: "e",
+};
+
+// Gustav's sprites were drawn with a different facing convention than the
+// apple/banana art, so applying DIRECTION_TO_COMPASS to them would render
+// him rotated 90°.
+const GUSTAV_DIRECTION_TO_COMPASS: Record<Direction, string> = {
   [Direction.Up]: "west",
   [Direction.Down]: "east",
   [Direction.Left]: "south",
   [Direction.Right]: "north",
-};
-
-export const DIRECTION_TO_SHORT_COMPASS: Record<Direction, string> = {
-  [Direction.Up]: "w",
-  [Direction.Down]: "e",
-  [Direction.Left]: "s",
-  [Direction.Right]: "n",
 };
 
 export enum LightingType {
@@ -73,6 +82,17 @@ export enum CharacterType {
   Banana = "banana",
   Apple = "apple",
   Gustav = "gustav",
+}
+
+export function getCharacterTextureKey(
+  characterType: CharacterType,
+  direction: Direction
+): string {
+  const compass =
+    characterType === CharacterType.Gustav
+      ? GUSTAV_DIRECTION_TO_COMPASS[direction]
+      : DIRECTION_TO_COMPASS[direction];
+  return `${characterType}_${compass}`;
 }
 
 export interface Character {

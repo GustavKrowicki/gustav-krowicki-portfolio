@@ -21,6 +21,7 @@ import {
   TRIGGER_ZONE_RADIUS,
   DIRECTION_TO_COMPASS,
   DIRECTION_TO_SHORT_COMPASS,
+  getCharacterTextureKey,
 } from "../types";
 import { GAME_HEIGHT, GAME_WIDTH, GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import {
@@ -2199,14 +2200,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
-    const dirMap: Record<Direction, string> = {
-      [Direction.Down]: "south",
-      [Direction.Up]: "north",
-      [Direction.Left]: "west",
-      [Direction.Right]: "east",
-    };
-
-    const dir = orientation ? dirMap[orientation] : "south";
+    const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
 
     if (building.sprites[dir as keyof typeof building.sprites]) {
       return `${building.id}_${dir}`;
@@ -2265,7 +2259,7 @@ export class MainScene extends Phaser.Scene {
     for (const char of this.characters) {
       const screenPos = this.gridToScreen(char.x, char.y);
       const centerY = screenPos.y + TILE_HEIGHT / 2;
-      const textureKey = this.getCharacterTextureKey(char.characterType, char.direction);
+      const textureKey = getCharacterTextureKey(char.characterType, char.direction);
 
       let sprite = this.characterSprites.get(char.id);
       if (!sprite) {
@@ -2290,9 +2284,6 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
-  private getCharacterTextureKey(charType: CharacterType, direction: Direction): string {
-    return `${charType}_${DIRECTION_TO_COMPASS[direction]}`;
-  }
 
   private clearPreview(): void {
     this.previewSprites.forEach((s) => s.destroy());

@@ -4,7 +4,7 @@ import {
   NPCState,
   Direction,
   CharacterType,
-  DIRECTION_TO_COMPASS,
+  getCharacterTextureKey,
   TILE_WIDTH,
   TILE_HEIGHT,
 } from "../types";
@@ -112,7 +112,7 @@ export class NPCManager {
   }
 
   private getTextureKey(direction: Direction): string {
-    return `${this.npcCharacterType}_${DIRECTION_TO_COMPASS[direction]}`;
+    return getCharacterTextureKey(this.npcCharacterType, direction);
   }
 
   render(
