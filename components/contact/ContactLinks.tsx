@@ -52,7 +52,7 @@ export default function ContactLinks() {
           const Icon = item.icon;
           return (
             <div key={item.label} className="flex items-start gap-4">
-              <div className="flex items-center justify-center w-12 h-12 bg-neutral-100 rounded-lg flex-shrink-0">
+              <div className="flex items-center justify-center w-12 h-12 flex-shrink-0">
                 <Icon className="w-5 h-5 text-neutral-700" />
               </div>
 
