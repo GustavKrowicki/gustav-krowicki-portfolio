@@ -61,7 +61,7 @@ export default function WelcomeOverlay({
                         initial={{ scale: 0 }}
                         animate={{ scale: 1 }}
                         transition={{ delay: 0.2, type: "spring", stiffness: 200 }}
-                        className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16 mb-4" : "h-20 w-20 mb-6"} mx-auto flex items-center justify-center overflow-hidden`}
+                        className={`${pixelSpriteFrameClass} ${isMobile ? "h-16 w-16 mb-4" : "h-20 w-22 mb-6"} mx-auto flex items-center justify-center overflow-hidden`}
                         style={PIXEL_INSET_CLIP}
                       >
                         <Image
@@ -80,7 +80,7 @@ export default function WelcomeOverlay({
                         transition={{ delay: 0.3 }}
                         className="text-center font-mono text-2xl uppercase tracking-[0.08em] text-[#f5ecd2]"
                       >
-                        Welcome to Gustav&apos;s City
+                        Welcome to my City
                       </motion.h2>
 
                       <motion.p
@@ -89,12 +89,12 @@ export default function WelcomeOverlay({
                         transition={{ delay: 0.4 }}
                         className="mt-3 text-center font-mono text-sm leading-relaxed text-[#d7ceb8]"
                       >
-                        I&apos;m a digitalproduct designer who builds digital experiences.
-                        Explore my portfolio in this city.
+                        I&apos;m a digital product designer who builds digital experiences.
+                        Explore my portfolio in this city. Happy to chat on new opportunities in second half&nbsp;2026
                       </motion.p>
                     </div>
 
-                    <div className={`${isMobile ? "px-5 pb-5" : "px-8 pb-8"} bg-[#6d6b5f] pt-5`}>
+                    <div className={`${isMobile ? "px-5 pb-5" : "px-6 pb-8"} bg-[#6d6b5f] pt-5`}>
                       <motion.div
                         initial={{ opacity: 0, y: 10 }}
                         animate={{ opacity: 1, y: 0 }}
