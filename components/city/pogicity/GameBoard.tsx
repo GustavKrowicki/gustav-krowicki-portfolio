@@ -532,13 +532,15 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
           const cell = grid[py]?.[px];
           if (!cell) return;
 
-          // Allow placement on grass, tile, snow, or road (not asphalt unless decoration)
+          // Allow placement on grass, tile, snow; decorations can also sit on
+          // road or asphalt (e.g. pedestrian fans walking to the stadium).
           const isDecoration = building.isDecoration || building.category === "props";
           if (
             cell.type !== TileType.Grass &&
             cell.type !== TileType.Tile &&
             cell.type !== TileType.Snow &&
-            !(cell.type === TileType.Road && isDecoration)
+            !(cell.type === TileType.Road && isDecoration) &&
+            !(cell.type === TileType.Asphalt && isDecoration)
           ) {
             return;
           }

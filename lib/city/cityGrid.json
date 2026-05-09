@@ -533,10 +533,15 @@
       "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 19,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 1,
+      "buildingId": "stadium-fan-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
@@ -931,12 +936,15 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 21,
       "y": 2,
       "isOrigin": true,
       "originX": 21,
-      "originY": 2
+      "originY": 2,
+      "buildingId": "stadium-fan-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "snow",
@@ -1708,10 +1716,15 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 21,
       "y": 4,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 21,
+      "originY": 4,
+      "buildingId": "stadium-fan-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "snow",
@@ -2109,10 +2122,15 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 20,
       "y": 5,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 5,
+      "buildingId": "stadium-fan-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "tile",
@@ -2484,20 +2502,26 @@
       "originY": 6
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 16,
       "y": 6,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 16,
-      "originY": 4
+      "originY": 6,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
-      "type": "asphalt",
+      "type": "building",
       "x": 17,
       "y": 6,
-      "isOrigin": false,
-      "originX": 16,
-      "originY": 4
+      "isOrigin": true,
+      "originX": 17,
+      "originY": 6,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "asphalt"
     },
     {
       "type": "asphalt",
@@ -2508,24 +2532,37 @@
       "originY": 4
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 6,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 6,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 20,
       "y": 6,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 20,
+      "originY": 6,
+      "buildingId": "stadium-fan-2",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 21,
       "y": 6,
       "isOrigin": true,
       "originX": 21,
-      "originY": 6
+      "originY": 6,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "snow",
@@ -2870,12 +2907,15 @@
       "isOrigin": true
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 16,
       "y": 7,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 16,
-      "originY": 4
+      "originY": 7,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",
@@ -2886,18 +2926,26 @@
       "originY": 4
     },
     {
-      "type": "asphalt",
+      "type": "building",
       "x": 18,
       "y": 7,
-      "isOrigin": false,
-      "originX": 16,
-      "originY": 4
+      "isOrigin": true,
+      "originX": 18,
+      "originY": 7,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "asphalt"
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 7,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "tile",
@@ -3280,12 +3328,15 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 21,
       "y": 8,
       "isOrigin": true,
       "originX": 21,
-      "originY": 8
+      "originY": 8,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "snow",
@@ -3618,12 +3669,15 @@
       "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 16,
       "y": 9,
       "isOrigin": true,
       "originX": 16,
-      "originY": 9
+      "originY": 9,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "asphalt",
@@ -3642,18 +3696,26 @@
       "originY": 8
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 9,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 20,
       "y": 9,
       "isOrigin": true,
       "originX": 20,
-      "originY": 9
+      "originY": 9,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "tile",
@@ -4350,12 +4412,15 @@
       "originY": 8
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 19,
       "y": 11,
-      "isOrigin": false,
-      "originX": 16,
-      "originY": 8
+      "isOrigin": true,
+      "originX": 19,
+      "originY": 11,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "grass",
@@ -4656,12 +4721,15 @@
       "isOrigin": true
     },
     {
-      "type": "road",
+      "type": "building",
       "x": 16,
       "y": 12,
       "isOrigin": true,
       "originX": 16,
-      "originY": 12
+      "originY": 12,
+      "buildingId": "stadium-fan-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "road"
     },
     {
       "type": "asphalt",

@@ -505,6 +505,28 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     icon: "🎋",
     isDecoration: true,
   },
+  "stadium-fan-1": {
+    id: "stadium-fan-1",
+    name: "Stadium Fan (back)",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    sprites: {
+      south: "/game/pogicity/Props/1x1stadium_fan_1.png",
+    },
+    icon: "🧑",
+    isDecoration: true,
+  },
+  "stadium-fan-2": {
+    id: "stadium-fan-2",
+    name: "Stadium Fan (front)",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    sprites: {
+      south: "/game/pogicity/Props/1x1stadium_fan_2.png",
+    },
+    icon: "👕",
+    isDecoration: true,
+  },
 
   // ========================================
   // POGICITY RESIDENTIAL
