@@ -1607,7 +1607,7 @@ export class MainScene extends Phaser.Scene {
 
     // Initialize managers
     this.npcManager = new NPCManager(this);
-    this.triggerZoneManager = new TriggerZoneManager(this);
+    this.triggerZoneManager = new TriggerZoneManager();
 
     // Create player controller
     this.playerController = new PlayerController(this, this.grid);
