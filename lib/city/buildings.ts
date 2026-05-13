@@ -216,6 +216,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     category: "portfolio",
     footprint: { width: 4, height: 4 },
     collisionPadding: { left: 2, top: 2 },
+    triggerZoneRadius: 4,
     sprites: {
       south: "/game/pogicity/Building/landmark/aarhus-stadium_south.png",
       north: "/game/pogicity/Building/landmark/aarhus-stadium_north.png",

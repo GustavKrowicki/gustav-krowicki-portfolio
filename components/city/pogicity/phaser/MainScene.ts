@@ -1643,7 +1643,7 @@ export class MainScene extends Phaser.Scene {
     this.triggerZoneManager.setupZones(TOUR_STOPS, getBuildingPosition);
 
     // Find spawn position (on main road near Valtech area)
-    const spawnPos = this.findWalkableSpawnPosition(15, 30);
+    const spawnPos = this.findSpawnPosition(15, 30);
 
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
@@ -1665,35 +1665,50 @@ export class MainScene extends Phaser.Scene {
     this.events.emit("adventureModeStarted");
   }
 
-  private findWalkableSpawnPosition(preferX: number, preferY: number): { x: number; y: number } {
-    // Check if preferred position is walkable
-    if (this.isWalkable(preferX, preferY)) {
+  // A spawnable tile must be player-walkable AND have at least one player-walkable
+  // neighbour — otherwise the player lands in a collision-padding pocket and can't move.
+  private isSpawnable(x: number, y: number): boolean {
+    if (!this.isPlayerWalkable(x, y)) return false;
+    for (const dir of allDirections) {
+      const vec = directionVectors[dir];
+      if (this.isPlayerWalkable(x + vec.dx, y + vec.dy)) return true;
+    }
+    return false;
+  }
+
+  private findSpawnPosition(preferX: number, preferY: number): { x: number; y: number } {
+    if (this.isSpawnable(preferX, preferY)) {
       return { x: preferX, y: preferY };
     }
 
-    // Search in expanding rings around preferred position
+    // Expanding ring search — only check the perimeter at each radius
     for (let radius = 1; radius < 10; radius++) {
       for (let dx = -radius; dx <= radius; dx++) {
         for (let dy = -radius; dy <= radius; dy++) {
+          if (Math.abs(dx) !== radius && Math.abs(dy) !== radius) continue;
           const x = preferX + dx;
           const y = preferY + dy;
-          if (this.isWalkable(x, y)) {
+          if (this.isSpawnable(x, y)) {
             return { x, y };
           }
         }
       }
     }
 
-    // Fallback: find any walkable tile
+    // Last-resort grid scan: take the first spawnable tile, falling back to any
+    // player-walkable tile (so a 1-tile pocket is still better than the prefer point).
+    let walkableFallback: { x: number; y: number } | null = null;
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
-        if (this.isWalkable(x, y)) {
+        if (this.isSpawnable(x, y)) {
           return { x, y };
+        }
+        if (!walkableFallback && this.isPlayerWalkable(x, y)) {
+          walkableFallback = { x, y };
         }
       }
     }
-
-    return { x: preferX, y: preferY };
+    return walkableFallback ?? { x: preferX, y: preferY };
   }
 
   stopAdventureMode(): void {
@@ -1804,7 +1819,7 @@ export class MainScene extends Phaser.Scene {
         const x = Math.floor(centerX) + dx;
         const y = Math.floor(centerY) + dy;
 
-        if (!this.isPlayerWalkable(x, y)) continue;
+        if (!this.isSpawnable(x, y)) continue;
 
         const ex = x - centerX;
         const ey = y - centerY;
@@ -1841,7 +1856,7 @@ export class MainScene extends Phaser.Scene {
       }
     }
 
-    const fallback = this.findWalkableSpawnPosition(
+    const fallback = this.findSpawnPosition(
       Math.floor(position.x + 1),
       Math.floor(position.y + 1)
     );
@@ -1863,7 +1878,7 @@ export class MainScene extends Phaser.Scene {
     const bld = getBuilding(buildingId);
     const zoneRadius = bld?.triggerZoneRadius ?? TRIGGER_ZONE_RADIUS;
     const candidates = this.findWalkableTilesInZone(position.x, position.y, zoneRadius);
-    const target = candidates[0] ?? this.findWalkableSpawnPosition(
+    const target = candidates[0] ?? this.findSpawnPosition(
       Math.floor(position.x + 1),
       Math.floor(position.y + 1)
     );
