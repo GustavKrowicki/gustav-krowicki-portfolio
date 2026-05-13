@@ -4,7 +4,6 @@ import { useState, useRef, useCallback } from "react";
 import { Direction } from "./pogicity/types";
 import {
   PIXEL_INSET_CLIP,
-  pixelButtonClass,
   pixelPanelInnerClass,
   pixelPanelOuterClass,
 } from "./pixelModalStyles";
@@ -12,13 +11,11 @@ import {
 interface VirtualJoystickProps {
   isMobile: boolean;
   onDirectionChange: (direction: Direction | null) => void;
-  onInteract?: () => void;
 }
 
 export default function VirtualJoystick({
   isMobile,
   onDirectionChange,
-  onInteract,
 }: VirtualJoystickProps) {
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -148,23 +145,6 @@ export default function VirtualJoystick({
           }}
         />
       </div>
-
-      {onInteract && (
-        <div className="self-end">
-          <button
-            onTouchStart={(e) => {
-              e.preventDefault();
-              onInteract();
-            }}
-            onTouchCancel={handleTouchEnd}
-            className={`min-h-[5.5rem] min-w-[7rem] self-end ${pixelButtonClass("primary")}`}
-            style={PIXEL_INSET_CLIP}
-            data-testid="city-talk-button"
-          >
-            Talk
-          </button>
-        </div>
-      )}
     </div>
   );
 }

@@ -1910,15 +1910,6 @@ export class MainScene extends Phaser.Scene {
     return this.playerController?.getState() || null;
   }
 
-  // Trigger interaction programmatically
-  triggerInteraction(): void {
-    const activeZone = this.triggerZoneManager?.getActiveZone();
-    const activeTourStop = this.triggerZoneManager?.getActiveTourStop();
-    if (activeZone && activeTourStop) {
-      this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId, method: 'mobile_button' });
-    }
-  }
-
   // ==================== END ADVENTURE MODE API ====================
 
   // ==================== LOGO OVERLAY API ====================

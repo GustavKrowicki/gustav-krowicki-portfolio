@@ -68,7 +68,6 @@ export interface PhaserGameHandle {
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
   getPlayerState: () => PlayerState | null;
-  triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
   // Logo overlay methods
   getPortfolioBuildingPositions: () => Array<{
@@ -106,7 +105,6 @@ export interface GameBoardHandle {
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
   getPlayerState: () => PlayerState | null;
-  triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
   // Logo overlay methods
   getPortfolioBuildingPositions: () => Array<{
@@ -252,9 +250,6 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     getPlayerState: () => {
       return gameRef.current?.getPlayerState() ?? null;
-    },
-    triggerInteraction: () => {
-      gameRef.current?.triggerInteraction();
     },
     getGameInstance: () => {
       return gameRef.current?.getGameInstance() ?? null;

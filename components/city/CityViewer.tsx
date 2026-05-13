@@ -423,11 +423,6 @@ export default function CityViewer({
     gameBoardRef.current?.setPlayerInputDirection(direction);
   }, []);
 
-  // Handle mobile interact button
-  const handleMobileInteract = useCallback(() => {
-    gameBoardRef.current?.triggerInteraction();
-  }, []);
-
   // Handle view case study from dialog
   const handleViewCaseStudy = useCallback((projectSlug: string) => {
     setIsDialogOpen(false);
@@ -743,7 +738,6 @@ export default function CityViewer({
           <VirtualJoystick
             isMobile={isMobile}
             onDirectionChange={handleJoystickDirection}
-            onInteract={currentEncounter && !isDialogOpen ? handleMobileInteract : undefined}
           />
 
         </>

@@ -38,7 +38,6 @@ export interface PhaserGameHandle {
   getVisitedBuildings: () => Set<string>;
   isAdventureModeActive: () => boolean;
   getPlayerState: () => PlayerState | null;
-  triggerInteraction: () => void;
   getGameInstance: () => Phaser.Game | null;
   // Logo overlay methods
   getPortfolioBuildingPositions: () => Array<{
@@ -237,11 +236,6 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
             return sceneRef.current.getPlayerState();
           }
           return null;
-        },
-        triggerInteraction: () => {
-          if (sceneRef.current) {
-            sceneRef.current.triggerInteraction();
-          }
         },
         getGameInstance: () => {
           return gameRef.current;

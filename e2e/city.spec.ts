@@ -48,19 +48,27 @@ test.describe("city flows", () => {
     await expect(page.getByTestId("city-rpg-dialog")).toBeHidden();
   });
 
-  test("mobile adventure hook exposes talk affordance when an encounter is active", async ({
+  test("mobile adventure never renders a talk button, even after closing the encounter dialog", async ({
     page,
   }, testInfo) => {
     test.skip(
       !testInfo.project.name.includes("mobile"),
-      "Talk control is only rendered in mobile mode."
+      "city-talk-button only ever rendered on mobile."
     );
 
     await gotoCityE2E(page);
     await startAdventure(page);
     await openEncounter(page, "lego");
 
-    await expect(page.getByTestId("city-talk-button")).toBeVisible();
+    await expect(page.getByTestId("city-talk-button")).toHaveCount(0);
+
+    // Dismiss via keyboard so handleDialogClose runs — that path leaves
+    // currentEncounter set, which is the state where the Talk button used to appear.
+    await page.keyboard.press("Enter");
+    await page.keyboard.press("Enter");
+    await expect(page.getByTestId("city-rpg-dialog")).toBeHidden();
+
+    await expect(page.getByTestId("city-talk-button")).toHaveCount(0);
   });
 
   test("dismissWelcome helper can move directly into viewer mode", async ({
