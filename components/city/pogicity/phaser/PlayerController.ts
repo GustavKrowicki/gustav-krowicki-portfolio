@@ -360,10 +360,7 @@ export class PlayerController {
       const current = openSet.shift()!;
       const currentKey = `${current.x},${current.y}`;
 
-      // Check if we've reached the goal (or close enough)
-      const distToEnd = Math.abs(current.x - endX) + Math.abs(current.y - endY);
-      if (distToEnd <= 1 || (current.x === endX && current.y === endY)) {
-        // Reconstruct path
+      if (current.x === endX && current.y === endY) {
         const path: { x: number; y: number }[] = [];
         let node: PathNode | null = current;
         while (node) {
