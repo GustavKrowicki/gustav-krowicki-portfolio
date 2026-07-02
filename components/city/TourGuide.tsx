@@ -3,8 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { TOUR_STOPS, CATEGORY_STYLES, TourStop } from "@/lib/city/tourStops";
-import { getBuildingVideo } from "@/lib/city/buildingVideos";
-import VideoThumbnail from "./VideoThumbnail";
 import SpotifyPlayer, { NORTHSIDE_PLAYLIST_URL } from "./SpotifyPlayer";
 import BookShelf from "./BookShelf";
 import { useRouter } from "next/navigation";
@@ -185,7 +183,6 @@ export default function TourGuide({
                 </div>
               </div>
 
-              {/* Dialogue box + optional video */}
               <div className="flex gap-3">
                 <div className="flex-1 border-[3px] border-[#171a1d] bg-[#77715f] px-3 py-2 shadow-[inset_0_3px_0_#98917c]">
                   <p className="font-mono text-sm leading-relaxed text-[#171411]">
@@ -197,16 +194,6 @@ export default function TourGuide({
                     )}
                   </p>
                 </div>
-
-                {currentStop.buildingId && getBuildingVideo(currentStop.buildingId) && (
-                  <div className="h-16 w-16 flex-shrink-0 self-start [&>div]:!h-16 [&>div]:!border-0 [&>div]:!shadow-none [&>div]:!bg-transparent">
-                    <VideoThumbnail
-                      video={getBuildingVideo(currentStop.buildingId)!}
-                      isActive={isActive}
-                      compact
-                    />
-                  </div>
-                )}
               </div>
 
               {currentStop.buildingId === "northside-stage" && (
