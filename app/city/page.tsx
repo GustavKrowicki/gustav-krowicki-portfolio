@@ -57,9 +57,12 @@ function CityPageContent() {
   // Belt-and-suspenders: push a dummy history entry so if a swipe-back gesture
   // somehow still fires, it navigates to the same /city page instead of leaving.
   useEffect(() => {
-    history.pushState(null, "", "/city");
+    // Preserve the query string (e.g. ?e2e=1 for Playwright) — replacing the URL
+    // without it makes Next.js sync useSearchParams and drop e2eMode mid-mount.
+    const cityUrl = `/city${window.location.search}`;
+    history.pushState(null, "", cityUrl);
     const onPopState = () => {
-      history.pushState(null, "", "/city");
+      history.pushState(null, "", cityUrl);
     };
     window.addEventListener("popstate", onPopState);
     return () => window.removeEventListener("popstate", onPopState);
