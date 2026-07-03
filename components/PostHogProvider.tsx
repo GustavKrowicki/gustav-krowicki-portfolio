@@ -14,6 +14,14 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         person_profiles: 'identified_only',
         capture_pageview: true,
         capture_pageleave: true,
+        session_recording: {
+          // Record the Phaser WebGL canvas so /city replays show the game
+          // (character, camera) instead of a blank element. fps/quality are
+          // left to remote defaults (4fps, 0.4).
+          captureCanvas: {
+            recordCanvas: true,
+          },
+        },
       });
       (window as any).posthog = posthog;
 
