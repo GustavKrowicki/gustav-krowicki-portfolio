@@ -66,3 +66,11 @@ export function trackCvDownloaded(source: 'header' | 'contact' | 'mobile_nav') {
 export function trackModeSwitched(from: 'classic' | 'city', to: 'classic' | 'city') {
   capture('mode_switched', { from, to });
 }
+
+export function trackSpotifyInteracted(
+  action: 'play' | 'pause' | 'next' | 'prev' | 'embed_click',
+  source: 'city_player' | 'about_playlist_1' | 'about_playlist_2',
+  trackName?: string
+) {
+  capture('spotify_interacted', { action, source, track_name: trackName });
+}

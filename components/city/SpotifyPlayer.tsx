@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { trackSpotifyInteracted } from "@/lib/analytics";
 
 export const NORTHSIDE_PLAYLIST_URL = "https://open.spotify.com/playlist/3EauLdytT4srscIeLfXD2H?si=613af6771c324e08";
 const PLAYLIST_URI = "spotify:playlist:3EauLdytT4srscIeLfXD2H";
@@ -122,17 +123,20 @@ export default function SpotifyPlayer({ playlistUrl }: SpotifyPlayerProps) {
   }, []);
 
   const togglePlay = useCallback(() => {
+    trackSpotifyInteracted(isPaused ? "play" : "pause", "city_player", currentTrack?.name);
     controllerRef.current?.togglePlay();
-  }, []);
+  }, [isPaused, currentTrack]);
 
   const nextTrack = useCallback(() => {
     const nextIndex = (currentIndex + 1) % TRACKS.length;
+    trackSpotifyInteracted("next", "city_player", TRACKS[nextIndex].name);
     setCurrentUri(TRACKS[nextIndex].uri);
     controllerRef.current?.loadUri(TRACKS[nextIndex].uri);
   }, [currentIndex]);
 
   const prevTrack = useCallback(() => {
     const prevIndex = (currentIndex - 1 + TRACKS.length) % TRACKS.length;
+    trackSpotifyInteracted("prev", "city_player", TRACKS[prevIndex].name);
     setCurrentUri(TRACKS[prevIndex].uri);
     controllerRef.current?.loadUri(TRACKS[prevIndex].uri);
   }, [currentIndex]);

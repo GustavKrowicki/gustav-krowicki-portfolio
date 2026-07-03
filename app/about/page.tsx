@@ -3,6 +3,7 @@ import Container from '@/components/ui/Container';
 import InterestMap from '@/components/interactive/InterestMap';
 import Bookshelf3D from '@/components/interactive/Bookshelf3D';
 import InterestCarousel from '@/components/interactive/InterestCarousel';
+import TrackedSpotifyEmbed from '@/components/interactive/TrackedSpotifyEmbed';
 
 export const metadata: Metadata = {
   title: 'About',
@@ -64,15 +65,9 @@ export default function AboutPage() {
           </div>
 
           <div className="md:pt-20">
-            <iframe
-              style={{borderRadius: '12px'}}
+            <TrackedSpotifyEmbed
               src="https://open.spotify.com/embed/playlist/43WEe56nhD7k22nUzpMn10?utm_source=generator&theme=0"
-              width="100%"
-              height="352"
-              frameBorder="0"
-              allowFullScreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
+              source="about_playlist_1"
             />
           </div>
         </div>
@@ -96,15 +91,9 @@ export default function AboutPage() {
           </div>
 
           <div className="md:pt-20">
-            <iframe
-              style={{borderRadius: '12px'}}
+            <TrackedSpotifyEmbed
               src="https://open.spotify.com/embed/playlist/6rpgDVWQUR93MLJ5fuz3sC?utm_source=generator"
-              width="100%"
-              height="352"
-              frameBorder="0"
-              allowFullScreen
-              allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-              loading="lazy"
+              source="about_playlist_2"
             />
           </div>
         </div>
