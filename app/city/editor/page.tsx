@@ -1,10 +1,26 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useEffect, useMemo, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
-import initialGrid from "@/lib/city/cityGrid.json";
-import { GridCell } from "@/components/city/pogicity/types";
+import savedGrid from "@/lib/city/cityGrid.json";
+import {
+  GRID_HEIGHT,
+  GRID_WIDTH,
+  GridCell,
+  TileType,
+} from "@/components/city/pogicity/types";
+
+function buildEmptyGrid(): GridCell[][] {
+  return Array.from({ length: GRID_HEIGHT }, (_, y) =>
+    Array.from({ length: GRID_WIDTH }, (_, x) => ({
+      type: TileType.Grass,
+      x,
+      y,
+      isOrigin: true,
+    }))
+  );
+}
 
 // Dynamically import CityEditor to avoid SSR issues with Phaser
 const CityEditor = dynamic(
@@ -21,10 +37,17 @@ const CityEditor = dynamic(
   }
 );
 
-export default function CityEditorPage() {
+function CityEditorPageContent() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const isEmpty = searchParams.get("empty") === "1";
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [isChecking, setIsChecking] = useState(true);
+
+  const gridForEditor = useMemo<GridCell[][]>(
+    () => (isEmpty ? buildEmptyGrid() : (savedGrid as GridCell[][])),
+    [isEmpty]
+  );
 
   useEffect(() => {
     // Only allow editor access on localhost
@@ -65,9 +88,14 @@ export default function CityEditorPage() {
           <div>
             <h1 className="text-white font-mono text-xl font-bold">
               City Editor <span className="text-yellow-400">(Dev Only)</span>
+              {isEmpty && (
+                <span className="ml-2 text-green-400">[Empty Plate]</span>
+              )}
             </h1>
             <p className="text-gray-300 font-mono text-sm">
-              Build and customize your city
+              {isEmpty
+                ? "Blank grass canvas — drop in buildings, props, roads"
+                : "Build and customize your city"}
             </p>
           </div>
           <div className="flex gap-2">
@@ -88,7 +116,24 @@ export default function CityEditorPage() {
       </div>
 
       {/* City Editor */}
-      <CityEditor initialGrid={initialGrid as GridCell[][]} />
+      <CityEditor key={isEmpty ? "empty" : "saved"} initialGrid={gridForEditor} />
     </div>
+  );
+}
+
+// useSearchParams() requires a Suspense boundary during prerendering
+export default function CityEditorPage() {
+  return (
+    <Suspense
+      fallback={
+        <div className="w-full h-screen flex items-center justify-center bg-[#73645F]">
+          <div className="text-white font-mono text-xl animate-pulse">
+            Loading City Editor...
+          </div>
+        </div>
+      }
+    >
+      <CityEditorPageContent />
+    </Suspense>
   );
 }
