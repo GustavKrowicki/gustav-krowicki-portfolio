@@ -25,7 +25,6 @@ test.describe("city flows", () => {
     await gotoCityE2E(page);
 
     await page.getByTestId("city-welcome-adventure").click();
-    await page.getByRole("button", { name: /banana/i }).click();
 
     await expect(page.getByTestId("city-adventure-hud")).toBeVisible();
     if (testInfo.project.name.includes("mobile")) {

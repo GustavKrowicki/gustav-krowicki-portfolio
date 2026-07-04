@@ -55,6 +55,8 @@ interface CityE2EApi {
   getVisitedBuildings: () => string[];
   setVisitedBuildings: (buildingIds: string[]) => void;
   stopAdventure: () => void;
+  pauseGame: () => boolean;
+  resumeGame: () => boolean;
 }
 
 export default function CityViewer({
@@ -629,6 +631,23 @@ export default function CityViewer({
       },
       stopAdventure: () => {
         handleStopAdventure();
+      },
+      // Freeze the update loop (tweens, anims, movement) so canvas
+      // screenshots are deterministic; the renderer keeps drawing the
+      // last frame.
+      pauseGame: () => {
+        const game = gameBoardRef.current?.getGameInstance();
+        const scene = game?.scene.getScene("MainScene");
+        if (!scene) return false;
+        if (!scene.scene.isPaused()) scene.scene.pause();
+        return scene.scene.isPaused();
+      },
+      resumeGame: () => {
+        const game = gameBoardRef.current?.getGameInstance();
+        const scene = game?.scene.getScene("MainScene");
+        if (!scene) return false;
+        if (scene.scene.isPaused()) scene.scene.resume();
+        return !scene.scene.isPaused();
       },
     }) satisfies CityE2EApi;
 
