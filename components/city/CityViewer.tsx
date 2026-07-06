@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
-import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
+import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode, LightingType } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import WelcomeOverlay from "./WelcomeOverlay";
@@ -13,6 +13,7 @@ import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
+import { playClickSound } from "@/lib/city/sounds";
 import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
 import {
@@ -40,6 +41,7 @@ interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
   e2eMode?: boolean;
+  lighting?: LightingType;
 }
 
 
@@ -63,6 +65,7 @@ export default function CityViewer({
   initialGrid,
   onProjectClick,
   e2eMode = false,
+  lighting = LightingType.Day,
 }: CityViewerProps) {
   // Mode state
   const [showWelcome, setShowWelcome] = useState(true);
@@ -356,6 +359,10 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
+    // Immediate click feedback (Thomas Bohse: nothing visually confirms the click)
+    gameBoardRef.current?.bumpBuilding(buildingId);
+    playClickSound();
+
     if (isAdventureActive) {
       autoWalkTargetRef.current = buildingId;
       gameBoardRef.current?.walkPlayerToBuilding(buildingId);
@@ -516,6 +523,10 @@ export default function CityViewer({
       if (!building) return;
 
       if (isTourActive) return;
+
+      // Immediate click feedback (Thomas Bohse: nothing visually confirms the click)
+      gameBoardRef.current?.bumpBuilding(buildingId);
+      playClickSound();
 
       trackBuildingInteracted(building.name, gameMode, 'click');
 
@@ -689,6 +700,7 @@ export default function CityViewer({
         initialGrid={initialGrid}
         onBuildingClick={handleBuildingClick}
         testId="city-canvas"
+        lighting={lighting}
       />
 
       {/* Portfolio mode toggle */}

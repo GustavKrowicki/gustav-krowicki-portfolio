@@ -22,6 +22,9 @@ import {
   DIRECTION_TO_COMPASS,
   DIRECTION_TO_SHORT_COMPASS,
   getCharacterTextureKey,
+  LightingType,
+  LIGHTING_TINTS,
+  LIGHTING_BG,
 } from "../types";
 import { GAME_HEIGHT, GAME_WIDTH, GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
 import {
@@ -33,6 +36,8 @@ import {
   canPlaceRoadSegment,
   getLaneDirection,
   isAtIntersection,
+  canTurnAtTile,
+  getUTurnDirection,
 } from "../roadUtils";
 import {
   BUILDINGS,
@@ -95,6 +100,7 @@ export class MainScene extends Phaser.Scene {
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private glowSprites: Map<string, Phaser.GameObjects.GameObject> = new Map();
+  private lighting: LightingType = LightingType.Day;
   private carSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
   private characterSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
   private previewSprites: Phaser.GameObjects.Image[] = [];
@@ -258,6 +264,9 @@ export class MainScene extends Phaser.Scene {
 
     // Initial render
     this.renderGrid();
+
+    // Apply lighting that was set before the scene booted
+    this.applyLighting();
 
     // Load character animations
     this.loadCharacterAnimations();
@@ -704,9 +713,87 @@ export class MainScene extends Phaser.Scene {
     return valid;
   }
 
+  // Pick the direction a car should take from a tile center, respecting the
+  // road network's one-way lane semantics (see roadUtils) instead of turning
+  // randomly onto any adjacent asphalt.
+  private pickCarDirection(tileX: number, tileY: number, currentDir: Direction): Direction {
+    const driveableAhead = (d: Direction) => {
+      const v = directionVectors[d];
+      return this.isDrivable(tileX + v.dx, tileY + v.dy);
+    };
+
+    const laneDir = getLaneDirection(tileX, tileY, this.grid);
+
+    // Intersection center tiles: lane direction is ambiguous; take only turns
+    // that are legal from this specific lane tile, preferring straight.
+    if (isAtIntersection(tileX, tileY, this.grid)) {
+      const legal = allDirections.filter(
+        (d) => canTurnAtTile(tileX, tileY, currentDir, d) && driveableAhead(d)
+      );
+      if (driveableAhead(currentDir) && (legal.includes(currentDir) || legal.length === 0)) {
+        // Mostly keep going straight; occasionally take a legal turn.
+        const turns = legal.filter((d) => d !== currentDir);
+        if (turns.length > 0 && Math.random() > 0.75) {
+          return turns[Math.floor(Math.random() * turns.length)];
+        }
+        return currentDir;
+      }
+      if (legal.length > 0) {
+        return legal[Math.floor(Math.random() * legal.length)];
+      }
+    } else if (laneDir !== null) {
+      // Regular one-way lane tile: adopt the lane's direction. An instant flip
+      // beats permanently driving against a one-way (matches the game's idiom
+      // of instant direction changes).
+      if (driveableAhead(laneDir)) {
+        return laneDir;
+      }
+    } else if (driveableAhead(currentDir)) {
+      // Off-pattern asphalt (hand-painted outside the 4x4 segments): carry on.
+      return currentDir;
+    }
+
+    // Blocked ahead — fallback chain: legal turns, then a proper U-turn into
+    // the opposite lane, then any drivable neighbor as a last resort.
+    const legalTurns = allDirections.filter(
+      (d) => d !== currentDir && canTurnAtTile(tileX, tileY, currentDir, d) && driveableAhead(d)
+    );
+    if (legalTurns.length > 0) {
+      return legalTurns[Math.floor(Math.random() * legalTurns.length)];
+    }
+
+    const uTurn = getUTurnDirection(tileX, tileY, currentDir, this.grid);
+    if (uTurn !== null && driveableAhead(uTurn)) {
+      return uTurn;
+    }
+
+    const validDirs = this.getValidCarDirections(tileX, tileY);
+    if (validDirs.length > 0) {
+      const opposite = oppositeDirection[currentDir];
+      const choices = validDirs.filter((d) => d !== opposite);
+      return choices.length > 0
+        ? choices[Math.floor(Math.random() * choices.length)]
+        : validDirs[0];
+    }
+
+    return currentDir;
+  }
+
+  // Another car close ahead? Used for simple queueing so cars don't overlap.
+  private isCarBlockedAhead(car: Car, direction: Direction): boolean {
+    const v = directionVectors[direction];
+    const aheadX = car.x + v.dx * 0.6;
+    const aheadY = car.y + v.dy * 0.6;
+    return this.cars.some(
+      (other) =>
+        other.id !== car.id &&
+        Math.abs(other.x - aheadX) < 0.55 &&
+        Math.abs(other.y - aheadY) < 0.55
+    );
+  }
+
   private updateSingleCar(car: Car): Car {
-    const { x, y, direction, speed, waiting } = car;
-    const vec = directionVectors[direction];
+    const { x, y, direction, speed } = car;
     const tileX = Math.floor(x);
     const tileY = Math.floor(y);
 
@@ -728,6 +815,7 @@ export class MainScene extends Phaser.Scene {
           y: newTile.y + 0.5,
           direction: laneDir || Direction.Right,
           waiting: 0,
+          lastDecisionTile: undefined,
         };
       }
       return car;
@@ -742,23 +830,24 @@ export class MainScene extends Phaser.Scene {
     let newDirection = direction;
     let nextX = x;
     let nextY = y;
+    let lastDecisionTile = car.lastDecisionTile;
 
-    if (nearCenter) {
-      const nextTileX = tileX + vec.dx;
-      const nextTileY = tileY + vec.dy;
-
-      if (!this.isDrivable(nextTileX, nextTileY)) {
-        const validDirs = this.getValidCarDirections(tileX, tileY);
-        if (validDirs.length > 0) {
-          const opposite = oppositeDirection[direction];
-          const choices = validDirs.filter((d) => d !== opposite);
-          newDirection = choices.length > 0
-            ? choices[Math.floor(Math.random() * choices.length)]
-            : validDirs[0];
-        }
+    const tileKey = `${tileX},${tileY}`;
+    if (nearCenter && lastDecisionTile !== tileKey) {
+      // Decide once per tile — the near-center window spans several frames.
+      lastDecisionTile = tileKey;
+      newDirection = this.pickCarDirection(tileX, tileY, direction);
+      if (newDirection !== direction) {
+        // Snap to tile center when turning so the sprite pivots cleanly.
         nextX = tileX + 0.5;
         nextY = tileY + 0.5;
       }
+    }
+
+    // Simple queueing: hold position while another car is directly ahead
+    // (with a deadlock escape after ~3s).
+    if (this.isCarBlockedAhead(car, newDirection) && car.waiting < 180) {
+      return { ...car, direction: newDirection, waiting: car.waiting + 1, lastDecisionTile };
     }
 
     const moveVec = directionVectors[newDirection];
@@ -775,10 +864,11 @@ export class MainScene extends Phaser.Scene {
         y: tileY + 0.5,
         direction: newDirection,
         waiting: 0,
+        lastDecisionTile,
       };
     }
 
-    return { ...car, x: nextX, y: nextY, direction: newDirection, waiting: 0 };
+    return { ...car, x: nextX, y: nextY, direction: newDirection, waiting: 0, lastDecisionTile };
   }
 
   // PUBLIC METHODS
@@ -1167,6 +1257,7 @@ export class MainScene extends Phaser.Scene {
       tileSprite.setOrigin(0.5, 0);
       tileSprite.setScale(scale);
       tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+      this.applyTintTo(tileSprite);
       this.tileSprites.set(key, tileSprite);
     }
   }
@@ -2041,6 +2132,48 @@ export class MainScene extends Phaser.Scene {
 
   // ==================== END LOGO OVERLAY API ====================
 
+  // Find a building's origin cell by scanning the grid (footprints are keyed
+  // by their isOrigin cell, NOT the footprint center).
+  private findBuildingOrigin(
+    buildingId: string
+  ): { origin: { x: number; y: number }; cell: GridCell } | null {
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (cell?.buildingId === buildingId && cell?.isOrigin) {
+          return { origin: { x, y }, cell };
+        }
+      }
+    }
+    return null;
+  }
+
+  private drawFootprintDiamonds(
+    g: Phaser.GameObjects.Graphics,
+    origin: { x: number; y: number },
+    footprint: { width: number; height: number },
+    alpha: number
+  ): void {
+    g.clear();
+    g.lineStyle(3, 0x4f94ef, alpha);
+    g.fillStyle(0x4f94ef, alpha * 0.15);
+
+    // Draw isometric diamond for each tile
+    for (let dy = 0; dy < footprint.height; dy++) {
+      for (let dx = 0; dx < footprint.width; dx++) {
+        const tilePos = this.gridToScreen(origin.x + dx, origin.y + dy);
+        g.beginPath();
+        g.moveTo(tilePos.x, tilePos.y);
+        g.lineTo(tilePos.x + TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
+        g.lineTo(tilePos.x, tilePos.y + TILE_HEIGHT);
+        g.lineTo(tilePos.x - TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
+        g.closePath();
+        g.fillPath();
+        g.strokePath();
+      }
+    }
+  }
+
   highlightBuilding(buildingId: string | null): void {
     // Clear existing highlight
     if (this.highlightSprite) {
@@ -2052,23 +2185,9 @@ export class MainScene extends Phaser.Scene {
 
     if (!buildingId || !this.isReady) return;
 
-    // Find the building in the grid
-    let buildingOrigin: { x: number; y: number } | null = null;
-    let buildingCell: GridCell | null = null;
-
-    for (let y = 0; y < GRID_HEIGHT; y++) {
-      for (let x = 0; x < GRID_WIDTH; x++) {
-        const cell = this.grid[y]?.[x];
-        if (cell?.buildingId === buildingId && cell?.isOrigin) {
-          buildingOrigin = { x, y };
-          buildingCell = cell;
-          break;
-        }
-      }
-      if (buildingOrigin) break;
-    }
-
-    if (!buildingOrigin || !buildingCell) return;
+    const found = this.findBuildingOrigin(buildingId);
+    if (!found) return;
+    const { origin: buildingOrigin, cell: buildingCell } = found;
 
     const building = getBuilding(buildingId);
     if (!building) return;
@@ -2079,32 +2198,8 @@ export class MainScene extends Phaser.Scene {
     this.highlightSprite = this.add.graphics();
     this.highlightSprite.setDepth(1_500_000);
 
-    // Draw pulsing highlight around the building footprint
-    const drawHighlight = (alpha: number) => {
-      if (!this.highlightSprite || !buildingOrigin) return;
-
-      this.highlightSprite.clear();
-      this.highlightSprite.lineStyle(3, 0x4f94ef, alpha);
-      this.highlightSprite.fillStyle(0x4f94ef, alpha * 0.15);
-
-      // Draw isometric diamond for each tile
-      for (let dy = 0; dy < footprint.height; dy++) {
-        for (let dx = 0; dx < footprint.width; dx++) {
-          const tilePos = this.gridToScreen(buildingOrigin.x + dx, buildingOrigin.y + dy);
-          this.highlightSprite.beginPath();
-          this.highlightSprite.moveTo(tilePos.x, tilePos.y);
-          this.highlightSprite.lineTo(tilePos.x + TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
-          this.highlightSprite.lineTo(tilePos.x, tilePos.y + TILE_HEIGHT);
-          this.highlightSprite.lineTo(tilePos.x - TILE_WIDTH / 2, tilePos.y + TILE_HEIGHT / 2);
-          this.highlightSprite.closePath();
-          this.highlightSprite.fillPath();
-          this.highlightSprite.strokePath();
-        }
-      }
-    };
-
     // Initial draw
-    drawHighlight(0.8);
+    this.drawFootprintDiamonds(this.highlightSprite, buildingOrigin, footprint, 0.8);
 
     // Pulsing animation
     this.tweens.add({
@@ -2114,11 +2209,164 @@ export class MainScene extends Phaser.Scene {
       yoyo: true,
       repeat: -1,
       onUpdate: (tween) => {
+        if (!this.highlightSprite) return;
         const alpha = tween.getValue() ?? 0.8;
-        drawHighlight(alpha);
+        this.drawFootprintDiamonds(this.highlightSprite, buildingOrigin, footprint, alpha);
       },
     });
   }
+
+  // One-shot click feedback: squash-bounce the building sprite and flash its
+  // footprint. Independent of the looping highlightSprite used by the tour.
+  bumpBuilding(buildingId: string): void {
+    if (!this.isReady) return;
+
+    const found = this.findBuildingOrigin(buildingId);
+    if (!found) return;
+    const { origin, cell } = found;
+
+    const sprite = this.buildingSprites.get(`building_${origin.x},${origin.y}`);
+    if (sprite) {
+      // Reset before tweening so rapid clicks can't accumulate scale drift.
+      this.tweens.killTweensOf(sprite);
+      sprite.setScale(1);
+      this.tweens.add({
+        targets: sprite,
+        scaleY: 0.93,
+        scaleX: 1.04,
+        duration: 90,
+        yoyo: true,
+        ease: "Quad.easeOut",
+      });
+    }
+
+    const building = getBuilding(buildingId);
+    if (!building) return;
+    const footprint = getBuildingFootprint(building, cell.buildingOrientation);
+
+    const flash = this.add.graphics();
+    flash.setDepth(1_500_000);
+    this.drawFootprintDiamonds(flash, origin, footprint, 0.8);
+    this.tweens.add({
+      targets: flash,
+      alpha: 0,
+      duration: 250,
+      ease: "Quad.easeOut",
+      onComplete: () => flash.destroy(),
+    });
+  }
+
+  // ==================== DAY/NIGHT LIGHTING ====================
+
+  setLighting(lighting: LightingType): void {
+    if (this.lighting === lighting) return;
+    this.lighting = lighting;
+    if (this.isReady) {
+      this.applyLighting();
+    }
+  }
+
+  getLightingTint(): number | null {
+    return LIGHTING_TINTS[this.lighting];
+  }
+
+  private applyTintTo(sprite: Phaser.GameObjects.Image | Phaser.GameObjects.Sprite): void {
+    const tint = this.getLightingTint();
+    if (tint === null) {
+      sprite.clearTint();
+    } else {
+      sprite.setTint(tint);
+    }
+  }
+
+  // One-time sweep applied at boot and on lighting changes — no per-frame cost.
+  // Day is a strict no-op state (clearTint, original background, no glows) so
+  // e2e canvas baselines stay byte-identical.
+  private applyLighting(): void {
+    this.tileSprites.forEach((sprite) => this.applyTintTo(sprite));
+    this.buildingSprites.forEach((sprite) => this.applyTintTo(sprite));
+    this.carSprites.forEach((sprite) => this.applyTintTo(sprite));
+    this.characterSprites.forEach((sprite) => this.applyTintTo(sprite));
+
+    this.cameras.main.setBackgroundColor(LIGHTING_BG[this.lighting]);
+
+    const tint = this.getLightingTint();
+    this.npcManager?.applyTint(tint);
+    this.playerController?.applyTint(tint);
+
+    this.rebuildGlows();
+  }
+
+  // Soft radial glow texture generated at runtime (no art asset needed).
+  private ensureGlowTexture(): void {
+    if (this.textures.exists("glow_radial")) return;
+    const width = 96;
+    const height = 48;
+    const canvasTexture = this.textures.createCanvas("glow_radial", width, height);
+    if (!canvasTexture) return;
+    const ctx = canvasTexture.getContext();
+    const gradient = ctx.createRadialGradient(
+      width / 2, height / 2, 0,
+      width / 2, height / 2, width / 2
+    );
+    gradient.addColorStop(0, "rgba(255, 223, 158, 0.9)");
+    gradient.addColorStop(0.5, "rgba(255, 223, 158, 0.35)");
+    gradient.addColorStop(1, "rgba(255, 223, 158, 0)");
+    ctx.fillStyle = gradient;
+    // Ellipse via scaled circle so the glow hugs the isometric ground plane
+    ctx.save();
+    ctx.scale(1, height / width);
+    ctx.beginPath();
+    ctx.arc(width / 2, (height / 2) * (width / height), width / 2, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
+    canvasTexture.refresh();
+  }
+
+  // Warm window/entrance glow for a landmark building at night.
+  private createBuildingGlow(originX: number, originY: number, buildingId: string): void {
+    const building = getBuilding(buildingId);
+    if (!building?.logoUrl) return;
+
+    this.ensureGlowTexture();
+
+    const footprint = getBuildingFootprint(
+      building,
+      this.grid[originY]?.[originX]?.buildingOrientation
+    );
+    const frontX = originX + footprint.width - 1;
+    const frontY = originY + footprint.height - 1;
+    const screenPos = this.gridToScreen(frontX, frontY);
+    const bottomY = screenPos.y + TILE_HEIGHT;
+
+    const glow = this.add.image(screenPos.x, bottomY - TILE_HEIGHT / 2, "glow_radial");
+    glow.setBlendMode(Phaser.BlendModes.ADD);
+    glow.setAlpha(0.35);
+    const footprintWidthPx = (footprint.width + footprint.height) * (TILE_WIDTH / 2);
+    glow.setScale(footprintWidthPx / 96, 1.2);
+    // Just above the building (0.05), below cars (0.1) at the same sort point
+    glow.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.06));
+
+    this.glowSprites.set(`building_${originX},${originY}`, glow);
+  }
+
+  private rebuildGlows(): void {
+    this.glowSprites.forEach((glow) => glow.destroy());
+    this.glowSprites.clear();
+
+    if (this.lighting !== LightingType.Night) return;
+
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (cell?.buildingId && cell.isOrigin) {
+          this.createBuildingGlow(x, y, cell.buildingId);
+        }
+      }
+    }
+  }
+
+  // ==================== END DAY/NIGHT LIGHTING ====================
 
   // RENDERING
   private renderGrid(): void {
@@ -2146,6 +2394,7 @@ export class MainScene extends Phaser.Scene {
         tileSprite.setOrigin(0.5, 0);
         tileSprite.setScale(textureKey.startsWith("snow_") ? 0.5 * 1.02 : 1.02);
         tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+        this.applyTintTo(tileSprite);
         this.tileSprites.set(key, tileSprite);
 
         if (cell.type === TileType.Building && cell.isOrigin && cell.buildingId) {
@@ -2160,6 +2409,12 @@ export class MainScene extends Phaser.Scene {
     if (sprite) {
       sprite.destroy();
       this.buildingSprites.delete(buildingKey);
+    }
+
+    const glow = this.glowSprites.get(buildingKey);
+    if (glow) {
+      glow.destroy();
+      this.glowSprites.delete(buildingKey);
     }
 
     for (let i = 1; i < 20; i++) {
@@ -2201,8 +2456,15 @@ export class MainScene extends Phaser.Scene {
     const sprite = this.add.image(screenPos.x, bottomY, textureKey);
     sprite.setOrigin(0.5, 1);
     sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
+    this.applyTintTo(sprite);
 
     this.buildingSprites.set(key, sprite);
+
+    // Night glow for landmark buildings (re-created here so editor re-renders
+    // stay consistent)
+    if (this.lighting === LightingType.Night && !this.glowSprites.has(key)) {
+      this.createBuildingGlow(originX, originY, buildingId);
+    }
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
@@ -2240,6 +2502,7 @@ export class MainScene extends Phaser.Scene {
       if (!sprite) {
         sprite = this.add.sprite(screenPos.x, groundY, textureKey);
         sprite.setOrigin(0.5, 1);
+        this.applyTintTo(sprite);
         this.carSprites.set(car.id, sprite);
       } else {
         sprite.setPosition(screenPos.x, groundY);
@@ -2276,6 +2539,7 @@ export class MainScene extends Phaser.Scene {
           sprite.setVisible(false);
         }
         sprite.setOrigin(0.5, 1);
+        this.applyTintTo(sprite);
         this.characterSprites.set(char.id, sprite);
       } else {
         sprite.setPosition(screenPos.x, centerY);

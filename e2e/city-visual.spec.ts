@@ -60,6 +60,10 @@ test.describe("city visual regression", () => {
     await startAdventure(page);
     await openEncounter(page, "lego");
 
+    // Freeze the game — the canvas peeks through at the HUD/joystick edges,
+    // and the player idle-animation behind them flakes the screenshots.
+    await pauseGame(page);
+
     await expect(page.getByTestId("city-adventure-hud")).toHaveScreenshot(
       "city-adventure-hud-mobile.png"
     );

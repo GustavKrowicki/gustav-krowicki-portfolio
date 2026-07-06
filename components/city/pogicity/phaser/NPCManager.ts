@@ -23,6 +23,7 @@ export class NPCManager {
   private scene: Phaser.Scene;
   private npcs: Map<string, NPCData> = new Map();
   private sprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
+  private currentTint: number | null = null;
   private markerSprites: Map<string, Phaser.GameObjects.Container> = new Map();
 
   // NPC appearance settings (using existing character sprites)
@@ -144,6 +145,7 @@ export class NPCManager {
       if (!sprite && gifsLoaded && this.scene.textures.exists(textureKey)) {
         sprite = this.scene.add.sprite(screenPos.x, groundY, textureKey, 0);
         sprite.setOrigin(0.5, 1);
+        if (this.currentTint !== null) sprite.setTint(this.currentTint);
         this.sprites.set(npcId, sprite);
       }
 
@@ -285,6 +287,18 @@ export class NPCManager {
 
   getNPC(buildingId: string): NPCData | null {
     return this.npcs.get(`npc_${buildingId}`) || null;
+  }
+
+  // Day/night lighting tint (null = clear)
+  applyTint(tint: number | null): void {
+    this.currentTint = tint;
+    for (const [, sprite] of this.sprites) {
+      if (tint === null) {
+        sprite.clearTint();
+      } else {
+        sprite.setTint(tint);
+      }
+    }
   }
 
   destroy(): void {

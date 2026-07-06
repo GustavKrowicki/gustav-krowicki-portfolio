@@ -13,6 +13,7 @@ import {
   Car,
   CharacterType,
   PlayerState,
+  LightingType,
 } from "./types";
 import {
   getRoadSegmentOrigin,
@@ -58,6 +59,7 @@ export interface PhaserGameHandle {
   panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
   panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  bumpBuilding: (buildingId: string) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
   stopAdventureMode: () => void;
@@ -95,6 +97,7 @@ export interface GameBoardHandle {
   panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
   panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  bumpBuilding: (buildingId: string) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
   stopAdventureMode: () => void;
@@ -137,6 +140,7 @@ interface GameBoardProps {
   onBuildingClick?: (buildingId: string, cell: GridCell) => void;
   onSave?: (data: GameSaveData) => void;
   testId?: string;
+  lighting?: LightingType;
 }
 
 function createEmptyGrid(): GridCell[][] {
@@ -156,6 +160,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   onBuildingClick,
   onSave,
   testId,
+  lighting = LightingType.Day,
 }, ref) {
   const [grid, setGrid] = useState<GridCell[][]>(() => {
     // Check if initialGrid is valid (non-empty array with proper dimensions)
@@ -222,6 +227,9 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     },
     highlightBuilding: (buildingId: string | null) => {
       gameRef.current?.highlightBuilding(buildingId);
+    },
+    bumpBuilding: (buildingId: string) => {
+      gameRef.current?.bumpBuilding(buildingId);
     },
     // Adventure mode methods
     startAdventureMode: (characterType: CharacterType) => {
@@ -723,6 +731,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
         onRoadDrag={handleRoadDrag}
         onZoomChange={setZoom}
         showStats={editable}
+        lighting={lighting}
       />
 
       {/* Tool Window (Editor only) */}

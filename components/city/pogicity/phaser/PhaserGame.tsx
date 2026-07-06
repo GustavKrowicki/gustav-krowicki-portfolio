@@ -9,7 +9,7 @@ import {
 import Phaser from "phaser";
 import { MainScene, SceneEvents } from "./MainScene";
 import { createGameConfig } from "./gameConfig";
-import { GridCell, ToolType, Direction, Car, CharacterType, PlayerState } from "../types";
+import { GridCell, ToolType, Direction, Car, CharacterType, PlayerState, LightingType } from "../types";
 
 // Exposed methods for parent component
 export interface PhaserGameHandle {
@@ -28,6 +28,7 @@ export interface PhaserGameHandle {
   panToPosition: (gridX: number, gridY: number, options?: { dialogVisible?: boolean }) => void;
   panToBuildingById: (buildingId: string, options?: { dialogVisible?: boolean }) => void;
   highlightBuilding: (buildingId: string | null) => void;
+  bumpBuilding: (buildingId: string) => void;
   // Adventure mode methods
   startAdventureMode: (characterType: CharacterType) => void;
   stopAdventureMode: () => void;
@@ -70,6 +71,7 @@ interface PhaserGameProps {
   onZoomChange?: (zoom: number) => void;
   showPaths?: boolean;
   showStats?: boolean;
+  lighting?: LightingType;
 }
 
 const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
@@ -88,6 +90,7 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
       onZoomChange,
       showPaths = false,
       showStats = true,
+      lighting = LightingType.Day,
     },
     ref
   ) {
@@ -185,6 +188,9 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           if (sceneRef.current) {
             sceneRef.current.highlightBuilding(buildingId);
           }
+        },
+        bumpBuilding: (buildingId: string) => {
+          sceneRef.current?.bumpBuilding(buildingId);
         },
         // Adventure mode methods
         startAdventureMode: (characterType: CharacterType) => {
@@ -321,6 +327,11 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
         sceneRef.current.updateGrid(grid);
       }
     }, [grid]);
+
+    // Apply lighting (day/night) when it changes
+    useEffect(() => {
+      sceneRef.current?.setLighting(lighting);
+    }, [lighting]);
 
     // Update selected tool
     useEffect(() => {

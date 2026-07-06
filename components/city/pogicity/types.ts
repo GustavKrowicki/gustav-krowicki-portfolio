@@ -71,6 +71,27 @@ export enum LightingType {
   Sunset = "sunset",
 }
 
+// Multiply tint applied to every world sprite for a lighting mode (null = no
+// tint). Values tuned for the pixel-art palette; adjust here, not per sprite.
+export const LIGHTING_TINTS: Record<LightingType, number | null> = {
+  [LightingType.Day]: null,
+  [LightingType.Sunset]: 0xffc9a0,
+  [LightingType.Night]: 0x8899cc,
+};
+
+// Camera background color per lighting mode (day matches gameConfig's #73645F).
+export const LIGHTING_BG: Record<LightingType, number> = {
+  [LightingType.Day]: 0x73645f,
+  [LightingType.Sunset]: 0x7d6055,
+  [LightingType.Night]: 0x2e2b38,
+};
+
+export function resolveLightingFromHour(hour: number): LightingType {
+  if (hour >= 19 || hour < 6) return LightingType.Night;
+  if ((hour >= 6 && hour < 8) || (hour >= 17 && hour < 19)) return LightingType.Sunset;
+  return LightingType.Day;
+}
+
 export interface VisualSettings {
   blueness: number; // -100 to 100 (hue shift toward blue)
   contrast: number; // 0.5 to 2.0
@@ -117,6 +138,9 @@ export interface Car {
   speed: number;
   waiting: number;
   carType: CarType;
+  // Tile key ("x,y") of the last tile a direction decision was made on, so
+  // the near-center window (several frames wide) only decides once per tile.
+  lastDecisionTile?: string;
 }
 
 export const GRID_WIDTH = 48;

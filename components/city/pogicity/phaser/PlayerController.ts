@@ -53,6 +53,7 @@ export class PlayerController {
   private scene: Phaser.Scene;
   private grid: GridCell[][];
   private sprite: Phaser.GameObjects.Sprite | null = null;
+  private currentTint: number | null = null;
   private pointer: Phaser.GameObjects.Graphics | null = null;
   private pointerBounceOffset: number = 0;
   private pointerBounceDirection: number = 1;
@@ -339,6 +340,17 @@ export class PlayerController {
     this.emitPositionChange();
   }
 
+  // Day/night lighting tint (null = clear)
+  applyTint(tint: number | null): void {
+    this.currentTint = tint;
+    if (!this.sprite) return;
+    if (tint === null) {
+      this.sprite.clearTint();
+    } else {
+      this.sprite.setTint(tint);
+    }
+  }
+
   private findPath(startX: number, startY: number, endX: number, endY: number): { x: number; y: number }[] {
     const openSet: PathNode[] = [];
     const closedSet = new Set<string>();
@@ -498,6 +510,7 @@ export class PlayerController {
       if (this.scene.textures.exists(textureKey)) {
         this.sprite = this.scene.add.sprite(this.worldX, this.worldY, textureKey, 0);
         this.sprite.setOrigin(0.5, 1);
+        if (this.currentTint !== null) this.sprite.setTint(this.currentTint);
       }
     }
 

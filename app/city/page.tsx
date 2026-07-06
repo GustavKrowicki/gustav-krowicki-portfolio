@@ -5,7 +5,11 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { trackCityEntered } from "@/lib/analytics";
 import dynamic from "next/dynamic";
 import initialGrid from "@/lib/city/cityGrid.json";
-import { GridCell } from "@/components/city/pogicity/types";
+import {
+  GridCell,
+  LightingType,
+  resolveLightingFromHour,
+} from "@/components/city/pogicity/types";
 
 function CityLoadingFallback() {
   return (
@@ -30,6 +34,15 @@ function CityPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const e2eMode = searchParams.get("e2e") === "1";
+
+  // Day/night from the visitor's local time; ?light= overrides for QA, and
+  // e2e is pinned to Day so canvas snapshot baselines stay stable.
+  const lightOverride = searchParams.get("light");
+  const lighting = e2eMode
+    ? LightingType.Day
+    : Object.values(LightingType).includes(lightOverride as LightingType)
+      ? (lightOverride as LightingType)
+      : resolveLightingFromHour(new Date().getHours());
   // Track city entry on mount
   useEffect(() => {
     const isMobile = window.innerWidth < 768;
@@ -78,6 +91,7 @@ function CityPageContent() {
         initialGrid={initialGrid as GridCell[][]}
         onProjectClick={handleProjectClick}
         e2eMode={e2eMode}
+        lighting={lighting}
       />
     </div>
   );
