@@ -14,6 +14,9 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         person_profiles: 'identified_only',
         capture_pageview: true,
         capture_pageleave: true,
+        // Surface uncaught errors (incl. Phaser game-loop crashes — a dead
+        // canvas is otherwise a silently blank portfolio)
+        capture_exceptions: true,
         session_recording: {
           // Record the Phaser WebGL canvas so /city replays show the game
           // (character, camera) instead of a blank element. fps/quality are

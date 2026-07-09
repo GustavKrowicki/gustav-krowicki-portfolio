@@ -42,6 +42,7 @@ interface CityViewerProps {
   onProjectClick?: (projectSlug: string) => void;
   e2eMode?: boolean;
   lighting?: LightingType;
+  skipWelcome?: boolean;
 }
 
 
@@ -66,9 +67,10 @@ export default function CityViewer({
   onProjectClick,
   e2eMode = false,
   lighting = LightingType.Day,
+  skipWelcome = false,
 }: CityViewerProps) {
   // Mode state
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(!skipWelcome);
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
 
   // Tour state (classic tour mode)

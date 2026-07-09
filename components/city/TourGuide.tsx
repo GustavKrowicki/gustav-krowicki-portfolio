@@ -124,7 +124,8 @@ export default function TourGuide({
 
   const handleViewProject = () => {
     if (currentStop?.projectSlug) {
-      router.push(`/work/${currentStop.projectSlug}`);
+      // ?from=city lets the case study's close button return to the city
+      router.push(`/work/${currentStop.projectSlug}?from=city`);
     }
   };
 

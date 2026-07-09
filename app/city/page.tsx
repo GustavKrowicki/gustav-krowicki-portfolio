@@ -34,6 +34,8 @@ function CityPageContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const e2eMode = searchParams.get("e2e") === "1";
+  // Returning from a case study — skip the welcome overlay, straight to explore
+  const returning = searchParams.get("return") === "1";
 
   // Day/night from the visitor's local time; ?light= overrides for QA, and
   // e2e is pinned to Day so canvas snapshot baselines stay stable.
@@ -82,7 +84,9 @@ function CityPageContent() {
   }, []);
 
   const handleProjectClick = (projectSlug: string) => {
-    router.push(`/work/${projectSlug}`);
+    // ?from=city lets the case study's close button return here instead of
+    // the classic landing page
+    router.push(`/work/${projectSlug}?from=city`);
   };
 
   return (
@@ -92,6 +96,7 @@ function CityPageContent() {
         onProjectClick={handleProjectClick}
         e2eMode={e2eMode}
         lighting={lighting}
+        skipWelcome={returning}
       />
     </div>
   );
