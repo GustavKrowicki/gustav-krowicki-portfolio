@@ -18,10 +18,14 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
         capture_pageleave: true,
         session_recording: {
           // Record the Phaser WebGL canvas so /city replays show the game
-          // (character, camera) instead of a blank element. fps/quality are
-          // left to remote defaults (4fps, 0.4).
+          // (character, camera) instead of a blank element. The remote
+          // defaults (4fps, 0.4) made a 16-min city visit ~2 GB, too large
+          // for the replay player and Replay Vision; 1fps at 0.2 keeps
+          // typical visits playable. DOM, clicks and cursor are unaffected.
           captureCanvas: {
             recordCanvas: true,
+            canvasFps: 1,
+            canvasQuality: '0.2',
           },
         },
       });
