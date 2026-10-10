@@ -1,7 +1,7 @@
-import posthog from 'posthog-js';
+import posthog, { type CaptureOptions } from 'posthog-js';
 
-function capture(event: string, properties?: Record<string, unknown>) {
-  posthog?.capture?.(event, properties);
+function capture(event: string, properties?: Record<string, unknown>, options?: CaptureOptions) {
+  posthog?.capture?.(event, properties, options);
 }
 
 // City events
@@ -34,7 +34,12 @@ export function trackAdventureExited(durationSeconds: number, buildingsVisitedCo
 }
 
 export function trackCityExited(durationSeconds: number, mode: string, buildingsVisitedCount: number) {
-  capture('city_exited', { duration_seconds: durationSeconds, mode, buildings_visited_count: buildingsVisitedCount });
+  // Sent immediately rather than batched, so it still arrives when fired from pagehide (tab close)
+  capture(
+    'city_exited',
+    { duration_seconds: durationSeconds, mode, buildings_visited_count: buildingsVisitedCount },
+    { send_instantly: true }
+  );
 }
 
 export function trackTourStopViewed(stopTitle: string, stopIndex: number) {

@@ -10,9 +10,11 @@ export default function PostHogProvider({ children }: { children: React.ReactNod
     const host = process.env.NEXT_PUBLIC_POSTHOG_HOST;
     if (key) {
       posthog.init(key, {
-        api_host: host || 'https://us.i.posthog.com',
+        api_host: host || 'https://eu.i.posthog.com',
         person_profiles: 'identified_only',
-        capture_pageview: true,
+        // 'history_change' also captures client-side (App Router) navigations;
+        // `true` only fires on the first hard page load.
+        capture_pageview: 'history_change',
         capture_pageleave: true,
         session_recording: {
           // Record the Phaser WebGL canvas so /city replays show the game

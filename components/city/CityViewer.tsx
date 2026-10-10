@@ -24,6 +24,7 @@ import {
   trackTourStopViewed,
   trackTourCompleted,
   trackTourExited,
+  trackCityExited,
 } from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -110,6 +111,29 @@ export default function CityViewer({
   const autoWalkTargetRef = useRef<string | null>(null);
   const currentEncounterRef = useRef<TourStop | null>(null);
   currentEncounterRef.current = currentEncounter;
+  const selectedModeRef = useRef<'none' | 'tour' | 'explore' | 'adventure'>('none');
+  const visitedBuildingsCountRef = useRef(0);
+  useEffect(() => {
+    visitedBuildingsCountRef.current = visitedBuildings.size;
+  }, [visitedBuildings]);
+
+  // Track leaving the city, once: client-side navigation (unmount) or tab close (pagehide)
+  useEffect(() => {
+    const enteredAt = Date.now();
+    let hasTrackedExit = false;
+    const trackExit = () => {
+      if (hasTrackedExit) return;
+      hasTrackedExit = true;
+      const duration = Math.round((Date.now() - enteredAt) / 1000);
+      trackCityExited(duration, selectedModeRef.current, visitedBuildingsCountRef.current);
+    };
+
+    window.addEventListener("pagehide", trackExit);
+    return () => {
+      window.removeEventListener("pagehide", trackExit);
+      trackExit();
+    };
+  }, []);
 
   useEffect(() => {
     const checkIsMobile = () => {
@@ -275,6 +299,7 @@ export default function CityViewer({
     setIsTourActive(true);
     setCurrentTourStop(0);
     trackModeSelected('tour');
+    selectedModeRef.current = 'tour';
     tourStartTimeRef.current = Date.now();
     maxTourStopViewedRef.current = 0;
   }, []);
@@ -284,6 +309,7 @@ export default function CityViewer({
     setGameMode(GameMode.Viewer);
     setIsTourActive(false);
     trackModeSelected('explore');
+    selectedModeRef.current = 'explore';
   }, []);
 
   // Start Adventure Mode
@@ -293,6 +319,7 @@ export default function CityViewer({
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
     trackModeSelected('adventure', 'gustav');
+    selectedModeRef.current = 'adventure';
     adventureStartTimeRef.current = Date.now();
     hasTrackedAdventureCompletionRef.current = false;
 
