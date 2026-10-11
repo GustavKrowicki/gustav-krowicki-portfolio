@@ -1,10 +1,14 @@
 import { defineConfig, devices } from "@playwright/test";
 
-const port = 3000;
+// E2E_PORT targets a server that is already running, e.g. `next start -p 3100` (prod) or `next dev -p 3101`
+const port = Number(process.env.E2E_PORT ?? 3000);
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: false,
+  // Each test runs the WebGL city; parallel browsers starve each other (measured 2026-10-11: 1 worker 97 s,
+  // 2 workers 6.3 min, 4 workers 8-16 min for city + smoke)
+  workers: 1,
   timeout: 45_000,
   expect: {
     timeout: 10_000,
