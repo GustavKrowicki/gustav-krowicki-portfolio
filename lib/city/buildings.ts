@@ -80,8 +80,9 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
+    // img2threejs campus rendered at 30 deg pitch with converter settings computed for a 7x7 footprint
+    // (zoom 0.945, vertical offset 0.235), so the sprite sits on its footprint without collision padding.
+    footprint: { width: 7, height: 7 },
     triggerZoneRadius: 5.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq_south.png",
@@ -95,7 +96,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: true,
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
-    logoOffset: { x: 0, y: 100 },
+    logoOffset: { x: 0, y: 34 },
   },
   "valtech-office": {
     id: "valtech-office",

@@ -12280,46 +12280,74 @@
       "originY": 32
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -12668,46 +12696,74 @@
       "originY": 32
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 33,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
@@ -13077,46 +13133,74 @@
       "originY": 32
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 34,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -13477,46 +13561,74 @@
       "originY": 32
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 35,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -13847,46 +13959,74 @@
       "originY": 36
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 36,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
@@ -14248,44 +14388,62 @@
       "originY": 36
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 8,
       "y": 37,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 8,
-      "originY": 37
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 13,
       "y": 37,
-      "isOrigin": true,
-      "originX": 13,
-      "originY": 37,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -14294,20 +14452,18 @@
       "x": 14,
       "y": 37,
       "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
+      "originX": 8,
+      "originY": 32,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 15,
       "y": 37,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 37
     },
     {
       "type": "road",
@@ -14649,46 +14805,62 @@
       "originY": 36
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 8,
       "y": 38,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 8,
-      "originY": 38
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 9,
       "y": 38,
-      "isOrigin": true,
-      "originX": 9,
-      "originY": 38
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 13,
       "y": 38,
       "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
+      "originX": 8,
+      "originY": 32,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -14697,20 +14869,18 @@
       "x": 14,
       "y": 38,
       "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
+      "originX": 8,
+      "originY": 32,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 15,
       "y": 38,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 38
     },
     {
       "type": "road",
@@ -15057,34 +15227,28 @@
       "originY": 39
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 13,
       "y": 39,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 13,
-      "originY": 37,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "originY": 39
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 14,
       "y": 39,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 14,
+      "originY": 39
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 15,
       "y": 39,
-      "isOrigin": false,
-      "originX": 13,
-      "originY": 37,
-      "buildingId": "lego-hq",
-      "buildingOrientation": "down"
+      "isOrigin": true,
+      "originX": 15,
+      "originY": 39
     },
     {
       "type": "road",
