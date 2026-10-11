@@ -1,0 +1,149 @@
+{
+ "grass": {
+  "n": 12379,
+  "old": "#99c54c",
+  "new": "#628948",
+  "ours_rendered": "#6c8b37",
+  "live_rendered": "#3d5e30"
+ },
+ "tile-frame": {
+  "n": 12379,
+  "old": "#99c54c",
+  "new": "#628948",
+  "ours_rendered": "#6c8b37",
+  "live_rendered": "#3d5e30"
+ },
+ "sand": {
+  "n": 8164,
+  "old": "#e5d8c7",
+  "new": "#c5b17d",
+  "ours_rendered": "#a2988c",
+  "live_rendered": "#8a7c57"
+ },
+ "road": {
+  "n": 7904,
+  "old": "#b9b2a6",
+  "new": "#6a6a61",
+  "ours_rendered": "#827e75",
+  "live_rendered": "#474741"
+ },
+ "plaza": {
+  "n": 1748,
+  "old": "#dcd3cb",
+  "new": "#7e827b",
+  "ours_rendered": "#9b958f",
+  "live_rendered": "#555953"
+ },
+ "facade-wall": {
+  "n": 9324,
+  "old": "#c4c1b8",
+  "new": "#6a7767",
+  "ours_rendered": "#696762",
+  "live_rendered": "#31382f"
+ },
+ "window-band": {
+  "n": 6727,
+  "old": "#3d4447",
+  "new": "#677165",
+  "ours_rendered": "#1e2224",
+  "live_rendered": "#353b33"
+ },
+ "window-dark": {
+  "n": 3884,
+  "old": "#2f3639",
+  "new": "#5f6b55",
+  "ours_rendered": "#16191b",
+  "live_rendered": "#415127"
+ },
+ "roof-green": {
+  "n": 27157,
+  "old": "#92b948",
+  "new": "#4c8236",
+  "ours_rendered": "#678234",
+  "live_rendered": "#2d5923"
+ },
+ "parapet-dark": {
+  "n": 2180,
+  "old": "#3a3c3a",
+  "new": "#546350",
+  "ours_rendered": "#282928",
+  "live_rendered": "#374233"
+ },
+ "yellow-frame": {
+  "n": 1778,
+  "old": "#ecc61c",
+  "new": "#8a9b39",
+  "ours_rendered": "#8c7512",
+  "live_rendered": "#4b5829"
+ },
+ "atrium-glass": {
+  "n": 1260,
+  "old": "#8a9a9c",
+  "new": "#97af9d",
+  "ours_rendered": "#474f50",
+  "live_rendered": "#48594d"
+ },
+ "slab-white": {
+  "n": 1417,
+  "old": "#e6e3dc",
+  "new": "#92aa9a",
+  "ours_rendered": "#7c7b77",
+  "live_rendered": "#49584e"
+ },
+ "skylight-white": {
+  "n": 2973,
+  "old": "#e0d8d1",
+  "new": "#788272",
+  "ours_rendered": "#9f9994",
+  "live_rendered": "#435946"
+ },
+ "skylight-dome": {
+  "n": 403,
+  "old": "#7c9bb0",
+  "new": "#5c6d78",
+  "ours_rendered": "#7a8b96",
+  "live_rendered": "#6a6c6e"
+ },
+ "perforated": {
+  "n": 1268,
+  "old": "#8c8a83",
+  "new": "#6c7b6b",
+  "ours_rendered": "#4a4945",
+  "live_rendered": "#343d35"
+ },
+ "terrace": {
+  "n": 3942,
+  "old": "#b8b5b2",
+  "new": "#78916f",
+  "ours_rendered": "#82807e",
+  "live_rendered": "#4d6445"
+ },
+ "glass-light": {
+  "n": 440,
+  "old": "#c9d6d6",
+  "new": "#6b7272",
+  "ours_rendered": "#919898",
+  "live_rendered": "#2f4143"
+ },
+ "round-glass": {
+  "n": 6727,
+  "old": "#3e4447",
+  "new": "#687165",
+  "ours_rendered": "#1e2224",
+  "live_rendered": "#353b33"
+ },
+ "brick": {
+  "n": 1174,
+  "old": "#a0634c",
+  "new": "#788755",
+  "ours_rendered": "#5e392c",
+  "live_rendered": "#454b31"
+ },
+ "tree-crown": {
+  "n": 6177,
+  "old": "#6a9a3a",
+  "new": "#60824c",
+  "ours_rendered": "#416024",
+  "live_rendered": "#344e2b"
+ }
+}
