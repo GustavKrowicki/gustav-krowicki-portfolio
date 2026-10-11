@@ -14,6 +14,14 @@ type CityE2EApi = {
   stopAdventure: () => void;
   pauseGame: () => boolean;
   resumeGame: () => boolean;
+  getCameraState: () => CameraState | null;
+};
+
+export type CameraState = {
+  webgl: boolean;
+  zoom: number;
+  view: { x: number; y: number; width: number; height: number };
+  player: { x: number; y: number } | null;
 };
 
 declare global {
@@ -100,6 +108,16 @@ export async function getVisitedBuildings(page: Page) {
 export async function setVisitedBuildings(page: Page, buildingIds: string[]) {
   await waitForCityHarness(page);
   await callCityHook(page, "setVisitedBuildings", buildingIds);
+}
+
+export async function getCameraState(page: Page) {
+  await waitForCityHarness(page);
+  return callCityHook<CameraState | null>(page, "getCameraState");
+}
+
+// The harness exists before Phaser has created the scene; camera commands are ignored until then.
+export async function waitForCamera(page: Page) {
+  await expect.poll(() => getCameraState(page), { timeout: 30000 }).not.toBeNull();
 }
 
 export async function pauseGame(page: Page) {

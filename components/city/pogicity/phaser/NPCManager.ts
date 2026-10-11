@@ -5,10 +5,9 @@ import {
   Direction,
   CharacterType,
   getCharacterTextureKey,
-  TILE_WIDTH,
   TILE_HEIGHT,
 } from "../types";
-import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
+import { gridToScreen } from "./gameConfig";
 import { TourStop } from "@/lib/city/tourStops";
 import { playGifAnimation } from "./GifLoader";
 
@@ -87,13 +86,6 @@ export class NPCManager {
     }
   }
 
-  private gridToScreen(gridX: number, gridY: number): { x: number; y: number } {
-    return {
-      x: GRID_OFFSET_X + (gridX - gridY) * (TILE_WIDTH / 2),
-      y: GRID_OFFSET_Y + (gridX + gridY) * (TILE_HEIGHT / 2),
-    };
-  }
-
   private getNPCDirection(npc: NPCData, playerGridX?: number, playerGridY?: number): Direction {
     // If alert and player position known, face the player
     if (npc.state === NPCState.Alert && playerGridX !== undefined && playerGridY !== undefined) {
@@ -134,7 +126,7 @@ export class NPCManager {
         continue;
       }
 
-      const screenPos = this.gridToScreen(npc.gridX, npc.gridY);
+      const screenPos = gridToScreen(npc.gridX, npc.gridY);
       const groundY = screenPos.y + TILE_HEIGHT / 2;
       const direction = this.getNPCDirection(npc, playerGridX, playerGridY);
       const textureKey = this.getTextureKey(direction);
@@ -184,7 +176,7 @@ export class NPCManager {
         continue;
       }
 
-      const screenPos = this.gridToScreen(npc.gridX - 1, npc.gridY - 1); // Above the building
+      const screenPos = gridToScreen(npc.gridX - 1, npc.gridY - 1); // Above the building
       let marker = this.markerSprites.get(npc.buildingId);
 
       if (!marker) {

@@ -15,6 +15,7 @@ import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
+import type { MainScene } from "./pogicity/phaser/MainScene";
 import {
   trackModeSelected,
   trackBuildingInteracted,
@@ -58,6 +59,14 @@ interface CityE2EApi {
   stopAdventure: () => void;
   pauseGame: () => boolean;
   resumeGame: () => boolean;
+  getCameraState: () => CityE2ECameraState | null;
+}
+
+interface CityE2ECameraState {
+  webgl: boolean;
+  zoom: number;
+  view: { x: number; y: number; width: number; height: number };
+  player: { x: number; y: number } | null;
 }
 
 export default function CityViewer({
@@ -675,6 +684,20 @@ export default function CityViewer({
         if (!scene) return false;
         if (scene.scene.isPaused()) scene.scene.resume();
         return !scene.scene.isPaused();
+      },
+      // Visible world rectangle (world pixels) and the player's feet, for camera tests
+      getCameraState: () => {
+        const game = gameBoardRef.current?.getGameInstance();
+        const scene = game?.scene.getScene("MainScene") as MainScene | undefined;
+        // null until create() has run, so tests can wait for a camera that accepts commands
+        if (!game || !scene || !scene.scene.isActive()) return null;
+        const { zoom, worldView } = scene.cameras.main;
+        return {
+          webgl: game.renderer.type === 2, // Phaser.WEBGL
+          zoom,
+          view: { x: worldView.x, y: worldView.y, width: worldView.width, height: worldView.height },
+          player: scene.getPlayerWorldPosition(),
+        };
       },
     }) satisfies CityE2EApi;
 

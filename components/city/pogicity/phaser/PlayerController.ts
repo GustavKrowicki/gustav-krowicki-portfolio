@@ -7,13 +7,12 @@ import {
   TileType,
   GRID_WIDTH,
   GRID_HEIGHT,
-  TILE_WIDTH,
   TILE_HEIGHT,
   PLAYER_MOVE_LERP,
   getCharacterTextureKey,
   GridCell,
 } from "../types";
-import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
+import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
 
 // Direction vectors for movement
@@ -122,7 +121,7 @@ export class PlayerController {
     this.state = PlayerState.Idle;
 
     // Calculate world position
-    const screenPos = this.gridToScreen(gridX, gridY);
+    const screenPos = gridToScreen(gridX, gridY);
     this.worldX = screenPos.x;
     this.worldY = screenPos.y + TILE_HEIGHT / 2;
     this.targetWorldX = this.worldX;
@@ -223,7 +222,7 @@ export class PlayerController {
         this.targetGridX = newGridX;
         this.targetGridY = newGridY;
 
-        const targetScreen = this.gridToScreen(newGridX, newGridY);
+        const targetScreen = gridToScreen(newGridX, newGridY);
         this.targetWorldX = targetScreen.x;
         this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
 
@@ -285,7 +284,7 @@ export class PlayerController {
       this.targetGridX = nextNode.x;
       this.targetGridY = nextNode.y;
 
-      const targetScreen = this.gridToScreen(nextNode.x, nextNode.y);
+      const targetScreen = gridToScreen(nextNode.x, nextNode.y);
       this.targetWorldX = targetScreen.x;
       this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
 
@@ -320,7 +319,7 @@ export class PlayerController {
     this.targetGridX = gridX;
     this.targetGridY = gridY;
 
-    const screenPos = this.gridToScreen(gridX, gridY);
+    const screenPos = gridToScreen(gridX, gridY);
     this.worldX = screenPos.x;
     this.worldY = screenPos.y + TILE_HEIGHT / 2;
     this.targetWorldX = this.worldX;
@@ -460,13 +459,6 @@ export class PlayerController {
     return true;
   }
 
-  private gridToScreen(gridX: number, gridY: number): { x: number; y: number } {
-    return {
-      x: GRID_OFFSET_X + (gridX - gridY) * (TILE_WIDTH / 2),
-      y: GRID_OFFSET_Y + (gridX + gridY) * (TILE_HEIGHT / 2),
-    };
-  }
-
   private lerp(a: number, b: number, t: number): number {
     return a + (b - a) * t;
   }
@@ -506,7 +498,7 @@ export class PlayerController {
 
       // Calculate depth from grid position (consistent with NPCs and characters)
       // This ensures correct depth sorting with buildings while keeping smooth movement
-      const screenPos = this.gridToScreen(this.gridX, this.gridY);
+      const screenPos = gridToScreen(this.gridX, this.gridY);
       const groundY = screenPos.y + TILE_HEIGHT / 2;
       this.sprite.setDepth(depthFromSortPoint(screenPos.x, groundY, 0.3));
 
