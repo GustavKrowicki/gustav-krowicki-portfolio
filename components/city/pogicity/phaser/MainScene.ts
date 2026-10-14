@@ -1331,14 +1331,17 @@ export class MainScene extends Phaser.Scene {
     const contentWidth = GAME_WIDTH + this.FIT_CITY_PADDING_X * 2;
     const contentHeight = GAME_HEIGHT + this.FIT_CITY_PADDING_Y * 2;
 
-    // With Scale.ENVELOP on mobile the canvas overflows the viewport horizontally.
-    // Only window.innerWidth / displaySize.width of the canvas is visible, so we
-    // must use the visible game-pixel dimensions to compute the correct fit zoom.
+    // With Scale.ENVELOP on mobile the canvas overflows its parent element.
+    // Only parentSize / displaySize of the canvas is visible, so we must use the
+    // visible game-pixel dimensions to compute the correct fit zoom. The parent is
+    // the whole viewport on /city, but only the area above the panel in the shell.
     const isMobile = this.isMobileViewport();
     const displayW = this.scale.displaySize.width;
     const displayH = this.scale.displaySize.height;
-    const effectiveW = isMobile ? camera.width * (window.innerWidth / displayW) : camera.width;
-    const effectiveH = isMobile ? camera.height * (window.innerHeight / displayH) : camera.height;
+    const parentW = this.scale.parentSize.width;
+    const parentH = this.scale.parentSize.height;
+    const effectiveW = isMobile ? camera.width * (parentW / displayW) : camera.width;
+    const effectiveH = isMobile ? camera.height * (parentH / displayH) : camera.height;
 
     const fitZoom = Math.min(effectiveW / contentWidth, effectiveH / contentHeight);
 

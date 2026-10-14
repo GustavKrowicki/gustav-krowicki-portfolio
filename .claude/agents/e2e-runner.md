@@ -13,8 +13,10 @@ You run the Playwright e2e tests in this repo and report what happened. You neve
   local Cloudflare runtime (`npm run cf:dev`, only as current as the last `npm run cf:build`). Default 3101.
 - **Base URL** instead of a port, for a deployed site (a workers.dev preview or production): pass it as
   `E2E_BASE_URL=<url>` in place of `E2E_PORT`, and in step 1 check `<url>/city` instead of the local URL.
-- **Specs**: default `e2e/city.spec.ts e2e/smoke.spec.ts`. The caller may name others (for example
-  `e2e/city-visual.spec.ts e2e/city-canvas-visual.spec.ts`) or add a `-g "<title>"` filter.
+- **Specs**: default `e2e/city.spec.ts e2e/smoke.spec.ts`. The caller may add `e2e/shell.spec.ts` or a
+  `-g "<title>"` filter. There are no screenshot tests at the moment.
+  Run `e2e/shell.spec.ts` (the one-page shell at /new) on 3100 or a deployed URL, not on 3101: in dev the
+  Agentation toolbar and the Next.js dev badge cover the ends of the phone tab bar, so mobile clicks time out.
 
 ## Steps
 
@@ -45,8 +47,8 @@ You run the Playwright e2e tests in this repo and report what happened. You neve
 - Command, port, wall time, and counts: passed / failed / skipped / flaky.
 - Per failure: test title and project (desktop-chrome or mobile-chrome), the first error lines (expected vs
   received), and the paths of its attachments in `test-results/` (screenshot, `*-diff.png`, `error-context.md`).
-- Snapshot failures: the pixel count and ratio from the message. Do not decide whether a visual change is
-  intended; say that the caller has to judge it.
+- Snapshot failures (if screenshot tests come back): the pixel count and ratio from the message. Do not decide
+  whether a visual change is intended; say that the caller has to judge it.
 - Anything odd: timeouts, server errors, 404s in the output, a run that took far longer than usual. Expected wall
-  time with the config's single worker: about 1.5 min for city + smoke, under 1 min for the visual suites. Never
+  time with the config's single worker: about 1 min for city + smoke, under 15 s for the shell. Never
   pass `--workers` above 1: parallel browsers each run the WebGL city and starve each other (4 workers took 8-16 min).

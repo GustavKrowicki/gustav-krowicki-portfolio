@@ -10,9 +10,11 @@ export default function LayoutContent({ children }: { children: React.ReactNode 
   const pathname = usePathname();
   const isProjectPage = pathname.startsWith('/work/') && pathname !== '/work';
   const isCityPage = pathname.startsWith('/city');
+  // /new is the one-page portfolio shell (panel + city) under construction; it brings its own navigation.
+  const isShellPage = pathname.startsWith('/new');
 
-  const showHeader = !isProjectPage && !isCityPage;
-  const showFooter = !isProjectPage && !isCityPage;
+  const showHeader = !isProjectPage && !isCityPage && !isShellPage;
+  const showFooter = !isProjectPage && !isCityPage && !isShellPage;
 
   return (
     <>

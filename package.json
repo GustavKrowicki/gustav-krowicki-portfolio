@@ -11,7 +11,7 @@
     "test:e2e:ui": "playwright test --ui",
     "test:e2e:headed": "playwright test --headed",
     "test:e2e:update": "playwright test --update-snapshots",
-    "test:e2e:city": "playwright test e2e/city.spec.ts e2e/city-visual.spec.ts",
+    "test:e2e:city": "playwright test e2e/city.spec.ts",
     "cf:build": "next build && cf-wrangler build",
     "cf:build:live": "CF_IMAGE_TRANSFORMS=1 npm run cf:build",
     "cf:dev": "cf-wrangler dev --port 3100",

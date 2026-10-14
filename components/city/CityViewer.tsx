@@ -42,6 +42,9 @@ interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
   e2eMode?: boolean;
+  // "page" is the standalone /city route. "shell" sits beside the portfolio panel, which owns the
+  // navigation, so the city starts without the welcome overlay and hides its own mode and tour buttons.
+  variant?: "page" | "shell";
 }
 
 
@@ -73,9 +76,12 @@ export default function CityViewer({
   initialGrid,
   onProjectClick,
   e2eMode = false,
+  variant = "page",
 }: CityViewerProps) {
+  const isShell = variant === "shell";
+
   // Mode state
-  const [showWelcome, setShowWelcome] = useState(true);
+  const [showWelcome, setShowWelcome] = useState(!isShell);
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
 
   // Tour state (classic tour mode)
@@ -742,7 +748,7 @@ export default function CityViewer({
       />
 
       {/* Portfolio mode toggle */}
-      {!showWelcome && !isAdventureActive && (
+      {!isShell && !showWelcome && !isAdventureActive && (
         <div className="fixed z-40 md:top-4 top-[max(0.75rem,env(safe-area-inset-top))] left-4 right-4">
           <PortfolioModeToggle activeMode="city" showIdentity />
         </div>
@@ -824,7 +830,7 @@ export default function CityViewer({
       />
 
       {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
-      {!showWelcome && !isTourActive && !isAdventureActive && (
+      {!isShell && !showWelcome && !isTourActive && !isAdventureActive && (
         <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
           <button
             onClick={() => {
