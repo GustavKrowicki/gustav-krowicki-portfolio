@@ -13,7 +13,8 @@ function Linkedin({ className }: { className?: string }) {
 }
 import { trackContactClicked, trackCvDownloaded } from '@/lib/analytics';
 
-const contactInfo = [
+// Also used by the portfolio shell (Home section).
+export const contactInfo = [
   {
     icon: Mail,
     label: 'Email',

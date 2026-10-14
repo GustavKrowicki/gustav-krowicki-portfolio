@@ -22,6 +22,21 @@ test("panel and rail sit beside the city", async ({ page }) => {
   await expect(rail.getByRole("button", { name: "Work" })).toHaveAttribute("aria-current", "page");
 });
 
+test("a case study opens in the panel and Back returns to the list", async ({ page }) => {
+  await page.goto("/new");
+  const panel = page.getByTestId("shell-panel");
+
+  await page.getByRole("navigation", { name: "Portfolio sections" }).getByRole("button", { name: "Work" }).click();
+  await panel.getByRole("button", { name: /ML-Assisted Internal Product/ }).click();
+  await expect(
+    panel.getByRole("heading", { name: /designing for autonomy in a supervised system/i })
+  ).toBeVisible();
+
+  // The header shows Back, labelled with the section the case came from
+  await panel.getByRole("button", { name: "Back to Work" }).click();
+  await expect(panel.getByRole("button", { name: /ML-Assisted Internal Product/ })).toBeVisible();
+});
+
 test("closing the panel gives the city more room", async ({ page }, testInfo) => {
   await page.goto("/new");
   // Desktop: the panel is a column left of the city. Phones: a sheet under it.

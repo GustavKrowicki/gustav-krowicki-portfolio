@@ -10,9 +10,11 @@ if (typeof window !== 'undefined') {
 
 interface PDFViewerProps {
   url: string;
+  // Page width in px. The portfolio panel passes its own width; the classic home keeps 450.
+  width?: number;
 }
 
-export default function PDFViewer({ url }: PDFViewerProps) {
+export default function PDFViewer({ url, width = 450 }: PDFViewerProps) {
   const [numPages, setNumPages] = useState<number>(0);
   const [pageNumber, setPageNumber] = useState(1);
 
@@ -41,7 +43,7 @@ export default function PDFViewer({ url }: PDFViewerProps) {
             pageNumber={pageNumber}
             renderTextLayer={false}
             renderAnnotationLayer={false}
-            width={450}
+            width={width}
             className="mx-auto"
           />
         </Document>

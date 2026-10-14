@@ -63,7 +63,7 @@ export function trackContactClicked(method: 'email' | 'phone' | 'linkedin') {
   capture('contact_clicked', { method });
 }
 
-export function trackCvDownloaded(source: 'header' | 'contact' | 'mobile_nav') {
+export function trackCvDownloaded(source: 'header' | 'contact' | 'mobile_nav' | 'panel') {
   capture('cv_downloaded', { source });
 }
 

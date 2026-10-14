@@ -1,12 +1,14 @@
-import { CircleX, Maximize2, Minimize2 } from 'lucide-react';
-import { SectionContent, type SectionId } from './sections';
+import { ArrowLeft, CircleX, Maximize2, Minimize2 } from 'lucide-react';
+import { SECTIONS, SectionContent, type SectionId } from './sections';
 
 export type PanelState = 'open' | 'expanded' | 'closed';
 
 interface ShellPanelProps {
   section: SectionId;
   state: PanelState;
-  selectedProject: string | null;
+  openCase: string | null;
+  onOpenCase: (slug: string) => void;
+  onCloseCase: () => void;
   onToggleExpand: () => void;
   onClose: () => void;
 }
@@ -18,9 +20,18 @@ const HEIGHT_ON_PHONE: Record<PanelState, string> = {
   closed: 'h-0',
 };
 
-export default function ShellPanel({ section, state, selectedProject, onToggleExpand, onClose }: ShellPanelProps) {
+export default function ShellPanel({
+  section,
+  state,
+  openCase,
+  onOpenCase,
+  onCloseCase,
+  onToggleExpand,
+  onClose,
+}: ShellPanelProps) {
   const isClosed = state === 'closed';
   const isExpanded = state === 'expanded';
+  const sectionLabel = SECTIONS.find(({ id }) => id === section)?.label;
 
   return (
     <section
@@ -32,7 +43,19 @@ export default function ShellPanel({ section, state, selectedProject, onToggleEx
       } ${isClosed ? 'md:invisible' : ''}`}
     >
       <header className="flex h-14 shrink-0 items-center justify-between border-b border-neutral-200 px-6">
-        <span className="font-semibold text-neutral-900">Gustav Krowicki</span>
+        {openCase ? (
+          <button
+            type="button"
+            onClick={onCloseCase}
+            aria-label={`Back to ${sectionLabel}`}
+            className="flex items-center gap-2 font-medium text-neutral-900 hover:text-neutral-600"
+          >
+            <ArrowLeft className="h-4 w-4" />
+            {sectionLabel}
+          </button>
+        ) : (
+          <span className="font-semibold text-neutral-900">Gustav Krowicki</span>
+        )}
         <div className="flex items-center gap-3 text-neutral-600">
           <button
             type="button"
@@ -47,8 +70,13 @@ export default function ShellPanel({ section, state, selectedProject, onToggleEx
           </button>
         </div>
       </header>
-      <div className="min-h-0 flex-1 overflow-y-auto px-6 py-6">
-        <SectionContent id={section} selectedProject={selectedProject} />
+      {/* Keyed by what it shows, so a new section or case starts scrolled to the top. */}
+      <div
+        key={openCase ?? section}
+        className={`min-h-0 flex-1 overflow-y-auto ${openCase ? 'bg-background' : ''}`}
+        data-testid="shell-panel-content"
+      >
+        <SectionContent id={section} openCase={openCase} onOpenCase={onOpenCase} />
       </div>
     </section>
   );

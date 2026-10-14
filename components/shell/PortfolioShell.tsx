@@ -16,7 +16,7 @@ const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
 
 // Desktop width of the rail + panel column. The city takes the rest of the row and rescales when this changes.
 const WIDTH_ON_DESKTOP: Record<PanelState, string> = {
-  open: 'md:w-[374px]',
+  open: 'md:w-[440px]',
   expanded: 'md:w-[min(760px,60vw)]',
   closed: 'md:w-[72px]',
 };
@@ -25,7 +25,8 @@ const WIDTH_ON_DESKTOP: Record<PanelState, string> = {
 export default function PortfolioShell() {
   const [section, setSection] = useState<SectionId>('home');
   const [panel, setPanel] = useState<PanelState>('open');
-  const [selectedProject, setSelectedProject] = useState<string | null>(null);
+  // A case study opens over the section it came from and widens the panel for reading.
+  const [openCase, setOpenCase] = useState<string | null>(null);
 
   // The page never scrolls; without this a trackpad swipe can trigger browser back (same fix as /city).
   useEffect(() => {
@@ -42,17 +43,33 @@ export default function PortfolioShell() {
     };
   }, []);
 
-  const openSection = useCallback((id: SectionId) => {
-    setSection(id);
-    setPanel((current) => (current === 'closed' ? 'open' : current));
+  const openCaseStudy = useCallback((slug: string) => {
+    setOpenCase(slug);
+    setPanel('expanded');
   }, []);
 
+  // Leaving a case returns the panel from reading width to its normal width.
+  const closeCaseStudy = useCallback(() => {
+    setOpenCase(null);
+    setPanel((current) => (current === 'expanded' ? 'open' : current));
+  }, []);
+
+  const openSection = useCallback(
+    (id: SectionId) => {
+      if (openCase) closeCaseStudy();
+      setSection(id);
+      setPanel((current) => (current === 'closed' ? 'open' : current));
+    },
+    [openCase, closeCaseStudy]
+  );
+
+  // A project building in the city opens its case, with Back leading to Work.
   const handleProjectClick = useCallback(
     (slug: string) => {
-      setSelectedProject(slug);
-      openSection('work');
+      setSection('work');
+      openCaseStudy(slug);
     },
-    [openSection]
+    [openCaseStudy]
   );
 
   return (
@@ -64,7 +81,9 @@ export default function PortfolioShell() {
         <ShellPanel
           section={section}
           state={panel}
-          selectedProject={selectedProject}
+          openCase={openCase}
+          onOpenCase={openCaseStudy}
+          onCloseCase={closeCaseStudy}
           onToggleExpand={() => setPanel((current) => (current === 'expanded' ? 'open' : 'expanded'))}
           onClose={() => setPanel('closed')}
         />

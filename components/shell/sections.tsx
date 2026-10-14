@@ -1,5 +1,9 @@
 import { CableCar, FileUser, PencilLine, Trophy, UserStar, type LucideIcon } from 'lucide-react';
-import { getAllProjects } from '@/lib/projects';
+import { CASES } from '@/components/cases';
+import HomeSection from './sections/HomeSection';
+import WorkSection from './sections/WorkSection';
+import AboutSection from './sections/AboutSection';
+import CvSection from './sections/CvSection';
 
 // The rail order follows the IA (Figma "IA v2"). Home has no icon: the rail shows Gustav's photo for it.
 export type SectionId = 'home' | 'achievements' | 'avatar' | 'work' | 'hobbies' | 'cv';
@@ -19,64 +23,41 @@ export const SECTIONS: ShellSection[] = [
   { id: 'cv', label: 'CV', icon: FileUser },
 ];
 
-// Placeholder content for step 1 of the shell. Each section gets its real content in step 2.
-export function SectionContent({ id, selectedProject }: { id: SectionId; selectedProject: string | null }) {
+interface SectionContentProps {
+  id: SectionId;
+  openCase: string | null;
+  onOpenCase: (slug: string) => void;
+}
+
+// An open case replaces the section it was opened from; the panel header then shows Back.
+export function SectionContent({ id, openCase, onOpenCase }: SectionContentProps) {
+  if (openCase) {
+    const Case = CASES[openCase];
+    return Case ? <Case /> : <Placeholder title="Case not found" note={openCase} />;
+  }
+
   switch (id) {
     case 'home':
-      return (
-        <Placeholder title="Hello" note="Introduction, case studies, uni work and contact." />
-      );
+      return <HomeSection onOpenCase={onOpenCase} />;
+    case 'work':
+      return <WorkSection onOpenCase={onOpenCase} />;
+    case 'hobbies':
+      return <AboutSection />;
+    case 'cv':
+      return <CvSection />;
+    // Achievements and the avatar builder come in step 5 of the shell.
     case 'achievements':
       return <Placeholder title="Achievements" note="Places, photos, workshop, music, food and books found in the city." />;
     case 'avatar':
       return <Placeholder title="Create your own avatar" note="Face, hair, body and shoes." />;
-    case 'work':
-      return <WorkList selectedProject={selectedProject} />;
-    case 'hobbies':
-      return <Placeholder title="About me" note="One card for each free time area, with its place in the city." />;
-    case 'cv':
-      return (
-        <div>
-          <h2 className="text-2xl font-semibold text-neutral-900">Resume</h2>
-          <a
-            href="/cv/CV-Gustav-Krowicki.pdf"
-            download
-            className="mt-4 inline-block text-sm font-medium text-neutral-900 underline underline-offset-4"
-          >
-            Download CV (PDF)
-          </a>
-        </div>
-      );
   }
 }
 
 function Placeholder({ title, note }: { title: string; note: string }) {
   return (
-    <div>
+    <div className="px-6 py-6">
       <h2 className="text-2xl font-semibold text-neutral-900">{title}</h2>
       <p className="mt-3 text-sm leading-relaxed text-neutral-600">{note}</p>
-    </div>
-  );
-}
-
-function WorkList({ selectedProject }: { selectedProject: string | null }) {
-  return (
-    <div>
-      <h2 className="text-2xl font-semibold text-neutral-900">Work</h2>
-      <ul className="mt-6 space-y-3">
-        {getAllProjects().map((project) => (
-          <li
-            key={project.slug}
-            aria-current={project.slug === selectedProject ? 'true' : undefined}
-            className={`rounded-lg border px-4 py-3 ${
-              project.slug === selectedProject ? 'border-neutral-900 bg-white' : 'border-neutral-200'
-            }`}
-          >
-            <p className="font-medium text-neutral-900">{project.title}</p>
-            <p className="text-sm text-neutral-600">{project.role}</p>
-          </li>
-        ))}
-      </ul>
     </div>
   );
 }

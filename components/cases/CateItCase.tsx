@@ -1,0 +1,246 @@
+// Case study body for /work/cate-it. The route page wraps it as a full page; the portfolio shell shows it in the panel.
+import Image from 'next/image';
+import { ExternalLink } from 'lucide-react';
+import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
+import CaseSection from '@/components/case-study/CaseSection';
+import TwoColumn from '@/components/case-study/TwoColumn';
+import InsightCards from '@/components/case-study/InsightCards';
+import StrategicDecisions from '@/components/case-study/StrategicDecisions';
+import Container from '@/components/ui/Container';
+import { getProjectBySlug } from '@/lib/projects';
+
+export default function CateItCase() {
+  const project = getProjectBySlug('cate-it');
+
+  if (!project) {
+    return <div>Project not found</div>;
+  }
+
+  return (
+    <>
+      <CaseHeroAnimated
+        coverImage={project.coverImage}
+        alt={project.title}
+        objectFit="cover"
+      />
+
+      {/* Hero Info Section */}
+      <section className="py-16 md:py-20">
+        <Container maxWidth="container">
+          <div className="max-w-4xl">
+            <span className="inline-block px-3 py-1 bg-neutral-100 text-neutral-700 text-sm rounded-full mb-6">
+              Co-founder, Product Designer
+            </span>
+            <div className="flex items-start gap-4 mb-8">
+              <h1 className="text-5xl md:text-6xl font-bold">
+                Building a two-sided marketplace with real constraints
+              </h1>
+              {project.link && (
+                <a
+                  href={project.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex-shrink-0 mt-3 flex items-center gap-2 px-4 py-2 rounded-full bg-black hover:bg-neutral-800 transition-colors text-white"
+                >
+                  <span className="text-sm font-medium">Check it out</span>
+                  <ExternalLink className="w-4 h-4" />
+                </a>
+              )}
+            </div>
+
+            <div className="flex flex-wrap gap-x-8 gap-y-2 text-lg text-neutral-600 mb-12">
+              <div>
+                <span className="font-medium">Team:</span> Anders (Front-end), Johannes (Full-stack)
+              </div>
+            </div>
+
+            <div className="space-y-4 text-lg leading-relaxed text-neutral-700 max-w-2xl">
+              <p>
+                Food truck owners struggle to get booked for events. Event planners don't
+                have a reliable way to find and book food trucks. Existing solutions are
+                either generic event platforms or require upfront subscriptions that don't
+                work for seasonal small businesses.
+              </p>
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <CaseSection title="Why existing solutions don't work for food truck owners" maxWidth="content" background="gray">
+        <p>
+          Food truck businesses are highly seasonal. Revenue drops significantly in winter
+          months. Any fixed monthly cost—like a subscription—becomes a real burden when
+          cash flow is tight. Existing platforms don't account for this reality, making
+          them unattractive to the very people they're trying to serve.
+        </p>
+      </CaseSection>
+
+      <CaseSection 
+        title="Research and insights" 
+        maxWidth="container"
+        className="bg-[#2C2929] [&_h2]:text-white"
+      >
+        <InsightCards
+          cards={[
+            {
+              header: 'Seasonality is a real concern',
+              illustration: (
+                <Image
+                  src="/images/cate-it/sun.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
+              text: 'Eight conversations with food truck owners revealed consistent patterns. January and February are slow months. Any fat in the budget during winter is a problem. Fixed costs don\'t work for this business model.',
+              backgroundColor: 'yellow',
+            },
+            {
+              header: 'The community is welcoming',
+              illustration: (
+                <Image
+                  src="/images/cate-it/person-standing.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
+              text: 'Food truck owners remember what it\'s like starting out. They\'re happy to refer you to others in the space. This openness gave us access to more conversations and validated that there\'s genuine interest in solving this problem.',
+              backgroundColor: 'orange',
+            },
+            {
+              header: 'They\'re okay with manual processes',
+              illustration: (
+                <Image
+                  src="/images/cate-it/ticket.svg"
+                  alt=""
+                  width={240}
+                  height={240}
+                  className="w-auto h-40 md:h-56"
+                />
+              ),
+              text: 'Food truck owners were surprisingly comfortable with bookings going through their email rather than a fancy platform. This insight let us de-risk the launch with a simpler MVP.',
+              backgroundColor: 'cream',
+            },
+          ]}
+        />
+      </CaseSection>
+
+      <section className="py-16 md:py-24">
+        <Container maxWidth="container">
+          <StrategicDecisions
+            header="STRATEGIC DECISIONS"
+            leftTitle="How we learned"
+            leftText="We initially planned a subscription model—predictable revenue for us, clear value prop for them. But research with food truck owners showed this wouldn't work given their seasonal cash flow."
+            rightTitle="The insight and choice we made"
+            rightText="We pivoted to a percentage fee per booking, charged to both food truck owners and event planners. No fixed costs. The platform only makes money when they make money. This aligns our incentives with theirs and removes the barrier that would've prevented sign-ups."
+          />
+        </Container>
+      </section>
+
+      <section className="py-16 md:py-24">
+        <Container maxWidth="container">
+          <div className="grid md:grid-cols-2 gap-8 lg:gap-16 items-start">
+            {/* Left Column - Content */}
+            <div className="space-y-6 text-lg leading-relaxed text-neutral-700">
+              <h2 className="text-3xl md:text-4xl font-bold text-black">Design solution</h2>
+              <p>
+                We built a simple email form that redirects booking information to the food
+                truck owner's inbox. No complex booking flow yet. No payment processing. Just
+                enough to test if the value proposition works.
+              </p>
+              <p>
+                The site is live at cateit.com with four food trucks signed up. We're focusing
+                on supply-side first, getting food trucks on the platform before pushing hard
+                on event planner acquisition.
+              </p>
+
+              <div className="mt-8">
+                <h3 className="font-semibold text-xl mb-4">Design compromises we made</h3>
+                <ul className="space-y-3 text-neutral-700">
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>The site uses a modular system limited to five components across all pages, faster to build, but limits flexibility</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>Food truck editing is in a modal instead of a drawer</span>
+                  </li>
+                  <li className="flex gap-3">
+                    <span className="text-neutral-400">•</span>
+                    <span>Landing page is more generic than ideal we cut location-specific carousels to ship faster and with a clear structure</span>
+                  </li>
+                </ul>
+              </div>
+
+              <p className="mt-8">
+                More interested? Take a look at{' '}
+                <a
+                  href="https://cateit.com"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-black underline hover:opacity-70"
+                >
+                  cateit.com
+                </a>
+              </p>
+            </div>
+
+            {/* Right Column - Design solution screenshot */}
+            <div className="relative w-full rounded-2xl overflow-hidden">
+              <Image
+                src="/images/cate-it/design-solution.png"
+                alt="Cate It design solution"
+                width={1600}
+                height={1200}
+                className="w-full h-auto"
+                sizes="(min-width: 768px) 50vw, 100vw"
+              />
+            </div>
+          </div>
+        </Container>
+      </section>
+
+      <CaseSection title="Current status" maxWidth="content" background="gray">
+        <div className="space-y-6">
+          <div>
+            <h3 className="font-semibold text-xl mb-3">Where we are now (pre soft-launch)</h3>
+            <p>
+              Site is live with food trucks listed. We haven't done the marketing push yet.
+              Next step is building out the full booking flow and onboarding more trucks.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-xl mb-3">What we've learned so far</h3>
+            <p>
+              Building a marketplace part-time across three cities is hard. We've had to
+              align three different motivations: Which has been clearly the hardest part, shipping something is easy, but agreeing on the scope is difficult.
+            </p>
+          </div>
+
+          <div>
+            <h3 className="font-semibold text-xl mb-3">Next priorities</h3>
+            <ul className="space-y-2 text-neutral-700">
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Onboard foodtruck owners</span>
+              </li>
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Push on marketing strategy</span>
+              </li>
+  
+              <li className="flex gap-3">
+                <span className="text-neutral-400">•</span>
+                <span>Test whether we can generate enough demand to make the marketplace viable</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </CaseSection>
+    </>
+  );
+}
