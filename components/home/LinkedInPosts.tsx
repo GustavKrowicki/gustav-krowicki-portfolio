@@ -39,7 +39,7 @@ export const posts: Post[] = [
   {
     type: 'pdf',
     embedUrl: '/recommendations/Recommendation%20letter,%20Gustav%20Krowicki.pdf',
-    title: 'Recommendation',
+    title: 'Recommendation letter',
   },
 ];
 

@@ -3,10 +3,8 @@ import { getAllProjects } from '@/lib/projects';
 import { contactInfo } from '@/components/contact/ContactLinks';
 import { trackContactClicked } from '@/lib/analytics';
 import { posts } from '@/components/home/LinkedInPosts';
+import UniWorkCarousel from '../UniWorkCarousel';
 
-// Projects from the studies, shared on LinkedIn (same list as the classic home), and the recommendation letter.
-const LINKEDIN_POSTS = posts.filter((post) => post.type === 'linkedin');
-const RECOMMENDATION = posts.find((post) => post.type === 'pdf');
 
 // Short version of the classic home: introduction, case studies, uni work and contact.
 export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string) => void }) {
@@ -54,30 +52,10 @@ export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string)
           Projects from my studies in IT and product design at SDU in Kolding, with stakeholders across different
           industries.
         </p>
-        <ul className="mt-4 space-y-4">
-          {LINKEDIN_POSTS.map((post) => (
-            <li key={post.embedUrl} className="overflow-hidden rounded-lg border border-neutral-200 bg-white">
-              {/* Same LinkedIn embeds as the classic home; lazy so they load when scrolled into view. */}
-              <iframe
-                src={post.embedUrl}
-                title={post.title ?? 'LinkedIn post'}
-                loading="lazy"
-                height={600}
-                className="w-full border-0"
-              />
-            </li>
-          ))}
-        </ul>
-        {RECOMMENDATION && (
-          <a
-            href={RECOMMENDATION.embedUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="mt-4 inline-block text-sm font-medium text-neutral-900 underline underline-offset-4"
-          >
-            Recommendation letter (PDF)
-          </a>
-        )}
+        {/* Projects from the studies shared on LinkedIn, then the recommendation letter (same list as the classic home) */}
+        <div className="mt-4">
+          <UniWorkCarousel items={posts} />
+        </div>
 
       </section>
 
