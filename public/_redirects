@@ -1,0 +1,3 @@
+# The previous portfolio used /projects/<slug>; those URLs still get visits.
+/projects/internship-at-valtech-2024  /work/valtech  307
+/projects/*                           /work          307

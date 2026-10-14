@@ -121,40 +121,44 @@ Put all server code in the Worker (Phase 6).
    npm install --save-dev cf@1.0.0-beta.17 wrangler@4.151.0
    ```
 
-9. In a terminal, run `npx cf init .`.
-10. Read the settings that `cf` shows before you accept them.
-
-    - The correct settings are a static site with the assets directory `out`.
-    - If `cf` shows an adapter for Next.js (vinext or OpenNext), do not accept.
-    - In that case, use Wrangler for the build and the deploy, and use `cf` for the account work.
-
-11. In `cloudflare.config.ts`, set these values:
+9. Do not run `npx cf init .`, `npx cf build`, or `npx cf dev` in this project.
+   `cf` finds Next.js and then uses the OpenNext adapter, which makes a server build.
+   This site is a static export, so `cf` must use Wrangler for the build.
+10. Create `cloudflare.config.ts` with these values:
 
     ```ts
     worker: {
       name: "portfolio",
       compatibilityDate: "2026-10-14",
       previewUrls: true,
+      observability: { enabled: true },
       assets: { htmlHandling: "auto-trailing-slash", notFoundHandling: "404-page" },
     }
     ```
 
+11. Create `wrangler.config.ts` with the value `assetsDirectory: "./out"`.
 12. Do not add a domain in this phase.
-13. Add `.cloudflare/` to `.gitignore`.
+13. Add `/.cloudflare/` and `/.wrangler/` to `.gitignore`.
 14. Add these scripts to `package.json`:
 
     ```json
-    "cf:build": "next build && cf build",
-    "cf:deploy": "next build && cf build && cf deploy --prebuilt"
+    "cf:build": "next build && cf-wrangler build",
+    "cf:dev": "cf-wrangler dev --port 3100",
+    "cf:deploy": "npm run cf:build && cf deploy --prebuilt"
     ```
+
+    `cf-wrangler` is the Wrangler program that `cf` uses for a build without a framework.
+    `cf-wrangler build` writes the build output for `cf` to `.cloudflare/output/v0/`.
+    `cf deploy --prebuilt` uploads that build output.
 
 15. In `playwright.config.ts`, add the variable `E2E_BASE_URL`.
     If `E2E_BASE_URL` has a value, the tests use the value as `baseURL` and do not start a server.
-16. In `.claude/launch.json`, change `portfolio-prod` to `npx cf dev --port 3100`.
+16. In `.claude/launch.json`, change `portfolio-prod` to `npm run cf:dev`.
     With a static export, `next start` does not work.
 17. Run `npm run cf:build`.
-18. Start `portfolio-prod`, and run the e2e-runner agent on port 3100 (city and smoke).
-19. Open these URLs on port 3100. Compare each result with the correct result:
+18. Run `npx cf deploy --prebuilt --dry-run`. This command sends no data and needs no sign-in.
+19. Start `portfolio-prod`, and run the e2e-runner agent on port 3100 (city and smoke).
+20. Open these URLs on port 3100. Compare each result with the correct result:
 
     | URL | Correct result |
     | --- | --- |
@@ -163,6 +167,7 @@ Put all server code in the Worker (Phase 6).
     | `/work/valtech` | Case page, status 200 |
     | `/projects/foo` | Redirect 307 to `/work` |
     | `/no-page` | The 404 page, status 404 |
+    | `/_next/static/<file>.js` | `Cache-Control: public, max-age=31536000, immutable` |
 
 ## 6. Phase 2: First deploy to workers.dev
 
@@ -172,7 +177,7 @@ This deploy does not change the live site, because at this time no domain points
 2. Build the site without the PostHog key. Then PostHog gets no data from the tests:
 
    ```bash
-   NEXT_PUBLIC_POSTHOG_KEY= npx next build && npx cf build
+   NEXT_PUBLIC_POSTHOG_KEY= npm run cf:build
    ```
 
 3. Deploy the build:
@@ -255,7 +260,7 @@ For approximately one minute, visitors cannot open the site.
 2. Prepare the Worker on `main` before you change the DNS:
 
    - Add `domains: ["www.gustavkrowicki.com"]` to `cloudflare.config.ts`.
-   - Build the site with the PostHog key: `npx next build && npx cf build`.
+   - Build the site with the PostHog key: `npm run cf:build`.
 
 3. Delete the `www` CNAME record with `npx cf dns records delete`.
    A Worker domain cannot use a name that has a CNAME record.
@@ -369,7 +374,8 @@ Do a test of each class change on a preview before you deploy it.
 ## 11. Changes for daily work
 
 - A push to `main` does not deploy the site until you add the GitHub Actions workflow.
-- `next start` does not work. Use `npx cf dev`.
+- `next start` does not work. Use `npm run cf:dev`.
+- Do not use `npx cf init .`, `npx cf build`, or `npx cf dev`. Use the `cf:` scripts in `package.json`.
 - The images are not optimized until you add a Cloudflare Images loader.
 - The redirects are in `public/_redirects`, not in `next.config.ts`.
 - Vercel made a preview for each branch. With `cf`, run `npx cf previews deploy`.

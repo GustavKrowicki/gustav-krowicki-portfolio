@@ -9,8 +9,10 @@ You run the Playwright e2e tests in this repo and report what happened. You neve
 
 ## Inputs (from the caller)
 
-- **Port** of a running server: 3101 = dev (`next dev`, always the current code), 3100 = production (`next start`,
-  only as current as the last `next build`). Default 3101.
+- **Port** of a running server: 3101 = dev (`next dev`, always the current code), 3100 = the static export on the
+  local Cloudflare runtime (`npm run cf:dev`, only as current as the last `npm run cf:build`). Default 3101.
+- **Base URL** instead of a port, for a deployed site (a workers.dev preview or production): pass it as
+  `E2E_BASE_URL=<url>` in place of `E2E_PORT`, and in step 1 check `<url>/city` instead of the local URL.
 - **Specs**: default `e2e/city.spec.ts e2e/smoke.spec.ts`. The caller may name others (for example
   `e2e/city-visual.spec.ts e2e/city-canvas-visual.spec.ts`) or add a `-g "<title>"` filter.
 

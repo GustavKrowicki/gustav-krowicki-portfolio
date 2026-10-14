@@ -1,13 +1,12 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  // The previous portfolio used /projects/<slug>; those URLs still get visits.
-  async redirects() {
-    return [
-      { source: "/projects/internship-at-valtech-2024", destination: "/work/valtech", permanent: false },
-      { source: "/projects/:slug*", destination: "/work", permanent: false },
-    ];
-  },
+  // Static export served by Cloudflare Workers static assets (docs/hosting-cloudflare.md).
+  // Server code goes in the Worker, not in Next.js API routes, middleware or server actions.
+  output: "export",
+  // No image optimizer in a static export; images are served as they are in public/.
+  images: { unoptimized: true },
+  // The /projects/* redirects for the previous portfolio live in public/_redirects.
 };
 
 export default nextConfig;

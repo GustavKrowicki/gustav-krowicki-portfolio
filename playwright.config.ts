@@ -1,7 +1,9 @@
 import { defineConfig, devices } from "@playwright/test";
 
-// E2E_PORT targets a server that is already running, e.g. `next start -p 3100` (prod) or `next dev -p 3101`
+// E2E_PORT targets a server that is already running, e.g. `npm run cf:dev` (static export, 3100) or `next dev -p 3101`.
+// E2E_BASE_URL targets a deployed site instead (a workers.dev preview or production); no local server starts then.
 const port = Number(process.env.E2E_PORT ?? 3000);
+const remoteBaseURL = process.env.E2E_BASE_URL;
 
 export default defineConfig({
   testDir: "./e2e",
@@ -20,17 +22,19 @@ export default defineConfig({
   retries: process.env.CI ? 2 : 0,
   reporter: process.env.CI ? [["html"], ["list"]] : "list",
   use: {
-    baseURL: `http://127.0.0.1:${port}`,
+    baseURL: remoteBaseURL ?? `http://127.0.0.1:${port}`,
     trace: "on-first-retry",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
   },
-  webServer: {
-    command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
-    url: `http://127.0.0.1:${port}`,
-    reuseExistingServer: !process.env.CI,
-    timeout: 120_000,
-  },
+  webServer: remoteBaseURL
+    ? undefined
+    : {
+        command: `npm run dev -- --hostname 127.0.0.1 --port ${port}`,
+        url: `http://127.0.0.1:${port}`,
+        reuseExistingServer: !process.env.CI,
+        timeout: 120_000,
+      },
   projects: [
     {
       name: "desktop-chrome",

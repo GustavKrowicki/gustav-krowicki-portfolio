@@ -46,3 +46,7 @@ playwright-report/
 
 # local claude config
 .claude/mcp.json
+
+# cloudflare (cf builds and generated types)
+/.cloudflare/
+/.wrangler/
