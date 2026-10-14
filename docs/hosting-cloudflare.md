@@ -224,7 +224,9 @@ This deploy does not change the live site, because at this time no domain points
 8. Replace `public/images/about/Dortmund.png` (20 MB) with a smaller file.
    A preview loads this file at its full size.
    Done on 2026-10-14: `Dortmund.jpg`, 1512 x 2016 pixels, 568 KB, without photo metadata.
+
 9. Open the workers.dev URL on a phone. Make sure that the city and the 3D models load.
+   Done on 2026-10-14: the city and the 3D models load on Gustav's phone.
 
 NOTE: A workers.dev URL is public.
 The rule `https://:version.:subdomain.workers.dev/*` in `public/_headers` adds `X-Robots-Tag: noindex` to all workers.dev URLs of the Worker.
@@ -240,6 +242,22 @@ Each deploy also gets its own URL, for example `https://9dd4aa29-portfolio.gkkro
 | Branch | Preview URL (first deploy 2026-10-14) |
 | --- | --- |
 | `feature/portfolio-redo` | `https://feature-portfolio-redo-portfolio.gkkrowicki.workers.dev` |
+
+### Automatic previews
+
+The GitHub Actions workflow `.github/workflows/cloudflare-preview.yml` deploys a preview after each push to a branch.
+The workflow does not operate on `main`, because Vercel serves `main` until the launch.
+The workflow uses only committed files. A local `npm run cf:preview` also uploads files in `public/` that are not in Git.
+
+Gustav does these steps one time, before the first push of the workflow:
+
+1. In the Cloudflare dashboard, create an account-owned API token.
+2. Give the token the Workers role "Editor", only for the Worker `portfolio`.
+3. In GitHub, open the repository settings, then "Secrets and variables", then "Actions".
+4. Add the secret `CLOUDFLARE_API_TOKEN` with the token value.
+5. Add the secret `CLOUDFLARE_ACCOUNT_ID` with the account ID of the Cloudflare account.
+
+After each push, the summary of the workflow run shows the preview URL.
 
 ## 7. Phase 3: Move the DNS to Cloudflare
 
@@ -429,12 +447,12 @@ Do a test of each class change on a preview before you deploy it.
 - Do not use `npx cf init .`, `npx cf build`, or `npx cf dev`. Use the `cf:` scripts in `package.json`.
 - Previews and local builds use the original images. Only `npm run cf:build:live` uses Image Transformations.
 - The redirects are in `public/_redirects`, not in `next.config.ts`.
-- Vercel made a preview for each branch. With `cf`, run `npm run cf:preview` on the branch.
+- A push to a branch other than `main` deploys a Cloudflare preview through GitHub Actions. To deploy a preview from the computer, run `npm run cf:preview`.
 - Each file in `public` must be smaller than 25 MiB. Put a larger file in R2.
 
 ## 12. Open decisions
 
 1. The base of the branch: `feature/portfolio-redo` (decided 2026-10-14). The host changes at the launch of the redo.
 2. The images: Image Transformations through `/cdn-cgi/image/` for the live build only (decided 2026-10-14). The Worker does not need code for images.
-3. The deploy: add GitHub Actions before the cut-over, or after the cut-over.
+3. The deploy: previews of branches use GitHub Actions (decided 2026-10-14). The deploy of `main` to production through GitHub Actions comes in Phase 5.
 4. The canonical host: keep `www`, because the PostHog data uses `www`.

@@ -1,0 +1,42 @@
+name: Cloudflare preview
+
+# Every push to a branch other than main deploys a Worker Preview on workers.dev, named after the branch:
+# feature/portfolio-redo -> https://feature-portfolio-redo-portfolio.gkkrowicki.workers.dev
+# main keeps deploying to Vercel until the launch (docs/hosting-cloudflare.md).
+on:
+  push:
+    branches-ignore: [main]
+
+# A newer push to the same branch replaces a preview that is still deploying.
+concurrency:
+  group: cloudflare-preview-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  preview:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      CF_SEND_TELEMETRY: "false"
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      # Builds without the PostHog key and marks the Build Output as a preview.
+      - run: npm run cf:preview:build
+      - name: Deploy preview
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: npx cf previews deploy "$GITHUB_REF_NAME" --prebuilt > preview.json
+      - name: Show the preview URL
+        run: |
+          url=$(jq -r '.preview_urls[0]' preview.json)
+          echo "Preview: $url"
+          echo "Cloudflare preview for \`$GITHUB_REF_NAME\`: $url" >> "$GITHUB_STEP_SUMMARY"
