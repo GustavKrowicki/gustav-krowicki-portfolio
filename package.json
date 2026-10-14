@@ -15,7 +15,8 @@
     "cf:build": "next build && cf-wrangler build",
     "cf:build:live": "CF_IMAGE_TRANSFORMS=1 npm run cf:build",
     "cf:dev": "cf-wrangler dev --port 3100",
-    "cf:deploy": "npm run cf:build && cf deploy --prebuilt"
+    "cf:deploy": "npm run cf:build && cf deploy --prebuilt",
+    "cf:preview": "NEXT_PUBLIC_POSTHOG_KEY= next build && CLOUDFLARE_PREVIEW_BUILD=true cf-wrangler build && cf previews deploy --prebuilt"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.7",

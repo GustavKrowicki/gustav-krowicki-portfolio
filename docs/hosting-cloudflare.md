@@ -229,8 +229,17 @@ This deploy does not change the live site, because at this time no domain points
 NOTE: A workers.dev URL is public.
 The rule `https://:version.:subdomain.workers.dev/*` in `public/_headers` adds `X-Robots-Tag: noindex` to all workers.dev URLs of the Worker.
 The rule does not apply to `www.gustavkrowicki.com`.
-During the redo, deploy a preview of the redo with `npx cf previews deploy --prebuilt`.
+
+During the redo, deploy a preview of the current branch with `npm run cf:preview`.
+The script builds the site without the PostHog key and marks the build as a preview (`CLOUDFLARE_PREVIEW_BUILD=true`).
+Then `cf previews deploy --prebuilt` uploads the build.
+
 The preview URL of a branch stays the same after each deploy.
+Each deploy also gets its own URL, for example `https://9dd4aa29-portfolio.gkkrowicki.workers.dev`.
+
+| Branch | Preview URL (first deploy 2026-10-14) |
+| --- | --- |
+| `feature/portfolio-redo` | `https://feature-portfolio-redo-portfolio.gkkrowicki.workers.dev` |
 
 ## 7. Phase 3: Move the DNS to Cloudflare
 
@@ -420,7 +429,7 @@ Do a test of each class change on a preview before you deploy it.
 - Do not use `npx cf init .`, `npx cf build`, or `npx cf dev`. Use the `cf:` scripts in `package.json`.
 - Previews and local builds use the original images. Only `npm run cf:build:live` uses Image Transformations.
 - The redirects are in `public/_redirects`, not in `next.config.ts`.
-- Vercel made a preview for each branch. With `cf`, run `npx cf previews deploy`.
+- Vercel made a preview for each branch. With `cf`, run `npm run cf:preview` on the branch.
 - Each file in `public` must be smaller than 25 MiB. Put a larger file in R2.
 
 ## 12. Open decisions
