@@ -169,6 +169,28 @@ Put all server code in the Worker (Phase 6).
     | `/no-page` | The 404 page, status 404 |
     | `/_next/static/<file>.js` | `Cache-Control: public, max-age=31536000, immutable` |
 
+### Images
+
+A static export has no image optimizer.
+On Vercel, `next/image` makes small WebP files for each screen width.
+On Cloudflare, Image Transformations do this work, through the URL `/cdn-cgi/image/`.
+
+`/cdn-cgi/image/` operates only on a hostname of a Cloudflare zone.
+It does not operate on workers.dev or on the local server (test of 2026-10-14: status 404).
+Thus, only the build for the live site uses transformations.
+Previews and local builds use the original images.
+
+21. Add the loader `lib/cloudflareImageLoader.ts`.
+    The loader writes URLs with `width`, `quality=75`, `format=auto`, and `onerror=redirect`.
+    If a transformation fails, `onerror=redirect` sends the original image.
+    The loader does not change SVG files or absolute URLs.
+22. In `next.config.ts`, use the loader only when `CF_IMAGE_TRANSFORMS=1`.
+    In all other builds, use `images: { unoptimized: true }`.
+23. Add the script `"cf:build:live": "CF_IMAGE_TRANSFORMS=1 npm run cf:build"` to `package.json`.
+
+The live build has 115 unique transformation URLs from 17 images (count of 2026-10-14).
+The Free plan includes 5,000 unique transformations each month.
+
 ## 6. Phase 2: First deploy to workers.dev
 
 This deploy does not change the live site, because at this time no domain points to the Worker.
@@ -189,9 +211,18 @@ This deploy does not change the live site, because at this time no domain points
 4. Open `https://portfolio.gkkrowicki.workers.dev`.
 5. Make sure that the browser sends no request to `pht.gustavkrowicki.com`.
 6. Run the e2e-runner agent with `E2E_BASE_URL` set to the workers.dev URL (city and smoke).
-7. Compare the page weight of `/` with the Vercel site on a phone profile.
-8. If the page weight on Cloudflare is more than 20% larger, add a Cloudflare Images loader after Phase 4.
-   The Free plan includes 5,000 unique transformations each month.
+7. Compare the page weight with the Vercel site on a phone profile.
+   The preview uses the original images, so the preview is heavier than the Vercel site:
+
+   | Page | Vercel | Preview (2026-10-14) |
+   | --- | --- | --- |
+   | `/` | 8.2 MB | 10.8 MB |
+   | `/about` | 3.1 MB | 4.6 MB |
+   | `/work/valtech` | 1.3 MB | 2.3 MB |
+
+   The live build in Phase 4 uses transformations. Do this comparison again in Phase 4.
+8. Make `public/images/about/Dortmund.png` (20 MB) smaller.
+   A preview loads this file at its full size.
 9. Open the workers.dev URL on a phone. Make sure that the city and the 3D models load.
 
 NOTE: A workers.dev URL is public.
@@ -246,6 +277,13 @@ If the DS records stay at the registry, resolvers that validate DNSSEC cannot fi
     The time for this can be 24 hours.
 11. Make sure that the site on Vercel continues to open.
 12. In PostHog, make sure that PostHog gets new events through `pht`.
+13. Set Image Transformations to ON for the zone:
+
+    ```bash
+    npx cf zones image-resizing edit --zone gustavkrowicki.com --value on
+    ```
+
+14. Make sure that `npx cf zones image-resizing get --zone gustavkrowicki.com` shows the value `on`.
 
 The `pht` record must always stay DNS only.
 The PostHog proxy gets its certificate through this record.
@@ -260,7 +298,7 @@ For approximately one minute, visitors cannot open the site.
 2. Prepare the Worker on `main` before you change the DNS:
 
    - Add `domains: ["www.gustavkrowicki.com"]` to `cloudflare.config.ts`.
-   - Build the site with the PostHog key: `npm run cf:build`.
+   - Build the site with the PostHog key and the transformations: `npm run cf:build:live`.
 
 3. Delete the `www` CNAME record with `npx cf dns records delete`.
    A Worker domain cannot use a name that has a CNAME record.
@@ -292,6 +330,8 @@ For approximately one minute, visitors cannot open the site.
    | `curl -sI https://www.gustavkrowicki.com` | 200, and the server is `cloudflare` |
    | `curl -sI https://www.gustavkrowicki.com/projects/foo` | 307 to `/work` |
    | PostHog live events | A pageview with the UTM values from the first check |
+   | `curl -sI` on an image URL that starts with `/cdn-cgi/image/` | 200, a `cf-resized` header, and a smaller `content-length` than the original |
+   | Page weight of `/`, `/about`, and `/work/valtech` on a phone profile | Not more than the Vercel values in Phase 2 |
    | e2e-runner with `E2E_BASE_URL=https://www.gustavkrowicki.com` | All city and smoke tests pass |
 
 8. Commit the change to `cloudflare.config.ts` on `main`.
@@ -376,7 +416,7 @@ Do a test of each class change on a preview before you deploy it.
 - A push to `main` does not deploy the site until you add the GitHub Actions workflow.
 - `next start` does not work. Use `npm run cf:dev`.
 - Do not use `npx cf init .`, `npx cf build`, or `npx cf dev`. Use the `cf:` scripts in `package.json`.
-- The images are not optimized until you add a Cloudflare Images loader.
+- Previews and local builds use the original images. Only `npm run cf:build:live` uses Image Transformations.
 - The redirects are in `public/_redirects`, not in `next.config.ts`.
 - Vercel made a preview for each branch. With `cf`, run `npx cf previews deploy`.
 - Each file in `public` must be smaller than 25 MiB. Put a larger file in R2.
@@ -384,6 +424,6 @@ Do a test of each class change on a preview before you deploy it.
 ## 12. Open decisions
 
 1. The base of the branch: `feature/portfolio-redo` (decided 2026-10-14). The host changes at the launch of the redo.
-2. The images: keep them unoptimized, or add a Cloudflare Images loader.
+2. The images: Image Transformations through `/cdn-cgi/image/` for the live build only (decided 2026-10-14). The Worker does not need code for images.
 3. The deploy: add GitHub Actions before the cut-over, or after the cut-over.
 4. The canonical host: keep `www`, because the PostHog data uses `www`.
