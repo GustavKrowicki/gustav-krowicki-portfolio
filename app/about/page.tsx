@@ -42,7 +42,7 @@ export default function AboutPage() {
       caption: 'Cup final in Parken',
     },
     {
-      src: '/images/about/Dortmund.png',
+      src: '/images/about/Dortmund.jpg',
       alt: 'Dortmund trip',
       caption: 'Away day in Dortmund',
     },

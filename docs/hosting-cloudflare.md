@@ -221,12 +221,14 @@ This deploy does not change the live site, because at this time no domain points
    | `/work/valtech` | 1.3 MB | 2.3 MB |
 
    The live build in Phase 4 uses transformations. Do this comparison again in Phase 4.
-8. Make `public/images/about/Dortmund.png` (20 MB) smaller.
+8. Replace `public/images/about/Dortmund.png` (20 MB) with a smaller file.
    A preview loads this file at its full size.
+   Done on 2026-10-14: `Dortmund.jpg`, 1512 x 2016 pixels, 568 KB, without photo metadata.
 9. Open the workers.dev URL on a phone. Make sure that the city and the 3D models load.
 
 NOTE: A workers.dev URL is public.
-Cloudflare adds `X-Robots-Tag: noindex` to workers.dev Preview URLs.
+The rule `https://:version.:subdomain.workers.dev/*` in `public/_headers` adds `X-Robots-Tag: noindex` to all workers.dev URLs of the Worker.
+The rule does not apply to `www.gustavkrowicki.com`.
 During the redo, deploy a preview of the redo with `npx cf previews deploy --prebuilt`.
 The preview URL of a branch stays the same after each deploy.
 
