@@ -7,6 +7,8 @@ import * as campus from '@/lib/city/models/legoCampus';
 import * as main from '@/lib/city/models/legoHqMainEntrance';
 import * as workshop from '@/lib/city/models/workshop';
 import * as rooms from '@/lib/city/models/legoCampusRooms';
+import * as hqRooms from '@/lib/city/models/legoHqRooms';
+import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus, or krea = the original GLB served by
 // art/img2threejs/tools/static_cors.py on :8766). Generation sources live in art/img2threejs/.
@@ -98,6 +100,27 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  // img2threejs build of the roof-off campus (art/img2threejs/lego-campus-rooms, board 02b card B3)
+  hqRooms: {
+    name: 'LEGO HQ rooms, img2threejs (roof on)',
+    create: hqRooms.createLEGOHQRoomsModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
+  },
+  hqRoomsOpen: {
+    name: 'LEGO HQ rooms, img2threejs (roof off)',
+    create: createLEGOHQRoomsRoofOffModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {

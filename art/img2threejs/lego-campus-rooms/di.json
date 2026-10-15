@@ -1,0 +1,192 @@
+{
+  "sourceImage": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+  "zonesDir": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3 on the Figma AI reference",
+    "targetMinDetails": 6,
+    "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+    "details": [
+      {
+        "id": "cut-caps",
+        "kind": "contour",
+        "description": "Thick dark top edge on every cut wall: reads as a cut-away, not a ruin.",
+        "region": {
+          "x": 0.15,
+          "y": 0.1,
+          "width": 0.7,
+          "height": 0.75,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "workshop-floor.cutCaps"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "canopy-studs",
+        "kind": "contour",
+        "description": "Giant yellow 2 x 4 brick over the glass doors, round studs on top.",
+        "region": {
+          "x": 0.42,
+          "y": 0.7,
+          "width": 0.16,
+          "height": 0.16,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "canopy.studs"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r2c1.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "lobby-glass",
+        "kind": "contour",
+        "description": "Lobby: thin glass walls with white posts around a white floor, open to the entrance hall.",
+        "region": {
+          "x": 0.37,
+          "y": 0.32,
+          "width": 0.26,
+          "height": 0.28,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "lobby-floor.glassWalls"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c1.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "room-floor-colours",
+        "kind": "stain",
+        "description": "One flat pastel colour per room floor (blue, mint, peach, yellow, grey).",
+        "region": {
+          "x": 0.15,
+          "y": 0.15,
+          "width": 0.7,
+          "height": 0.6,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "floor-workshop.tone"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "whiteboard",
+        "kind": "contour",
+        "description": "Workshop: one long whiteboard on the north wall and one timber table.",
+        "region": {
+          "x": 0.25,
+          "y": 0.15,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "workshop-whiteboard.board"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r0c0.png",
+        "confidence": 0.75
+      },
+      {
+        "id": "wall-map",
+        "kind": "decal",
+        "description": "Map room: one large world map panel on the inner face of the round wall.",
+        "region": {
+          "x": 0.78,
+          "y": 0.35,
+          "width": 0.14,
+          "height": 0.12,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "map-panel.map"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "chair-rows",
+        "kind": "contour",
+        "description": "Launch room: two rows of simple chairs facing one black screen.",
+        "region": {
+          "x": 0.56,
+          "y": 0.52,
+          "width": 0.18,
+          "height": 0.18,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "launch-screen.chairs"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "studio-button",
+        "kind": "contour",
+        "description": "Recommendation studio: one big round red button on a white pedestal.",
+        "region": {
+          "x": 0.25,
+          "y": 0.55,
+          "width": 0.25,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "studio-button.button"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+        "confidence": 0.6
+      },
+      {
+        "id": "glass-link",
+        "kind": "contour",
+        "description": "Short low glass corridor from the lobby to the round map room.",
+        "region": {
+          "x": 0.62,
+          "y": 0.4,
+          "width": 0.12,
+          "height": 0.08,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "glass-link.link"
+        },
+        "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+        "confidence": 0.65
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

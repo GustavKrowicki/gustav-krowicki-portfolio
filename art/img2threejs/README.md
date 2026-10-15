@@ -58,3 +58,4 @@ Buildings use the base skill with the `generic` profile; no plugins are needed. 
 | --- | --- | --- |
 | `lego-campus/` | `lib/city/models/legoCampus.ts` | 7 x 7 footprint, pitch 30 deg, zoom 0.945, vOff 0.235, 384 px |
 | `lego-main-entrance/` | `lib/city/models/legoHqMainEntrance.ts` | close-up door-moment model (sliding doors) |
+| `lego-campus-rooms/` | `lib/city/models/legoHqRooms.ts` (+ `legoHqRoomsStates.ts`) | roof on / roof off (hide ids starting `roof-`), 7 x 7, pitch 30 deg, zoom 0.9452, vOff 0.1966, 384 px. Per pass: `run_pass.sh <pass>`, score `renders/<pass>-cmp.png`, then `review.sh` |
