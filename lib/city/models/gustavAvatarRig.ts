@@ -27,6 +27,9 @@ export type AvatarOptions = {
   stage?: AvatarStage;
   binding?: AvatarBinding;
   heightWu?: number;
+  // The laptop the sprite carries in its left hand (east frames). On by default; false hides it (the mesh stays
+  // bound, so toggling never touches the rig).
+  laptop?: boolean;
   castShadow?: boolean;
   receiveShadow?: boolean;
 };
@@ -155,7 +158,9 @@ function bindRigidParts(
     const skinIndex = new Uint16Array(pos.count * 4);
     const skinWeight = new Float32Array(pos.count * 4);
     for (let k = 0; k < pos.count; k++) {
-      if (mode === 'rigid') {
+      // Props (the laptop) never bend: weight 1.0 to their own bone in every mode.
+      const isProp = (mesh.userData.sculptComponent as { role?: string } | undefined)?.role === 'prop';
+      if (mode === 'rigid' || isProp) {
         skinIndex[k * 4] = owner;
         skinWeight[k * 4] = 1;
         continue;
@@ -221,6 +226,11 @@ export function createGustavAvatar(options: AvatarOptions = {}): THREE.Group {
   let rigidParts: string[] = [];
   if (stage !== 'generated') rigidParts = prepareRigidParts(model, rig.bones);
   if (stage === 'bound') bindRigidParts(model, rig.skeleton, rig.boneIndexOf, binding);
+  if (options.laptop === false) {
+    model.traverse((o) => {
+      if (componentId(o) === 'laptop' && (o as THREE.Mesh).isMesh) o.visible = false;
+    });
+  }
 
   // Display: scale to the city standard height and seat the feet on y = 0 (offset from mesh bounds alone).
   const outer = new THREE.Group();

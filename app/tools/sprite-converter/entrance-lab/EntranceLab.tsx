@@ -49,6 +49,7 @@ const AVATAR_PARAMS = () => {
   return {
     stage: (p.get('stage') as AvatarStage) ?? 'bound',
     binding: (p.get('binding') as AvatarBinding) ?? 'transfer',
+    laptop: p.get('laptop') !== '0',
   };
 };
 
