@@ -238,10 +238,15 @@ export function createGustavAvatar(options: AvatarOptions = {}): THREE.Group {
   outer.add(model);
   const rest = skinnedBounds(model);
   const size = rest.getSize(new THREE.Vector3());
-  const centre = rest.getCenter(new THREE.Vector3());
   const scale = heightWu / size.y;
   model.scale.setScalar(scale);
-  model.position.set(-centre.x * scale, -rest.min.y * scale, -centre.z * scale);
+  // Ground anchor: height from the mesh bounds alone (R1); x/z from the midpoint between the feet, not the bounds
+  // centre, which the hand-held laptop pulls sideways (the sprite origin must sit under the feet).
+  model.updateMatrixWorld(true);
+  const footL = rig.bones['foot-l'].getWorldPosition(new THREE.Vector3());
+  const footR = rig.bones['foot-r'].getWorldPosition(new THREE.Vector3());
+  const feet = footL.add(footR).multiplyScalar(0.5).divideScalar(scale);
+  model.position.set(-feet.x * scale, -rest.min.y * scale, -feet.z * scale);
   outer.updateMatrixWorld(true);
 
   const clips = buildAvatarClips();

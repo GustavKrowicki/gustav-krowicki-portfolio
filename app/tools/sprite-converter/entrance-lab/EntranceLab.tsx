@@ -329,6 +329,8 @@ export default function EntranceLab() {
         model.updateMatrixWorld(true);
         const b = restBox ? restBox.clone() : new THREE.Box3().setFromObject(model);
         const centre = b.getCenter(new THREE.Vector3());
+        // The avatar's own origin is already the ground point between its feet: keep it as the sprite anchor
+        if (avatar && !model.userData.avatarGroup) centre.set(0, centre.y, 0);
         const size = b.getSize(new THREE.Vector3());
         model.position.set(-centre.x, -b.min.y, -centre.z);
         model.scale.setScalar(3 / Math.max(size.x, size.y, size.z));
