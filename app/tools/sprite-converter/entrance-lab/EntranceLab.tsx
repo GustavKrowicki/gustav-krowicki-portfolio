@@ -6,6 +6,7 @@ import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as campus from '@/lib/city/models/legoCampus';
 import * as main from '@/lib/city/models/legoHqMainEntrance';
 import * as workshop from '@/lib/city/models/workshop';
+import * as rooms from '@/lib/city/models/legoCampusRooms';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus, or krea = the original GLB served by
 // art/img2threejs/tools/static_cors.py on :8766). Generation sources live in art/img2threejs/.
@@ -76,6 +77,27 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0,
     reference: { width: 900, height: 1200, halfW: 1.2, target: [0, 0.6, 0] },
     eye: { fov: 84, position: [0.15, 0.86, 1.25], target: [-0.05, 0.62, -1.0] },
+  },
+  // Roof-off LEGO HQ skeleton (board 02b, card B2): rooms = roof on, roomsOpen = roof off
+  rooms: {
+    name: 'LEGO HQ rooms (roof on)',
+    create: rooms.createLEGOCampusRoomsModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  roomsOpen: {
+    name: 'LEGO HQ rooms (roof off)',
+    create: rooms.createLEGOCampusRoomsOpenModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {
