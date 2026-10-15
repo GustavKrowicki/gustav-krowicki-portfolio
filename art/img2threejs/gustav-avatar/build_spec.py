@@ -181,6 +181,93 @@ for side in ("l", "r"):
     by[f"forearm-{side}"]["attachment"]["baseRadius"] = 0.046
     by[f"forearm-{side}"]["attachment"]["endRadius"] = 0.04
 
+# ==== v2 refinement (Gustav's review of v1): smaller head, tighter jacket, clearer face, laptop ===================
+V2 = os.environ.get("AVATAR_V", "2") == "2"
+if V2:
+    # -- tighter jacket: slimmer torso and sleeves; rounder shoulders (clavicle end = sleeve top radius)
+    by["chest"]["attachment"]["baseRadius"], by["chest"]["attachment"]["endRadius"] = 0.088, 0.064
+    by["abdomen"]["attachment"]["baseRadius"], by["abdomen"]["attachment"]["endRadius"] = 0.08, 0.086
+    set_dims(by["pelvis"], (0.18, 0.12, 0.14))
+    for side in ("l", "r"):
+        by[f"clavicle-{side}"]["attachment"]["baseRadius"] = 0.026
+        by[f"clavicle-{side}"]["attachment"]["endRadius"] = 0.04
+        by[f"upper-arm-{side}"]["attachment"]["baseRadius"] = 0.04
+        by[f"upper-arm-{side}"]["attachment"]["endRadius"] = 0.035
+        by[f"forearm-{side}"]["attachment"]["baseRadius"] = 0.034
+        by[f"forearm-{side}"]["attachment"]["endRadius"] = 0.03
+        # rounded shoes instead of boxes
+        by[f"foot-{side}"]["primitive"] = "ellipsoid"
+        set_dims(by[f"foot-{side}"], (0.064, 0.05, 0.12))
+    for cid, z, tilt in (("tee-front", 0.066, -0.14), ("tee-front-low", 0.072, 0.048)):
+        by[cid]["transform"]["position"][2] = z
+        by[cid]["transform"]["rotation"] = [tilt, 0, 0]
+    set_dims(by["tee-front"], (0.042, 0.17, 0.024))
+    set_dims(by["tee-front-low"], (0.038, 0.12, 0.024))
+    set_dims(by["jacket-collar"], (0.13, 0.13, 0.05))
+
+    # -- clearer face (authored at the old head size, then the whole head scales by HEAD_K below):
+    # flatter, wider face so both eyes read at the game yaw; dark eyes spaced wider; brows; a darker, thicker
+    # glasses frame; the hair cap lifted so the fringe ends above the brows
+    set_dims(by["head"], (0.29, 0.31, 0.26))
+    brow_y = eye_y + 0.036
+    for side, sign in (("l", 1), ("r", -1)):
+        by[f"eye-{side}"]["transform"]["position"] = r4((sign * 0.058, eye_y, 0.106))
+        set_dims(by[f"eye-{side}"], (0.032, 0.038, 0.022))
+        by[f"glasses-frame-{side}"]["transform"]["position"] = r4((sign * 0.056, eye_y, 0.111))
+        by[f"glasses-frame-{side}"]["transform"]["rotation"] = [0, sign * 0.6, 0]
+        set_dims(by[f"glasses-frame-{side}"], (0.058, 0.05, 0.012))
+        by[f"glasses-frame-{side}"]["geometryDescriptor"]["torusTubeRatio"] = 0.16
+        part(f"brow-{side}", f"Brow {side.upper()}", "ellipsoid", "head", (sign * 0.058, brow_y, 0.113), (0.052, 0.013, 0.016),
+             "hair", role="detail", level="micro", importance=0.55, rotation=(0, 0, sign * 0.12),
+             features=[{"id": f"brow-{side}-line", "kind": "contour", "notes": "dark brow bar above the glasses"}])
+    by["glasses-bridge"]["primitive"] = "ellipsoid"
+    by["glasses-bridge"]["transform"]["position"] = r4((0, eye_y + 0.004, 0.124))
+    set_dims(by["glasses-bridge"], (0.04, 0.009, 0.01))
+    by["nose"]["transform"]["position"] = r4((0, at(lm["noseBase"]) + 0.018, 0.118))
+    set_dims(by["nose"], (0.034, 0.048, 0.04))
+    by["mouth"]["primitive"] = "ellipsoid"
+    by["mouth"]["transform"]["position"] = r4((0, at(lm["mouthLine"]) + 0.014, 0.088))
+    set_dims(by["mouth"], (0.054, 0.012, 0.014))
+    hair["transform"]["position"] = r4((0, 0.06, -0.03))
+    set_dims(hair, (0.315, 0.255, 0.295))
+
+    # -- smaller head: scale the head and everything on it by HEAD_K about the chin, so the neck joint stays put.
+    # 0.6 takes head+hair from 0.32 H (sprite, 1:3.1) to ~0.22 H (1:4.6): the requested ~1:5, still 10 px at 48 px.
+    HEAD_K = 0.6
+    head_half = by["head"]["transform"]["scale"][1] / 2
+    by["head"]["transform"]["position"][1] = round(by["head"]["transform"]["position"][1] - head_half * (1 - HEAD_K), 5)
+    set_dims(by["head"], [v * HEAD_K for v in by["head"]["transform"]["scale"]])
+    for c in tree:
+        if c.get("parent") == "head":
+            c["transform"]["position"] = r4([v * HEAD_K for v in c["transform"]["position"]])
+            set_dims(c, [v * HEAD_K for v in c["transform"]["scale"]])
+    hair["standProud"].update({"clearance": round(0.006 * HEAD_K, 5), "maxPush": round(0.03 * HEAD_K, 5)})
+    # the smaller head sits down on the collar: thinner, shorter visible neck
+    by["head"]["transform"]["position"][1] = round(by["head"]["transform"]["position"][1] - 0.03, 5)
+    by["neck"]["attachment"]["baseRadius"], by["neck"]["attachment"]["endRadius"] = 0.04, 0.034
+    # slimmer jeans to match the slimmer jacket
+    for side in ("l", "r"):
+        by[f"thigh-{side}"]["attachment"]["baseRadius"], by[f"thigh-{side}"]["attachment"]["endRadius"] = 0.044, 0.037
+        by[f"shin-{side}"]["attachment"]["baseRadius"], by[f"shin-{side}"]["attachment"]["endRadius"] = 0.037, 0.03
+        # rounded shoulder: a jacket ball over the clavicle/sleeve junction instead of two flat cylinder caps
+        part(f"shoulder-{side}", f"Shoulder {side.upper()} (jacket)", "ellipsoid", f"clavicle-{side}",
+             by[f"upper-arm-{side}"]["transform"]["position"], (0.084, 0.078, 0.08), "jacket", role="detail",
+             level="meso", importance=0.5,
+             features=[{"id": f"shoulder-{side}-round", "kind": "contour", "notes": "rounded jacket shoulder"}],
+             topo="Ellipsoid cap over the shoulder joint so the jacket shoulder reads round, not as two cylinder ends.")
+    spec["preSpecAssessment"]["anatomy"]["styleHeadsBuilt"] = 4.6
+    spec["preSpecAssessment"]["anatomy"]["styleNote"] = (
+        "v2: head scaled 0.6 on Gustav's request (target ~1:5); the sprite measures 1:3.1, so the built figure "
+        "deliberately departs from the reference's head-unit ratio")
+
+    # -- laptop (measure/laptop.json: screen box 0.18 x 0.17 H at 0.61 H from the top, near hip, east frames):
+    # a closed laptop held upright in the left hand, long edge forward, pressed to the hip. Parented to the hand
+    # bone so it follows the walk; bound rigidly to that bone (a prop does not bend).
+    part("laptop", "Laptop (closed, held in the left hand)", "box", "hand-l", (-0.026, 0.04, 0.025), (0.014, 0.115, 0.165),
+         "laptop", role="prop", level="meso", importance=0.6,
+         features=[{"id": "laptop-closed", "kind": "contour", "notes": "closed laptop, no logo"}],
+         topo="A closed laptop is a thin rounded slab; at 24-48 px a box reads correctly.")
+
 # ---- materials (flat, textureless; calibrated so the converter-rig render lands on the sprite medians) ----
 mat_t = copy.deepcopy(spec["materials"][0])
 
@@ -221,9 +308,12 @@ spec["materials"] = [
     material("shoes", "Shoes (leather)", "unknown", col("shoes", "#1e2229"), 0.55, f"sprite shoes median {P['shoes']}", P["shoes"]),
     material("eye", "Eyes", "glass", "#17140f", 0.3, "eyes read as 1-2 dark pixels in the sprite"),
     material("lips", "Mouth", "skin", "#9c6c5c", 0.6, "sub-pixel in the sprite; a slightly darker skin line"),
-    material("glasses-frame", "Glasses frame", "plastic", col("glasses-frame", "#c9c6c0"), 0.3,
-             "light grey pixels around the eyes in east/north frames"),
+    material("glasses-frame", "Glasses frame", "plastic", "#4a4846" if V2 else col("glasses-frame", "#c9c6c0"), 0.3,
+             "sprite: light pixels around the eyes; v2 darkens the frame so it reads as a line at 48 px"),
 ]
+if V2:
+    spec["materials"].append(material("laptop", "Laptop (aluminium, closed)", "metal", col("laptop", "#d9dadf"), 0.4,
+                                      f"east frames: light grey block at the near hip, median {P['laptop']}", P["laptop"]))
 mats = {m["id"]: m for m in spec["materials"]}
 
 
@@ -258,7 +348,7 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["root", "hair", "upper-arm-l", "thigh-l"], "evidenceRefs": EV},
     {"id": "outfit-and-palette", "name": "Grey jacket over dark tee, indigo jeans, dark shoes, olive-brown hair",
      "tier": "important", "passIds": ["material-pass"], "minimumScore": 0.7, "mustPass": False,
-     "componentRefs": ["chest", "tee-front", "thigh-l", "foot-l", "hair"], "evidenceRefs": EV},
+     "componentRefs": ["chest", "tee-front", "thigh-l", "foot-l", "hair"] + (["laptop"] if V2 else []), "evidenceRefs": EV},
 ]
 # The character template has no structural pass; the strict gate requires one (hierarchy before form)
 if not any(bp["id"] == "structural-pass" for bp in spec["buildPasses"]):
@@ -271,7 +361,7 @@ for bp in spec["buildPasses"]:
     bp["componentRefs"] = ["root"] + [cid for name in lv for cid in levels[name]]
 spec["qualityTargets"]["reviewViewpoints"] = ["sprite 30 deg pitch yaw 45 (game camera)", "front", "right 90", "rear 180", "left 270"]
 spec["lookDevTargets"]["qualityPriority"] = "game-prop"
-spec["performanceBudget"].update({"qualityPriority": "game-prop", "targetTriangles": 6000, "maxDrawCalls": 40,
+spec["performanceBudget"].update({"qualityPriority": "game-prop", "targetTriangles": 20000 if V2 else 6000, "maxDrawCalls": 40,
                                   "textureSize": 256, "fpsTarget": 60,
                                   "optimizationPolicy": "low tier: one flat material per part, no textures; reads at 24-48 px"})
 spec["silhouette"] = {

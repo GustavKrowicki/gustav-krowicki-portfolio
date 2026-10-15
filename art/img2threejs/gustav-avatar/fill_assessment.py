@@ -41,7 +41,7 @@ p["specDepthDecision"] = {
 p["unknownsToResolveBeforeImplementation"] = [
     "Face features are 1-2 px: eye shape, brows, nose, mouth undetermined -> minimal stylized marks.",
     "Hands are 2-3 px blobs -> mitten hands, no digits (template digits removed; they cannot read at 24-48 px).",
-    "Laptop appears only in the east frames -> left out of the body build (optional prop later).",
+    "Laptop appears only in the east frames (held at the near hip) -> v2 builds it as a prop in the left hand, on by default.",
     "Jacket buttons/pockets not resolvable -> plain jacket with the open front (tee band) as the only front detail.",
     "Glasses frame colour is light grey in east/north frames -> thin light rims, no lenses.",
 ]
@@ -71,6 +71,8 @@ p["detailInventory"] = {
           (0.15, 0.66, 0.75, 0.06), "meso", "geometry", CF, "jacket-skirt", f"{Z}/middle.png", 0.75),
         d("trouser-hem", "seam", "Straight jeans break over the shoe top; dark shoes read as a separate block.",
           (0.1, 0.88, 0.8, 0.1), "micro", "geometry", CF, "shoe-break", f"{Z}/lower.png", 0.6),
+        d("laptop-prop", "contour", "Closed light-grey laptop held upright at the near hip in the east frames (0.18 x 0.17 H box).",
+          (0.45, 0.52, 0.4, 0.2), "meso", "geometry", CF, "laptop-closed", f"{R}/east-00-x12.png", 0.6),
         d("cloth-matte", "gloss", "Jacket, tee and denim are matte (no highlight in any frame); shoes slightly satin.",
           (0.1, 0.36, 0.8, 0.6), "meso", "material", MO, "matte-cotton", f"{Z}/middle.png", 0.6),
     ],

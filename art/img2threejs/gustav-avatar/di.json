@@ -127,6 +127,26 @@
         "confidence": 0.6
       },
       {
+        "id": "laptop-prop",
+        "kind": "contour",
+        "description": "Closed light-grey laptop held upright at the near hip in the east frames (0.18 x 0.17 H box).",
+        "region": {
+          "x": 0.45,
+          "y": 0.52,
+          "width": 0.4,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "laptop-closed"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/ref/east-00-x12.png",
+        "confidence": 0.6
+      },
+      {
         "id": "cloth-matte",
         "kind": "gloss",
         "description": "Jacket, tee and denim are matte (no highlight in any frame); shoes slightly satin.",
