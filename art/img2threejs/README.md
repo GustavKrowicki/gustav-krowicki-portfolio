@@ -4,6 +4,27 @@ Procedural Three.js buildings for the city, built with the img2threejs skill ins
 The generated factories live in `lib/city/models/`; these folders hold everything needed to regenerate them.
 Projection, scale and sprite-export rules: `docs/city-rules.md`.
 
+## Setup
+
+The img2threejs skill v2.0.0 (the current release), installed with its CLI:
+`npx --yes img2threejs@latest install --host claude`, check with `npx --yes img2threejs@latest doctor`.
+Buildings use the base skill with the `generic` profile; no plugins are needed. Plugins come from the separate
+`img2` harness (`npx --yes @img2threejs/img2@latest install --yes`, then `img2 add <id>`); the private
+`environment` plugin is planned for ground and surroundings.
+
+## New building
+
+`tools/new_building.sh <folder> "<Name>" <factoryFile> <footprintW> <footprintH>` copies `_template/`
+(`building.env`, `rebuild_spec.sh`, `pass.sh`, `sync_factory.sh`). Then:
+
+1. Put the reference image in `<folder>/ref/` (ignored by git, see `.gitignore`) and set `REF` in `building.env`.
+2. Write `assessment.json` with the skill's `stage2_spec/new_pre_spec_assessment.py`, and author `build_spec.py`
+   in wu (1 wu = 1 model unit, `docs/city-rules.md` section 4), with the entrance from section 6.
+3. `rebuild_spec.sh`, then `pass.sh gen <pass>` and `pass.sh gates <pass>` per pass. The template's gates
+   compare against the reference image, since a new building has no live sprite to match.
+4. Register the factory in the entrance lab's `MODELS` and export sprites with `converterSettings()` from
+   `lib/city/units.ts`.
+
 ## Pipeline (per building)
 
 1. **Style source:** a "game-like" image made in Google AI Studio from a real photo (kept outside the repo).
