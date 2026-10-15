@@ -7,15 +7,15 @@
       "segmented": true,
       "holed": false,
       "interiorHolePixelCount": 162,
-      "interiorHoleFraction": 0.0016678849777100556,
+      "interiorHoleFraction": 0.0016775743517521333,
       "largestHolePixelCount": 162,
       "largestHoleBBox": {
         "x": 239,
-        "y": 365,
+        "y": 360,
         "width": 9,
         "height": 18
       },
-      "areaFraction": 0.4496712962962963,
+      "areaFraction": 0.44707407407407407,
       "ratio": 1.0,
       "degenerate": false
     },
@@ -34,8 +34,8 @@
         "width": 0,
         "height": 0
       },
-      "areaFraction": 0.28611574074074075,
-      "ratio": 0.636277527823822,
+      "areaFraction": 0.28656018518518517,
+      "ratio": 0.6409680225333444,
       "degenerate": false
     },
     {
@@ -44,17 +44,17 @@
       "isReference": false,
       "segmented": true,
       "holed": false,
-      "interiorHolePixelCount": 122,
-      "interiorHoleFraction": 0.0012729549248747913,
-      "largestHolePixelCount": 122,
+      "interiorHolePixelCount": 104,
+      "interiorHoleFraction": 0.0010900667665894536,
+      "largestHolePixelCount": 104,
       "largestHoleBBox": {
-        "x": 51,
-        "y": 360,
-        "width": 10,
-        "height": 13
+        "x": 52,
+        "y": 367,
+        "width": 9,
+        "height": 12
       },
-      "areaFraction": 0.4437037037037037,
-      "ratio": 0.9867289892822947,
+      "areaFraction": 0.44169907407407405,
+      "ratio": 0.987977383812443,
       "degenerate": false
     },
     {
@@ -63,17 +63,17 @@
       "isReference": false,
       "segmented": true,
       "holed": false,
-      "interiorHolePixelCount": 1,
-      "interiorHoleFraction": 1.60253842085864e-05,
-      "largestHolePixelCount": 1,
+      "interiorHolePixelCount": 0,
+      "interiorHoleFraction": 0.0,
+      "largestHolePixelCount": 0,
       "largestHoleBBox": {
-        "x": 85,
-        "y": 103,
-        "width": 1,
-        "height": 1
+        "x": 0,
+        "y": 0,
+        "width": 0,
+        "height": 0
       },
-      "areaFraction": 0.2888935185185185,
-      "ratio": 0.6424548795931184,
+      "areaFraction": 0.28928703703703706,
+      "ratio": 0.6470673515036037,
       "degenerate": false
     }
   ],

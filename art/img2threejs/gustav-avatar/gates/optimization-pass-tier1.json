@@ -2,13 +2,13 @@ STATUS pass=complete completed=8 blocked=all build passes completed next=diagnos
 {
   "passed": false,
   "checks": {
-    "silhouetteIoU": 0.7223,
+    "silhouetteIoU": 0.7024,
     "aspectRatioDelta": 0.1144,
     "scaleDelta": 0.1144,
-    "bilateralSymmetryError": 0.3078,
+    "bilateralSymmetryError": 0.3318,
     "colorDelta": {
       "checked": 46,
-      "maxDeltaE": 18.69,
+      "maxDeltaE": 18.88,
       "perComponent": [
         {
           "componentId": null,
@@ -16,39 +16,35 @@ STATUS pass=complete completed=8 blocked=all build passes completed next=diagnos
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 10.98
+          "deltaE": 11.25
         },
         {
           "componentId": null,
-          "deltaE": 10.98
+          "deltaE": 11.25
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 1.08
         },
         {
           "componentId": null,
-          "deltaE": 10.98
+          "deltaE": 11.25
         },
         {
           "componentId": null,
-          "deltaE": 18.69
-        },
-        {
-          "componentId": null,
-          "deltaE": 14.25
+          "deltaE": 18.88
         },
         {
           "componentId": null,
@@ -56,55 +52,47 @@ STATUS pass=complete completed=8 blocked=all build passes completed next=diagnos
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 14.25
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 10.98
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 11.25
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 10.98
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 2.51
+          "deltaE": 11.25
         },
         {
           "componentId": null,
-          "deltaE": 2.51
+          "deltaE": 2.52
         },
         {
           "componentId": null,
-          "deltaE": 5.95
-        },
-        {
-          "componentId": null,
-          "deltaE": 2.51
-        },
-        {
-          "componentId": null,
-          "deltaE": 2.51
+          "deltaE": 2.52
         },
         {
           "componentId": null,
@@ -112,98 +100,110 @@ STATUS pass=complete completed=8 blocked=all build passes completed next=diagnos
         },
         {
           "componentId": null,
-          "deltaE": 6.1
+          "deltaE": 2.52
         },
         {
           "componentId": null,
-          "deltaE": 6.1
+          "deltaE": 2.52
         },
         {
           "componentId": null,
-          "deltaE": 6.1
+          "deltaE": 5.95
         },
         {
           "componentId": null,
-          "deltaE": 6.45
+          "deltaE": 5.98
         },
         {
           "componentId": null,
-          "deltaE": 6.45
+          "deltaE": 5.98
         },
         {
           "componentId": null,
-          "deltaE": 4.32
+          "deltaE": 5.98
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 6.36
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 6.36
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 4.11
         },
         {
           "componentId": null,
-          "deltaE": 5.48
+          "deltaE": 1.08
         },
         {
           "componentId": null,
-          "deltaE": 2.07
+          "deltaE": 1.08
         },
         {
           "componentId": null,
-          "deltaE": 5.73
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 5.73
+          "deltaE": 5.16
         },
         {
           "componentId": null,
-          "deltaE": 5.73
+          "deltaE": 1.95
         },
         {
           "componentId": null,
-          "deltaE": 5.73
+          "deltaE": 5.86
         },
         {
           "componentId": null,
-          "deltaE": 5.73
+          "deltaE": 5.86
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 5.86
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 5.86
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 5.86
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 1.08
         },
         {
           "componentId": null,
-          "deltaE": 0.98
+          "deltaE": 1.08
+        },
+        {
+          "componentId": null,
+          "deltaE": 1.08
+        },
+        {
+          "componentId": null,
+          "deltaE": 1.08
+        },
+        {
+          "componentId": null,
+          "deltaE": 1.08
         }
       ],
       "gated": true
     }
   },
   "failures": [
-    "silhouette IoU 0.722 is below threshold 0.85",
+    "silhouette IoU 0.702 is below threshold 0.85",
     "aspect-ratio delta 0.114 exceeds threshold 0.05",
     "scale delta 0.114 exceeds threshold 0.08"
   ],
   "maskWarnings": [],
-  "renderHash": "debb6b89f5e2134d",
+  "renderHash": "a5456a1406bcbaa5",
   "passId": "optimization-pass"
 }
