@@ -332,7 +332,7 @@ if V3:
         stations = []
         for i, f in enumerate((-0.3, 0.0, 0.35, 0.7, 1.0)):
             q = [p[k] + d[k] * f * length + bend[k] * (max(f, 0) ** 2) * length for k in range(3)]
-            r = root_r * (1.0, 0.95, 0.75, 0.5, 0.26)[i]  # chunky clumps with blunt tips (tip/root 0.26)
+            r = root_r * (1.0, 0.95, 0.82, 0.64, 0.46)[i]  # v4: rounded clump tips (tip/root 0.46, the validator caps 0.55)
             stations.append({"position": r4(q), "rx": round(r, 5), "rz": round(r * 0.8, 5)})
         c = part(cid, name, "tapered-sweep", "head", (0, 0, 0), (1, 1, 1), material, role="hair", level="micro",
                  importance=0.5, features=[{"id": f"{cid}-clump", "kind": "contour", "notes": f"{family} clump"}],
@@ -345,9 +345,10 @@ if V3:
     S = K  # authoring lengths below are in pre-scale head units
     # crown clumps lean out and back (a mop), tips curling down, so they break the side/back outline without
     # raising the hair top (the head-to-height ratio is measured hair top to chin)
-    crown = [((0.62, 0.55, 0.35), (0.4, -1.0, 0.2)), ((-0.62, 0.55, 0.3), (-0.4, -1.0, 0.2)),
-             ((0.5, 0.5, -0.62), (0.3, -1.0, -0.3)), ((-0.5, 0.5, -0.62), (-0.3, -1.0, -0.3)),
-             ((0.0, 0.55, -0.85), (0.0, -1.0, -0.4))]
+    # v4: less outward lean (lateral components and bends roughly halved) so the crown reads soft, not spiky
+    crown = [((0.45, 0.5, 0.35), (0.15, -1.0, 0.1)), ((-0.45, 0.5, 0.3), (-0.15, -1.0, 0.1)),
+             ((0.35, 0.48, -0.62), (0.1, -1.0, -0.15)), ((-0.35, 0.48, -0.62), (-0.1, -1.0, -0.15)),
+             ((0.0, 0.5, -0.8), (0.0, -1.0, -0.2))]
     for i, (d, bend) in enumerate(crown):
         tuft(f"hair-tuft-{i + 1}", f"Hair tuft {i + 1} (crown)", d, bend, 0.04 * S, 0.06 * S, "hair-light", "crown")
     for i, x in enumerate((-0.42, 0.0, 0.42)):

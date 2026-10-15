@@ -1,15 +1,15 @@
 {
-  "figureHeightModel": 0.92304,
-  "headFraction": 0.2399,
-  "headToHeight": "1:4.17",
+  "figureHeightModel": 0.92745,
+  "headFraction": 0.2436,
+  "headToHeight": "1:4.11",
   "walk": {
     "duration": 1.0,
     "speedH": 0.4,
-    "travelModel": 0.36922,
+    "travelModel": 0.37098,
     "contact": 0.58,
     "riseH": 0.02,
-    "stepModel": 0.18461,
-    "excursionModel": 0.21415,
+    "stepModel": 0.18549,
+    "excursionModel": 0.21517,
     "hipDropAtDoubleSupport": 0.0185,
     "legReachMax": 0.31462,
     "reachMargin": 0.003
