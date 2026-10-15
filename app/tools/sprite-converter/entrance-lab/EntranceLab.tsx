@@ -8,6 +8,10 @@ import * as main from '@/lib/city/models/legoHqMainEntrance';
 import * as avatarFactory from '@/lib/city/models/gustavAvatar';
 import { createGustavAvatar, skinnedBounds, type AvatarRig, type AvatarStage, type AvatarBinding } from '@/lib/city/models/gustavAvatarRig';
 import * as avatarHarness from '@/lib/city/models/gustavAvatarHarness';
+import * as workshop from '@/lib/city/models/workshop';
+import * as rooms from '@/lib/city/models/legoCampusRooms';
+import * as hqRooms from '@/lib/city/models/legoHqRooms';
+import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
 // krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
@@ -38,6 +42,8 @@ type ModelConfig = {
   travel: number;
   // Reference framing: output size, ortho half-width and look-at target matching the aerial crop
   reference: { width: number; height: number; halfW: number; target: [number, number, number] };
+  // Optional eye-height perspective for the 'reference' view, for references that are ground photos
+  eye?: { fov: number; position: [number, number, number]; target: [number, number, number] };
   // Sun position read off the reference photo's cast shadows (for the 'photo' rig)
   sun?: { position: [number, number, number]; intensity: number };
   // Sprite view: normalise from the rest-pose bounds captured at load (animated models must not re-frame per pose)
@@ -149,6 +155,60 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0.24 * 0.04,
     reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
     restBounds: true,
+  },
+  // Cut-away workshop room (art/img2threejs/workshop); reference = phone photo from the door end
+  workshop: {
+    name: 'Workshop',
+    create: workshop.createWorkshopModel,
+    lights: workshop.createWorkshopLookDevLights,
+    environment: workshop.createWorkshopEnvironment,
+    configure: workshop.configureWorkshopRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 900, height: 1200, halfW: 1.2, target: [0, 0.6, 0] },
+    eye: { fov: 84, position: [0.15, 0.86, 1.25], target: [-0.05, 0.62, -1.0] },
+  },
+  // Roof-off LEGO HQ skeleton (board 02b, card B2): rooms = roof on, roomsOpen = roof off
+  rooms: {
+    name: 'LEGO HQ rooms (roof on)',
+    create: rooms.createLEGOCampusRoomsModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  roomsOpen: {
+    name: 'LEGO HQ rooms (roof off)',
+    create: rooms.createLEGOCampusRoomsOpenModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  // img2threejs build of the roof-off campus (art/img2threejs/lego-campus-rooms, board 02b card B3)
+  hqRooms: {
+    name: 'LEGO HQ rooms, img2threejs (roof on)',
+    create: hqRooms.createLEGOHQRoomsModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
+  },
+  hqRoomsOpen: {
+    name: 'LEGO HQ rooms, img2threejs (roof off)',
+    create: createLEGOHQRoomsRoofOffModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {
@@ -283,7 +343,9 @@ export default function EntranceLab() {
     const restBox = config.restBounds
       ? (avatar && !model.userData.avatarGroup ? skinnedBounds(model).applyMatrix4(model.matrix) : box.clone())
       : null;
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
+    const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
+    const eyeCamera = new THREE.PerspectiveCamera(config.eye?.fov ?? 60, config.reference.width / config.reference.height, 0.02, 50);
+    let camera: THREE.Camera = ortho;
 
     const apply = (o: ShotOptions) => {
       const opts = { ...initial, ...o };
@@ -322,6 +384,7 @@ export default function EntranceLab() {
         }
       }
       // Camera
+      camera = opts.view !== 'sprite' && opts.view !== 'iso' && config.eye ? eyeCamera : ortho;
       if (opts.view === 'sprite') {
         // Same maths as /tools/sprite-converter: base at y = 0 via an UNscaled offset, then
         // scale to 3 / maxDim; ortho frustum 5 / zoom split by the vertical offset; iso camera
@@ -334,8 +397,8 @@ export default function EntranceLab() {
         model.scale.setScalar(3 / Math.max(size.x, size.y, size.z));
         const frustum = 5 / (opts.zoom ?? 1);
         const voff = opts.voff ?? 0.31;
-        camera.left = -frustum / 2; camera.right = frustum / 2;
-        camera.top = frustum * (1 - voff); camera.bottom = -frustum * voff;
+        ortho.left = -frustum / 2; ortho.right = frustum / 2;
+        ortho.top = frustum * (1 - voff); ortho.bottom = -frustum * voff;
         const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
         const focus = new THREE.Vector3();
@@ -345,44 +408,50 @@ export default function EntranceLab() {
           model.updateMatrixWorld(true);
           new THREE.Box3().setFromObject(focusNode).getCenter(focus);
         }
-        camera.position.set(focus.x + 10 * Math.cos(iso) * Math.sin(yaw), focus.y + 10 * Math.sin(iso), focus.z + 10 * Math.cos(iso) * Math.cos(yaw));
-        camera.lookAt(focus);
+        ortho.position.set(focus.x + 10 * Math.cos(iso) * Math.sin(yaw), focus.y + 10 * Math.sin(iso), focus.z + 10 * Math.cos(iso) * Math.cos(yaw));
+        ortho.lookAt(focus);
         renderer.setSize(opts.size ?? 384, opts.size ?? 384, false);
       } else if (opts.view === 'iso') {
         const size = box.getSize(new THREE.Vector3());
         const centre = box.getCenter(new THREE.Vector3());
         const half = Math.max(size.x, size.z) * 0.62;
-        const iso = Math.atan(1 / Math.sqrt(2));
+        const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
-        camera.position.set(centre.x + 40 * Math.cos(iso) * Math.sin(yaw), centre.y + 40 * Math.sin(iso), centre.z + 40 * Math.cos(iso) * Math.cos(yaw));
-        camera.lookAt(centre);
-        camera.left = -half; camera.right = half; camera.top = half; camera.bottom = -half;
+        ortho.position.set(centre.x + 40 * Math.cos(iso) * Math.sin(yaw), centre.y + 40 * Math.sin(iso), centre.z + 40 * Math.cos(iso) * Math.cos(yaw));
+        ortho.lookAt(centre);
+        ortho.left = -half; ortho.right = half; ortho.top = half; ortho.bottom = -half;
         let width = opts.size ?? 512, height = opts.size ?? 512;
         if (opts.fit) {
           // Crop the frustum to the model's projected bounds so area-based gate checks compare
           // like with like (a long wall in a square frame reads as a false collapse).
-          camera.updateMatrixWorld();
+          ortho.updateMatrixWorld();
           const local = [0, 1].flatMap((i) => [0, 1].flatMap((j) => [0, 1].map((k) => new THREE.Vector3(
             i ? box.max.x : box.min.x, j ? box.max.y : box.min.y, k ? box.max.z : box.min.z,
-          ).applyMatrix4(camera.matrixWorldInverse))));
+          ).applyMatrix4(ortho.matrixWorldInverse))));
           const xs = local.map((v) => v.x), ys = local.map((v) => v.y);
           const m = 0.04 * (Math.max(...xs) - Math.min(...xs));
-          camera.left = Math.min(...xs) - m; camera.right = Math.max(...xs) + m;
-          camera.bottom = Math.min(...ys) - m; camera.top = Math.max(...ys) + m;
+          ortho.left = Math.min(...xs) - m; ortho.right = Math.max(...xs) + m;
+          ortho.bottom = Math.min(...ys) - m; ortho.top = Math.max(...ys) + m;
           width = 1024;
-          height = Math.round(width * (camera.top - camera.bottom) / (camera.right - camera.left));
+          height = Math.round(width * (ortho.top - ortho.bottom) / (ortho.right - ortho.left));
         }
         renderer.setSize(width, height, false);
+      } else if (config.eye) {
+        camera = eyeCamera;
+        eyeCamera.position.set(...config.eye.position);
+        eyeCamera.lookAt(new THREE.Vector3(...config.eye.target));
+        eyeCamera.updateProjectionMatrix();
+        renderer.setSize(config.reference.width, config.reference.height, false);
       } else {
         const { width, height, halfW } = config.reference;
-        camera.left = -halfW; camera.right = halfW; camera.top = halfW * height / width; camera.bottom = -halfW * height / width;
+        ortho.left = -halfW; ortho.right = halfW; ortho.top = halfW * height / width; ortho.bottom = -halfW * height / width;
         const elev = THREE.MathUtils.degToRad(opts.elev ?? 30);
         const target = new THREE.Vector3(...config.reference.target);
-        camera.position.set(target.x, target.y + 40 * Math.sin(elev), target.z + 40 * Math.cos(elev));
-        camera.lookAt(target);
+        ortho.position.set(target.x, target.y + 40 * Math.sin(elev), target.z + 40 * Math.cos(elev));
+        ortho.lookAt(target);
         renderer.setSize(width, height, false);
       }
-      camera.updateProjectionMatrix();
+      ortho.updateProjectionMatrix();
       renderer.render(scene, camera);
       setLabel(`${opts.view} · ${opts.rig}${opts.stripped ? ' · stripped' : ''} · open ${(opts.open ?? 0).toFixed(2)}`);
     };

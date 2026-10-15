@@ -35,6 +35,13 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
+  // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites)
+  openSprites?: {
+    south: string;
+    west?: string;
+    north?: string;
+    east?: string;
+  };
   icon: string; // Emoji for UI
   supportsRotation?: boolean;
   isDecoration?: boolean; // If true, preserves underlying tile (like props)
@@ -80,15 +87,21 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // img2threejs campus rendered at 30 deg pitch with converter settings computed for a 7x7 footprint
-    // (zoom 0.945, vertical offset 0.235), so the sprite sits on its footprint without collision padding.
+    // Roof-off skeleton (art/img2threejs/lego-campus-rooms): one room per campus block. Rendered at 30 deg
+    // pitch with converter settings for a 7x7 footprint (zoom 0.945, vertical offset 0.197).
     footprint: { width: 7, height: 7 },
     triggerZoneRadius: 5.5,
     sprites: {
-      south: "/game/pogicity/Building/landmark/lego-hq_south.png",
-      north: "/game/pogicity/Building/landmark/lego-hq_north.png",
-      east: "/game/pogicity/Building/landmark/lego-hq_east.png",
-      west: "/game/pogicity/Building/landmark/lego-hq_west.png",
+      south: "/game/pogicity/Building/landmark/lego-hq-rooms_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-rooms_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-rooms_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-rooms_west.png",
+    },
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/lego-hq-rooms-open_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-rooms-open_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-rooms-open_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-rooms-open_west.png",
     },
     icon: "🧱",
     projectSlug: "lego",

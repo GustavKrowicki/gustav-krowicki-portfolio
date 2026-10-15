@@ -1,0 +1,13 @@
+# Per-building working files stay local (README "Not in the repo"): reference photos, generated specs,
+# factory drafts, renders and the skill's resumable state. The repo is public.
+*/ref/
+*/src/
+*/renders/
+*/object-sculpt-spec.json
+*/_prev_spec.json
+*/strict-validation.txt
+*/.img2threejs/
+*/detail-zones/
+*/material-crops/
+*/admission.json
+*/probe.json

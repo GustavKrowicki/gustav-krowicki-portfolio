@@ -96,6 +96,10 @@ export class MainScene extends Phaser.Scene {
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  // Building sprite key -> what it shows, so a roof-off swap can re-texture it in place
+  private buildingSpriteInfo: Map<string, { buildingId: string; orientation?: Direction }> = new Map();
+  // Buildings with openSprites whose roof is off (player inside the trigger zone)
+  private openBuildings: Set<string> = new Set();
   private glowSprites: Map<string, Phaser.GameObjects.GameObject> = new Map();
   private carSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
   private characterSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
@@ -220,6 +224,9 @@ export class MainScene extends Phaser.Scene {
       for (const [dir, path] of Object.entries(building.sprites)) {
         const key = `${building.id}_${dir}`;
         this.load.image(key, path);
+      }
+      for (const [dir, path] of Object.entries(building.openSprites ?? {})) {
+        this.load.image(`${building.id}_open_${dir}`, path);
       }
     }
 
@@ -1640,9 +1647,11 @@ export class MainScene extends Phaser.Scene {
     // Set up trigger zone callbacks
     this.triggerZoneManager.setCallbacks({
       onEnterZone: (zone, tourStop) => {
+        this.setBuildingOpen(zone.buildingId, true);
         this.events.emit("playerEnteredZone", { buildingId: zone.buildingId, tourStop });
       },
       onExitZone: (zone) => {
+        this.setBuildingOpen(zone.buildingId, false);
         this.events.emit("playerExitedZone", { buildingId: zone.buildingId });
       },
     });
@@ -2156,6 +2165,7 @@ export class MainScene extends Phaser.Scene {
     this.tileSprites.clear();
     this.buildingSprites.forEach((sprite) => sprite.destroy());
     this.buildingSprites.clear();
+    this.buildingSpriteInfo.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2191,6 +2201,7 @@ export class MainScene extends Phaser.Scene {
       sprite.destroy();
       this.buildingSprites.delete(buildingKey);
     }
+    this.buildingSpriteInfo.delete(buildingKey);
 
     for (let i = 1; i < 20; i++) {
       const sliceKey = `${buildingKey}_s${i}`;
@@ -2233,10 +2244,37 @@ export class MainScene extends Phaser.Scene {
     sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
 
     this.buildingSprites.set(key, sprite);
+    this.buildingSpriteInfo.set(key, { buildingId, orientation });
+  }
+
+  // Roof off / on: cross-fade the building's sprite to its open (or closed) texture
+  private setBuildingOpen(buildingId: string, open: boolean): void {
+    const building = getBuilding(buildingId);
+    if (!building?.openSprites || this.openBuildings.has(buildingId) === open) return;
+    if (open) this.openBuildings.add(buildingId);
+    else this.openBuildings.delete(buildingId);
+
+    this.buildingSpriteInfo.forEach((info, key) => {
+      if (info.buildingId !== buildingId) return;
+      const sprite = this.buildingSprites.get(key);
+      const textureKey = this.getBuildingTextureKey(building, info.orientation);
+      if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
+      const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
+      previous.setOrigin(0.5, 1);
+      previous.setDepth(sprite.depth + 0.001);
+      sprite.setTexture(textureKey);
+      this.tweens.add({ targets: previous, alpha: 0, duration: 450, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
+    });
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
+
+    if (this.openBuildings.has(building.id) && building.openSprites) {
+      const openKey = `${building.id}_open_${dir}`;
+      if (this.textures.exists(openKey)) return openKey;
+      if (this.textures.exists(`${building.id}_open_south`)) return `${building.id}_open_south`;
+    }
 
     if (building.sprites[dir as keyof typeof building.sprites]) {
       return `${building.id}_${dir}`;
