@@ -4,7 +4,7 @@ import { chromium } from 'playwright';
 const [, , model, name, pitch = '30', yaw = '45'] = process.argv;
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH, args: ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: 1300, height: 1400 } });
-await page.goto(`http://localhost:3100/tools/sprite-converter/entrance-lab?model=${model}`, { waitUntil: 'networkidle', timeout: 300000 });
+await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/tools/sprite-converter/entrance-lab?model=${model}`, { waitUntil: 'networkidle', timeout: 300000 });
 await page.waitForFunction(() => typeof window.__shoot === 'function', null, { timeout: 300000 });
 await page.waitForTimeout(1500);
 const o = { view: 'iso', fit: true, pitch: Number(pitch), yaw: Number(yaw), rig: 'lookdev', bg: 'ffffff', tone: 'neutral' };

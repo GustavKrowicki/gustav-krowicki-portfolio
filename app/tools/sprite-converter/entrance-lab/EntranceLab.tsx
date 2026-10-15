@@ -12,6 +12,8 @@ import * as workshop from '@/lib/city/models/workshop';
 import * as rooms from '@/lib/city/models/legoCampusRooms';
 import * as hqRooms from '@/lib/city/models/legoHqRooms';
 import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
+import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
+import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
 // krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
@@ -87,6 +89,20 @@ function avatarScene(kind: 'entrance' | 'campus'): THREE.Group {
     avatar.position.copy(at.add(out.multiplyScalar(0.6 * unit))).setY(Number.isFinite(floor) ? floor : ground);
     avatar.lookAt(avatar.position.clone().add(out));
   }
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The avatar with the LEGO HQ at avatar scale (both in wu): at the main door (roof on) or in the Workshop (roof off).
+function avatarHqScene(open: boolean): THREE.Group {
+  const group = new THREE.Group();
+  const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  // plan tile (gx, gy) -> model (gx - 4, gy - 4); the plot top is at y = 0.06
+  if (open) { avatar.position.set(5.2 - 4, 0.06, 2.2 - 4); avatar.rotation.y = -Math.PI / 4; }
+  else avatar.position.set(4.5 - 4, 0.06, 7.55 - 4);
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   return group;
@@ -209,6 +225,79 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
+  },
+  // LEGO HQ rebuilt at avatar scale (art/img2threejs/lego-hq-avatar, board 529:3604): roof on, and roof off per sprite view
+  hqAvatar: {
+    name: 'LEGO HQ at avatar scale (roof on)',
+    create: createLEGOHQAvatarRoofOnModel,
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpen: {
+    name: 'LEGO HQ at avatar scale (roof off, south view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'south' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenWest: {
+    name: 'LEGO HQ at avatar scale (roof off, west view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'west' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenNorth: {
+    name: 'LEGO HQ at avatar scale (roof off, north view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'north' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenEast: {
+    name: 'LEGO HQ at avatar scale (roof off, east view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'east' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  'avatar-hq': {
+    name: 'Gustav avatar at the LEGO HQ main door (avatar scale)',
+    create: () => avatarHqScene(false),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  'avatar-hq-open': {
+    name: 'Gustav avatar in the LEGO HQ Workshop (roof off)',
+    create: () => avatarHqScene(true),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+    restBounds: true,
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {

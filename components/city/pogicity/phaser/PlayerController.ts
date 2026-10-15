@@ -49,6 +49,12 @@ export interface PathNode {
   parent: PathNode | null;
 }
 
+export interface InteriorRules {
+  /** null when (x, y) is not inside a walk-in building */
+  isWalkable(x: number, y: number): boolean | null;
+  canStep(fromX: number, fromY: number, toX: number, toY: number): boolean;
+}
+
 export class PlayerController {
   private scene: Phaser.Scene;
   private grid: GridCell[][];
@@ -92,6 +98,12 @@ export class PlayerController {
   // Tiles blocked by building collision padding
   private blockedTiles: Set<string> = new Set();
 
+  // Walk-in buildings (lib/city/buildingInteriors.ts): per-tile walkability inside footprints and per-step door rules
+  private interiorRules: InteriorRules | null = null;
+
+  // Drawn above a walk-in building while the player stands in its footprint (null = normal depth sort)
+  private depthOverride: number | null = null;
+
   // Ready state
   private isReady: boolean = false;
 
@@ -106,6 +118,18 @@ export class PlayerController {
 
   setBlockedTiles(tiles: Set<string>): void {
     this.blockedTiles = tiles;
+  }
+
+  setInteriorRules(rules: InteriorRules | null): void {
+    this.interiorRules = rules;
+  }
+
+  setDepthOverride(depth: number | null): void {
+    this.depthOverride = depth;
+  }
+
+  private canStep(fromX: number, fromY: number, toX: number, toY: number): boolean {
+    return this.interiorRules ? this.interiorRules.canStep(fromX, fromY, toX, toY) : true;
   }
 
   setOnReachDestination(callback: (buildingId: string) => void): void {
@@ -219,7 +243,7 @@ export class PlayerController {
       // Update facing direction
       this.direction = this.inputDirection;
 
-      if (this.isWalkable(newGridX, newGridY)) {
+      if (this.isWalkable(newGridX, newGridY) && this.canStep(this.gridX, this.gridY, newGridX, newGridY)) {
         this.targetGridX = newGridX;
         this.targetGridY = newGridY;
 
@@ -385,6 +409,7 @@ export class PlayerController {
 
         if (closedSet.has(neighborKey)) continue;
         if (!this.isWalkable(neighbor.x, neighbor.y)) continue;
+        if (!this.canStep(current.x, current.y, neighbor.x, neighbor.y)) continue;
 
         const g = current.g + 1;
         const h = this.heuristic(neighbor.x, neighbor.y, endX, endY);
@@ -428,7 +453,7 @@ export class PlayerController {
     const walkable: Direction[] = [];
     for (const dir of [Direction.Up, Direction.Down, Direction.Left, Direction.Right]) {
       const vec = directionVectors[dir];
-      if (this.isWalkable(this.gridX + vec.dx, this.gridY + vec.dy)) {
+      if (this.isWalkable(this.gridX + vec.dx, this.gridY + vec.dy) && this.canStep(this.gridX, this.gridY, this.gridX + vec.dx, this.gridY + vec.dy)) {
         walkable.push(dir);
       }
     }
@@ -438,6 +463,8 @@ export class PlayerController {
   private isWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     if (this.blockedTiles.has(`${x},${y}`)) return false;
+    const inside = this.interiorRules?.isWalkable(x, y);
+    if (inside !== null && inside !== undefined) return inside;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
 
@@ -509,7 +536,7 @@ export class PlayerController {
       // This ensures correct depth sorting with buildings while keeping smooth movement
       const screenPos = gridToScreen(this.gridX, this.gridY);
       const groundY = screenPos.y + TILE_HEIGHT / 2;
-      this.sprite.setDepth(depthFromSortPoint(screenPos.x, groundY, 0.3));
+      this.sprite.setDepth(this.depthOverride ?? depthFromSortPoint(screenPos.x, groundY, 0.3));
 
       // Update animation
       if (this.scene.textures.exists(textureKey)) {
@@ -566,6 +593,10 @@ export class PlayerController {
       worldX: this.worldX,
       worldY: this.worldY,
     };
+  }
+
+  getTargetGrid(): { x: number; y: number } {
+    return { x: this.targetGridX, y: this.targetGridY };
   }
 
   getDirection(): Direction {

@@ -35,7 +35,10 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
-  // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites)
+  // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
+  spriteScale?: number;
+  // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
+  // walk-in buildings (lib/city/buildingInteriors.ts) show it while the player is inside, past the main door
   openSprites?: {
     south: string;
     west?: string;
@@ -87,21 +90,24 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // Roof-off skeleton (art/img2threejs/lego-campus-rooms): one room per campus block. Rendered at 30 deg
-    // pitch with converter settings for a 7x7 footprint (zoom 0.945, vertical offset 0.197).
-    footprint: { width: 7, height: 7 },
+    // The real campus rebuilt at the 3D avatar's scale (art/img2threejs/lego-hq-avatar, board section 529:3604):
+    // 8 x 8 tiles, wings 2 storeys, atrium and yellow blocks 3, main door south under the yellow 2x4 plate.
+    // Sprites at 2x density (768 px, converter zoom 1.0803, vertical offset 0.2250), drawn at 0.5. Walk-in: the
+    // roof comes off when the player walks through the main door (lib/city/buildingInteriors.ts).
+    footprint: { width: 8, height: 8 },
     triggerZoneRadius: 5.5,
+    spriteScale: 0.5,
     sprites: {
-      south: "/game/pogicity/Building/landmark/lego-hq-rooms_south.png",
-      north: "/game/pogicity/Building/landmark/lego-hq-rooms_north.png",
-      east: "/game/pogicity/Building/landmark/lego-hq-rooms_east.png",
-      west: "/game/pogicity/Building/landmark/lego-hq-rooms_west.png",
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar_west.png",
     },
     openSprites: {
-      south: "/game/pogicity/Building/landmark/lego-hq-rooms-open_south.png",
-      north: "/game/pogicity/Building/landmark/lego-hq-rooms-open_north.png",
-      east: "/game/pogicity/Building/landmark/lego-hq-rooms-open_east.png",
-      west: "/game/pogicity/Building/landmark/lego-hq-rooms-open_west.png",
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar-open_west.png",
     },
     icon: "🧱",
     projectSlug: "lego",

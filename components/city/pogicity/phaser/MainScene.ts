@@ -47,6 +47,7 @@ import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isInteriorDoor } from "@/lib/city/buildingInteriors";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -98,8 +99,10 @@ export class MainScene extends Phaser.Scene {
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   // Building sprite key -> what it shows, so a roof-off swap can re-texture it in place
   private buildingSpriteInfo: Map<string, { buildingId: string; orientation?: Direction }> = new Map();
-  // Buildings with openSprites whose roof is off (player inside the trigger zone)
+  // Buildings with openSprites whose roof is off (walk-in buildings: player inside; others: player in the trigger zone)
   private openBuildings: Set<string> = new Set();
+  // Walk-in building tiles: "x,y" -> the building and the tile's local position in its interior map
+  private interiorTiles: Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }> = new Map();
   private glowSprites: Map<string, Phaser.GameObjects.GameObject> = new Map();
   private carSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
   private characterSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
@@ -412,6 +415,9 @@ export class MainScene extends Phaser.Scene {
 
     // Alert nearby NPCs
     this.npcManager.alertNearbyNPCs(playerPos.gridX, playerPos.gridY, TRIGGER_ZONE_RADIUS + 1);
+
+    // Walk-in buildings: roof off while inside, player drawn above the building while in its footprint
+    this.updateInteriorState(playerPos.gridX, playerPos.gridY);
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -1595,6 +1601,55 @@ export class MainScene extends Phaser.Scene {
   private highlightedBuildingId: string | null = null;
   private highlightSprite: Phaser.GameObjects.Graphics | null = null;
 
+  // Walk-in buildings (default orientation only): index every footprint tile against its interior map
+  private computeInteriorTiles(): Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }> {
+    const tiles = new Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }>();
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (!cell?.isOrigin || !cell.buildingId) continue;
+        const interior = BUILDING_INTERIORS[cell.buildingId];
+        if (!interior || (cell.buildingOrientation && cell.buildingOrientation !== Direction.Down)) continue;
+        interior.map.forEach((row, ly) => {
+          for (let lx = 0; lx < row.length; lx++) {
+            tiles.set(`${x + lx},${y + ly}`, { buildingId: cell.buildingId!, key: `building_${x},${y}`, interior, lx, ly });
+          }
+        });
+      }
+    }
+    return tiles;
+  }
+
+  // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
+  // through the building's outside rooms (the plaza)
+  private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
+    const a = this.interiorTiles.get(`${fx},${fy}`);
+    const b = this.interiorTiles.get(`${tx},${ty}`);
+    if (!a && !b) return true;
+    const ca = a ? interiorCode(a.interior, a.lx, a.ly) : null;
+    const cb = b ? interiorCode(b.interior, b.lx, b.ly) : null;
+    if (b && !cb) return false;
+    if (a && b) {
+      if (a.key !== b.key) return false;
+      return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
+    }
+    if (b) return b.interior.outside.includes(cb!);
+    return !ca || a!.interior.outside.includes(ca);
+  }
+
+  private updateInteriorState(gridX: number, gridY: number): void {
+    if (!this.playerController) return;
+    const here = this.interiorTiles.get(`${gridX},${gridY}`);
+    const target = this.playerController.getTargetGrid();
+    const next = this.interiorTiles.get(`${target.x},${target.y}`);
+    const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
+    const inside = !!here && !!code && !here.interior.outside.includes(code);
+    for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    const tile = here ?? next;
+    const sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
+    this.playerController.setDepthOverride(sprite ? sprite.depth + 0.5 : null);
+  }
+
   // Compute tiles blocked by building sprite overhang (collision padding)
   private computeBlockedTiles(): Set<string> {
     const blocked = new Set<string>();
@@ -1643,15 +1698,24 @@ export class MainScene extends Phaser.Scene {
     // Compute collision padding blocked tiles and pass to player controller
     this.blockedTiles = this.computeBlockedTiles();
     this.playerController.setBlockedTiles(this.blockedTiles);
+    this.interiorTiles = this.computeInteriorTiles();
+    this.playerController.setInteriorRules({
+      isWalkable: (x, y) => {
+        const t = this.interiorTiles.get(`${x},${y}`);
+        return t ? interiorCode(t.interior, t.lx, t.ly) !== null : null;
+      },
+      canStep: (fx, fy, tx, ty) => this.canStepInterior(fx, fy, tx, ty),
+    });
 
     // Set up trigger zone callbacks
     this.triggerZoneManager.setCallbacks({
       onEnterZone: (zone, tourStop) => {
-        this.setBuildingOpen(zone.buildingId, true);
+        // Walk-in buildings open only through their main door (updateInteriorState)
+        if (!BUILDING_INTERIORS[zone.buildingId]) this.setBuildingOpen(zone.buildingId, true);
         this.events.emit("playerEnteredZone", { buildingId: zone.buildingId, tourStop });
       },
       onExitZone: (zone) => {
-        this.setBuildingOpen(zone.buildingId, false);
+        if (!BUILDING_INTERIORS[zone.buildingId]) this.setBuildingOpen(zone.buildingId, false);
         this.events.emit("playerExitedZone", { buildingId: zone.buildingId });
       },
     });
@@ -1834,6 +1898,8 @@ export class MainScene extends Phaser.Scene {
   private isPlayerWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     if (this.blockedTiles.has(`${x},${y}`)) return false;
+    const inside = this.interiorTiles.get(`${x},${y}`);
+    if (inside) return interiorCode(inside.interior, inside.lx, inside.ly) !== null;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
     const t = cell.type;
@@ -2241,6 +2307,7 @@ export class MainScene extends Phaser.Scene {
     // Simple rendering (without slicing for performance)
     const sprite = this.add.image(screenPos.x, bottomY, textureKey);
     sprite.setOrigin(0.5, 1);
+    sprite.setScale(building.spriteScale ?? 1);
     sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
 
     this.buildingSprites.set(key, sprite);
@@ -2261,6 +2328,7 @@ export class MainScene extends Phaser.Scene {
       if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
       const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
       previous.setOrigin(0.5, 1);
+      previous.setScale(sprite.scaleX, sprite.scaleY);
       previous.setDepth(sprite.depth + 0.001);
       sprite.setTexture(textureKey);
       this.tweens.add({ targets: previous, alpha: 0, duration: 450, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });

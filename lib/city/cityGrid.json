@@ -12350,12 +12350,14 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 32,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 32
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -12769,12 +12771,11 @@
       "type": "building",
       "x": 15,
       "y": 33,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 33,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "right",
-      "underlyingTileType": "tile"
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -13203,12 +13204,14 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 34,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 34
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -13631,12 +13634,14 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 35,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 35
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -14032,12 +14037,11 @@
       "type": "building",
       "x": 15,
       "y": 36,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 36,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "right",
-      "underlyingTileType": "tile"
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -14458,12 +14462,14 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 37,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 37
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -14875,12 +14881,14 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 38,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 38
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
@@ -15187,68 +15195,84 @@
       "originY": 36
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 8,
       "y": 39,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 8,
-      "originY": 39
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 9,
       "y": 39,
-      "isOrigin": true,
-      "originX": 9,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 10,
       "y": 39,
-      "isOrigin": true,
-      "originX": 10,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 11,
       "y": 39,
-      "isOrigin": true,
-      "originX": 11,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 12,
       "y": 39,
-      "isOrigin": true,
-      "originX": 12,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 13,
       "y": 39,
-      "isOrigin": true,
-      "originX": 13,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 14,
       "y": 39,
-      "isOrigin": true,
-      "originX": 14,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 15,
       "y": 39,
-      "isOrigin": true,
-      "originX": 15,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 32,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "road",
