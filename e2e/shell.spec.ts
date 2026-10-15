@@ -52,3 +52,34 @@ test("closing the panel gives the city more room", async ({ page }, testInfo) =>
   await page.getByRole("button", { name: "Home" }).click();
   await expect.poll(async () => (await canvasSize(page))[axis]).toBeLessThan(open + 2);
 });
+
+test("the URL keeps the open section and case", async ({ page }) => {
+  await page.goto("/new?s=work&case=lego");
+  const panel = page.getByTestId("shell-panel");
+  const rail = page.getByRole("navigation", { name: "Portfolio sections" });
+
+  // A shared link opens the case directly, with Back leading to the section in the URL
+  await expect(
+    panel.getByRole("heading", { name: /designing for autonomy in a supervised system/i })
+  ).toBeVisible();
+  await expect(panel.getByRole("button", { name: "Back to Work" })).toBeVisible();
+
+  // Each step is a history entry: browser Back closes the case, then returns to Home
+  await rail.getByRole("button", { name: "CV" }).click();
+  await expect(page).toHaveURL(/\?s=cv$/);
+  await page.goBack();
+  await expect(page).toHaveURL(/\?s=work&case=lego$/);
+  await expect(panel.getByRole("button", { name: "Back to Work" })).toBeVisible();
+
+  await panel.getByRole("button", { name: "Back to Work" }).click();
+  await expect(page).toHaveURL(/\?s=work$/);
+  await page.reload();
+  await expect(rail.getByRole("button", { name: "Work" })).toHaveAttribute("aria-current", "page");
+});
+
+test("an unknown section or case in the URL falls back to Home", async ({ page }) => {
+  await page.goto("/new?s=nope&case=nope");
+  const rail = page.getByRole("navigation", { name: "Portfolio sections" });
+  await expect(rail.getByRole("button", { name: "Home" })).toHaveAttribute("aria-current", "page");
+  await expect(page.getByTestId("shell-panel").getByRole("button", { name: /^Back to/ })).toHaveCount(0);
+});
