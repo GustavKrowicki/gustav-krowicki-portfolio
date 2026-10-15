@@ -58,7 +58,7 @@ def outline(im, px=2):
     return ring
 
 
-walk_fps = float(sys.argv[3]) if len(sys.argv) > 3 else 8.0
+walk_fps = float(sys.argv[3]) if len(sys.argv) > 3 else 17.78  # 0.8 wu/s over a 0.36 wu, 8-frame cycle
 os.makedirs(out, exist_ok=True)
 manifest = {
     "frameWidth": FW, "frameHeight": FH,
@@ -69,6 +69,8 @@ manifest = {
             "(img2threejs, art/img2threejs/gustav-avatar) in the entrance lab's sprite view: ortho, pitch 30, "
             "converter light.",
     "yaw": meta["yaw"],
+    "laptopVisible": meta.get("laptop"),
+    "originNote": "x = the midpoint between the feet (createGustavAvatar anchor), y = the ground",
     "animations": {},
 }
 for clip, info in meta["clips"].items():

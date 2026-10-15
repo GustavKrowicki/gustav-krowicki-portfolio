@@ -13,6 +13,9 @@ const [, , outDir] = process.argv;
 mkdirSync(outDir, { recursive: true });
 
 export const YAW = { east: 45, north: -45, south: 135, west: -135 };
+// The laptop is in the LEFT hand. North and west show the character's right side, where the laptop is on the far
+// side and only pokes out behind the body (and the GIFs never show it there), so those sheets render without it.
+const LAPTOP = { east: true, north: false, south: true, west: false };
 const SUPER = 4;
 const S = 2048;
 // px per normalised unit = S*zoom/5; normalised units per wu = 3/0.9; vertical px per wu = cos30 * that.
@@ -22,11 +25,16 @@ const VOFF = 0.25;
 const CLIPS = { 'walk-in-place': { frames: 8, duration: 1.0 }, idle: { frames: 4, duration: 3.0 } };
 
 const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
-const page = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
-await page.goto(`${LAB}/tools/sprite-converter/entrance-lab?model=avatar`, { waitUntil: 'domcontentloaded' });
-await page.waitForFunction(() => window.__labReady === true, null, { timeout: 180000 });
-const meta = { supersample: SUPER, size: S, zoom: ZOOM, voff: VOFF, origin: [S / 2, S * (1 - VOFF)], yaw: YAW, clips: CLIPS, frames: [] };
+async function open(laptop) {
+  const p = await browser.newPage({ viewport: { width: 1400, height: 1000 } });
+  await p.goto(`${LAB}/tools/sprite-converter/entrance-lab?model=avatar${laptop ? '' : '&laptop=0'}`, { waitUntil: 'domcontentloaded' });
+  await p.waitForFunction(() => window.__labReady === true, null, { timeout: 180000 });
+  return p;
+}
+const pages = { true: await open(true), false: await open(false) };
+const meta = { laptop: LAPTOP, supersample: SUPER, size: S, zoom: ZOOM, voff: VOFF, origin: [S / 2, S * (1 - VOFF)], yaw: YAW, clips: CLIPS, frames: [] };
 for (const [dir, yaw] of Object.entries(YAW)) {
+  const page = pages[LAPTOP[dir]];
   for (const [clip, { frames, duration }] of Object.entries(CLIPS)) {
     for (let i = 0; i < frames; i++) {
       const t = (duration * i) / frames;
