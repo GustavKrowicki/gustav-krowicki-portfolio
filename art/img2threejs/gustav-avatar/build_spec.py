@@ -181,8 +181,11 @@ for side in ("l", "r"):
     by[f"forearm-{side}"]["attachment"]["baseRadius"] = 0.046
     by[f"forearm-{side}"]["attachment"]["endRadius"] = 0.04
 
+HEAD_K3 = float(os.environ.get("AVATAR_HEAD_K", "0.63"))  # v3: hair top to chin = 1:4.20 of H (clips-authored.json headToHeight)
 # ==== v2 refinement (Gustav's review of v1): smaller head, tighter jacket, clearer face, laptop ===================
-V2 = os.environ.get("AVATAR_V", "2") == "2"
+VERSION = int(os.environ.get("AVATAR_V", "3"))
+V2 = VERSION >= 2
+V3 = VERSION >= 3
 if V2:
     # -- tighter jacket: slimmer torso and sleeves; rounder shoulders (clavicle end = sleeve top radius)
     by["chest"]["attachment"]["baseRadius"], by["chest"]["attachment"]["endRadius"] = 0.088, 0.064
@@ -233,7 +236,7 @@ if V2:
 
     # -- smaller head: scale the head and everything on it by HEAD_K about the chin, so the neck joint stays put.
     # 0.6 takes head+hair from 0.32 H (sprite, 1:3.1) to ~0.22 H (1:4.6): the requested ~1:5, still 10 px at 48 px.
-    HEAD_K = 0.6
+    HEAD_K = 0.6 if not V3 else HEAD_K3
     head_half = by["head"]["transform"]["scale"][1] / 2
     by["head"]["transform"]["position"][1] = round(by["head"]["transform"]["position"][1] - head_half * (1 - HEAD_K), 5)
     set_dims(by["head"], [v * HEAD_K for v in by["head"]["transform"]["scale"]])
@@ -267,6 +270,93 @@ if V2:
          "laptop", role="prop", level="meso", importance=0.6,
          features=[{"id": "laptop-closed", "kind": "contour", "notes": "closed laptop, no logo"}],
          topo="A closed laptop is a thin rounded slab; at 24-48 px a box reads correctly.")
+
+# ==== v3 refinement: head 1:4.2, darker jacket with a side tone, tousled hair, <= 8k triangles ===================
+if V3:
+    import math
+
+    K = HEAD_K
+    # -- jacket form tone: sleeves and shoulders take the GIF's shaded jacket (measure_v3.py)
+    for cid in ("upper-arm-l", "upper-arm-r", "forearm-l", "forearm-r", "shoulder-l", "shoulder-r"):
+        by[cid]["material"] = "jacket-shade"
+        by[cid]["materialLayers"] = ["jacket-shade"]
+    # -- low tessellation tier (<= 8k triangles); the meshes that would drop under G2's 64 vertices are boxes,
+    # so the tee bands become flattened ellipsoids and the laptop a rounded-rectangle extrusion
+    def rect_profile(w, h, n=5):
+        # rectangle outline with n points per edge (an extrusion needs >= 64 vertices for G2; a box has 24)
+        out = []
+        for (x0, y0, x1, y1) in ((-w / 2, -h / 2, w / 2, -h / 2), (w / 2, -h / 2, w / 2, h / 2),
+                                 (w / 2, h / 2, -w / 2, h / 2), (-w / 2, h / 2, -w / 2, -h / 2)):
+            for k in range(n):
+                f = k / n
+                out.append([round(x0 + (x1 - x0) * f, 5), round(y0 + (y1 - y0) * f, 5)])
+        return out
+
+    for cid in ("tee-front", "tee-front-low"):
+        c = by[cid]
+        w, h, d = c["transform"]["scale"]
+        c["primitive"] = "extrude"
+        c["geometryDescriptor"]["profile2D"] = {"points": rect_profile(w, h), "depth": d}
+        c["geometryDescriptor"]["edgeTreatment"] = {"type": "none", "bevelRadius": 0.0, "segments": 1}
+        c["transform"]["position"][2] = round(c["transform"]["position"][2] - d / 2, 5)
+        set_dims(c, (1, 1, 1))
+    lap = by["laptop"]
+    L, Hh, D, R = 0.165, 0.115, 0.014, 0.012
+    pts = []
+    for cx, cy, a0 in ((L / 2 - R, Hh / 2 - R, 0), (-L / 2 + R, Hh / 2 - R, 90), (-L / 2 + R, -Hh / 2 + R, 180), (L / 2 - R, -Hh / 2 + R, 270)):
+        for k in range(4):
+            a = math.radians(a0 + k * 30)
+            pts.append([round(cx + R * math.cos(a), 5), round(cy + R * math.sin(a), 5)])
+    lap["primitive"] = "extrude"
+    lap["geometryDescriptor"]["profile2D"] = {"points": pts, "depth": D}
+    lap["geometryDescriptor"]["edgeTreatment"] = {"type": "none", "bevelRadius": 0.0, "segments": 1}
+    # extrusion runs along local +Z; turn it so the thin side faces the hip (+X) and centre the slab
+    lap["transform"]["position"] = r4((-0.026 - D / 2, 0.04, 0.025))
+    lap["transform"]["rotation"] = [0, math.pi / 2, 0]
+    set_dims(lap, (1, 1, 1))
+    lap["topologyRationale"] = "Closed laptop = rounded-rectangle extrusion (rounded corners read at 48 px; >= 64 vertices)."
+
+    # -- tousled hair (grimoire/character/stylized_hair_threejs.md, short-mop subset): the cap stays the scalp mass;
+    # tapered-sweep clumps break its outline: crown tufts (lighter, the GIF's top), fringe clumps that break the
+    # hairline, and sideburns in front of the ears. Head-local, after the head scaling (K).
+    cx0, cy0, cz0 = hair["transform"]["position"]
+    rx, ry, rz = [v / 2 for v in hair["transform"]["scale"]]
+
+    def on_cap(d):
+        n = math.sqrt(sum(v * v for v in d))
+        d = [v / n for v in d]
+        return [cx0 + rx * d[0], cy0 + ry * d[1], cz0 + rz * d[2]], d
+
+    def tuft(cid, name, direction, bend, length, root_r, material, family):
+        p, d = on_cap(direction)
+        stations = []
+        for i, f in enumerate((-0.3, 0.0, 0.35, 0.7, 1.0)):
+            q = [p[k] + d[k] * f * length + bend[k] * (max(f, 0) ** 2) * length for k in range(3)]
+            r = root_r * (1.0, 0.95, 0.75, 0.5, 0.26)[i]  # chunky clumps with blunt tips (tip/root 0.26)
+            stations.append({"position": r4(q), "rx": round(r, 5), "rz": round(r * 0.8, 5)})
+        c = part(cid, name, "tapered-sweep", "head", (0, 0, 0), (1, 1, 1), material, role="hair", level="micro",
+                 importance=0.5, features=[{"id": f"{cid}-clump", "kind": "contour", "notes": f"{family} clump"}],
+                 topo=f"Tapered-sweep {family} clump: broad embedded root, curved centreline, near-zero tip.")
+        c["geometryDescriptor"]["taperedSweep"] = {"stations": stations, "radialSegments": 12, "capEnds": True,
+                                                   "family": family}
+        c["standProud"] = {"againstComponentId": "head", "clearance": round(0.004 * K, 5), "maxPush": round(0.02 * K, 5),
+                           "notes": "clump roots sit on the cap, never inside the skull"}
+        return c
+
+    S = K  # authoring lengths below are in pre-scale head units
+    # crown clumps lean out and back (a mop), tips curling down, so they break the side/back outline without
+    # raising the hair top (the head-to-height ratio is measured hair top to chin)
+    crown = [((0.62, 0.55, 0.35), (0.4, -1.0, 0.2)), ((-0.62, 0.55, 0.3), (-0.4, -1.0, 0.2)),
+             ((0.5, 0.5, -0.62), (0.3, -1.0, -0.3)), ((-0.5, 0.5, -0.62), (-0.3, -1.0, -0.3)),
+             ((0.0, 0.55, -0.85), (0.0, -1.0, -0.4))]
+    for i, (d, bend) in enumerate(crown):
+        tuft(f"hair-tuft-{i + 1}", f"Hair tuft {i + 1} (crown)", d, bend, 0.04 * S, 0.06 * S, "hair-light", "crown")
+    for i, x in enumerate((-0.42, 0.0, 0.42)):
+        tuft(f"fringe-{i + 1}", f"Fringe clump {i + 1}", (x, 0.3, 1.0), (0.1 * x, -1.0, 0.3), 0.04 * S, 0.045 * S,
+             "hair", "fringe")
+    for side, sign in (("l", 1), ("r", -1)):
+        tuft(f"sideburn-{side}", f"Sideburn {side.upper()}", (sign * 1.0, -0.3, 0.35), (0, -1.0, 0.0), 0.035 * S,
+             0.03 * S, "hair", "sideburn")
 
 # ---- materials (flat, textureless; calibrated so the converter-rig render lands on the sprite medians) ----
 mat_t = copy.deepcopy(spec["materials"][0])
@@ -311,6 +401,11 @@ spec["materials"] = [
     material("glasses-frame", "Glasses frame", "plastic", "#4a4846" if V2 else col("glasses-frame", "#c9c6c0"), 0.3,
              "sprite: light pixels around the eyes; v2 darkens the frame so it reads as a line at 48 px"),
 ]
+if V3:
+    spec["materials"].append(material("jacket-shade", "Jacket, sleeves and sides (shaded tone)", "fabric", col("jacket-shade", "#a39c97"), 0.9,
+                                      f"darker 25 % of the GIF jacket band {P['jacket-shade']} (measure_v3.py)", P["jacket-shade"]))
+    spec["materials"].append(material("hair-light", "Hair, lighter top", "unknown", col("hair-light", "#7a7058"), 0.85,
+                                      f"lighter 20 % of the GIF hair band {P['hair-light']}", P["hair-light"]))
 if V2:
     spec["materials"].append(material("laptop", "Laptop (aluminium, closed)", "metal", col("laptop", "#d9dadf"), 0.4,
                                       f"east frames: light grey block at the near hip, median {P['laptop']}", P["laptop"]))
@@ -361,7 +456,7 @@ for bp in spec["buildPasses"]:
     bp["componentRefs"] = ["root"] + [cid for name in lv for cid in levels[name]]
 spec["qualityTargets"]["reviewViewpoints"] = ["sprite 30 deg pitch yaw 45 (game camera)", "front", "right 90", "rear 180", "left 270"]
 spec["lookDevTargets"]["qualityPriority"] = "game-prop"
-spec["performanceBudget"].update({"qualityPriority": "game-prop", "targetTriangles": 20000 if V2 else 6000, "maxDrawCalls": 40,
+spec["performanceBudget"].update({"qualityPriority": "game-prop", "targetTriangles": 6000 if (V3 or not V2) else 20000, "maxDrawCalls": 40,
                                   "textureSize": 256, "fpsTarget": 60,
                                   "optimizationPolicy": "low tier: one flat material per part, no textures; reads at 24-48 px"})
 spec["silhouette"] = {

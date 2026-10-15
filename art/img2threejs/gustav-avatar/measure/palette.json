@@ -19,12 +19,13 @@
   },
   "jacket": {
     "rgb": [
-      140,
-      138,
-      141
+      111,
+      107,
+      107
     ],
-    "hex": "#8c8a8d",
-    "samples": 4012
+    "hex": "#6f6b6b",
+    "samples": 9453,
+    "rule": "measure_v3.py"
   },
   "tee": {
     "rgb": [
@@ -61,5 +62,34 @@
     ],
     "hex": "#8c8a8e",
     "samples": 888
+  },
+  "jacket-v1": {
+    "rgb": [
+      140,
+      138,
+      141
+    ],
+    "hex": "#8c8a8d",
+    "samples": 4012
+  },
+  "jacket-shade": {
+    "rgb": [
+      104,
+      100,
+      99
+    ],
+    "hex": "#686463",
+    "samples": 9453,
+    "rule": "measure_v3.py"
+  },
+  "hair-light": {
+    "rgb": [
+      76,
+      71,
+      57
+    ],
+    "hex": "#4c4739",
+    "samples": 8977,
+    "rule": "measure_v3.py"
   }
 }

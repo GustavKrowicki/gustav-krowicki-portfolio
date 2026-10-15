@@ -1,9 +1,11 @@
 {
-  "skin": "#ffcfb6",
+  "skin": "#ffcfb8",
   "hair": "#625c48",
-  "jacket": "#e7e5ea",
   "tee": "#8e8574",
-  "jeans": "#2e3d57",
-  "shoes": "#1d262f",
-  "laptop": "#f2eef5"
+  "jeans": "#2e3d59",
+  "shoes": "#1a222c",
+  "laptop": "#f2eef5",
+  "jacket": "#b5b0af",
+  "jacket-shade": "#b2aba9",
+  "hair-light": "#746c57"
 }
