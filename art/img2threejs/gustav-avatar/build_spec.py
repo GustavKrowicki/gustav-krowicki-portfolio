@@ -337,8 +337,7 @@ if V3:
         c = part(cid, name, "tapered-sweep", "head", (0, 0, 0), (1, 1, 1), material, role="hair", level="micro",
                  importance=0.5, features=[{"id": f"{cid}-clump", "kind": "contour", "notes": f"{family} clump"}],
                  topo=f"Tapered-sweep {family} clump: broad embedded root, curved centreline, near-zero tip.")
-        c["geometryDescriptor"]["taperedSweep"] = {"stations": stations, "radialSegments": 12, "capEnds": True,
-                                                   "family": family}
+        c["geometryDescriptor"]["taperedSweep"] = {"stations": stations, "radialSegments": 12, "capEnds": True}
         c["standProud"] = {"againstComponentId": "head", "clearance": round(0.004 * K, 5), "maxPush": round(0.02 * K, 5),
                            "notes": "clump roots sit on the cap, never inside the skull"}
         return c
