@@ -43,7 +43,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@types/three": "^0.182.0",
-    "agentation": "^2.3.3",
+    "agentation": "^3.1.2",
     "cf": "1.0.0-beta.17",
     "eslint": "^9",
     "eslint-config-next": "16.1.1",
