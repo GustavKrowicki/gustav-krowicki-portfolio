@@ -15,8 +15,8 @@ p["objectClass"] = {
     "structureKind": ["articulated humanoid", "layered clothing over body segments"],
     "motionPotential": ["skinned skeleton", "walk cycle", "idle loop"],
     "materialFamilies": ["skin", "hair (matte)", "cotton cloth (jacket, tee)", "denim", "leather (shoes)", "thin plastic frames (glasses)"],
-    "notes": "Reference = the four 16-frame walk GIFs (56 px tall). Fixed gate view = east frame 0 at 12x (three-quarter, "
-             "face-on, carrying a laptop). Only silhouette, colour blocks and band heights are measurable at this size.",
+    "notes": "Reference = the four 16-frame walk GIFs (56 px tall). Fixed gate view = north frame 0 at 12x (three-quarter "
+             "front, no prop; the east frames carry a laptop that is not built). Only silhouette, colour blocks and band heights are measurable at this size.",
 }
 p["complexity"] = {
     "tier": "moderate",
@@ -60,9 +60,9 @@ p["detailInventory"] = {
     "scanMethod": "component-zones", "targetMinDetails": 6, "note": p["detailInventory"]["note"],
     "details": [
         d("fringe-edge", "contour", "Full fringe ends in a straight-ish edge at the brow line (0.58 of the head box), wider than the face.",
-          (0.1, 0.03, 0.8, 0.22), "meso", "geometry", CF, "hair/fringe-edge", f"{Z}/upper.png", 0.75),
+          (0.1, 0.03, 0.8, 0.22), "meso", "geometry", CF, "fringe-edge", f"{Z}/upper.png", 0.75),
         d("hair-mop-volume", "contour", "Hair mass overhangs the skull on all sides (head box 16 px wide vs ~12 px face).",
-          (0.05, 0.0, 0.9, 0.25), "macro", "geometry", CF, "hair/mop-overhang", f"{Z}/upper.png", 0.8),
+          (0.05, 0.0, 0.9, 0.25), "macro", "geometry", CF, "mop-overhang", f"{Z}/upper.png", 0.8),
         d("glasses-rims", "linework", "Thin light-grey rims around both eyes (seen east/north).",
           (0.1, 0.22, 0.6, 0.06), "micro", "geometry", CF, "glasses-frame-l", f"{R}/east-00-x12.png", 0.5),
         d("jacket-open-front", "seam", "Open jacket front: a dark olive tee band runs from the collar to the hem.",
@@ -70,9 +70,9 @@ p["detailInventory"] = {
         d("jacket-hem", "contour", "Jacket hem sits at the hip (0.71 H from the top), covering the top of the jeans.",
           (0.15, 0.66, 0.75, 0.06), "meso", "geometry", CF, "jacket-skirt", f"{Z}/middle.png", 0.75),
         d("trouser-hem", "seam", "Straight jeans break over the shoe top; dark shoes read as a separate block.",
-          (0.1, 0.88, 0.8, 0.1), "micro", "geometry", CF, "foot-l/shoe-break", f"{Z}/lower.png", 0.6),
+          (0.1, 0.88, 0.8, 0.1), "micro", "geometry", CF, "shoe-break", f"{Z}/lower.png", 0.6),
         d("cloth-matte", "gloss", "Jacket, tee and denim are matte (no highlight in any frame); shoes slightly satin.",
-          (0.1, 0.36, 0.8, 0.6), "meso", "material", MO, "jacket/matte-cotton", f"{Z}/middle.png", 0.6),
+          (0.1, 0.36, 0.8, 0.6), "meso", "material", MO, "matte-cotton", f"{Z}/middle.png", 0.6),
     ],
 }
 p["anatomy"] = json.load(open(f"{W}/anatomy.json"))["anatomy"]

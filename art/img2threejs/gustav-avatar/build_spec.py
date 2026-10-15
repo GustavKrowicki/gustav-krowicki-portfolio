@@ -31,17 +31,17 @@ tree = spec["componentTree"]
 by = {c["id"]: c for c in tree}
 template = copy.deepcopy(by["nose"])
 HU = 0.28
-REF = "ref/east-00-x12-white.png"
-EV = ["east-face-on", "north-face-on", "south-back", "west-back"]
+REF = "ref/north-00-x12-white.png"
+EV = ["north-face-on", "east-face-on", "south-back", "west-back"]
 
 spec["viewEvidence"] = [
-    {"id": "east-face-on", "view": "fixed reference: east walk frame 0, three-quarter front, 30-35 deg pitch",
-     "image": f"{W}/{REF}", "imageRegion": {"x": 0, "y": 0, "width": 1, "height": 1, "units": "normalized"},
+    {"id": "east-face-on", "view": "east walk frames, three-quarter front (carries the laptop prop, not built)",
+     "image": f"{W}/ref/east-00-x12-white.png", "imageRegion": {"x": 0, "y": 0, "width": 1, "height": 1, "units": "normalized"},
      "observations": ["mop hair wider than the face, fringe to the brows", "light frames around the eyes",
                       "light grey jacket open over a dark tee", "dark indigo jeans, dark shoes", "laptop under the arm"],
      "confidence": 0.7},
-    {"id": "north-face-on", "view": "north walk frames, three-quarter front from the other side",
-     "image": f"{W}/ref/north-00-x12.png", "imageRegion": {"x": 0, "y": 0, "width": 1, "height": 1, "units": "normalized"},
+    {"id": "north-face-on", "view": "FIXED REFERENCE: north walk frame 0, three-quarter front, game camera (yaw -45, 30 deg)",
+     "image": f"{W}/{REF}", "imageRegion": {"x": 0, "y": 0, "width": 1, "height": 1, "units": "normalized"},
      "observations": ["same palette mirrored", "tee band visible at the open front", "no laptop on this side"],
      "confidence": 0.65},
     {"id": "south-back", "view": "south walk frames, three-quarter back",
@@ -135,10 +135,10 @@ set_dims(by["mouth"], (0.05, 0.008, 0.012))
 
 # ---- hair: mop cap + fringe, both held outside the skull ----------------------------------------------
 hair = by["hair"]
-hair["transform"]["position"] = r4((0, 0.055, -0.035))
+hair["transform"]["position"] = r4((0, 0.055, -0.028))
 # A short neck: the sprite shows none between the hair and the jacket collar
 by["head"]["transform"]["position"][1] = round(by["head"]["transform"]["position"][1] - 0.035, 5)
-set_dims(hair, (0.32, 0.25, 0.32))
+set_dims(hair, (0.305, 0.245, 0.29))
 hair["standProud"] = {"againstComponentId": "head", "clearance": 0.006, "maxPush": 0.03,
                       "notes": "the cap must stay outside the skull everywhere it covers it, or the crown renders bald"}
 hair["localFeatures"] = [{"id": "mop-overhang", "kind": "contour", "notes": "cap 0.33 wide vs 0.26 skull: overhangs the sides and back"}]
@@ -150,34 +150,36 @@ hair["localFeatures"].append({"id": "fringe-edge", "kind": "contour",
 
 # ---- glasses: light rims at eye height -------------------------------------------------------------
 for side, sign in (("l", 1), ("r", -1)):
-    part(f"glasses-frame-{side}", f"Glasses rim {side.upper()}", "torus", "head", (sign * 0.052, eye_y, 0.133),
-         (0.062, 0.05, 0.012), "glasses-frame", role="rim", level="micro", importance=0.6,
+    # Rims hug the face: smaller, and turned about Y with the face curvature (feature-placement review: flat
+    # rims stuck out of the profile at the game yaw)
+    part(f"glasses-frame-{side}", f"Glasses rim {side.upper()}", "torus", "head", (sign * 0.05, eye_y, 0.127),
+         (0.05, 0.042, 0.01), "glasses-frame", role="rim", level="micro", importance=0.6, rotation=(0, sign * 0.35, 0),
          features=[{"id": f"glasses-rim-{side}", "kind": "linework", "notes": "thin light rim around the eye"}])
-part("glasses-bridge", "Glasses bridge", "box", "head", (0, eye_y + 0.006, 0.141), (0.04, 0.008, 0.01), "glasses-frame",
+part("glasses-bridge", "Glasses bridge", "box", "head", (0, eye_y + 0.006, 0.136), (0.036, 0.007, 0.008), "glasses-frame",
      role="trim", level="micro", importance=0.4)
 
 # ---- tee band down the open jacket front ------------------------------------------------------------
-part("tee-front", "Tee band (open jacket front)", "box", "chest", (0, 0.085, 0.072), (0.05, 0.17, 0.03), "tee", role="panel",
+part("tee-front", "Tee band (open jacket front)", "box", "chest", (0, 0.085, 0.078), (0.05, 0.17, 0.03), "tee", role="panel",
      level="meso", importance=0.65, rotation=(-0.145, 0, 0),
      features=[{"id": "jacket-open-front", "kind": "seam", "notes": "dark olive tee visible between the jacket fronts"}],
      topo="A thin panel on the chest front reads as the gap between the two jacket fronts.")
-part("tee-front-low", "Tee band, lower", "box", "abdomen", (0, 0.06, 0.079), (0.045, 0.12, 0.03), "tee", role="panel",
+part("tee-front-low", "Tee band, lower", "box", "abdomen", (0, 0.06, 0.086), (0.045, 0.12, 0.03), "tee", role="panel",
      level="meso", importance=0.5, rotation=(0.056, 0, 0))
 # A bulkier jacket torso (sprite: torso ~0.24 H wide without the arms)
-by["chest"]["attachment"]["baseRadius"], by["chest"]["attachment"]["endRadius"] = 0.097, 0.072
-by["abdomen"]["attachment"]["baseRadius"], by["abdomen"]["attachment"]["endRadius"] = 0.088, 0.095
+by["chest"]["attachment"]["baseRadius"], by["chest"]["attachment"]["endRadius"] = 0.104, 0.076
+by["abdomen"]["attachment"]["baseRadius"], by["abdomen"]["attachment"]["endRadius"] = 0.094, 0.102
 # Jacket collar: a ring around the neck base, so the neck does not read as a bare column
-part("jacket-collar", "Jacket collar", "torus", "chest", (0, 0.168, 0.004), (0.15, 0.15, 0.06), "jacket", role="trim",
+part("jacket-collar", "Jacket collar", "torus", "chest", (0, 0.168, 0.004), (0.16, 0.16, 0.06), "jacket", role="trim",
      level="meso", importance=0.5, rotation=(1.5708, 0, 0),
      features=[{"id": "collar-ring", "kind": "contour", "notes": "jacket collar around the neck base"}])
 # Shoulders: rounder, less like pads (clavicle = deltoid mass under the jacket)
 for side in ("l", "r"):
     by[f"clavicle-{side}"]["attachment"]["baseRadius"] = 0.03
     by[f"clavicle-{side}"]["attachment"]["endRadius"] = 0.042
-    by[f"upper-arm-{side}"]["attachment"]["baseRadius"] = 0.05
-    by[f"upper-arm-{side}"]["attachment"]["endRadius"] = 0.042
-    by[f"forearm-{side}"]["attachment"]["baseRadius"] = 0.04
-    by[f"forearm-{side}"]["attachment"]["endRadius"] = 0.033
+    by[f"upper-arm-{side}"]["attachment"]["baseRadius"] = 0.056
+    by[f"upper-arm-{side}"]["attachment"]["endRadius"] = 0.048
+    by[f"forearm-{side}"]["attachment"]["baseRadius"] = 0.046
+    by[f"forearm-{side}"]["attachment"]["endRadius"] = 0.04
 
 # ---- materials (flat, textureless; calibrated so the converter-rig render lands on the sprite medians) ----
 mat_t = copy.deepcopy(spec["materials"][0])
@@ -232,7 +234,10 @@ def rgba(h, a=1.0):
 
 for c in tree:
     m = mats[c["material"]]
-    c["colorMaterialRecipe"] = {"dominantAlbedo": rgba(m["baseColor"]), "secondaryAlbedo": rgba(m["albedo"]["secondary"][0]),
+    # The recipe carries the colour the REFERENCE shows (sprite median); the material's baseColor is the albedo that
+    # reproduces it under the converter light (material-pass review 1: recipes held the albedo, deltaE 27).
+    seen = P.get(c["material"], m["baseColor"])
+    c["colorMaterialRecipe"] = {"dominantAlbedo": rgba(seen), "secondaryAlbedo": rgba(m["baseColor"]),
                                 "materialClass": m["materialClass"], "materialClassConfidence": 0.7, "evidenceRefs": EV}
     c["fidelityTier"] = "game-prop"
     c["evidenceRefs"] = EV

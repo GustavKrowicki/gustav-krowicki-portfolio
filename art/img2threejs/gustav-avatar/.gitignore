@@ -14,3 +14,10 @@ landmarks.png
 probe.json
 .img2threejs/
 .img2/
+rig-payload.json
+rig-gate-payload.json
+mesh-manifest.json
+sampled-clips.json
+sampled-clips-measured.json
+parts.json
+admission.json

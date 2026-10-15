@@ -9,7 +9,7 @@ cd "$W"
 python3 -I fill_anatomy.py "$W" >/dev/null
 python3 -I fill_assessment.py "$W" >/dev/null
 # The character plugin publishes no spec-augmentation artifact (it contributes rig steps only), so --augmentation is omitted.
-python3 $F/stage2_spec/new_sculpt_spec.py "Gustav Avatar" --image "$W/ref/east-00-x12-white.png" --assessment assessment.json \
+python3 $F/stage2_spec/new_sculpt_spec.py "Gustav Avatar" --image "$W/ref/north-00-x12-white.png" --assessment assessment.json \
   --domain animated-character --out object-sculpt-spec.json --force >/dev/null
 python3 build_spec.py "$W"
 if [ -f _prev_spec.json ]; then python3 - <<'PY'

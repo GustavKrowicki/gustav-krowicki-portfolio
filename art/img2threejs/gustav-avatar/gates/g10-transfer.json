@@ -1,0 +1,301 @@
+{
+ "binding": "transfer",
+ "clips": 3,
+ "times": 4,
+ "sides": 2,
+ "azimuths": 2,
+ "frames": 48,
+ "backgroundThroughSplitPx": 128,
+ "backgroundThroughSplitBlobs": 42,
+ "creasePx": 1703,
+ "perFrame": [
+  {
+   "frame": "transfer-idle-t0-s90-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 56
+  },
+  {
+   "frame": "transfer-idle-t0-s90-a25",
+   "holesPx": 6,
+   "holeBlobs": 2,
+   "creasePx": 28
+  },
+  {
+   "frame": "transfer-idle-t0-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 20
+  },
+  {
+   "frame": "transfer-idle-t0-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 45
+  },
+  {
+   "frame": "transfer-idle-t1-s90-a-25",
+   "holesPx": 2,
+   "holeBlobs": 1,
+   "creasePx": 57
+  },
+  {
+   "frame": "transfer-idle-t1-s90-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 27
+  },
+  {
+   "frame": "transfer-idle-t1-s270-a-25",
+   "holesPx": 6,
+   "holeBlobs": 1,
+   "creasePx": 20
+  },
+  {
+   "frame": "transfer-idle-t1-s270-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 41
+  },
+  {
+   "frame": "transfer-idle-t2-s90-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 42
+  },
+  {
+   "frame": "transfer-idle-t2-s90-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 26
+  },
+  {
+   "frame": "transfer-idle-t2-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 18
+  },
+  {
+   "frame": "transfer-idle-t2-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 62
+  },
+  {
+   "frame": "transfer-idle-t3-s90-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 52
+  },
+  {
+   "frame": "transfer-idle-t3-s90-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 30
+  },
+  {
+   "frame": "transfer-idle-t3-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 18
+  },
+  {
+   "frame": "transfer-idle-t3-s270-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 43
+  },
+  {
+   "frame": "transfer-walk-t0-s90-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 43
+  },
+  {
+   "frame": "transfer-walk-t0-s90-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 34
+  },
+  {
+   "frame": "transfer-walk-t0-s270-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 23
+  },
+  {
+   "frame": "transfer-walk-t0-s270-a25",
+   "holesPx": 2,
+   "holeBlobs": 2,
+   "creasePx": 50
+  },
+  {
+   "frame": "transfer-walk-t1-s90-a-25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 50
+  },
+  {
+   "frame": "transfer-walk-t1-s90-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 27
+  },
+  {
+   "frame": "transfer-walk-t1-s270-a-25",
+   "holesPx": 18,
+   "holeBlobs": 2,
+   "creasePx": 24
+  },
+  {
+   "frame": "transfer-walk-t1-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-t2-s90-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 52
+  },
+  {
+   "frame": "transfer-walk-t2-s90-a25",
+   "holesPx": 2,
+   "holeBlobs": 1,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-t2-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-t2-s270-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 36
+  },
+  {
+   "frame": "transfer-walk-t3-s90-a-25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 40
+  },
+  {
+   "frame": "transfer-walk-t3-s90-a25",
+   "holesPx": 20,
+   "holeBlobs": 2,
+   "creasePx": 22
+  },
+  {
+   "frame": "transfer-walk-t3-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 20
+  },
+  {
+   "frame": "transfer-walk-t3-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 51
+  },
+  {
+   "frame": "transfer-walk-in-place-t0-s90-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 43
+  },
+  {
+   "frame": "transfer-walk-in-place-t0-s90-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 34
+  },
+  {
+   "frame": "transfer-walk-in-place-t0-s270-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 23
+  },
+  {
+   "frame": "transfer-walk-in-place-t0-s270-a25",
+   "holesPx": 2,
+   "holeBlobs": 2,
+   "creasePx": 50
+  },
+  {
+   "frame": "transfer-walk-in-place-t1-s90-a-25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 50
+  },
+  {
+   "frame": "transfer-walk-in-place-t1-s90-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 27
+  },
+  {
+   "frame": "transfer-walk-in-place-t1-s270-a-25",
+   "holesPx": 18,
+   "holeBlobs": 2,
+   "creasePx": 24
+  },
+  {
+   "frame": "transfer-walk-in-place-t1-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-in-place-t2-s90-a-25",
+   "holesPx": 3,
+   "holeBlobs": 2,
+   "creasePx": 52
+  },
+  {
+   "frame": "transfer-walk-in-place-t2-s90-a25",
+   "holesPx": 2,
+   "holeBlobs": 1,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-in-place-t2-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 29
+  },
+  {
+   "frame": "transfer-walk-in-place-t2-s270-a25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 36
+  },
+  {
+   "frame": "transfer-walk-in-place-t3-s90-a-25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 40
+  },
+  {
+   "frame": "transfer-walk-in-place-t3-s90-a25",
+   "holesPx": 20,
+   "holeBlobs": 2,
+   "creasePx": 22
+  },
+  {
+   "frame": "transfer-walk-in-place-t3-s270-a-25",
+   "holesPx": 0,
+   "holeBlobs": 0,
+   "creasePx": 20
+  },
+  {
+   "frame": "transfer-walk-in-place-t3-s270-a25",
+   "holesPx": 1,
+   "holeBlobs": 1,
+   "creasePx": 51
+  }
+ ]
+}

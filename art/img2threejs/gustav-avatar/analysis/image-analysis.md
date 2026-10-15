@@ -2,7 +2,10 @@
 
 Reference set: `public/game/pogicity/Characters/gustavwalk{south,north,east,west}.gif`, every frame extracted to
 `ref/` by `measure_ref.py`, sheet in `ref/reference-sheet.png`. Fixed reference for the gates:
-`ref/east-00-x12-white.png` (east frame 0, 12x nearest, white background). Palette and bands:
+`ref/north-00-x12-white.png` (north frame 0, 12x nearest, white background). It was first `east-00`; that frame
+carries the laptop prop the build leaves out, so the fixed view was re-selected (before any review was recorded)
+to the north frame, which shows the same figure without the prop and matches the game camera exactly
+(yaw -45, pitch 30: silhouette IoU 0.84 vs 0.78 best-case for east). Palette and bands:
 `measure/palette.json`, `measure/proportions.json`.
 
 ## Layer 1 - identification

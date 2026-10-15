@@ -1,91 +1,91 @@
 {
   "skin": {
-    "pixels": 2994,
-    "albedo": "#f9cab1",
+    "pixels": 5345,
+    "albedo": "#f9cab3",
     "litMedian": [
-      147.0,
-      118.0,
-      103.0
+      143,
+      115,
+      101
     ],
     "target": [
       147,
       118,
       104
     ],
-    "newAlbedo": "#f9cab3",
+    "newAlbedo": "#ffcfb8",
     "deltaRGB": [
-      0.0,
-      0.0,
-      -1.0
+      -4,
+      -3,
+      -3
     ]
   },
   "hair": {
-    "pixels": 16230,
-    "albedo": "#615a45",
+    "pixels": 13268,
+    "albedo": "#625d48",
     "litMedian": [
-      63.0,
-      58.0,
-      45.0
+      65.0,
+      62.0,
+      48.0
     ],
     "target": [
       64,
       60,
       47
     ],
-    "newAlbedo": "#625d48",
+    "newAlbedo": "#615a47",
     "deltaRGB": [
-      -1.0,
-      -2.0,
-      -2.0
+      1.0,
+      2.0,
+      1.0
     ]
   },
   "jacket": {
-    "pixels": 14236,
-    "albedo": "#e7e5ea",
+    "pixels": 16093,
+    "albedo": "#e9e5ea",
     "litMedian": [
-      139.0,
-      138.0,
-      141.0
+      140,
+      137,
+      141
     ],
     "target": [
       140,
       138,
       141
     ],
-    "newAlbedo": "#e9e5ea",
+    "newAlbedo": "#e9e7ea",
     "deltaRGB": [
-      -1.0,
-      0.0,
-      0.0
+      0,
+      -1,
+      0
     ]
   },
   "tee": {
-    "pixels": 2212,
-    "albedo": "#8c836c",
+    "pixels": 2191,
+    "albedo": "#938b77",
     "litMedian": [
-      80.0,
-      74.0,
-      61.0
+      88,
+      83,
+      70
     ],
     "target": [
       84,
       79,
       68
     ],
-    "newAlbedo": "#938b77",
+    "newAlbedo": "#8d8574",
     "deltaRGB": [
-      -4.0,
-      -5.0,
-      -7.0
+      4,
+      4,
+      2
     ]
   },
   "jeans": {
-    "pixels": 7983,
-    "albedo": "#2d3b57",
+    "pixels": 7726,
+    "albedo": "#2f3d59",
     "litMedian": [
-      25,
-      33,
-      49
+      26.0,
+      34.0,
+      50.0
     ],
     "target": [
       26,
@@ -94,29 +94,29 @@
     ],
     "newAlbedo": "#2f3d59",
     "deltaRGB": [
-      -1,
-      -1,
-      -1
+      0.0,
+      0.0,
+      0.0
     ]
   },
   "shoes": {
-    "pixels": 3513,
-    "albedo": "#29323c",
+    "pixels": 2793,
+    "albedo": "#2b343e",
     "litMedian": [
-      20,
-      25,
-      31
+      21,
+      27,
+      32
     ],
     "target": [
       21,
       26,
       32
     ],
-    "newAlbedo": "#2b343e",
+    "newAlbedo": "#2b323e",
     "deltaRGB": [
-      -1,
-      -1,
-      -1
+      0,
+      1,
+      0
     ]
   }
 }

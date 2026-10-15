@@ -1,6 +1,6 @@
 {
   "targetName": "Gustav Avatar",
-  "sourceImage": "ref/east-00-x12-white.png",
+  "sourceImage": "ref/north-00-x12-white.png",
   "preSpecAssessment": {
     "objectClass": {
       "primaryType": "stylized low-poly game avatar of an adult man (portfolio owner) in a light jacket, dark tee and jeans",
@@ -28,7 +28,7 @@
         "leather (shoes)",
         "thin plastic frames (glasses)"
       ],
-      "notes": "Reference = the four 16-frame walk GIFs (56 px tall). Fixed gate view = east frame 0 at 12x (three-quarter, face-on, carrying a laptop). Only silhouette, colour blocks and band heights are measurable at this size."
+      "notes": "Reference = the four 16-frame walk GIFs (56 px tall). Fixed gate view = north frame 0 at 12x (three-quarter front, no prop; the east frames carry a laptop that is not built). Only silhouette, colour blocks and band heights are measurable at this size."
     },
     "complexity": {
       "tier": "moderate",
@@ -97,7 +97,7 @@
           "affects": "geometry",
           "mapsTo": {
             "type": "component.localFeatures",
-            "ref": "hair/fringe-edge"
+            "ref": "fringe-edge"
           },
           "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
           "confidence": 0.75
@@ -117,7 +117,7 @@
           "affects": "geometry",
           "mapsTo": {
             "type": "component.localFeatures",
-            "ref": "hair/mop-overhang"
+            "ref": "mop-overhang"
           },
           "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
           "confidence": 0.8
@@ -197,7 +197,7 @@
           "affects": "geometry",
           "mapsTo": {
             "type": "component.localFeatures",
-            "ref": "foot-l/shoe-break"
+            "ref": "shoe-break"
           },
           "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/lower.png",
           "confidence": 0.6
@@ -217,7 +217,7 @@
           "affects": "material",
           "mapsTo": {
             "type": "material.localOverrides",
-            "ref": "jacket/matte-cotton"
+            "ref": "matte-cotton"
           },
           "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/middle.png",
           "confidence": 0.6
@@ -263,7 +263,7 @@
       ],
       "confidenceNote": "56 px source: proportions +-1 px (~0.06 HU); face landmarks +-1 px of an 18 px head (~0.06)."
     },
-    "sourceImage": "ref/east-00-x12-white.png"
+    "sourceImage": "ref/north-00-x12-white.png"
   },
   "qualityContract": {
     "qualityBar": "moderate",

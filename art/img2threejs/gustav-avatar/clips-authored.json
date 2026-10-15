@@ -1,0 +1,31 @@
+{
+  "figureHeightModel": 1.06006,
+  "walk": {
+    "duration": 1.0,
+    "speedH": 0.4,
+    "travelModel": 0.42402,
+    "contact": 0.58,
+    "riseH": 0.02,
+    "stepModel": 0.21201,
+    "excursionModel": 0.24593,
+    "hipDropAtDoubleSupport": 0.025,
+    "legReachMax": 0.31462,
+    "reachMargin": 0.003
+  },
+  "idle": {
+    "duration": 3.0
+  },
+  "rigidParts": {
+    "hair": "head",
+    "nose": "head",
+    "mouth": "head",
+    "eye-l": "head",
+    "eye-r": "head",
+    "glasses-frame-l": "head",
+    "glasses-frame-r": "head",
+    "glasses-bridge": "head",
+    "tee-front": "chest",
+    "tee-front-low": "abdomen",
+    "jacket-collar": "chest"
+  }
+}

@@ -1,5 +1,5 @@
 {
-  "sourceImage": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/ref/east-00-x12-white.png",
+  "sourceImage": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/ref/north-00-x12-white.png",
   "zonesDir": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones",
   "detailInventory": {
     "scanMethod": "component-zones",
@@ -21,7 +21,7 @@
         "affects": "geometry",
         "mapsTo": {
           "type": "component.localFeatures",
-          "ref": "hair/fringe-edge"
+          "ref": "fringe-edge"
         },
         "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
         "confidence": 0.75
@@ -41,7 +41,7 @@
         "affects": "geometry",
         "mapsTo": {
           "type": "component.localFeatures",
-          "ref": "hair/mop-overhang"
+          "ref": "mop-overhang"
         },
         "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
         "confidence": 0.8
@@ -121,7 +121,7 @@
         "affects": "geometry",
         "mapsTo": {
           "type": "component.localFeatures",
-          "ref": "foot-l/shoe-break"
+          "ref": "shoe-break"
         },
         "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/lower.png",
         "confidence": 0.6
@@ -141,7 +141,7 @@
         "affects": "material",
         "mapsTo": {
           "type": "material.localOverrides",
-          "ref": "jacket/matte-cotton"
+          "ref": "matte-cotton"
         },
         "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/middle.png",
         "confidence": 0.6

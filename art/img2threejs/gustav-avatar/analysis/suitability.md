@@ -8,3 +8,5 @@ blocks and silhouette, not facial geometry. Projection texturing is not applicab
 Rubric verdict (grimoire/intake/validation_rubric.md): character-conditional -> stylized. The brief asks for a
 stylized low-poly game character that keeps the sprite silhouette and colour blocks (not maximum likeness);
 stylization level chibi-leaning ~3.2 heads, as measured. Admission: ADMITTED (admission.json).
+
+Fixed reference re-selected to ref/north-00-x12-white.png (same figure, no laptop prop): ADMITTED (admission.json).
