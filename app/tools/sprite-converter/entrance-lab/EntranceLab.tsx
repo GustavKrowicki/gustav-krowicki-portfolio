@@ -5,9 +5,15 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as campus from '@/lib/city/models/legoCampus';
 import * as main from '@/lib/city/models/legoHqMainEntrance';
+import * as avatarFactory from '@/lib/city/models/gustavAvatar';
+import { createGustavAvatar, skinnedBounds, type AvatarRig, type AvatarStage, type AvatarBinding } from '@/lib/city/models/gustavAvatarRig';
+import * as avatarHarness from '@/lib/city/models/gustavAvatarHarness';
 
-// Review/test bench for the img2threejs reconstructions (?model=main|campus, or krea = the original GLB served by
-// art/img2threejs/tools/static_cors.py on :8766). Generation sources live in art/img2threejs/.
+// Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
+// krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
+// art/img2threejs/. The avatar models are in wu (0.9 wu tall); avatar-entrance / avatar-campus put it next to the
+// LEGO main entrance / campus models at the same wu scale. Avatar-only options: clip ('idle' | 'walk' |
+// 'walk-in-place'), t (seconds), and URL params stage / binding (see gustavAvatarRig.ts).
 // One page session renders every view through window.__shoot(name, options), so textures
 // load once and every capture shares them:
 //   view: 'reference' (front, elevated, framed like the model's aerial crop) | 'iso' (converter camera)
@@ -34,7 +40,51 @@ type ModelConfig = {
   reference: { width: number; height: number; halfW: number; target: [number, number, number] };
   // Sun position read off the reference photo's cast shadows (for the 'photo' rig)
   sun?: { position: [number, number, number]; intensity: number };
+  // Sprite view: normalise from the rest-pose bounds captured at load (animated models must not re-frame per pose)
+  restBounds?: boolean;
 };
+
+const AVATAR_PARAMS = () => {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    stage: (p.get('stage') as AvatarStage) ?? 'bound',
+    binding: (p.get('binding') as AvatarBinding) ?? 'transfer',
+  };
+};
+
+// One LEGO plate width W in the main-entrance model is ~5.3 m = 2.65 wu; the campus model is 7 tiles across 1.0 unit.
+const ENTRANCE_UNITS_PER_WU = 1 / 2.65;
+const CAMPUS_UNITS_PER_WU = 1 / 7;
+
+function avatarScene(kind: 'entrance' | 'campus'): THREE.Group {
+  const group = new THREE.Group();
+  const building = kind === 'entrance' ? main.createLEGOHQMainEntranceModel({ castShadow: true, receiveShadow: true })
+    : campus.createLEGOCampusModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  const unit = kind === 'entrance' ? ENTRANCE_UNITS_PER_WU : CAMPUS_UNITS_PER_WU;
+  avatar.scale.setScalar(unit);
+  group.add(building, avatar);
+  group.updateMatrixWorld(true);
+  if (kind === 'entrance') {
+    // Doors at z ~ 1.0 W (vestibule depth); stand on the approach in front of the right-hand leaf, facing the camera.
+    avatar.position.set(0.3, 0, 1.25);
+  } else {
+    // In front of the campus door head, on the ground, 1 wu out along the plate's outward axis.
+    const runtime = building.userData.sculptRuntime as { nodes: Record<string, THREE.Object3D> };
+    const head = runtime.nodes['door-head'];
+    const plate = runtime.nodes['entrance-plate'];
+    const at = head.getWorldPosition(new THREE.Vector3());
+    const out = plate.localToWorld(new THREE.Vector3(0, 0, -1)).sub(plate.getWorldPosition(new THREE.Vector3())).setY(0).normalize();
+    const ground = new THREE.Box3().setFromObject(runtime.nodes['root'] ?? building).min.y;
+    const floor = (runtime.nodes['vestibule-floor'] ?? head).getWorldPosition(new THREE.Vector3()).y;
+    avatar.position.copy(at.add(out.multiplyScalar(0.6 * unit))).setY(Number.isFinite(floor) ? floor : ground);
+    avatar.lookAt(avatar.position.clone().add(out));
+  }
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
 
 const MODELS: Record<string, ModelConfig> = {
   // Glass vestibule under the giant yellow 2x4 plate (the real main entrance), 435×510 aerial crop
@@ -61,6 +111,43 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
     travel: 0.24 * 0.04,
     reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
+  avatar: {
+    name: 'Gustav avatar',
+    create: (options) => createGustavAvatar({ ...AVATAR_PARAMS(), ...options }),
+    lights: avatarFactory.createGustavAvatarLookDevLights,
+    environment: avatarFactory.createGustavAvatarEnvironment,
+    configure: avatarFactory.configureGustavAvatarRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 300, height: 720, halfW: 0.21, target: [0, 0.45, 0] },
+    restBounds: true,
+  },
+  // The avatar at the LEGO HQ main entrance close-up, same wu scale (doors 0.42 W ~ 1.1 wu)
+  'avatar-entrance': {
+    name: 'Gustav avatar at the LEGO main entrance',
+    create: () => avatarScene('entrance'),
+    lights: main.createLEGOHQMainEntranceLookDevLights,
+    environment: main.createLEGOHQMainEntranceEnvironment,
+    configure: main.configureLEGOHQMainEntranceRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.24,
+    reference: { width: 435, height: 510, halfW: 1.243, target: [0.029, 0.911, 0] },
+    sun: { position: [-6, 4, 3], intensity: 2.4 },
+    restBounds: true,
+  },
+  // The avatar at the campus model's entrance, same wu scale (the campus is 7 tiles = 1.0 model unit)
+  'avatar-campus': {
+    name: 'Gustav avatar at the LEGO campus',
+    create: () => avatarScene('campus'),
+    lights: campus.createLEGOCampusLookDevLights,
+    environment: campus.createLEGOCampusEnvironment,
+    configure: campus.configureLEGOCampusRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.24 * 0.04,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+    restBounds: true,
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {
@@ -98,6 +185,10 @@ export type ShotOptions = {
   size?: number;
   exposure?: number;
   tone?: 'aces' | 'neutral';
+  clip?: string;
+  t?: number;
+  spin?: number; // turntable: model yaw in degrees (reference / sprite views)
+  follow?: boolean; // reference view: keep the avatar's hips over the origin (root-motion clips)
 };
 
 type Runtime = { nodes: Record<string, THREE.Object3D> };
@@ -185,7 +276,12 @@ export default function EntranceLab() {
       const src = mesh.material as THREE.MeshStandardMaterial;
       flat.set(mesh, new THREE.MeshBasicMaterial({ color: src.color ?? new THREE.Color(0x888888) }));
     });
+    const avatar = model.userData.avatar as AvatarRig | undefined;
     const box = new THREE.Box3().setFromObject(model);
+    // Rest-pose bounds in the model's parent frame (skinned vertices, so a posed frame never re-frames the sprite)
+    const restBox = config.restBounds
+      ? (avatar && !model.userData.avatarGroup ? skinnedBounds(model).applyMatrix4(model.matrix) : box.clone())
+      : null;
     const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
 
     const apply = (o: ShotOptions) => {
@@ -212,13 +308,25 @@ export default function EntranceLab() {
       // Converter normalisation applies only to the 'sprite' view
       model.position.set(0, 0, 0);
       model.scale.set(1, 1, 1);
+      model.rotation.set(0, THREE.MathUtils.degToRad(opts.spin ?? 0), 0);
+      // Avatar pose: a clip at time t, or the bind pose
+      if (avatar) {
+        if (opts.clip) avatar.seek(opts.clip, opts.t ?? 0);
+        else avatar.rest();
+        if (opts.follow) {
+          model.updateMatrixWorld(true);
+          const hip = avatar.bones.pelvis.getWorldPosition(new THREE.Vector3());
+          model.position.x -= hip.x;
+          model.position.z -= hip.z;
+        }
+      }
       // Camera
       if (opts.view === 'sprite') {
         // Same maths as /tools/sprite-converter: base at y = 0 via an UNscaled offset, then
         // scale to 3 / maxDim; ortho frustum 5 / zoom split by the vertical offset; iso camera
         // at distance 10 looking at the origin; square output.
         model.updateMatrixWorld(true);
-        const b = new THREE.Box3().setFromObject(model);
+        const b = restBox ? restBox.clone() : new THREE.Box3().setFromObject(model);
         const centre = b.getCenter(new THREE.Vector3());
         const size = b.getSize(new THREE.Vector3());
         model.position.set(-centre.x, -b.min.y, -centre.z);
@@ -325,6 +433,29 @@ export default function EntranceLab() {
     };
     // Debug handle for probing the scene from the browser console
     (w as LabWindow & { __scene?: unknown }).__scene = { scene, model, renderer, lookdev, photo, converter, camera };
+    // Render one shot and hand back the PNG directly (capture scripts; no receiver needed)
+    (w as LabWindow & { __render?: unknown }).__render = (o: ShotOptions = {}) => {
+      current = o;
+      apply(o);
+      renderer.render(scene, camera);
+      return canvas.toDataURL('image/png');
+    };
+    if (avatar) {
+      const target = (model.userData.avatarGroup as THREE.Object3D | undefined) ?? model;
+      (w as LabWindow & { __avatarHarness?: unknown }).__avatarHarness = {
+        meshBuffers: () => avatarHarness.meshBuffers(avatar.model),
+        sampleClips: (n?: number) => avatarHarness.sampleClips(target, n),
+        bindingSamples: (n?: number) => avatarHarness.bindingSamples(target, n),
+        deformation: () => avatarHarness.deformation(target),
+        bindRestore: () => avatarHarness.bindRestore(target),
+        meshVisibility: () => avatarHarness.meshVisibility(target),
+        chainAnchors: () => avatarHarness.chainAnchors(target),
+        binding: () => avatarHarness.binding(target),
+        stats: () => avatarHarness.stats(target),
+        hairGeometry: () => avatarHarness.hairGeometry(target),
+      };
+    }
+    (w as LabWindow & { __labReady?: boolean }).__labReady = true;
     w.__shoot = async (name: string, o: ShotOptions = {}) => {
       current = o;
       apply(o);
