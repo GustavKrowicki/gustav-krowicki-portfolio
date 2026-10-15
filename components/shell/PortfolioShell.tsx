@@ -7,6 +7,7 @@ import type { GridCell } from '@/components/city/pogicity/types';
 import ShellRail from './ShellRail';
 import ShellPanel, { type PanelState } from './ShellPanel';
 import type { SectionId } from './sections';
+import { readView, viewToSearch, type ShellView } from './shellUrl';
 
 // Phaser needs the browser, so the city loads on the client only.
 const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
@@ -28,6 +29,26 @@ export default function PortfolioShell() {
   // A case study opens over the section it came from and widens the panel for reading.
   const [openCase, setOpenCase] = useState<string | null>(null);
 
+  // Restore the view from the URL on load, and again when the browser goes back or forward.
+  useEffect(() => {
+    const applyUrl = () => {
+      const view = readView(window.location.search);
+      setSection(view.section);
+      setOpenCase(view.openCase);
+      setPanel((current) => (view.openCase ? 'expanded' : current === 'expanded' ? 'open' : current));
+    };
+    applyUrl();
+    window.addEventListener('popstate', applyUrl);
+    return () => window.removeEventListener('popstate', applyUrl);
+  }, []);
+
+  // Each step a visitor takes (section, case, Back) becomes a browser history entry.
+  const pushView = useCallback((view: ShellView) => {
+    const search = viewToSearch(view, window.location.search);
+    if (search === window.location.search) return;
+    window.history.pushState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+  }, []);
+
   // The page never scrolls; without this a trackpad swipe can trigger browser back (same fix as /city).
   useEffect(() => {
     const { documentElement: html, body } = document;
@@ -43,31 +64,40 @@ export default function PortfolioShell() {
     };
   }, []);
 
-  const openCaseStudy = useCallback((slug: string) => {
-    setOpenCase(slug);
-    setPanel('expanded');
-  }, []);
+  const openCaseStudy = useCallback(
+    (slug: string, from: SectionId = section) => {
+      setOpenCase(slug);
+      setPanel('expanded');
+      pushView({ section: from, openCase: slug });
+    },
+    [section, pushView]
+  );
 
   // Leaving a case returns the panel from reading width to its normal width.
   const closeCaseStudy = useCallback(() => {
     setOpenCase(null);
     setPanel((current) => (current === 'expanded' ? 'open' : current));
-  }, []);
+    pushView({ section, openCase: null });
+  }, [section, pushView]);
 
   const openSection = useCallback(
     (id: SectionId) => {
-      if (openCase) closeCaseStudy();
+      if (openCase) {
+        setOpenCase(null);
+        setPanel((current) => (current === 'expanded' ? 'open' : current));
+      }
       setSection(id);
       setPanel((current) => (current === 'closed' ? 'open' : current));
+      pushView({ section: id, openCase: null });
     },
-    [openCase, closeCaseStudy]
+    [openCase, pushView]
   );
 
   // A project building in the city opens its case, with Back leading to Work.
   const handleProjectClick = useCallback(
     (slug: string) => {
       setSection('work');
-      openCaseStudy(slug);
+      openCaseStudy(slug, 'work');
     },
     [openCaseStudy]
   );
