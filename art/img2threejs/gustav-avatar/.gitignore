@@ -1,0 +1,16 @@
+# Not in the repo (art/img2threejs/README.md): references, generated spec/factory, renders and run state.
+ref/
+src/
+renders/
+reviews/
+harness/
+sweep/
+detail-zones/
+object-sculpt-spec.json
+_prev_spec.json
+_preview-spec.json
+strict-validation.txt
+landmarks.png
+probe.json
+.img2threejs/
+.img2/

@@ -1,0 +1,489 @@
+{
+  "targetName": "Gustav Avatar",
+  "sourceImage": "ref/east-00-x12-white.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "stylized low-poly game avatar of an adult man (portfolio owner) in a light jacket, dark tee and jeans",
+      "primaryDomain": "character",
+      "formLanguage": [
+        "organic",
+        "stylized low-poly",
+        "chibi-leaning (3.1 heads)",
+        "rounded primitives"
+      ],
+      "structureKind": [
+        "articulated humanoid",
+        "layered clothing over body segments"
+      ],
+      "motionPotential": [
+        "skinned skeleton",
+        "walk cycle",
+        "idle loop"
+      ],
+      "materialFamilies": [
+        "skin",
+        "hair (matte)",
+        "cotton cloth (jacket, tee)",
+        "denim",
+        "leather (shoes)",
+        "thin plastic frames (glasses)"
+      ],
+      "notes": "Reference = the four 16-frame walk GIFs (56 px tall). Fixed gate view = east frame 0 at 12x (three-quarter, face-on, carrying a laptop). Only silhouette, colour blocks and band heights are measurable at this size."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 2,
+        "hierarchyDepth": 3,
+        "repetitionDensity": 1,
+        "materialLayerCount": 2,
+        "localDetailDensity": 1,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 4,
+        "mesoComponents": 20,
+        "microFeatureGroups": 4,
+        "materialLayers": 9,
+        "repetitionSystems": 0
+      },
+      "reasoning": [
+        "Silhouette: big rounded mop head on a short fitted jacket torso and two straight jean legs; arms close to the body.",
+        "Hierarchy is the humanoid chain pelvis > spine > neck > head, clavicle > arm > hand, thigh > shin > foot (3+ levels).",
+        "Materials: 7 flat colour blocks (hair, skin, jacket, tee, jeans, shoes, glasses frame) plus eyes.",
+        "Local detail is minimal at 56 px: fringe edge, glasses, open jacket front, trouser hem over the shoe.",
+        "Action readiness is the main requirement: it must walk (4 directions for sprites) and idle, so it needs a real skeleton."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": false,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity at sprite scale = mop hair + light jacket over dark tee + dark jeans; the rig must animate a walk without tearing at the jacket/limb overlaps."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Face features are 1-2 px: eye shape, brows, nose, mouth undetermined -> minimal stylized marks.",
+      "Hands are 2-3 px blobs -> mitten hands, no digits (template digits removed; they cannot read at 24-48 px).",
+      "Laptop appears only in the east frames -> left out of the body build (optional prop later).",
+      "Jacket buttons/pockets not resolvable -> plain jacket with the open front (tee band) as the only front detail.",
+      "Glasses frame colour is light grey in east/north frames -> thin light rims, no lenses."
+    ],
+    "detailInventory": {
+      "scanMethod": "component-zones",
+      "targetMinDetails": 6,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "fringe-edge",
+          "kind": "contour",
+          "description": "Full fringe ends in a straight-ish edge at the brow line (0.58 of the head box), wider than the face.",
+          "region": {
+            "x": 0.1,
+            "y": 0.03,
+            "width": 0.8,
+            "height": 0.22,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "hair/fringe-edge"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
+          "confidence": 0.75
+        },
+        {
+          "id": "hair-mop-volume",
+          "kind": "contour",
+          "description": "Hair mass overhangs the skull on all sides (head box 16 px wide vs ~12 px face).",
+          "region": {
+            "x": 0.05,
+            "y": 0.0,
+            "width": 0.9,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "hair/mop-overhang"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/upper.png",
+          "confidence": 0.8
+        },
+        {
+          "id": "glasses-rims",
+          "kind": "linework",
+          "description": "Thin light-grey rims around both eyes (seen east/north).",
+          "region": {
+            "x": 0.1,
+            "y": 0.22,
+            "width": 0.6,
+            "height": 0.06,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "glasses-frame-l"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/ref/east-00-x12.png",
+          "confidence": 0.5
+        },
+        {
+          "id": "jacket-open-front",
+          "kind": "seam",
+          "description": "Open jacket front: a dark olive tee band runs from the collar to the hem.",
+          "region": {
+            "x": 0.35,
+            "y": 0.36,
+            "width": 0.2,
+            "height": 0.34,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "tee-front"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/middle.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "jacket-hem",
+          "kind": "contour",
+          "description": "Jacket hem sits at the hip (0.71 H from the top), covering the top of the jeans.",
+          "region": {
+            "x": 0.15,
+            "y": 0.66,
+            "width": 0.75,
+            "height": 0.06,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "jacket-skirt"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/middle.png",
+          "confidence": 0.75
+        },
+        {
+          "id": "trouser-hem",
+          "kind": "seam",
+          "description": "Straight jeans break over the shoe top; dark shoes read as a separate block.",
+          "region": {
+            "x": 0.1,
+            "y": 0.88,
+            "width": 0.8,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "foot-l/shoe-break"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/lower.png",
+          "confidence": 0.6
+        },
+        {
+          "id": "cloth-matte",
+          "kind": "gloss",
+          "description": "Jacket, tee and denim are matte (no highlight in any frame); shoes slightly satin.",
+          "region": {
+            "x": 0.1,
+            "y": 0.36,
+            "width": 0.8,
+            "height": 0.6,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "jacket/matte-cotton"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/detail-zones/middle.png",
+          "confidence": 0.6
+        }
+      ]
+    },
+    "anatomy": {
+      "styleHeads": 3.11,
+      "proportions": {
+        "headUnit": 0.321,
+        "torso": 1.056,
+        "legs": 1.056,
+        "shoulderWidth": 0.778,
+        "hipWidth": 0.611
+      },
+      "pose": {
+        "type": "walk-cycle (16 frames per direction); bind pose built as a neutral A-pose standing",
+        "jointAngles": {},
+        "note": "The sprite is a walk cycle, not a static pose. The model binds in a neutral stance; the walk pose lives in the authored clips (author_clips.py), never in the bind pose."
+      },
+      "faceLandmarks": {
+        "hairline": 0.58,
+        "eyeLine": 0.7,
+        "eyeSpacing": 0.3,
+        "noseBase": 0.8,
+        "mouthLine": 0.9,
+        "earTop": 0.62,
+        "earBottom": 0.84
+      },
+      "features": [
+        "mop haircut wider than the face (head box 16 px wide x 18 px tall, hair to the ears)",
+        "full fringe down to the brow line",
+        "light-frame glasses (light grey rims around the eyes in east/north frames)",
+        "light grey open jacket over a dark olive tee",
+        "dark indigo straight jeans, dark shoes"
+      ],
+      "confidence": 0.6,
+      "applies": true,
+      "evidenceRefs": [
+        "ref/east-00-x12.png",
+        "ref/north-00-x12.png",
+        "measure/proportions.json"
+      ],
+      "confidenceNote": "56 px source: proportions +-1 px (~0.06 HU); face landmarks +-1 px of an 18 px head (~0.06)."
+    },
+    "sourceImage": "ref/east-00-x12-white.png"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 2,
+      "mesoComponents": 3,
+      "microFeatureGroups": 2,
+      "materialLayers": 2,
+      "repetitionSystems": 0,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Gustav Avatar stylized humanoid character low poly game avatar cotton jacket fabric roughness denim jeans albedo hair stylized clumps walk cycle gait skinning",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "62f2831e1d52eeb6dbb94a87c44fa25b1f4926626a7b1f8c2bcadc63e04e9471"
+    },
+    "matches": [
+      {
+        "record_id": "core.pbr-roughness",
+        "file_path": "grimoire/glossary/3d_vocabulary.md",
+        "heading": "Material And PBR",
+        "key_path": null,
+        "score": 8.485019761707,
+        "snippets": [
+          "Roughness is microfacet scatter: high roughness reads matte and low roughness reads glossy. Recognition cues: low roughness reads as a sharp, mirror-like, tight specular highlight; high roughness reads as a blurry, wide, dim highlight and matte ..."
+        ],
+        "source_refs": [
+          {
+            "path": "grimoire/glossary/3d_vocabulary.md",
+            "heading": "Material And PBR",
+            "key_path": null
+          },
+          {
+            "path": "grimoire/intake/image_analysis.md",
+            "heading": "Layer 5 \u2014 Materials & surface (PBR)",
+            "key_path": null
+          },
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[1]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "grimoire/glossary/3d_vocabulary.md"
+          },
+          {
+            "kind": "notebooklm-research",
+            "ref": "notebooklm:4b03c2f9-8393-411f-b5b4-039ab9532843",
+            "note": "Validated generic schema vocabulary; numeric claims remain backed by local source_refs."
+          },
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation \u2014 merged recognition cues + Three.js target instead of duplicating this entity."
+          }
+        ]
+      },
+      {
+        "record_id": "core.pbr-color-space-srgb-vs-linearnocolorspace",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.material_pbr[11]",
+        "score": 6.615447681944,
+        "snippets": [
+          "... (c\u1ea7n gamma/sRGB) v\u00e0 c\u00e1c b\u1ea3n \u0111\u1ed3 d\u1eef li\u1ec7u to\u00e1n h\u1ecdc (ph\u1ea3i gi\u1eef tuy\u1ebfn t\u00ednh/kh\u00f4ng hi\u1ec7u ch\u1ec9nh). Recognition cues: Base color/albedo and emissive textures are the only ones that should look like natural photographic color; Normal, roughness, ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.material_pbr[11]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      },
+      {
+        "record_id": "core.description-pbr-vocabulary-caption-calibration",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.description_conventions[7]",
+        "score": 6.411707488269,
+        "snippets": [
+          "Embedding a technical material-attribute block (Albedo, Metalness, Roughness, Normals) with measured reflectance ranges directly into the structured description, not just prose. Nh\u00fang m\u1ed9t kh\u1ed1i thu\u1ed9c t\u00ednh v\u1eadt li\u1ec7u k\u1ef9 thu\u1eadt (Albedo, Metalness, ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.description_conventions[7]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

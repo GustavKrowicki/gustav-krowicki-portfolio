@@ -1,0 +1,122 @@
+{
+  "skin": {
+    "pixels": 2994,
+    "albedo": "#f9cab1",
+    "litMedian": [
+      147.0,
+      118.0,
+      103.0
+    ],
+    "target": [
+      147,
+      118,
+      104
+    ],
+    "newAlbedo": "#f9cab3",
+    "deltaRGB": [
+      0.0,
+      0.0,
+      -1.0
+    ]
+  },
+  "hair": {
+    "pixels": 16230,
+    "albedo": "#615a45",
+    "litMedian": [
+      63.0,
+      58.0,
+      45.0
+    ],
+    "target": [
+      64,
+      60,
+      47
+    ],
+    "newAlbedo": "#625d48",
+    "deltaRGB": [
+      -1.0,
+      -2.0,
+      -2.0
+    ]
+  },
+  "jacket": {
+    "pixels": 14236,
+    "albedo": "#e7e5ea",
+    "litMedian": [
+      139.0,
+      138.0,
+      141.0
+    ],
+    "target": [
+      140,
+      138,
+      141
+    ],
+    "newAlbedo": "#e9e5ea",
+    "deltaRGB": [
+      -1.0,
+      0.0,
+      0.0
+    ]
+  },
+  "tee": {
+    "pixels": 2212,
+    "albedo": "#8c836c",
+    "litMedian": [
+      80.0,
+      74.0,
+      61.0
+    ],
+    "target": [
+      84,
+      79,
+      68
+    ],
+    "newAlbedo": "#938b77",
+    "deltaRGB": [
+      -4.0,
+      -5.0,
+      -7.0
+    ]
+  },
+  "jeans": {
+    "pixels": 7983,
+    "albedo": "#2d3b57",
+    "litMedian": [
+      25,
+      33,
+      49
+    ],
+    "target": [
+      26,
+      34,
+      50
+    ],
+    "newAlbedo": "#2f3d59",
+    "deltaRGB": [
+      -1,
+      -1,
+      -1
+    ]
+  },
+  "shoes": {
+    "pixels": 3513,
+    "albedo": "#29323c",
+    "litMedian": [
+      20,
+      25,
+      31
+    ],
+    "target": [
+      21,
+      26,
+      32
+    ],
+    "newAlbedo": "#2b343e",
+    "deltaRGB": [
+      -1,
+      -1,
+      -1
+    ]
+  }
+}
