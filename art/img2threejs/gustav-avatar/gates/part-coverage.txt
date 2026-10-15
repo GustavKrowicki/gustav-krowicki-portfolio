@@ -1,4 +1,4 @@
 note  part-not-specified: Character (root)
       built part has no matching component in the spec (fine for detail groups; a sign of spec drift for anything larger)
 
-check_part_coverage: 30 specified, 31 built, 0 error(s), 0 warning(s)
+check_part_coverage: 35 specified, 36 built, 0 error(s), 0 warning(s)
