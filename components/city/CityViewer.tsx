@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
+import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import WelcomeOverlay from "./WelcomeOverlay";
 import TourGuide from "./TourGuide";
@@ -391,6 +392,7 @@ export default function CityViewer({
           // Building visited
           scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
             setVisitedBuildings((prev) => new Set([...prev, buildingId]));
+            markPlaceFound(buildingId);
           });
         }
       }
@@ -398,6 +400,7 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
+    markPlaceFound(buildingId);
     if (isAdventureActive) {
       autoWalkTargetRef.current = buildingId;
       gameBoardRef.current?.walkPlayerToBuilding(buildingId);
@@ -559,6 +562,7 @@ export default function CityViewer({
 
       if (isTourActive) return;
 
+      markPlaceFound(buildingId);
       trackBuildingInteracted(building.name, gameMode, 'click');
 
       if (building.interactable && building.projectSlug) {

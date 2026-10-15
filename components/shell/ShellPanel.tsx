@@ -8,6 +8,7 @@ interface ShellPanelProps {
   state: PanelState;
   openCase: string | null;
   onOpenCase: (slug: string) => void;
+  onOpenSection: (id: SectionId) => void;
   onCloseCase: () => void;
   onToggleExpand: () => void;
   onClose: () => void;
@@ -25,6 +26,7 @@ export default function ShellPanel({
   state,
   openCase,
   onOpenCase,
+  onOpenSection,
   onCloseCase,
   onToggleExpand,
   onClose,
@@ -76,7 +78,7 @@ export default function ShellPanel({
         className={`min-h-0 flex-1 overflow-y-auto ${openCase ? 'bg-background' : ''}`}
         data-testid="shell-panel-content"
       >
-        <SectionContent id={section} openCase={openCase} onOpenCase={onOpenCase} />
+        <SectionContent id={section} openCase={openCase} onOpenCase={onOpenCase} onOpenSection={onOpenSection} />
       </div>
     </section>
   );

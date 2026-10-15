@@ -4,6 +4,8 @@ import HomeSection from './sections/HomeSection';
 import WorkSection from './sections/WorkSection';
 import AboutSection from './sections/AboutSection';
 import CvSection from './sections/CvSection';
+import AchievementsSection from './sections/AchievementsSection';
+import AvatarSection from './sections/AvatarSection';
 
 // The rail order follows the IA (Figma "IA v2"). Home has no icon: the rail shows Gustav's photo for it.
 export type SectionId = 'home' | 'achievements' | 'avatar' | 'work' | 'hobbies' | 'cv';
@@ -27,10 +29,11 @@ interface SectionContentProps {
   id: SectionId;
   openCase: string | null;
   onOpenCase: (slug: string) => void;
+  onOpenSection: (id: SectionId) => void;
 }
 
 // An open case replaces the section it was opened from; the panel header then shows Back.
-export function SectionContent({ id, openCase, onOpenCase }: SectionContentProps) {
+export function SectionContent({ id, openCase, onOpenCase, onOpenSection }: SectionContentProps) {
   if (openCase) {
     const Case = CASES[openCase];
     return Case ? <Case /> : <Placeholder title="Case not found" note={openCase} />;
@@ -45,11 +48,11 @@ export function SectionContent({ id, openCase, onOpenCase }: SectionContentProps
       return <AboutSection />;
     case 'cv':
       return <CvSection />;
-    // Achievements and the avatar builder come in step 5 of the shell.
+    // Placeholders until the art and content exist (POR-21, POR-22).
     case 'achievements':
-      return <Placeholder title="Achievements" note="Places, photos, workshop, music, food and books found in the city." />;
+      return <AchievementsSection onOpenSection={onOpenSection} />;
     case 'avatar':
-      return <Placeholder title="Create your own avatar" note="Face, hair, body and shoes." />;
+      return <AvatarSection />;
   }
 }
 
