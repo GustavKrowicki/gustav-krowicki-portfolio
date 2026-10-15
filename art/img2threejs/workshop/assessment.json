@@ -1,6 +1,6 @@
 {
   "targetName": "Workshop",
-  "sourceImage": "ref/photo-wide-1200.png",
+  "sourceImage": "ref/ai-studio-room-fit.png",
   "preSpecAssessment": {
     "objectClass": {
       "primaryType": "cut-away diorama of a furnished meeting room set up for a design workshop",
@@ -27,7 +27,7 @@
         "paper (sticky notes)",
         "plastic (chair frames)"
       ],
-      "notes": "Primary reference = eye-height phone photo from the door end; the diorama camera is the 30 deg city camera, so scale comes from docs/city-rules.md and the photo gives identity, layout and colour."
+      "notes": "Primary reference = AI Studio isometric cut-away (game camera); photos confirm details. Scale from docs/city-rules.md."
     },
     "complexity": {
       "tier": "moderate",
@@ -70,13 +70,13 @@
       "rationale": "Identity is the whiteboard wall with the list and sticky grid, the table with laptops and notes, and the teal chairs; at sprite scale (~62 px per wu) proportions and colour blocks carry it."
     },
     "unknownsToResolveBeforeImplementation": [
-      "Room size: ceiling tiles give ~3 x 6.5 m -> compressed to a 2 x 2 tile diorama (city rules section 2).",
+      "Room size: ceiling tiles give ~3 x 6.5 m; the AI Studio image ratio ~1 : 1.45 -> a 2 x 3 tile diorama.",
       "Door wall and ceiling are not modelled: the diorama is cut away on the camera-facing sides.",
       "Whiteboard text must not be legible: stylised marker strokes.",
-      "Table length is cropped: 1.3 wu table along the room's long axis."
+      "Table: centred, 1.25 x 0.62 wu on black sled legs, as in the AI Studio image."
     ],
     "detailInventory": {
-      "scanMethod": "grid-3x3 + close wall view",
+      "scanMethod": "grid-3x3 on the AI Studio reference + photos",
       "targetMinDetails": 6,
       "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
       "details": [
@@ -85,10 +85,10 @@
           "kind": "linework",
           "description": "Handwritten list in black marker on the left of the whiteboard: a heading, underline and 5 bulleted lines.",
           "region": {
-            "x": 0.27,
-            "y": 0.46,
-            "width": 0.11,
-            "height": 0.18,
+            "x": 0.08,
+            "y": 0.25,
+            "width": 0.22,
+            "height": 0.3,
             "units": "normalized"
           },
           "scale": "meso",
@@ -97,7 +97,7 @@
             "type": "component.localFeatures",
             "ref": "whiteboard.markerList"
           },
-          "evidenceRef": "detail-zones/zone-r1c0.png",
+          "evidenceRef": "detail-zones/zone-r0c0.png",
           "confidence": 0.8
         },
         {
@@ -105,10 +105,10 @@
           "kind": "decal",
           "description": "Three column headings with yellow, lime and orange sticky notes in a loose grid at shoulder height.",
           "region": {
-            "x": 0.42,
-            "y": 0.49,
-            "width": 0.16,
-            "height": 0.08,
+            "x": 0.27,
+            "y": 0.15,
+            "width": 0.26,
+            "height": 0.23,
             "units": "normalized"
           },
           "scale": "micro",
@@ -117,7 +117,7 @@
             "type": "component.localFeatures",
             "ref": "whiteboard.stickyGrid"
           },
-          "evidenceRef": "ref/photo-wall-1200.png",
+          "evidenceRef": "detail-zones/zone-r0c1.png",
           "confidence": 0.75
         },
         {
@@ -125,10 +125,10 @@
           "kind": "gloss",
           "description": "Wall-sized painted whiteboard with large soft specular highlights.",
           "region": {
-            "x": 0.0,
-            "y": 0.1,
-            "width": 0.6,
-            "height": 0.6,
+            "x": 0.05,
+            "y": 0.05,
+            "width": 0.55,
+            "height": 0.55,
             "units": "normalized"
           },
           "scale": "macro",
@@ -137,7 +137,7 @@
             "type": "material.localOverrides",
             "ref": "whiteboard.gloss"
           },
-          "evidenceRef": "detail-zones/zone-r0c0.png",
+          "evidenceRef": "ref/ai-studio-room-fit.png",
           "confidence": 0.8
         },
         {
@@ -145,10 +145,10 @@
           "kind": "contour",
           "description": "Round exposed-concrete column, floor to ceiling, near the end wall.",
           "region": {
-            "x": 0.68,
-            "y": 0.37,
-            "width": 0.08,
-            "height": 0.31,
+            "x": 0.63,
+            "y": 0.08,
+            "width": 0.1,
+            "height": 0.35,
             "units": "normalized"
           },
           "scale": "macro",
@@ -157,7 +157,7 @@
             "type": "component.localFeatures",
             "ref": "column.boardMarks"
           },
-          "evidenceRef": "detail-zones/zone-r1c2.png",
+          "evidenceRef": "detail-zones/zone-r0c2.png",
           "confidence": 0.8
         },
         {
@@ -165,10 +165,10 @@
           "kind": "decal",
           "description": "Sticky notes and paper strewn over the oak table between laptops.",
           "region": {
-            "x": 0.66,
-            "y": 0.68,
-            "width": 0.24,
-            "height": 0.11,
+            "x": 0.32,
+            "y": 0.45,
+            "width": 0.36,
+            "height": 0.2,
             "units": "normalized"
           },
           "scale": "micro",
@@ -177,7 +177,7 @@
             "type": "component.localFeatures",
             "ref": "table.stickyNotes"
           },
-          "evidenceRef": "detail-zones/zone-r2c2.png",
+          "evidenceRef": "detail-zones/zone-r1c1.png",
           "confidence": 0.7
         },
         {
@@ -185,10 +185,10 @@
           "kind": "contour",
           "description": "Open silver laptops along the table edge with dark screens.",
           "region": {
-            "x": 0.65,
-            "y": 0.78,
-            "width": 0.28,
-            "height": 0.19,
+            "x": 0.35,
+            "y": 0.46,
+            "width": 0.27,
+            "height": 0.22,
             "units": "normalized"
           },
           "scale": "meso",
@@ -197,7 +197,7 @@
             "type": "component.localFeatures",
             "ref": "laptop-1.screen"
           },
-          "evidenceRef": "detail-zones/zone-r2c2.png",
+          "evidenceRef": "detail-zones/zone-r1c1.png",
           "confidence": 0.7
         },
         {
@@ -206,9 +206,9 @@
           "description": "Swivel chairs: teal upholstered seat and back, white frame and star base.",
           "region": {
             "x": 0.22,
-            "y": 0.7,
-            "width": 0.42,
-            "height": 0.3,
+            "y": 0.4,
+            "width": 0.53,
+            "height": 0.4,
             "units": "normalized"
           },
           "scale": "meso",
@@ -225,10 +225,10 @@
           "kind": "stain",
           "description": "Dark teal carpet across the floor.",
           "region": {
-            "x": 0.4,
-            "y": 0.67,
-            "width": 0.3,
-            "height": 0.16,
+            "x": 0.1,
+            "y": 0.4,
+            "width": 0.85,
+            "height": 0.55,
             "units": "normalized"
           },
           "scale": "macro",
@@ -237,7 +237,7 @@
             "type": "material.localOverrides",
             "ref": "carpet.tone"
           },
-          "evidenceRef": "detail-zones/zone-r2c1.png",
+          "evidenceRef": "detail-zones/zone-r2c0.png",
           "confidence": 0.7
         },
         {
@@ -245,10 +245,10 @@
           "kind": "contour",
           "description": "Low white radiator panel under the end wall.",
           "region": {
-            "x": 0.64,
-            "y": 0.62,
-            "width": 0.03,
-            "height": 0.04,
+            "x": 0.6,
+            "y": 0.28,
+            "width": 0.05,
+            "height": 0.08,
             "units": "normalized"
           },
           "scale": "micro",
@@ -257,7 +257,7 @@
             "type": "component.localFeatures",
             "ref": "radiator.panel"
           },
-          "evidenceRef": "ref/photo-wall-1200.png",
+          "evidenceRef": "ref/ai-studio-room-fit.png",
           "confidence": 0.55
         }
       ]
@@ -287,7 +287,7 @@
       "confidence": 0.0,
       "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
     },
-    "sourceImage": "ref/photo-wide-1200.png"
+    "sourceImage": "ref/ai-studio-room-fit.png"
   },
   "qualityContract": {
     "qualityBar": "moderate",
@@ -412,8 +412,8 @@
     "collection": "core_3d",
     "query": "Workshop furniture table chair whiteboard interior diorama",
     "index": {
-      "status": "rebuilt",
-      "reason": "missing",
+      "status": "hit",
+      "reason": "current",
       "fingerprint": "62f2831e1d52eeb6dbb94a87c44fa25b1f4926626a7b1f8c2bcadc63e04e9471"
     },
     "matches": []

@@ -261,7 +261,7 @@ export default function EntranceLab() {
         const size = box.getSize(new THREE.Vector3());
         const centre = box.getCenter(new THREE.Vector3());
         const half = Math.max(size.x, size.z) * 0.62;
-        const iso = Math.atan(1 / Math.sqrt(2));
+        const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
         ortho.position.set(centre.x + 40 * Math.cos(iso) * Math.sin(yaw), centre.y + 40 * Math.sin(iso), centre.z + 40 * Math.cos(iso) * Math.cos(yaw));
         ortho.lookAt(centre);

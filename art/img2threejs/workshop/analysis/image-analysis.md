@@ -1,7 +1,11 @@
 # Image analysis: Workshop (cut-away meeting room set up for a design workshop)
 
 References (kept out of git, `ref/`)
-- PRIMARY `ref/photo-wide.jpg`: phone photo from the room's door end, eye height, wide lens, looking along the
+- PRIMARY `ref/ai-studio-room-fit.png`: Gustav's AI Studio isometric cut-away made from the two photos (camera
+  ~30 deg, yaw 45, white background). Sets the layout, proportions and palette: whiteboard on the long back
+  wall, end wall with the column and a white wall unit, table centred on black sled legs, two chairs on each long
+  side, thick dark wall caps and posts, teal carpet on a dark plinth. Room ratio ~1 : 1.45 -> 2 x 3 tiles.
+- `ref/photo-wide.jpg`: phone photo from the room's door end, eye height, wide lens, looking along the
   long axis. Shows the whiteboard wall, end wall, column, table, chairs and ceiling.
 - `ref/photo-wall.jpg`: closer view of the whiteboard wall and the end wall corner with the column.
 People in both photos are not modelled (the city has its own characters). Whiteboard text is stylised into
