@@ -67,6 +67,6 @@ for i in range(n):
         s = s.resize((FW // 2, FH // 2), Image.LANCZOS).resize(((FW // 2) * 3, (FH // 2) * 3), Image.NEAREST)
         canvas.paste(s, (10 + k * ((FW // 2) * 3 + 10), 10), s)
     gif_frames.append(canvas)
-# a GIF cannot hold 28 ms delays reliably; preview at a quarter of game speed so the gait is visible
-gif_frames[0].save(f"{OUT}.gif", save_all=True, append_images=gif_frames[1:], duration=round(4000 / fps), loop=0)
+# real game speed (17.8 fps = 56 ms per frame; GIF delays are in 10 ms steps, so 60 ms)
+gif_frames[0].save(f"{OUT}.gif", save_all=True, append_images=gif_frames[1:], duration=round(1000 / fps, -1), loop=0)
 print("ok", fps)

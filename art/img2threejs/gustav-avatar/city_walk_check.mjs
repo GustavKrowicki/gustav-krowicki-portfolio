@@ -6,9 +6,11 @@ import { writeFileSync } from 'node:fs';
 
 const [, , outDir, stepsArg = '7'] = process.argv;
 const LAB = process.env.LAB ?? 'http://localhost:3102';
-const browser = await chromium.launch({ args: ['--use-angle=swiftshader', '--enable-unsafe-swiftshader'] });
-const page = await browser.newPage({ viewport: { width: 1280, height: 800 }, deviceScaleFactor: 1 });
+const browser = await chromium.launch({ args: (process.env.GL ?? '--use-angle=swiftshader,--enable-unsafe-swiftshader').split(',') });
+// A <768 px viewport puts the city in its mobile adventure camera: Street zoom 2 with lerp follow of the player.
+const page = await browser.newPage({ viewport: { width: Number(process.env.VW ?? 760), height: 560 }, deviceScaleFactor: 1 });
 const consoleLog = [];
+page.on('response', (r) => { if (r.status() >= 400) consoleLog.push({ type: 'http', text: `${r.status()} ${r.url()}` }); });
 page.on('pageerror', (e) => consoleLog.push({ type: 'pageerror', text: String(e) }));
 page.on('console', (m) => { if (m.type() === 'error' || m.type() === 'warning') consoleLog.push({ type: m.type(), text: m.text() }); });
 
@@ -34,7 +36,7 @@ async function findPointer() {
   }, b64);
 }
 
-await page.goto(`${LAB}/city?e2e=1&avatar=3d`, { waitUntil: 'domcontentloaded' });
+await page.goto(`${LAB}/city?e2e=1${process.env.NO3D ? '' : '&avatar=3d'}`, { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => typeof window.__CITY_E2E__ !== 'undefined', null, { timeout: 180000 });
 await page.evaluate(() => window.__CITY_E2E__.dismissWelcome());
 await page.waitForTimeout(1500);
@@ -49,19 +51,16 @@ for (let i = 0; i < Number(stepsArg); i++) {
 }
 await page.mouse.move(5, 790);
 const shots = [];
-for (const [dir, key] of [['right', 'd'], ['down', 's'], ['left', 'a'], ['up', 'w']]) {
-  await page.keyboard.down(key);
-  for (let i = 0; i < 8; i++) {
-    await page.waitForTimeout(140);
-    const p = await findPointer();
-    if (!p) continue;
-    const clip = { x: Math.max(0, p.x - 70), y: Math.max(0, p.y - 30), width: 140, height: 150 };
-    const path = `${outDir}/${dir}-${i}.png`;
-    await page.screenshot({ path, clip });
-    shots.push({ dir, i, path, pointer: p });
+// Keyboard input does not move the player in this headless harness (the GIF player neither; checked), so walk
+// with the e2e auto-walk to buildings in different directions. Full-frame screenshots only (fast); crops are made
+// offline around the gold pointer (city_walk_crops.py).
+for (const building of (process.env.TARGETS ?? 'lego-hq,aarhus-stadium').split(',')) {
+  const ok = await page.evaluate((b) => window.__CITY_E2E__.walkToBuilding(b), building);
+  for (let i = 0; i < Number(process.env.SHOTS ?? 24); i++) {
+    const path = `${outDir}/${building}-${String(i).padStart(2, '0')}.png`;
+    await page.screenshot({ path });
+    shots.push({ building, ok, i, path, t: Date.now() });
   }
-  await page.keyboard.up(key);
-  await page.waitForTimeout(1500);
 }
 await page.screenshot({ path: `${outDir}/full.png` });
 writeFileSync(`${outDir}/console.json`, JSON.stringify(consoleLog, null, 1));
