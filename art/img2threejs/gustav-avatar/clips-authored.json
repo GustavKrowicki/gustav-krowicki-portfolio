@@ -1,14 +1,16 @@
 {
-  "figureHeightModel": 0.90706,
+  "figureHeightModel": 0.92304,
+  "headFraction": 0.2399,
+  "headToHeight": "1:4.17",
   "walk": {
     "duration": 1.0,
     "speedH": 0.4,
-    "travelModel": 0.36282,
+    "travelModel": 0.36922,
     "contact": 0.58,
     "riseH": 0.02,
-    "stepModel": 0.18141,
-    "excursionModel": 0.21044,
-    "hipDropAtDoubleSupport": 0.0175,
+    "stepModel": 0.18461,
+    "excursionModel": 0.21415,
+    "hipDropAtDoubleSupport": 0.0185,
     "legReachMax": 0.31462,
     "reachMargin": 0.003
   },
@@ -31,6 +33,16 @@
     "brow-r": "head",
     "shoulder-l": "clavicle-l",
     "shoulder-r": "clavicle-r",
-    "laptop": "hand-l"
+    "laptop": "hand-l",
+    "hair-tuft-1": "head",
+    "hair-tuft-2": "head",
+    "hair-tuft-3": "head",
+    "hair-tuft-4": "head",
+    "hair-tuft-5": "head",
+    "fringe-1": "head",
+    "fringe-2": "head",
+    "fringe-3": "head",
+    "sideburn-l": "head",
+    "sideburn-r": "head"
   }
 }

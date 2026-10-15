@@ -43,8 +43,15 @@ def model_pos(cid):
 
 # Figure height from the spec geometry (hair top to shoe sole); the browser measures the real one.
 hair_top = model_pos("hair")[1] + tree["hair"]["transform"]["scale"][1] / 2
+head_y = model_pos("head")[1]
+for c in tree.values():  # v3 hair clumps (tapered sweeps, head-local stations)
+    sw = (c.get("geometryDescriptor") or {}).get("taperedSweep")
+    if c.get("parent") == "head" and isinstance(sw, dict):
+        hair_top = max(hair_top, head_y + max(st["position"][1] + st["rx"] for st in sw["stations"]))
 sole = model_pos("foot-l")[1] - tree["foot-l"]["transform"]["scale"][1] / 2
 H = hair_top - sole
+chin = head_y - tree["head"]["transform"]["scale"][1] / 2
+HEAD_FRACTION = (hair_top - chin) / H
 
 # ---------------------------------------------------------------- quaternion helpers (x, y, z, w)
 def q_axis(axis, angle):
@@ -268,7 +275,7 @@ def owner(cid):
 
 rigid = {cid: owner(cid) for cid in tree if cid not in bone_ids and cid != "root"}
 
-meta = {"figureHeightModel": round(H, 5), "walk": {"duration": DURATION, "speedH": SPEED_H, "travelModel": round(TRAVEL, 5),
+meta = {"figureHeightModel": round(H, 5), "headFraction": round(HEAD_FRACTION, 4), "headToHeight": f"1:{H / (hair_top - chin):.2f}", "walk": {"duration": DURATION, "speedH": SPEED_H, "travelModel": round(TRAVEL, 5),
         "contact": CONTACT, "riseH": RISE_H, "stepModel": round(TRAVEL / 2, 5), "excursionModel": round(EXC, 5),
         "hipDropAtDoubleSupport": round(V_REST - V_LOW, 5), "legReachMax": round(LMAX, 5), "reachMargin": REACH_MARGIN},
         "idle": {"duration": IDLE_DURATION}, "rigidParts": rigid}
