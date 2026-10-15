@@ -113,6 +113,7 @@ export default function PortfolioShell() {
           state={panel}
           openCase={openCase}
           onOpenCase={openCaseStudy}
+          onOpenSection={openSection}
           onCloseCase={closeCaseStudy}
           onToggleExpand={() => setPanel((current) => (current === 'expanded' ? 'open' : 'expanded'))}
           onClose={() => setPanel('closed')}
