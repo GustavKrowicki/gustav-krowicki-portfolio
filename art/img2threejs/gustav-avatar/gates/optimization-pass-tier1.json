@@ -2,168 +2,208 @@ STATUS pass=complete completed=8 blocked=all build passes completed next=diagnos
 {
   "passed": false,
   "checks": {
-    "silhouetteIoU": 0.6951,
+    "silhouetteIoU": 0.7223,
     "aspectRatioDelta": 0.1144,
     "scaleDelta": 0.1144,
-    "bilateralSymmetryError": 0.3307,
+    "bilateralSymmetryError": 0.3078,
     "colorDelta": {
-      "checked": 36,
-      "maxDeltaE": 14.75,
+      "checked": 46,
+      "maxDeltaE": 18.69,
       "perComponent": [
         {
           "componentId": null,
-          "deltaE": 14.75
+          "deltaE": 15.18
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 5.24
+          "deltaE": 10.98
         },
         {
           "componentId": null,
-          "deltaE": 5.24
+          "deltaE": 10.98
         },
         {
           "componentId": null,
-          "deltaE": 1.13
+          "deltaE": 0.98
         },
         {
           "componentId": null,
-          "deltaE": 5.24
+          "deltaE": 10.98
         },
         {
           "componentId": null,
-          "deltaE": 11.02
+          "deltaE": 18.69
         },
         {
           "componentId": null,
-          "deltaE": 13.67
+          "deltaE": 14.25
         },
         {
           "componentId": null,
-          "deltaE": 13.67
+          "deltaE": 14.25
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 5.24
+          "deltaE": 10.98
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 5.24
+          "deltaE": 10.98
         },
         {
           "componentId": null,
-          "deltaE": 2.98
+          "deltaE": 2.51
         },
         {
           "componentId": null,
-          "deltaE": 2.98
+          "deltaE": 2.51
         },
         {
           "componentId": null,
-          "deltaE": 5.32
+          "deltaE": 5.95
         },
         {
           "componentId": null,
-          "deltaE": 2.98
+          "deltaE": 2.51
         },
         {
           "componentId": null,
-          "deltaE": 2.98
+          "deltaE": 2.51
         },
         {
           "componentId": null,
-          "deltaE": 5.32
+          "deltaE": 5.95
         },
         {
           "componentId": null,
-          "deltaE": 8.14
+          "deltaE": 6.1
         },
         {
           "componentId": null,
-          "deltaE": 8.14
+          "deltaE": 6.1
         },
         {
           "componentId": null,
-          "deltaE": 8.14
+          "deltaE": 6.1
         },
         {
           "componentId": null,
-          "deltaE": 8.37
+          "deltaE": 6.45
         },
         {
           "componentId": null,
-          "deltaE": 8.37
+          "deltaE": 6.45
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 4.32
         },
         {
           "componentId": null,
-          "deltaE": 1.13
+          "deltaE": 0.98
         },
         {
           "componentId": null,
-          "deltaE": 1.13
+          "deltaE": 0.98
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 7.15
+          "deltaE": 5.48
         },
         {
           "componentId": null,
-          "deltaE": 7.2
+          "deltaE": 2.07
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 5.73
+        },
+        {
+          "componentId": null,
+          "deltaE": 0.98
+        },
+        {
+          "componentId": null,
+          "deltaE": 0.98
+        },
+        {
+          "componentId": null,
+          "deltaE": 0.98
+        },
+        {
+          "componentId": null,
+          "deltaE": 0.98
+        },
+        {
+          "componentId": null,
+          "deltaE": 0.98
         }
       ],
       "gated": true
     }
   },
   "failures": [
-    "silhouette IoU 0.695 is below threshold 0.85",
+    "silhouette IoU 0.722 is below threshold 0.85",
     "aspect-ratio delta 0.114 exceeds threshold 0.05",
     "scale delta 0.114 exceeds threshold 0.08"
   ],
   "maskWarnings": [],
-  "renderHash": "2663c6075776be8b",
+  "renderHash": "debb6b89f5e2134d",
   "passId": "optimization-pass"
 }

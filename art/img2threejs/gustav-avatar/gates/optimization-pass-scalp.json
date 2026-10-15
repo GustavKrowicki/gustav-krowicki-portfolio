@@ -4,10 +4,10 @@
   "exposedFraction": 0.0,
   "exposedSamples": [],
   "sampleCount": 640,
-  "hairPointCount": 34048,
-  "hairPointsInsideSkull": 7731,
-  "reach": 0.03751,
-  "lateral": 0.012787,
+  "hairPointCount": 8064,
+  "hairPointsInsideSkull": 1922,
+  "reach": 0.039386,
+  "lateral": 0.013427,
   "vRange": [
     0.5,
     1.0
