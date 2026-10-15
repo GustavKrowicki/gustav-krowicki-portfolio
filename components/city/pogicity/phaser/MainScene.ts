@@ -46,6 +46,7 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
+import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -316,6 +317,9 @@ export class MainScene extends Phaser.Scene {
         loadPromises.push(loadGifAsAnimation(this, key, url));
       }
     }
+
+    // Opt-in 3D-rendered player sheets (?avatar=3d); the GIFs above stay loaded for NPCs and as the default.
+    if (avatar3dEnabled()) loadPromises.push(loadAvatar3dSprites(this));
 
     try {
       await Promise.all(loadPromises);
