@@ -1,14 +1,14 @@
 {
-  "figureHeightModel": 1.06006,
+  "figureHeightModel": 0.90706,
   "walk": {
     "duration": 1.0,
     "speedH": 0.4,
-    "travelModel": 0.42402,
+    "travelModel": 0.36282,
     "contact": 0.58,
     "riseH": 0.02,
-    "stepModel": 0.21201,
-    "excursionModel": 0.24593,
-    "hipDropAtDoubleSupport": 0.025,
+    "stepModel": 0.18141,
+    "excursionModel": 0.21044,
+    "hipDropAtDoubleSupport": 0.0175,
     "legReachMax": 0.31462,
     "reachMargin": 0.003
   },
@@ -26,6 +26,11 @@
     "glasses-bridge": "head",
     "tee-front": "chest",
     "tee-front-low": "abdomen",
-    "jacket-collar": "chest"
+    "jacket-collar": "chest",
+    "brow-l": "head",
+    "brow-r": "head",
+    "shoulder-l": "clavicle-l",
+    "shoulder-r": "clavicle-r",
+    "laptop": "hand-l"
   }
 }

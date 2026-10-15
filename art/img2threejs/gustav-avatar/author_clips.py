@@ -117,7 +117,9 @@ DURATION = 1.0                       # s per cycle (band 1.0-1.2)
 SPEED_H = 0.40                       # H/s: the band target (band 0.30-0.60); first authoring at 0.36 missed the travel band
 CONTACT = 0.58                       # stance fraction per foot (band 0.55-0.65)
 RISE_H = 0.02                        # hip rise, fraction of H (band 0.015-0.025)
-ARM_SWING = 0.33                     # upper-arm pitch amplitude, rad (0.36 measured handRange 0.254 H > 0.25 band)
+ARM_SWING = 0.28                     # upper-arm pitch amplitude, rad (v1 0.36 -> handRange 0.254 H; v2 longer arms in H at 0.33 -> 0.277 H; band <= 0.25)
+CARRY_IN = 0.1                       # left (laptop) arm: less adduction so the laptop clears the hip
+CARRY_SWING = 0.08                   # left (laptop) arm swing, rad
 ARM_IN = 0.2                        # constant adduction from the A-pose bind, rad
 FOOT_LIFT = 0.032                    # swing apex, model units
 FPS = 60
@@ -161,9 +163,10 @@ def walk_pose(t, in_place=False):
     # arms: counter-swing (left arm back when the left foot strikes), elbows bend more on the forward swing
     c = math.cos(2 * math.pi * ph)
     # arms hang closer to the body than the A-pose bind (sprite: arms at the sides)
-    rot["upper-arm-l"] = q_mul(q_axis(Z, -ARM_IN), rx(ARM_SWING * c))
+    # v2: the left hand carries the laptop (east frames): a short swing, elbow held a little bent
+    rot["upper-arm-l"] = q_mul(q_axis(Z, -CARRY_IN), rx(CARRY_SWING * c))
     rot["upper-arm-r"] = q_mul(q_axis(Z, ARM_IN), rx(-ARM_SWING * c))
-    rot["forearm-l"] = rx(-0.18 - 0.22 * max(0.0, -c))
+    rot["forearm-l"] = rx(-0.22)
     rot["forearm-r"] = rx(-0.18 - 0.22 * max(0.0, c))
     rot["chest"] = q_axis(Y, 0.07 * c)
     rot["head"] = q_axis(Y, -0.05 * c)
@@ -197,9 +200,9 @@ def idle_pose(t):
         "abdomen": rx(-0.015 * b),
         "chest": q_mul(rx(-0.02 * b), q_axis(Y, 0.02 * s)),
         "head": q_mul(rx(0.03 * b), q_axis(Y, -0.04 * math.sin(2 * math.pi * t / T + 0.6))),
-        "upper-arm-l": q_mul(q_axis(Z, -ARM_IN + 0.02 * b), rx(0.03 * s)),
+        "upper-arm-l": q_mul(q_axis(Z, -CARRY_IN + 0.01 * b), rx(0.02 * s)),
         "upper-arm-r": q_mul(q_axis(Z, ARM_IN - 0.02 * b), rx(-0.03 * s)),
-        "forearm-l": rx(-0.12 - 0.03 * b),
+        "forearm-l": rx(-0.22 - 0.02 * b),
         "forearm-r": rx(-0.12 - 0.03 * b),
     }, "feet": {}}
 
