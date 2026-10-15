@@ -2,14 +2,22 @@
 // rendered from lib/city/models/gustavAvatar.ts by art/img2threejs/gustav-avatar/render_sheets.mjs + pack_sheets.py.
 // Opt-in only (?avatar=3d): the live GIFs stay the default.
 import type Phaser from 'phaser';
+import { CHARACTER_HEIGHT_WU, PX_PER_WU_UP, TILE_HEIGHT, TILE_WIDTH } from '@/lib/city/units';
 
 export const AVATAR3D_BASE = '/game/pogicity/Characters/avatar3d';
 
 // Sheets are 4x world pixels (0.9 wu = 97 px); 0.25 draws the city standard 0.9 wu = 24 px at zoom 1, 48 px at
-// Street zoom 2. Walk fps: the walk clip covers 0.36 wu per 1.0 s cycle (0.40 H/s), so at the city's 1.6 wu/s
-// the 8-frame cycle must run 1.6 / 0.36 = 4.44 times a second = 35.6 fps for the feet not to slide.
+// Street zoom 2.
 export const AVATAR3D_DISPLAY_SCALE = 0.25;
-export const AVATAR3D_WALK_FPS = 35.56;
+// Walk: the clip covers 0.36 wu per 1.0 s cycle (0.40 H/s, 8 frames). The 3D player walks at 0.8 wu/s (the GIF
+// player keeps its lerp), so the cycle runs 0.8 / 0.36 = 2.22 times a second = 17.8 fps and the feet do not slide.
+export const AVATAR3D_STRIDE_WU_PER_CYCLE = 0.36;
+export const AVATAR3D_WALK_SPEED_WU = 0.8;
+export const AVATAR3D_WALK_FPS = (8 * AVATAR3D_WALK_SPEED_WU) / AVATAR3D_STRIDE_WU_PER_CYCLE;
+// Screen px per wu along a grid axis (one tile moves the screen by (TILE_WIDTH/2, TILE_HEIGHT/2)).
+export const AVATAR3D_WALK_PX_PER_S = AVATAR3D_WALK_SPEED_WU * Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+// Gold pointer: the figure's displayed height (0.9 wu = 24.2 px at zoom 1) plus a 7 px gap above the head.
+export const AVATAR3D_POINTER_OFFSET_PX = CHARACTER_HEIGHT_WU * PX_PER_WU_UP + 7;
 
 type Manifest = {
   frameWidth: number;

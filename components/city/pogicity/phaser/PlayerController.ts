@@ -14,7 +14,9 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { AVATAR3D_DISPLAY_SCALE, avatar3dEnabled, avatar3dOrigin } from "@/lib/city/avatar3dSprites";
+import {
+  AVATAR3D_DISPLAY_SCALE, AVATAR3D_POINTER_OFFSET_PX, AVATAR3D_WALK_PX_PER_S, avatar3dEnabled, avatar3dOrigin,
+} from "@/lib/city/avatar3dSprites";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -194,8 +196,7 @@ export class PlayerController {
 
     if (this.isMoving) {
       // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+      this.stepTowardTarget();
 
       const dx = Math.abs(this.worldX - this.targetWorldX);
       const dy = Math.abs(this.worldY - this.targetWorldY);
@@ -248,8 +249,7 @@ export class PlayerController {
 
     if (this.isMoving) {
       // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+      this.stepTowardTarget();
 
       const dx = Math.abs(this.worldX - this.targetWorldX);
       const dy = Math.abs(this.worldY - this.targetWorldY);
@@ -460,15 +460,40 @@ export class PlayerController {
     return true;
   }
 
+  private uses3dAvatar(): boolean {
+    return this.characterType === CharacterType.Gustav && avatar3dEnabled();
+  }
+
+  // ?avatar=3d: constant 0.8 wu/s (time based, so the 17.8 fps walk keeps the feet planted); otherwise the lerp.
+  private stepTowardTarget(): void {
+    if (!this.uses3dAvatar()) {
+      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
+      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+      return;
+    }
+    const dx = this.targetWorldX - this.worldX;
+    const dy = this.targetWorldY - this.worldY;
+    const dist = Math.hypot(dx, dy);
+    const step = (AVATAR3D_WALK_PX_PER_S * Math.min(this.scene.game.loop.delta, 100)) / 1000;
+    if (dist <= step) {
+      this.worldX = this.targetWorldX;
+      this.worldY = this.targetWorldY;
+    } else {
+      this.worldX += (dx / dist) * step;
+      this.worldY += (dy / dist) * step;
+    }
+  }
+
   private lerp(a: number, b: number, t: number): number {
     return a + (b - a) * t;
   }
 
   private getTextureKey(): string {
     const key = getCharacterTextureKey(this.characterType, this.direction);
-    if (this.characterType !== CharacterType.Gustav || !avatar3dEnabled()) return key;
+    if (!this.uses3dAvatar()) return key;
     // ?avatar=3d: the 3D-rendered sheets, same compass naming as the GIFs, walk or idle by state
-    const clip = this.state === PlayerState.Idle ? "idle" : "walk";
+    // held input keeps the walk cycle running across tile boundaries (no idle flicker between tiles)
+    const clip = this.state === PlayerState.Idle && !this.inputDirection ? "idle" : "walk";
     return `avatar3d_${clip}_${key.slice(key.indexOf("_") + 1)}`;
   }
 
@@ -528,7 +553,10 @@ export class PlayerController {
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
       // Position pointer above player (with bounce)
-      const pointerY = this.worldY - 80 - this.pointerBounceOffset;
+      // 3D avatar: just above its head (the arrow is 14 px tall); the GIF player keeps its 80 px
+      const pointerY = this.uses3dAvatar()
+        ? this.worldY - AVATAR3D_POINTER_OFFSET_PX - 14 - this.pointerBounceOffset
+        : this.worldY - 80 - this.pointerBounceOffset;
       this.pointer.setPosition(this.worldX, pointerY);
       this.pointer.setDepth(20_000_000); // Always on top
     }
