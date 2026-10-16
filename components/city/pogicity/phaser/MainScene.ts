@@ -1647,7 +1647,8 @@ export class MainScene extends Phaser.Scene {
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     const tile = here ?? next;
     const sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
-    this.playerController.setDepthOverride(sprite ? sprite.depth + 0.5 : null);
+    const local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
+    this.playerController.setDepthOverride(sprite && local ? sprite.depth + this.footprintSortOffset(local.x, local.y) : null);
   }
 
   // Compute tiles blocked by building sprite overhang (collision padding)
@@ -2269,6 +2270,14 @@ export class MainScene extends Phaser.Scene {
     }
     this.buildingSpriteInfo.delete(buildingKey);
 
+    for (let i = 0; i < 40; i++) {
+      const decorKey = `${buildingKey}_d${i}`;
+      const decor = this.buildingSprites.get(decorKey);
+      if (!decor) continue;
+      decor.destroy();
+      this.buildingSprites.delete(decorKey);
+    }
+
     for (let i = 1; i < 20; i++) {
       const sliceKey = `${buildingKey}_s${i}`;
       const sliceSprite = this.buildingSprites.get(sliceKey);
@@ -2312,6 +2321,51 @@ export class MainScene extends Phaser.Scene {
 
     this.buildingSprites.set(key, sprite);
     this.buildingSpriteInfo.set(key, { buildingId, orientation });
+
+    // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
+    // (and against the player inside the footprint) by their local ground position
+    if (!orientation || orientation === Direction.Down) {
+      (building.decor ?? []).forEach((d, i) => {
+        const textureKey = `${d.prop}_south`;
+        if (!this.textures.exists(textureKey)) return;
+        const p = this.gridToScreen(originX + d.x, originY + d.y);
+        const image = this.add.image(p.x, p.y, textureKey);
+        const frame = image.frame;
+        const bottom = this.decorBottom.get(textureKey) ?? this.measureBottom(textureKey, frame.height);
+        image.setOrigin(0.5, bottom / frame.height);
+        image.setScale(d.scale);
+        image.setDepth(sprite.depth + this.footprintSortOffset(d.x, d.y));
+        this.buildingSprites.set(`${key}_d${i}`, image);
+      });
+    }
+  }
+
+  // Bottom row of a prop sprite's visible pixels (its ground point), cached per texture
+  private decorBottom: Map<string, number> = new Map();
+  private measureBottom(textureKey: string, height: number): number {
+    let bottom = height;
+    const source = this.textures.get(textureKey).getSourceImage() as HTMLImageElement;
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = source.width; canvas.height = source.height;
+      const g = canvas.getContext("2d");
+      if (g) {
+        g.drawImage(source, 0, 0);
+        const data = g.getImageData(0, 0, source.width, source.height).data;
+        search: for (let y = source.height - 1; y >= 0; y--) {
+          for (let x = 0; x < source.width; x++) if (data[(y * source.width + x) * 4 + 3] > 20) { bottom = y + 1; break search; }
+        }
+      }
+    } catch {
+      // keep the sprite bottom
+    }
+    this.decorBottom.set(textureKey, bottom);
+    return bottom;
+  }
+
+  // Small depth step above a walk-in building's sprite for things on its footprint (decor, the player)
+  private footprintSortOffset(localX: number, localY: number): number {
+    return 0.3 + (localX + localY) * 0.001;
   }
 
   // Roof off / on: cross-fade the building's sprite to its open (or closed) texture

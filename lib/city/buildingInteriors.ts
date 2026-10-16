@@ -26,7 +26,7 @@ const LEGO_HQ: BuildingInterior = {
     "P#SSSLLLRRRR##",
     "P#S#SLLLRRRR##",
     "P#SSSPPP#PPPPP",
-    "PPPPP#P#PPPPPP",
+    "#PPPP#P#PPPPP#",
   ],
   outside: "P",
   doors: [

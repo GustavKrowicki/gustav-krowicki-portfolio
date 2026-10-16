@@ -35,6 +35,9 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
+  // Library props drawn on the building's own footprint (props cannot occupy footprint tiles in the grid): the prop's
+  // own sprite, scaled, with its ground point at local tile coordinates (x right, y down from the origin tile)
+  decor?: { prop: string; x: number; y: number; scale: number }[];
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
   // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
@@ -98,6 +101,15 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     footprint: { width: 14, height: 9 },
     triggerZoneRadius: 5.5,
     spriteScale: 0.5,
+    // Pogicity trees and bushes, downsized to the avatar scale, in the plaza planters and on the front corners
+    decor: [
+      { prop: "tree-4", x: 8.5, y: 7.5, scale: 0.45 },
+      { prop: "tree-4", x: 7.5, y: 8.5, scale: 0.45 },
+      { prop: "tree-1", x: 0.5, y: 8.55, scale: 0.55 },
+      { prop: "tree-1", x: 13.5, y: 8.55, scale: 0.55 },
+      { prop: "flower-bush", x: 2.0, y: 8.85, scale: 0.8 },
+      { prop: "flower-bush", x: 3.4, y: 8.85, scale: 0.8 },
+    ],
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
       north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
