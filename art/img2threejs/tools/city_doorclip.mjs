@@ -6,7 +6,7 @@ const b = await chromium.launch({ args: ['--use-gl=angle', '--enable-unsafe-swif
 const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
 await p.goto(`http://localhost:${process.env.LAB_PORT ?? 3103}/city?avatar=3d&e2e=1`, { waitUntil: 'load' });
 await p.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); return !!(s && s.isReady && s.grid.length); }, null, { timeout: 120000 });
-await p.evaluate(async () => { const a = window.__CITY_E2E__; a.dismissWelcome(); await new Promise((r) => setTimeout(r, 1500)); a.startAdventure(); await new Promise((r) => setTimeout(r, 1500)); });
+await p.evaluate(async () => { const a = window.__CITY_E2E__; a.startAdventure(); await new Promise((r) => setTimeout(r, 1500)); });
 await p.waitForFunction(() => !!window.__CITY_E2E__.getScene().playerController?.isReady, null, { timeout: 60000 });
 await p.evaluate(() => {
   const s = window.__CITY_E2E__.getScene(); const pc = s.playerController; pc.spawn(34, 47, pc.characterType);

@@ -144,7 +144,7 @@ export const CHARACTER_SPEED = 0.015;
 
 // Adventure Mode Types
 export enum GameMode {
-  Viewer = "viewer",       // Classic tour mode with TourGuide panel
+  Viewer = "viewer",       // Camera pans between buildings; no avatar
   Adventure = "adventure", // Pokemon Go-style exploration
 }
 

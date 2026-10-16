@@ -6,11 +6,8 @@ import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode }
 import { getBuilding } from "@/lib/city/buildings";
 import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
-import WelcomeOverlay from "./WelcomeOverlay";
-import TourGuide from "./TourGuide";
 import RPGDialogBox from "./RPGDialogBox";
 import VirtualJoystick from "./VirtualJoystick";
-import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
@@ -21,11 +18,6 @@ import {
   trackModeSelected,
   trackBuildingInteracted,
   trackProjectOpened,
-  trackAdventureCompleted,
-  trackAdventureExited,
-  trackTourStopViewed,
-  trackTourCompleted,
-  trackTourExited,
   trackCityExited,
 } from "@/lib/analytics";
 
@@ -43,14 +35,13 @@ interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
   e2eMode?: boolean;
-  // "page" is the standalone /city route. "shell" sits beside the portfolio panel, which owns the
-  // navigation, so the city starts without the welcome overlay and hides its own mode and tour buttons.
+  // "page" is the standalone /city route, with its own mode toggle and a Walk button for the avatar.
+  // "shell" sits beside the portfolio panel, which owns the navigation, so the city hides those.
   variant?: "page" | "shell";
 }
 
 
 interface CityE2EApi {
-  dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
@@ -83,20 +74,12 @@ export default function CityViewer({
 }: CityViewerProps) {
   const isShell = variant === "shell";
 
-  // Mode state
-  const [showWelcome, setShowWelcome] = useState(!isShell);
+  // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
-
-  // Tour state (classic tour mode)
-  const [isTourActive, setIsTourActive] = useState(false);
-  const [currentTourStop, setCurrentTourStop] = useState(0);
-
-  // Adventure mode state
   const [isAdventureActive, setIsAdventureActive] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAutoWalking, setIsAutoWalking] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
 
   // Logo overlay state
@@ -122,14 +105,10 @@ export default function CityViewer({
   const hasSpawnedAmbientLife = useRef(false);
   const hasManualViewportInteraction = useRef(false);
   const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
-  const adventureStartTimeRef = useRef<number | null>(null);
-  const tourStartTimeRef = useRef<number | null>(null);
-  const hasTrackedAdventureCompletionRef = useRef(false);
-  const maxTourStopViewedRef = useRef(0);
   const autoWalkTargetRef = useRef<string | null>(null);
   const currentEncounterRef = useRef<TourStop | null>(null);
   currentEncounterRef.current = currentEncounter;
-  const selectedModeRef = useRef<'none' | 'tour' | 'explore' | 'adventure'>('none');
+  const selectedModeRef = useRef<'explore' | 'adventure'>('explore');
   const visitedBuildingsCountRef = useRef(0);
   useEffect(() => {
     visitedBuildingsCountRef.current = visitedBuildings.size;
@@ -297,7 +276,7 @@ export default function CityViewer({
       window.setTimeout(() => {
         updateLogosAndCameraRef.current?.();
 
-        if (showWelcome || !hasManualViewportInteraction.current) {
+        if (!hasManualViewportInteraction.current) {
           gameBoardRef.current?.fitCityView();
         }
       }, 300);
@@ -308,38 +287,15 @@ export default function CityViewer({
     return () => {
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, [showWelcome]);
-
-  // Handle welcome overlay actions
-  const handleStartTour = useCallback(() => {
-    setShowWelcome(false);
-    setGameMode(GameMode.Viewer);
-    setIsTourActive(true);
-    setCurrentTourStop(0);
-    trackModeSelected('tour');
-    selectedModeRef.current = 'tour';
-    tourStartTimeRef.current = Date.now();
-    maxTourStopViewedRef.current = 0;
-  }, []);
-
-  const handleExploreFreely = useCallback(() => {
-    setShowWelcome(false);
-    setGameMode(GameMode.Viewer);
-    setIsTourActive(false);
-    trackModeSelected('explore');
-    selectedModeRef.current = 'explore';
   }, []);
 
   // Start Adventure Mode
   const handleStartAdventure = useCallback(() => {
-    setShowWelcome(false);
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
     trackModeSelected('adventure', 'gustav');
     selectedModeRef.current = 'adventure';
-    adventureStartTimeRef.current = Date.now();
-    hasTrackedAdventureCompletionRef.current = false;
 
     // Start adventure mode in Phaser
     const gameBoard = gameBoardRef.current;
@@ -387,7 +343,6 @@ export default function CityViewer({
             if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
               autoWalkTargetRef.current = null;
             }
-            setIsAutoWalking(data.state === PlayerState.AutoWalking);
             setWalkableDirections(data.walkableDirections ?? []);
           });
 
@@ -427,11 +382,6 @@ export default function CityViewer({
 
   // Stop Adventure Mode
   const handleStopAdventure = useCallback(() => {
-    if (adventureStartTimeRef.current && !hasTrackedAdventureCompletionRef.current) {
-      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
-      trackAdventureExited(duration, visitedBuildings.size);
-    }
-
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
@@ -442,7 +392,7 @@ export default function CityViewer({
     if (gameBoard) {
       gameBoard.stopAdventureMode();
     }
-  }, [visitedBuildings.size]);
+  }, []);
 
   // Handle dialog close
   const handleDialogClose = useCallback(() => {
@@ -454,18 +404,6 @@ export default function CityViewer({
       setVisitedBuildings((prev) => new Set([...prev, currentEncounter.buildingId!]));
     }
   }, [currentEncounter]);
-
-  // Handle "Next Stop" button in AdventureHUD
-  const handleNextStop = useCallback(() => {
-    // Find next unvisited building
-    for (const stop of TOUR_STOPS) {
-      if (stop.buildingId && !visitedBuildings.has(stop.buildingId)) {
-        autoWalkTargetRef.current = stop.buildingId;
-        gameBoardRef.current?.walkPlayerToBuilding(stop.buildingId);
-        break;
-      }
-    }
-  }, [visitedBuildings]);
 
   // Handle joystick direction change
   const handleJoystickDirection = useCallback((direction: Direction | null) => {
@@ -486,83 +424,11 @@ export default function CityViewer({
     onProjectClick?.(projectSlug);
   }, [currentEncounter, onProjectClick]);
 
-  // Tour navigation (classic mode)
-  const handleTourNextStop = useCallback(() => {
-    if (currentTourStop < TOUR_STOPS.length - 1) {
-      const nextIndex = currentTourStop + 1;
-      setCurrentTourStop(nextIndex);
-      const stop = TOUR_STOPS[nextIndex];
-      if (stop) {
-        trackTourStopViewed(stop.title, nextIndex);
-        maxTourStopViewedRef.current = Math.max(maxTourStopViewedRef.current, nextIndex);
-      }
-    }
-  }, [currentTourStop]);
-
-  const handlePreviousStop = useCallback(() => {
-    if (currentTourStop > 0) {
-      setCurrentTourStop((prev) => prev - 1);
-    }
-  }, [currentTourStop]);
-
-  const handleEndTour = useCallback(() => {
-    if (tourStartTimeRef.current) {
-      const duration = Math.round((Date.now() - tourStartTimeRef.current) / 1000);
-      const isLastStop = currentTourStop >= TOUR_STOPS.length - 1;
-      if (isLastStop) {
-        trackTourCompleted(duration);
-      } else {
-        trackTourExited(duration, maxTourStopViewedRef.current + 1);
-      }
-    }
-    setIsTourActive(false);
-    setCurrentTourStop(0);
-  }, [currentTourStop]);
-
-  // Handle tour stop changes - pan camera to building
-  // Skip zoom/pan for the Welcome step (first stop) - only start panning from step 2 onwards
-  const handleStopChange = useCallback(
-    (stop: TourStop) => {
-      const gameBoard = gameBoardRef.current;
-      if (!gameBoard) return;
-
-      // Skip zoom/pan for the Welcome step - keep showing whole city
-      if (stop.id === "welcome") {
-        return;
-      }
-
-      let position: { x: number; y: number } | null = null;
-
-      if (stop.buildingId) {
-        position = findBuildingPosition(initialGrid, stop.buildingId);
-      } else if (stop.gridPosition) {
-        position = stop.gridPosition;
-      }
-
-      if (position) {
-        const isMobile = window.innerWidth < 768;
-        const offset = isMobile
-          ? (stop.cameraOffsetMobile ?? stop.cameraOffset)
-          : stop.cameraOffset;
-        const offsetX = offset?.x ?? 0;
-        const offsetY = offset?.y ?? 0;
-        gameBoard.panToPosition(position.x + offsetX, position.y + offsetY, { dialogVisible: true });
-        hasManualViewportInteraction.current = true;
-      }
-
-      // Highlight the building if it exists
-      gameBoard.highlightBuilding(stop.buildingId || null);
-    },
-    [initialGrid]
-  );
-
   // Handle building click
   const handleBuildingClick = useCallback(
     (buildingId: string) => {
       const building = getBuilding(buildingId);
       if (!building) return;
-
-      if (isTourActive) return;
 
       markPlaceFound(buildingId);
       trackBuildingInteracted(building.name, gameMode, 'click');
@@ -578,7 +444,7 @@ export default function CityViewer({
         }
       }
     },
-    [onProjectClick, isTourActive, gameMode]
+    [onProjectClick, gameMode]
   );
 
 
@@ -608,15 +474,10 @@ export default function CityViewer({
     };
 
     (window as any).__CITY_E2E__ = ({
-      dismissWelcome: () => {
-        handleExploreFreely();
-      },
       focusBuilding: (buildingId: string) => {
         const building = getBuilding(buildingId);
         if (!building) return false;
 
-        setShowWelcome(false);
-        setIsTourActive(false);
         setGameMode(GameMode.Viewer);
         gameBoardRef.current?.highlightBuilding(buildingId);
 
@@ -723,29 +584,12 @@ export default function CityViewer({
   }, [
     e2eMode,
     currentEncounter?.id,
-    handleExploreFreely,
     handleStartAdventure,
     handleStopAdventure,
     initialGrid,
     isAdventureActive,
     visitedBuildings,
   ]);
-
-  // Track adventure completion when all buildings are visited
-  const adventureBuildingCount = TOUR_STOPS.filter((s) => s.buildingId).length;
-  useEffect(() => {
-    if (
-      isAdventureActive &&
-      visitedBuildings.size >= adventureBuildingCount &&
-      !hasTrackedAdventureCompletionRef.current &&
-      adventureStartTimeRef.current
-    ) {
-      hasTrackedAdventureCompletionRef.current = true;
-      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
-      trackAdventureCompleted(duration, visitedBuildings.size);
-    }
-  }, [isAdventureActive, visitedBuildings.size, adventureBuildingCount]);
-
 
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
@@ -758,14 +602,14 @@ export default function CityViewer({
       />
 
       {/* Portfolio mode toggle */}
-      {!isShell && !showWelcome && !isAdventureActive && (
+      {!isShell && !isAdventureActive && (
         <div className="fixed z-40 md:top-4 top-[max(0.75rem,env(safe-area-inset-top))] left-4 right-4">
           <PortfolioModeToggle activeMode="city" showIdentity />
         </div>
       )}
 
       {/* 3D Spinning Logos Overlay */}
-      {!e2eMode && !showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
+      {!e2eMode && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
           isMobile={isMobile}
           logos={logoPositions}
@@ -782,40 +626,9 @@ export default function CityViewer({
         />
       )}
 
-      {/* Welcome Overlay */}
-      <WelcomeOverlay
-        isMobile={isMobile}
-        isVisible={showWelcome}
-        onStartTour={handleStartTour}
-        onExploreFreely={handleExploreFreely}
-        onStartAdventure={handleStartAdventure}
-      />
-
-      {/* Tour Guide (classic tour mode) */}
-      {gameMode === GameMode.Viewer && (
-        <TourGuide
-          isMobile={isMobile}
-          isActive={isTourActive}
-          currentStopIndex={currentTourStop}
-          onNext={handleTourNextStop}
-          onPrevious={handlePreviousStop}
-          onEnd={handleEndTour}
-          onStopChange={handleStopChange}
-        />
-      )}
-
       {/* Adventure Mode UI */}
       {isAdventureActive && (
         <>
-          {/* Adventure HUD */}
-          <AdventureHUD
-            isMobile={isMobile}
-            visitedBuildings={visitedBuildings}
-            onNextStop={handleNextStop}
-            onExitAdventure={handleStopAdventure}
-            isAutoWalking={isAutoWalking}
-          />
-
           {/* Directional Compass */}
           <DirectionalCompass isMobile={isMobile} walkableDirections={walkableDirections} />
 
@@ -828,7 +641,7 @@ export default function CityViewer({
         </>
       )}
 
-      {/* RPG Dialog Box - shown in adventure mode and on logo click */}
+      {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox
         isMobile={isMobile}
         tourStop={currentEncounter}
@@ -839,36 +652,18 @@ export default function CityViewer({
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
-      {!isShell && !showWelcome && !isTourActive && !isAdventureActive && (
+      {/* Walk the avatar (the standalone city only; the shell gets its own walk step) */}
+      {!isShell && !isDialogOpen && (
         <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
           <button
-            onClick={() => {
-              setIsTourActive(true);
-              setCurrentTourStop(0);
-            }}
-            className={pixelButtonClass("ghost")}
+            onClick={isAdventureActive ? handleStopAdventure : handleStartAdventure}
+            className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
             style={PIXEL_INSET_CLIP}
           >
-            Take Tour
-          </button>
-          <button
-            onClick={handleStartAdventure}
-            className={pixelButtonClass("primary")}
-            style={PIXEL_INSET_CLIP}
-          >
-            Adventure
+            {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
         </div>
       )}
-
-      {/* Mobile zoom controls hidden for now
-      {isMobile && !showWelcome && !isAdventureActive && !isDialogOpen && !isModalOpen && (
-        <div className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-col gap-2">
-          ...
-        </div>
-      )}
-      */}
     </div>
   );
 }
