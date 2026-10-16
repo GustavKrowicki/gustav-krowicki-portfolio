@@ -9,7 +9,7 @@ from PIL import Image, ImageDraw
 OUT, BAY = sys.argv[1], len(sys.argv) > 2 and sys.argv[2] == "bay"
 S = 4.0                                   # px scale (x4 of zoom 1)
 GS, ST, TS, NL = 1.4, 1.2, 0.2, 3         # ground storey, storey, white band (slab + parapet), louvre storeys
-L, D = (1.0, 2.0) if BAY else (4.0, 2.0)  # x length (east), y depth (south); 4 x 2 since 2026-10-16
+L, D = (1.0, 2.0) if BAY else (5.0, 2.0)  # x length (east), y depth (south); 5 x 2 since 2026-10-16
 GB = L - 1.0                              # the gate bay is the east bay (not in the bay slice)
 COL = {"white": (235, 233, 227), "louvre": (58, 62, 64), "glass": (164, 188, 203), "dark": (40, 48, 55),
        "awning": (62, 98, 83), "pave": (185, 178, 168), "roof": (188, 179, 168), "planter": (29, 29, 32)}

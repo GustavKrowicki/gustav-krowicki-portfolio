@@ -1,6 +1,6 @@
-"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 4 x 2 tile city building.
+"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 5 x 2 tile city building.
 
-Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions), ground storey 1.4 wu with dark green
+Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 5 x 2 on 2026-10-16 to match the real proportions), ground storey 1.4 wu with dark green
 awnings, white columns, black planters and the gate (passage) as the entrance on the south side under an awning; three
 louvre storeys of 1.2 wu; a recessed glass top floor with a white frame.
 Gustav, 2026-10-16: white bands (0.2 wu, standing 0.04 wu proud of the slats) clearly apart from warm grey louvre bands over
@@ -10,8 +10,8 @@ Style + camera: ref/ref-A-gemini.png. Facts: ref/photo-6.jpg (straight front), p
 Colours: photo crops (material-crops/) through analyze_texture.py and extract_pbr_evidence.py (material-evidence/),
 lifted into the sprite value band and kept flat. Nothing from the photos is projected onto the mesh.
 
-Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 4 x 2 footprint centred on the
-origin: X east (4 wu, -2..2), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
+Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 5 x 2 footprint centred on the
+origin: X east (5 wu, -2.5..2.5), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
 """
 import copy
 import json
@@ -41,7 +41,7 @@ GS, ST, TS = 1.4, 1.2, 0.2    # ground storey, upper storey, white band (slab + 
 NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
-HX, HZ = 2.0, 1.0             # half footprint (4 x 2: Gustav, 2026-10-16, closer to the real proportions)
+HX, HZ = 2.5, 1.0             # half footprint (5 x 2: Gustav, 2026-10-16, closer to the real proportions)
 
 
 def r4(v):
@@ -118,7 +118,7 @@ def lf(fid, kind, notes):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# Pavement pad (root): exactly the 4 x 2 footprint, so the converter bbox starts at the footprint
+# Pavement pad (root): exactly the footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Pavement", "macro", "base", "box", (2 * HX, G, 2 * HZ), (0, G / 2, 0), "paving", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "top of the pavement"}],
               features=lf("root.pad", "contour", f"{2 * HX:g} x {2 * HZ:g} wu pavement = the footprint (collision = footprint)"),
