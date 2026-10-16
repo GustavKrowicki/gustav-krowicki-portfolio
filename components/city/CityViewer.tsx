@@ -358,6 +358,15 @@ export default function CityViewer({
 
   const handleLogoClick = useCallback((buildingId: string) => {
     markPlaceFound(buildingId);
+
+    // A logo opens the same thing as its building: the case, when there is one
+    const building = getBuilding(buildingId);
+    if (building?.interactable && building.projectSlug) {
+      trackBuildingInteracted(building.name, gameMode, 'logo_click');
+      onProjectClick?.(building.projectSlug);
+      return;
+    }
+
     if (isAdventureActive) {
       autoWalkTargetRef.current = buildingId;
       gameBoardRef.current?.walkPlayerToBuilding(buildingId);
@@ -378,7 +387,7 @@ export default function CityViewer({
       setCurrentEncounter(stop);
       setIsDialogOpen(true);
     }
-  }, [gameMode, isAdventureActive]);
+  }, [gameMode, isAdventureActive, onProjectClick]);
 
   // Stop Adventure Mode
   const handleStopAdventure = useCallback(() => {
