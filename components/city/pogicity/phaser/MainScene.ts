@@ -426,9 +426,11 @@ export class MainScene extends Phaser.Scene {
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
 
-    // Render NPCs (only if not visited)
+    // Render NPCs (only if not visited; a walk-in building's guide steps away while the player is inside, so it does
+    // not stand in front of the opened rooms)
+    const insideId = this.insideBuildingId(playerPos.gridX, playerPos.gridY);
     this.npcManager.render(
-      this.visitedBuildings,
+      insideId ? new Set([...this.visitedBuildings, insideId]) : this.visitedBuildings,
       playerPos.gridX,
       playerPos.gridY,
       (x, y, offset) => this.depthFromSortPoint(x, y, offset),
@@ -1566,6 +1568,7 @@ export class MainScene extends Phaser.Scene {
     const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    this.updateInsideZoom(inside ? here! : null);
     const tile = here ?? next;
     if (!tile) {
       this.playerController.setDepthOverride(this.frontOfPlotDepth(gridX, gridY));
@@ -1573,6 +1576,26 @@ export class MainScene extends Phaser.Scene {
     }
     const sprite = this.buildingSprites.get(tile.key);
     this.playerController.setDepthOverride(sprite ? sprite.depth + this.footprintSortOffset(tile.lx + 0.5, tile.ly + 0.5) : null);
+  }
+
+  // The walk-in building the player is inside (past its main door), or null
+  private insideBuildingId(gridX: number, gridY: number): string | null {
+    const here = this.interiorTiles.get(`${gridX},${gridY}`);
+    const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
+    return here && code && !here.interior.outside.includes(code) ? here.buildingId : null;
+  }
+
+  // Walk-in buildings with an inside zoom: zoom in around the player on entering, back to the earlier zoom on leaving
+  private insideZoomFrom: { buildingId: string; zoom: number } | null = null;
+  private updateInsideZoom(here: { buildingId: string; interior: BuildingInterior } | null): void {
+    const id = here?.interior.insideZoom ? here.buildingId : null;
+    if ((this.insideZoomFrom?.buildingId ?? null) === id) return;
+    const camera = this.cameras.main;
+    const target = id ? here!.interior.insideZoom! : this.insideZoomFrom!.zoom;
+    if (id) this.insideZoomFrom = { buildingId: id, zoom: camera.zoom };
+    else this.insideZoomFrom = null;
+    const p = this.playerController!.getPosition();
+    this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
   }
 
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite

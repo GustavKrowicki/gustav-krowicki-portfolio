@@ -1,7 +1,8 @@
 // Walk the avatar into a walk-in building in the running city and screenshot each moment (?e2e=1 test API).
 // Usage: LAB_PORT=3104 node art/img2threejs/tools/city_walkin.mjs <outDir> [buildingId] [steps json]
 // steps: [[name, gridX, gridY], ...] walked in order; a screenshot after each, camera centred on the building at zoom 2
-// (CITY_ZOOM sets the zoom; CITY_FOCUS=player centres the player instead of the building).
+// (CITY_ZOOM sets the zoom; CITY_FOCUS=player centres the player instead of the building; CITY_QUERY adds URL flags,
+// e.g. valtech=5x2).
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 const [, , out, buildingId = 'lego-hq', stepsJson] = process.argv;
@@ -12,7 +13,7 @@ mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
 page.on('console', (m) => { if (m.type() === 'error') console.log('console:', m.text().slice(0, 200)); });
-await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/city?avatar=3d&e2e=1`, { waitUntil: 'load', timeout: 120000 });
+await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/city?avatar=3d&e2e=1${process.env.CITY_QUERY ? `&${process.env.CITY_QUERY}` : ''}`, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); return !!(s && s.isReady && s.grid.length); }, null, { timeout: 120000 });
 await page.evaluate(async () => {
   const api = window.__CITY_E2E__;

@@ -16,6 +16,7 @@ origin: X east (4 wu, -2..2), Z south (2 wu, -1..1). The south (+Z) and east (+X
 import copy
 import json
 import math
+import os
 import sys
 
 W = sys.argv[1]
@@ -42,6 +43,12 @@ NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
 HX, HZ = 2.0, 1.0             # half footprint (4 x 2: Gustav, 2026-10-16, closer to the real proportions)
+# Interior variants (VARIANT env; the approved building is 4x2): 5x2 / 6x2 widen the block west (the gate stays the east
+# bay); 4x3 keeps the 4 x 2 block and adds a one-storey back wing on the north grass row. Only 4x2 has furniture until
+# the beat sheet decides what each variant holds.
+VARIANT = os.environ.get("VARIANT") or "4x2"
+HX = {"4x2": 2.0, "4x3": 2.0, "5x2": 2.5, "6x2": 3.0}[VARIANT]
+EXT = 1.0 if VARIANT == "4x3" else 0.0
 
 
 def r4(v):
@@ -377,6 +384,117 @@ bx("lowcap-E", "East wall cut", "micro", "interior", GX1, HX, 0, CUT, -HZ + WT, 
 # stand spots for the later peek cards (plan tiles, data only; lib/city/buildingInteriors.ts carries the same)
 STAND_SPOTS = {"desk-1": (1.35, 1.5), "desk-2": (2.0, 1.5), "desk-3": (2.65, 1.5), "lunch": (3.5, 1.5), "room-01": (1.12, 1.5)}
 
+# The beat sheet (2026-10-16) replaces the first furniture: one desk (his), meeting room 01, lunch; built below per variant
+C = [c for c in C if not c["id"].startswith(("int-01", "int-desk", "int-chair", "int-lunch", "side-"))]
+if EXT:
+    # 4x3: shift the block south by half the wing, open its north wall into the wing, and build the wing (ground storey,
+    # flat roof at the first slab line). Wing ids follow the state prefixes: wall-<side>, slab-, lowcap-<side>.
+    dz = EXT / 2
+    C = [c for c in C if c["id"] not in ("wall-N", "lowcap-N")]
+    for c in C:
+        if c["parent"] is None:
+            c["dimensions"]["depth"] = 2 * HZ + EXT
+            c["transform"]["scale"][2] = 2 * HZ + EXT
+            continue
+        c["transform"]["position"][2] = round(c["transform"]["position"][2] + dz, 4)
+        for k in ("localStart", "localEnd"):
+            c["attachment"][k][2] = round(c["attachment"][k][2] + dz, 4)
+    Z0, ZB = -HZ - dz, -HZ + dz            # wing north edge, block north edge
+    bx("wall-N", "North wall (back wing)", "macro", "ground-storey", -HX, HX, 0, GS, Z0, Z0 + WT, "white", importance=0.6)
+    bx("wall-W-wing", "West wall (back wing)", "meso", "ground-storey", -HX, -HX + WT, 0, GS, Z0 + WT, ZB + WT, "white", importance=0.5)
+    bx("wall-E-wing", "East wall (back wing)", "meso", "ground-storey", HX - WT, HX, 0, GS, Z0 + WT, ZB + WT, "white", importance=0.5)
+    bx("slab-wing", "Back wing roof", "macro", "slab", -HX, HX, GS, GS + TS, Z0, ZB, "white", importance=0.6)
+    bx("int-floor-wing", "Interior floor (back wing)", "meso", "interior", -HX + WT, HX - WT, 0, 0.01, Z0 + WT, ZB + WT, "gb-floor",
+       contact="flush-mount", importance=0.4)
+    bx("lowcap-N", "North wall cut", "micro", "interior", -HX, HX, 0, CUT, Z0, Z0 + WT, "white", importance=0.3)
+    bx("lowcap-W-wing", "West wing wall cut", "micro", "interior", -HX, -HX + WT, 0, CUT, Z0 + WT, ZB + WT, "white", importance=0.3)
+    bx("lowcap-E-wing", "East wing wall cut", "micro", "interior", HX - WT, HX, 0, CUT, Z0 + WT, ZB + WT, "white", importance=0.3)
+
+# ---------------------------------------------------------------------------------------------------------------
+# Beats (Gustav's beat sheet, 2026-10-16), in walk order from the gate (east bay, street row): 1 enter at the gate,
+# 2 my desk (by the window, two screens, a notebook, the edge of one neighbour desk), 3 meeting room 01 (yellow
+# whiteboards with sticky notes, big "01" on the glass), 4 lunch farthest from the gate (round tables, banquette, Friday
+# quiz board), 5 leave at the gate. Plan tiles: x west -> east, y north -> south; zones are (x0, x1, y0, y1) in tiles.
+# Real sizes (1 wu = 2 m): desk 1.6 x 0.8 m, top 0.75 m; screen 0.56 x 0.36 m; chair 0.5 m, 0.8 m to pull out;
+# round table 0.8 m; banquette seat 0.5 m deep, 0.45 m high, back 0.9 m; whiteboard 1.2 x 0.9 m; quiz board 1.0 x 0.7 m.
+PW, PH = int(round(2 * HX)), int(round(2 * HZ + EXT))
+LAYOUTS = {
+    "4x2": {"lunch": (0, 1, 0, 1), "room": (1, 2, 0, 1), "desk": 2, "hint": 3, "stand": {"desk": (2, 1), "room": (1, 1), "lunch": (0, 1)},
+            "map": ["####", "OOOG"]},
+    "4x3": {"lunch": (0, 1, 0, 2), "room": (1, 2, 0, 2), "desk": 2, "hint": 3, "stand": {"desk": (2, 1), "room": (1, 2), "lunch": (0, 2)},
+            "map": ["####", "##O#", "OOOG"]},
+    "5x2": {"lunch": (0, 1, 0, 2), "room": (1, 3, 0, 1), "desk": 3, "hint": 4, "stand": {"desk": (3, 1), "room": (2, 1), "lunch": (1, 1)},
+            "map": ["#####", "#OOOG"]},
+    "6x2": {"lunch": (0, 2, 0, 1), "room": (2, 4, 0, 1), "desk": 4, "hint": 5, "stand": {"desk": (4, 1), "room": (3, 1), "lunch": (1, 1)},
+            "map": ["######", "#OOOOG"]},
+}
+LAY = LAYOUTS[VARIANT]
+
+
+def px(v):
+    return v - HX
+
+
+def pz(v):
+    return v - PH / 2
+
+
+def pbx(cid, name, x0, x1, y0, y1, h0, h1, material, **kw):
+    """Box in plan tiles (x0..x1 west -> east, y0..y1 north -> south) from height h0 to h1 (wu)."""
+    bx(cid, name, "meso", "interior", px(x0), px(x1), h0, h1, pz(y0), pz(y1), material, importance=0.4, **kw)
+
+
+WI = 0.1     # inside face of the outer walls, in tiles
+# 2 my desk: against the north wall under a window panel (inside face only: the approved outside stays plain)
+t = LAY["desk"]
+d0, d1 = t + 0.1, t + 0.9
+pbx("side-N-desk-window", "Window by my desk (inside panel)", d0, d1, WI, WI + 0.01, 0.4, 1.15, "gb-window")
+pbx("int-desk-top", "My desk top", d0, d1, WI + 0.02, WI + 0.42, DESK_H - 0.03, DESK_H, "gb")
+pbx("int-desk-leg-w", "My desk leg (west)", d0 + 0.02, d0 + 0.05, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+pbx("int-desk-leg-e", "My desk leg (east)", d1 - 0.05, d1 - 0.02, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+for i, x in enumerate((t + 0.2, t + 0.52), 1):    # two screens: two fields at a time
+    pbx(f"int-screen-{i}", f"Screen {i}", x, x + 0.28, WI + 0.08, WI + 0.1, DESK_H + 0.04, DESK_H + 0.22, "gb-dark")
+    pbx(f"int-screen-{i}-foot", f"Screen {i} foot", x + 0.12, x + 0.16, WI + 0.06, WI + 0.12, DESK_H, DESK_H + 0.04, "gb-dark")
+pbx("int-notebook", "Notebook", t + 0.3, t + 0.45, WI + 0.28, WI + 0.38, DESK_H, DESK_H + 0.01, "gb-light")
+pbx("int-desk-chair-seat", "My chair seat", t + 0.38, t + 0.62, WI + 0.5, WI + 0.74, 0.01, 0.225, "gb-dark")
+pbx("int-desk-chair-back", "My chair back", t + 0.38, t + 0.62, WI + 0.71, WI + 0.74, 0.225, 0.45, "gb-dark")
+h = LAY["hint"]    # the edge of one neighbour desk
+pbx("int-hint-desk", "Neighbour desk (edge)", h + 0.05, h + 0.4, WI + 0.02, WI + 0.42, DESK_H - 0.03, DESK_H, "gb")
+pbx("int-hint-desk-leg", "Neighbour desk leg", h + 0.07, h + 0.1, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+# 3 meeting room 01: glass on its inside sides, yellow whiteboards with sticky notes on its north wall, "01" on the glass
+rx0, rx1, ry0, ry1 = LAY["room"]
+gy1 = ry1    # south glass line (the walkway edge)
+if rx0 > 0:
+    pbx("int-room-glass-w", "01 glass (west)", rx0 - 0.01, rx0 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
+if rx1 < PW:
+    pbx("int-room-glass-e", "01 glass (east)", rx1 - 0.01, rx1 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
+pbx("int-room-glass-s", "01 glass (south)", rx0 + 0.01, rx1 - 0.01, gy1 - 0.02, gy1, 0.01, GS, "gb-glass")
+pbx("int-room-glass-head", "01 glass head", rx0, rx1, gy1 - 0.03, gy1, GS - 0.05, GS, "gb-dark")
+cx = (rx0 + rx1) / 2
+pbx("int-room-01-number", "01 on the glass", cx - 0.13, cx + 0.13, gy1 + 0.0, gy1 + 0.01, 0.52, 0.72, "gb-dark")
+for i in range(rx1 - rx0):
+    b0 = rx0 + i + 0.2
+    pbx(f"side-N-room-wb-{i + 1}", f"01 whiteboard {i + 1}", b0, b0 + 0.6, WI, WI + 0.02, 0.4, 0.85, "gb-yellow")
+    for j, (sx, sy) in enumerate(((0.08, 0.7), (0.2, 0.62), (0.34, 0.72), (0.46, 0.58)), 1):
+        pbx(f"side-N-room-wb-{i + 1}-note-{j}", f"Sticky note {i + 1}.{j}", b0 + sx, b0 + sx + 0.07, WI + 0.02, WI + 0.025, sy, sy + 0.07, "gb-light")
+# 4 lunch: banquette along the north wall, round tables in front, Friday quiz board above the banquette
+lx0, lx1, ly0, ly1 = LAY["lunch"]
+a0 = lx0 + (WI if lx0 == 0 else 0.05)
+pbx("int-lunch-banquette", "Lunch banquette seat", a0, lx1 - 0.05, WI, WI + 0.25, 0.01, 0.225, "gb")
+pbx("int-lunch-banquette-back", "Lunch banquette back", a0, lx1 - 0.05, WI, WI + 0.06, 0.225, 0.45, "gb")
+n = max(1, int((lx1 - a0 - 0.05) / 0.5))   # 0.4 tables at least 0.1 apart
+for i in range(n):
+    for row, ty in enumerate([WI + 0.55] + ([WI + 1.35] if ly1 - ly0 > 1 else [])):
+        x = a0 + (lx1 - 0.05 - a0) * (i + 0.5) / n
+        cyl(f"int-lunch-table-{row + 1}-{i + 1}", f"Lunch table {row + 1}.{i + 1}", "micro", "interior", px(x), pz(ty), DESK_H - 0.03, 0.03, 0.2, "gb")
+        cyl(f"int-lunch-table-{row + 1}-{i + 1}-foot", f"Lunch table {row + 1}.{i + 1} foot", "micro", "interior", px(x), pz(ty), 0.016, DESK_H - 0.046, 0.03,
+            "gb-mid")
+q = (a0 + lx1 - 0.05) / 2
+pbx("side-N-lunch-quiz", "Friday quiz board", q - 0.25, q + 0.25, WI, WI + 0.02, 0.52, 0.87, "gb-light")
+STAND_SPOTS = {k: (v[0] + 0.5, v[1] + 0.5) for k, v in LAY["stand"].items()}
+STAND_SPOTS["gate"] = (PW - 0.5, PH - 0.5)
+WALKMAP = LAY["map"]
+
 C = [c for c in C if c is not None]
 
 # Bay proof (BAY=1): only the south-west bay as a 1 wu slice of the full stack (x -1.5..-0.5), same scale and camera
@@ -499,6 +617,8 @@ spec["materials"] = [
     material("gb-mid", "Grey box mid", "stone", "#9a9792", ["#928f8a"], 0.9, 0.0, "legs, poufs", **flat("grey box")),
     material("gb-dark", "Grey box dark", "stone", "#6c6a67", ["#64625f"], 0.9, 0.0, "chairs, screen, glass frame", **flat("grey box")),
     material("gb-light", "Grey box light", "stone", "#ecebe7", ["#e4e3df"], 0.9, 0.0, "boards on the walls", **flat("grey box")),
+    material("gb-yellow", "Grey box yellow", "plastic", "#e6c84a", ["#dcbe40"], 0.8, 0.0, "01 whiteboards (yellow, as in the office)", **flat("grey box")),
+    material("gb-window", "Grey box window", "glass", "#c9d6dc", ["#bfccd2"], 0.3, 0.0, "window panel by my desk (inside face)", **flat("grey box")),
     material("gb-glass", "Grey box glass", "glass", "#b7cdd6", ["#adc3cc"], 0.2, 0.0, "01 glass wall (see-through)", opacity={"base": 0.3},
              **flat("grey box")),
 ]
@@ -582,8 +702,9 @@ spec["states"] = {"roofOn": "hide open-* and lowcap-*",
                   "roofOff": "hide the upper storeys (slab-, louvre-, parapet-, roof-deck, top-) and the cafe front (shop-core, col-S-, shop-glass-, "
                              "shop-light-, awning-, gate lintel, soffit, end wall, brick west lining, door, art, sign); walls of the view's two far "
                              "sides stay full height, the others show lowcap-<side>; lib/city/models/valtechOfficeStates.ts"}
-spec["interior"] = {"plan": "Figma 597-3604 (section 601-3604)", "walkable": [[1, 1], [2, 1], [3, 1]], "mainDoor": "south edge of (3,1)",
-                    "standSpots": {k: list(v) for k, v in STAND_SPOTS.items()}}
+spec["interior"] = {"plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16", "variant": VARIANT, "map": WALKMAP,
+                    "mainDoor": "south edge of the gate tile", "standSpots": {k: list(v) for k, v in STAND_SPOTS.items()}}
+json.dump(spec["interior"], open(f"{W}/walkmap-{VARIANT}.json", "w"), indent=1)
 pa = spec["preSpecAssessment"]
 spec["assumptions"] = ["RESOLVED BY ASSUMPTION: " + u for u in (pa.get("unknownsToResolveBeforeImplementation") or [])]
 pa["unknownsToResolveBeforeImplementation"] = []

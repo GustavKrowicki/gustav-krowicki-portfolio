@@ -9,7 +9,10 @@ import * as workshop from '@/lib/city/models/workshop';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
-import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
+import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel, setValtechOfficeState } from '@/lib/city/models/valtechOfficeStates';
+import { createValtechOfficeV4x3Model } from '@/lib/city/models/valtechOfficeV4x3';
+import { createValtechOfficeV5x2Model } from '@/lib/city/models/valtechOfficeV5x2';
+import { createValtechOfficeV6x2Model } from '@/lib/city/models/valtechOfficeV6x2';
 
 // Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
 // Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
@@ -95,7 +98,49 @@ const valtechOpen = (view: CampusView): ModelConfig => ({
   reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
 });
 
+// Valtech interior grey-box variants (art/img2threejs/valtech-office, VARIANT=...): roof on, roof off (south view), and
+// roof off with the avatar (moved per shot with the avatarAt option, in plan tiles). Plan tile (lx, ly) -> model
+// (lx - W / 2, ly - H / 2); the floor top is at y = 0.05.
+const VALTECH_VARIANTS: Record<string, { w: number; h: number; create: (options: { castShadow?: boolean; receiveShadow?: boolean }) => THREE.Group }> = {
+  '4x2': { w: 4, h: 2, create: valtech.createValtechOfficeModel },
+  '4x3': { w: 4, h: 3, create: createValtechOfficeV4x3Model },
+  '5x2': { w: 5, h: 2, create: createValtechOfficeV5x2Model },
+  '6x2': { w: 6, h: 2, create: createValtechOfficeV6x2Model },
+};
+
+function valtechVariantModels(): Record<string, ModelConfig> {
+  const out: Record<string, ModelConfig> = {};
+  for (const [v, { w, h, create }] of Object.entries(VALTECH_VARIANTS)) {
+    const base = { ...valtechOpen('south'), reference: { width: 384, height: 384, halfW: w / 2, target: [0, 0, 0] as [number, number, number] } };
+    const state = (open: boolean) => (options: { castShadow?: boolean; receiveShadow?: boolean }) => {
+      const model = create(options);
+      setValtechOfficeState(model, open);
+      return model;
+    };
+    out[`valtech-${v}`] = { ...base, name: `Valtech office ${v} (roof on)`, create: state(false) };
+    out[`valtech-${v}-open`] = { ...base, name: `Valtech office ${v} (roof off)`, create: state(true) };
+    out[`valtech-${v}-avatar`] = {
+      ...base,
+      name: `Valtech office ${v} (roof off, avatar)`,
+      create: () => {
+        const group = new THREE.Group();
+        const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+        group.add(state(true)({ castShadow: true, receiveShadow: true }), avatar);
+        avatar.position.set(w - 0.5 - w / 2, 0.05, h - 0.5 - h / 2);
+        avatar.rotation.y = -Math.PI / 4;
+        group.userData.avatar = avatar.userData.avatar;
+        group.userData.avatarGroup = avatar;
+        group.userData.plan = { w, h };
+        return group;
+      },
+      restBounds: true,
+    };
+  }
+  return out;
+}
+
 const MODELS: Record<string, ModelConfig> = {
+  ...valtechVariantModels(),
   // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
   avatar: {
     name: 'Gustav avatar',
@@ -256,6 +301,9 @@ export type ShotOptions = {
   t?: number;
   spin?: number; // turntable: model yaw in degrees (reference / sprite views)
   follow?: boolean; // reference view: keep the avatar's hips over the origin (root-motion clips)
+  avatarAt?: [number, number]; // models with a plan (userData.plan): stand the avatar on plan point (lx, ly) in tiles
+  masks?: string[]; // flat-colour mask render: entry i (node-id prefixes joined by '|') -> rgb(255, 8 * (i + 1), 0), avatar rgb(0, 0, 255), rest grey; glass left out
+  only?: string[]; // draw only the nodes with these id prefixes ('avatar' = the avatar), e.g. one prop's full silhouette
 };
 
 type Runtime = { nodes: Record<string, THREE.Object3D> };
@@ -354,6 +402,30 @@ export default function EntranceLab() {
       const src = mesh.material as THREE.MeshStandardMaterial;
       flat.set(mesh, new THREE.MeshBasicMaterial({ color: src.color ?? new THREE.Color(0x888888) }));
     });
+    // Mask renders: each mesh's sculpt node id (nearest ancestor that is a runtime node), 'avatar' for the avatar's meshes
+    const nodeIds = new Map<THREE.Object3D, string>();
+    const nodeRuntime = (model.userData.sculptRuntime ?? model.children.find((c) => c.userData.sculptRuntime)?.userData.sculptRuntime) as Runtime | undefined;
+    for (const [id, node] of Object.entries(nodeRuntime?.nodes ?? {})) nodeIds.set(node, id);
+    const avatarGroup = model.userData.avatarGroup as THREE.Object3D | undefined;
+    const meshNode = new Map<THREE.Mesh, string>();
+    const baseVisible = new Map<THREE.Mesh, boolean>();
+    for (const mesh of original.keys()) {
+      baseVisible.set(mesh, mesh.visible);
+      let o: THREE.Object3D | null = mesh;
+      let id = '';
+      while (o && !id) {
+        if (o === avatarGroup) id = 'avatar';
+        else id = nodeIds.get(o) ?? '';
+        o = o.parent;
+      }
+      meshNode.set(mesh, id);
+    }
+    const maskColour = (i: number) => new THREE.Color().setRGB(i < 0 ? 0.5 : 1, i < 0 ? 0.5 : (8 * (i + 1)) / 255, i < 0 ? 0.5 : 0, THREE.SRGBColorSpace);
+    const maskMats = new Map<string, THREE.MeshBasicMaterial>();
+    const maskMat = (key: string, c: THREE.Color) => {
+      if (!maskMats.has(key)) maskMats.set(key, new THREE.MeshBasicMaterial({ color: c }));
+      return maskMats.get(key)!;
+    };
     const avatar = model.userData.avatar as AvatarRig | undefined;
     const box = new THREE.Box3().setFromObject(model);
     // Rest-pose bounds in the model's parent frame (skinned vertices, so a posed frame never re-frames the sprite)
@@ -382,6 +454,21 @@ export default function EntranceLab() {
       else renderer.setClearColor(new THREE.Color(`#${opts.bg}`), 1);
       // Materials
       for (const [mesh, mat] of original) mesh.material = opts.stripped ? flat.get(mesh)! : mat;
+      // Mask render and solo silhouettes (occlusion counts)
+      // an entry may join several prefixes with '|' (one story prop made of several parts, e.g. a desk and its chair)
+      const match = (id: string, list: string[]) => list.findIndex((entry) => entry.split('|').some((p) => (p === 'avatar' ? id === 'avatar' : id !== 'avatar' && id.startsWith(p))));
+      for (const mesh of original.keys()) {
+        const id = meshNode.get(mesh) ?? '';
+        mesh.visible = baseVisible.get(mesh)! && (!opts.only || match(id, opts.only) >= 0);
+        if (!opts.masks) continue;
+        if ((original.get(mesh) as THREE.Material).transparent) { mesh.visible = false; continue; }   // see-through glass hides nothing
+        const i = match(id, opts.masks);
+        mesh.material = id === 'avatar' ? maskMat('avatar', new THREE.Color().setRGB(0, 0, 1, THREE.SRGBColorSpace)) : maskMat(`m${i}`, maskColour(i));
+      }
+      if (opts.masks) { lookdev.visible = photo.visible = converter.visible = shade.visible = false; }
+      // Avatar stand point (plan tiles) on models that carry a plan
+      const plan = model.userData.plan as { w: number; h: number } | undefined;
+      if (plan && avatarGroup && opts.avatarAt) avatarGroup.position.set(opts.avatarAt[0] - plan.w / 2, 0.05, opts.avatarAt[1] - plan.h / 2);
       // Doors
       for (const [id, dir] of Object.entries(config.leaves)) {
         const node = runtime?.nodes?.[id];

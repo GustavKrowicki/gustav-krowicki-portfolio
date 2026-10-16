@@ -16,7 +16,7 @@ const FRONT = ['shop-core', 'col-S-', 'shop-glass-S-', 'shop-light-S-', 'awning-
 const WALLS: Record<string, string[]> = {
   N: ['wall-N', 'side-N-'],
   W: ['wall-W', 'side-W-'],
-  E: ['gate-east-wall', 'wall-E-back', 'gate-brick-e', 'side-E-'],
+  E: ['gate-east-wall', 'wall-E', 'gate-brick-e', 'side-E-'],
 };
 
 const starts = (id: string, list: string[]) => list.some((p) => id.startsWith(p));
@@ -26,7 +26,7 @@ export function setValtechOfficeState(model: THREE.Object3D, open: boolean, view
   const far = FAR_SIDES[view];
   for (const [id, node] of Object.entries(nodes)) {
     if (id.startsWith('open-')) node.visible = open;
-    else if (id.startsWith('lowcap-')) node.visible = open && !far.includes(id.slice(7));
+    else if (id.startsWith('lowcap-')) node.visible = open && !far.includes(id.split('-')[1]);
     else if (starts(id, UPPER) || starts(id, FRONT)) node.visible = !open;
     else {
       const side = Object.keys(WALLS).find((s) => starts(id, WALLS[s]));

@@ -1,0 +1,28 @@
+{
+ "plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16",
+ "variant": "4x3",
+ "map": [
+  "####",
+  "##O#",
+  "OOOG"
+ ],
+ "mainDoor": "south edge of the gate tile",
+ "standSpots": {
+  "desk": [
+   2.5,
+   1.5
+  ],
+  "room": [
+   1.5,
+   2.5
+  ],
+  "lunch": [
+   0.5,
+   2.5
+  ],
+  "gate": [
+   3.5,
+   2.5
+  ]
+ }
+}
