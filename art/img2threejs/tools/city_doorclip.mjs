@@ -19,8 +19,8 @@ await p.evaluate(() => {
 let n = 0;
 const shoot = async (k) => { for (let i = 0; i < k; i++) { await p.evaluate(() => window.__CITY_E2E__.closeEncounter()); await p.screenshot({ path: `${out}/f${String(n++).padStart(3, '0')}.png`, clip: { x: 470, y: 200, width: 500, height: 420 } }); await p.waitForTimeout(80); } };
 await shoot(4);
-await p.evaluate(() => { const s = window.__CITY_E2E__.getScene(); s.playerController.walkToBuilding(34, 43); });
+console.log("in", await p.evaluate(() => { const s = window.__CITY_E2E__.getScene(); return s.playerController.walkToBuilding(34, 43); }));
 await shoot(28);
-await p.evaluate(() => { const s = window.__CITY_E2E__.getScene(); s.playerController.walkToBuilding(34, 47); });
+console.log("out", await p.evaluate(() => { const s = window.__CITY_E2E__.getScene(); return s.playerController.walkToBuilding(34, 47); }));
 await shoot(30);
 await b.close();

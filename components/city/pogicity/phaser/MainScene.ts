@@ -1607,6 +1607,9 @@ export class MainScene extends Phaser.Scene {
   private highlightedBuildingId: string | null = null;
   private highlightSprite: Phaser.GameObjects.Graphics | null = null;
 
+  // Walk-in building plots by sprite key, for drawing the player above a plot it stands in front of
+  private interiorPlots: Map<string, { originX: number; originY: number; width: number; height: number }> = new Map();
+
   // Walk-in buildings (default orientation only): index every footprint tile against its interior map
   private computeInteriorTiles(): Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }> {
     const tiles = new Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }>();
@@ -1616,6 +1619,7 @@ export class MainScene extends Phaser.Scene {
         if (!cell?.isOrigin || !cell.buildingId) continue;
         const interior = BUILDING_INTERIORS[cell.buildingId];
         if (!interior || (cell.buildingOrientation && cell.buildingOrientation !== Direction.Down)) continue;
+        this.interiorPlots.set(`building_${x},${y}`, { originX: x, originY: y, width: interior.map[0].length, height: interior.map.length });
         interior.map.forEach((row, ly) => {
           for (let lx = 0; lx < row.length; lx++) {
             tiles.set(`${x + lx},${y + ly}`, { buildingId: cell.buildingId!, key: `building_${x},${y}`, interior, lx, ly });
@@ -1652,8 +1656,21 @@ export class MainScene extends Phaser.Scene {
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     const tile = here ?? next;
-    const sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
-    const local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
+    let sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
+    let local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
+    if (!tile) {
+      // Just outside a walk-in plot on its south or east side the whole building is behind the player, but its big
+      // sprite sorts by the plot's front corner and would paint over the player: draw the player above it
+      for (const [key, plot] of this.interiorPlots) {
+        const lx = gridX - plot.originX, ly = gridY - plot.originY;
+        const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
+        if (near && (lx >= plot.width || ly >= plot.height)) {
+          sprite = this.buildingSprites.get(key);
+          local = { x: lx + 0.5, y: ly + 0.5 };
+          break;
+        }
+      }
+    }
     this.playerController.setDepthOverride(sprite && local ? sprite.depth + this.footprintSortOffset(local.x, local.y) : null);
   }
 
@@ -1705,6 +1722,7 @@ export class MainScene extends Phaser.Scene {
     // Compute collision padding blocked tiles and pass to player controller
     this.blockedTiles = this.computeBlockedTiles();
     this.playerController.setBlockedTiles(this.blockedTiles);
+    this.interiorPlots.clear();
     this.interiorTiles = this.computeInteriorTiles();
     this.playerController.setInteriorRules({
       isWalkable: (x, y) => {
