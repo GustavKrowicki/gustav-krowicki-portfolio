@@ -69,7 +69,7 @@ function CityPageContent() {
   }, []);
 
   const handleProjectClick = (projectSlug: string) => {
-    router.push(`/work/${projectSlug}`);
+    router.push(`/new?s=work&case=${projectSlug}`);
   };
 
   return (

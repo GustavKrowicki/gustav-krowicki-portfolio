@@ -1,3 +1,6 @@
+# The classic site at / was removed; the one-page portfolio at /new replaces / at launch.
+/  /new  307
+
 # The previous portfolio used /projects/<slug>; those URLs still get visits.
-/projects/internship-at-valtech-2024  /work/valtech  307
-/projects/*                           /work          307
+/projects/internship-at-valtech-2024  /new?s=work&case=valtech  307
+/projects/*                           /new?s=work               307

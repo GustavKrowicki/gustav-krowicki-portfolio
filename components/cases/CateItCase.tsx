@@ -1,4 +1,4 @@
-// Case study body for /work/cate-it. The route page wraps it as a full page; the portfolio shell shows it in the panel.
+// Case study body for the cate-it case; the portfolio shell shows it in the panel.
 import Image from 'next/image';
 import { ExternalLink } from 'lucide-react';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';

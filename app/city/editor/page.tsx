@@ -106,7 +106,7 @@ function CityEditorPageContent() {
               View Mode
             </button>
             <button
-              onClick={() => router.push("/")}
+              onClick={() => router.push("/new")}
               className="px-4 py-2 bg-white/10 text-white rounded hover:bg-white/20 font-mono text-sm border border-white/20"
             >
               ← Back

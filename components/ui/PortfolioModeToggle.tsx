@@ -30,7 +30,7 @@ export default function PortfolioModeToggle({ activeMode, showIdentity = false }
       )}
       <div className="flex rounded-full border border-neutral-200 bg-neutral-100 p-0.5 text-sm">
         <button
-          onClick={() => { if (activeMode !== 'classic') { trackModeSwitched('city', 'classic'); router.push('/'); } }}
+          onClick={() => { if (activeMode !== 'classic') { trackModeSwitched('city', 'classic'); router.push('/new'); } }}
           className={`rounded-full px-3 py-1 transition-colors ${
             activeMode === 'classic'
               ? 'bg-white font-medium text-neutral-900 shadow-sm'

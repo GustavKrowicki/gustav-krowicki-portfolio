@@ -88,10 +88,6 @@ export const projects: Project[] = [
   },
 ];
 
-export const getFeaturedProjects = (): Project[] => {
-  return projects.filter(project => project.featured).sort((a, b) => a.order - b.order);
-};
-
 export const getProjectBySlug = (slug: string): Project | undefined => {
   return projects.find(project => project.slug === slug);
 };

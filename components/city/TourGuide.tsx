@@ -124,12 +124,12 @@ export default function TourGuide({
 
   const handleViewProject = () => {
     if (currentStop?.projectSlug) {
-      router.push(`/work/${currentStop.projectSlug}`);
+      router.push(`/new?s=work&case=${currentStop.projectSlug}`);
     }
   };
 
   const handleContact = () => {
-    router.push("/contact");
+    router.push("/new");
   };
 
   if (!isActive || !currentStop) return null;
