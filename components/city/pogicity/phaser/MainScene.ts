@@ -137,8 +137,6 @@ export class MainScene extends Phaser.Scene {
   // Debug flags
   private showPaths: boolean = false;
   private pathOverlaySprites: Phaser.GameObjects.Graphics | null = null;
-  private showWalkability: boolean = false;
-  private walkabilityOverlay: Phaser.GameObjects.Graphics | null = null;
 
   // Driving mode state
   private isPlayerDriving: boolean = false;
@@ -1393,94 +1391,6 @@ export class MainScene extends Phaser.Scene {
     this.showStats = show;
   }
 
-  toggleWalkabilityOverlay(): void {
-    this.showWalkability = !this.showWalkability;
-    if (this.showWalkability) {
-      this.renderWalkabilityOverlay();
-    } else {
-      this.clearWalkabilityOverlay();
-    }
-  }
-
-  private renderWalkabilityOverlay(): void {
-    this.clearWalkabilityOverlay();
-
-    this.walkabilityOverlay = this.add.graphics();
-    this.walkabilityOverlay.setDepth(15_000_000); // Above all tiles and buildings
-
-    const walkableTypes = [TileType.Road, TileType.Tile, TileType.Grass, TileType.Snow, TileType.Asphalt];
-
-    // Helper to check if a cell is walkable (matches PlayerController logic)
-    const isWalkableCell = (x: number, y: number): boolean => {
-      if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
-      const cell = this.grid[y]?.[x];
-      if (!cell || !walkableTypes.includes(cell.type)) return false;
-      return true;
-    };
-
-    // Flood fill from spawn point to find reachable tiles
-    const spawnX = 15, spawnY = 30;
-    const reachable = new Set<string>();
-    const stack: [number, number][] = [[spawnX, spawnY]];
-
-    while (stack.length > 0) {
-      const [x, y] = stack.pop()!;
-      const key = `${x},${y}`;
-      if (reachable.has(key)) continue;
-      if (!isWalkableCell(x, y)) continue;
-
-      reachable.add(key);
-      stack.push([x+1, y], [x-1, y], [x, y+1], [x, y-1]);
-    }
-
-    // Render overlay for each tile
-    for (let y = 0; y < GRID_HEIGHT; y++) {
-      for (let x = 0; x < GRID_WIDTH; x++) {
-        const cell = this.grid[y]?.[x];
-        if (!cell) continue;
-
-        const screenPos = this.gridToScreen(x, y);
-        const key = `${x},${y}`;
-        const canWalk = isWalkableCell(x, y);
-
-        let color: number;
-        let alpha: number;
-
-        if (reachable.has(key)) {
-          // Reachable - green
-          color = 0x00ff00;
-          alpha = 0.3;
-        } else if (canWalk) {
-          // Walkable but isolated - yellow/orange
-          color = 0xffaa00;
-          alpha = 0.5;
-        } else {
-          // Blocked - red
-          color = 0xff0000;
-          alpha = 0.2;
-        }
-
-        // Draw isometric diamond
-        this.walkabilityOverlay.fillStyle(color, alpha);
-        this.walkabilityOverlay.beginPath();
-        this.walkabilityOverlay.moveTo(screenPos.x, screenPos.y - TILE_HEIGHT / 2);
-        this.walkabilityOverlay.lineTo(screenPos.x + TILE_WIDTH / 2, screenPos.y);
-        this.walkabilityOverlay.lineTo(screenPos.x, screenPos.y + TILE_HEIGHT / 2);
-        this.walkabilityOverlay.lineTo(screenPos.x - TILE_WIDTH / 2, screenPos.y);
-        this.walkabilityOverlay.closePath();
-        this.walkabilityOverlay.fillPath();
-      }
-    }
-
-  }
-
-  private clearWalkabilityOverlay(): void {
-    if (this.walkabilityOverlay) {
-      this.walkabilityOverlay.destroy();
-      this.walkabilityOverlay = null;
-    }
-  }
-
   // Tour navigation - smoothly pan camera to a grid position
   panToPosition(gridX: number, gridY: number, options?: { dialogVisible?: boolean }): void {
     if (!this.isReady) return;
@@ -1883,11 +1793,6 @@ export class MainScene extends Phaser.Scene {
           e.preventDefault();
           this.events.emit("interactionTriggered", { tourStop: activeTourStop, buildingId: activeZone.buildingId, method: 'keyboard' });
         }
-      }
-
-      // Toggle walkability debug overlay (G key)
-      if (e.key === "g" || e.key === "G") {
-        this.toggleWalkabilityOverlay();
       }
 
       // Handle movement keys
