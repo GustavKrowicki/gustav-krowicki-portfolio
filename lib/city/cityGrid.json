@@ -9062,15 +9062,10 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 11,
       "y": 24,
-      "isOrigin": true,
-      "originX": 11,
-      "originY": 24,
-      "buildingId": "tree-1",
-      "buildingOrientation": "down",
-      "underlyingTileType": "grass"
+      "isOrigin": true
     },
     {
       "type": "grass",
@@ -9458,15 +9453,16 @@
       "isOrigin": true,
       "originX": 11,
       "originY": 25,
-      "buildingId": "valtech-office",
-      "buildingOrientation": "down"
+      "buildingId": "tree-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
       "x": 12,
       "y": 25,
-      "isOrigin": false,
-      "originX": 11,
+      "isOrigin": true,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9476,7 +9472,7 @@
       "x": 13,
       "y": 25,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9486,7 +9482,7 @@
       "x": 14,
       "y": 25,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9496,7 +9492,7 @@
       "x": 15,
       "y": 25,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9843,21 +9839,17 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 11,
       "y": 26,
-      "isOrigin": false,
-      "originX": 11,
-      "originY": 25,
-      "buildingId": "valtech-office",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "building",
       "x": 12,
       "y": 26,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9867,7 +9859,7 @@
       "x": 13,
       "y": 26,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9877,7 +9869,7 @@
       "x": 14,
       "y": 26,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9887,7 +9879,7 @@
       "x": 15,
       "y": 26,
       "isOrigin": false,
-      "originX": 11,
+      "originX": 12,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -10290,12 +10282,10 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 11,
       "y": 27,
-      "isOrigin": true,
-      "originX": 11,
-      "originY": 27
+      "isOrigin": true
     },
     {
       "type": "tile",
