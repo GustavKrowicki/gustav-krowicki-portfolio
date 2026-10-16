@@ -1,6 +1,7 @@
 // Walk the avatar into a walk-in building in the running city and screenshot each moment (?e2e=1 test API).
 // Usage: LAB_PORT=3104 node art/img2threejs/tools/city_walkin.mjs <outDir> [buildingId] [steps json]
-// steps: [[name, gridX, gridY], ...] walked in order; a screenshot after each, camera centred on the building at zoom 2.
+// steps: [[name, gridX, gridY], ...] walked in order; a screenshot after each, camera centred on the building at zoom 2
+// (CITY_ZOOM sets the zoom; CITY_FOCUS=player centres the player instead of the building).
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 const [, , out, buildingId = 'lego-hq', stepsJson] = process.argv;
@@ -23,7 +24,7 @@ await page.waitForFunction(() => !!window.__CITY_E2E__.getScene().playerControll
 const first = steps[0];
 await page.evaluate(([x, y]) => { const pc = window.__CITY_E2E__.getScene().playerController; pc.spawn(x, y, pc.characterType); }, [first[1], first[2]]);
 for (const [name, x, y] of steps) {
-  const r = await page.evaluate(async ([x, y, id, z]) => {
+  const r = await page.evaluate(async ([x, y, id, z, focus]) => {
     const api = window.__CITY_E2E__; const s = api.getScene(); const pc = s.playerController;
     const p0 = pc.getPosition();
     let ok = true;
@@ -38,14 +39,16 @@ for (const [name, x, y] of steps) {
     s.recordManualCameraInteraction();
     const sp = s.buildingSprites.get(`building_${cell.x},${cell.y}`);
     cam.setZoom(z);
-    cam.scrollX = Math.round(sp.x - cam.width / 2);
-    cam.scrollY = Math.round(sp.y - sp.displayHeight * 0.45 - cam.height / 2);
+    const p = pc.getPosition();
+    const [fx, fy] = focus === 'player' ? [p.worldX, p.worldY - 20] : [sp.x, sp.y - sp.displayHeight * 0.45];
+    cam.scrollX = Math.round(fx - cam.width / 2);
+    cam.scrollY = Math.round(fy - cam.height / 2);
     s.baseScrollX = cam.scrollX; s.baseScrollY = cam.scrollY; s.zoomLevel = z;
     s.zoomHandledInternally = true; s.events.emit('zoomChanged', z);
     api.closeEncounter();
     await new Promise((r) => setTimeout(r, 600));
     return { ok, pos: pc.getPosition(), open: [...s.openBuildings], depth: pc.depthOverride, tex: sp.texture.key };
-  }, [x, y, buildingId, Number(process.env.CITY_ZOOM ?? 2)]);
+  }, [x, y, buildingId, Number(process.env.CITY_ZOOM ?? 2), process.env.CITY_FOCUS ?? 'building']);
   console.log(name, JSON.stringify(r));
   await page.screenshot({ path: `${out}/${name}.png` });
 }

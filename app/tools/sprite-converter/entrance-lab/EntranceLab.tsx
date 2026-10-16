@@ -9,6 +9,7 @@ import * as workshop from '@/lib/city/models/workshop';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
+import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
 // Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
@@ -68,6 +69,31 @@ function avatarHqScene(open: boolean): THREE.Group {
   return group;
 }
 
+// The avatar with the Valtech office (both in wu): on the approach tile in front of the gate (roof on), or inside on
+// plan tile (2,1) (roof off). Plan tile (lx, ly) -> model (lx - 2, ly - 1) on the 4 x 2 plot; the floor top is at y = 0.05.
+function avatarValtechScene(open: boolean): THREE.Group {
+  const group = new THREE.Group();
+  const options = { castShadow: true, receiveShadow: true };
+  const building = open ? createValtechOfficeRoofOffModel(options) : createValtechOfficeRoofOnModel(options);
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  if (open) { avatar.position.set(2.5 - 2, 0.05, 1.5 - 1); avatar.rotation.y = -Math.PI / 4; }
+  else avatar.position.set(3.5 - 2, 0.04, 2.5 - 1);
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+const valtechOpen = (view: CampusView): ModelConfig => ({
+  name: `Valtech office (roof off, ${view} view)`,
+  create: (options) => createValtechOfficeRoofOffModel(options, view),
+  lights: valtech.createValtechOfficeLookDevLights,
+  environment: valtech.createValtechOfficeEnvironment,
+  configure: valtech.configureValtechOfficeRenderer,
+  leaves: {},
+  travel: 0,
+  reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
+});
 
 const MODELS: Record<string, ModelConfig> = {
   // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
@@ -167,16 +193,33 @@ const MODELS: Record<string, ModelConfig> = {
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
   },
-  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 3 x 2 footprint, banded louvre block
+  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 4 x 2 footprint, banded louvre block; roof on, and
+  // roof off per sprite view (street-level interior grey box), and with the avatar at the gate / inside
   valtech: {
     name: 'Valtech office',
-    create: valtech.createValtechOfficeModel,
+    create: createValtechOfficeRoofOnModel,
     lights: valtech.createValtechOfficeLookDevLights,
     environment: valtech.createValtechOfficeEnvironment,
     configure: valtech.configureValtechOfficeRenderer,
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
+  },
+  valtechOpen: valtechOpen('south'),
+  valtechOpenWest: valtechOpen('west'),
+  valtechOpenNorth: valtechOpen('north'),
+  valtechOpenEast: valtechOpen('east'),
+  'avatar-valtech': {
+    ...valtechOpen('south'),
+    name: 'Gustav avatar at the Valtech office gate (roof on)',
+    create: () => avatarValtechScene(false),
+    restBounds: true,
+  },
+  'avatar-valtech-open': {
+    ...valtechOpen('south'),
+    name: 'Gustav avatar inside the Valtech office (roof off)',
+    create: () => avatarValtechScene(true),
+    restBounds: true,
   },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {

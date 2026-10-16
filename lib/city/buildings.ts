@@ -156,6 +156,14 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       east: "/game/pogicity/Building/landmark/valtech-office-avatar_east.png",
       west: "/game/pogicity/Building/landmark/valtech-office-avatar_west.png",
     },
+    // Street-level interior, grey box (Figma board 597-3604): the upper storeys and the cafe front come off when the player
+    // walks in through the gate (lib/city/buildingInteriors.ts)
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/valtech-office-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/valtech-office-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/valtech-office-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/valtech-office-avatar-open_west.png",
+    },
     icon: "💼",
     projectSlug: "valtech",
     description: "Design Internship",

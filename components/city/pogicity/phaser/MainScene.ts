@@ -47,7 +47,7 @@ import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
-import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isInteriorDoor } from "@/lib/city/buildingInteriors";
+import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -1541,7 +1541,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
-  // through the building's outside rooms (the plaza)
+  // through the building's outside rooms (the plaza), or across a main door that opens straight onto the street
   private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
     const a = this.interiorTiles.get(`${fx},${fy}`);
     const b = this.interiorTiles.get(`${tx},${ty}`);
@@ -1553,8 +1553,8 @@ export class MainScene extends Phaser.Scene {
       if (a.key !== b.key) return false;
       return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
     }
-    if (b) return b.interior.outside.includes(cb!);
-    return !ca || a!.interior.outside.includes(ca);
+    if (b) return b.interior.outside.includes(cb!) || isEntranceStep(b.interior, b.lx, b.ly, fx - tx, fy - ty);
+    return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);
   }
 
   private updateInteriorState(gridX: number, gridY: number): void {

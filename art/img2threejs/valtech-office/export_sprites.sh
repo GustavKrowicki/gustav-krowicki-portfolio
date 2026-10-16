@@ -1,7 +1,8 @@
 #!/bin/sh
 # Export the 4 city sprites: 2x density, 512 px, converter zoom from lib/city/units.ts (converterSettings, measured maxDim),
 # the footprint's front corner at the bottom centre (vOff 0), converter rig with the soft shadow light; drawn at spriteScale 0.5.
-# Dev server on $LAB_PORT (default 3107). Writes public/game/pogicity/Building/landmark/valtech-office-avatar_<view>.png
+# Roof on in 4 views, and roof off (street-level interior) with each view's own wall cut (lib/city/models/valtechOfficeStates.ts).
+# Dev server on $LAB_PORT (default 3107). Writes public/game/pogicity/Building/landmark/valtech-office-avatar[-open]_<view>.png
 set -e
 W="$(cd "$(dirname "$0")" && pwd)"; R="$W/../../.."; O="$R/public/game/pogicity/Building/landmark"; . "$W/building.env"
 export LAB_PORT="${LAB_PORT:-3107}"
@@ -15,3 +16,7 @@ S="\"pitch\":30,\"zoom\":$ZOOM,\"voff\":0,\"size\":512,\"rig\":\"converter\",\"s
 node art/img2threejs/tools/lab_render.mjs valtech "$O" \
   "valtech-office-avatar_south={\"view\":\"sprite\",\"yaw\":45,\"aim\":[$HX,1],$S}" "valtech-office-avatar_west={\"view\":\"sprite\",\"yaw\":135,\"aim\":[$HX,-1],$S}" \
   "valtech-office-avatar_north={\"view\":\"sprite\",\"yaw\":225,\"aim\":[-$HX,-1],$S}" "valtech-office-avatar_east={\"view\":\"sprite\",\"yaw\":315,\"aim\":[-$HX,1],$S}" | tail -1
+node art/img2threejs/tools/lab_render.mjs valtechOpen "$O" "valtech-office-avatar-open_south={\"view\":\"sprite\",\"yaw\":45,\"aim\":[$HX,1],$S}" | tail -1
+node art/img2threejs/tools/lab_render.mjs valtechOpenWest "$O" "valtech-office-avatar-open_west={\"view\":\"sprite\",\"yaw\":135,\"aim\":[$HX,-1],$S}" | tail -1
+node art/img2threejs/tools/lab_render.mjs valtechOpenNorth "$O" "valtech-office-avatar-open_north={\"view\":\"sprite\",\"yaw\":225,\"aim\":[-$HX,-1],$S}" | tail -1
+node art/img2threejs/tools/lab_render.mjs valtechOpenEast "$O" "valtech-office-avatar-open_east={\"view\":\"sprite\",\"yaw\":315,\"aim\":[-$HX,1],$S}" | tail -1
