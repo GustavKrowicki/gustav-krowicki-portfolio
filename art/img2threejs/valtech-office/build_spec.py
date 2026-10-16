@@ -1,6 +1,6 @@
-"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 3 x 2 tile city building.
+"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 4 x 2 tile city building.
 
-Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2, ground storey 1.4 wu with dark green
+Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions), ground storey 1.4 wu with dark green
 awnings, white columns, black planters and the gate (passage) as the entrance on the south side under an awning; three
 louvre storeys of 1.2 wu; a recessed glass top floor with a white frame.
 Gustav, 2026-10-16: white bands (0.2 wu, standing 0.04 wu proud of the slats) clearly apart from warm grey louvre bands over
@@ -10,8 +10,8 @@ Style + camera: ref/ref-A-gemini.png. Facts: ref/photo-6.jpg (straight front), p
 Colours: photo crops (material-crops/) through analyze_texture.py and extract_pbr_evidence.py (material-evidence/),
 lifted into the sprite value band and kept flat. Nothing from the photos is projected onto the mesh.
 
-Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 3 x 2 footprint centred on the
-origin: X east (3 wu, -1.5..1.5), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
+Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 4 x 2 footprint centred on the
+origin: X east (4 wu, -2..2), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
 """
 import copy
 import json
@@ -41,7 +41,7 @@ GS, ST, TS = 1.4, 1.2, 0.2    # ground storey, upper storey, white band (slab + 
 NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
-HX, HZ = 1.5, 1.0             # half footprint
+HX, HZ = 2.0, 1.0             # half footprint (4 x 2: Gustav, 2026-10-16, closer to the real proportions)
 
 
 def r4(v):
@@ -118,33 +118,34 @@ def lf(fid, kind, notes):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# Pavement pad (root): exactly the 3 x 2 footprint, so the converter bbox starts at the footprint
+# Pavement pad (root): exactly the 4 x 2 footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Pavement", "macro", "base", "box", (2 * HX, G, 2 * HZ), (0, G / 2, 0), "paving", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "top of the pavement"}],
-              features=lf("root.pad", "contour", "3 x 2 wu pavement = the footprint (collision = footprint)"),
+              features=lf("root.pad", "contour", f"{2 * HX:g} x {2 * HZ:g} wu pavement = the footprint (collision = footprint)"),
               topo="Flat pad: a box exactly the size of the footprint."))
 
 # ---------------------------------------------------------------------------------------------------------------
 # Ground storey (0 .. 1.4): shops behind an arcade on the south side, the gate passage in the east bay
 SHOP_Z = 0.55      # shop glazing line (set back 0.45 behind the column line)
 COL = 0.14         # column size
-GX0, GX1 = 0.55, 1.38   # gate passage between the shop block and the east end wall
+GB = HX - 1.0     # the gate bay is the east bay of the south side (x GB .. HX); the cafe bays fill the rest
+GX0, GX1 = GB + 0.05, HX - 0.12   # gate passage between the shop block and the east end wall
 DOOR_Z = -0.45     # the passage ends at the entrance door
 PASS_H = 1.15      # passage clear height (door 1.0 + transom)
-bx("shop-core", "Shop block", "macro", "ground-storey", -HX, 0.5, 0, GS, -HZ, SHOP_Z, "white", importance=0.8,
+bx("shop-core", "Shop block", "macro", "ground-storey", -HX, GB, 0, GS, -HZ, SHOP_Z, "white", importance=0.8,
    features=lf("shop-core.arcade", "contour", "ground storey set back behind the column line on the south side"),
    topo="Shop block behind the arcade: a box.")
-bx("gate-back", "Lobby block behind the gate", "meso", "ground-storey", 0.5, HX, 0, GS, -HZ, DOOR_Z, "white", importance=0.6)
+bx("gate-back", "Lobby block behind the gate", "meso", "ground-storey", GB, HX, 0, GS, -HZ, DOOR_Z, "white", importance=0.6)
 bx("gate-east-wall", "Gate east wall", "meso", "ground-storey", GX1, HX, 0, GS, DOOR_Z, HZ, "white", importance=0.6,
    topo="East end wall of the passage, flush with the east facade: a box.")
-bx("gate-lintel", "Gate lintel", "meso", "ground-storey", 0.5, GX1, PASS_H, GS, DOOR_Z, HZ, "white", importance=0.5)
+bx("gate-lintel", "Gate lintel", "meso", "ground-storey", GB, GX1, PASS_H, GS, DOOR_Z, HZ, "white", importance=0.5)
 bx("gate-void", "Gate passage floor", "meso", "entrance", GX0, GX1, 0, 0.01, DOOR_Z, HZ, "passage", contact="flush-mount", importance=0.85,
    features=lf("gate-void.passage", "contour", "dark passage through the ground storey: the entrance (1.0 wu wide incl. reveals)"),
    topo="Passage floor: a thin box; the walls are the brick reveals and the blocks around it.")
-bx("gate-brick-w", "Gate brick lining (west)", "micro", "entrance", 0.5, GX0, 0, PASS_H, DOOR_Z, HZ - 0.05, "brick", importance=0.5,
+bx("gate-brick-w", "Gate brick lining (west)", "micro", "entrance", GB, GX0, 0, PASS_H, DOOR_Z, HZ - 0.05, "brick", importance=0.5,
    topo="Brick lining on the passage's west wall: a thin box.")
 bx("gate-brick-e", "Gate brick lining (east)", "micro", "entrance", GX1 - 0.02, GX1, 0, PASS_H, DOOR_Z, HZ - 0.05, "brick", importance=0.5)
-bx("gate-soffit", "Gate soffit", "micro", "entrance", 0.5, GX1, PASS_H - 0.02, PASS_H, DOOR_Z, HZ, "passage", importance=0.3)
+bx("gate-soffit", "Gate soffit", "micro", "entrance", GB, GX1, PASS_H - 0.02, PASS_H, DOOR_Z, HZ, "passage", importance=0.3)
 # entrance door on the passage's west wall (it faces the default camera; a door at the passage end is hidden behind the
 # east wall from the south-east view), lit from inside, with the red and blue art panel beside it, as in the photo
 DZ0, DZ1, DW = 0.05, 0.55, GX0 + 0.02
@@ -161,12 +162,16 @@ bx("gate-sign", "House number plate", "micro", "entrance", GX0, DW + 0.01, 0.55,
 bx("gate-threshold", "Threshold path", "micro", "entrance", GX0, GX1, 0.01, 0.015, 0.85, HZ, "paving-light", contact="flush-mount", importance=0.4,
    topo="Light threshold at the passage mouth: a thin box (path ending at the entrance).")
 
-# columns on the south column line (west corner, two bay lines) and the shop glazing behind them
-for i, x in enumerate((-HX + COL / 2, -0.5, 0.5 - COL / 2 + 0.02), 1):
+# cafe bays: one per wu from the west corner to the gate bay; columns on the bay lines, shop glazing behind them
+NCAFE = int(round(GB + HX))
+BAYS = [(-HX + i, -HX + i + 1) for i in range(NCAFE)]
+COLS = [-HX + COL / 2] + [-HX + i for i in range(1, NCAFE)] + [GB - COL / 2 + 0.02]
+for i, x in enumerate(COLS, 1):
     bx(f"col-S-{i}", f"Column S{i}", "macro", "arcade", x - COL / 2, x + COL / 2, 0, GS, HZ - COL, HZ, "white", importance=0.6,
        features=lf(f"col-S-{i}.pier", "contour", "white square column on the facade line") if i == 1 else None,
        topo="Square white column: a box.")
-for i, (x0, x1) in enumerate(((-HX + COL, -0.5 - COL / 2), (-0.5 + COL / 2, 0.5 - COL)), 1):
+for i, (b0, b1) in enumerate(BAYS, 1):
+    x0, x1 = b0 + (COL if i == 1 else COL / 2), b1 - (COL if i == NCAFE else COL / 2)
     bx(f"shop-glass-S-{i}", f"Shop glazing S{i}", "meso", "glazing", x0 + 0.03, x1 - 0.03, 0.05, 1.12, SHOP_Z, SHOP_Z + 0.02,
        "shop-glass", importance=0.6, contact="flush-mount")
     bx(f"shop-light-S-{i}", f"Shop light band S{i}", "micro", "glazing", x0 + 0.08, x1 - 0.08, 0.72, 0.8, SHOP_Z + 0.02, SHOP_Z + 0.025,
@@ -176,7 +181,8 @@ for i, (x0, x1) in enumerate(((-HX + COL, -0.5 - COL / 2), (-0.5 + COL / 2, 0.5 
 # east side: plain white wall, no windows (Gustav, 2026-10-16)
 
 # awnings: dark green, one per cafe bay, sloping from the glazing to the column line; the gate's awning projects 0.5 wu
-for i, (x0, x1) in enumerate(((-HX + COL + 0.02, -0.5 - COL / 2 - 0.02), (-0.5 + COL / 2 + 0.02, 0.5 - COL - 0.02)), 1):
+for i, (x0, x1) in enumerate([(b0 + (COL if i == 0 else COL / 2) + 0.02, b1 - (COL if i == NCAFE - 1 else COL / 2) - 0.02)
+                              for i, (b0, b1) in enumerate(BAYS)], 1):
     tilted(f"awning-S-{i}", f"Awning S{i}", "meso", "awning", x0, x1, SHOP_Z + 0.02, 1.22, HZ - 0.03, 0.98, 0.03, "awning", importance=0.8,
            features=lf(f"awning-S-{i}.slope", "contour", "dark green awning sloping out to the column line") if i == 1 else None,
            topo="Sloped canvas plate: a thin box tilted about X.")
@@ -188,7 +194,7 @@ bx("awning-gate-valance", "Gate awning valance", "micro", "entrance", GX0 - 0.03
    importance=0.5, topo="White-edged valance: the accent on the entrance.")
 
 # planters with shrubs in front of the shop glazing (inside the footprint)
-for i, x in enumerate((-1.0, 0.0), 1):
+for i, x in enumerate([(b0 + b1) / 2 for b0, b1 in BAYS], 1):
     bx(f"planter-{i}", f"Planter {i}", "micro", "planter", x - 0.25, x + 0.25, 0, 0.2, 0.68, 0.86, "planter", importance=0.5,
        features=lf(f"planter-{i}.shrub", "contour", "black box planter with green shrubs") if i == 1 else None)
     for j, dx in enumerate((-0.15, 0.0, 0.15), 1):
@@ -262,7 +268,7 @@ bx("roof-deck", "Roof terrace deck", "meso", "roof", -HX + PT, HX - PT, PY0, PY0
 
 # ---------------------------------------------------------------------------------------------------------------
 # Recessed glass top floor with a white frame and a flat roof (no ducts or roof box: Gustav, 2026-10-16)
-TX0, TX1, TZ0, TZ1 = -1.12, 1.24, -0.7, 0.7
+TX0, TX1, TZ0, TZ1 = -HX + 0.38, HX - 0.26, -0.7, 0.7
 T0 = PY0 + 0.01
 bx("top-core", "Top floor (glass)", "macro", "top-floor", TX0, TX1, T0, T0 + TOPH, TZ0, TZ1, "glass-top", importance=0.85,
    features=lf("top-core.setback", "contour", "top floor set back ~0.3 wu, wider terrace at the west end"),
@@ -441,13 +447,13 @@ spec["repetitionSystems"] = [
     rep("louvre-fins", fin_ids, "vertical fins every 1.0 wu on every band"),
     rep("slabs", [f"slab-{k + 1}" for k in range(NL + 1)], "one slab per storey line, 1.2 wu apart"),
     rep("top-mullions", mull_ids, "white mullions every ~0.4 wu around the top floor"),
-    rep("awnings", ["awning-S-1", "awning-S-2"], "one per cafe bay"),
+    rep("awnings", [f"awning-S-{i + 1}" for i in range(NCAFE)], "one per cafe bay"),
     rep("columns", [i for i in ids if i.startswith("col-S-")], "south column line at the bay lines"),
     rep("planters", [i for i in ids if i.startswith("planter-") and "shrub" not in i], "between the columns"),
 ]
 top = TR + 0.1 + G
-spec["silhouette"] = {"boundingShape": f"3 x 2 wu block, louvre block {ROOF + TS + G:.2f} wu, top floor to {top:.2f} wu",
-                      "aspectRatios": ["footprint 3 : 2", f"height {top:.2f} : length 3"], "symmetry": "asymmetric (gate at the east end)",
+spec["silhouette"] = {"boundingShape": f"{2 * HX:g} x {2 * HZ:g} wu block, louvre block {ROOF + TS + G:.2f} wu, top floor to {top:.2f} wu",
+                      "aspectRatios": [f"footprint {2 * HX:g} : {2 * HZ:g}", f"height {top:.2f} : length {2 * HX:g}"], "symmetry": "asymmetric (gate at the east end)",
                       "dominantCurves": [], "negativeSpaces": ["gate passage", "arcade", "roof terrace"],
                       "landmarks": ["white band / louvre banding", "glass top floor", "green awnings", "gate with awning"]}
 spec["coordinateFrame"] = {"front": "+Z south (cafe arcade, gate)", "up": "+Y", "scaleReference": "1.0 = 1 wu = one tile edge (~2 m); avatar 0.9"}
@@ -490,7 +496,7 @@ spec["lightingFromPhoto"] = [
     {"id": "tone", "role": "exposure", "toneMapping": "Neutral", "exposure": 1.0, "notes": "game sprites use the converter rig"},
     {"id": "contact", "role": "shadow", "notes": "soft contact shadows under the slabs and awnings"},
 ]
-spec["entrance"] = {"side": "south", "at": 1.0, "width": 1.0, "approachTile": [2, 2],
+spec["entrance"] = {"side": "south", "at": int(round(GB + HX)), "width": 1.0, "approachTile": [int(round(GB + HX)), int(2 * HZ)],
                     "cues": ["green awning projecting 0.5 wu with a white valance", "lit glass door on the passage wall, facing the camera",
                              "brick-lined passage", "light threshold path"]}
 pa = spec["preSpecAssessment"]

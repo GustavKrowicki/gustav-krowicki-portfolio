@@ -142,12 +142,13 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "valtech-office",
     name: "Valtech Office",
     category: "portfolio",
-    // Rebuilt with img2threejs at the avatar's scale (art/img2threejs/valtech-office, Linear POR-35): a 3 x 2 block, long
-    // side south; ground storey with green awnings and the gate (the entrance, east bay of the south side, approach tile in
-    // front of it), 3 louvre storeys, recessed glass top floor. Sprites at 2x density (512 px, converter zoom 1.2984, front
-    // corner at the bottom centre), drawn at 0.5. Turned a quarter, the footprint is 2 x 3.
-    footprint: { width: 3, height: 2 },
-    footprintByOrientation: { east: { width: 2, height: 3 }, west: { width: 2, height: 3 } },
+    // Rebuilt with img2threejs at the avatar's scale (art/img2threejs/valtech-office, Linear POR-35): a 4 x 2 block (wider
+    // than the 3 x 2 the footprint rule gives, to match the real proportions), long side south; ground storey with three
+    // cafe bays under green awnings and the gate (the entrance, east bay of the south side, approach tile in front of it),
+    // 3 louvre storeys, recessed glass top floor. Sprites at 2x density (512 px, converter zoom 1.2984, front corner at the
+    // bottom centre), drawn at 0.5. Turned a quarter, the footprint is 2 x 4.
+    footprint: { width: 4, height: 2 },
+    footprintByOrientation: { east: { width: 2, height: 4 }, west: { width: 2, height: 4 } },
     spriteScale: 0.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/valtech-office-avatar_south.png",

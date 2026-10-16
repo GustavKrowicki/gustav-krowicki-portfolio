@@ -11,7 +11,8 @@ SIZE=$(LAB_STATS=1 node art/img2threejs/tools/lab_render.mjs valtech "$W/renders
 MAX=$(echo "$SIZE" | python3 -c "import json,sys; s=json.load(sys.stdin)['size']; print(max(s))")
 ZOOM=$(node art/img2threejs/tools/converter_settings.mjs "$FOOTPRINT_W" "$FOOTPRINT_H" "$MAX" 512 2 2>/dev/null | python3 -c "import json,sys; print(round(json.load(sys.stdin)['zoom'], 4))")
 echo "maxDim $MAX zoom $ZOOM  stats $SIZE"
-if [ "$BAY" = "1" ]; then XE=0.5; XW=-0.5; else XE=1.5; XW=-1.5; fi
+HX=$(python3 -c "print($FOOTPRINT_W / 2)")
+if [ "$BAY" = "1" ]; then XE=0.5; XW=-0.5; else XE=$HX; XW=-$HX; fi
 S="\"pitch\":30,\"zoom\":$ZOOM,\"voff\":0,\"rig\":\"converter\",\"shadow\":true"
 # the front corner of the footprint (model x, z) for each view: south (+X+Z), west (+X-Z), north (-X-Z), east (-X+Z)
 AS="\"aim\":[$XE,1]"; AW="\"aim\":[$XE,-1]"; AN="\"aim\":[$XW,-1]"; AE="\"aim\":[$XW,1]"
