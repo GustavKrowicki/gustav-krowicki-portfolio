@@ -131,7 +131,7 @@ export default function PortfolioShell() {
           onClose={() => setPanel('closed')}
         />
       </aside>
-      <div className="relative order-1 min-h-0 min-w-0 flex-1 md:order-2">
+      <div className="relative order-1 min-h-0 min-w-0 flex-1 overflow-hidden md:order-2">
         <CityViewer
           initialGrid={initialGrid as GridCell[][]}
           onProjectClick={handleProjectClick}

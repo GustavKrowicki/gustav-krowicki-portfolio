@@ -92,7 +92,7 @@ A design lead in an interview (October 2026):
 These problems were found on 2026-10-10 or later:
 
 - The Viz generator case is not in the city.
-- A click on the LEGO logo opens a pop-up, but a click on the LEGO building opens the case.
+- ~~A click on the LEGO logo opens a pop-up, but a click on the LEGO building opens the case.~~ Fixed: a logo now opens the same thing as its building.
 - The building highlight stays on the screen when a visitor stops the tour early.
 - The key G shows a debug overlay to visitors.
 - The city code uses a pixel font, but the site does not load it.
