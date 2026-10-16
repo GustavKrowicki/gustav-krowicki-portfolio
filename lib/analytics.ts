@@ -42,6 +42,11 @@ export function trackCvDownloaded(source: 'contact' | 'panel') {
   capture('cv_downloaded', { source });
 }
 
+// "Open PDF" on the CV (opens the browser's own PDF viewer)
+export function trackPdfOpened(document: 'cv') {
+  capture('pdf_opened', { document });
+}
+
 // Cross-cutting
 export function trackModeSwitched(from: 'classic' | 'city', to: 'classic' | 'city') {
   capture('mode_switched', { from, to });

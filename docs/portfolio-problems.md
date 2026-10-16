@@ -99,7 +99,7 @@ These problems were found on 2026-10-10 or later:
 - Day and night are in the code but not in use. The branch `living-city-polish` uses them.
 - The image `erhvervsakademiet_east.png` is missing (status 404). The file in the repository has a space in its name.
 - The city tour data shows the Swinburne logo for the University of Melbourne.
-- The PDF viewer shows the CV and the recommendation letter as images. Visitors cannot select the text, and the links do not operate.
+- The PDF viewer shows the CV and the recommendation letter as images. Visitors cannot select the text, and the links do not operate. Fixed on the branch for POR-18: the viewer has the text and link layers, and the uni letter file has real text.
 
 ## 7. Keep this document current
 
