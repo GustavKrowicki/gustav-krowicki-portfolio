@@ -176,7 +176,7 @@ for i in range(10):
            contact="flush-mount", importance=0.25, topo="Dark paving square: a thin box.")
 
 # Minifigure statue on the plaza
-MX, MZ = 5.5, 7.55
+MX, MZ = 5.2, 8.5   # clear of the 2 x 4 plate
 bx("minifig-leg-w", "Minifigure west leg", "meso", "statue", MX - 0.24, MX - 0.02, 0, 0.42, MZ - 0.13, MZ + 0.13, "mf-blue", importance=0.6)
 bx("minifig-leg-e", "Minifigure east leg", "meso", "statue", MX + 0.02, MX + 0.24, 0, 0.42, MZ - 0.13, MZ + 0.13, "mf-blue", importance=0.6)
 bx("minifig-hips", "Minifigure hips", "meso", "statue", MX - 0.25, MX + 0.25, 0.42, 0.5, MZ - 0.13, MZ + 0.13, "mf-blue", importance=0.5)
@@ -343,14 +343,15 @@ bx("upper-S-door-glass", "Glass over the door", "meso", "wall", DX0, DX1, 1.08, 
    contact="flush-mount", importance=0.4)
 bx("topcap-S-door", "Door top cap", "micro", "trim", DX0, DX1, G1 - CAP, G1, DZ - WT / 2, DZ + WT / 2, "wall-cap", plan=False, contact="applied")
 
-# Yellow 2 x 4 plate canopy over the main door (always shown: it marks the entrance)
-PX0, PX1, PZ0, PZ1, PY = 5.5, 7.5, 6.62, 7.62, 1.22
-bx("canopy", "Yellow 2 x 4 plate canopy", "macro", "canopy", PX0, PX1, PY, PY + 0.2, PZ0, PZ1, "yellow", importance=0.95, conf=0.85,
+# Yellow 2 x 4 plate canopy over the main door, fully in front of the atrium face so all 4 x 2 studs show. It is part of
+# the roof: hidden with the other "roof-" parts when the avatar is inside (Gustav, 2026-10-16)
+PX0, PX1, PZ0, PZ1, PY = 5.5, 7.5, 7.22, 8.22, 1.18
+bx("roof-canopy", "Yellow 2 x 4 plate canopy", "macro", "canopy", PX0, PX1, PY, PY + 0.2, PZ0, PZ1, "yellow", importance=0.95, conf=0.85,
    features=[{"id": "canopy.studs", "kind": "contour", "notes": "2 x 4 round studs on top (8 cylinders)"}],
    sockets=[{"id": "top", "localPosition": [0, 0.1, 0], "notes": "stud row"}], topo="Toy plate: a box over the doors.")
 for i in range(4):
     for j in range(2):
-        cyl(f"canopy-stud-{i * 2 + j + 1}", f"Canopy stud {i * 2 + j + 1}", "micro", "trim", PX0 + 0.25 + 0.5 * i, PZ0 + 0.25 + 0.5 * j, PY + 0.2, 0.09,
+        cyl(f"roof-canopy-stud-{i * 2 + j + 1}", f"Canopy stud {i * 2 + j + 1}", "micro", "trim", PX0 + 0.25 + 0.5 * i, PZ0 + 0.25 + 0.5 * j, PY + 0.2, 0.09,
             0.15, "yellow", importance=0.6, topo="Plate stud: a short cylinder.")
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -632,7 +633,7 @@ for r_, gy in enumerate((4.2, 4.8), 1):
 
 # Walk map (one char per tile; lib/city/buildingInteriors.ts): rooms, plaza P, '#' blocked
 WALK_BLOCK = {(5, 1), (6, 1), (4, 0), (4, 1), (11, 2), (9, 1), (10, 1), (11, 0), (5, 3), (1, 5), (1, 6), (3, 6), (1, 7),
-              (5, 7), (8, 7), (7, 8)}
+              (5, 8), (8, 7), (7, 8)}
 CODE = {"workshop": "W", "ailab": "A", "lobby": "L", "studio": "S", "launch": "R"}
 walk = []
 for gy in range(int(PH)):
@@ -771,7 +772,7 @@ spec["repetitionSystems"] = [
     rep("upper-walls", lambda i: i.startswith("upper-") and "-win-" not in i, "upper parts of the ground storey walls"),
     rep("windows", lambda i: "-win-" in i, "one window per bay and storey"),
     rep("skylight-domes", lambda i: i.startswith("roof-dome-"), "two rings and a centre on the skylight disc"),
-    rep("canopy-studs", lambda i: i.startswith("canopy-stud-"), "2 x 4 grid on the plate", "canopy"),
+    rep("canopy-studs", lambda i: i.startswith("roof-canopy-stud-"), "2 x 4 grid on the plate", "roof-canopy"),
     rep("perforations", lambda i: i.startswith("roof-perf-"), "staggered rows on the terrace building"),
     rep("workshop-chairs", lambda i: i.startswith("workshop-chair-") and not i.endswith("-back"), "three each side of the table"),
     rep("sticky-notes", lambda i: i.startswith("workshop-note-"), "grid on the pinboard"),
@@ -789,10 +790,10 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["roof-north-mass", "roof-atrium-upper", "roof-round-mass", "roof-yellow-bar-mass", "roof-yellow-block-mass", "roof-skylight"]},
     {"id": "avatar-scale", "name": "Storeys 1.2 wu, door 1.0 wu: the avatar (0.9 wu) fits the main door", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True,
-     "componentRefs": ["door-leaf-left", "door-leaf-right", "upper-S-door-header", "canopy"]},
+     "componentRefs": ["door-leaf-left", "door-leaf-right", "upper-S-door-header", "roof-canopy"]},
     {"id": "entrance", "name": "Yellow 2 x 4 plate over the glass main door on the south side", "tier": "critical",
      "passIds": ["structural-pass", "material-pass"], "minimumScore": 0.7, "mustPass": True,
-     "componentRefs": ["canopy", "door-leaf-left", "door-leaf-right"] + [f"canopy-stud-{i}" for i in range(1, 9)]},
+     "componentRefs": ["roof-canopy", "door-leaf-left", "door-leaf-right"] + [f"roof-canopy-stud-{i}" for i in range(1, 9)]},
     {"id": "cutaway", "name": "Roof off: far walls high, other walls cut with dark caps, every room floor visible", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True, "componentRefs": floors},
     {"id": "workshop", "name": "Workshop in full detail: table, chairs, whiteboard, sticky-note wall, brick shelf", "tier": "important",
