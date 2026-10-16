@@ -142,19 +142,27 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "valtech-office",
     name: "Valtech Office",
     category: "portfolio",
-    // Rebuilt with img2threejs at the avatar's scale (art/img2threejs/valtech-office, Linear POR-35): a 4 x 2 block (wider
-    // than the 3 x 2 the footprint rule gives, to match the real proportions), long side south; ground storey with three
-    // cafe bays under green awnings and the gate (the entrance, east bay of the south side, approach tile in front of it),
-    // 3 louvre storeys, recessed glass top floor. Sprites at 2x density (512 px, converter zoom 1.2984, front corner at the
-    // bottom centre), drawn at 0.5. Turned a quarter, the footprint is 2 x 4.
-    footprint: { width: 4, height: 2 },
-    footprintByOrientation: { east: { width: 2, height: 4 }, west: { width: 2, height: 4 } },
+    // Rebuilt with img2threejs at the avatar's scale (art/img2threejs/valtech-office, Linear POR-35): a 6 x 2 block (Gustav,
+    // 2026-10-16: wide enough for the street-level interior; it was 4 x 2), long side south; ground storey with five cafe
+    // bays under green awnings and the gate (the entrance, east bay of the south side, approach tile in front of it),
+    // 3 louvre storeys, recessed glass top floor. Sprites at 2x density (768 px, converter zoom 0.8656, front corner at the
+    // bottom centre), drawn at 0.5. Turned a quarter, the footprint is 2 x 6.
+    footprint: { width: 6, height: 2 },
+    footprintByOrientation: { east: { width: 2, height: 6 }, west: { width: 2, height: 6 } },
     spriteScale: 0.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/valtech-office-avatar_south.png",
       north: "/game/pogicity/Building/landmark/valtech-office-avatar_north.png",
       east: "/game/pogicity/Building/landmark/valtech-office-avatar_east.png",
       west: "/game/pogicity/Building/landmark/valtech-office-avatar_west.png",
+    },
+    // Street-level interior, grey box (Figma board 597-3604, beat sheet 2026-10-16): the upper storeys and the cafe front
+    // come off when the player walks in through the gate (lib/city/buildingInteriors.ts)
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/valtech-office-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/valtech-office-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/valtech-office-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/valtech-office-avatar-open_west.png",
     },
     icon: "💼",
     projectSlug: "valtech",

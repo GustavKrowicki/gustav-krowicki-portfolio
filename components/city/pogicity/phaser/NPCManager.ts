@@ -112,7 +112,9 @@ export class NPCManager {
     playerGridX: number,
     playerGridY: number,
     depthFromSortPoint: (x: number, y: number, offset: number) => number,
-    gifsLoaded: boolean
+    gifsLoaded: boolean,
+    // Depth for an NPC standing just in front of a walk-in building, whose big sprite would otherwise paint over it
+    depthOverride?: (gridX: number, gridY: number) => number | null
   ): void {
     for (const [npcId, npc] of this.npcs) {
       // Skip NPCs at visited buildings
@@ -141,7 +143,7 @@ export class NPCManager {
 
       if (sprite) {
         sprite.setPosition(screenPos.x, groundY);
-        sprite.setDepth(depthFromSortPoint(screenPos.x, groundY, 0.2));
+        sprite.setDepth(depthOverride?.(npc.gridX, npc.gridY) ?? depthFromSortPoint(screenPos.x, groundY, 0.2));
 
         // Play animation
         if (gifsLoaded && this.scene.textures.exists(textureKey)) {

@@ -1,6 +1,6 @@
-"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 4 x 2 tile city building.
+"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 6 x 2 tile city building.
 
-Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions), ground storey 1.4 wu with dark green
+Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions, then 6 x 2 the same day for the street-level interior), ground storey 1.4 wu with dark green
 awnings, white columns, black planters and the gate (passage) as the entrance on the south side under an awning; three
 louvre storeys of 1.2 wu; a recessed glass top floor with a white frame.
 Gustav, 2026-10-16: white bands (0.2 wu, standing 0.04 wu proud of the slats) clearly apart from warm grey louvre bands over
@@ -10,12 +10,13 @@ Style + camera: ref/ref-A-gemini.png. Facts: ref/photo-6.jpg (straight front), p
 Colours: photo crops (material-crops/) through analyze_texture.py and extract_pbr_evidence.py (material-evidence/),
 lifted into the sprite value band and kept flat. Nothing from the photos is projected onto the mesh.
 
-Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 4 x 2 footprint centred on the
-origin: X east (4 wu, -2..2), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
+Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 6 x 2 footprint centred on the
+origin: X east (6 wu, -3..3), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
 """
 import copy
 import json
 import math
+import os
 import sys
 
 W = sys.argv[1]
@@ -41,7 +42,7 @@ GS, ST, TS = 1.4, 1.2, 0.2    # ground storey, upper storey, white band (slab + 
 NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
-HX, HZ = 2.0, 1.0             # half footprint (4 x 2: Gustav, 2026-10-16, closer to the real proportions)
+HX, HZ = 3.0, 1.0             # half footprint: 6 x 2 (Gustav, 2026-10-16: room for the street-level interior; was 4 x 2)
 
 
 def r4(v):
@@ -118,7 +119,7 @@ def lf(fid, kind, notes):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# Pavement pad (root): exactly the 4 x 2 footprint, so the converter bbox starts at the footprint
+# Pavement pad (root): exactly the footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Pavement", "macro", "base", "box", (2 * HX, G, 2 * HZ), (0, G / 2, 0), "paving", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "top of the pavement"}],
               features=lf("root.pad", "contour", f"{2 * HX:g} x {2 * HZ:g} wu pavement = the footprint (collision = footprint)"),
@@ -132,10 +133,21 @@ GB = HX - 1.0     # the gate bay is the east bay of the south side (x GB .. HX);
 GX0, GX1 = GB + 0.05, HX - 0.12   # gate passage between the shop block and the east end wall
 DOOR_Z = -0.45     # the passage ends at the entrance door
 PASS_H = 1.15      # passage clear height (door 1.0 + transom)
-bx("shop-core", "Shop block", "macro", "ground-storey", -HX, GB, 0, GS, -HZ, SHOP_Z, "white", importance=0.8,
+# The ground storey is a hollow shell (street-level interior, Figma 597-3604): the same outer faces as the solid shop
+# block and lobby block it replaces, so the roof-on look does not change. "wall-<side>" stay on entry (cut low on the
+# camera side), "front-S" and the gate pieces fade with the cafe front.
+WT = 0.1           # shell wall thickness
+bx("shop-core", "Shop front wall", "macro", "ground-storey", -HX, GB, 0, GS, SHOP_Z - 0.02, SHOP_Z, "white", importance=0.8,
    features=lf("shop-core.arcade", "contour", "ground storey set back behind the column line on the south side"),
-   topo="Shop block behind the arcade: a box.")
-bx("gate-back", "Lobby block behind the gate", "meso", "ground-storey", GB, HX, 0, GS, -HZ, DOOR_Z, "white", importance=0.6)
+   topo="Shop front wall behind the arcade: a thin box (the shop block is a hollow shell).")
+bx("wall-N", "North wall", "macro", "ground-storey", -HX, HX, 0, GS, -HZ, -HZ + WT, "white", importance=0.6,
+   topo="North wall of the ground-storey shell: a box.")
+bx("wall-W", "West wall", "macro", "ground-storey", -HX, -HX + WT, 0, GS, -HZ + WT, SHOP_Z - 0.02, "white", importance=0.6,
+   topo="West wall of the ground-storey shell: a box.")
+bx("wall-E-back", "East wall behind the gate", "meso", "ground-storey", GX1, HX, 0, GS, -HZ + WT, DOOR_Z, "white", importance=0.6,
+   topo="East wall north of the passage end: a box.")
+bx("gate-back", "Passage end wall", "meso", "ground-storey", GB, GX1, 0, GS, DOOR_Z - 0.02, DOOR_Z, "white", importance=0.6,
+   topo="End wall of the gate passage: a thin box (the lobby block behind it is hollow).")
 bx("gate-east-wall", "Gate east wall", "meso", "ground-storey", GX1, HX, 0, GS, DOOR_Z, HZ, "white", importance=0.6,
    topo="East end wall of the passage, flush with the east facade: a box.")
 bx("gate-lintel", "Gate lintel", "meso", "ground-storey", GB, GX1, PASS_H, GS, DOOR_Z, HZ, "white", importance=0.5)
@@ -306,6 +318,146 @@ for c in C:
 TR = T0 - G + TOPH
 bx("top-roof", "Top floor roof", "macro", "top-floor", TX0 - 0.05, TX1 + 0.05, TR, TR + 0.1, TZ0 - 0.05, TZ1 + 0.05, "frame-white", importance=0.7,
    topo="Flat white roof slab overhanging the glass by 0.05: a box.")
+
+# ---------------------------------------------------------------------------------------------------------------
+# Street-level interior, GREY BOX (Figma board "Valtech office - interior v1", 597-3604; space budget 601-3604).
+# Plan tiles (lx, ly): x 0..4 west -> east, y 0 = north row, 1 = south row; model x = lx - HX, z = ly - HZ.
+# 01 meeting room (0,0)+(0,1), look-in only; desks (1,0)+(2,0); lunch (3,0); walkable south row (1,1) (2,1) (3,1);
+# main door = the gate mouth (south edge of (3,1)); the lit door on the passage west wall joins (3,1) and (2,1).
+# Ids: "int-" interior part group (always shown, hidden inside the shell when the roof is on); "side-<N|W|E>-" wall
+# mounted, hidden with their wall when that wall is cut; "open-" and "lowcap-<side>" shown only with the roof off.
+def lx(v):
+    return v - HX
+
+
+def lz(v):
+    return v - HZ
+
+
+IN_X0, IN_X1, IN_Z0, IN_Z1 = -HX + WT, GX1, -HZ + WT, SHOP_Z - 0.02     # inside faces of the shell
+bx("int-floor", "Interior floor (shop)", "macro", "interior", IN_X0, GB, 0, 0.01, IN_Z0, IN_Z1, "gb-floor", contact="flush-mount",
+   importance=0.5, topo="Grey box floor: a thin box.")
+bx("open-floor-lunch", "Interior floor (lunch, over the old passage end)", "meso", "interior", GB, IN_X1, 0.01, 0.016, IN_Z0, 0.0, "gb-floor",
+   contact="flush-mount", importance=0.4)
+# 01 meeting room: glass wall at lx 1, bench under the north wall, 2 poufs, whiteboard (west wall), screen (north wall)
+GW = lx(1.0)
+bx("int-01-glass", "01 glass wall", "meso", "interior", GW - 0.01, GW + 0.01, 0.01, GS, IN_Z0, IN_Z1, "gb-glass", importance=0.5)
+for pid, z0, z1 in (("n", IN_Z0, IN_Z0 + 0.03), ("s", IN_Z1 - 0.03, IN_Z1)):
+    bx(f"int-01-post-{pid}", f"01 glass wall post {pid}", "micro", "interior", GW - 0.015, GW + 0.015, 0.01, GS, z0, z1, "gb-dark", importance=0.3)
+bx("int-01-head", "01 glass wall head", "micro", "interior", GW - 0.015, GW + 0.015, GS - 0.05, GS, IN_Z0, IN_Z1, "gb-dark", importance=0.3)
+bx("int-01-bench", "01 bench", "meso", "interior", IN_X0 + 0.05, GW - 0.1, 0.01, 0.22, IN_Z0, IN_Z0 + 0.18, "gb", importance=0.4)
+cyl("int-01-pouf-1", "01 pouf 1", "micro", "interior", lx(0.4), lz(0.7), 0.01, 0.2, 0.09, "gb-mid", importance=0.3)
+cyl("int-01-pouf-2", "01 pouf 2", "micro", "interior", lx(0.7), lz(1.05), 0.01, 0.2, 0.09, "gb-mid", importance=0.3)
+bx("side-W-01-whiteboard", "01 whiteboard", "meso", "interior", IN_X0, IN_X0 + 0.02, 0.4, 0.95, lz(0.45), lz(1.15), "gb-light", importance=0.4)
+bx("side-N-01-screen", "01 screen", "meso", "interior", lx(0.25), lx(0.8), 0.5, 0.8, IN_Z0, IN_Z0 + 0.02, "gb-dark", importance=0.4)
+# desk corner: three desks 0.6 x 0.4 at lx 1.05 / 1.70 / 2.35, ly 0.12..0.52, top at 0.375 wu (0.75 m), one chair each
+DESK_H, DESK_X = 0.375, (1.05, 1.70, 2.35)
+for i, x0 in enumerate(DESK_X, 1):
+    a, b, z0, z1 = lx(x0), lx(x0 + 0.6), lz(0.12), lz(0.52)
+    bx(f"int-desk-{i}-top", f"Desk {i} top", "meso", "interior", a, b, DESK_H - 0.03, DESK_H, z0, z1, "gb", importance=0.45)
+    bx(f"int-desk-{i}-leg-w", f"Desk {i} leg (west)", "micro", "interior", a + 0.02, a + 0.05, 0.01, DESK_H - 0.03, z0 + 0.03, z1 - 0.03, "gb-mid", importance=0.3)
+    bx(f"int-desk-{i}-leg-e", f"Desk {i} leg (east)", "micro", "interior", b - 0.05, b - 0.02, 0.01, DESK_H - 0.03, z0 + 0.03, z1 - 0.03, "gb-mid", importance=0.3)
+    c = (a + b) / 2
+    bx(f"int-chair-{i}-seat", f"Chair {i} seat", "micro", "interior", c - 0.11, c + 0.11, 0.01, 0.23, lz(0.58), lz(0.8), "gb-dark", importance=0.3)
+    bx(f"int-chair-{i}-back", f"Chair {i} back", "micro", "interior", c - 0.11, c + 0.11, 0.23, 0.45, lz(0.77), lz(0.8), "gb-dark", importance=0.3)
+# lunch: banquette along the north wall, two round tables d 0.38, quiz board above the banquette
+bx("int-lunch-banquette", "Lunch banquette seat", "meso", "interior", GB + 0.06, IN_X1 - 0.02, 0.01, 0.22, IN_Z0, IN_Z0 + 0.2, "gb", importance=0.4)
+bx("int-lunch-banquette-back", "Lunch banquette back", "micro", "interior", GB + 0.06, IN_X1 - 0.02, 0.22, 0.45, IN_Z0, IN_Z0 + 0.06, "gb", importance=0.3)
+for i, x in enumerate((GB + 0.27, GB + 0.67), 1):
+    cyl(f"int-lunch-table-{i}", f"Lunch table {i}", "micro", "interior", x, lz(0.55), DESK_H - 0.03, 0.03, 0.19, "gb", importance=0.35)
+    cyl(f"int-lunch-table-{i}-foot", f"Lunch table {i} foot", "micro", "interior", x, lz(0.55), 0.016, DESK_H - 0.046, 0.03, "gb-mid", importance=0.2)
+# quiz board on the north wall above the banquette (on the east wall it faced away from the camera; Gustav, 2026-10-16)
+bx("side-N-lunch-quiz", "Quiz board", "meso", "interior", GB + 0.12, IN_X1 - 0.1, 0.55, 0.95, IN_Z0, IN_Z0 + 0.02, "gb-light", importance=0.35)
+# roof off: low stubs on the passage west wall either side of the lit door's opening, and low caps on the cut walls
+CUT = 0.35
+bx("open-I-door-n", "Passage wall stub (north)", "micro", "interior", GB, GX0, 0.01, CUT, -0.02, DZ0 - 0.04, "gb", importance=0.3)
+bx("open-I-door-s", "Passage wall stub (south)", "micro", "interior", GB, GX0, 0.01, CUT, DZ1 + 0.04, HZ - 0.05, "gb", importance=0.3)
+bx("lowcap-N", "North wall cut", "micro", "interior", -HX, HX, 0, CUT, -HZ, -HZ + WT, "white", importance=0.3)
+bx("lowcap-W", "West wall cut", "micro", "interior", -HX, -HX + WT, 0, CUT, -HZ + WT, SHOP_Z - 0.02, "white", importance=0.3)
+bx("lowcap-E", "East wall cut", "micro", "interior", GX1, HX, 0, CUT, -HZ + WT, HZ, "white", importance=0.3)
+# stand spots for the later peek cards (plan tiles, data only; lib/city/buildingInteriors.ts carries the same)
+STAND_SPOTS = {"desk-1": (1.35, 1.5), "desk-2": (2.0, 1.5), "desk-3": (2.65, 1.5), "lunch": (3.5, 1.5), "room-01": (1.12, 1.5)}
+
+# The beat sheet (2026-10-16) replaces the first furniture: one desk (his), meeting room 01, lunch; built below per variant
+C = [c for c in C if not c["id"].startswith(("int-01", "int-desk", "int-chair", "int-lunch", "side-"))]
+# ---------------------------------------------------------------------------------------------------------------
+# Beats (Gustav's beat sheet, 2026-10-16), in walk order from the gate (east bay, street row): 1 enter at the gate,
+# 2 my desk (by the window, two screens, a notebook, the edge of one neighbour desk), 3 meeting room 01 (yellow
+# whiteboards with sticky notes, big "01" on the glass), 4 lunch farthest from the gate (round tables, banquette, Friday
+# quiz board), 5 leave at the gate. Plan tiles: x west -> east, y north -> south; zones are (x0, x1, y0, y1) in tiles.
+# Real sizes (1 wu = 2 m): desk 1.6 x 0.8 m, top 0.75 m; screen 0.56 x 0.36 m; chair 0.5 m, 0.8 m to pull out;
+# round table 0.8 m; banquette seat 0.5 m deep, 0.45 m high, back 0.9 m; whiteboard 1.2 x 0.9 m; quiz board 1.0 x 0.7 m.
+PW, PH = int(round(2 * HX)), int(round(2 * HZ))
+# Zones west -> east in the north row: lunch (2 tiles), meeting room 01 (2 tiles), my desk, a neighbour desk; the street
+# row is the walkway with a stand tile in front of each beat, the gate passage at the east end
+LAY = {"lunch": (0, 2, 0, 1), "room": (2, 4, 0, 1), "desk": 4, "hint": 5, "stand": {"desk": (4, 1), "room": (3, 1), "lunch": (1, 1)},
+       "map": ["######", "#OOOOG"]}
+
+
+def px(v):
+    return v - HX
+
+
+def pz(v):
+    return v - PH / 2
+
+
+def pbx(cid, name, x0, x1, y0, y1, h0, h1, material, **kw):
+    """Box in plan tiles (x0..x1 west -> east, y0..y1 north -> south) from height h0 to h1 (wu)."""
+    bx(cid, name, "meso", "interior", px(x0), px(x1), h0, h1, pz(y0), pz(y1), material, importance=0.4, **kw)
+
+
+WI = 0.1     # inside face of the outer walls, in tiles
+# 2 my desk: against the north wall under a window panel (inside face only: the approved outside stays plain)
+t = LAY["desk"]
+d0, d1 = t + 0.1, t + 0.9
+pbx("side-N-desk-window", "Window by my desk (inside panel)", d0, d1, WI, WI + 0.01, 0.4, 1.15, "gb-window")
+pbx("int-desk-top", "My desk top", d0, d1, WI + 0.02, WI + 0.42, DESK_H - 0.03, DESK_H, "gb")
+pbx("int-desk-leg-w", "My desk leg (west)", d0 + 0.02, d0 + 0.05, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+pbx("int-desk-leg-e", "My desk leg (east)", d1 - 0.05, d1 - 0.02, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+for i, x in enumerate((t + 0.2, t + 0.52), 1):    # two screens: two fields at a time
+    pbx(f"int-screen-{i}", f"Screen {i}", x, x + 0.28, WI + 0.08, WI + 0.1, DESK_H + 0.04, DESK_H + 0.22, "gb-dark")
+    pbx(f"int-screen-{i}-foot", f"Screen {i} foot", x + 0.12, x + 0.16, WI + 0.06, WI + 0.12, DESK_H, DESK_H + 0.04, "gb-dark")
+pbx("int-notebook", "Notebook", t + 0.3, t + 0.45, WI + 0.28, WI + 0.38, DESK_H, DESK_H + 0.01, "gb-light")
+pbx("int-desk-chair-seat", "My chair seat", t + 0.38, t + 0.62, WI + 0.5, WI + 0.74, 0.01, 0.225, "gb-dark")
+pbx("int-desk-chair-back", "My chair back", t + 0.38, t + 0.62, WI + 0.71, WI + 0.74, 0.225, 0.45, "gb-dark")
+h = LAY["hint"]    # the edge of one neighbour desk
+pbx("int-hint-desk", "Neighbour desk (edge)", h + 0.05, h + 0.4, WI + 0.02, WI + 0.42, DESK_H - 0.03, DESK_H, "gb")
+pbx("int-hint-desk-leg", "Neighbour desk leg", h + 0.07, h + 0.1, WI + 0.05, WI + 0.39, 0.01, DESK_H - 0.03, "gb-mid")
+# 3 meeting room 01: glass on its inside sides, yellow whiteboards with sticky notes on its north wall, "01" on the glass
+rx0, rx1, ry0, ry1 = LAY["room"]
+gy1 = ry1    # south glass line (the walkway edge)
+if rx0 > 0:
+    pbx("int-room-glass-w", "01 glass (west)", rx0 - 0.01, rx0 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
+if rx1 < PW:
+    pbx("int-room-glass-e", "01 glass (east)", rx1 - 0.01, rx1 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
+pbx("int-room-glass-s", "01 glass (south)", rx0 + 0.01, rx1 - 0.01, gy1 - 0.02, gy1, 0.01, GS, "gb-glass")
+pbx("int-room-glass-head", "01 glass head", rx0, rx1, gy1 - 0.03, gy1, GS - 0.05, GS, "gb-dark")
+cx = (rx0 + rx1) / 2
+pbx("int-room-01-number", "01 on the glass", cx - 0.13, cx + 0.13, gy1 + 0.0, gy1 + 0.01, 0.52, 0.72, "gb-dark")
+for i in range(rx1 - rx0):
+    b0 = rx0 + i + 0.2
+    pbx(f"side-N-room-wb-{i + 1}", f"01 whiteboard {i + 1}", b0, b0 + 0.6, WI, WI + 0.02, 0.4, 0.85, "gb-yellow")
+    for j, (sx, sy) in enumerate(((0.08, 0.7), (0.2, 0.62), (0.34, 0.72), (0.46, 0.58)), 1):
+        pbx(f"side-N-room-wb-{i + 1}-note-{j}", f"Sticky note {i + 1}.{j}", b0 + sx, b0 + sx + 0.07, WI + 0.02, WI + 0.025, sy, sy + 0.07, "gb-light")
+# 4 lunch: banquette along the north wall, round tables in front, Friday quiz board above the banquette
+lx0, lx1, ly0, ly1 = LAY["lunch"]
+a0 = lx0 + (WI if lx0 == 0 else 0.05)
+pbx("int-lunch-banquette", "Lunch banquette seat", a0, lx1 - 0.05, WI, WI + 0.25, 0.01, 0.225, "gb")
+pbx("int-lunch-banquette-back", "Lunch banquette back", a0, lx1 - 0.05, WI, WI + 0.06, 0.225, 0.45, "gb")
+n = max(1, int((lx1 - a0 - 0.05) / 0.5))   # 0.4 tables at least 0.1 apart
+for i in range(n):
+    for row, ty in enumerate([WI + 0.55] + ([WI + 1.35] if ly1 - ly0 > 1 else [])):
+        x = a0 + (lx1 - 0.05 - a0) * (i + 0.5) / n
+        cyl(f"int-lunch-table-{row + 1}-{i + 1}", f"Lunch table {row + 1}.{i + 1}", "micro", "interior", px(x), pz(ty), DESK_H - 0.03, 0.03, 0.2, "gb")
+        cyl(f"int-lunch-table-{row + 1}-{i + 1}-foot", f"Lunch table {row + 1}.{i + 1} foot", "micro", "interior", px(x), pz(ty), 0.016, DESK_H - 0.046, 0.03,
+            "gb-mid")
+q = (a0 + lx1 - 0.05) / 2
+pbx("side-N-lunch-quiz", "Friday quiz board", q - 0.25, q + 0.25, WI, WI + 0.02, 0.52, 0.87, "gb-light")
+STAND_SPOTS = {k: (v[0] + 0.5, v[1] + 0.5) for k, v in LAY["stand"].items()}
+STAND_SPOTS["gate"] = (PW - 0.5, PH - 0.5)
+WALKMAP = LAY["map"]
+
 C = [c for c in C if c is not None]
 
 # Bay proof (BAY=1): only the south-west bay as a 1 wu slice of the full stack (x -1.5..-0.5), same scale and camera
@@ -422,6 +574,16 @@ spec["materials"] = [
     material("art-red", "Art panel red", "plastic", "#c63a2f", ["#bc3429"], 0.6, 0.0, "art panel by the door", **flat("photo-6 zone r2c2")),
     material("art-blue", "Art panel blue", "plastic", "#33539e", ["#2d4c94"], 0.6, 0.0, "art panel by the door", **flat("photo-6 zone r2c2")),
     material("roof-deck", "Roof deck", "stone", "#bcb3a8", ["#b2a99e"], 0.9, 0.0, "roof terrace (ref A warm grey)", **flat("ref A roof")),
+    # interior grey box: neutral greys only, no detail (the detail pass comes later)
+    material("gb-floor", "Grey box floor", "stone", "#d9d6cf", ["#d1cec7"], 0.9, 0.0, "interior floor", **flat("grey box")),
+    material("gb", "Grey box", "stone", "#bdbab4", ["#b5b2ac"], 0.9, 0.0, "furniture blocks", **flat("grey box")),
+    material("gb-mid", "Grey box mid", "stone", "#9a9792", ["#928f8a"], 0.9, 0.0, "legs, poufs", **flat("grey box")),
+    material("gb-dark", "Grey box dark", "stone", "#6c6a67", ["#64625f"], 0.9, 0.0, "chairs, screen, glass frame", **flat("grey box")),
+    material("gb-light", "Grey box light", "stone", "#ecebe7", ["#e4e3df"], 0.9, 0.0, "boards on the walls", **flat("grey box")),
+    material("gb-yellow", "Grey box yellow", "plastic", "#e6c84a", ["#dcbe40"], 0.8, 0.0, "01 whiteboards (yellow, as in the office)", **flat("grey box")),
+    material("gb-window", "Grey box window", "glass", "#c9d6dc", ["#bfccd2"], 0.3, 0.0, "window panel by my desk (inside face)", **flat("grey box")),
+    material("gb-glass", "Grey box glass", "glass", "#b7cdd6", ["#adc3cc"], 0.2, 0.0, "01 glass wall (see-through)", opacity={"base": 0.3},
+             **flat("grey box")),
 ]
 
 
@@ -499,6 +661,13 @@ spec["lightingFromPhoto"] = [
 spec["entrance"] = {"side": "south", "at": int(round(GB + HX)), "width": 1.0, "approachTile": [int(round(GB + HX)), int(2 * HZ)],
                     "cues": ["green awning projecting 0.5 wu with a white valance", "lit glass door on the passage wall, facing the camera",
                              "brick-lined passage", "light threshold path"]}
+spec["states"] = {"roofOn": "hide open-* and lowcap-*",
+                  "roofOff": "hide the upper storeys (slab-, louvre-, parapet-, roof-deck, top-) and the cafe front (shop-core, col-S-, shop-glass-, "
+                             "shop-light-, awning-, gate lintel, soffit, end wall, brick west lining, door, art, sign); walls of the view's two far "
+                             "sides stay full height, the others show lowcap-<side>; lib/city/models/valtechOfficeStates.ts"}
+spec["interior"] = {"plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16", "map": WALKMAP,
+                    "mainDoor": "south edge of the gate tile", "standSpots": {k: list(v) for k, v in STAND_SPOTS.items()}}
+json.dump(spec["interior"], open(f"{W}/walkmap.json", "w"), indent=1)
 pa = spec["preSpecAssessment"]
 spec["assumptions"] = ["RESOLVED BY ASSUMPTION: " + u for u in (pa.get("unknownsToResolveBeforeImplementation") or [])]
 pa["unknownsToResolveBeforeImplementation"] = []

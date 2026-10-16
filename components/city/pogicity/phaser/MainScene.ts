@@ -47,7 +47,7 @@ import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
-import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isInteriorDoor } from "@/lib/city/buildingInteriors";
+import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -426,13 +426,16 @@ export class MainScene extends Phaser.Scene {
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
 
-    // Render NPCs (only if not visited)
+    // Render NPCs (only if not visited; a walk-in building's guide steps away while the player is inside, so it does
+    // not stand in front of the opened rooms)
+    const insideId = this.insideBuildingId(playerPos.gridX, playerPos.gridY);
     this.npcManager.render(
-      this.visitedBuildings,
+      insideId ? new Set([...this.visitedBuildings, insideId]) : this.visitedBuildings,
       playerPos.gridX,
       playerPos.gridY,
       (x, y, offset) => this.depthFromSortPoint(x, y, offset),
-      this.gifsLoaded
+      this.gifsLoaded,
+      (x, y) => this.frontOfPlotDepth(x, y)
     );
 
     // Render numbered markers
@@ -1458,6 +1461,8 @@ export class MainScene extends Phaser.Scene {
         this.zoomLevel = targetZoom;
         this.zoomHandledInternally = true;
         this.events.emit("zoomChanged", targetZoom);
+        // A running follow keeps the dead zone it got at the old zoom; restart it next frame, sized for this one
+        this.stopCameraFollow();
       }
     );
   }
@@ -1541,7 +1546,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
-  // through the building's outside rooms (the plaza)
+  // through the building's outside rooms (the plaza), or across a main door that opens straight onto the street
   private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
     const a = this.interiorTiles.get(`${fx},${fy}`);
     const b = this.interiorTiles.get(`${tx},${ty}`);
@@ -1553,8 +1558,8 @@ export class MainScene extends Phaser.Scene {
       if (a.key !== b.key) return false;
       return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
     }
-    if (b) return b.interior.outside.includes(cb!);
-    return !ca || a!.interior.outside.includes(ca);
+    if (b) return b.interior.outside.includes(cb!) || isEntranceStep(b.interior, b.lx, b.ly, fx - tx, fy - ty);
+    return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);
   }
 
   private updateInteriorState(gridX: number, gridY: number): void {
@@ -1565,23 +1570,46 @@ export class MainScene extends Phaser.Scene {
     const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    this.updateInsideZoom(inside ? here! : null);
     const tile = here ?? next;
-    let sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
-    let local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
     if (!tile) {
-      // Just outside a walk-in plot on its south or east side the whole building is behind the player, but its big
-      // sprite sorts by the plot's front corner and would paint over the player: draw the player above it
-      for (const [key, plot] of this.interiorPlots) {
-        const lx = gridX - plot.originX, ly = gridY - plot.originY;
-        const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
-        if (near && (lx >= plot.width || ly >= plot.height)) {
-          sprite = this.buildingSprites.get(key);
-          local = { x: lx + 0.5, y: ly + 0.5 };
-          break;
-        }
-      }
+      this.playerController.setDepthOverride(this.frontOfPlotDepth(gridX, gridY));
+      return;
     }
-    this.playerController.setDepthOverride(sprite && local ? sprite.depth + this.footprintSortOffset(local.x, local.y) : null);
+    const sprite = this.buildingSprites.get(tile.key);
+    this.playerController.setDepthOverride(sprite ? sprite.depth + this.footprintSortOffset(tile.lx + 0.5, tile.ly + 0.5) : null);
+  }
+
+  // The walk-in building the player is inside (past its main door), or null
+  private insideBuildingId(gridX: number, gridY: number): string | null {
+    const here = this.interiorTiles.get(`${gridX},${gridY}`);
+    const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
+    return here && code && !here.interior.outside.includes(code) ? here.buildingId : null;
+  }
+
+  // Walk-in buildings with an inside zoom: zoom in around the player on entering, back to the earlier zoom on leaving
+  private insideZoomFrom: { buildingId: string; zoom: number } | null = null;
+  private updateInsideZoom(here: { buildingId: string; interior: BuildingInterior } | null): void {
+    const id = here?.interior.insideZoom ? here.buildingId : null;
+    if ((this.insideZoomFrom?.buildingId ?? null) === id) return;
+    const camera = this.cameras.main;
+    const target = id ? here!.interior.insideZoom! : this.insideZoomFrom!.zoom;
+    if (id) this.insideZoomFrom = { buildingId: id, zoom: camera.zoom };
+    else this.insideZoomFrom = null;
+    const p = this.playerController!.getPosition();
+    this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
+  }
+
+  // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
+  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null
+  private frontOfPlotDepth(gridX: number, gridY: number): number | null {
+    for (const [key, plot] of this.interiorPlots) {
+      const lx = gridX - plot.originX, ly = gridY - plot.originY;
+      const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
+      const sprite = near && (lx >= plot.width || ly >= plot.height) ? this.buildingSprites.get(key) : undefined;
+      if (sprite) return sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5);
+    }
+    return null;
   }
 
   // Compute tiles blocked by building sprite overhang (collision padding)

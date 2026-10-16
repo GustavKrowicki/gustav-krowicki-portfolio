@@ -9,6 +9,7 @@ import * as workshop from '@/lib/city/models/workshop';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
+import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
 // Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
@@ -68,6 +69,35 @@ function avatarHqScene(open: boolean): THREE.Group {
   return group;
 }
 
+// The avatar with the Valtech office (both in wu): on the approach tile in front of the gate (roof on), or inside at
+// the desk's stand tile (roof off); the avatarAt option moves it to any plan point. Plan tile (lx, ly) -> model
+// (lx - 3, ly - 1) on the 6 x 2 plot; the floor top is at y = 0.05.
+const VALTECH_PLAN = { w: 6, h: 2 };
+function avatarValtechScene(open: boolean): THREE.Group {
+  const group = new THREE.Group();
+  const options = { castShadow: true, receiveShadow: true };
+  const building = open ? createValtechOfficeRoofOffModel(options) : createValtechOfficeRoofOnModel(options);
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  const [x, y] = open ? [4.5, 1.5] : [5.5, 2.5];
+  avatar.position.set(x - VALTECH_PLAN.w / 2, open ? 0.05 : 0.04, y - VALTECH_PLAN.h / 2);
+  if (open) avatar.rotation.y = -Math.PI / 4;
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  group.userData.plan = VALTECH_PLAN;
+  return group;
+}
+
+const valtechOpen = (view: CampusView): ModelConfig => ({
+  name: `Valtech office (roof off, ${view} view)`,
+  create: (options) => createValtechOfficeRoofOffModel(options, view),
+  lights: valtech.createValtechOfficeLookDevLights,
+  environment: valtech.createValtechOfficeEnvironment,
+  configure: valtech.configureValtechOfficeRenderer,
+  leaves: {},
+  travel: 0,
+  reference: { width: 384, height: 384, halfW: 3.0, target: [0, 0, 0] },
+});
 
 const MODELS: Record<string, ModelConfig> = {
   // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
@@ -167,16 +197,33 @@ const MODELS: Record<string, ModelConfig> = {
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
   },
-  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 3 x 2 footprint, banded louvre block
+  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 6 x 2 footprint, banded louvre block; roof on, and
+  // roof off per sprite view (street-level interior grey box), and with the avatar at the gate / inside
   valtech: {
     name: 'Valtech office',
-    create: valtech.createValtechOfficeModel,
+    create: createValtechOfficeRoofOnModel,
     lights: valtech.createValtechOfficeLookDevLights,
     environment: valtech.createValtechOfficeEnvironment,
     configure: valtech.configureValtechOfficeRenderer,
     leaves: {},
     travel: 0,
-    reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
+    reference: { width: 384, height: 384, halfW: 3.0, target: [0, 0, 0] },
+  },
+  valtechOpen: valtechOpen('south'),
+  valtechOpenWest: valtechOpen('west'),
+  valtechOpenNorth: valtechOpen('north'),
+  valtechOpenEast: valtechOpen('east'),
+  'avatar-valtech': {
+    ...valtechOpen('south'),
+    name: 'Gustav avatar at the Valtech office gate (roof on)',
+    create: () => avatarValtechScene(false),
+    restBounds: true,
+  },
+  'avatar-valtech-open': {
+    ...valtechOpen('south'),
+    name: 'Gustav avatar inside the Valtech office (roof off)',
+    create: () => avatarValtechScene(true),
+    restBounds: true,
   },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {
@@ -213,6 +260,9 @@ export type ShotOptions = {
   t?: number;
   spin?: number; // turntable: model yaw in degrees (reference / sprite views)
   follow?: boolean; // reference view: keep the avatar's hips over the origin (root-motion clips)
+  avatarAt?: [number, number]; // models with a plan (userData.plan): stand the avatar on plan point (lx, ly) in tiles
+  masks?: string[]; // flat-colour mask render: entry i (node-id prefixes joined by '|') -> rgb(255, 8 * (i + 1), 0), avatar rgb(0, 0, 255), rest grey; glass left out
+  only?: string[]; // draw only the nodes with these id prefixes ('avatar' = the avatar), e.g. one prop's full silhouette
 };
 
 type Runtime = { nodes: Record<string, THREE.Object3D> };
@@ -311,6 +361,30 @@ export default function EntranceLab() {
       const src = mesh.material as THREE.MeshStandardMaterial;
       flat.set(mesh, new THREE.MeshBasicMaterial({ color: src.color ?? new THREE.Color(0x888888) }));
     });
+    // Mask renders: each mesh's sculpt node id (nearest ancestor that is a runtime node), 'avatar' for the avatar's meshes
+    const nodeIds = new Map<THREE.Object3D, string>();
+    const nodeRuntime = (model.userData.sculptRuntime ?? model.children.find((c) => c.userData.sculptRuntime)?.userData.sculptRuntime) as Runtime | undefined;
+    for (const [id, node] of Object.entries(nodeRuntime?.nodes ?? {})) nodeIds.set(node, id);
+    const avatarGroup = model.userData.avatarGroup as THREE.Object3D | undefined;
+    const meshNode = new Map<THREE.Mesh, string>();
+    const baseVisible = new Map<THREE.Mesh, boolean>();
+    for (const mesh of original.keys()) {
+      baseVisible.set(mesh, mesh.visible);
+      let o: THREE.Object3D | null = mesh;
+      let id = '';
+      while (o && !id) {
+        if (o === avatarGroup) id = 'avatar';
+        else id = nodeIds.get(o) ?? '';
+        o = o.parent;
+      }
+      meshNode.set(mesh, id);
+    }
+    const maskColour = (i: number) => new THREE.Color().setRGB(i < 0 ? 0.5 : 1, i < 0 ? 0.5 : (8 * (i + 1)) / 255, i < 0 ? 0.5 : 0, THREE.SRGBColorSpace);
+    const maskMats = new Map<string, THREE.MeshBasicMaterial>();
+    const maskMat = (key: string, c: THREE.Color) => {
+      if (!maskMats.has(key)) maskMats.set(key, new THREE.MeshBasicMaterial({ color: c }));
+      return maskMats.get(key)!;
+    };
     const avatar = model.userData.avatar as AvatarRig | undefined;
     const box = new THREE.Box3().setFromObject(model);
     // Rest-pose bounds in the model's parent frame (skinned vertices, so a posed frame never re-frames the sprite)
@@ -339,6 +413,21 @@ export default function EntranceLab() {
       else renderer.setClearColor(new THREE.Color(`#${opts.bg}`), 1);
       // Materials
       for (const [mesh, mat] of original) mesh.material = opts.stripped ? flat.get(mesh)! : mat;
+      // Mask render and solo silhouettes (occlusion counts)
+      // an entry may join several prefixes with '|' (one story prop made of several parts, e.g. a desk and its chair)
+      const match = (id: string, list: string[]) => list.findIndex((entry) => entry.split('|').some((p) => (p === 'avatar' ? id === 'avatar' : id !== 'avatar' && id.startsWith(p))));
+      for (const mesh of original.keys()) {
+        const id = meshNode.get(mesh) ?? '';
+        mesh.visible = baseVisible.get(mesh)! && (!opts.only || match(id, opts.only) >= 0);
+        if (!opts.masks) continue;
+        if ((original.get(mesh) as THREE.Material).transparent) { mesh.visible = false; continue; }   // see-through glass hides nothing
+        const i = match(id, opts.masks);
+        mesh.material = id === 'avatar' ? maskMat('avatar', new THREE.Color().setRGB(0, 0, 1, THREE.SRGBColorSpace)) : maskMat(`m${i}`, maskColour(i));
+      }
+      if (opts.masks) { lookdev.visible = photo.visible = converter.visible = shade.visible = false; }
+      // Avatar stand point (plan tiles) on models that carry a plan
+      const plan = model.userData.plan as { w: number; h: number } | undefined;
+      if (plan && avatarGroup && opts.avatarAt) avatarGroup.position.set(opts.avatarAt[0] - plan.w / 2, 0.05, opts.avatarAt[1] - plan.h / 2);
       // Doors
       for (const [id, dir] of Object.entries(config.leaves)) {
         const node = runtime?.nodes?.[id];
