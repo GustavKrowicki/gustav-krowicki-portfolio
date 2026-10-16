@@ -54,16 +54,11 @@ export function trackTourExited(durationSeconds: number, stopsViewedCount: numbe
   capture('tour_exited', { duration_seconds: durationSeconds, stops_viewed_count: stopsViewedCount });
 }
 
-// Classic events
-export function trackProjectCardClicked(projectSlug: string, page: 'home' | 'work') {
-  capture('project_card_clicked', { project_slug: projectSlug, page });
-}
-
 export function trackContactClicked(method: 'email' | 'phone' | 'linkedin') {
   capture('contact_clicked', { method });
 }
 
-export function trackCvDownloaded(source: 'header' | 'contact' | 'mobile_nav' | 'panel') {
+export function trackCvDownloaded(source: 'contact' | 'panel') {
   capture('cv_downloaded', { source });
 }
 

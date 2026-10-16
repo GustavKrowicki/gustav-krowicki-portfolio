@@ -1,4 +1,4 @@
-// Case study body for /work/valtech. The route page wraps it as a full page; the portfolio shell shows it in the panel.
+// Case study body for the valtech case; the portfolio shell shows it in the panel.
 import Image from 'next/image';
 import CaseHeroAnimated from '@/components/case-study/CaseHeroAnimated';
 import RecommendationsSection from '@/components/case-study/RecommendationsSection';

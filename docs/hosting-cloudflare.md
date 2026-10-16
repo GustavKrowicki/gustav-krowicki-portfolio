@@ -103,8 +103,8 @@ Put all server code in the Worker (Phase 6).
 5. Create `public/_redirects` with these two rules:
 
    ```text
-   /projects/internship-at-valtech-2024  /work/valtech  307
-   /projects/*                           /work          307
+   /projects/internship-at-valtech-2024  /new?s=work&case=valtech  307
+   /projects/*                           /new?s=work               307
    ```
 
 6. Create `public/_headers` with this rule:
@@ -162,10 +162,10 @@ Put all server code in the Worker (Phase 6).
 
     | URL | Correct result |
     | --- | --- |
-    | `/` | Home page, status 200 |
+    | `/` | Redirects to `/new` (the one-page portfolio, until it replaces `/` at launch) |
     | `/city` | The city loads |
-    | `/work/valtech` | Case page, status 200 |
-    | `/projects/foo` | Redirect 307 to `/work` |
+    | `/new?s=work&case=valtech` | The shell opens the case in the panel |
+    | `/projects/foo` | Redirect 307 to `/new?s=work` |
     | `/no-page` | The 404 page, status 404 |
     | `/_next/static/<file>.js` | `Cache-Control: public, max-age=31536000, immutable` |
 
@@ -219,6 +219,8 @@ This deploy does not change the live site, because at this time no domain points
    | `/` | 8.2 MB | 10.8 MB |
    | `/about` | 3.1 MB | 4.6 MB |
    | `/work/valtech` | 1.3 MB | 2.3 MB |
+
+   The classic pages `/about` and `/work/valtech` were removed on 2026-10-16; measure `/new` instead from then on.
 
    The live build in Phase 4 uses transformations. Do this comparison again in Phase 4.
 8. Replace `public/images/about/Dortmund.png` (20 MB) with a smaller file.
@@ -355,12 +357,12 @@ For approximately one minute, visitors cannot open the site.
 
    | Check | Correct result |
    | --- | --- |
-   | `curl -sI "https://gustavkrowicki.com/work?utm_source=resume&utm_campaign=test"` | 301, and the location is `www` with the same query string |
+   | `curl -sI "https://gustavkrowicki.com/new?utm_source=resume&utm_campaign=test"` | 301, and the location is `www` with the same query string |
    | `curl -sI https://www.gustavkrowicki.com` | 200, and the server is `cloudflare` |
-   | `curl -sI https://www.gustavkrowicki.com/projects/foo` | 307 to `/work` |
+   | `curl -sI https://www.gustavkrowicki.com/projects/foo` | 307 to `/new?s=work` |
    | PostHog live events | A pageview with the UTM values from the first check |
    | `curl -sI` on an image URL that starts with `/cdn-cgi/image/` | 200, a `cf-resized` header, and a smaller `content-length` than the original |
-   | Page weight of `/`, `/about`, and `/work/valtech` on a phone profile | Not more than the Vercel values in Phase 2 |
+   | Page weight of `/new` and `/new?s=work&case=valtech` on a phone profile | Not more than the Vercel values in Phase 2 |
    | e2e-runner with `E2E_BASE_URL=https://www.gustavkrowicki.com` | All city and smoke tests pass |
 
 8. Commit the change to `cloudflare.config.ts` on `main`.
