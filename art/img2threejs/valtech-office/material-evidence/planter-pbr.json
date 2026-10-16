@@ -1,0 +1,86 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.729,
+  "estimatedFidelity": 0.729,
+  "targetThreshold": 0.7,
+  "materialId": "planter",
+  "sourceImage": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-crops/planter.png",
+  "outDir": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter",
+  "palette": [
+    "#151418",
+    "#100F13",
+    "#0A0B0C",
+    "#292622",
+    "#4B4742"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter/planter_albedo.png",
+      "url": "planter_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter/planter_roughness.png",
+      "url": "planter_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter/planter_height.png",
+      "url": "planter_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter/planter_normal.png",
+      "url": "planter_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/planter/planter_ao.png",
+      "url": "planter_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 90,
+    "sourceHeight": 40,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 90,
+      "height": 40
+    },
+    "mask": {
+      "backgroundColor": "#171716",
+      "backgroundNoise": 17.493,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.0936
+    },
+    "mapStats": {
+      "valueRange": 0.1753,
+      "heightP90Gradient": 0.0048,
+      "roughnessBase": 0.68,
+      "roughnessVariation": 0.05,
+      "normalStrength": 0.162,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#151418",
+      "#100F13",
+      "#0A0B0C",
+      "#292622",
+      "#4B4742"
+    ]
+  },
+  "warnings": [
+    "low value range weakens height/roughness inference",
+    "low high-frequency detail weakens normal/roughness inference"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

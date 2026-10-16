@@ -13,6 +13,7 @@ import * as rooms from '@/lib/city/models/legoCampusRooms';
 import * as hqRooms from '@/lib/city/models/legoHqRooms';
 import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
+import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
@@ -298,6 +299,17 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
+  },
+  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 3 x 2 footprint, banded louvre block
+  valtech: {
+    name: 'Valtech office',
+    create: valtech.createValtechOfficeModel,
+    lights: valtech.createValtechOfficeLookDevLights,
+    environment: valtech.createValtechOfficeEnvironment,
+    configure: valtech.configureValtechOfficeRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
   },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {
@@ -604,7 +616,7 @@ export default function EntranceLab() {
         triangles += (g.index ? g.index.count : g.attributes.position.count) / 3;
       });
       renderer.render(scene, camera);
-      return { triangles: Math.round(triangles), meshes, drawCalls: renderer.info.render.calls, textures: renderer.info.memory.textures };
+      return { triangles: Math.round(triangles), meshes, drawCalls: renderer.info.render.calls, textures: renderer.info.memory.textures, size: box.getSize(new THREE.Vector3()).toArray() };
     };
     (w as LabWindow & { __parts?: () => unknown }).__parts = () => {
       // Parts manifest for img2threejs check_part_coverage.py: one entry per named component mesh

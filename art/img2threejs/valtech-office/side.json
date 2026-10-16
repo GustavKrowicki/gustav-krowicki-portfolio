@@ -1,0 +1,4 @@
+{"refs": [
+  {"img": "ref/ref-A-gemini.png", "box": [60, 130, 960, 900], "label": "ref A (style, camera)"},
+  {"img": "ref/photo-6.jpg", "box": [150, 170, 2160, 1500], "label": "photo-6 (real facade)"}
+]}
