@@ -201,9 +201,7 @@ def tree(cid, gx, gy, s=1.0, y0=0.0):
 for k, (gx, gy) in enumerate(((8.5, 7.5), (7.5, 8.5)), 1):     # round planters with a tree on the plaza
     cyl(f"planter-{k}", f"Round planter {k}", "meso", "prop", gx, gy, 0, 0.14, 0.33, "planter", importance=0.5)
     cyl(f"planter-{k}-soil", f"Planter {k} soil", "micro", "prop", gx, gy, 0.14, 0.01, 0.27, "court", importance=0.2)
-    tree(f"planter-{k}-tree", gx, gy, 0.8, 0.14)
-for k, (gx, gy) in enumerate(((0.35, 0.35), (0.4, 4.3), (13.5, 0.5), (13.5, 7.9)), 1):
-    tree(f"garden-tree-{k}", gx, gy, 0.75)
+# No trees in the model: the city places its own Pogicity trees around the site (Gustav, 2026-10-16)
 
 # ---------------------------------------------------------------------------------------------------------------
 # Rooms (board option B plan, 14 x 9) and the ground storey walls
@@ -500,7 +498,7 @@ for k, (gx, gy, w, d) in enumerate(((0.9, 7.5, 0.5, 0.12), (1.6, 7.7, 0.12, 0.3)
     bx(f"roof-bench-{k}", f"Terrace yellow bench {k}", "micro", "prop", gx, gx + w, H2, H2 + 0.08, gy, gy + d, "yellow", importance=0.4)
 for k, (gx, gy) in enumerate(((4.5, 7.6), (2.0, 5.3)), 1):
     bx(f"roof-planter-{k}", f"Terrace planter {k}", "micro", "prop", gx - 0.15, gx + 0.15, H2, H2 + 0.12, gy - 0.15, gy + 0.15, "frame-light")
-    bx(f"roof-planter-{k}-tree", f"Terrace tree {k}", "micro", "tree", gx - 0.17, gx + 0.17, H2 + 0.12, H2 + 0.5, gy - 0.17, gy + 0.17, "tree")
+    bx(f"roof-planter-{k}-shrub", f"Terrace planter {k} shrub", "micro", "prop", gx - 0.12, gx + 0.12, H2 + 0.12, H2 + 0.2, gy - 0.12, gy + 0.12, "court")
 perf = 0
 for sd, (a0, a1) in (("S", (0.6, 4.95)), ("W", (5.0, 8.05))):
     for i in range(int((a1 - a0) / 0.35)):
