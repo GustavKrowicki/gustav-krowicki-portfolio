@@ -9016,17 +9016,21 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 6,
       "y": 24,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 6,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 7,
       "y": 24,
-      "isOrigin": true,
-      "originX": 7,
+      "isOrigin": false,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9036,7 +9040,7 @@
       "x": 8,
       "y": 24,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9046,7 +9050,7 @@
       "x": 9,
       "y": 24,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9055,11 +9059,12 @@
       "type": "building",
       "x": 10,
       "y": 24,
-      "isOrigin": false,
-      "originX": 7,
+      "isOrigin": true,
+      "originX": 10,
       "originY": 24,
-      "buildingId": "medium-apartments",
-      "buildingOrientation": "down"
+      "buildingId": "tree-1",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "grass",
@@ -9401,17 +9406,21 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 6,
       "y": 25,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 6,
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 7,
       "y": 25,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9421,7 +9430,7 @@
       "x": 8,
       "y": 25,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9431,7 +9440,7 @@
       "x": 9,
       "y": 25,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9440,29 +9449,28 @@
       "type": "building",
       "x": 10,
       "y": 25,
-      "isOrigin": false,
-      "originX": 7,
-      "originY": 24,
-      "buildingId": "medium-apartments",
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 25,
+      "buildingId": "valtech-office",
       "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 11,
       "y": 25,
-      "isOrigin": true,
-      "originX": 11,
+      "isOrigin": false,
+      "originX": 10,
       "originY": 25,
-      "buildingId": "tree-1",
-      "buildingOrientation": "down",
-      "underlyingTileType": "grass"
+      "buildingId": "valtech-office",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 12,
       "y": 25,
-      "isOrigin": true,
-      "originX": 12,
+      "isOrigin": false,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9472,7 +9480,7 @@
       "x": 13,
       "y": 25,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9482,7 +9490,7 @@
       "x": 14,
       "y": 25,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9492,7 +9500,7 @@
       "x": 15,
       "y": 25,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9791,19 +9799,21 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 26,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 6,
-      "originY": 26
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 7,
       "y": 26,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9813,7 +9823,7 @@
       "x": 8,
       "y": 26,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9823,7 +9833,7 @@
       "x": 9,
       "y": 26,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -9833,23 +9843,27 @@
       "x": 10,
       "y": 26,
       "isOrigin": false,
-      "originX": 7,
-      "originY": 24,
-      "buildingId": "medium-apartments",
+      "originX": 10,
+      "originY": 25,
+      "buildingId": "valtech-office",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 26,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 25,
+      "buildingId": "valtech-office",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 12,
       "y": 26,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9859,7 +9873,7 @@
       "x": 13,
       "y": 26,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9869,7 +9883,7 @@
       "x": 14,
       "y": 26,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -9879,7 +9893,7 @@
       "x": 15,
       "y": 26,
       "isOrigin": false,
-      "originX": 12,
+      "originX": 10,
       "originY": 25,
       "buildingId": "valtech-office",
       "buildingOrientation": "down"
@@ -10234,19 +10248,21 @@
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 27,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 6,
-      "originY": 27
+      "originY": 24,
+      "buildingId": "medium-apartments",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 7,
       "y": 27,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -10256,7 +10272,7 @@
       "x": 8,
       "y": 27,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
@@ -10266,20 +10282,16 @@
       "x": 9,
       "y": 27,
       "isOrigin": false,
-      "originX": 7,
+      "originX": 6,
       "originY": 24,
       "buildingId": "medium-apartments",
       "buildingOrientation": "down"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 10,
       "y": 27,
-      "isOrigin": false,
-      "originX": 7,
-      "originY": 24,
-      "buildingId": "medium-apartments",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "grass",

@@ -28,7 +28,6 @@ import {
   getBuildingFootprint,
 } from "@/lib/city/buildings";
 import { playBuildSound, playBuildRoadSound, playDestructionSound } from "@/lib/city/sounds";
-import { applyValtechVariantFromUrl } from "@/lib/city/valtechVariants";
 
 // Dynamically import Phaser components to avoid SSR issues
 const PhaserGame = dynamic(() => import("./phaser/PhaserGame"), {
@@ -161,8 +160,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   const [grid, setGrid] = useState<GridCell[][]>(() => {
     // Check if initialGrid is valid (non-empty array with proper dimensions)
     if (initialGrid && initialGrid.length === GRID_HEIGHT && initialGrid[0]?.length === GRID_WIDTH) {
-      // Preview flag ?valtech=<variant>: the Valtech office interior grey-box variants (lib/city/valtechVariants.ts)
-      return editable ? initialGrid : applyValtechVariantFromUrl(initialGrid);
+      return initialGrid;
     }
     return createEmptyGrid();
   });
@@ -276,11 +274,11 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     if (!initialGrid) return;
 
     const timer = setTimeout(() => {
-      setGrid(editable ? initialGrid : applyValtechVariantFromUrl(initialGrid));
+      setGrid(initialGrid);
     }, 0);
 
     return () => clearTimeout(timer);
-  }, [initialGrid, editable]);
+  }, [initialGrid]);
 
   // Keyboard shortcuts (R to rotate, Ctrl/Cmd+Z to undo)
   useEffect(() => {

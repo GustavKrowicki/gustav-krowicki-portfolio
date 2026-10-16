@@ -46,8 +46,8 @@ export class NPCManager {
       if (!position) return;
 
       // Offset NPC slightly in front of building
-      const offsetX = 1 + (stop.npcShift?.x ?? 0); // 1 tile to the right
-      const offsetY = 1 + (stop.npcShift?.y ?? 0); // 1 tile down (towards camera)
+      const offsetX = 1; // 1 tile to the right
+      const offsetY = 1; // 1 tile down (towards camera)
 
       const npcId = `npc_${stop.buildingId}`;
       const npcData: NPCData = {

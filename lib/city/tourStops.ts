@@ -12,8 +12,6 @@ export interface TourStop {
   projectSlug?: string;
   // Offset for NPC position relative to building center
   npcOffset?: { x: number; y: number };
-  /** Moves the NPC this many tiles from its default spot (one tile right and down of the building centre) */
-  npcShift?: { x: number; y: number };
   // Offset for camera position relative to building center (grid units)
   cameraOffset?: { x: number; y: number };
   // Separate mobile camera offset (uses cameraOffset as fallback if not set)
@@ -51,7 +49,6 @@ export const TOUR_STOPS: TourStop[] = [
     category: "work",
     projectSlug: "valtech",
     npcOffset: { x: 2, y: 2 },
-    npcShift: { x: -1, y: 0 }, // off the gate tile (the walk-in main door), onto the pavement in front of the third cafe bay
     cameraOffset: { x: 10.6, y: 3.6 }, 
     cameraOffsetMobile: { x: 20.5, y: 18.8 },
   },

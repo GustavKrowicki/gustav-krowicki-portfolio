@@ -1,6 +1,7 @@
 // Walk-in buildings: which footprint tiles the player can stand on, which tile edges are doors, and the main door
 // whose crossing opens the roof. Coordinates are local to the footprint (x right, y down, the origin tile = 0,0),
 // for the building's default orientation. Built from the same plan as the model (art/img2threejs/lego-hq-avatar).
+import { ZOOM } from './units';
 
 export interface BuildingInterior {
   /** One string per footprint row; one char per tile: a room code, or '#' = not walkable (props, courtyard, walls) */
@@ -45,21 +46,23 @@ const LEGO_HQ: BuildingInterior = {
   entrance: { outside: [6, 7], inside: [6, 6] },
 };
 
-// Valtech office, 4 x 2, street-level interior grey box (Figma board 597-3604, beat sheet 2026-10-16,
-// art/img2threejs/valtech-office walkmap-4x2.json). Row 0: lunch, meeting room 01, my desk, a neighbour desk (not
-// walkable). Row 1: O the walkway (a stand tile in front of each beat) and G the gate passage. The main door is the gate
-// mouth, from the street tile south of (3,1); the lit door on the passage west wall joins G and O.
+// Valtech office, 6 x 2, street-level interior grey box (Figma board 597-3604, beat sheet 2026-10-16,
+// art/img2threejs/valtech-office walkmap.json). Row 0, west to east: lunch, meeting room 01, my desk, a neighbour desk
+// (not walkable). Row 1: lunch floor, then O the walkway (a stand tile in front of each beat) and G the gate passage. The
+// main door is the gate mouth, from the street tile south of (5,1); the lit door on the passage west wall joins G and O.
+// Inside, the camera goes to Detail zoom and follows the player, so the whole walk works on a phone without panning.
 const VALTECH_OFFICE: BuildingInterior = {
   map: [
-    "####",
-    "OOOG",
+    "######",
+    "#OOOOG",
   ],
   outside: "",
   doors: [
-    [2, 1, 3, 1], // lit door on the passage west wall
+    [4, 1, 5, 1], // lit door on the passage west wall
   ],
-  entrance: { outside: [3, 2], inside: [3, 1] },
-  standSpots: { desk: [2.5, 1.5], room: [1.5, 1.5], lunch: [0.5, 1.5], gate: [3.5, 1.5] },
+  entrance: { outside: [5, 2], inside: [5, 1] },
+  standSpots: { desk: [4.5, 1.5], room: [3.5, 1.5], lunch: [1.5, 1.5], gate: [5.5, 1.5] },
+  insideZoom: ZOOM.detail,
 };
 
 export const BUILDING_INTERIORS: Record<string, BuildingInterior> = {

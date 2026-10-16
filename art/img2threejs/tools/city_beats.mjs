@@ -1,8 +1,10 @@
 // Walk the avatar through a walk-in building's beats in the running city at a phone viewport, screenshot each beat at
 // the given zooms (camera on the player), and check whether the opened interior fits the visible screen without panning.
 // Usage: LAB_PORT=3108 node art/img2threejs/tools/city_beats.mjs <outDir> '<config json>'
-// config: { query: "valtech=5x2", buildingId, viewport: [390, 844], zooms: [2, 4], start: [x, y],
-//           beats: [[name, gridX, gridY], ...], wallWu: 1.4 }
+// config: { query: "", buildingId, viewport: [390, 844], zooms: [2, 4], start: [x, y],
+//           beats: [[name, gridX, gridY], ...], wallWu: 1.4, asIs: false }
+// asIs: no camera moves of its own; one screenshot per beat as the game frames it, with a check that the avatar and the
+// tile it faces (north of it) are on screen with a 10% margin.
 // Prints one JSON line per shot and per fit check. The fit check centres the camera on the interior (footprint diamond
 // plus the far walls) and reports whether it lies inside the part of the canvas that is on screen (the canvas is CSS
 // scaled to cover the viewport, so its edges can be off screen), and the avatar's on-screen height in CSS px.
@@ -73,6 +75,22 @@ for (const [name, x, y] of cfg.beats) {
     await new Promise((r) => setTimeout(r, 900));
     return ok;
   }, [x, y]);
+  if (cfg.asIs) {
+    const r = await page.evaluate(() => {
+      const s = window.__CITY_E2E__.getScene(); const cam = s.cameras.main; const p = s.playerController.getPosition();
+      const rect = s.game.canvas.getBoundingClientRect();
+      const css = (wx, wy) => {   // world point -> CSS px on screen
+        const gx = (wx - cam.worldView.x) * cam.zoom, gy = (wy - cam.worldView.y) * cam.zoom;
+        return [rect.left + gx * rect.width / s.scale.width, rect.top + gy * rect.height / s.scale.height];
+      };
+      const inView = ([x, y]) => x >= innerWidth * 0.1 && x <= innerWidth * 0.9 && y >= innerHeight * 0.1 && y <= innerHeight * 0.9;
+      const avatar = css(p.worldX, p.worldY - 12), prop = css(p.worldX + 22, p.worldY - 11 - 20);
+      return { zoom: cam.zoom, pos: [p.gridX, p.gridY], open: [...s.openBuildings].length > 0, avatar: avatar.map(Math.round), prop: prop.map(Math.round), onScreen: inView(avatar) && inView(prop) };
+    });
+    console.log(JSON.stringify({ shot: `${name}-asis`, ok, ...r }));
+    await page.screenshot({ path: `${out}/${name}-asis.png` });
+    continue;
+  }
   for (const z of cfg.zooms) {
     const p = await page.evaluate(() => window.__CITY_E2E__.getScene().playerController.getPosition());
     await setCam(p.worldX, p.worldY - 20, z);
@@ -82,7 +100,7 @@ for (const [name, x, y] of cfg.beats) {
   }
 }
 // Fit: the camera on the whole interior (player still inside on the last beat)
-for (const z of cfg.zooms) {
+for (const z of cfg.asIs ? [] : cfg.zooms) {
   const m0 = await measure(cfg.buildingId, cfg.wallWu ?? 1.4);
   await setCam(m0.centre[0], m0.centre[1], z);
   const m = await measure(cfg.buildingId, cfg.wallWu ?? 1.4);

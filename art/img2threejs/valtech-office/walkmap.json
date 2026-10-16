@@ -1,18 +1,17 @@
 {
  "plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16",
- "variant": "5x2",
  "map": [
-  "#####",
-  "#OOOG"
+  "######",
+  "#OOOOG"
  ],
  "mainDoor": "south edge of the gate tile",
  "standSpots": {
   "desk": [
-   3.5,
+   4.5,
    1.5
   ],
   "room": [
-   2.5,
+   3.5,
    1.5
   ],
   "lunch": [
@@ -20,7 +19,7 @@
    1.5
   ],
   "gate": [
-   4.5,
+   5.5,
    1.5
   ]
  }

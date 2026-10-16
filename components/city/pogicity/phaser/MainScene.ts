@@ -1461,6 +1461,8 @@ export class MainScene extends Phaser.Scene {
         this.zoomLevel = targetZoom;
         this.zoomHandledInternally = true;
         this.events.emit("zoomChanged", targetZoom);
+        // A running follow keeps the dead zone it got at the old zoom; restart it next frame, sized for this one
+        this.stopCameraFollow();
       }
     );
   }

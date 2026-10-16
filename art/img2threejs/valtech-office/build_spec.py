@@ -1,6 +1,6 @@
-"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 4 x 2 tile city building.
+"""ObjectSculptSpec for the Valtech office (Linear POR-35): the riverside office block as a 6 x 2 tile city building.
 
-Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions), ground storey 1.4 wu with dark green
+Plan authority: Figma board node 576-3613 (agreed with Gustav): footprint 3 x 2 (made 4 x 2 on 2026-10-16 to match the real proportions, then 6 x 2 the same day for the street-level interior), ground storey 1.4 wu with dark green
 awnings, white columns, black planters and the gate (passage) as the entrance on the south side under an awning; three
 louvre storeys of 1.2 wu; a recessed glass top floor with a white frame.
 Gustav, 2026-10-16: white bands (0.2 wu, standing 0.04 wu proud of the slats) clearly apart from warm grey louvre bands over
@@ -10,8 +10,8 @@ Style + camera: ref/ref-A-gemini.png. Facts: ref/photo-6.jpg (straight front), p
 Colours: photo crops (material-crops/) through analyze_texture.py and extract_pbr_evidence.py (material-evidence/),
 lifted into the sprite value band and kept flat. Nothing from the photos is projected onto the mesh.
 
-Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 4 x 2 footprint centred on the
-origin: X east (4 wu, -2..2), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
+Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the pavement top at y = G, the 6 x 2 footprint centred on the
+origin: X east (6 wu, -3..3), Z south (2 wu, -1..1). The south (+Z) and east (+X) sides face the default camera.
 """
 import copy
 import json
@@ -42,13 +42,7 @@ GS, ST, TS = 1.4, 1.2, 0.2    # ground storey, upper storey, white band (slab + 
 NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
-HX, HZ = 2.0, 1.0             # half footprint (4 x 2: Gustav, 2026-10-16, closer to the real proportions)
-# Interior variants (VARIANT env; the approved building is 4x2): 5x2 / 6x2 widen the block west (the gate stays the east
-# bay); 4x3 keeps the 4 x 2 block and adds a one-storey back wing on the north grass row. Only 4x2 has furniture until
-# the beat sheet decides what each variant holds.
-VARIANT = os.environ.get("VARIANT") or "4x2"
-HX = {"4x2": 2.0, "4x3": 2.0, "5x2": 2.5, "6x2": 3.0}[VARIANT]
-EXT = 1.0 if VARIANT == "4x3" else 0.0
+HX, HZ = 3.0, 1.0             # half footprint: 6 x 2 (Gustav, 2026-10-16: room for the street-level interior; was 4 x 2)
 
 
 def r4(v):
@@ -125,7 +119,7 @@ def lf(fid, kind, notes):
 
 
 # ---------------------------------------------------------------------------------------------------------------
-# Pavement pad (root): exactly the 4 x 2 footprint, so the converter bbox starts at the footprint
+# Pavement pad (root): exactly the footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Pavement", "macro", "base", "box", (2 * HX, G, 2 * HZ), (0, G / 2, 0), "paving", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "top of the pavement"}],
               features=lf("root.pad", "contour", f"{2 * HX:g} x {2 * HZ:g} wu pavement = the footprint (collision = footprint)"),
@@ -386,30 +380,6 @@ STAND_SPOTS = {"desk-1": (1.35, 1.5), "desk-2": (2.0, 1.5), "desk-3": (2.65, 1.5
 
 # The beat sheet (2026-10-16) replaces the first furniture: one desk (his), meeting room 01, lunch; built below per variant
 C = [c for c in C if not c["id"].startswith(("int-01", "int-desk", "int-chair", "int-lunch", "side-"))]
-if EXT:
-    # 4x3: shift the block south by half the wing, open its north wall into the wing, and build the wing (ground storey,
-    # flat roof at the first slab line). Wing ids follow the state prefixes: wall-<side>, slab-, lowcap-<side>.
-    dz = EXT / 2
-    C = [c for c in C if c["id"] not in ("wall-N", "lowcap-N")]
-    for c in C:
-        if c["parent"] is None:
-            c["dimensions"]["depth"] = 2 * HZ + EXT
-            c["transform"]["scale"][2] = 2 * HZ + EXT
-            continue
-        c["transform"]["position"][2] = round(c["transform"]["position"][2] + dz, 4)
-        for k in ("localStart", "localEnd"):
-            c["attachment"][k][2] = round(c["attachment"][k][2] + dz, 4)
-    Z0, ZB = -HZ - dz, -HZ + dz            # wing north edge, block north edge
-    bx("wall-N", "North wall (back wing)", "macro", "ground-storey", -HX, HX, 0, GS, Z0, Z0 + WT, "white", importance=0.6)
-    bx("wall-W-wing", "West wall (back wing)", "meso", "ground-storey", -HX, -HX + WT, 0, GS, Z0 + WT, ZB + WT, "white", importance=0.5)
-    bx("wall-E-wing", "East wall (back wing)", "meso", "ground-storey", HX - WT, HX, 0, GS, Z0 + WT, ZB + WT, "white", importance=0.5)
-    bx("slab-wing", "Back wing roof", "macro", "slab", -HX, HX, GS, GS + TS, Z0, ZB, "white", importance=0.6)
-    bx("int-floor-wing", "Interior floor (back wing)", "meso", "interior", -HX + WT, HX - WT, 0, 0.01, Z0 + WT, ZB + WT, "gb-floor",
-       contact="flush-mount", importance=0.4)
-    bx("lowcap-N", "North wall cut", "micro", "interior", -HX, HX, 0, CUT, Z0, Z0 + WT, "white", importance=0.3)
-    bx("lowcap-W-wing", "West wing wall cut", "micro", "interior", -HX, -HX + WT, 0, CUT, Z0 + WT, ZB + WT, "white", importance=0.3)
-    bx("lowcap-E-wing", "East wing wall cut", "micro", "interior", HX - WT, HX, 0, CUT, Z0 + WT, ZB + WT, "white", importance=0.3)
-
 # ---------------------------------------------------------------------------------------------------------------
 # Beats (Gustav's beat sheet, 2026-10-16), in walk order from the gate (east bay, street row): 1 enter at the gate,
 # 2 my desk (by the window, two screens, a notebook, the edge of one neighbour desk), 3 meeting room 01 (yellow
@@ -417,18 +387,11 @@ if EXT:
 # quiz board), 5 leave at the gate. Plan tiles: x west -> east, y north -> south; zones are (x0, x1, y0, y1) in tiles.
 # Real sizes (1 wu = 2 m): desk 1.6 x 0.8 m, top 0.75 m; screen 0.56 x 0.36 m; chair 0.5 m, 0.8 m to pull out;
 # round table 0.8 m; banquette seat 0.5 m deep, 0.45 m high, back 0.9 m; whiteboard 1.2 x 0.9 m; quiz board 1.0 x 0.7 m.
-PW, PH = int(round(2 * HX)), int(round(2 * HZ + EXT))
-LAYOUTS = {
-    "4x2": {"lunch": (0, 1, 0, 1), "room": (1, 2, 0, 1), "desk": 2, "hint": 3, "stand": {"desk": (2, 1), "room": (1, 1), "lunch": (0, 1)},
-            "map": ["####", "OOOG"]},
-    "4x3": {"lunch": (0, 1, 0, 2), "room": (1, 2, 0, 2), "desk": 2, "hint": 3, "stand": {"desk": (2, 1), "room": (1, 2), "lunch": (0, 2)},
-            "map": ["####", "##O#", "OOOG"]},
-    "5x2": {"lunch": (0, 1, 0, 2), "room": (1, 3, 0, 1), "desk": 3, "hint": 4, "stand": {"desk": (3, 1), "room": (2, 1), "lunch": (1, 1)},
-            "map": ["#####", "#OOOG"]},
-    "6x2": {"lunch": (0, 2, 0, 1), "room": (2, 4, 0, 1), "desk": 4, "hint": 5, "stand": {"desk": (4, 1), "room": (3, 1), "lunch": (1, 1)},
-            "map": ["######", "#OOOOG"]},
-}
-LAY = LAYOUTS[VARIANT]
+PW, PH = int(round(2 * HX)), int(round(2 * HZ))
+# Zones west -> east in the north row: lunch (2 tiles), meeting room 01 (2 tiles), my desk, a neighbour desk; the street
+# row is the walkway with a stand tile in front of each beat, the gate passage at the east end
+LAY = {"lunch": (0, 2, 0, 1), "room": (2, 4, 0, 1), "desk": 4, "hint": 5, "stand": {"desk": (4, 1), "room": (3, 1), "lunch": (1, 1)},
+       "map": ["######", "#OOOOG"]}
 
 
 def px(v):
@@ -702,9 +665,9 @@ spec["states"] = {"roofOn": "hide open-* and lowcap-*",
                   "roofOff": "hide the upper storeys (slab-, louvre-, parapet-, roof-deck, top-) and the cafe front (shop-core, col-S-, shop-glass-, "
                              "shop-light-, awning-, gate lintel, soffit, end wall, brick west lining, door, art, sign); walls of the view's two far "
                              "sides stay full height, the others show lowcap-<side>; lib/city/models/valtechOfficeStates.ts"}
-spec["interior"] = {"plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16", "variant": VARIANT, "map": WALKMAP,
+spec["interior"] = {"plan": "Figma 597-3604 (section 601-3604) + beat sheet 2026-10-16", "map": WALKMAP,
                     "mainDoor": "south edge of the gate tile", "standSpots": {k: list(v) for k, v in STAND_SPOTS.items()}}
-json.dump(spec["interior"], open(f"{W}/walkmap-{VARIANT}.json", "w"), indent=1)
+json.dump(spec["interior"], open(f"{W}/walkmap.json", "w"), indent=1)
 pa = spec["preSpecAssessment"]
 spec["assumptions"] = ["RESOLVED BY ASSUMPTION: " + u for u in (pa.get("unknownsToResolveBeforeImplementation") or [])]
 pa["unknownsToResolveBeforeImplementation"] = []

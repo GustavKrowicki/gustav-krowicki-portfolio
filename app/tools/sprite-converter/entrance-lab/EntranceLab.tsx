@@ -9,10 +9,7 @@ import * as workshop from '@/lib/city/models/workshop';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
-import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel, setValtechOfficeState } from '@/lib/city/models/valtechOfficeStates';
-import { createValtechOfficeV4x3Model } from '@/lib/city/models/valtechOfficeV4x3';
-import { createValtechOfficeV5x2Model } from '@/lib/city/models/valtechOfficeV5x2';
-import { createValtechOfficeV6x2Model } from '@/lib/city/models/valtechOfficeV6x2';
+import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
 // Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
@@ -72,18 +69,22 @@ function avatarHqScene(open: boolean): THREE.Group {
   return group;
 }
 
-// The avatar with the Valtech office (both in wu): on the approach tile in front of the gate (roof on), or inside on
-// plan tile (2,1) (roof off). Plan tile (lx, ly) -> model (lx - 2, ly - 1) on the 4 x 2 plot; the floor top is at y = 0.05.
+// The avatar with the Valtech office (both in wu): on the approach tile in front of the gate (roof on), or inside at
+// the desk's stand tile (roof off); the avatarAt option moves it to any plan point. Plan tile (lx, ly) -> model
+// (lx - 3, ly - 1) on the 6 x 2 plot; the floor top is at y = 0.05.
+const VALTECH_PLAN = { w: 6, h: 2 };
 function avatarValtechScene(open: boolean): THREE.Group {
   const group = new THREE.Group();
   const options = { castShadow: true, receiveShadow: true };
   const building = open ? createValtechOfficeRoofOffModel(options) : createValtechOfficeRoofOnModel(options);
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  if (open) { avatar.position.set(2.5 - 2, 0.05, 1.5 - 1); avatar.rotation.y = -Math.PI / 4; }
-  else avatar.position.set(3.5 - 2, 0.04, 2.5 - 1);
+  const [x, y] = open ? [4.5, 1.5] : [5.5, 2.5];
+  avatar.position.set(x - VALTECH_PLAN.w / 2, open ? 0.05 : 0.04, y - VALTECH_PLAN.h / 2);
+  if (open) avatar.rotation.y = -Math.PI / 4;
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  group.userData.plan = VALTECH_PLAN;
   return group;
 }
 
@@ -95,52 +96,10 @@ const valtechOpen = (view: CampusView): ModelConfig => ({
   configure: valtech.configureValtechOfficeRenderer,
   leaves: {},
   travel: 0,
-  reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
+  reference: { width: 384, height: 384, halfW: 3.0, target: [0, 0, 0] },
 });
 
-// Valtech interior grey-box variants (art/img2threejs/valtech-office, VARIANT=...): roof on, roof off (south view), and
-// roof off with the avatar (moved per shot with the avatarAt option, in plan tiles). Plan tile (lx, ly) -> model
-// (lx - W / 2, ly - H / 2); the floor top is at y = 0.05.
-const VALTECH_VARIANTS: Record<string, { w: number; h: number; create: (options: { castShadow?: boolean; receiveShadow?: boolean }) => THREE.Group }> = {
-  '4x2': { w: 4, h: 2, create: valtech.createValtechOfficeModel },
-  '4x3': { w: 4, h: 3, create: createValtechOfficeV4x3Model },
-  '5x2': { w: 5, h: 2, create: createValtechOfficeV5x2Model },
-  '6x2': { w: 6, h: 2, create: createValtechOfficeV6x2Model },
-};
-
-function valtechVariantModels(): Record<string, ModelConfig> {
-  const out: Record<string, ModelConfig> = {};
-  for (const [v, { w, h, create }] of Object.entries(VALTECH_VARIANTS)) {
-    const base = { ...valtechOpen('south'), reference: { width: 384, height: 384, halfW: w / 2, target: [0, 0, 0] as [number, number, number] } };
-    const state = (open: boolean) => (options: { castShadow?: boolean; receiveShadow?: boolean }) => {
-      const model = create(options);
-      setValtechOfficeState(model, open);
-      return model;
-    };
-    out[`valtech-${v}`] = { ...base, name: `Valtech office ${v} (roof on)`, create: state(false) };
-    out[`valtech-${v}-open`] = { ...base, name: `Valtech office ${v} (roof off)`, create: state(true) };
-    out[`valtech-${v}-avatar`] = {
-      ...base,
-      name: `Valtech office ${v} (roof off, avatar)`,
-      create: () => {
-        const group = new THREE.Group();
-        const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
-        group.add(state(true)({ castShadow: true, receiveShadow: true }), avatar);
-        avatar.position.set(w - 0.5 - w / 2, 0.05, h - 0.5 - h / 2);
-        avatar.rotation.y = -Math.PI / 4;
-        group.userData.avatar = avatar.userData.avatar;
-        group.userData.avatarGroup = avatar;
-        group.userData.plan = { w, h };
-        return group;
-      },
-      restBounds: true,
-    };
-  }
-  return out;
-}
-
 const MODELS: Record<string, ModelConfig> = {
-  ...valtechVariantModels(),
   // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
   avatar: {
     name: 'Gustav avatar',
@@ -238,7 +197,7 @@ const MODELS: Record<string, ModelConfig> = {
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
   },
-  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 4 x 2 footprint, banded louvre block; roof on, and
+  // Valtech office (art/img2threejs/valtech-office, Linear POR-35): 6 x 2 footprint, banded louvre block; roof on, and
   // roof off per sprite view (street-level interior grey box), and with the avatar at the gate / inside
   valtech: {
     name: 'Valtech office',
@@ -248,7 +207,7 @@ const MODELS: Record<string, ModelConfig> = {
     configure: valtech.configureValtechOfficeRenderer,
     leaves: {},
     travel: 0,
-    reference: { width: 384, height: 384, halfW: 2.0, target: [0, 0, 0] },
+    reference: { width: 384, height: 384, halfW: 3.0, target: [0, 0, 0] },
   },
   valtechOpen: valtechOpen('south'),
   valtechOpenWest: valtechOpen('west'),
