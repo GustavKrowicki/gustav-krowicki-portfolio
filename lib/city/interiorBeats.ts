@@ -30,6 +30,10 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   },
 };
 
+/** Buildings whose story is told only by their beat cards: the tour dialog (RPGDialogBox) does not open for them
+ *  (Gustav, 2026-10-16: delete the old Valtech dialog). Their case study opens from the logo and the leave card. */
+export const BEAT_CARD_BUILDINGS = new Set(Object.keys(INTERIOR_BEATS));
+
 /** The beat whose stand tile is the footprint tile (lx, ly) of a walk-in building, or null */
 export function beatAtTile(buildingId: string, lx: number, ly: number): string | null {
   const spots = BUILDING_INTERIORS[buildingId]?.standSpots ?? {};

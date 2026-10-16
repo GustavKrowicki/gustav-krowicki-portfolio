@@ -8,7 +8,7 @@ import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
 import PeekCard from "./PeekCard";
-import { INTERIOR_BEATS } from "@/lib/city/interiorBeats";
+import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
@@ -672,7 +672,7 @@ export default function CityViewer({
       <RPGDialogBox
         isMobile={isMobile}
         tourStop={currentEncounter}
-        isVisible={isDialogOpen}
+        isVisible={isDialogOpen && !BEAT_CARD_BUILDINGS.has(currentEncounter?.buildingId ?? "")}
         onClose={handleDialogClose}
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}

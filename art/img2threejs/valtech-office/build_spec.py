@@ -486,23 +486,25 @@ def kit_desk(prefix, name, tx, ty, yaw=0.0, *, top_from=-DESK_W / 2, top_to=DESK
 
 
 def kit_chair(prefix, name, tx, ty, yaw=0.0):
-    """Task chair facing -z (the person looks at local -z): five-star base on casters, gas column, light grey mesh seat
-    and back on a dark frame, two armrests."""
+    """Task chair facing -z (the person looks at local -z), as in the desk-corner photo: silver five-star base on casters,
+    gas column, blue-grey seat, black mesh back in a white frame, white armrests with black pads."""
     k = Kit(prefix, name, tx, ty, yaw)
     for i in range(5):
         a = math.radians(18 + 72 * i)
         ca, sa = math.cos(a), math.sin(a)
         cx, cz = 0.08 * ca, -0.08 * sa
-        k.box(f"leg-{i + 1}", f"base leg {i + 1}", cx - 0.08, cx + 0.08, 0.018, 0.034, cz - 0.011, cz + 0.011, "chair-frame", spin=a)
+        k.box(f"leg-{i + 1}", f"base leg {i + 1}", cx - 0.08, cx + 0.08, 0.018, 0.034, cz - 0.011, cz + 0.011, "chair-base", spin=a)
         k.cyl(f"caster-{i + 1}", f"caster {i + 1}", 0.155 * ca, -0.155 * sa, 0.0, 0.018, 0.011, "black")
-    k.cyl("hub", "base hub", 0, 0, 0.012, 0.03, 0.022, "chair-frame")
+    k.cyl("hub", "base hub", 0, 0, 0.012, 0.03, 0.022, "chair-base")
     k.cyl("gas", "gas column", 0, 0, 0.04, 0.17, 0.013, "steel")
-    k.box("mech", "seat mechanism", -0.05, 0.05, 0.19, 0.212, -0.05, 0.05, "chair-frame")
-    k.box("seat", "seat (mesh)", -0.12, 0.12, 0.212, 0.24, -0.115, 0.11, "chair-mesh", level="meso", importance=0.45)
+    k.box("mech", "seat mechanism", -0.05, 0.05, 0.19, 0.212, -0.05, 0.05, "black")
+    k.box("seat", "seat (blue-grey)", -0.12, 0.12, 0.212, 0.24, -0.115, 0.11, "chair-seat", level="meso", importance=0.45)
     k.box("seat-edge", "seat front edge", -0.12, 0.12, 0.205, 0.235, -0.125, -0.105, "chair-frame")
     k.box("spine", "back spine", -0.022, 0.022, 0.2, 0.32, 0.1, 0.125, "chair-frame")
-    k.box("back", "back (mesh)", -0.115, 0.115, 0.27, 0.52, 0.12, 0.14, "chair-mesh", tilt=0.17, level="meso", importance=0.45)
+    k.box("back", "back (black mesh)", -0.105, 0.105, 0.28, 0.51, 0.12, 0.135, "chair-mesh", tilt=0.17, level="meso", importance=0.45)
     k.box("back-frame", "back frame (top)", -0.12, 0.12, 0.505, 0.53, 0.155, 0.18, "chair-frame", tilt=0.17)
+    for s_, tag in ((-1, "w"), (1, "e")):     # white side rails of the back frame
+        k.box(f"back-rail-{tag}", f"back frame ({tag})", s_ * 0.115 - 0.01, s_ * 0.115 + 0.01, 0.27, 0.52, 0.115, 0.14, "chair-frame", tilt=0.17)
     for s, tag in ((-1, "w"), (1, "e")):
         x = s * 0.115
         k.box(f"arm-post-{tag}", f"armrest post ({tag})", x - 0.007, x + 0.007, 0.235, 0.33, 0.025, 0.045, "chair-frame")
@@ -567,35 +569,35 @@ nb.box("cover", "cover (black)", -0.054, 0.054, 0.008, 0.011, -0.075, 0.075, "no
 nb.box("band", "elastic band", 0.03, 0.036, 0.0, 0.012, -0.076, 0.076, "black")
 nb.box("pen", "pen", 0.065, 0.073, 0, 0.008, -0.06, 0.07, "steel")
 cyl("int-desk-mug", "Mug", "micro", "interior", px(DX0 + 0.09), pz(DZB + 0.3), FLOOR + DESK_H, 0.045, 0.02, "paper", importance=0.3)
-# slim black desk lamp at the east back corner, head over the desk
-lamp = Kit("int-desk-lamp", "Desk lamp", DX1 - 0.07, DZB + 0.06, 0.5, base=FLOOR + DESK_H)
-lamp.cyl("base", "base", 0, 0, 0, 0.008, 0.028, "black")
-lamp.box("stem", "stem", -0.006, 0.006, 0.008, 0.25, -0.006, 0.006, "black")
-lamp.box("arm", "arm", -0.006, 0.006, 0.24, 0.252, -0.006, 0.16, "black")
-lamp.box("head", "head", -0.022, 0.022, 0.215, 0.245, 0.13, 0.18, "black")
+# slim black desk lamp at the east back corner: a straight stem and a flat round head (desk-corner photo)
+lamp = Kit("int-desk-lamp", "Desk lamp", DX1 - 0.07, DZB + 0.06, 0.0, base=FLOOR + DESK_H)
+lamp.cyl("base", "base", 0, 0, 0, 0.006, 0.03, "black")
+lamp.cyl("stem", "stem", 0, 0, 0.006, 0.27, 0.004, "black")
+lamp.cyl("head", "head", 0, 0.012, 0.276, 0.007, 0.038, "black")
 # my chair, pulled out and turned a little, as if I just got up
 kit_chair("int-desk-chair", "My chair", DCX - 0.04, DZB + 0.62, -0.22)
-# a bag on the floor by the east leg
-bag = Kit("int-desk-bag", "Bag", DX1 - 0.05, DZB + 0.47, -0.5)
-bag.box("body", "body", -0.07, 0.07, 0, 0.15, -0.035, 0.035, "bag", tilt=0.06)
-bag.box("flap", "flap", -0.07, 0.07, 0.1, 0.155, 0.035, 0.045, "bag-dark", tilt=0.06)
-bag.box("handle", "handle", -0.03, 0.03, 0.15, 0.17, -0.006, 0.006, "black")
-# the mustard planter with a big plant at the window end: the hero accent of the desk zone
+# bags on the floor by the east leg (desk-corner photo): a black laptop bag lying down, a backpack leaning on the leg
+bag = Kit("int-desk-bag", "Laptop bag", DX1 - 0.02, DZB + 0.5, -0.5)
+bag.box("body", "body", -0.085, 0.085, 0, 0.045, -0.06, 0.06, "bag")
+bag.box("strap", "strap", -0.07, -0.05, 0.045, 0.05, -0.065, 0.065, "bag-dark")
+pack = Kit("int-desk-pack", "Backpack", DX1 - 0.09, DZB + 0.3, 0.3)
+pack.box("body", "body", -0.06, 0.06, 0, 0.17, -0.03, 0.03, "bag", tilt=-0.18)
+pack.box("pocket", "front pocket", -0.045, 0.045, 0.02, 0.09, 0.025, 0.045, "bag-dark", tilt=-0.18)
+# the mustard planter at the window end: the hero accent of the zone. Desk-corner photo: a wide low yellow bowl on a
+# dark round ledge, long upright blade leaves (an aspidistra) fanning out of it
 pl = Kit("int-desk-planter", "Mustard planter", t + 0.17, WI + 0.2, 0.0)
-pl.cyl("pot", "pot (mustard)", 0, 0, 0, 0.2, 0.1, "mustard", importance=0.6)
-pl.cyl("rim", "pot rim", 0, 0, 0.19, 0.016, 0.104, "mustard-dark", importance=0.4)
-pl.cyl("soil", "soil", 0, 0, 0.2, 0.004, 0.09, "soil")
-pl.cyl("stem", "stem", 0, 0, 0.2, 0.4, 0.008, "plant-stem")
-pl.cyl("trunk", "trunk", 0, 0, 0.58, 0.16, 0.006, "plant-stem")
-# a fiddle-leaf fig: big flat leaves in a spiral up the stem, tipped out and down, lighter on top; a small crown on top
-for i in range(11):
-    a, y = 2.4 * i, 0.3 + 0.042 * i
-    rr = 0.055 + 0.012 * (i % 3)
-    lx_, lz_ = 0.05 * math.cos(a), -0.05 * math.sin(a)
-    pl.ell(f"leaf-{i + 1}", f"leaf {i + 1}", lx_, y, lz_, rr, 0.016, 0.042, "plant-mid" if i % 2 else "plant-dark", spin=a, tilt=0.0)
-    C[-1]["transform"]["rotation"] = r4(yaw_xyz(a, 0.0)[:2] + [-0.55])     # tip the leaf out (about its own length axis)
-for i, (x, y, z, r, m) in enumerate(((0.0, 0.8, 0.0, 0.07, "plant-mid"), (-0.05, 0.74, 0.03, 0.06, "plant-dark"), (0.05, 0.75, -0.02, 0.06, "plant-mid"))):
-    pl.ell(f"crown-{i + 1}", f"crown {i + 1}", x, y, z, r, r * 0.7, r * 0.85, m, spin=0.7 * i)
+pl.cyl("ledge", "ledge (dark)", 0, 0, 0, 0.07, 0.15, "black")
+pl.cyl("pot", "bowl (mustard)", 0, 0, 0.07, 0.1, 0.14, "mustard", importance=0.6)
+pl.cyl("rim", "bowl rim", 0, 0, 0.165, 0.008, 0.142, "mustard-dark", importance=0.4)
+pl.cyl("soil", "soil", 0, 0, 0.17, 0.004, 0.13, "soil")
+for i in range(13):
+    a = 2.39996 * i                          # golden-angle spread round the bowl
+    tlt = 0.25 + 0.35 * ((i * 7) % 5) / 4    # 0.25 .. 0.6 rad out from upright
+    ln = 0.15 + 0.06 * ((i * 3) % 4) / 3     # half length 0.15 .. 0.21 wu (0.6 .. 0.84 m leaves)
+    r0 = 0.03 + 0.05 * (i % 3) / 2
+    dx, dz = math.sin(a), math.cos(a)
+    pl.ell(f"leaf-{i + 1}", f"leaf {i + 1}", dx * (r0 + ln * math.sin(tlt)), 0.17 + ln * math.cos(tlt), dz * (r0 + ln * math.sin(tlt)),
+           0.032, ln, 0.008, "plant-dark" if i % 3 else "plant-mid", spin=a, tilt=tlt)
 # the edge of one neighbour desk: its west end runs on behind the gate passage wall
 h = LAY["hint"]
 kit_desk("int-hint-desk", "Neighbour desk (edge)", h + 0.66, DCZ, top_from=-0.4, top_to=IN_X1 + HX - (h + 0.66) - 0.005, legs=(-1,))
@@ -778,19 +780,22 @@ spec["materials"] = [
     material("black", "Black plastic", "plastic", "#222325", ["#1c1d1f"], 0.6, 0.0, "keyboard, mouse, lamp, tray, casters", **flat("reference: black lamp")),
     material("monitor", "Monitor black", "plastic", "#1e1f22", ["#18191c"], 0.5, 0.0, "monitor bodies and arm (ref ~#191a1c)", **flat("reference: black monitors")),
     material("screen", "Screen", "glass", "#2b3138", ["#252b31"], 0.3, 0.0, "display: a case image (texture) at runtime", **flat("case images in public/images/valtech")),
-    material("chair-mesh", "Chair mesh", "fabric", "#c3c5c5", ["#b9bbbb"], 0.85, 0.0, "light grey mesh seat and back", **flat("reference: light grey mesh chairs")),
-    material("chair-frame", "Chair frame", "plastic", "#4b4e52", ["#43464a"], 0.6, 0.1, "dark grey chair frame and base", **flat("reference: five-star base")),
-    material("mustard", "Mustard", "plastic", "#c9a93f", ["#bfa036"], 0.7, 0.0, "the zone's hero accent: the planter (ref ~#bda244)",
+    material("chair-mesh", "Chair mesh", "fabric", "#2b2f35", ["#25292e"], 0.85, 0.0, "black mesh back (photo ~#23282f)", **flat("desk-corner photo")),
+    material("chair-seat", "Chair seat", "fabric", "#6d7b85", ["#64727c"], 0.85, 0.0, "blue-grey seat (photo ~#5c6b75)", **flat("desk-corner photo")),
+    material("chair-frame", "Chair frame", "plastic", "#e3e4e2", ["#d9dad8"], 0.6, 0.0, "white back frame and armrests", emissiveIntensity={"base": 0.4},
+             **flat("desk-corner photo")),
+    material("chair-base", "Chair base", "metal", "#a9aeb2", ["#a0a5a9"], 0.4, 0.5, "silver five-star base", **flat("desk-corner photo")),
+    material("mustard", "Mustard", "plastic", "#d6ba3c", ["#ccb034"], 0.6, 0.0, "the zone's hero accent: the bowl (photo ~#c9ab45 in shade)",
              **flat("reference: mustard planter")),
-    material("mustard-dark", "Mustard rim", "plastic", "#ad9033", ["#a3872c"], 0.7, 0.0, "planter rim, a shade darker", **flat("reference: mustard planter")),
+    material("mustard-dark", "Mustard rim", "plastic", "#c2a532", ["#b89c2b"], 0.7, 0.0, "planter rim, a shade darker", **flat("reference: mustard planter")),
     material("soil", "Soil", "unknown", "#3b2f26", ["#342920"], 0.95, 0.0, "planter soil", **flat("planter")),
-    material("plant-dark", "Leaves dark", "unknown", "#3d6a33", ["#36602d"], 0.9, 0.0, "big plant, shaded leaves", **flat("reference: big green plant")),
+    material("plant-dark", "Leaves dark", "unknown", "#2f5a2f", ["#2a5229"], 0.9, 0.0, "big plant, shaded leaves", **flat("reference: big green plant")),
     material("plant-mid", "Leaves light", "unknown", "#5b8b3d", ["#538236"], 0.9, 0.0, "big plant, lit leaves", **flat("reference: big green plant")),
     material("plant-stem", "Stem", "wood", "#5a4a36", ["#52432f"], 0.9, 0.0, "plant stem", **flat("plant")),
     material("paper", "Paper white", "stone", "#f2f0ea", ["#e9e7e1"], 0.8, 0.0, "notebook pages, the mug", emissiveIntensity={"base": 0.45}, **flat("desk props")),
     material("notebook", "Notebook cover", "fabric", "#2a2a2d", ["#242427"], 0.8, 0.0, "black notebook", **flat("beat sheet: a notebook")),
-    material("bag", "Bag", "fabric", "#3c4352", ["#353c4a"], 0.9, 0.0, "a bag on the floor (reference)", **flat("reference: bags on the floor")),
-    material("bag-dark", "Bag flap", "fabric", "#2f3542", ["#292e3a"], 0.9, 0.0, "bag flap", **flat("reference: bags on the floor")),
+    material("bag", "Bag", "fabric", "#26282a", ["#212325"], 0.9, 0.0, "black bags on the floor (photo ~#202222)", **flat("reference: bags on the floor")),
+    material("bag-dark", "Bag strap", "fabric", "#3a3d40", ["#33363a"], 0.9, 0.0, "bag flap", **flat("reference: bags on the floor")),
 ]
 
 
