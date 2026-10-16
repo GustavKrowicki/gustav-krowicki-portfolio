@@ -7,6 +7,8 @@ import { getBuilding } from "@/lib/city/buildings";
 import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
+import PeekCard from "./PeekCard";
+import { INTERIOR_BEATS } from "@/lib/city/interiorBeats";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
@@ -78,6 +80,8 @@ export default function CityViewer({
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
+  // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
+  const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
@@ -325,6 +329,11 @@ export default function CityViewer({
             }
           });
 
+          // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
+          scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            setInteriorBeat(next);
+          });
+
           // Player exited trigger zone
           scene.events.on("playerExitedZone", () => {
             setCurrentEncounter(null);
@@ -395,6 +404,7 @@ export default function CityViewer({
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
     setIsDialogOpen(false);
+    setInteriorBeat(null);
     autoWalkTargetRef.current = null;
 
     const gameBoard = gameBoardRef.current;
@@ -648,6 +658,14 @@ export default function CityViewer({
           />
 
         </>
+      )}
+
+      {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
+      {isAdventureActive && (
+        <PeekCard
+          beat={interiorBeat ? INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat] ?? null : null}
+          beatKey={interiorBeat ? `${interiorBeat.buildingId}:${interiorBeat.beat}` : null}
+        />
       )}
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}

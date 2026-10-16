@@ -48,6 +48,7 @@ import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
+import { beatAtTile } from "@/lib/city/interiorBeats";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -1571,6 +1572,10 @@ export class MainScene extends Phaser.Scene {
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     this.updateInsideZoom(inside ? here! : null);
+    // Peek card: the player stands on a beat's stand tile (arrived, not passing through on the way to the next tile)
+    const stopped = target.x === gridX && target.y === gridY;
+    const beat = inside && stopped ? beatAtTile(here!.buildingId, here!.lx, here!.ly) : null;
+    this.setInteriorBeat(beat ? { buildingId: here!.buildingId, beat } : null);
     const tile = here ?? next;
     if (!tile) {
       this.playerController.setDepthOverride(this.frontOfPlotDepth(gridX, gridY));
@@ -1578,6 +1583,15 @@ export class MainScene extends Phaser.Scene {
     }
     const sprite = this.buildingSprites.get(tile.key);
     this.playerController.setDepthOverride(sprite ? sprite.depth + this.footprintSortOffset(tile.lx + 0.5, tile.ly + 0.5) : null);
+  }
+
+  // The beat whose peek card is open ("buildingId:beat"); React gets "interiorBeatChanged" with the beat or null
+  private activeBeat: string | null = null;
+  private setInteriorBeat(next: { buildingId: string; beat: string } | null): void {
+    const key = next ? `${next.buildingId}:${next.beat}` : null;
+    if (key === this.activeBeat) return;
+    this.activeBeat = key;
+    this.events.emit("interiorBeatChanged", next);
   }
 
   // The walk-in building the player is inside (past its main door), or null
@@ -1776,6 +1790,7 @@ export class MainScene extends Phaser.Scene {
     this.cameraFollowPlayer = false;
     this.manualCameraOverrideInAdventure = false;
     this.stopCameraFollow();
+    this.setInteriorBeat(null);
 
     // Clean up
     if (this.playerController) {
@@ -2281,7 +2296,7 @@ export class MainScene extends Phaser.Scene {
     // Simple rendering (without slicing for performance)
     const sprite = this.add.image(screenPos.x, bottomY, textureKey);
     sprite.setOrigin(0.5, 1);
-    sprite.setScale(building.spriteScale ?? 1);
+    sprite.setScale(this.buildingTextureScale(building, textureKey));
     sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
 
     this.buildingSprites.set(key, sprite);
@@ -2290,7 +2305,7 @@ export class MainScene extends Phaser.Scene {
     // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
     const door = building.door;
     if (door && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_door`)) {
-      const s = sprite.scaleX;
+      const s = building.spriteScale ?? 1;
       const left = sprite.x - sprite.width * s / 2;
       const top = sprite.y - sprite.height * s;
       const image = this.add.image(left + door.x * s, top + door.y * s, `${building.id}_door`, 0);
@@ -2388,8 +2403,15 @@ export class MainScene extends Phaser.Scene {
       previous.setScale(sprite.scaleX, sprite.scaleY);
       previous.setDepth(sprite.depth + 0.001);
       sprite.setTexture(textureKey);
+      sprite.setScale(this.buildingTextureScale(building, textureKey));
       this.tweens.add({ targets: previous, alpha: 0, duration: 450, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
     });
+  }
+
+  // Display scale of a building texture: open (roof-off) textures may have their own texel density
+  private buildingTextureScale(building: BuildingDefinition, textureKey: string): number {
+    const base = building.spriteScale ?? 1;
+    return textureKey.startsWith(`${building.id}_open_`) ? building.openSpriteScale ?? base : base;
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
