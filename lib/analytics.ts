@@ -42,9 +42,9 @@ export function trackCvDownloaded(source: 'contact' | 'panel') {
   capture('cv_downloaded', { source });
 }
 
-// "Open PDF" on the CV or a recommendation letter (opens the browser's own PDF viewer)
-export function trackPdfOpened(document: 'cv' | 'recommendation', name?: string) {
-  capture('pdf_opened', { document, ...(name && { name }) });
+// "Open PDF" on the CV (opens the browser's own PDF viewer)
+export function trackPdfOpened(document: 'cv') {
+  capture('pdf_opened', { document });
 }
 
 // Cross-cutting
