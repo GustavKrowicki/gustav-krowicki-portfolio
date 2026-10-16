@@ -264,9 +264,8 @@ def windows_on(prefix, ax, at_model, p0, p1, out, y_lo, y_hi, level_tag):
         n += 1
         wid = f"{prefix}-win-{n}"
         mat = "panel-wood" if (int(c * 2) % 5) == 2 else "window"
-        # surface pass, north wing first: a light sill under each window and a dark reveal around it
-        north = (ax == "h" and X(4) - 0.1 <= c <= X(12.7) and at_model <= Z(3.05)) or (ax == "v" and c <= Z(3.05) and X(4) - 0.2 <= at_model <= X(12.7))
-        if north and mat == "window":
+        # surface pass: a light sill under each window and a dark reveal around it
+        if mat == "window":
             o = 0.045 * out
             if ax == "h":
                 bx(f"{wid}-sill", f"Window sill {level_tag}.{n}", "micro", "trim", c - 0.19, c + 0.19, y_lo - 0.05, y_lo, min(at_model, at_model + o),
@@ -433,7 +432,7 @@ def block(cid, name, x0, z0, x1, z1, y0, y1, side_mat, roof_mat="roof-green", co
         bx(f"roof-{cid}-court-{k}", f"{name} courtyard {k} floor", "micro", "roof", c[0], c[2], y0, y0 + 0.03, c[1], c[3], "court", importance=0.5,
            features=[{"id": f"roof-{cid}-court-{k}.well", "kind": "contour", "notes": "square courtyard light well in the green roof"}])
         parapet_ring(f"roof-{cid}-court-{k}", rect(c[0] - WT, c[1] - WT, c[2] + WT, c[3] + WT), y1, par)
-        if cid == "north":   # surface pass, north wing first: windows on the courtyard walls seen from above (north and west faces)
+        if True:   # surface pass: windows on the courtyard walls seen from above (north and west faces)
             windows_on(f"roof-{cid}-court-{k}-n", "h", Z(c[1]), X(c[0]), X(c[2]), 1, y0 + 0.25, y0 + 1.0, f"{cid}-court{k}n")
             windows_on(f"roof-{cid}-court-{k}-w", "v", X(c[0]), Z(c[1]), Z(c[3]), 1, y0 + 0.25, y0 + 1.0, f"{cid}-court{k}w")
     for sd in windows:      # narrow windows per storey on the named outer faces
@@ -470,6 +469,14 @@ for k, (gx, gy, w, d, h) in enumerate(((11.6, 0.35, 0.6, 0.4, 0.35), (9.3, 2.35,
        topo="Rooftop plant unit: a box.")
     cyl(f"roof-north-unit-{k}-fan", f"Plant unit {k} fan", "micro", "trim", gx + w / 2, gy + d / 2, H2 + h, 0.02, min(w, d) * 0.35, "parapet",
         importance=0.2)
+for k, (gx, gy, w, d, h) in enumerate(((11.3, 5.6, 0.6, 0.45, 0.35), (8.5, 3.4, 0.45, 0.35, 0.28), (13.2, 6.6, 0.5, 0.4, 0.3)), 4):
+    bx(f"roof-east-unit-{k}", f"East roof plant unit {k}", "micro", "roof", gx, gx + w, H2, H2 + h, gy, gy + d, "frame-light", importance=0.4,
+       topo="Rooftop plant unit: a box.")
+    cyl(f"roof-east-unit-{k}-fan", f"East plant unit {k} fan", "micro", "trim", gx + w / 2, gy + d / 2, H2 + h, 0.02, min(w, d) * 0.35, "parapet",
+        importance=0.2)
+for k, (gx, gy) in enumerate(((11.9, 3.5), (9.0, 6.3), (12.0, 6.7), (13.4, 5.6)), 1):
+    cyl(f"roof-east-skylight-{k}", f"East roof skylight {k}", "micro", "trim", gx, gy, H2, 0.06, 0.13, "dome", importance=0.3,
+        topo="Small round roof skylight: a short cylinder.")
 for k, (gx, gy) in enumerate(((6.5, 2.55), (7.6, 2.55), (11.9, 2.4), (4.45, 0.35), (8.6, 2.55)), 1):
     cyl(f"roof-north-skylight-{k}", f"North roof skylight {k}", "micro", "trim", gx, gy, H2, 0.06, 0.13, "dome", importance=0.3,
         topo="Small round roof skylight: a short cylinder.")
