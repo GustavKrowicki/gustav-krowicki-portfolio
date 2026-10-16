@@ -1,0 +1,95 @@
+{
+  "hair": {
+    "rgb": [
+      64,
+      60,
+      47
+    ],
+    "hex": "#403c2f",
+    "samples": 8977
+  },
+  "skin": {
+    "rgb": [
+      147,
+      118,
+      104
+    ],
+    "hex": "#937668",
+    "samples": 2303
+  },
+  "jacket": {
+    "rgb": [
+      111,
+      107,
+      107
+    ],
+    "hex": "#6f6b6b",
+    "samples": 9453,
+    "rule": "measure_v3.py"
+  },
+  "tee": {
+    "rgb": [
+      84,
+      79,
+      68
+    ],
+    "hex": "#544f44",
+    "samples": 727
+  },
+  "jeans": {
+    "rgb": [
+      26,
+      34,
+      50
+    ],
+    "hex": "#1a2232",
+    "samples": 6114
+  },
+  "shoes": {
+    "rgb": [
+      21,
+      26,
+      32
+    ],
+    "hex": "#151a20",
+    "samples": 1701
+  },
+  "laptop": {
+    "rgb": [
+      140,
+      138,
+      142
+    ],
+    "hex": "#8c8a8e",
+    "samples": 888
+  },
+  "jacket-v1": {
+    "rgb": [
+      140,
+      138,
+      141
+    ],
+    "hex": "#8c8a8d",
+    "samples": 4012
+  },
+  "jacket-shade": {
+    "rgb": [
+      104,
+      100,
+      99
+    ],
+    "hex": "#686463",
+    "samples": 9453,
+    "rule": "measure_v3.py"
+  },
+  "hair-light": {
+    "rgb": [
+      76,
+      71,
+      57
+    ],
+    "hex": "#4c4739",
+    "samples": 8977,
+    "rule": "measure_v3.py"
+  }
+}

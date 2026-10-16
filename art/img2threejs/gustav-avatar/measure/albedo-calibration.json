@@ -1,0 +1,182 @@
+{
+  "skin": {
+    "pixels": 2846,
+    "albedo": "#ffcfb6",
+    "litMedian": [
+      147.0,
+      118.0,
+      103.0
+    ],
+    "target": [
+      147,
+      118,
+      104
+    ],
+    "newAlbedo": "#ffcfb8",
+    "deltaRGB": [
+      0.0,
+      0.0,
+      -1.0
+    ]
+  },
+  "hair": {
+    "pixels": 6558,
+    "albedo": "#625c48",
+    "litMedian": [
+      64.0,
+      60.0,
+      47.0
+    ],
+    "target": [
+      64,
+      60,
+      47
+    ],
+    "newAlbedo": "#625c48",
+    "deltaRGB": [
+      0.0,
+      0.0,
+      0.0
+    ]
+  },
+  "jacket": {
+    "pixels": 8683,
+    "albedo": "#b5aea9",
+    "litMedian": [
+      111,
+      106,
+      103
+    ],
+    "target": [
+      111,
+      107,
+      107
+    ],
+    "newAlbedo": "#b5b0af",
+    "deltaRGB": [
+      0,
+      -1,
+      -4
+    ]
+  },
+  "tee": {
+    "pixels": 2309,
+    "albedo": "#8e8574",
+    "litMedian": [
+      84,
+      79,
+      68
+    ],
+    "target": [
+      84,
+      79,
+      68
+    ],
+    "newAlbedo": "#8e8574",
+    "deltaRGB": [
+      0,
+      0,
+      0
+    ]
+  },
+  "jeans": {
+    "pixels": 9077,
+    "albedo": "#2e3d57",
+    "litMedian": [
+      26,
+      34,
+      49
+    ],
+    "target": [
+      26,
+      34,
+      50
+    ],
+    "newAlbedo": "#2e3d59",
+    "deltaRGB": [
+      0,
+      0,
+      -1
+    ]
+  },
+  "shoes": {
+    "pixels": 2138,
+    "albedo": "#1d262f",
+    "litMedian": [
+      24.0,
+      29.0,
+      34.0
+    ],
+    "target": [
+      21,
+      26,
+      32
+    ],
+    "newAlbedo": "#1a222c",
+    "deltaRGB": [
+      3.0,
+      3.0,
+      2.0
+    ]
+  },
+  "jacket-shade": {
+    "pixels": 9639,
+    "albedo": "#a39c97",
+    "litMedian": [
+      95,
+      91,
+      88
+    ],
+    "target": [
+      104,
+      100,
+      99
+    ],
+    "newAlbedo": "#b2aba9",
+    "deltaRGB": [
+      -9,
+      -9,
+      -11
+    ]
+  },
+  "hair-light": {
+    "pixels": 2569,
+    "albedo": "#7a7058",
+    "litMedian": [
+      80,
+      74,
+      58
+    ],
+    "target": [
+      76,
+      71,
+      57
+    ],
+    "newAlbedo": "#746c57",
+    "deltaRGB": [
+      4,
+      3,
+      1
+    ]
+  },
+  "laptop": {
+    "pixels": 2237,
+    "albedo": "#f2eef5",
+    "litMedian": [
+      140,
+      138,
+      142
+    ],
+    "target": [
+      140,
+      138,
+      142
+    ],
+    "newAlbedo": "#f2eef5",
+    "deltaRGB": [
+      0,
+      0,
+      0
+    ]
+  }
+}

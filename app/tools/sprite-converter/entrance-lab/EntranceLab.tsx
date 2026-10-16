@@ -5,9 +5,21 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import * as campus from '@/lib/city/models/legoCampus';
 import * as main from '@/lib/city/models/legoHqMainEntrance';
+import * as avatarFactory from '@/lib/city/models/gustavAvatar';
+import { createGustavAvatar, skinnedBounds, type AvatarRig, type AvatarStage, type AvatarBinding } from '@/lib/city/models/gustavAvatarRig';
+import * as avatarHarness from '@/lib/city/models/gustavAvatarHarness';
+import * as workshop from '@/lib/city/models/workshop';
+import * as rooms from '@/lib/city/models/legoCampusRooms';
+import * as hqRooms from '@/lib/city/models/legoHqRooms';
+import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
+import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
+import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 
-// Review/test bench for the img2threejs reconstructions (?model=main|campus, or krea = the original GLB served by
-// art/img2threejs/tools/static_cors.py on :8766). Generation sources live in art/img2threejs/.
+// Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
+// krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
+// art/img2threejs/. The avatar models are in wu (0.9 wu tall); avatar-entrance / avatar-campus put it next to the
+// LEGO main entrance / campus models at the same wu scale. Avatar-only options: clip ('idle' | 'walk' |
+// 'walk-in-place'), t (seconds), and URL params stage / binding (see gustavAvatarRig.ts).
 // One page session renders every view through window.__shoot(name, options), so textures
 // load once and every capture shares them:
 //   view: 'reference' (front, elevated, framed like the model's aerial crop) | 'iso' (converter camera)
@@ -32,9 +44,70 @@ type ModelConfig = {
   travel: number;
   // Reference framing: output size, ortho half-width and look-at target matching the aerial crop
   reference: { width: number; height: number; halfW: number; target: [number, number, number] };
+  // Optional eye-height perspective for the 'reference' view, for references that are ground photos
+  eye?: { fov: number; position: [number, number, number]; target: [number, number, number] };
   // Sun position read off the reference photo's cast shadows (for the 'photo' rig)
   sun?: { position: [number, number, number]; intensity: number };
+  // Sprite view: normalise from the rest-pose bounds captured at load (animated models must not re-frame per pose)
+  restBounds?: boolean;
 };
+
+const AVATAR_PARAMS = () => {
+  const p = new URLSearchParams(window.location.search);
+  return {
+    stage: (p.get('stage') as AvatarStage) ?? 'bound',
+    binding: (p.get('binding') as AvatarBinding) ?? 'transfer',
+    laptop: p.get('laptop') !== '0',
+  };
+};
+
+// One LEGO plate width W in the main-entrance model is ~5.3 m = 2.65 wu; the campus model is 7 tiles across 1.0 unit.
+const ENTRANCE_UNITS_PER_WU = 1 / 2.65;
+const CAMPUS_UNITS_PER_WU = 1 / 7;
+
+function avatarScene(kind: 'entrance' | 'campus'): THREE.Group {
+  const group = new THREE.Group();
+  const building = kind === 'entrance' ? main.createLEGOHQMainEntranceModel({ castShadow: true, receiveShadow: true })
+    : campus.createLEGOCampusModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  const unit = kind === 'entrance' ? ENTRANCE_UNITS_PER_WU : CAMPUS_UNITS_PER_WU;
+  avatar.scale.setScalar(unit);
+  group.add(building, avatar);
+  group.updateMatrixWorld(true);
+  if (kind === 'entrance') {
+    // Doors at z ~ 1.0 W (vestibule depth); stand on the approach in front of the right-hand leaf, facing the camera.
+    avatar.position.set(0.3, 0, 1.25);
+  } else {
+    // In front of the campus door head, on the ground, 1 wu out along the plate's outward axis.
+    const runtime = building.userData.sculptRuntime as { nodes: Record<string, THREE.Object3D> };
+    const head = runtime.nodes['door-head'];
+    const plate = runtime.nodes['entrance-plate'];
+    const at = head.getWorldPosition(new THREE.Vector3());
+    const out = plate.localToWorld(new THREE.Vector3(0, 0, -1)).sub(plate.getWorldPosition(new THREE.Vector3())).setY(0).normalize();
+    const ground = new THREE.Box3().setFromObject(runtime.nodes['root'] ?? building).min.y;
+    const floor = (runtime.nodes['vestibule-floor'] ?? head).getWorldPosition(new THREE.Vector3()).y;
+    avatar.position.copy(at.add(out.multiplyScalar(0.6 * unit))).setY(Number.isFinite(floor) ? floor : ground);
+    avatar.lookAt(avatar.position.clone().add(out));
+  }
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The avatar with the LEGO HQ at avatar scale (both in wu): at the main door (roof on) or in the Workshop (roof off).
+function avatarHqScene(open: boolean): THREE.Group {
+  const group = new THREE.Group();
+  const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  // plan tile (gx, gy) -> model (gx - 7, gy - 4.5) on the 14 x 9 plot; the plot top is at y = 0.06
+  if (open) { avatar.position.set(6.5 - 7, 0.06, 2.5 - 4.5); avatar.rotation.y = -Math.PI / 4; }
+  else avatar.position.set(6.5 - 7, 0.06, 7.55 - 4.5);
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
 
 const MODELS: Record<string, ModelConfig> = {
   // Glass vestibule under the giant yellow 2x4 plate (the real main entrance), 435×510 aerial crop
@@ -62,6 +135,181 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0.24 * 0.04,
     reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
   },
+  // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
+  avatar: {
+    name: 'Gustav avatar',
+    create: (options) => createGustavAvatar({ ...AVATAR_PARAMS(), ...options }),
+    lights: avatarFactory.createGustavAvatarLookDevLights,
+    environment: avatarFactory.createGustavAvatarEnvironment,
+    configure: avatarFactory.configureGustavAvatarRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 300, height: 720, halfW: 0.21, target: [0, 0.45, 0] },
+    restBounds: true,
+  },
+  // The avatar at the LEGO HQ main entrance close-up, same wu scale (doors 0.42 W ~ 1.1 wu)
+  'avatar-entrance': {
+    name: 'Gustav avatar at the LEGO main entrance',
+    create: () => avatarScene('entrance'),
+    lights: main.createLEGOHQMainEntranceLookDevLights,
+    environment: main.createLEGOHQMainEntranceEnvironment,
+    configure: main.configureLEGOHQMainEntranceRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.24,
+    reference: { width: 435, height: 510, halfW: 1.243, target: [0.029, 0.911, 0] },
+    sun: { position: [-6, 4, 3], intensity: 2.4 },
+    restBounds: true,
+  },
+  // The avatar at the campus model's entrance, same wu scale (the campus is 7 tiles = 1.0 model unit)
+  'avatar-campus': {
+    name: 'Gustav avatar at the LEGO campus',
+    create: () => avatarScene('campus'),
+    lights: campus.createLEGOCampusLookDevLights,
+    environment: campus.createLEGOCampusEnvironment,
+    configure: campus.configureLEGOCampusRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.24 * 0.04,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // Cut-away workshop room (art/img2threejs/workshop); reference = phone photo from the door end
+  workshop: {
+    name: 'Workshop',
+    create: workshop.createWorkshopModel,
+    lights: workshop.createWorkshopLookDevLights,
+    environment: workshop.createWorkshopEnvironment,
+    configure: workshop.configureWorkshopRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 900, height: 1200, halfW: 1.2, target: [0, 0.6, 0] },
+    eye: { fov: 84, position: [0.15, 0.86, 1.25], target: [-0.05, 0.62, -1.0] },
+  },
+  // Roof-off LEGO HQ skeleton (board 02b, card B2): rooms = roof on, roomsOpen = roof off
+  rooms: {
+    name: 'LEGO HQ rooms (roof on)',
+    create: rooms.createLEGOCampusRoomsModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  roomsOpen: {
+    name: 'LEGO HQ rooms (roof off)',
+    create: rooms.createLEGOCampusRoomsOpenModel,
+    lights: rooms.createLEGOCampusRoomsLookDevLights,
+    environment: rooms.createLEGOCampusRoomsEnvironment,
+    configure: rooms.configureLEGOCampusRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
+  },
+  // img2threejs build of the roof-off campus (art/img2threejs/lego-campus-rooms, board 02b card B3)
+  hqRooms: {
+    name: 'LEGO HQ rooms, img2threejs (roof on)',
+    create: hqRooms.createLEGOHQRoomsModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
+  },
+  hqRoomsOpen: {
+    name: 'LEGO HQ rooms, img2threejs (roof off)',
+    create: createLEGOHQRoomsRoofOffModel,
+    lights: hqRooms.createLEGOHQRoomsLookDevLights,
+    environment: hqRooms.createLEGOHQRoomsEnvironment,
+    configure: hqRooms.configureLEGOHQRoomsRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
+  },
+  // LEGO HQ rebuilt at avatar scale (art/img2threejs/lego-hq-avatar, board 529:3604): roof on, and roof off per sprite view
+  hqAvatar: {
+    name: 'LEGO HQ at avatar scale (roof on)',
+    create: createLEGOHQAvatarRoofOnModel,
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpen: {
+    name: 'LEGO HQ at avatar scale (roof off, south view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'south' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenWest: {
+    name: 'LEGO HQ at avatar scale (roof off, west view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'west' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenNorth: {
+    name: 'LEGO HQ at avatar scale (roof off, north view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'north' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  hqAvatarOpenEast: {
+    name: 'LEGO HQ at avatar scale (roof off, east view)',
+    create: (options) => createLEGOHQAvatarRoofOffModel(options, 'east' as CampusView),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
+  'avatar-hq': {
+    name: 'Gustav avatar at the LEGO HQ main door (avatar scale)',
+    create: () => avatarHqScene(false),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  'avatar-hq-open': {
+    name: 'Gustav avatar in the LEGO HQ Workshop (roof off)',
+    create: () => avatarHqScene(true),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
+  hqAvatarDoor: {
+    name: 'LEGO HQ at avatar scale (door frame)',
+    create: (options) => createLEGOHQAvatarDoorModel(options, Number(new URLSearchParams(window.location.search).get('door') ?? 0)),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+  },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {
     name: 'LEGO HQ (Krea GLB)',
@@ -87,17 +335,23 @@ export type ShotOptions = {
   zoom?: number;
   voff?: number;
   focusNode?: string;
+  aim?: [number, number]; // sprite view: ground point (model x, z, unscaled) placed at the frame's horizontal centre (non-square footprints: the front corner)
   pitch?: number;
   yaw?: number;
   fit?: boolean;
   elev?: number;
   rig?: 'lookdev' | 'photo' | 'converter';
+  shadow?: boolean; // converter rig: add a soft shadow light from screen upper left (baked-light look of the Krea sprites)
   bg?: string;
   stripped?: boolean;
   open?: number;
   size?: number;
   exposure?: number;
   tone?: 'aces' | 'neutral';
+  clip?: string;
+  t?: number;
+  spin?: number; // turntable: model yaw in degrees (reference / sprite views)
+  follow?: boolean; // reference view: keep the avatar's hips over the origin (root-motion clips)
 };
 
 type Runtime = { nodes: Record<string, THREE.Object3D> };
@@ -153,6 +407,17 @@ export default function EntranceLab() {
     const fill = new THREE.DirectionalLight(0xffffff, 0.3);
     fill.position.set(-5, 5, -5);
     converter.add(key, fill);
+    // Optional soft shadows for the converter rig: a weak light from screen upper left that casts, the ambient drops to match
+    const ambient = converter.children[0] as THREE.AmbientLight;
+    const shade = new THREE.DirectionalLight(0xfff4e6, 0.6);
+    shade.position.set(-4, 10, 6);
+    shade.castShadow = true;
+    shade.shadow.mapSize.set(4096, 4096);
+    shade.shadow.normalBias = 0.01;
+    shade.shadow.radius = 3;
+    Object.assign(shade.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 0.5, far: 40 });
+    shade.shadow.camera.updateProjectionMatrix();
+    converter.add(shade);
     const photo = new THREE.Group();
     photo.add(new THREE.HemisphereLight(0xdfe8ff, 0x6b6455, 0.6));
     if (config.sun) {
@@ -185,8 +450,15 @@ export default function EntranceLab() {
       const src = mesh.material as THREE.MeshStandardMaterial;
       flat.set(mesh, new THREE.MeshBasicMaterial({ color: src.color ?? new THREE.Color(0x888888) }));
     });
+    const avatar = model.userData.avatar as AvatarRig | undefined;
     const box = new THREE.Box3().setFromObject(model);
-    const camera = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
+    // Rest-pose bounds in the model's parent frame (skinned vertices, so a posed frame never re-frames the sprite)
+    const restBox = config.restBounds
+      ? (avatar && !model.userData.avatarGroup ? skinnedBounds(model).applyMatrix4(model.matrix) : box.clone())
+      : null;
+    const ortho = new THREE.OrthographicCamera(-1, 1, 1, -1, 0.1, 200);
+    const eyeCamera = new THREE.PerspectiveCamera(config.eye?.fov ?? 60, config.reference.width / config.reference.height, 0.02, 50);
+    let camera: THREE.Camera = ortho;
 
     const apply = (o: ShotOptions) => {
       const opts = { ...initial, ...o };
@@ -195,6 +467,8 @@ export default function EntranceLab() {
       lookdev.visible = opts.rig === 'lookdev';
       photo.visible = opts.rig === 'photo';
       converter.visible = isConverter;
+      shade.visible = isConverter && !!opts.shadow;
+      ambient.intensity = isConverter && opts.shadow ? 0.36 : 0.6;
       scene.environment = isConverter ? null : environment;
       renderer.toneMapping = isConverter
         ? THREE.NoToneMapping
@@ -212,68 +486,92 @@ export default function EntranceLab() {
       // Converter normalisation applies only to the 'sprite' view
       model.position.set(0, 0, 0);
       model.scale.set(1, 1, 1);
+      model.rotation.set(0, THREE.MathUtils.degToRad(opts.spin ?? 0), 0);
+      // Avatar pose: a clip at time t, or the bind pose
+      if (avatar) {
+        if (opts.clip) avatar.seek(opts.clip, opts.t ?? 0);
+        else avatar.rest();
+        if (opts.follow) {
+          model.updateMatrixWorld(true);
+          const hip = avatar.bones.pelvis.getWorldPosition(new THREE.Vector3());
+          model.position.x -= hip.x;
+          model.position.z -= hip.z;
+        }
+      }
       // Camera
+      camera = opts.view !== 'sprite' && opts.view !== 'iso' && config.eye ? eyeCamera : ortho;
       if (opts.view === 'sprite') {
         // Same maths as /tools/sprite-converter: base at y = 0 via an UNscaled offset, then
         // scale to 3 / maxDim; ortho frustum 5 / zoom split by the vertical offset; iso camera
         // at distance 10 looking at the origin; square output.
         model.updateMatrixWorld(true);
-        const b = new THREE.Box3().setFromObject(model);
+        const b = restBox ? restBox.clone() : new THREE.Box3().setFromObject(model);
         const centre = b.getCenter(new THREE.Vector3());
         const size = b.getSize(new THREE.Vector3());
         model.position.set(-centre.x, -b.min.y, -centre.z);
         model.scale.setScalar(3 / Math.max(size.x, size.y, size.z));
         const frustum = 5 / (opts.zoom ?? 1);
         const voff = opts.voff ?? 0.31;
-        camera.left = -frustum / 2; camera.right = frustum / 2;
-        camera.top = frustum * (1 - voff); camera.bottom = -frustum * voff;
+        ortho.left = -frustum / 2; ortho.right = frustum / 2;
+        ortho.top = frustum * (1 - voff); ortho.bottom = -frustum * voff;
         const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
         const focus = new THREE.Vector3();
+        if (opts.aim) {
+          // world = position + scale * local (position is the unscaled -centre offset above)
+          const s = 3 / Math.max(size.x, size.y, size.z);
+          focus.set(-centre.x + s * opts.aim[0], 0, -centre.z + s * opts.aim[1]);
+        }
         const focusNode = opts.focusNode ? runtime?.nodes?.[opts.focusNode] : undefined;
         if (focusNode) {
           // Aim at the part's bounding-box centre (extruded parts share the model origin as their pivot)
           model.updateMatrixWorld(true);
           new THREE.Box3().setFromObject(focusNode).getCenter(focus);
         }
-        camera.position.set(focus.x + 10 * Math.cos(iso) * Math.sin(yaw), focus.y + 10 * Math.sin(iso), focus.z + 10 * Math.cos(iso) * Math.cos(yaw));
-        camera.lookAt(focus);
+        ortho.position.set(focus.x + 10 * Math.cos(iso) * Math.sin(yaw), focus.y + 10 * Math.sin(iso), focus.z + 10 * Math.cos(iso) * Math.cos(yaw));
+        ortho.lookAt(focus);
         renderer.setSize(opts.size ?? 384, opts.size ?? 384, false);
       } else if (opts.view === 'iso') {
         const size = box.getSize(new THREE.Vector3());
         const centre = box.getCenter(new THREE.Vector3());
         const half = Math.max(size.x, size.z) * 0.62;
-        const iso = Math.atan(1 / Math.sqrt(2));
+        const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
-        camera.position.set(centre.x + 40 * Math.cos(iso) * Math.sin(yaw), centre.y + 40 * Math.sin(iso), centre.z + 40 * Math.cos(iso) * Math.cos(yaw));
-        camera.lookAt(centre);
-        camera.left = -half; camera.right = half; camera.top = half; camera.bottom = -half;
+        ortho.position.set(centre.x + 40 * Math.cos(iso) * Math.sin(yaw), centre.y + 40 * Math.sin(iso), centre.z + 40 * Math.cos(iso) * Math.cos(yaw));
+        ortho.lookAt(centre);
+        ortho.left = -half; ortho.right = half; ortho.top = half; ortho.bottom = -half;
         let width = opts.size ?? 512, height = opts.size ?? 512;
         if (opts.fit) {
           // Crop the frustum to the model's projected bounds so area-based gate checks compare
           // like with like (a long wall in a square frame reads as a false collapse).
-          camera.updateMatrixWorld();
+          ortho.updateMatrixWorld();
           const local = [0, 1].flatMap((i) => [0, 1].flatMap((j) => [0, 1].map((k) => new THREE.Vector3(
             i ? box.max.x : box.min.x, j ? box.max.y : box.min.y, k ? box.max.z : box.min.z,
-          ).applyMatrix4(camera.matrixWorldInverse))));
+          ).applyMatrix4(ortho.matrixWorldInverse))));
           const xs = local.map((v) => v.x), ys = local.map((v) => v.y);
           const m = 0.04 * (Math.max(...xs) - Math.min(...xs));
-          camera.left = Math.min(...xs) - m; camera.right = Math.max(...xs) + m;
-          camera.bottom = Math.min(...ys) - m; camera.top = Math.max(...ys) + m;
+          ortho.left = Math.min(...xs) - m; ortho.right = Math.max(...xs) + m;
+          ortho.bottom = Math.min(...ys) - m; ortho.top = Math.max(...ys) + m;
           width = 1024;
-          height = Math.round(width * (camera.top - camera.bottom) / (camera.right - camera.left));
+          height = Math.round(width * (ortho.top - ortho.bottom) / (ortho.right - ortho.left));
         }
         renderer.setSize(width, height, false);
+      } else if (config.eye) {
+        camera = eyeCamera;
+        eyeCamera.position.set(...config.eye.position);
+        eyeCamera.lookAt(new THREE.Vector3(...config.eye.target));
+        eyeCamera.updateProjectionMatrix();
+        renderer.setSize(config.reference.width, config.reference.height, false);
       } else {
         const { width, height, halfW } = config.reference;
-        camera.left = -halfW; camera.right = halfW; camera.top = halfW * height / width; camera.bottom = -halfW * height / width;
+        ortho.left = -halfW; ortho.right = halfW; ortho.top = halfW * height / width; ortho.bottom = -halfW * height / width;
         const elev = THREE.MathUtils.degToRad(opts.elev ?? 30);
         const target = new THREE.Vector3(...config.reference.target);
-        camera.position.set(target.x, target.y + 40 * Math.sin(elev), target.z + 40 * Math.cos(elev));
-        camera.lookAt(target);
+        ortho.position.set(target.x, target.y + 40 * Math.sin(elev), target.z + 40 * Math.cos(elev));
+        ortho.lookAt(target);
         renderer.setSize(width, height, false);
       }
-      camera.updateProjectionMatrix();
+      ortho.updateProjectionMatrix();
       renderer.render(scene, camera);
       setLabel(`${opts.view} · ${opts.rig}${opts.stripped ? ' · stripped' : ''} · open ${(opts.open ?? 0).toFixed(2)}`);
     };
@@ -325,6 +623,29 @@ export default function EntranceLab() {
     };
     // Debug handle for probing the scene from the browser console
     (w as LabWindow & { __scene?: unknown }).__scene = { scene, model, renderer, lookdev, photo, converter, camera };
+    // Render one shot and hand back the PNG directly (capture scripts; no receiver needed)
+    (w as LabWindow & { __render?: unknown }).__render = (o: ShotOptions = {}) => {
+      current = o;
+      apply(o);
+      renderer.render(scene, camera);
+      return canvas.toDataURL('image/png');
+    };
+    if (avatar) {
+      const target = (model.userData.avatarGroup as THREE.Object3D | undefined) ?? model;
+      (w as LabWindow & { __avatarHarness?: unknown }).__avatarHarness = {
+        meshBuffers: () => avatarHarness.meshBuffers(avatar.model),
+        sampleClips: (n?: number) => avatarHarness.sampleClips(target, n),
+        bindingSamples: (n?: number) => avatarHarness.bindingSamples(target, n),
+        deformation: () => avatarHarness.deformation(target),
+        bindRestore: () => avatarHarness.bindRestore(target),
+        meshVisibility: () => avatarHarness.meshVisibility(target),
+        chainAnchors: () => avatarHarness.chainAnchors(target),
+        binding: () => avatarHarness.binding(target),
+        stats: () => avatarHarness.stats(target),
+        hairGeometry: () => avatarHarness.hairGeometry(target),
+      };
+    }
+    (w as LabWindow & { __labReady?: boolean }).__labReady = true;
     w.__shoot = async (name: string, o: ShotOptions = {}) => {
       current = o;
       apply(o);

@@ -64,6 +64,8 @@ interface CityE2EApi {
   pauseGame: () => boolean;
   resumeGame: () => boolean;
   getCameraState: () => CityE2ECameraState | null;
+  // The live MainScene, for probing in e2e mode (camera, player, walk-in buildings)
+  getScene: () => MainScene | null;
 }
 
 interface CityE2ECameraState {
@@ -694,6 +696,10 @@ export default function CityViewer({
         if (!scene) return false;
         if (scene.scene.isPaused()) scene.scene.resume();
         return !scene.scene.isPaused();
+      },
+      getScene: () => {
+        const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+        return scene ?? null;
       },
       // Visible world rectangle (world pixels) and the player's feet, for camera tests
       getCameraState: () => {

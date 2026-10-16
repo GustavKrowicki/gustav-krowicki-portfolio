@@ -46,6 +46,8 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
+import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isInteriorDoor } from "@/lib/city/buildingInteriors";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -95,6 +97,12 @@ export class MainScene extends Phaser.Scene {
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  // Building sprite key -> what it shows, so a roof-off swap can re-texture it in place
+  private buildingSpriteInfo: Map<string, { buildingId: string; orientation?: Direction }> = new Map();
+  // Buildings with openSprites whose roof is off (walk-in buildings: player inside; others: player in the trigger zone)
+  private openBuildings: Set<string> = new Set();
+  // Walk-in building tiles: "x,y" -> the building and the tile's local position in its interior map
+  private interiorTiles: Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }> = new Map();
   private glowSprites: Map<string, Phaser.GameObjects.GameObject> = new Map();
   private carSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
   private characterSprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
@@ -220,6 +228,14 @@ export class MainScene extends Phaser.Scene {
         const key = `${building.id}_${dir}`;
         this.load.image(key, path);
       }
+      for (const [dir, path] of Object.entries(building.openSprites ?? {})) {
+        this.load.image(`${building.id}_open_${dir}`, path);
+      }
+      if (building.door) {
+        this.load.spritesheet(`${building.id}_door`, building.door.sheet, {
+          frameWidth: building.door.frameWidth, frameHeight: building.door.frameHeight,
+        });
+      }
     }
 
     // Load car textures
@@ -317,6 +333,9 @@ export class MainScene extends Phaser.Scene {
       }
     }
 
+    // Opt-in 3D-rendered player sheets (?avatar=3d); the GIFs above stay loaded for NPCs and as the default.
+    if (avatar3dEnabled()) loadPromises.push(loadAvatar3dSprites(this));
+
     try {
       await Promise.all(loadPromises);
       this.gifsLoaded = true;
@@ -401,6 +420,10 @@ export class MainScene extends Phaser.Scene {
 
     // Alert nearby NPCs
     this.npcManager.alertNearbyNPCs(playerPos.gridX, playerPos.gridY, TRIGGER_ZONE_RADIUS + 1);
+
+    // Walk-in buildings: roof off while inside, player drawn above the building while in its footprint
+    this.updateInteriorState(playerPos.gridX, playerPos.gridY);
+    this.updateDoors();
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -1584,6 +1607,73 @@ export class MainScene extends Phaser.Scene {
   private highlightedBuildingId: string | null = null;
   private highlightSprite: Phaser.GameObjects.Graphics | null = null;
 
+  // Walk-in building plots by sprite key, for drawing the player above a plot it stands in front of
+  private interiorPlots: Map<string, { originX: number; originY: number; width: number; height: number }> = new Map();
+
+  // Walk-in buildings (default orientation only): index every footprint tile against its interior map
+  private computeInteriorTiles(): Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }> {
+    const tiles = new Map<string, { buildingId: string; key: string; interior: BuildingInterior; lx: number; ly: number }>();
+    for (let y = 0; y < GRID_HEIGHT; y++) {
+      for (let x = 0; x < GRID_WIDTH; x++) {
+        const cell = this.grid[y]?.[x];
+        if (!cell?.isOrigin || !cell.buildingId) continue;
+        const interior = BUILDING_INTERIORS[cell.buildingId];
+        if (!interior || (cell.buildingOrientation && cell.buildingOrientation !== Direction.Down)) continue;
+        this.interiorPlots.set(`building_${x},${y}`, { originX: x, originY: y, width: interior.map[0].length, height: interior.map.length });
+        interior.map.forEach((row, ly) => {
+          for (let lx = 0; lx < row.length; lx++) {
+            tiles.set(`${x + lx},${y + ly}`, { buildingId: cell.buildingId!, key: `building_${x},${y}`, interior, lx, ly });
+          }
+        });
+      }
+    }
+    return tiles;
+  }
+
+  // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
+  // through the building's outside rooms (the plaza)
+  private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
+    const a = this.interiorTiles.get(`${fx},${fy}`);
+    const b = this.interiorTiles.get(`${tx},${ty}`);
+    if (!a && !b) return true;
+    const ca = a ? interiorCode(a.interior, a.lx, a.ly) : null;
+    const cb = b ? interiorCode(b.interior, b.lx, b.ly) : null;
+    if (b && !cb) return false;
+    if (a && b) {
+      if (a.key !== b.key) return false;
+      return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
+    }
+    if (b) return b.interior.outside.includes(cb!);
+    return !ca || a!.interior.outside.includes(ca);
+  }
+
+  private updateInteriorState(gridX: number, gridY: number): void {
+    if (!this.playerController) return;
+    const here = this.interiorTiles.get(`${gridX},${gridY}`);
+    const target = this.playerController.getTargetGrid();
+    const next = this.interiorTiles.get(`${target.x},${target.y}`);
+    const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
+    const inside = !!here && !!code && !here.interior.outside.includes(code);
+    for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    const tile = here ?? next;
+    let sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
+    let local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
+    if (!tile) {
+      // Just outside a walk-in plot on its south or east side the whole building is behind the player, but its big
+      // sprite sorts by the plot's front corner and would paint over the player: draw the player above it
+      for (const [key, plot] of this.interiorPlots) {
+        const lx = gridX - plot.originX, ly = gridY - plot.originY;
+        const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
+        if (near && (lx >= plot.width || ly >= plot.height)) {
+          sprite = this.buildingSprites.get(key);
+          local = { x: lx + 0.5, y: ly + 0.5 };
+          break;
+        }
+      }
+    }
+    this.playerController.setDepthOverride(sprite && local ? sprite.depth + this.footprintSortOffset(local.x, local.y) : null);
+  }
+
   // Compute tiles blocked by building sprite overhang (collision padding)
   private computeBlockedTiles(): Set<string> {
     const blocked = new Set<string>();
@@ -1632,13 +1722,25 @@ export class MainScene extends Phaser.Scene {
     // Compute collision padding blocked tiles and pass to player controller
     this.blockedTiles = this.computeBlockedTiles();
     this.playerController.setBlockedTiles(this.blockedTiles);
+    this.interiorPlots.clear();
+    this.interiorTiles = this.computeInteriorTiles();
+    this.playerController.setInteriorRules({
+      isWalkable: (x, y) => {
+        const t = this.interiorTiles.get(`${x},${y}`);
+        return t ? interiorCode(t.interior, t.lx, t.ly) !== null : null;
+      },
+      canStep: (fx, fy, tx, ty) => this.canStepInterior(fx, fy, tx, ty),
+    });
 
     // Set up trigger zone callbacks
     this.triggerZoneManager.setCallbacks({
       onEnterZone: (zone, tourStop) => {
+        // Walk-in buildings open only through their main door (updateInteriorState)
+        if (!BUILDING_INTERIORS[zone.buildingId]) this.setBuildingOpen(zone.buildingId, true);
         this.events.emit("playerEnteredZone", { buildingId: zone.buildingId, tourStop });
       },
       onExitZone: (zone) => {
+        if (!BUILDING_INTERIORS[zone.buildingId]) this.setBuildingOpen(zone.buildingId, false);
         this.events.emit("playerExitedZone", { buildingId: zone.buildingId });
       },
     });
@@ -1821,6 +1923,8 @@ export class MainScene extends Phaser.Scene {
   private isPlayerWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     if (this.blockedTiles.has(`${x},${y}`)) return false;
+    const inside = this.interiorTiles.get(`${x},${y}`);
+    if (inside) return interiorCode(inside.interior, inside.lx, inside.ly) !== null;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
     const t = cell.type;
@@ -2152,6 +2256,8 @@ export class MainScene extends Phaser.Scene {
     this.tileSprites.clear();
     this.buildingSprites.forEach((sprite) => sprite.destroy());
     this.buildingSprites.clear();
+    this.buildingSpriteInfo.clear();
+    this.doors.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2186,6 +2292,22 @@ export class MainScene extends Phaser.Scene {
     if (sprite) {
       sprite.destroy();
       this.buildingSprites.delete(buildingKey);
+    }
+    this.buildingSpriteInfo.delete(buildingKey);
+
+    const doorSprite = this.buildingSprites.get(`${buildingKey}_door`);
+    if (doorSprite) {
+      doorSprite.destroy();
+      this.buildingSprites.delete(`${buildingKey}_door`);
+    }
+    this.doors.delete(buildingKey);
+
+    for (let i = 0; i < 40; i++) {
+      const decorKey = `${buildingKey}_d${i}`;
+      const decor = this.buildingSprites.get(decorKey);
+      if (!decor) continue;
+      decor.destroy();
+      this.buildingSprites.delete(decorKey);
     }
 
     for (let i = 1; i < 20; i++) {
@@ -2226,13 +2348,125 @@ export class MainScene extends Phaser.Scene {
     // Simple rendering (without slicing for performance)
     const sprite = this.add.image(screenPos.x, bottomY, textureKey);
     sprite.setOrigin(0.5, 1);
+    sprite.setScale(building.spriteScale ?? 1);
     sprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y + TILE_HEIGHT / 2, 0.05));
 
     this.buildingSprites.set(key, sprite);
+    this.buildingSpriteInfo.set(key, { buildingId, orientation });
+
+    // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
+    const door = building.door;
+    if (door && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_door`)) {
+      const s = sprite.scaleX;
+      const left = sprite.x - sprite.width * s / 2;
+      const top = sprite.y - sprite.height * s;
+      const image = this.add.image(left + door.x * s, top + door.y * s, `${building.id}_door`, 0);
+      image.setOrigin(0, 0);
+      image.setScale(s);
+      image.setDepth(sprite.depth + 0.05);
+      this.buildingSprites.set(`${key}_door`, image);
+      this.doors.set(key, { image, buildingId, originX, originY, value: 0 });
+    }
+
+    // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
+    // (and against the player inside the footprint) by their local ground position
+    if (!orientation || orientation === Direction.Down) {
+      (building.decor ?? []).forEach((d, i) => {
+        const textureKey = `${d.prop}_south`;
+        if (!this.textures.exists(textureKey)) return;
+        const p = this.gridToScreen(originX + d.x, originY + d.y);
+        const image = this.add.image(p.x, p.y, textureKey);
+        const frame = image.frame;
+        const bottom = this.decorBottom.get(textureKey) ?? this.measureBottom(textureKey, frame.height);
+        image.setOrigin(0.5, bottom / frame.height);
+        image.setScale(d.scale);
+        image.setDepth(sprite.depth + this.footprintSortOffset(d.x, d.y));
+        this.buildingSprites.set(`${key}_d${i}`, image);
+      });
+    }
+  }
+
+  // Animated doors by building key: current open value 0..1
+  private doors: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; originX: number; originY: number; value: number }> = new Map();
+
+  // Doors open within their radius of the player (0.4 s) and close after (0.6 s); hidden while the roof is off
+  private updateDoors(): void {
+    if (!this.playerController || this.doors.size === 0) return;
+    const pos = this.playerController.getPosition();
+    const target = this.playerController.getTargetGrid();
+    const dt = this.game.loop.delta / 1000;
+    this.doors.forEach((d) => {
+      const def = getBuilding(d.buildingId)?.door;
+      if (!def || !d.image.active) return;
+      const ax = d.originX + def.at[0], ay = d.originY + def.at[1];
+      const dist = Math.min(
+        Math.hypot(pos.gridX + 0.5 - ax, pos.gridY + 0.5 - ay),
+        Math.hypot(target.x + 0.5 - ax, target.y + 0.5 - ay),
+      );
+      const want = dist <= def.radius ? 1 : 0;
+      d.value = want > d.value ? Math.min(1, d.value + dt / 0.4) : Math.max(0, d.value - dt / 0.6);
+      d.image.setVisible(!this.openBuildings.has(d.buildingId));
+      d.image.setFrame(Math.round(d.value * (def.frames - 1)));
+    });
+  }
+
+  // Bottom row of a prop sprite's visible pixels (its ground point), cached per texture
+  private decorBottom: Map<string, number> = new Map();
+  private measureBottom(textureKey: string, height: number): number {
+    let bottom = height;
+    const source = this.textures.get(textureKey).getSourceImage() as HTMLImageElement;
+    try {
+      const canvas = document.createElement("canvas");
+      canvas.width = source.width; canvas.height = source.height;
+      const g = canvas.getContext("2d");
+      if (g) {
+        g.drawImage(source, 0, 0);
+        const data = g.getImageData(0, 0, source.width, source.height).data;
+        search: for (let y = source.height - 1; y >= 0; y--) {
+          for (let x = 0; x < source.width; x++) if (data[(y * source.width + x) * 4 + 3] > 20) { bottom = y + 1; break search; }
+        }
+      }
+    } catch {
+      // keep the sprite bottom
+    }
+    this.decorBottom.set(textureKey, bottom);
+    return bottom;
+  }
+
+  // Small depth step above a walk-in building's sprite for things on its footprint (decor, the player)
+  private footprintSortOffset(localX: number, localY: number): number {
+    return 0.3 + (localX + localY) * 0.001;
+  }
+
+  // Roof off / on: cross-fade the building's sprite to its open (or closed) texture
+  private setBuildingOpen(buildingId: string, open: boolean): void {
+    const building = getBuilding(buildingId);
+    if (!building?.openSprites || this.openBuildings.has(buildingId) === open) return;
+    if (open) this.openBuildings.add(buildingId);
+    else this.openBuildings.delete(buildingId);
+
+    this.buildingSpriteInfo.forEach((info, key) => {
+      if (info.buildingId !== buildingId) return;
+      const sprite = this.buildingSprites.get(key);
+      const textureKey = this.getBuildingTextureKey(building, info.orientation);
+      if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
+      const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
+      previous.setOrigin(0.5, 1);
+      previous.setScale(sprite.scaleX, sprite.scaleY);
+      previous.setDepth(sprite.depth + 0.001);
+      sprite.setTexture(textureKey);
+      this.tweens.add({ targets: previous, alpha: 0, duration: 450, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
+    });
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
+
+    if (this.openBuildings.has(building.id) && building.openSprites) {
+      const openKey = `${building.id}_open_${dir}`;
+      if (this.textures.exists(openKey)) return openKey;
+      if (this.textures.exists(`${building.id}_open_south`)) return `${building.id}_open_south`;
+    }
 
     if (building.sprites[dir as keyof typeof building.sprites]) {
       return `${building.id}_${dir}`;

@@ -1,0 +1,419 @@
+{
+  "targetName": "LEGO HQ Rooms",
+  "sourceImage": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "architecture diorama: a corporate campus with the roofs removed, one furnished room per building block",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "architectural",
+        "cut-away diorama"
+      ],
+      "structureKind": [
+        "compound object",
+        "repeated modules (cut walls, roof masses, chairs, studs)"
+      ],
+      "motionPotential": [
+        "static prop",
+        "state switch (roof on / roof off)"
+      ],
+      "materialFamilies": [
+        "painted plaster (flat)",
+        "glass",
+        "painted metal (yellow frame)",
+        "timber (props)",
+        "grass"
+      ],
+      "notes": "Primary reference = Figma AI image made from the board's block plan (card B2). Layout = the campus plan (../lego-campus/measure/plan.json). Scale from docs/city-rules.md."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 2,
+        "materialLayerCount": 2,
+        "localDetailDensity": 1,
+        "occlusionRisk": 1,
+        "actionReadinessNeed": 2
+      },
+      "estimatedCounts": {
+        "macroComponents": 12,
+        "mesoComponents": 60,
+        "microFeatureGroups": 5,
+        "materialLayers": 20,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Silhouette: low cut walls on a 7 x 7 plot with the lobby glass, the canopy and one closed block standing up.",
+        "Visible parts: 9 blocks (lobby, entrance, 5 rooms, entrance hall, closed wing), one or two large props per room.",
+        "Repetition: cut-wall segments with dark caps, roof masses, chair rows, canopy studs.",
+        "One state switch: every roof part can hide, so the same model renders roof on and roof off.",
+        "Occlusion is low: from above every room floor is visible over the knee-high walls."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity is the block layout, one colour per room and a few large props, read at ~44 px per wu. Roof parts are separate components so the city can show both states."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Block layout: the campus plan squared to the grid at 7 wu per plan unit (board card B3), shifted 0.5 wu west; the west wing is clipped at the plot edge.",
+      "Entrance: a glass vestibule on the atrium north face under the yellow brick; it opens into the lobby (board card B3).",
+      "Rooms: one box per room from the B3 room table, 2 back walls (north, west) with caps, 0.5 wu door gaps toward the lobby.",
+      "Roof-on state: not in the reference; built from the campus look (green roofs, yellow frames, glass atrium)."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3 on the Figma AI reference",
+      "targetMinDetails": 6,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "cut-caps",
+          "kind": "contour",
+          "description": "Thick dark top edge on every cut wall: reads as a cut-away, not a ruin.",
+          "region": {
+            "x": 0.15,
+            "y": 0.1,
+            "width": 0.7,
+            "height": 0.75,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "workshop-floor.cutCaps"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "canopy-studs",
+          "kind": "contour",
+          "description": "Giant yellow 2 x 4 brick over the glass doors, round studs on top.",
+          "region": {
+            "x": 0.42,
+            "y": 0.7,
+            "width": 0.16,
+            "height": 0.16,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "canopy.studs"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r2c1.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "lobby-glass",
+          "kind": "contour",
+          "description": "Lobby: thin glass walls with white posts around a white floor, open to the entrance hall.",
+          "region": {
+            "x": 0.37,
+            "y": 0.32,
+            "width": 0.26,
+            "height": 0.28,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "lobby-floor.glassWalls"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c1.png",
+          "confidence": 0.8
+        },
+        {
+          "id": "room-floor-colours",
+          "kind": "stain",
+          "description": "One flat pastel colour per room floor (blue, mint, peach, yellow, grey).",
+          "region": {
+            "x": 0.15,
+            "y": 0.15,
+            "width": 0.7,
+            "height": 0.6,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "floor-workshop.tone"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+          "confidence": 0.8
+        },
+        {
+          "id": "whiteboard",
+          "kind": "contour",
+          "description": "Workshop: one long whiteboard on the north wall and one timber table.",
+          "region": {
+            "x": 0.25,
+            "y": 0.15,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "workshop-whiteboard.board"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r0c0.png",
+          "confidence": 0.75
+        },
+        {
+          "id": "wall-map",
+          "kind": "decal",
+          "description": "Map room: one large world map panel on the inner face of the round wall.",
+          "region": {
+            "x": 0.78,
+            "y": 0.35,
+            "width": 0.14,
+            "height": 0.12,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "map-panel.map"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "chair-rows",
+          "kind": "contour",
+          "description": "Launch room: two rows of simple chairs facing one black screen.",
+          "region": {
+            "x": 0.56,
+            "y": 0.52,
+            "width": 0.18,
+            "height": 0.18,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "launch-screen.chairs"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "studio-button",
+          "kind": "contour",
+          "description": "Recommendation studio: one big round red button on a white pedestal.",
+          "region": {
+            "x": 0.25,
+            "y": 0.55,
+            "width": 0.25,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "studio-button.button"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png",
+          "confidence": 0.6
+        },
+        {
+          "id": "glass-link",
+          "kind": "contour",
+          "description": "Short low glass corridor from the lobby to the round map room.",
+          "region": {
+            "x": 0.62,
+            "y": 0.4,
+            "width": 0.12,
+            "height": 0.08,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "glass-link.link"
+          },
+          "evidenceRef": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/detail-zones/zone-r1c2.png",
+          "confidence": 0.65
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "/home/claude/gustav-krowicki-portfolio/art/img2threejs/lego-campus-rooms/ref/ai-roof-off-campus-v3.png"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 2,
+      "mesoComponents": 3,
+      "microFeatureGroups": 2,
+      "materialLayers": 2,
+      "repetitionSystems": 0,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "LEGO HQ Rooms",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "62f2831e1d52eeb6dbb94a87c44fa25b1f4926626a7b1f8c2bcadc63e04e9471"
+    },
+    "matches": []
+  }
+}

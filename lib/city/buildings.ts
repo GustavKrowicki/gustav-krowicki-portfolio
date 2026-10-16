@@ -35,6 +35,22 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
+  // Library props drawn on the building's own footprint (props cannot occupy footprint tiles in the grid): the prop's
+  // own sprite, scaled, with its ground point at local tile coordinates (x right, y down from the origin tile)
+  decor?: { prop: string; x: number; y: number; scale: number }[];
+  // Animated main door: a strip of frames (closed .. open) cropped from the south sprite at full resolution (x, y = the
+  // crop's top-left in sprite pixels), drawn over the building and played when the player is near the door point
+  door?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number };
+  // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
+  spriteScale?: number;
+  // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
+  // walk-in buildings (lib/city/buildingInteriors.ts) show it while the player is inside, past the main door
+  openSprites?: {
+    south: string;
+    west?: string;
+    north?: string;
+    east?: string;
+  };
   icon: string; // Emoji for UI
   supportsRotation?: boolean;
   isDecoration?: boolean; // If true, preserves underlying tile (like props)
@@ -80,21 +96,45 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // img2threejs campus rendered at 30 deg pitch with converter settings computed for a 7x7 footprint
-    // (zoom 0.945, vertical offset 0.235), so the sprite sits on its footprint without collision padding.
-    footprint: { width: 7, height: 7 },
+    // The real campus rebuilt at the 3D avatar's scale (art/img2threejs/lego-hq-avatar, board sections 529:3604 and
+    // 534:3604): a 14 x 9 site so the green roofs, courtyards, round building and terrace building read as the campus;
+    // wings 2 storeys, atrium and yellow blocks 3, main door south under the yellow 2x4 plate. Sprites at 2x density
+    // (1280 px, converter zoom 1.1342, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off
+    // when the player walks through the main door (lib/city/buildingInteriors.ts).
+    footprint: { width: 14, height: 9 },
     triggerZoneRadius: 5.5,
+    spriteScale: 0.5,
+    // Sliding glass doors under the plate (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1)
+    door: {
+      sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
+      frames: 7, frameWidth: 94, frameHeight: 62, x: 354, y: 1018, at: [6.5, 7.0], radius: 1.5,
+    },
+    // Pogicity trees and bushes, downsized to the avatar scale, in the plaza planters and on the front corners
+    decor: [
+      { prop: "tree-4", x: 8.5, y: 7.5, scale: 0.45 },
+      { prop: "tree-4", x: 8.5, y: 8.55, scale: 0.45 },
+      { prop: "tree-1", x: 0.5, y: 8.55, scale: 0.55 },
+      { prop: "tree-1", x: 13.5, y: 8.55, scale: 0.55 },
+      { prop: "flower-bush", x: 2.0, y: 8.85, scale: 0.8 },
+      { prop: "flower-bush", x: 3.4, y: 8.85, scale: 0.8 },
+    ],
     sprites: {
-      south: "/game/pogicity/Building/landmark/lego-hq_south.png",
-      north: "/game/pogicity/Building/landmark/lego-hq_north.png",
-      east: "/game/pogicity/Building/landmark/lego-hq_east.png",
-      west: "/game/pogicity/Building/landmark/lego-hq_west.png",
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar_west.png",
+    },
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar-open_west.png",
     },
     icon: "🧱",
     projectSlug: "lego",
     description: "ML-Assisted Internal Product",
     interactable: true,
-    supportsRotation: true,
+    supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
     logoOffset: { x: 0, y: 34 },
   },

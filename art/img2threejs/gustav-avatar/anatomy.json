@@ -1,0 +1,55 @@
+{
+  "sourceImage": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/ref/north-00-x12-white.png",
+  "overlayImage": "/Users/gustavkrowicki/gustav-krowicki-portfolio/.claude/worktrees/agent-af9245dbae5d68edb/art/img2threejs/gustav-avatar/landmarks.png",
+  "overlayLegend": {
+    "C": "center symmetry axis",
+    "1..N": "head-unit horizontal ticks (blue, dashed)",
+    "H": "hairline guide (default fraction of the first head-unit band)",
+    "E": "eye line guide",
+    "N": "nose base guide",
+    "M": "mouth line guide",
+    "S": "shoulder line guide (default fraction, adjust to observed pose)",
+    "P": "hip line guide (default fraction, adjust to observed pose)",
+    "grayDashed": "rule-of-thirds compositional grid"
+  },
+  "anatomy": {
+    "styleHeads": 3.11,
+    "proportions": {
+      "headUnit": 0.321,
+      "torso": 1.056,
+      "legs": 1.056,
+      "shoulderWidth": 0.778,
+      "hipWidth": 0.611
+    },
+    "pose": {
+      "type": "walk-cycle (16 frames per direction); bind pose built as a neutral A-pose standing",
+      "jointAngles": {},
+      "note": "The sprite is a walk cycle, not a static pose. The model binds in a neutral stance; the walk pose lives in the authored clips (author_clips.py), never in the bind pose."
+    },
+    "faceLandmarks": {
+      "hairline": 0.58,
+      "eyeLine": 0.7,
+      "eyeSpacing": 0.3,
+      "noseBase": 0.8,
+      "mouthLine": 0.9,
+      "earTop": 0.62,
+      "earBottom": 0.84
+    },
+    "features": [
+      "mop haircut wider than the face (head box 16 px wide x 18 px tall, hair to the ears)",
+      "full fringe down to the brow line",
+      "light-frame glasses (light grey rims around the eyes in east/north frames)",
+      "light grey open jacket over a dark olive tee",
+      "dark indigo straight jeans, dark shoes"
+    ],
+    "confidence": 0.6,
+    "applies": true,
+    "evidenceRefs": [
+      "ref/east-00-x12.png",
+      "ref/north-00-x12.png",
+      "measure/proportions.json"
+    ],
+    "confidenceNote": "56 px source: proportions +-1 px (~0.06 HU); face landmarks +-1 px of an 18 px head (~0.06)."
+  },
+  "authoringInstruction": "Open overlayImage and read the reference against its head-unit ticks, thirds grid, face-line guides, shoulder/hip lines, and center axis. Replace every null/placeholder value in anatomy with normalized coordinates or joint angles actually observed; the drawn guide lines are generic starting positions, not measurements."
+}
