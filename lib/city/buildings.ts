@@ -38,6 +38,9 @@ export interface BuildingDefinition {
   // Library props drawn on the building's own footprint (props cannot occupy footprint tiles in the grid): the prop's
   // own sprite, scaled, with its ground point at local tile coordinates (x right, y down from the origin tile)
   decor?: { prop: string; x: number; y: number; scale: number }[];
+  // Animated main door: a strip of frames (closed .. open) cropped from the south sprite at full resolution (x, y = the
+  // crop's top-left in sprite pixels), drawn over the building and played when the player is near the door point
+  door?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number };
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
   // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
@@ -101,10 +104,15 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     footprint: { width: 14, height: 9 },
     triggerZoneRadius: 5.5,
     spriteScale: 0.5,
+    // Sliding glass doors under the plate (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1)
+    door: {
+      sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
+      frames: 7, frameWidth: 94, frameHeight: 62, x: 354, y: 1018, at: [6.5, 7.0], radius: 1.5,
+    },
     // Pogicity trees and bushes, downsized to the avatar scale, in the plaza planters and on the front corners
     decor: [
       { prop: "tree-4", x: 8.5, y: 7.5, scale: 0.45 },
-      { prop: "tree-4", x: 7.5, y: 8.5, scale: 0.45 },
+      { prop: "tree-4", x: 8.5, y: 8.55, scale: 0.45 },
       { prop: "tree-1", x: 0.5, y: 8.55, scale: 0.55 },
       { prop: "tree-1", x: 13.5, y: 8.55, scale: 0.55 },
       { prop: "flower-bush", x: 2.0, y: 8.85, scale: 0.8 },

@@ -198,7 +198,7 @@ def tree(cid, gx, gy, s=1.0, y0=0.0):
        "tree", importance=0.45, topo="Blocky tree crown (AI image style): a box.")
 
 
-for k, (gx, gy) in enumerate(((8.5, 7.5), (7.5, 8.5)), 1):     # round planters with a tree on the plaza
+for k, (gx, gy) in enumerate(((8.5, 7.5), (8.5, 8.55)), 1):     # round planters (east of the door's line of sight) with a tree on the plaza
     cyl(f"planter-{k}", f"Round planter {k}", "meso", "prop", gx, gy, 0, 0.14, 0.33, "planter", importance=0.5)
     cyl(f"planter-{k}-soil", f"Planter {k} soil", "micro", "prop", gx, gy, 0.14, 0.01, 0.27, "court", importance=0.2)
 # No trees in the model: the city places its own Pogicity trees around the site (Gustav, 2026-10-16)
@@ -345,7 +345,7 @@ bx("topcap-S-door", "Door top cap", "micro", "trim", DX0, DX1, G1 - CAP, G1, DZ 
 
 # Yellow 2 x 4 plate canopy over the main door, fully in front of the atrium face so all 4 x 2 studs show. It is part of
 # the roof: hidden with the other "roof-" parts when the avatar is inside (Gustav, 2026-10-16)
-PX0, PX1, PZ0, PZ1, PY = 5.5, 7.5, 7.22, 8.22, 1.18
+PX0, PX1, PZ0, PZ1, PY = 5.5, 7.5, 7.22, 8.22, 1.55   # high enough that the sliding doors show under it
 bx("roof-canopy", "Yellow 2 x 4 plate canopy", "macro", "canopy", PX0, PX1, PY, PY + 0.2, PZ0, PZ1, "yellow", importance=0.95, conf=0.85,
    features=[{"id": "canopy.studs", "kind": "contour", "notes": "2 x 4 round studs on top (8 cylinders)"}],
    sockets=[{"id": "top", "localPosition": [0, 0.1, 0], "notes": "stud row"}], topo="Toy plate: a box over the doors.")
@@ -633,7 +633,7 @@ for r_, gy in enumerate((4.2, 4.8), 1):
 
 # Walk map (one char per tile; lib/city/buildingInteriors.ts): rooms, plaza P, '#' blocked
 WALK_BLOCK = {(5, 1), (6, 1), (4, 0), (4, 1), (11, 2), (9, 1), (10, 1), (11, 0), (5, 3), (1, 5), (1, 6), (3, 6), (1, 7),
-              (5, 8), (8, 7), (7, 8)}
+              (5, 8), (8, 7), (8, 8)}
 CODE = {"workshop": "W", "ailab": "A", "lobby": "L", "studio": "S", "launch": "R"}
 walk = []
 for gy in range(int(PH)):

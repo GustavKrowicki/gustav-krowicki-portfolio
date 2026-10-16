@@ -13,7 +13,7 @@ import * as rooms from '@/lib/city/models/legoCampusRooms';
 import * as hqRooms from '@/lib/city/models/legoHqRooms';
 import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
-import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
+import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 
 // Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
 // krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
@@ -298,6 +298,17 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
+  },
+  // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
+  hqAvatarDoor: {
+    name: 'LEGO HQ at avatar scale (door frame)',
+    create: (options) => createLEGOHQAvatarDoorModel(options, Number(new URLSearchParams(window.location.search).get('door') ?? 0)),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
   // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
   krea: {

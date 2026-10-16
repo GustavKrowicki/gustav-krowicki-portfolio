@@ -231,6 +231,11 @@ export class MainScene extends Phaser.Scene {
       for (const [dir, path] of Object.entries(building.openSprites ?? {})) {
         this.load.image(`${building.id}_open_${dir}`, path);
       }
+      if (building.door) {
+        this.load.spritesheet(`${building.id}_door`, building.door.sheet, {
+          frameWidth: building.door.frameWidth, frameHeight: building.door.frameHeight,
+        });
+      }
     }
 
     // Load car textures
@@ -418,6 +423,7 @@ export class MainScene extends Phaser.Scene {
 
     // Walk-in buildings: roof off while inside, player drawn above the building while in its footprint
     this.updateInteriorState(playerPos.gridX, playerPos.gridY);
+    this.updateDoors();
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -2233,6 +2239,7 @@ export class MainScene extends Phaser.Scene {
     this.buildingSprites.forEach((sprite) => sprite.destroy());
     this.buildingSprites.clear();
     this.buildingSpriteInfo.clear();
+    this.doors.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2269,6 +2276,13 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(buildingKey);
     }
     this.buildingSpriteInfo.delete(buildingKey);
+
+    const doorSprite = this.buildingSprites.get(`${buildingKey}_door`);
+    if (doorSprite) {
+      doorSprite.destroy();
+      this.buildingSprites.delete(`${buildingKey}_door`);
+    }
+    this.doors.delete(buildingKey);
 
     for (let i = 0; i < 40; i++) {
       const decorKey = `${buildingKey}_d${i}`;
@@ -2322,6 +2336,20 @@ export class MainScene extends Phaser.Scene {
     this.buildingSprites.set(key, sprite);
     this.buildingSpriteInfo.set(key, { buildingId, orientation });
 
+    // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
+    const door = building.door;
+    if (door && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_door`)) {
+      const s = sprite.scaleX;
+      const left = sprite.x - sprite.width * s / 2;
+      const top = sprite.y - sprite.height * s;
+      const image = this.add.image(left + door.x * s, top + door.y * s, `${building.id}_door`, 0);
+      image.setOrigin(0, 0);
+      image.setScale(s);
+      image.setDepth(sprite.depth + 0.05);
+      this.buildingSprites.set(`${key}_door`, image);
+      this.doors.set(key, { image, buildingId, originX, originY, value: 0 });
+    }
+
     // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
     // (and against the player inside the footprint) by their local ground position
     if (!orientation || orientation === Direction.Down) {
@@ -2338,6 +2366,30 @@ export class MainScene extends Phaser.Scene {
         this.buildingSprites.set(`${key}_d${i}`, image);
       });
     }
+  }
+
+  // Animated doors by building key: current open value 0..1
+  private doors: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; originX: number; originY: number; value: number }> = new Map();
+
+  // Doors open within their radius of the player (0.4 s) and close after (0.6 s); hidden while the roof is off
+  private updateDoors(): void {
+    if (!this.playerController || this.doors.size === 0) return;
+    const pos = this.playerController.getPosition();
+    const target = this.playerController.getTargetGrid();
+    const dt = this.game.loop.delta / 1000;
+    this.doors.forEach((d) => {
+      const def = getBuilding(d.buildingId)?.door;
+      if (!def || !d.image.active) return;
+      const ax = d.originX + def.at[0], ay = d.originY + def.at[1];
+      const dist = Math.min(
+        Math.hypot(pos.gridX + 0.5 - ax, pos.gridY + 0.5 - ay),
+        Math.hypot(target.x + 0.5 - ax, target.y + 0.5 - ay),
+      );
+      const want = dist <= def.radius ? 1 : 0;
+      d.value = want > d.value ? Math.min(1, d.value + dt / 0.4) : Math.max(0, d.value - dt / 0.6);
+      d.image.setVisible(!this.openBuildings.has(d.buildingId));
+      d.image.setFrame(Math.round(d.value * (def.frames - 1)));
+    });
   }
 
   // Bottom row of a prop sprite's visible pixels (its ground point), cached per texture

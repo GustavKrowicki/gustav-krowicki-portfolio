@@ -49,3 +49,14 @@ export function createLEGOHQAvatarRoofOffModel(options: ProceduralModelOptions =
   model.userData.campusView = view;
   return model;
 }
+
+// Door frames for the city's door animation: the roof-on model with both leaves slid open by `open` (0..1) into the
+// wall pockets (0.45 wu each). The lab reads ?door=<open> (model hqAvatarDoor).
+export function createLEGOHQAvatarDoorModel(options: ProceduralModelOptions = {}, open = 0): THREE.Group {
+  const model = createLEGOHQAvatarRoofOnModel(options);
+  const nodes: Record<string, THREE.Object3D> = model.userData.sculptRuntime?.nodes ?? {};
+  for (const [id, dir] of [['door-leaf-left', -1], ['door-leaf-right', 1]] as const) {
+    if (nodes[id]) nodes[id].position.x += dir * 0.45 * open;
+  }
+  return model;
+}
