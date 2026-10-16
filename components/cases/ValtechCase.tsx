@@ -67,11 +67,14 @@ export default function ValtechCase() {
           {
             name: 'Johannes Wigh-Poulsen',
             role: 'Lead UX, Valtech',
+            quote:
+              'Gustav consistently demonstrated his knowledge and skill within UX and product design.',
             pdfUrl: '/recommendations/reccomendation from Johannes Wigh-Poulsen.pdf',
           },
           {
             name: 'Helle Jensen',
-            role: 'Valtech',
+            role: 'Experience Director, Valtech Nordics',
+            quote: 'I have no doubt in recommending Gustav for any job within UX or UI.',
             pdfUrl: '/recommendations/Recommendation from Helle Jensen.pdf',
           },
         ]}

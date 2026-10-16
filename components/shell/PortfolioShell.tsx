@@ -22,6 +22,9 @@ const WIDTH_ON_DESKTOP: Record<PanelState, string> = {
   closed: 'md:w-[72px]',
 };
 
+// Sections that open at reading width, like a case (the CV pages need the room).
+const READING_SECTIONS: SectionId[] = ['cv'];
+
 // One-page portfolio: the panel (rail + content) beside the live city. Phones stack the city above a bottom sheet.
 export default function PortfolioShell() {
   const [section, setSection] = useState<SectionId>('home');
@@ -35,7 +38,13 @@ export default function PortfolioShell() {
       const view = readView(window.location.search);
       setSection(view.section);
       setOpenCase(view.openCase);
-      setPanel((current) => (view.openCase ? 'expanded' : current === 'expanded' ? 'open' : current));
+      setPanel((current) =>
+        view.openCase || READING_SECTIONS.includes(view.section)
+          ? 'expanded'
+          : current === 'expanded'
+            ? 'open'
+            : current
+      );
     };
     applyUrl();
     window.addEventListener('popstate', applyUrl);
@@ -82,15 +91,18 @@ export default function PortfolioShell() {
 
   const openSection = useCallback(
     (id: SectionId) => {
-      if (openCase) {
-        setOpenCase(null);
-        setPanel((current) => (current === 'expanded' ? 'open' : current));
-      }
+      // Leaving a case or a reading section returns the panel from reading width to its normal width.
+      const leavingReadingWidth = openCase !== null || READING_SECTIONS.includes(section);
+      if (openCase) setOpenCase(null);
       setSection(id);
-      setPanel((current) => (current === 'closed' ? 'open' : current));
+      setPanel((current) => {
+        if (READING_SECTIONS.includes(id)) return 'expanded';
+        if (current === 'closed' || (current === 'expanded' && leavingReadingWidth)) return 'open';
+        return current;
+      });
       pushView({ section: id, openCase: null });
     },
-    [openCase, pushView]
+    [openCase, section, pushView]
   );
 
   // A project building in the city opens its case, with Back leading to Work.
