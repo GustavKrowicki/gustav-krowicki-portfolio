@@ -43,6 +43,9 @@ A 10 m kiosk gets 2 tiles, a 40 m office 3, a 150 m library 5, the 300 m LEGO ca
 nothing swallows the map, and every building keeps character-scale doors and storeys, so the person always reads
 against the architecture. It is toy-like on purpose: a LEGO campus that looks like a LEGO model.
 
+The rule sets each side on its own. Exception: the Valtech office is 4 x 2, where the rule gives 3 for its 70 m long side,
+because Gustav chose to keep its long, narrow proportions (2026-10-16).
+
 ## 3. Camera and projection
 
 | Rule | Standard |

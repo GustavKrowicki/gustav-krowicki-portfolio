@@ -1,0 +1,69 @@
+{
+  "finishClass": "painted-metal",
+  "recipe": {
+    "metalness": 0.0,
+    "roughness": 0.5,
+    "clearcoat": 1.0,
+    "clearcoatRoughness": 0.05,
+    "transmission": 0.0,
+    "ior": 1.5,
+    "envMapIntensity": 1.0,
+    "anisotropy": 0.0,
+    "procedural": "flat-clearcoat"
+  },
+  "palette": [
+    "#0A090B",
+    "#030305",
+    "#010103",
+    "#010104",
+    "#040304"
+  ],
+  "paletteHueRisk": [
+    {
+      "stop": "#0A090B",
+      "hueRisk": "blue-collapse",
+      "suggestedRgb": [
+        11,
+        9,
+        10
+      ]
+    },
+    {
+      "stop": "#030305",
+      "hueRisk": "blue-collapse",
+      "suggestedRgb": [
+        5,
+        3,
+        3
+      ]
+    },
+    {
+      "stop": "#010103",
+      "hueRisk": "blue-collapse",
+      "suggestedRgb": [
+        3,
+        1,
+        1
+      ]
+    },
+    {
+      "stop": "#010104",
+      "hueRisk": "blue-collapse",
+      "suggestedRgb": [
+        4,
+        1,
+        1
+      ]
+    }
+  ],
+  "gradientAxis": "horizontal",
+  "stats": {
+    "meanLum": 3.3,
+    "meanSaturation": 0.444,
+    "gradientStrength": 0.032,
+    "mottle": 0.002,
+    "streakRatio": 0.47,
+    "hueSpread": 0.039,
+    "specularFraction": 0.0
+  }
+}
