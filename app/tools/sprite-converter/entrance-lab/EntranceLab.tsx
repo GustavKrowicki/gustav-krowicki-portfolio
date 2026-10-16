@@ -100,9 +100,9 @@ function avatarHqScene(open: boolean): THREE.Group {
   const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  // plan tile (gx, gy) -> model (gx - 4, gy - 4); the plot top is at y = 0.06
-  if (open) { avatar.position.set(5.2 - 4, 0.06, 2.2 - 4); avatar.rotation.y = -Math.PI / 4; }
-  else avatar.position.set(4.5 - 4, 0.06, 7.55 - 4);
+  // plan tile (gx, gy) -> model (gx - 7, gy - 4.5) on the 14 x 9 plot; the plot top is at y = 0.06
+  if (open) { avatar.position.set(6.5 - 7, 0.06, 2.5 - 4.5); avatar.rotation.y = -Math.PI / 4; }
+  else avatar.position.set(6.5 - 7, 0.06, 7.55 - 4.5);
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   return group;
@@ -324,6 +324,7 @@ export type ShotOptions = {
   zoom?: number;
   voff?: number;
   focusNode?: string;
+  aim?: [number, number]; // sprite view: ground point (model x, z, unscaled) placed at the frame's horizontal centre (non-square footprints: the front corner)
   pitch?: number;
   yaw?: number;
   fit?: boolean;
@@ -491,6 +492,11 @@ export default function EntranceLab() {
         const iso = opts.pitch !== undefined ? THREE.MathUtils.degToRad(opts.pitch) : Math.atan(1 / Math.sqrt(2));
         const yaw = THREE.MathUtils.degToRad(opts.yaw ?? 45);
         const focus = new THREE.Vector3();
+        if (opts.aim) {
+          // world = position + scale * local (position is the unscaled -centre offset above)
+          const s = 3 / Math.max(size.x, size.y, size.z);
+          focus.set(-centre.x + s * opts.aim[0], 0, -centre.z + s * opts.aim[1]);
+        }
         const focusNode = opts.focusNode ? runtime?.nodes?.[opts.focusNode] : undefined;
         if (focusNode) {
           // Aim at the part's bounding-box centre (extruded parts share the model origin as their pivot)

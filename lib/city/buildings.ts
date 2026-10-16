@@ -90,11 +90,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // The real campus rebuilt at the 3D avatar's scale (art/img2threejs/lego-hq-avatar, board section 529:3604):
-    // 8 x 8 tiles, wings 2 storeys, atrium and yellow blocks 3, main door south under the yellow 2x4 plate.
-    // Sprites at 2x density (768 px, converter zoom 1.0803, vertical offset 0.2250), drawn at 0.5. Walk-in: the
-    // roof comes off when the player walks through the main door (lib/city/buildingInteriors.ts).
-    footprint: { width: 8, height: 8 },
+    // The real campus rebuilt at the 3D avatar's scale (art/img2threejs/lego-hq-avatar, board sections 529:3604 and
+    // 534:3604): a 14 x 9 site so the green roofs, courtyards, round building and terrace building read as the campus;
+    // wings 2 storeys, atrium and yellow blocks 3, main door south under the yellow 2x4 plate. Sprites at 2x density
+    // (1280 px, converter zoom 1.1342, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off
+    // when the player walks through the main door (lib/city/buildingInteriors.ts).
+    footprint: { width: 14, height: 9 },
     triggerZoneRadius: 5.5,
     spriteScale: 0.5,
     sprites: {
@@ -113,7 +114,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     projectSlug: "lego",
     description: "ML-Assisted Internal Product",
     interactable: true,
-    supportsRotation: true,
+    supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
     logoOffset: { x: 0, y: 34 },
   },
