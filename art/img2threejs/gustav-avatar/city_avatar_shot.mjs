@@ -33,7 +33,6 @@ async function findPointer() {
 
 await page.goto(`${LAB}/city?e2e=1&avatar=3d`, { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => typeof window.__CITY_E2E__ !== 'undefined', null, { timeout: 180000 });
-await page.evaluate(() => window.__CITY_E2E__.dismissWelcome());
 await page.waitForTimeout(1500);
 await page.evaluate(() => window.__CITY_E2E__.startAdventure());
 await page.waitForTimeout(3000);

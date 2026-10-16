@@ -2,24 +2,16 @@
 
 import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import * as campus from '@/lib/city/models/legoCampus';
-import * as main from '@/lib/city/models/legoHqMainEntrance';
 import * as avatarFactory from '@/lib/city/models/gustavAvatar';
 import { createGustavAvatar, skinnedBounds, type AvatarRig, type AvatarStage, type AvatarBinding } from '@/lib/city/models/gustavAvatarRig';
 import * as avatarHarness from '@/lib/city/models/gustavAvatarHarness';
 import * as workshop from '@/lib/city/models/workshop';
-import * as rooms from '@/lib/city/models/legoCampusRooms';
-import * as hqRooms from '@/lib/city/models/legoHqRooms';
-import { createLEGOHQRoomsRoofOffModel } from '@/lib/city/models/legoHqRoomsStates';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 
-// Review/test bench for the img2threejs reconstructions (?model=main|campus|avatar|avatar-entrance|avatar-campus, or
-// krea = the original GLB served by art/img2threejs/tools/static_cors.py on :8766). Generation sources live in
-// art/img2threejs/. The avatar models are in wu (0.9 wu tall); avatar-entrance / avatar-campus put it next to the
-// LEGO main entrance / campus models at the same wu scale. Avatar-only options: clip ('idle' | 'walk' |
-// 'walk-in-place'), t (seconds), and URL params stage / binding (see gustavAvatarRig.ts).
+// Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
+// Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
+// clip ('idle' | 'walk' | 'walk-in-place'), t (seconds), and URL params stage / binding (see gustavAvatarRig.ts).
 // One page session renders every view through window.__shoot(name, options), so textures
 // load once and every capture shares them:
 //   view: 'reference' (front, elevated, framed like the model's aerial crop) | 'iso' (converter camera)
@@ -61,39 +53,6 @@ const AVATAR_PARAMS = () => {
   };
 };
 
-// One LEGO plate width W in the main-entrance model is ~5.3 m = 2.65 wu; the campus model is 7 tiles across 1.0 unit.
-const ENTRANCE_UNITS_PER_WU = 1 / 2.65;
-const CAMPUS_UNITS_PER_WU = 1 / 7;
-
-function avatarScene(kind: 'entrance' | 'campus'): THREE.Group {
-  const group = new THREE.Group();
-  const building = kind === 'entrance' ? main.createLEGOHQMainEntranceModel({ castShadow: true, receiveShadow: true })
-    : campus.createLEGOCampusModel({ castShadow: true, receiveShadow: true });
-  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
-  const unit = kind === 'entrance' ? ENTRANCE_UNITS_PER_WU : CAMPUS_UNITS_PER_WU;
-  avatar.scale.setScalar(unit);
-  group.add(building, avatar);
-  group.updateMatrixWorld(true);
-  if (kind === 'entrance') {
-    // Doors at z ~ 1.0 W (vestibule depth); stand on the approach in front of the right-hand leaf, facing the camera.
-    avatar.position.set(0.3, 0, 1.25);
-  } else {
-    // In front of the campus door head, on the ground, 1 wu out along the plate's outward axis.
-    const runtime = building.userData.sculptRuntime as { nodes: Record<string, THREE.Object3D> };
-    const head = runtime.nodes['door-head'];
-    const plate = runtime.nodes['entrance-plate'];
-    const at = head.getWorldPosition(new THREE.Vector3());
-    const out = plate.localToWorld(new THREE.Vector3(0, 0, -1)).sub(plate.getWorldPosition(new THREE.Vector3())).setY(0).normalize();
-    const ground = new THREE.Box3().setFromObject(runtime.nodes['root'] ?? building).min.y;
-    const floor = (runtime.nodes['vestibule-floor'] ?? head).getWorldPosition(new THREE.Vector3()).y;
-    avatar.position.copy(at.add(out.multiplyScalar(0.6 * unit))).setY(Number.isFinite(floor) ? floor : ground);
-    avatar.lookAt(avatar.position.clone().add(out));
-  }
-  group.userData.avatar = avatar.userData.avatar;
-  group.userData.avatarGroup = avatar;
-  return group;
-}
-
 // The avatar with the LEGO HQ at avatar scale (both in wu): at the main door (roof on) or in the Workshop (roof off).
 function avatarHqScene(open: boolean): THREE.Group {
   const group = new THREE.Group();
@@ -110,31 +69,6 @@ function avatarHqScene(open: boolean): THREE.Group {
 
 
 const MODELS: Record<string, ModelConfig> = {
-  // Glass vestibule under the giant yellow 2x4 plate (the real main entrance), 435×510 aerial crop
-  main: {
-    name: 'LEGO HQ Main Entrance',
-    create: main.createLEGOHQMainEntranceModel,
-    lights: main.createLEGOHQMainEntranceLookDevLights,
-    environment: main.createLEGOHQMainEntranceEnvironment,
-    configure: main.configureLEGOHQMainEntranceRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.24,
-    reference: { width: 435, height: 510, halfW: 1.243, target: [0.029, 0.911, 0] },
-    // Stud shadows in the aerial fall ~0.17 W to the right of 0.1 W studs: sun from the left at ~30 deg,
-    // slightly in front of the facade (the plate's front face is lit).
-    sun: { position: [-6, 4, 3], intensity: 2.4 },
-  },
-  // Whole campus rebuilt from the AI Studio image; footprints measured from the Krea GLB plan
-  campus: {
-    name: 'LEGO Campus',
-    create: campus.createLEGOCampusModel,
-    lights: campus.createLEGOCampusLookDevLights,
-    environment: campus.createLEGOCampusEnvironment,
-    configure: campus.configureLEGOCampusRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.24 * 0.04,
-    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
-  },
   // Gustav's city avatar (img2threejs + character plugin), 0.9 wu tall, feet on y = 0, facing +Z
   avatar: {
     name: 'Gustav avatar',
@@ -145,31 +79,6 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 300, height: 720, halfW: 0.21, target: [0, 0.45, 0] },
-    restBounds: true,
-  },
-  // The avatar at the LEGO HQ main entrance close-up, same wu scale (doors 0.42 W ~ 1.1 wu)
-  'avatar-entrance': {
-    name: 'Gustav avatar at the LEGO main entrance',
-    create: () => avatarScene('entrance'),
-    lights: main.createLEGOHQMainEntranceLookDevLights,
-    environment: main.createLEGOHQMainEntranceEnvironment,
-    configure: main.configureLEGOHQMainEntranceRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.24,
-    reference: { width: 435, height: 510, halfW: 1.243, target: [0.029, 0.911, 0] },
-    sun: { position: [-6, 4, 3], intensity: 2.4 },
-    restBounds: true,
-  },
-  // The avatar at the campus model's entrance, same wu scale (the campus is 7 tiles = 1.0 model unit)
-  'avatar-campus': {
-    name: 'Gustav avatar at the LEGO campus',
-    create: () => avatarScene('campus'),
-    lights: campus.createLEGOCampusLookDevLights,
-    environment: campus.createLEGOCampusEnvironment,
-    configure: campus.configureLEGOCampusRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.24 * 0.04,
-    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
     restBounds: true,
   },
   // Cut-away workshop room (art/img2threejs/workshop); reference = phone photo from the door end
@@ -183,48 +92,6 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0,
     reference: { width: 900, height: 1200, halfW: 1.2, target: [0, 0.6, 0] },
     eye: { fov: 84, position: [0.15, 0.86, 1.25], target: [-0.05, 0.62, -1.0] },
-  },
-  // Roof-off LEGO HQ skeleton (board 02b, card B2): rooms = roof on, roomsOpen = roof off
-  rooms: {
-    name: 'LEGO HQ rooms (roof on)',
-    create: rooms.createLEGOCampusRoomsModel,
-    lights: rooms.createLEGOCampusRoomsLookDevLights,
-    environment: rooms.createLEGOCampusRoomsEnvironment,
-    configure: rooms.configureLEGOCampusRoomsRenderer,
-    leaves: {},
-    travel: 0,
-    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
-  },
-  roomsOpen: {
-    name: 'LEGO HQ rooms (roof off)',
-    create: rooms.createLEGOCampusRoomsOpenModel,
-    lights: rooms.createLEGOCampusRoomsLookDevLights,
-    environment: rooms.createLEGOCampusRoomsEnvironment,
-    configure: rooms.configureLEGOCampusRoomsRenderer,
-    leaves: {},
-    travel: 0,
-    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
-  },
-  // img2threejs build of the roof-off campus (art/img2threejs/lego-campus-rooms, board 02b card B3)
-  hqRooms: {
-    name: 'LEGO HQ rooms, img2threejs (roof on)',
-    create: hqRooms.createLEGOHQRoomsModel,
-    lights: hqRooms.createLEGOHQRoomsLookDevLights,
-    environment: hqRooms.createLEGOHQRoomsEnvironment,
-    configure: hqRooms.configureLEGOHQRoomsRenderer,
-    leaves: {},
-    travel: 0,
-    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
-  },
-  hqRoomsOpen: {
-    name: 'LEGO HQ rooms, img2threejs (roof off)',
-    create: createLEGOHQRoomsRoofOffModel,
-    lights: hqRooms.createLEGOHQRoomsLookDevLights,
-    environment: hqRooms.createLEGOHQRoomsEnvironment,
-    configure: hqRooms.configureLEGOHQRoomsRenderer,
-    leaves: {},
-    travel: 0,
-    reference: { width: 384, height: 384, halfW: 4.2, target: [0, 0, 0] },
   },
   // LEGO HQ rebuilt at avatar scale (art/img2threejs/lego-hq-avatar, board 529:3604): roof on, and roof off per sprite view
   hqAvatar: {
@@ -310,24 +177,6 @@ const MODELS: Record<string, ModelConfig> = {
     travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
-  // The original Krea GLB behind the old sprites, served locally (only used to check 'sprite' parity)
-  krea: {
-    name: 'LEGO HQ (Krea GLB)',
-    create: () => {
-      const group = new THREE.Group();
-      new GLTFLoader().load('http://localhost:8766/lego-hq-krea.glb', (gltf) => {
-        group.add(gltf.scene);
-        (window as Window & { __glbReady?: boolean }).__glbReady = true;
-      });
-      return group;
-    },
-    lights: campus.createLEGOCampusLookDevLights,
-    environment: campus.createLEGOCampusEnvironment,
-    configure: campus.configureLEGOCampusRenderer,
-    leaves: {},
-    travel: 0,
-    reference: { width: 384, height: 384, halfW: 0.6, target: [0, 0, 0] },
-  },
 };
 
 export type ShotOptions = {
@@ -380,7 +229,7 @@ function initialOptions(): ShotOptions {
 export default function EntranceLab() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [initial] = useState(initialOptions);
-  const [config] = useState(() => MODELS[new URLSearchParams(window.location.search).get('model') ?? 'main'] ?? MODELS.main);
+  const [config] = useState(() => MODELS[new URLSearchParams(window.location.search).get('model') ?? 'hqAvatar'] ?? MODELS.hqAvatar);
   const [open, setOpen] = useState(initial.open ?? 0);
   const applyRef = useRef<(o: ShotOptions) => void>(() => {});
   const [label, setLabel] = useState(`${initial.view} · ${initial.rig}`);

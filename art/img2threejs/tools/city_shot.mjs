@@ -5,7 +5,6 @@ const browser = await chromium.launch();
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 await page.goto('http://localhost:3101/city?e2e=1', { waitUntil: 'domcontentloaded' });
 await page.waitForFunction(() => typeof window.__CITY_E2E__ !== 'undefined', null, { timeout: 120000 });
-await page.evaluate(() => window.__CITY_E2E__.dismissWelcome());
 await page.waitForTimeout(1500);
 for (const id of ids) {
   await page.evaluate((b) => window.__CITY_E2E__.focusBuilding(b), id);

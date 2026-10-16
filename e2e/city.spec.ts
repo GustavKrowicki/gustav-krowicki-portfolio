@@ -1,6 +1,5 @@
 import { expect, test } from "@playwright/test";
 import {
-  dismissWelcome,
   focusBuilding,
   getCameraState,
   getPlayerState,
@@ -14,7 +13,7 @@ import {
 
 test.describe("city flows", () => {
   // The walking avatar and the camera carry over into the one-page shell (building click -> avatar walks there).
-  // Tests of the /city welcome screen, tour and dialog UI were removed: the shell replaces that UI.
+  // The /city welcome screen, tour and adventure HUD are gone; only the camera and the walking avatar remain.
   test("walkToBuilding hook can be invoked and visited building state can be read", async ({
     page,
   }) => {
@@ -35,7 +34,6 @@ test.describe("city flows", () => {
 
   test("camera renders with WebGL and pans to a building at tour zoom", async ({ page }) => {
     await gotoCityE2E(page);
-    await dismissWelcome(page);
     await waitForCamera(page);
     await focusBuilding(page, "lego-hq");
 
@@ -49,7 +47,6 @@ test.describe("city flows", () => {
 
   test("camera keeps the player in view while walking to a building", async ({ page }, testInfo) => {
     await gotoCityE2E(page);
-    await dismissWelcome(page);
     await waitForCamera(page);
     // Start zoomed in on the far side of the city so the walk has to leave the first view
     await focusBuilding(page, "lego-hq");

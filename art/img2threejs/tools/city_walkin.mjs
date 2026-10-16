@@ -15,7 +15,6 @@ await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/city?avatar=3d
 await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); return !!(s && s.isReady && s.grid.length); }, null, { timeout: 120000 });
 await page.evaluate(async () => {
   const api = window.__CITY_E2E__;
-  api.dismissWelcome();
   await new Promise((r) => setTimeout(r, 1500));
   api.startAdventure();
   await new Promise((r) => setTimeout(r, 1500));

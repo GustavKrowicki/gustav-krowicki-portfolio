@@ -56,7 +56,4 @@ Buildings use the base skill with the `generic` profile; no plugins are needed. 
 
 | Folder | Factory | Sprite export |
 | --- | --- | --- |
-| `lego-campus/` | `lib/city/models/legoCampus.ts` | 7 x 7 footprint, pitch 30 deg, zoom 0.945, vOff 0.235, 384 px |
-| `lego-main-entrance/` | `lib/city/models/legoHqMainEntrance.ts` | close-up door-moment model (sliding doors) |
-| `lego-campus-rooms/` | `lib/city/models/legoHqRooms.ts` (+ `legoHqRoomsStates.ts`) | roof on / roof off (hide ids starting `roof-`), 7 x 7, pitch 30 deg, zoom 0.9452, vOff 0.1966, 384 px. Per pass: `run_pass.sh <pass>`, score `renders/<pass>-cmp.png`, then `review.sh` |
 | `lego-hq-avatar/` | `lib/city/models/legoHqAvatar.ts` (+ `legoHqAvatarStates.ts`) | the live LEGO HQ: the real campus at avatar scale, 8 x 8, 2x density 768 px, pitch 30 deg, zoom 1.0803, vOff 0.2250, drawn at `spriteScale` 0.5; roof off per view (`hqAvatarOpen*`). `run_pass.sh <pass>` then `review.sh`; `export_sprites.sh` writes the 8 city sprites; walk map in `lib/city/buildingInteriors.ts`. Check in the city with `tools/city_walkin.mjs` |

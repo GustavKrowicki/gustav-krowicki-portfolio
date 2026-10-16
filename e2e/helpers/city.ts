@@ -1,7 +1,6 @@
 import { expect, Page } from "@playwright/test";
 
 type CityE2EApi = {
-  dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
@@ -58,16 +57,9 @@ export async function gotoCityE2E(page: Page) {
   await waitForCityHarness(page);
 }
 
-export async function dismissWelcome(page: Page) {
-  await waitForCityHarness(page);
-  await callCityHook(page, "dismissWelcome");
-  await expect(page.getByTestId("city-welcome-overlay")).toBeHidden();
-}
-
 export async function startAdventure(page: Page) {
   await waitForCityHarness(page);
   await callCityHook(page, "startAdventure");
-  await expect(page.getByTestId("city-adventure-hud")).toBeVisible();
   await expect.poll(() => getPlayerState(page)).toBeTruthy();
 }
 
