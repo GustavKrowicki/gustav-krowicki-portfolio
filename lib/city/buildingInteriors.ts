@@ -62,7 +62,7 @@ const VALTECH_OFFICE: BuildingInterior = {
     "desk-2": [2.0, 1.5],
     "desk-3": [2.65, 1.5],
     lunch: [3.5, 1.5],
-    "room-01": [1.12, 1.85],
+    "room-01": [1.12, 1.5],
   },
 };
 

@@ -9905,44 +9905,44 @@ export function createValtechOfficeModel(options: ProceduralModelOptions = {}): 
   destructionGroups["int-lunch-table-2-foot"] ??= [];
   destructionGroups["int-lunch-table-2-foot"].push(node_int_lunch_table_2_foot_234);
 
-  const endpoint_side_E_lunch_quiz_235 = makeAttachmentEndpoint(null);
-  const node_side_E_lunch_quiz_235 = new THREE.Group();
-  node_side_E_lunch_quiz_235.name = "Quiz board__pivot";
-  node_side_E_lunch_quiz_235.scale.set(1, 1, 1);
-  if (endpoint_side_E_lunch_quiz_235) {
-    node_side_E_lunch_quiz_235.position.copy(endpoint_side_E_lunch_quiz_235.start);
-    node_side_E_lunch_quiz_235.rotation.set(0.0, 0.0, 0.0);
+  const endpoint_side_N_lunch_quiz_235 = makeAttachmentEndpoint(null);
+  const node_side_N_lunch_quiz_235 = new THREE.Group();
+  node_side_N_lunch_quiz_235.name = "Quiz board__pivot";
+  node_side_N_lunch_quiz_235.scale.set(1, 1, 1);
+  if (endpoint_side_N_lunch_quiz_235) {
+    node_side_N_lunch_quiz_235.position.copy(endpoint_side_N_lunch_quiz_235.start);
+    node_side_N_lunch_quiz_235.rotation.set(0.0, 0.0, 0.0);
   } else {
-    node_side_E_lunch_quiz_235.position.set(1.87, 0.72, -0.5);
-    node_side_E_lunch_quiz_235.rotation.set(0.0, 0.0, 0.0);
+    node_side_N_lunch_quiz_235.position.set(1.45, 0.77, -0.89);
+    node_side_N_lunch_quiz_235.rotation.set(0.0, 0.0, 0.0);
   }
-  node_side_E_lunch_quiz_235.userData.sculptComponent = {"id": "side-E-lunch-quiz", "name": "Quiz board", "level": "meso", "role": "interior", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface interior: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.87, 0.47, -0.5], "localEnd": [1.87, 0.97, -0.5], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.02, "height": 0.5, "depth": 0.6, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.87, 0.72, -0.5], "rotation": [0.0, 0.0, 0.0], "scale": [0.02, 0.5, 0.6]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.02, 0.5, 0.6], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-E-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}}, "material": "gb-light", "materialLayers": ["gb-light"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ref-a", "photo-front"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(236, 235, 231, 1.0)", "secondaryAlbedo": "rgba(228, 227, 223, 1.0)", "materialClass": "stone", "materialClassConfidence": 0.75, "evidenceRefs": ["ref-a", "photo-front"]}};
-  node_side_E_lunch_quiz_235.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.02, 0.5, 0.6], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-E-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}};
-  (nodes["root"] ?? root).add(node_side_E_lunch_quiz_235);
-  nodes["side-E-lunch-quiz"] = node_side_E_lunch_quiz_235;
-  const mesh_side_E_lunch_quiz_235Geometry = endpoint_side_E_lunch_quiz_235
-    ? new THREE.CylinderGeometry(endpoint_side_E_lunch_quiz_235.endRadius, endpoint_side_E_lunch_quiz_235.baseRadius, endpoint_side_E_lunch_quiz_235.length, 8, 4)
+  node_side_N_lunch_quiz_235.userData.sculptComponent = {"id": "side-N-lunch-quiz", "name": "Quiz board", "level": "meso", "role": "interior", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface interior: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.45, 0.57, -0.89], "localEnd": [1.45, 0.97, -0.89], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.66, "height": 0.4, "depth": 0.02, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.45, 0.77, -0.89], "rotation": [0.0, 0.0, 0.0], "scale": [0.66, 0.4, 0.02]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.66, 0.4, 0.02], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-N-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}}, "material": "gb-light", "materialLayers": ["gb-light"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ref-a", "photo-front"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(236, 235, 231, 1.0)", "secondaryAlbedo": "rgba(228, 227, 223, 1.0)", "materialClass": "stone", "materialClassConfidence": 0.75, "evidenceRefs": ["ref-a", "photo-front"]}};
+  node_side_N_lunch_quiz_235.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.66, 0.4, 0.02], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-N-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}};
+  (nodes["root"] ?? root).add(node_side_N_lunch_quiz_235);
+  nodes["side-N-lunch-quiz"] = node_side_N_lunch_quiz_235;
+  const mesh_side_N_lunch_quiz_235Geometry = endpoint_side_N_lunch_quiz_235
+    ? new THREE.CylinderGeometry(endpoint_side_N_lunch_quiz_235.endRadius, endpoint_side_N_lunch_quiz_235.baseRadius, endpoint_side_N_lunch_quiz_235.length, 8, 4)
     : new THREE.BoxGeometry(1, 1, 1, 1, 1, 1);
-  if (!endpoint_side_E_lunch_quiz_235) {
-    mesh_side_E_lunch_quiz_235Geometry.scale(0.02, 0.5, 0.6);
+  if (!endpoint_side_N_lunch_quiz_235) {
+    mesh_side_N_lunch_quiz_235Geometry.scale(0.66, 0.4, 0.02);
   }
-  const mesh_side_E_lunch_quiz_235 = new THREE.Mesh(
-    mesh_side_E_lunch_quiz_235Geometry,
+  const mesh_side_N_lunch_quiz_235 = new THREE.Mesh(
+    mesh_side_N_lunch_quiz_235Geometry,
     materialMap["gb-light"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
-  mesh_side_E_lunch_quiz_235.name = "Quiz board";
-  if (endpoint_side_E_lunch_quiz_235) {
-    mesh_side_E_lunch_quiz_235.position.copy(endpoint_side_E_lunch_quiz_235.midpoint);
-    mesh_side_E_lunch_quiz_235.quaternion.copy(endpoint_side_E_lunch_quiz_235.quaternion);
+  mesh_side_N_lunch_quiz_235.name = "Quiz board";
+  if (endpoint_side_N_lunch_quiz_235) {
+    mesh_side_N_lunch_quiz_235.position.copy(endpoint_side_N_lunch_quiz_235.midpoint);
+    mesh_side_N_lunch_quiz_235.quaternion.copy(endpoint_side_N_lunch_quiz_235.quaternion);
   }
-  mesh_side_E_lunch_quiz_235.castShadow = options.castShadow ?? true;
-  mesh_side_E_lunch_quiz_235.receiveShadow = options.receiveShadow ?? true;
-  mesh_side_E_lunch_quiz_235.userData.sculptComponent = {"id": "side-E-lunch-quiz", "name": "Quiz board", "level": "meso", "role": "interior", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface interior: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.87, 0.47, -0.5], "localEnd": [1.87, 0.97, -0.5], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.02, "height": 0.5, "depth": 0.6, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.87, 0.72, -0.5], "rotation": [0.0, 0.0, 0.0], "scale": [0.02, 0.5, 0.6]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.02, 0.5, 0.6], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-E-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}}, "material": "gb-light", "materialLayers": ["gb-light"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ref-a", "photo-front"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(236, 235, 231, 1.0)", "secondaryAlbedo": "rgba(228, 227, 223, 1.0)", "materialClass": "stone", "materialClassConfidence": 0.75, "evidenceRefs": ["ref-a", "photo-front"]}};
-  node_side_E_lunch_quiz_235.add(mesh_side_E_lunch_quiz_235);
-  meshes["side-E-lunch-quiz"] = mesh_side_E_lunch_quiz_235;
-  colliders["side-E-lunch-quiz"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.02, 0.5, 0.6], "isTrigger": false, "notes": "box proxy"};
-  destructionGroups["side-E-lunch-quiz"] ??= [];
-  destructionGroups["side-E-lunch-quiz"].push(node_side_E_lunch_quiz_235);
+  mesh_side_N_lunch_quiz_235.castShadow = options.castShadow ?? true;
+  mesh_side_N_lunch_quiz_235.receiveShadow = options.receiveShadow ?? true;
+  mesh_side_N_lunch_quiz_235.userData.sculptComponent = {"id": "side-N-lunch-quiz", "name": "Quiz board", "level": "meso", "role": "interior", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface interior: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.45, 0.57, -0.89], "localEnd": [1.45, 0.97, -0.89], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.66, "height": 0.4, "depth": 0.02, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.45, 0.77, -0.89], "rotation": [0.0, 0.0, 0.0], "scale": [0.66, 0.4, 0.02]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.66, 0.4, 0.02], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "side-N-lunch-quiz", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "gb-light"}}, "material": "gb-light", "materialLayers": ["gb-light"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ref-a", "photo-front"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(236, 235, 231, 1.0)", "secondaryAlbedo": "rgba(228, 227, 223, 1.0)", "materialClass": "stone", "materialClassConfidence": 0.75, "evidenceRefs": ["ref-a", "photo-front"]}};
+  node_side_N_lunch_quiz_235.add(mesh_side_N_lunch_quiz_235);
+  meshes["side-N-lunch-quiz"] = mesh_side_N_lunch_quiz_235;
+  colliders["side-N-lunch-quiz"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.66, 0.4, 0.02], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["side-N-lunch-quiz"] ??= [];
+  destructionGroups["side-N-lunch-quiz"].push(node_side_N_lunch_quiz_235);
 
   const endpoint_open_I_door_n_236 = makeAttachmentEndpoint(null);
   const node_open_I_door_n_236 = new THREE.Group();

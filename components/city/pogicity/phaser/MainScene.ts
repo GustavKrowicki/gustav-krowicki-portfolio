@@ -432,7 +432,8 @@ export class MainScene extends Phaser.Scene {
       playerPos.gridX,
       playerPos.gridY,
       (x, y, offset) => this.depthFromSortPoint(x, y, offset),
-      this.gifsLoaded
+      this.gifsLoaded,
+      (x, y) => this.frontOfPlotDepth(x, y)
     );
 
     // Render numbered markers
@@ -1566,22 +1567,24 @@ export class MainScene extends Phaser.Scene {
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     const tile = here ?? next;
-    let sprite = tile ? this.buildingSprites.get(tile.key) : undefined;
-    let local = tile ? (tile === here ? { x: here.lx + 0.5, y: here.ly + 0.5 } : { x: next!.lx + 0.5, y: next!.ly + 0.5 }) : null;
     if (!tile) {
-      // Just outside a walk-in plot on its south or east side the whole building is behind the player, but its big
-      // sprite sorts by the plot's front corner and would paint over the player: draw the player above it
-      for (const [key, plot] of this.interiorPlots) {
-        const lx = gridX - plot.originX, ly = gridY - plot.originY;
-        const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
-        if (near && (lx >= plot.width || ly >= plot.height)) {
-          sprite = this.buildingSprites.get(key);
-          local = { x: lx + 0.5, y: ly + 0.5 };
-          break;
-        }
-      }
+      this.playerController.setDepthOverride(this.frontOfPlotDepth(gridX, gridY));
+      return;
     }
-    this.playerController.setDepthOverride(sprite && local ? sprite.depth + this.footprintSortOffset(local.x, local.y) : null);
+    const sprite = this.buildingSprites.get(tile.key);
+    this.playerController.setDepthOverride(sprite ? sprite.depth + this.footprintSortOffset(tile.lx + 0.5, tile.ly + 0.5) : null);
+  }
+
+  // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
+  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null
+  private frontOfPlotDepth(gridX: number, gridY: number): number | null {
+    for (const [key, plot] of this.interiorPlots) {
+      const lx = gridX - plot.originX, ly = gridY - plot.originY;
+      const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
+      const sprite = near && (lx >= plot.width || ly >= plot.height) ? this.buildingSprites.get(key) : undefined;
+      if (sprite) return sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5);
+    }
+    return null;
   }
 
   // Compute tiles blocked by building sprite overhang (collision padding)

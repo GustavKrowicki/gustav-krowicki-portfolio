@@ -359,13 +359,14 @@ for i, x0 in enumerate(DESK_X, 1):
     c = (a + b) / 2
     bx(f"int-chair-{i}-seat", f"Chair {i} seat", "micro", "interior", c - 0.11, c + 0.11, 0.01, 0.23, lz(0.58), lz(0.8), "gb-dark", importance=0.3)
     bx(f"int-chair-{i}-back", f"Chair {i} back", "micro", "interior", c - 0.11, c + 0.11, 0.23, 0.45, lz(0.77), lz(0.8), "gb-dark", importance=0.3)
-# lunch: banquette along the north wall, two round tables d 0.38, quiz board on the east wall
+# lunch: banquette along the north wall, two round tables d 0.38, quiz board above the banquette
 bx("int-lunch-banquette", "Lunch banquette seat", "meso", "interior", GB + 0.06, IN_X1 - 0.02, 0.01, 0.22, IN_Z0, IN_Z0 + 0.2, "gb", importance=0.4)
 bx("int-lunch-banquette-back", "Lunch banquette back", "micro", "interior", GB + 0.06, IN_X1 - 0.02, 0.22, 0.45, IN_Z0, IN_Z0 + 0.06, "gb", importance=0.3)
 for i, x in enumerate((GB + 0.27, GB + 0.67), 1):
     cyl(f"int-lunch-table-{i}", f"Lunch table {i}", "micro", "interior", x, lz(0.55), DESK_H - 0.03, 0.03, 0.19, "gb", importance=0.35)
     cyl(f"int-lunch-table-{i}-foot", f"Lunch table {i} foot", "micro", "interior", x, lz(0.55), 0.016, DESK_H - 0.046, 0.03, "gb-mid", importance=0.2)
-bx("side-E-lunch-quiz", "Quiz board", "meso", "interior", IN_X1 - 0.02, IN_X1, 0.45, 0.95, lz(0.2), lz(0.8), "gb-light", importance=0.35)
+# quiz board on the north wall above the banquette (on the east wall it faced away from the camera; Gustav, 2026-10-16)
+bx("side-N-lunch-quiz", "Quiz board", "meso", "interior", GB + 0.12, IN_X1 - 0.1, 0.55, 0.95, IN_Z0, IN_Z0 + 0.02, "gb-light", importance=0.35)
 # roof off: low stubs on the passage west wall either side of the lit door's opening, and low caps on the cut walls
 CUT = 0.35
 bx("open-I-door-n", "Passage wall stub (north)", "micro", "interior", GB, GX0, 0.01, CUT, -0.02, DZ0 - 0.04, "gb", importance=0.3)
@@ -374,7 +375,7 @@ bx("lowcap-N", "North wall cut", "micro", "interior", -HX, HX, 0, CUT, -HZ, -HZ 
 bx("lowcap-W", "West wall cut", "micro", "interior", -HX, -HX + WT, 0, CUT, -HZ + WT, SHOP_Z - 0.02, "white", importance=0.3)
 bx("lowcap-E", "East wall cut", "micro", "interior", GX1, HX, 0, CUT, -HZ + WT, HZ, "white", importance=0.3)
 # stand spots for the later peek cards (plan tiles, data only; lib/city/buildingInteriors.ts carries the same)
-STAND_SPOTS = {"desk-1": (1.35, 1.5), "desk-2": (2.0, 1.5), "desk-3": (2.65, 1.5), "lunch": (3.5, 1.5), "room-01": (1.12, 1.85)}
+STAND_SPOTS = {"desk-1": (1.35, 1.5), "desk-2": (2.0, 1.5), "desk-3": (2.65, 1.5), "lunch": (3.5, 1.5), "room-01": (1.12, 1.5)}
 
 C = [c for c in C if c is not None]
 
