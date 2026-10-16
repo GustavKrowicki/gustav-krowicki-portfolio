@@ -5,7 +5,7 @@
 set -e
 W="$(cd "$(dirname "$0")" && pwd)"; R="$W/../../.."; P="$1"; . "$W/building.env"
 export LAB_PORT="${LAB_PORT:-3103}"
-S='"pitch":30,"zoom":1.1342,"voff":0,"size":1280,"rig":"converter"'
+S='"pitch":30,"zoom":1.1342,"voff":0,"size":1280,"rig":"converter","shadow":true'
 # the front corner of the 14 x 9 plot (model x, z) for each view: south (+X+Z), west (+X-Z), north (-X-Z), east (-X+Z)
 AS='"aim":[7,4.5]'; AW='"aim":[7,-4.5]'; AN='"aim":[-7,-4.5]'; AE='"aim":[-7,4.5]'
 cd "$R"

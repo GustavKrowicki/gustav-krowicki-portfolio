@@ -264,12 +264,28 @@ def windows_on(prefix, ax, at_model, p0, p1, out, y_lo, y_hi, level_tag):
         n += 1
         wid = f"{prefix}-win-{n}"
         mat = "panel-wood" if (int(c * 2) % 5) == 2 else "window"
+        # surface pass, north wing first: a light sill under each window and a dark reveal around it
+        north = (ax == "h" and X(4) - 0.1 <= c <= X(12.7) and at_model <= Z(3.05)) or (ax == "v" and c <= Z(3.05) and X(4) - 0.2 <= at_model <= X(12.7))
+        if north and mat == "window":
+            o = 0.045 * out
+            if ax == "h":
+                bx(f"{wid}-sill", f"Window sill {level_tag}.{n}", "micro", "trim", c - 0.19, c + 0.19, y_lo - 0.05, y_lo, min(at_model, at_model + o),
+                   max(at_model, at_model + o), "frame-light", plan=False, contact="applied", importance=0.25, topo="Window sill: a thin box.")
+                bx(f"{wid}-reveal", f"Window reveal {level_tag}.{n}", "micro", "trim", c - 0.18, c + 0.18, y_lo - 0.02, y_hi + 0.03,
+                   min(at_model, at_model + 0.015 * out), max(at_model, at_model + 0.015 * out), "frame-dark", plan=False, contact="applied",
+                   importance=0.2, topo="Dark window reveal behind the pane: a thin box.")
+            else:
+                bx(f"{wid}-sill", f"Window sill {level_tag}.{n}", "micro", "trim", min(at_model, at_model + o), max(at_model, at_model + o),
+                   y_lo - 0.05, y_lo, c - 0.19, c + 0.19, "frame-light", plan=False, contact="applied", importance=0.25, topo="Window sill: a thin box.")
+                bx(f"{wid}-reveal", f"Window reveal {level_tag}.{n}", "micro", "trim", min(at_model, at_model + 0.015 * out),
+                   max(at_model, at_model + 0.015 * out), y_lo - 0.02, y_hi + 0.03, c - 0.18, c + 0.18, "frame-dark", plan=False, contact="applied",
+                   importance=0.2, topo="Dark window reveal behind the pane: a thin box.")
         if ax == "h":
             bx(wid, f"Window {level_tag}.{n}", "micro", "window", c - 0.15, c + 0.15, y_lo, y_hi,
-               min(at_model, at_model + 0.025 * out), max(at_model, at_model + 0.025 * out), mat, plan=False, contact="applied", importance=0.3,
+               min(at_model, at_model + 0.03 * out), max(at_model, at_model + 0.03 * out), mat, plan=False, contact="applied", importance=0.3,
                topo="Narrow window on the facade: a thin box.")
         else:
-            bx(wid, f"Window {level_tag}.{n}", "micro", "window", min(at_model, at_model + 0.025 * out), max(at_model, at_model + 0.025 * out),
+            bx(wid, f"Window {level_tag}.{n}", "micro", "window", min(at_model, at_model + 0.03 * out), max(at_model, at_model + 0.03 * out),
                y_lo, y_hi, c - 0.15, c + 0.15, mat, plan=False, contact="applied", importance=0.3, topo="Narrow window on the facade: a thin box.")
         win_ids.append(wid)
 
@@ -417,6 +433,9 @@ def block(cid, name, x0, z0, x1, z1, y0, y1, side_mat, roof_mat="roof-green", co
         bx(f"roof-{cid}-court-{k}", f"{name} courtyard {k} floor", "micro", "roof", c[0], c[2], y0, y0 + 0.03, c[1], c[3], "court", importance=0.5,
            features=[{"id": f"roof-{cid}-court-{k}.well", "kind": "contour", "notes": "square courtyard light well in the green roof"}])
         parapet_ring(f"roof-{cid}-court-{k}", rect(c[0] - WT, c[1] - WT, c[2] + WT, c[3] + WT), y1, par)
+        if cid == "north":   # surface pass, north wing first: windows on the courtyard walls seen from above (north and west faces)
+            windows_on(f"roof-{cid}-court-{k}-n", "h", Z(c[1]), X(c[0]), X(c[2]), 1, y0 + 0.25, y0 + 1.0, f"{cid}-court{k}n")
+            windows_on(f"roof-{cid}-court-{k}-w", "v", X(c[0]), Z(c[1]), Z(c[3]), 1, y0 + 0.25, y0 + 1.0, f"{cid}-court{k}w")
     for sd in windows:      # narrow windows per storey on the named outer faces
         for st in range(int(round((y1 - y0) / ST))):
             yb = y0 + st * ST
@@ -446,6 +465,14 @@ for cid, name, x0, z0, x1, z1, roof in (("yellow-bar", "Yellow bar", 6.8, 0.2, 9
         xx = x0 + i * (x1 - x0) / n
         bx(f"roof-{cid}-mullion-{i}", f"{name} mullion {i}", "micro", "trim", xx - 0.03, xx + 0.03, H2 + 0.2, H3 - 0.3, z1, z1 + 0.03, "yellow",
            contact="applied", importance=0.3)
+for k, (gx, gy, w, d, h) in enumerate(((11.6, 0.35, 0.6, 0.4, 0.35), (9.3, 2.35, 0.5, 0.4, 0.3), (4.25, 2.4, 0.45, 0.35, 0.28)), 1):
+    bx(f"roof-north-unit-{k}", f"North roof plant unit {k}", "micro", "roof", gx, gx + w, H2, H2 + h, gy, gy + d, "frame-light", importance=0.4,
+       topo="Rooftop plant unit: a box.")
+    cyl(f"roof-north-unit-{k}-fan", f"Plant unit {k} fan", "micro", "trim", gx + w / 2, gy + d / 2, H2 + h, 0.02, min(w, d) * 0.35, "parapet",
+        importance=0.2)
+for k, (gx, gy) in enumerate(((6.5, 2.55), (7.6, 2.55), (11.9, 2.4), (4.45, 0.35), (8.6, 2.55)), 1):
+    cyl(f"roof-north-skylight-{k}", f"North roof skylight {k}", "micro", "trim", gx, gy, H2, 0.06, 0.13, "dome", importance=0.3,
+        topo="Small round roof skylight: a short cylinder.")
 bx("roof-yellow-block-soffit", "Yellow block soffit over the plaza", "micro", "trim", 8.6, 11.2, H2 - 0.1, H2, 7.0, 8.2, "yellow", importance=0.5)
 cyl("roof-yellow-bar-skylight", "Yellow bar roof skylight", "micro", "trim", 8.0, 1.05, H3, 0.05, 0.12, "dome", importance=0.3)
 

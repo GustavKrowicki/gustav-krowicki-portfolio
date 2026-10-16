@@ -330,6 +330,7 @@ export type ShotOptions = {
   fit?: boolean;
   elev?: number;
   rig?: 'lookdev' | 'photo' | 'converter';
+  shadow?: boolean; // converter rig: add a soft shadow light from screen upper left (baked-light look of the Krea sprites)
   bg?: string;
   stripped?: boolean;
   open?: number;
@@ -395,6 +396,17 @@ export default function EntranceLab() {
     const fill = new THREE.DirectionalLight(0xffffff, 0.3);
     fill.position.set(-5, 5, -5);
     converter.add(key, fill);
+    // Optional soft shadows for the converter rig: a weak light from screen upper left that casts, the ambient drops to match
+    const ambient = converter.children[0] as THREE.AmbientLight;
+    const shade = new THREE.DirectionalLight(0xfff4e6, 0.6);
+    shade.position.set(-4, 10, 6);
+    shade.castShadow = true;
+    shade.shadow.mapSize.set(4096, 4096);
+    shade.shadow.normalBias = 0.01;
+    shade.shadow.radius = 3;
+    Object.assign(shade.shadow.camera, { left: -4, right: 4, top: 4, bottom: -4, near: 0.5, far: 40 });
+    shade.shadow.camera.updateProjectionMatrix();
+    converter.add(shade);
     const photo = new THREE.Group();
     photo.add(new THREE.HemisphereLight(0xdfe8ff, 0x6b6455, 0.6));
     if (config.sun) {
@@ -444,6 +456,8 @@ export default function EntranceLab() {
       lookdev.visible = opts.rig === 'lookdev';
       photo.visible = opts.rig === 'photo';
       converter.visible = isConverter;
+      shade.visible = isConverter && !!opts.shadow;
+      ambient.intensity = isConverter && opts.shadow ? 0.36 : 0.6;
       scene.environment = isConverter ? null : environment;
       renderer.toneMapping = isConverter
         ? THREE.NoToneMapping

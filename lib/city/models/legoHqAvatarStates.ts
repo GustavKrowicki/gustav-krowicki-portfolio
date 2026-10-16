@@ -4,6 +4,14 @@
 // I is between rooms. Roof off keeps the walls of the two far sides of the view high and cuts all others.
 import type * as THREE from 'three';
 import { createLEGOHQAvatarScaleModel, type ProceduralModelOptions } from './legoHqAvatar';
+import { applyLEGOHQSurfaces, inNorthWing } from './legoHqSurfaces';
+
+// Surface pass (textures, contact darkening), north wing first: judged against the Krea-made buildings in the city
+function createSurfacedModel(options: ProceduralModelOptions): THREE.Group {
+  const model = createLEGOHQAvatarScaleModel(options);
+  applyLEGOHQSurfaces(model, (id) => inNorthWing(model, id));
+  return model;
+}
 
 export type CampusView = 'south' | 'west' | 'north' | 'east';
 
@@ -30,13 +38,13 @@ export function setLEGOHQAvatarState(model: THREE.Object3D, open: boolean, view:
 }
 
 export function createLEGOHQAvatarRoofOnModel(options: ProceduralModelOptions = {}): THREE.Group {
-  const model = createLEGOHQAvatarScaleModel(options);
+  const model = createSurfacedModel(options);
   setLEGOHQAvatarState(model, false);
   return model;
 }
 
 export function createLEGOHQAvatarRoofOffModel(options: ProceduralModelOptions = {}, view: CampusView = 'south'): THREE.Group {
-  const model = createLEGOHQAvatarScaleModel(options);
+  const model = createSurfacedModel(options);
   setLEGOHQAvatarState(model, true, view);
   model.userData.campusView = view;
   return model;
