@@ -19,10 +19,15 @@ export interface InteriorBeat {
   seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
 }
 
-// Wired: the desk and meeting room 01. The other Valtech beats (gate, lunch) get their entries here when their zones
+// Wired: the desk, meeting room 01 and lunch. The other Valtech beats (enter and leave at the gate) get their entries here when their zones
 // are detailed; the card and the scene event already handle any standSpot key.
 export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   "valtech-office": {
+    lunch: {
+      kicker: "Lunch",
+      lead: "Two fields at a time.",
+      text: "Adaptability is key, and it was fun.",
+    },
     room: {
       kicker: "Meeting room 01",
       lead: "The crit.",

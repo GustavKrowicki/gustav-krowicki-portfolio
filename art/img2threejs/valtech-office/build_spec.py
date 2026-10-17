@@ -673,20 +673,71 @@ for k, (x, y) in enumerate(((rx0 + 0.18, WI + 0.42), (rx0 + 0.42, WI + 0.36)), 1
     for q, (lx_, lz_) in enumerate(((-0.045, -0.045), (0.045, -0.045), (0.045, 0.045), (-0.045, 0.045)), 1):
         st.box(f"leg-{q}", f"leg {q}", lx_ - 0.006, lx_ + 0.006, 0, 0.36, lz_ - 0.006, lz_ + 0.006, "black")
     st.box("ring", "foot ring", -0.05, 0.05, 0.14, 0.148, -0.05, 0.05, "black")
-# 4 lunch: banquette along the north wall, round tables in front, Friday quiz board above the banquette
+# 4 lunch (detail pass, 2026-10-17; written reference of the real lunch area): yellow brick on the north and west
+# walls, two tan banquettes along them with a planter in the corner and a planter trough on the north banquette's back,
+# round white tables and a black square table, black chairs with light wood seats, a big screen on the west brick wall,
+# and the Friday quiz board (black chalkboard in a mustard frame: the zone's hero; its text is a texture).
 lx0, lx1, ly0, ly1 = LAY["lunch"]
-a0 = lx0 + (WI if lx0 == 0 else 0.05)
-pbx("int-lunch-banquette", "Lunch banquette seat", a0, lx1 - 0.05, WI, WI + 0.25, 0.01, 0.225, "gb")
-pbx("int-lunch-banquette-back", "Lunch banquette back", a0, lx1 - 0.05, WI, WI + 0.06, 0.225, 0.45, "gb")
-n = max(1, int((lx1 - a0 - 0.05) / 0.5))   # 0.4 tables at least 0.1 apart
-for i in range(n):
-    for row, ty in enumerate([WI + 0.55] + ([WI + 1.35] if ly1 - ly0 > 1 else [])):
-        x = a0 + (lx1 - 0.05 - a0) * (i + 0.5) / n
-        cyl(f"int-lunch-table-{row + 1}-{i + 1}", f"Lunch table {row + 1}.{i + 1}", "micro", "interior", px(x), pz(ty), DESK_H - 0.03, 0.03, 0.2, "gb")
-        cyl(f"int-lunch-table-{row + 1}-{i + 1}-foot", f"Lunch table {row + 1}.{i + 1} foot", "micro", "interior", px(x), pz(ty), 0.016, DESK_H - 0.046, 0.03,
-            "gb-mid")
-q = (a0 + lx1 - 0.05) / 2
-pbx("side-N-lunch-quiz", "Friday quiz board", q - 0.25, q + 0.25, WI, WI + 0.02, 0.52, 0.87, "gb-light")
+
+
+def kit_dining_chair(prefix, name, tx, ty, yaw=0.0):
+    """Dining chair facing local -z: black steel legs and back posts, a light wood seat and back rail."""
+    k = Kit(prefix, name, tx, ty, yaw)
+    for q, (x, z) in enumerate(((-0.085, -0.08), (0.085, -0.08), (0.085, 0.08), (-0.085, 0.08)), 1):
+        k.box(f"leg-{q}", f"leg {q}", x - 0.007, x + 0.007, 0, 0.225, z - 0.007, z + 0.007, "black")
+    k.box("seat", "seat (light wood)", -0.1, 0.1, 0.225, 0.243, -0.095, 0.095, "wood-light", importance=0.4)
+    for q, x in enumerate((-0.085, 0.085), 1):
+        k.box(f"post-{q}", f"back post {q}", x - 0.007, x + 0.007, 0.243, 0.42, 0.08, 0.094, "black")
+    k.box("back", "back rail (light wood)", -0.1, 0.1, 0.34, 0.42, 0.082, 0.1, "wood-light", importance=0.4)
+    return k
+
+
+pbx("side-N-lunch-brick", "Yellow brick (lunch, north)", lx0, lx1, WI, WI + 0.012, 0.0, GS, "brick-yellow")
+pbx("side-W-lunch-brick", "Yellow brick (lunch, west)", WI, WI + 0.012, WI + 0.012, IN_Z1 + HZ, 0.0, GS, "brick-yellow")
+# the two tan banquettes: along the north wall and along the west wall, meeting at a corner planter
+BQ = 0.25
+pbx("int-lunch-banquette-n", "Banquette (north, tan)", WI + 0.3, lx1 - 0.06, WI + 0.012, WI + BQ, 0.01, 0.22, "leather-tan")
+pbx("int-lunch-banquette-n-back", "Banquette back (north)", WI + 0.3, lx1 - 0.06, WI + 0.012, WI + 0.07, 0.22, 0.44, "leather-tan")
+pbx("int-lunch-banquette-w", "Banquette (west, tan)", WI + 0.012, WI + BQ, WI + 0.3, 1.4, 0.01, 0.22, "leather-tan")
+pbx("int-lunch-banquette-w-back", "Banquette back (west)", WI + 0.012, WI + 0.07, WI + 0.3, 1.4, 0.22, 0.44, "leather-tan")
+for part, (a, b, c, d) in (("n", (WI + 0.3, lx1 - 0.06, WI + 0.012, WI + 0.02)), ("w", (WI + 0.012, WI + 0.02, WI + 0.3, 1.4))):
+    pbx(f"int-lunch-banquette-{part}-base", f"Banquette plinth ({part})", a, b, c, d, 0.0, 0.03, "black")
+# planters: a black box in the corner, a slim trough on the north banquette's back; low-poly blade leaves
+pc = Kit("int-lunch-planter", "Lunch corner planter", WI + 0.15, WI + 0.15, 0.0)
+pc.box("box", "box (black)", -0.13, 0.13, 0, 0.44, -0.13, 0.13, "black")
+pc.cyl("soil", "soil", 0, 0, 0.44, 0.004, 0.11, "soil")
+for q in range(9):
+    a = 2.39996 * q
+    tlt, ln = 0.3 + 0.3 * ((q * 7) % 5) / 4, 0.12 + 0.04 * ((q * 3) % 4) / 3
+    dx, dz = math.sin(a), math.cos(a)
+    pc.ell(f"leaf-{q + 1}", f"leaf {q + 1}", dx * (0.03 + ln * math.sin(tlt)), 0.44 + ln * math.cos(tlt), dz * (0.03 + ln * math.sin(tlt)),
+           0.028, ln, 0.008, "plant-dark" if q % 3 else "plant-mid", spin=a, tilt=tlt)
+pt = Kit("int-lunch-trough", "Planter trough on the banquette back", (WI + 0.3 + lx1 - 0.06) / 2, WI + 0.045, 0.0, base=FLOOR + 0.43)
+pt.box("box", "trough (black)", -0.6, 0.6, 0, 0.06, -0.03, 0.03, "black")
+for q in range(7):
+    x = -0.5 + q * (1.0 / 6)
+    pt.ell(f"leaf-{q + 1}", f"trough plant {q + 1}", x, 0.1, 0.0, 0.07, 0.06, 0.035, "plant-mid" if q % 2 else "plant-dark", spin=0.5 * q)
+# round white tables in front of the north banquette, a black square table in front of the west one
+for q, x in enumerate((lx0 + 0.75, lx0 + 1.42), 1):
+    tb = Kit(f"int-lunch-round-{q}", f"Round table {q} (white)", x, WI + 0.52, 0.0)
+    tb.cyl("top", "top (white)", 0, 0, DESK_H - 0.015, 0.015, 0.17, "desk-white", importance=0.45)
+    tb.cyl("stem", "stem (black)", 0, 0, 0.012, DESK_H - 0.027, 0.014, "black")
+    tb.cyl("foot", "foot (black)", 0, 0, 0, 0.012, 0.1, "black")
+    kit_dining_chair(f"int-lunch-chair-r{q}", f"Chair at round table {q}", x + 0.04 * (q - 1.5), WI + 0.85, 0.15 * (1.5 - q))
+sq = Kit("int-lunch-square", "Square table (black)", WI + 0.47, 1.12, 0.0)
+sq.box("top", "top (black)", -0.17, 0.17, DESK_H - 0.016, DESK_H, -0.17, 0.17, "black", importance=0.45)
+for q, (x, z) in enumerate(((-0.15, -0.15), (0.15, -0.15), (0.15, 0.15), (-0.15, 0.15)), 1):
+    sq.box(f"leg-{q}", f"leg {q}", x - 0.009, x + 0.009, 0, DESK_H - 0.016, z - 0.009, z + 0.009, "black")
+kit_dining_chair("int-lunch-chair-s1", "Chair at the square table (east)", WI + 0.8, 1.1, math.pi / 2 + 0.1)
+kit_dining_chair("int-lunch-chair-s2", "Chair at the square table (south)", WI + 0.5, 1.45, -0.08)
+# the big screen on the west brick wall, above the banquette, facing into the room
+pbx("side-W-lunch-tv", "Big screen (west wall)", WI + 0.012, WI + 0.04, 0.5, 1.08, 0.62, 0.95, "monitor")
+pbx("side-W-lunch-tv-display", "Big screen display", WI + 0.04, WI + 0.043, 0.52, 1.06, 0.64, 0.93, "screen-dark")
+# the Friday quiz board, the hero: a black chalkboard in a mustard frame on the north wall above the banquette
+QX0, QX1 = lx0 + 0.72, lx0 + 1.5
+pbx("side-N-lunch-quiz-frame", "Friday quiz board frame (mustard)", QX0 - 0.03, QX1 + 0.03, WI + 0.012, WI + 0.03, 0.66, 1.24, "mustard")
+pbx("side-N-lunch-quiz-board", "Friday quiz board (chalkboard)", QX0, QX1, WI + 0.03, WI + 0.034, 0.69, 1.21, "chalkboard")
+pbx("side-N-lunch-quiz-ledge", "Chalk ledge", QX0, QX1, WI + 0.03, WI + 0.06, 0.66, 0.675, "mustard-dark")
 STAND_SPOTS = {k: (v[0] + 0.5, v[1] + 0.5) for k, v in LAY["stand"].items()}
 STAND_SPOTS["gate"] = (PW - 0.5, PH - 0.5)
 WALKMAP = LAY["map"]
@@ -854,6 +905,10 @@ spec["materials"] = [
              emissiveIntensity={"base": 0.35}, **flat("01 reference")),
     material("pouf-mustard", "Pouf mustard", "fabric", "#b08d45", ["#a6833c"], 0.95, 0.0, "mustard pouf (ref ~#a1803e)", **flat("01 reference")),
     material("bench-grey", "Bench dark grey", "fabric", "#4a4a4c", ["#424244"], 0.95, 0.0, "upholstered bench under the window", **flat("01 photo")),
+    material("leather-tan", "Tan banquette", "fabric", "#b48b5f", ["#aa8156"], 0.8, 0.0, "tan banquettes (lunch reference)", **flat("lunch reference")),
+    material("wood-light", "Light wood", "wood", "#d4b88c", ["#caae82"], 0.8, 0.0, "chair seats and back rails", emissiveIntensity={"base": 0.35}, **flat("lunch reference")),
+    material("chalkboard", "Chalkboard", "stone", "#2b2f2d", ["#262a28"], 0.9, 0.0, "the Friday quiz board (text is a texture)", **flat("beat sheet")),
+    material("screen-dark", "Screen (off)", "glass", "#1f2429", ["#1a1f23"], 0.25, 0.0, "a screen that is off", **flat("lunch reference")),
     material("pouf-grey", "Pouf warm grey", "fabric", "#625e55", ["#59554c"], 0.95, 0.0, "warm grey pouf (ref ~#56534b)", **flat("01 reference")),
     material("decal", "Glass decal", "plastic", "#ffffff", ["#f6f6f6"], 0.6, 0.0, "the white 01 on the glass (texture)", **flat("01 reference")),
     material("bag-dark", "Bag strap", "fabric", "#3a3d40", ["#33363a"], 0.9, 0.0, "bag flap", **flat("reference: bags on the floor")),

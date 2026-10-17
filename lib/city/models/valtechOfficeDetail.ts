@@ -3,6 +3,7 @@
 //   side-N-*brick*  pale yellow brick, running bond, true course height (75 mm = 0.0375 wu)
 //   int-floor, open-floor-lunch  polished concrete: warm beige with soft mottling
 //   int-room-01-number  the huge white "01" on meeting room 01's glass (a transparent decal)
+//   side-N-lunch-quiz-board  the Friday quiz in chalk (heading, questions, a tally)
 //   *-screen-<n>-display  a downscaled case image (public/game/pogicity/Building/landmark/valtech-office-screen-<n>.png)
 //   *-planter-leaf-*, *-planter-crown-*  a low-poly sphere (8 x 5) instead of the factory's 16 x 12: flat leaves at
 //   sprite size do not need more, and the plant drops from about 4,400 to about 1,000 triangles
@@ -67,6 +68,41 @@ function numberImage(): HTMLCanvasElement {
   g.textBaseline = 'alphabetic';
   g.fillText('01', 128, 232);
   numberCanvas = c;
+  return c;
+}
+
+let quizCanvas: HTMLCanvasElement | null = null;
+function quizImage(): HTMLCanvasElement {
+  if (quizCanvas) return quizCanvas;
+  const c = document.createElement('canvas');
+  c.width = 312;
+  c.height = 208;   // the board is 0.78 x 0.52 wu
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#2b2f2d';
+  g.fillRect(0, 0, c.width, c.height);
+  g.fillStyle = 'rgba(240, 238, 228, 0.92)';
+  g.strokeStyle = 'rgba(240, 238, 228, 0.85)';
+  g.font = '700 34px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
+  g.fillText('FRIDAY QUIZ', 22, 46);
+  g.lineWidth = 3;
+  g.beginPath(); g.moveTo(22, 56); g.lineTo(232, 52); g.stroke();
+  g.font = '500 20px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
+  ['1.', '2.', '3.', '4.'].forEach((n, i) => {
+    const y = 92 + i * 28;
+    g.fillText(n, 24, y);
+    g.lineWidth = 2;
+    g.beginPath(); g.moveTo(50, y - 6); g.lineTo(150 + ((i * 37) % 50), y - 7); g.stroke();
+  });
+  // a tally of points on the right
+  g.lineWidth = 3;
+  for (let row = 0; row < 3; row++) {
+    const y0 = 86 + row * 36;
+    for (let k = 0; k < 4 + row; k++) {
+      const x = 214 + (k % 5) * 12 + (k >= 5 ? 6 : 0);
+      g.beginPath(); g.moveTo(x, y0); g.lineTo(x + 1, y0 + 22); g.stroke();
+    }
+  }
+  quizCanvas = c;
   return c;
 }
 
@@ -153,7 +189,7 @@ export function applyValtechOfficeDetail(model: THREE.Object3D): void {
   const meshes: Record<string, THREE.Mesh> = model.userData.sculptRuntime?.meshes ?? {};
   for (const [id, mesh] of Object.entries(meshes)) {
     const s = mesh.scale;   // the factory scales unit primitives to the part's size (wu)
-    if (/^side-N-.*brick/.test(id)) textured(mesh, canvasTexture(brickImage(), s.x / BRICK_TILE_WU.w, s.y / BRICK_TILE_WU.h));
+    if (/^side-[NWE]-.*brick/.test(id)) textured(mesh, canvasTexture(brickImage(), s.x / BRICK_TILE_WU.w, s.y / BRICK_TILE_WU.h));
     else if (id === 'int-floor' || id === 'open-floor-lunch') textured(mesh, canvasTexture(concreteImage(), s.x / 2, s.z / 2));
     else if (SCREENS[id]) screenTexture(SCREENS[id], mesh);
     else if (id === 'int-room-01-number') {
@@ -162,6 +198,7 @@ export function applyValtechOfficeDetail(model: THREE.Object3D): void {
       t.anisotropy = 8;
       mesh.material = new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, color: new THREE.Color(0.97, 0.97, 0.97) });
     }
-    else if (/-planter-(leaf|crown)-/.test(id)) lowPolyEllipsoid(mesh);
+    else if (/-(planter|trough)-(leaf|crown)-/.test(id)) lowPolyEllipsoid(mesh);
+    else if (id === 'side-N-lunch-quiz-board') textured(mesh, canvasTexture(quizImage(), 1, 1));
   }
 }
