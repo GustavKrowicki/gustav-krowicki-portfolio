@@ -1,7 +1,8 @@
 """Real campus plan fitted to the walk grid (grey box). Plan tiles: gx right 0..PW, gy down 0..PH; one tile = 1 wu.
 
 Source: the campus outline traced from map data and turned so the walls line up, shifted one tile east so the round
-building fits on the plot. Walls are snapped to tile edges (moves under half a tile) because the avatar walks from tile
+building fits on the plot. The real forecourt notch is filled in: from the city camera a door at its back is never seen, so
+the main door sits on the south front facing the plaza, like the earlier campus. Walls are snapped to tile edges (moves under half a tile) because the avatar walks from tile
 to tile: a wall must not cut through the middle of a tile. Each courtyard is centred on a tile, so the rooms around it
 are whole tiles. Rows 0 to 9 hold the building, row 10 is the plaza along the street.
 """
@@ -21,7 +22,7 @@ def arc(c, r, a0, a1, n):
 # outer wall, clockwise on screen (y down); the round building is an arc from the south-west leg round to the west wing
 a_sw = math.atan2(-(RC[1] - (RC[1] + math.sqrt(RO ** 2 - (4 - RC[0]) ** 2))), 4 - RC[0])   # where the arc meets x = 4 (south)
 a_nw = -math.acos((3 - RC[0]) / RO)                                                          # where it meets x = 3 (north)
-OUTLINE = ([(13, 4), (15, 4), (15, 8), (13, 8), (13, 10), (9, 10), (9, 7), (7, 7), (7, 10), (4, 10)]
+OUTLINE = ([(13, 4), (15, 4), (15, 8), (13, 8), (13, 10), (4, 10)]   # the real forecourt notch is filled: the main door is on the front
            + arc(RC, RO, a_sw, a_nw + 2 * math.pi, 40)
            + [(3, 2), (6, 2), (6, 0), (7, 0), (7, 0.5), (10, 0.5), (10, 2), (12.8, 2)])
 SHELL = Polygon(OUTLINE)
@@ -42,15 +43,15 @@ BUILDING = SHELL.difference(unary_union(list(COURTS.values())))
 # Areas by tile (route approved on the board: door, lobby, 1 shelf, 2 test, 3 team, 4 map, 5 AI lab). Open plan: no
 # walls between areas, the floor tone tells them apart; only the outside walls and the courtyard walls stand.
 ROOMS = {   # code: (name, number on the route, tiles as (x0, x1, y0, y1) inclusive ranges)
-    "L": ("Lobby", 0, [(6, 9, 3, 6), (6, 6, 7, 9)]),   # plus the strip behind the main door
-    "S": ("Shelf room", 1, [(4, 5, 7, 9)]),
+    "L": ("Lobby", 0, [(6, 9, 3, 6), (7, 8, 7, 9)]),   # plus the old forecourt, out to the front wall
+    "S": ("Shelf room", 1, [(4, 6, 7, 9)]),
     "T": ("Test room", 2, [(9, 12, 7, 9), (10, 12, 5, 6)]),
     "M": ("Team room", 3, [(6, 9, 0, 2), (3, 5, 2, 4)]),
     "Y": ("Systems map room", 4, [(0, 3, 4, 8)]),     # tiles inside the round building only (see room_of)
     "A": ("AI lab", 5, [(13, 14, 4, 7), (10, 12, 2, 4)]),
 }
 DOORS = [   # the main door, then the old room doors (kept as the route's main links; the plan is open)
-    (6, 8, 7, 8),     # main door on the forecourt's west face (it faces the city camera), lobby - forecourt
+    (8, 9, 8, 10),    # main door on the south front, lobby - plaza, under the yellow plate
     (6, 6, 6, 7),     # lobby - shelf room
     (9, 6, 9, 7),     # lobby - test room
     (6, 3, 6, 2),     # lobby - team room
@@ -65,7 +66,7 @@ HERO = {    # room code: (tile, label) where the hero object will stand; the til
     "Y": ((1, 6), "4 Systems map"),
     "A": ((14, 5), "5 AI lab table"),
 }
-OUTSIDE_TILES = {(x, y) for x in range(PW) for y in (10,)} | {(x, y) for x in (7, 8) for y in (7, 8, 9)}
+OUTSIDE_TILES = {(x, y) for x in range(PW) for y in (10,)}
 MARGIN = 0.3   # a tile is walkable when its centre is this far from every wall
 
 

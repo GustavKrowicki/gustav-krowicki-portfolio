@@ -109,18 +109,18 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "LEGO HQ",
     category: "portfolio",
     // Grey box on the real campus outline (art/img2threejs/lego-hq-avatar, plan.py; Linear POR-25): 15 x 11 with the
-    // plaza row, two storeys, green roofs with courtyards, round building at the west, main door on the west face of the
-    // south forecourt under the yellow 2x4 plate. Five areas (open plan) on the route from the board (node 651:3604). Sprites at 2x density
+    // plaza row, two storeys, green roofs with courtyards, round building at the west, main door on the south front facing
+    // the plaza, under the yellow 2x4 plate (the real forecourt notch is filled in). Five areas (open plan) on the route from the board (node 651:3604). Sprites at 2x density
     // (1536 px, converter zoom 1.0128, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off when
-    // the player walks through the main door (lib/city/buildingInteriors.ts). The door is on the forecourt's west face,
-    // not at its back, because the south-east leg hides the back wall from the city camera.
+    // the player walks through the main door (lib/city/buildingInteriors.ts). A door at the back of the real forecourt is
+    // hidden from the city camera by the south-east leg, so the door is on the front like the earlier campus.
     footprint: { width: 15, height: 11 },
     triggerZoneRadius: 6,
     spriteScale: 0.5,
     // Sliding glass doors (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1, export_door.sh)
     door: {
       sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
-      frames: 7, frameWidth: 72, frameHeight: 80, x: 478, y: 1234, at: [7.0, 8.5], radius: 1.5,
+      frames: 7, frameWidth: 92, frameHeight: 78, x: 482, y: 1302, at: [8.5, 10.0], radius: 1.5,
     },
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",

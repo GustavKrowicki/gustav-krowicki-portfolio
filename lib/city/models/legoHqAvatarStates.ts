@@ -31,7 +31,7 @@ export function setLEGOHQAvatarState(model: THREE.Object3D, open: boolean, view:
     else if (id.startsWith('lowcap-')) node.visible = open && !far.includes(sideOf(id));
     else if (id.startsWith('topcap-')) node.visible = open && far.includes(sideOf(id));
     else if (id.startsWith('upper-')) node.visible = !open || far.includes(sideOf(id));
-    else if (id.startsWith('door-leaf-')) node.visible = !open || far.includes('E');   // the main door is in an east-facing wall
+    else if (id.startsWith('door-leaf-')) node.visible = !open || far.includes('S');
   }
 }
 
@@ -48,13 +48,13 @@ export function createLEGOHQAvatarRoofOffModel(options: ProceduralModelOptions =
   return model;
 }
 
-// Door frames for the city's door animation: the roof-on model with both leaves slid open by `open` (0..1) along the
-// wall (z) into the pockets (0.45 wu each). The lab reads ?door=<open> (model hqAvatarDoor).
+// Door frames for the city's door animation: the roof-on model with both leaves slid open by `open` (0..1) into the
+// wall pockets (0.45 wu each). The lab reads ?door=<open> (model hqAvatarDoor).
 export function createLEGOHQAvatarDoorModel(options: ProceduralModelOptions = {}, open = 0): THREE.Group {
   const model = createLEGOHQAvatarRoofOnModel(options);
   const nodes: Record<string, THREE.Object3D> = model.userData.sculptRuntime?.nodes ?? {};
   for (const [id, dir] of [['door-leaf-left', -1], ['door-leaf-right', 1]] as const) {
-    if (nodes[id]) nodes[id].position.z += dir * 0.45 * open;
+    if (nodes[id]) nodes[id].position.x += dir * 0.45 * open;
   }
   return model;
 }

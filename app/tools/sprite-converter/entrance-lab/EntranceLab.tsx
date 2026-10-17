@@ -61,7 +61,7 @@ const AVATAR_PARAMS = () => {
   };
 };
 
-// The avatar with the LEGO HQ at avatar scale (both in wu): on the forecourt in front of the main door (roof on) or in
+// The avatar with the LEGO HQ at avatar scale (both in wu): on the plaza in front of the main door (roof on) or in
 // the lobby (roof off); the avatarAt option moves it to any plan point. Plan tile (gx, gy) -> model (gx - 7.5, gy - 5.5)
 // on the 15 x 11 plot; the plot top is at y = 0.06.
 const HQ_PLAN = { w: 15, h: 11 };
@@ -70,7 +70,7 @@ function avatarHqScene(open: boolean): THREE.Group {
   const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  const [x, y] = open ? [8.5, 5.5] : [7.9, 8.5];
+  const [x, y] = open ? [8.5, 5.5] : [8.5, 10.6];
   avatar.position.set(x - HQ_PLAN.w / 2, 0.06, y - HQ_PLAN.h / 2);
   if (open) avatar.rotation.y = -Math.PI / 4;
   group.userData.avatar = avatar.userData.avatar;
@@ -187,8 +187,8 @@ const MODELS: Record<string, ModelConfig> = {
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
     configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
-    leaves: {},   // the LEGO main door slides along z: frames come from model hqAvatarDoor (?door=)
-    travel: 0,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
   hqAvatarOpen: {
@@ -239,8 +239,8 @@ const MODELS: Record<string, ModelConfig> = {
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
     configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
-    leaves: {},   // the LEGO main door slides along z: frames come from model hqAvatarDoor (?door=)
-    travel: 0,
+    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
+    travel: 0.45,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
   },
