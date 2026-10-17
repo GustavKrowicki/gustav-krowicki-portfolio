@@ -1555,7 +1555,8 @@ export class MainScene extends Phaser.Scene {
     return tiles;
   }
 
-  // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
+  // One step between neighbouring tiles: inside a building only within a room or through a door (any step between areas in
+  // an open-plan building); in and out only
   // through the building's outside rooms (the plaza), or across a main door that opens straight onto the street
   private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
     const a = this.interiorTiles.get(`${fx},${fy}`);
@@ -1566,7 +1567,10 @@ export class MainScene extends Phaser.Scene {
     if (b && !cb) return false;
     if (a && b) {
       if (a.key !== b.key) return false;
-      return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
+      if (ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly)) return true;
+      // Open plan: areas join freely; the outside rooms (plaza) still meet the inside only at a door
+      const outside = a.interior.outside;
+      return !!a.interior.openPlan && !outside.includes(ca!) && !outside.includes(cb!);
     }
     if (b) return b.interior.outside.includes(cb!) || isEntranceStep(b.interior, b.lx, b.ly, fx - tx, fy - ty);
     return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);

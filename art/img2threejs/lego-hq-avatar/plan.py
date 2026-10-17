@@ -39,7 +39,8 @@ COURTS = {   # name: polygon (all centred on tiles except the long middle court,
 }
 BUILDING = SHELL.difference(unary_union(list(COURTS.values())))
 
-# Rooms by tile (route approved on the board: door, lobby, 1 shelf, 2 test, 3 team, 4 map, 5 AI lab)
+# Areas by tile (route approved on the board: door, lobby, 1 shelf, 2 test, 3 team, 4 map, 5 AI lab). Open plan: no
+# walls between areas, the floor tone tells them apart; only the outside walls and the courtyard walls stand.
 ROOMS = {   # code: (name, number on the route, tiles as (x0, x1, y0, y1) inclusive ranges)
     "L": ("Lobby", 0, [(6, 9, 3, 6)]),
     "S": ("Shelf room", 1, [(4, 6, 7, 9)]),
@@ -48,7 +49,7 @@ ROOMS = {   # code: (name, number on the route, tiles as (x0, x1, y0, y1) inclus
     "Y": ("Systems map room", 4, [(0, 3, 4, 8)]),     # tiles inside the round building only (see room_of)
     "A": ("AI lab", 5, [(13, 14, 4, 7), (10, 12, 2, 4)]),
 }
-DOORS = [   # tile pairs with an open edge (walk map); the main door is the first
+DOORS = [   # the main door, then the old room doors (kept as the route's main links; the plan is open)
     (8, 6, 8, 7),     # main door, lobby - forecourt, under the yellow plate
     (6, 6, 6, 7),     # lobby - shelf room
     (9, 6, 9, 7),     # lobby - test room
@@ -101,8 +102,6 @@ def walkable(x, y):
     if not BUILDING.contains(p) or BUILDING.exterior.distance(p) < MARGIN:
         return False
     if any(i.distance(p) < MARGIN for i in BUILDING.interiors):
-        return False
-    if ROUND.exterior.distance(p) < MARGIN:       # the round wall between the round room and the main block
         return False
     return (x, y) not in {t for t, _l in HERO.values()}
 

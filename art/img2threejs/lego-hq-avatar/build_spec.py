@@ -197,8 +197,8 @@ for cname, cg in plan.COURTS.items():
              topo="Courtyard lawn: a thin extrude.")
 
 # ---------------------------------------------------------------------------------------------------------------
-# Ground storey walls: every room edge. Shared with another room -> I (centred, with door gaps); else outside or round a
-# courtyard -> the side of the room it is on (thickness inside the room).
+# Ground storey walls: every area edge that is not shared with another area (open plan): outside walls take the side of
+# the area they are on, walls round a courtyard are C (thickness inside the area).
 
 
 def side_of(nx, ny):
@@ -230,8 +230,7 @@ for code in plan.ROOMS:
             mid = ((a[0] + b[0]) / 2 + n[0] * 0.05, (a[1] + b[1]) / 2 + n[1] * 0.05)
             other = next((o for o in plan.ROOMS if o != code and REGION[o].buffer(1e-6).contains(Point(mid))), None)
             if other:
-                if code < other:
-                    segs.setdefault(("I", "I", code + other), []).append(LineString([a, b]))
+                continue      # open plan: no wall between two areas
             elif any(cg.buffer(1e-6).contains(Point(mid)) for cg in plan.COURTS.values()):
                 segs.setdefault(("O", "C", code), []).append(LineString([a, b]))     # round a courtyard: always cut
             else:
