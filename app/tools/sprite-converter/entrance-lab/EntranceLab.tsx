@@ -70,7 +70,7 @@ function avatarHqScene(open: boolean): THREE.Group {
   const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  const [x, y] = open ? [8.5, 5.5] : [8.5, 7.6];
+  const [x, y] = open ? [8.5, 5.5] : [7.9, 8.5];
   avatar.position.set(x - HQ_PLAN.w / 2, 0.06, y - HQ_PLAN.h / 2);
   if (open) avatar.rotation.y = -Math.PI / 4;
   group.userData.avatar = avatar.userData.avatar;
@@ -187,8 +187,8 @@ const MODELS: Record<string, ModelConfig> = {
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
     configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.45,
+    leaves: {},   // the LEGO main door slides along z: frames come from model hqAvatarDoor (?door=)
+    travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
   hqAvatarOpen: {
@@ -239,8 +239,8 @@ const MODELS: Record<string, ModelConfig> = {
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
     configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
-    leaves: { 'door-leaf-left': -1, 'door-leaf-right': 1 },
-    travel: 0.45,
+    leaves: {},   // the LEGO main door slides along z: frames come from model hqAvatarDoor (?door=)
+    travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
     restBounds: true,
   },

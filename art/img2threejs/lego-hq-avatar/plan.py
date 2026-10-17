@@ -42,15 +42,15 @@ BUILDING = SHELL.difference(unary_union(list(COURTS.values())))
 # Areas by tile (route approved on the board: door, lobby, 1 shelf, 2 test, 3 team, 4 map, 5 AI lab). Open plan: no
 # walls between areas, the floor tone tells them apart; only the outside walls and the courtyard walls stand.
 ROOMS = {   # code: (name, number on the route, tiles as (x0, x1, y0, y1) inclusive ranges)
-    "L": ("Lobby", 0, [(6, 9, 3, 6)]),
-    "S": ("Shelf room", 1, [(4, 6, 7, 9)]),
+    "L": ("Lobby", 0, [(6, 9, 3, 6), (6, 6, 7, 9)]),   # plus the strip behind the main door
+    "S": ("Shelf room", 1, [(4, 5, 7, 9)]),
     "T": ("Test room", 2, [(9, 12, 7, 9), (10, 12, 5, 6)]),
     "M": ("Team room", 3, [(6, 9, 0, 2), (3, 5, 2, 4)]),
     "Y": ("Systems map room", 4, [(0, 3, 4, 8)]),     # tiles inside the round building only (see room_of)
     "A": ("AI lab", 5, [(13, 14, 4, 7), (10, 12, 2, 4)]),
 }
 DOORS = [   # the main door, then the old room doors (kept as the route's main links; the plan is open)
-    (8, 6, 8, 7),     # main door, lobby - forecourt, under the yellow plate
+    (6, 8, 7, 8),     # main door on the forecourt's west face (it faces the city camera), lobby - forecourt
     (6, 6, 6, 7),     # lobby - shelf room
     (9, 6, 9, 7),     # lobby - test room
     (6, 3, 6, 2),     # lobby - team room

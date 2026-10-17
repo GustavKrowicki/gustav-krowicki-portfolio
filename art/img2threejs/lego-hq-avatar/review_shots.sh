@@ -13,9 +13,9 @@ node art/img2threejs/tools/lab_render.mjs hqAvatar "$O" \
   "on-north={\"view\":\"sprite\",\"yaw\":225,$AN,$S}" "on-east={\"view\":\"sprite\",\"yaw\":315,$AE,$S}" | tail -1
 node art/img2threejs/tools/lab_render.mjs hqAvatarOpen "$O" "off-south={\"view\":\"sprite\",\"yaw\":45,$AS,$S}" \
   "off-masks={\"view\":\"sprite\",\"yaw\":45,$AS,$S,$M}" | tail -1
-node art/img2threejs/tools/lab_render.mjs avatar-hq "$O" "walk-0-door={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[8.5,8.9]}" \
-  "walk-0-door-mask={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[8.5,8.9],\"masks\":[\"none\"],\"only\":[\"avatar\"]}" \
-  "walk-0-door-avatar={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[8.5,8.9],\"only\":[\"avatar\"]}" | tail -1
+node art/img2threejs/tools/lab_render.mjs avatar-hq "$O" "walk-0-door={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[7.9,8.5]}" \
+  "walk-0-door-mask={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[7.9,8.5],\"masks\":[\"none\"],\"only\":[\"avatar\"]}" \
+  "walk-0-door-avatar={\"view\":\"sprite\",\"yaw\":45,$AS,$S,\"avatarAt\":[7.9,8.5],\"only\":[\"avatar\"]}" | tail -1
 set -- lobby:8.5:5.5 shelf:5.5:7.5 test:10.5:6.5 team:6.5:1.5 map:2.5:5.5 ailab:13.5:4.5
 i=1
 for r in "$@"; do

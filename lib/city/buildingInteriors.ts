@@ -34,17 +34,17 @@ const LEGO_HQ: BuildingInterior = {
     "###MMMLLLLAAAAA",
     "#YYY##LLLLTTT##",
     "###Y##LLLLT#T#A",
-    "#YYYSSSPPTTTTAA",
-    "######SPPTT#T##",
-    "####SSSPPTTTT##",
+    "#YYYSSLPPTTTTAA",
+    "######LPPTT#T##",
+    "####SSLPPTTTT##",
     "PPPPPPPPPPPPPPP",
   ],
   outside: "P",
   doors: [
-    [8, 6, 8, 7], // main door, at the back of the forecourt under the yellow 2x4 plate
+    [6, 8, 7, 8], // main door, on the forecourt's west face (it faces the city camera) under the yellow 2x4 plate
   ],
   openPlan: true,
-  entrance: { outside: [8, 7], inside: [8, 6] },
+  entrance: { outside: [7, 8], inside: [6, 8] },
   standSpots: { shelf: [4.5, 7.5], test: [10.5, 6.5], team: [7.5, 1.5], map: [1.5, 5.5], ailab: [14.5, 4.5] },
 };
 

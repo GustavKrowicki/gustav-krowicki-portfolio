@@ -8,7 +8,7 @@ block per room where its hero object will go. No detail yet.
 
 Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the plot top at y = G, the plot centred on the origin.
 Plan tiles (gx right, gy down) map to X = gx - PW / 2 (east) and Z = gy - PH / 2 (south). The south (+Z) and east (+X)
-sides face the default camera; the main door is at the back of the south forecourt under the yellow 2 x 4 plate.
+sides face the default camera; the main door is on the south forecourt's west face (it faces the camera) under the yellow 2 x 4 plate.
 
 States (one model, see lib/city/models/legoHqAvatarStates.ts):
 - ids starting "roof-": the upper storey, roofs, parapets, the plate over the door.
@@ -270,8 +270,8 @@ for (kind, sd, owner), lines in sorted(segs.items()):
             what = "between rooms"
         else:
             geom = line.buffer(WT, cap_style=2, join_style=2).intersection(REGION[owner])
-            if owner == "L" and sd == "S":
-                geom = geom.difference(DOOR_GAPS[0])
+            if owner == "L":
+                geom = geom.difference(DOOR_GAPS[0])      # the main door
             what = "courtyard" if sd == "C" else f"{sd} side"
         for g in parts(geom):
             n_wall[sd] += 1
@@ -279,32 +279,33 @@ for (kind, sd, owner), lines in sorted(segs.items()):
             wall_stack(tag, g, "wall-grey" if kind == "O" else "wall-light", "wall-grey" if kind == "O" else "wall-light", what,
                        curved=len(g.exterior.coords) > 12)
 
-# Main door: glass leaves in the 1.0 wu gap (lobby south wall at the back of the forecourt), dark posts, header
-DX0, DX1, DZ = X(8.0), X(9.0), Z(7) - WT / 2
-for s, (a0, a1) in (("left", (DX0, DX0 + 0.5)), ("right", (DX1 - 0.5, DX1))):
-    bx(f"door-leaf-{s}", f"Main door leaf {s}", "meso", "door", a0 + 0.01, a1 - 0.01, 0, 1.0, DZ - 0.03, DZ + 0.03, "glass-door", plan_units=False,
+# Main door: glass leaves in the 1.0 wu gap on the forecourt's west face (the lobby's east wall, so it faces the city camera),
+# dark posts, header. The leaves slide along the wall (z).
+DX, DZ0, DZ1 = X(7.0) - WT / 2, Z(8.0), Z(9.0)
+for s, (a0, a1) in (("left", (DZ0, DZ0 + 0.5)), ("right", (DZ1 - 0.5, DZ1))):
+    bx(f"door-leaf-{s}", f"Main door leaf {s}", "meso", "door", DX - 0.03, DX + 0.03, 0, 1.0, a0 + 0.01, a1 - 0.01, "glass-door", plan_units=False,
        contact="flush-mount", importance=0.7, channels={"translate": True, "rotate": False, "scale": False, "bend": False, "twist": False,
                                                         "detach": False, "visibility": True, "materialState": True},
        anim_role="slide", topo="Sliding glass door leaf: a thin box.")
-for s, xx in (("w", DX0), ("e", DX1)):
-    bx(f"wall-door-post-{s}", f"Door post {s}", "meso", "trim", xx - 0.04, xx + 0.04, 0, CUT, DZ - WT / 2 - 0.01, DZ + WT / 2 + 0.01, "frame-dark",
+for s, zz in (("n", DZ0), ("s", DZ1)):
+    bx(f"wall-door-post-{s}", f"Door post {s}", "meso", "trim", DX - WT / 2 - 0.01, DX + WT / 2 + 0.01, 0, CUT, zz - 0.04, zz + 0.04, "frame-dark",
        plan_units=False, contact="flush-mount", importance=0.5)
-    bx(f"upper-S-door-post-{s}", f"Door post {s} upper", "meso", "trim", xx - 0.04, xx + 0.04, CUT, 1.08, DZ - WT / 2 - 0.01, DZ + WT / 2 + 0.01,
+    bx(f"upper-E-door-post-{s}", f"Door post {s} upper", "meso", "trim", DX - WT / 2 - 0.01, DX + WT / 2 + 0.01, CUT, 1.08, zz - 0.04, zz + 0.04,
        "frame-dark", plan_units=False, contact="flush-mount", importance=0.5)
-bx("upper-S-door-header", "Door header", "meso", "trim", DX0 - 0.04, DX1 + 0.04, 1.0, 1.08, DZ - WT / 2 - 0.01, DZ + WT / 2 + 0.01, "frame-dark",
+bx("upper-E-door-header", "Door header", "meso", "trim", DX - WT / 2 - 0.01, DX + WT / 2 + 0.01, 1.0, 1.08, DZ0 - 0.04, DZ1 + 0.04, "frame-dark",
    plan_units=False, contact="flush-mount", importance=0.5)
-bx("upper-S-door-glass", "Glass over the door", "meso", "wall", DX0, DX1, 1.08, G1 - CAP, DZ - WT / 2, DZ + WT / 2, "glass-light", plan_units=False,
+bx("upper-E-door-glass", "Glass over the door", "meso", "wall", DX - WT / 2, DX + WT / 2, 1.08, G1 - CAP, DZ0, DZ1, "glass-light", plan_units=False,
    contact="flush-mount", importance=0.4)
-bx("topcap-S-door", "Door top cap", "micro", "trim", DX0, DX1, G1 - CAP, G1, DZ - WT / 2, DZ + WT / 2, "wall-cap", plan_units=False, contact="applied")
+bx("topcap-E-door", "Door top cap", "micro", "trim", DX - WT / 2, DX + WT / 2, G1 - CAP, G1, DZ0, DZ1, "wall-cap", plan_units=False, contact="applied")
 
-# Yellow 2 x 4 plate over the forecourt, wall to wall, in front of the door; part of the roof (hidden inside)
-PX0, PX1, PZ0, PZ1, PY = 7.02, 8.98, 7.04, 8.04, 1.55
+# Yellow 2 x 4 plate over the forecourt in front of the door, its long side along the west face; part of the roof (hidden inside)
+PX0, PX1, PZ0, PZ1, PY = 7.02, 8.02, 7.5, 9.5, 1.95   # high enough that it does not cover the doorway from the city camera
 bx("roof-canopy", "Yellow 2 x 4 plate canopy", "macro", "canopy", PX0, PX1, PY, PY + 0.2, PZ0, PZ1, "yellow", importance=0.95, conf=0.85,
    features=[{"id": "canopy.studs", "kind": "contour", "notes": "2 x 4 round studs on top (8 cylinders)"}],
    sockets=[{"id": "top", "localPosition": [0, 0.1, 0], "notes": "stud row"}], topo="Toy plate: a box over the forecourt.")
 for i in range(4):
     for j in range(2):
-        cyl(f"roof-canopy-stud-{i * 2 + j + 1}", f"Canopy stud {i * 2 + j + 1}", "micro", "trim", PX0 + 0.245 + 0.49 * i, PZ0 + 0.25 + 0.5 * j,
+        cyl(f"roof-canopy-stud-{i * 2 + j + 1}", f"Canopy stud {i * 2 + j + 1}", "micro", "trim", PX0 + 0.25 + 0.5 * j, PZ0 + 0.25 + 0.5 * i,
             PY + 0.2, 0.09, 0.15, "yellow", importance=0.6, topo="Plate stud: a short cylinder.")
 
 # ---------------------------------------------------------------------------------------------------------------
@@ -434,8 +435,8 @@ spec["featureReviewTargets"] = [
      "componentRefs": [i for i in ids if i.startswith("roof-mass") or i.startswith("roof-top")]},
     {"id": "avatar-scale", "name": "Storeys 1.2 wu, door 1.0 wu: the avatar (0.9 wu) fits the main door", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True,
-     "componentRefs": ["door-leaf-left", "door-leaf-right", "upper-S-door-header", "roof-canopy"]},
-    {"id": "entrance", "name": "Yellow 2 x 4 plate over the glass main door at the back of the forecourt", "tier": "critical",
+     "componentRefs": ["door-leaf-left", "door-leaf-right", "upper-E-door-header", "roof-canopy"]},
+    {"id": "entrance", "name": "Yellow 2 x 4 plate over the glass main door on the forecourt's west face", "tier": "critical",
      "passIds": ["structural-pass", "material-pass"], "minimumScore": 0.7, "mustPass": True,
      "componentRefs": ["roof-canopy", "door-leaf-left", "door-leaf-right"] + [f"roof-canopy-stud-{i}" for i in range(1, 9)]},
     {"id": "cutaway", "name": "Roof off: far walls high, other walls cut with dark caps, every room floor visible", "tier": "critical",
@@ -461,7 +462,7 @@ spec["lightingFromPhoto"] = [
     {"id": "tone", "role": "exposure", "toneMapping": "Neutral", "exposure": 1.0, "notes": "game sprites use the converter rig"},
     {"id": "contact", "role": "shadow", "notes": "soft contact shadows under the blocks"},
 ]
-spec["entrance"] = {"side": "south", "at": 8.5, "width": 1.0, "approachTile": [8, 7],
+spec["entrance"] = {"side": "forecourt west face (east-facing)", "at": 8.5, "width": 1.0, "approachTile": [7, 8],
                     "cues": ["yellow 2 x 4 plate over the forecourt", "glass sliding doors", "light forecourt paving"]}
 spec["states"] = {"roofOn": "hide lowcap-* and topcap-*",
                   "roofOff": "hide roof-*; keep upper-/topcap- only for the two far sides of the view; show lowcap- for the others"}
