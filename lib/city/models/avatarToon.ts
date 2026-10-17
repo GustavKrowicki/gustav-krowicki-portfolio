@@ -8,6 +8,7 @@
 // Base mesh: art/avatar-builder/base/ (Blender script), served as public/game/pogicity/Characters/avatar-builder/base.glb.
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { AVATAR_BASE_COLORS, AVATAR_PIECES, type AvatarPiece } from './avatarPieces';
 
 export const AVATAR_BASE_GLB = '/game/pogicity/Characters/avatar-builder/base.glb';
 
@@ -28,40 +29,8 @@ export const AVATAR_TOON = {
   depthEdgeWu: 0.035,
 } as const;
 
-// Base outfit flat colours, keyed by the GLB material names (sRGB hex).
-export const AVATAR_BASE_COLORS: Record<string, string> = {
-  skin: '#f0c3a0',
-  hair: '#c4602a',
-  moustache: '#d48a5c',
-  eye: '#2a1d18',
-  tee: '#f5f2ea',
-  denim: '#223680',
-  cuff: '#5274bd',
-  shoe: '#1e1a1a',
-  welt: '#e6c13a',
-  sole: '#141212',
-  hoodie: '#6e6e73',
-  'hoodie-pocket': '#5f5f64',
-  string: '#e9e7e1',
-  beanie: '#dca528',
-  'beanie-cuff': '#c8941f',
-  sweater: '#3c5a46',
-  'sweater-rib': '#253a2c',
-  'club-white': '#fafafa',
-  'club-blue': '#0046a0',
-  cargo: '#968769',
-  'cargo-dark': '#6c5f47',
-};
+export { AVATAR_BASE_COLORS, AVATAR_PIECES, type AvatarPiece } from './avatarPieces';
 
-// Swappable pieces in the GLB (node names): one piece per slot, and the base pieces each one covers.
-export const AVATAR_PIECES = {
-  hoodie: { slot: 'top', covers: ['tee'] },
-  sweater: { slot: 'top', covers: ['tee'] },
-  clubShirt: { slot: 'top', covers: ['tee'] }, // the football club shirt
-  beanie: { slot: 'head', covers: [] },
-  cargo: { slot: 'legs', covers: ['jeans'] },
-} as const satisfies Record<string, { slot: string; covers: readonly string[] }>;
-export type AvatarPiece = keyof typeof AVATAR_PIECES;
 
 // Shows the worn pieces (the last one wins within a slot), hides every other optional piece and
 // whatever the worn ones cover.
@@ -220,6 +189,16 @@ export function createToonCamera(view: ToonView): THREE.OrthographicCamera {
   return cam;
 }
 
+// One fetch per page: every view of the builder shares this model (callers render it, never mutate geometry).
+let sharedBase: Promise<THREE.Group> | null = null;
+export function loadSharedAvatarBase(): Promise<THREE.Group> {
+  sharedBase ??= loadAvatarBase().catch((err) => {
+    sharedBase = null;
+    throw err;
+  });
+  return sharedBase;
+}
+
 export async function loadAvatarBase(url = AVATAR_BASE_GLB): Promise<THREE.Group> {
   const gltf = await new GLTFLoader().loadAsync(url);
   const model = gltf.scene;
@@ -259,6 +238,15 @@ export class ToonRenderer {
     this.renderer.setClearColor(0x000000, 0);
     this.quadScene.add(this.quad);
     this.quad.frustumCulled = false;
+  }
+
+  dispose() {
+    this.colorRT.dispose();
+    this.depthRT.dispose();
+    this.depthMat.dispose();
+    this.outlineMat.dispose();
+    this.quad.geometry.dispose();
+    this.renderer.dispose();
   }
 
   render(model: THREE.Object3D, view: ToonView) {
