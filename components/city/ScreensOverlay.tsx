@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { InteriorBeat } from "@/lib/city/interiorBeats";
@@ -20,19 +20,29 @@ interface ScreensOverlayProps {
 export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverlayProps) {
   const reduced = useReducedMotion();
   const screens = beat?.seat?.screens ?? [];
-  // Rendered into the page body and fixed to the window: in the shell the city is only a strip of the screen on a phone,
-  // and the screens view must cover the whole screen above the panel, or its close is out of reach
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => setMounted(true), []);
+  const closeRef = useRef<HTMLButtonElement>(null);
 
+  // A modal: focus goes to Stand up when it opens, Tab stays inside, Escape closes, focus returns where it was
+  const open = !!beat && screens.length > 0;
   useEffect(() => {
-    if (!beat) return;
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
+    if (!open) return;
+    const before = document.activeElement as HTMLElement | null;
+    closeRef.current?.focus({ preventScroll: true });
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+      if (e.key === "Tab") { e.preventDefault(); closeRef.current?.focus(); }   // Stand up is the only control
+    };
     window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [beat, onClose]);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      before?.focus?.({ preventScroll: true });
+    };
+  }, [open, onClose]);
 
-  if (!mounted) return null;
+  // Rendered into the page body and fixed to the window: in the shell the city is only a strip of the screen on a phone,
+  // and the screens view must cover the whole screen above the panel, or its close is out of reach. (CityViewer only
+  // renders on the client, so document exists.)
+  if (typeof document === "undefined") return null;
   return createPortal(
     <AnimatePresence>
       {beat && screens.length > 0 && (
@@ -88,7 +98,7 @@ export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverla
                     </ul>
                   )}
                 </div>
-                <button onClick={onClose} className={`${pixelButtonClass("ghost")} shrink-0`} data-testid="screens-overlay-close">
+                <button ref={closeRef} onClick={onClose} className={`${pixelButtonClass("ghost")} shrink-0`} data-testid="screens-overlay-close">
                   Stand up
                 </button>
               </div>

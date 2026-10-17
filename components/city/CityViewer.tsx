@@ -89,7 +89,11 @@ export default function CityViewer({
   const [isSeated, setIsSeated] = useState(false);
   // Door beats (lib/city/interiorBeats.ts "enter" / "leave"): shown for a while after crossing a main door
   const [doorCard, setDoorCard] = useState<{ buildingId: string; beat: string } | null>(null);
-  const doorTimerRef = useRef<number | undefined>(undefined);   // at once; the screens (interiorSeat) follow a moment later
+  const doorTimerRef = useRef<number | undefined>(undefined);
+  useEffect(() => () => {
+    window.clearTimeout(seatTimerRef.current);
+    window.clearTimeout(doorTimerRef.current);
+  }, []);   // at once; the screens (interiorSeat) follow a moment later
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
@@ -322,6 +326,11 @@ export default function CityViewer({
           // Suppress dialog when passing through zones en route to a different target
           scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
+            // buildings told by beat cards never open the tour dialog (it would stay "open" unseen and hide Walk)
+            if (BEAT_CARD_BUILDINGS.has(buildingId)) {
+              if (autoWalkTargetRef.current === buildingId) autoWalkTargetRef.current = null;
+              return;
+            }
 
             if (!autoWalkTargetRef.current) {
               setIsDialogOpen(true);
@@ -336,6 +345,9 @@ export default function CityViewer({
               }
             }
           });
+
+          // Walk may be pressed again later: drop the interior listeners from the last time before adding them
+          for (const name of ["interiorBeatChanged", "interiorDoorCrossed", "interiorSeatChanged"]) scene.events.off(name);
 
           // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
           scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
@@ -651,7 +663,7 @@ export default function CityViewer({
   // The card on screen: a stand-tile beat first (hidden while seated), else a door beat
   const shownCard = interiorBeat ? (isSeated ? null : interiorBeat) : doorCard;
   // The tour dialog does not show for buildings told by beat cards (it may still be "open" for them in state)
-  const dialogShown = isDialogOpen && !BEAT_CARD_BUILDINGS.has(currentEncounter?.buildingId ?? "");
+  const dialogShown = isDialogOpen && !!currentEncounter && !BEAT_CARD_BUILDINGS.has(currentEncounter.buildingId ?? "");
 
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
