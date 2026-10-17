@@ -40,6 +40,8 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'beanie-cuff': '#c8941f',
     'sweater': '#3c5a46',
     'sweater-rib': '#253a2c',
+    'club-white': '#fafafa',
+    'club-blue': '#0046a0',
 }
 
 
@@ -392,10 +394,33 @@ def build_sweater():
     return new_object('sweater', bm, ['sweater', 'sweater-rib'])
 
 
+def build_club_shirt():
+    """The football club shirt: tee cut, white body, blue short sleeves, a blue collar line and one blue
+    chest band 2 px tall at street zoom. Hides the tee; shares the top slot with the hoodie and sweater."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    pad = TEE_PAD + 0.001
+    band_lo, band_hi = 0.535, 0.535 + 2 * PX
+    def torso_at(z):  # skin torso radii, interpolated between the TORSO stations
+        for (z0, ax, ay), (z1, bx, by) in zip(TORSO, TORSO[1:]):
+            if z0 <= z <= z1:
+                t = (z - z0) / (z1 - z0)
+                return ax + (bx - ax) * t, ay + (by - ay) * t
+        raise ValueError(z)
+    zs = [0.42, 0.48, band_lo, band_hi, 0.62, 0.655]
+    rings = [vring(HEM_Z, 0.091, 0.061)] + [vring(z, torso_at(z)[0] + pad, torso_at(z)[1] + pad) for z in zs]
+    rings += [vring(0.667, 0.056, 0.044), vring(0.679, 0.039, 0.035)]  # collar: last band is the blue line
+    mats = [0, 0, 0, 1, 0, 0, 0, 1]
+    loft(bm, uv, rings, 0, mats_by_ring=mats)
+    for side in (-1, 1):
+        loft(bm, uv, arm_rings(side, [(-0.02, 0.041, 0.043), (0.03, 0.043, 0.043), (0.085, 0.039, 0.039)]), 1, seg=10)
+    return new_object('clubShirt', bm, ['club-white', 'club-blue'])
+
+
 def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     base = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
-    parts = base + [build_hoodie(), build_beanie(), build_sweater()]
+    parts = base + [build_hoodie(), build_beanie(), build_sweater(), build_club_shirt()]
     tris = 0
     for obj in parts:
         bpy.context.view_layer.objects.active = obj
