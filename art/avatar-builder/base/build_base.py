@@ -42,6 +42,8 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'sweater-rib': '#253a2c',
     'club-white': '#fafafa',
     'club-blue': '#0046a0',
+    'cargo': '#968769',
+    'cargo-dark': '#6c5f47',
 }
 
 
@@ -303,12 +305,13 @@ def build_shoes():
     return new_object('shoes', bm, ['shoe', 'welt', 'sole'])
 
 
-def patch(bm, uv, rows, mat_index, cols=6):
-    """Front-facing strip on an elliptic shell. rows: (z, rx, ry, half_angle); angle 0 = front (-Y)."""
+def patch(bm, uv, rows, mat_index, cols=6, cx=0.0, a0=0.0):
+    """Strip on an elliptic shell centred on x = cx. rows: (z, rx, ry, half_angle); angle 0 = front (-Y),
+    a0 turns the strip's centre towards +X."""
     grid = []
     for (z, rx, ry, ha) in rows:
-        grid.append([bm.verts.new((rx * math.sin(a), -ry * math.cos(a), z))
-                     for a in (-ha + 2 * ha * c / cols for c in range(cols + 1))])
+        grid.append([bm.verts.new((cx + rx * math.sin(a), -ry * math.cos(a), z))
+                     for a in (a0 - ha + 2 * ha * c / cols for c in range(cols + 1))])
     for r in range(len(rows) - 1):
         for c in range(cols):
             f = bm.faces.new((grid[r][c], grid[r + 1][c], grid[r + 1][c + 1], grid[r][c + 1]))
@@ -417,10 +420,31 @@ def build_club_shirt():
     return new_object('clubShirt', bm, ['club-white', 'club-blue'])
 
 
+def build_cargo():
+    """Sand-wash cargo trousers: baggier than the denim (about 1 px wider per leg at street zoom), a darker
+    thigh pocket on the outer side of each leg, darker elastic hem at the ankle, no rolled cuff.
+    Replaces the jeans (legs slot)."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    loft(bm, uv, [vring(0.33, 0.074, 0.052), vring(0.37, 0.094, 0.062), vring(0.415, 0.082, 0.053)], 0)
+    for side in (-1, 1):
+        cx = side * 0.056
+        # elastic hem cinched just above the shoe top, then the leg balloons out a little above it;
+        # the leg narrows again at the top so the gap between the legs survives at street zoom
+        loft(bm, uv, [vring(0.082, 0.037, 0.039, cx), vring(0.110, 0.038, 0.040, cx),
+                      vring(0.124, 0.043, 0.045, cx), vring(0.17, 0.045, 0.047, cx),
+                      vring(0.28, 0.044, 0.047, cx), vring(0.385, 0.042, 0.048, cx)], 0, seg=10,
+             mats_by_ring=[1, 0, 0, 0, 0])
+        # thigh pocket: on the outer side, turned towards the front so it shows in the front view
+        patch(bm, uv, [(0.200, 0.049, 0.052, 0.40), (0.245, 0.049, 0.052, 0.40), (0.290, 0.048, 0.051, 0.40)],
+              1, cols=4, cx=cx, a0=side * 0.85)
+    return new_object('cargo', bm, ['cargo', 'cargo-dark'])
+
+
 def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     base = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
-    parts = base + [build_hoodie(), build_beanie(), build_sweater(), build_club_shirt()]
+    parts = base + [build_hoodie(), build_beanie(), build_sweater(), build_club_shirt(), build_cargo()]
     tris = 0
     for obj in parts:
         bpy.context.view_layer.objects.active = obj

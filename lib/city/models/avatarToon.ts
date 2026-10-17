@@ -49,6 +49,8 @@ export const AVATAR_BASE_COLORS: Record<string, string> = {
   'sweater-rib': '#253a2c',
   'club-white': '#fafafa',
   'club-blue': '#0046a0',
+  cargo: '#968769',
+  'cargo-dark': '#6c5f47',
 };
 
 // Swappable pieces in the GLB (node names): one piece per slot, and the base pieces each one covers.
@@ -57,6 +59,7 @@ export const AVATAR_PIECES = {
   sweater: { slot: 'top', covers: ['tee'] },
   clubShirt: { slot: 'top', covers: ['tee'] }, // the football club shirt
   beanie: { slot: 'head', covers: [] },
+  cargo: { slot: 'legs', covers: ['jeans'] },
 } as const satisfies Record<string, { slot: string; covers: readonly string[] }>;
 export type AvatarPiece = keyof typeof AVATAR_PIECES;
 
