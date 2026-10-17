@@ -12,6 +12,9 @@ export interface InteriorBeat {
   items?: { label: string; text: string }[];
   /** Show the building's case study link on the card (the leave beat) */
   caseStudy?: boolean;
+  /** A sit-and-look moment: on the stand tile the avatar walks to `at` (plan tiles) and sits, the building shows its
+   *  seated sprite (buildings.ts seatSprites[beat]), and the screens open large over the city (ScreensOverlay) */
+  seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
 }
 
 // Wired this round: the desk only. The other Valtech beats (gate, room, lunch) get their entries here when their zones
@@ -26,6 +29,14 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
         { label: "File-sharing platform", text: "Real content tells the truth." },
         { label: "B2B webshop", text: "Small scoped steps get the work out." },
       ],
+      // the chair (art/img2threejs/valtech-office build_spec.py kit_chair "int-desk-chair"); the full-size case images
+      seat: {
+        at: [4.72, 0.74],
+        screens: [
+          { src: "/images/valtech/vestas%201.png", alt: "B2B webshop: search results with filters and product rows", caption: "B2B webshop: search results" },
+          { src: "/images/valtech/vestas%20drawer.png", alt: "B2B webshop: the request product drawer", caption: "B2B webshop: request a product" },
+        ],
+      },
     },
   },
 };

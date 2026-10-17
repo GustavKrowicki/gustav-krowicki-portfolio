@@ -29,3 +29,9 @@ for V in ${VIEWS:-south}; do
   node art/img2threejs/tools/lab_render.mjs "$M" "$O" "valtech-office-avatar-open_$V={\"view\":\"sprite\",\"yaw\":$Y,\"aim\":$A,$S4}" | tail -1
   python3 -I "$W/trim_sprite.py" "$O/valtech-office-avatar-open_$V.png"
 done
+# Seated moments (south view only, walk-ins open in the default orientation): the roof-off sprite with the avatar in
+# the chair, cut to the same frame as the roof-off sprite so the city can swap it in place
+for SIT in ${SITS-desk}; do
+  node art/img2threejs/tools/lab_render.mjs "valtech-open-sit-$SIT" "$O" "valtech-office-avatar-open-sit-${SIT}_south={\"view\":\"sprite\",\"yaw\":45,\"aim\":[$HX,$HZ],$S4}" | tail -1
+  python3 -I "$W/trim_sprite.py" "$O/valtech-office-avatar-open-sit-${SIT}_south.png" "$O/valtech-office-avatar-open_south.png"
+done

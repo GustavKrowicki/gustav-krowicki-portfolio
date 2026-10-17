@@ -8,6 +8,7 @@ import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
 import PeekCard from "./PeekCard";
+import ScreensOverlay from "./ScreensOverlay";
 import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
@@ -82,6 +83,10 @@ export default function CityViewer({
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  // Sit-and-look moment: the beat the avatar sits at (MainScene "interiorSeatChanged"), shown by ScreensOverlay
+  const [interiorSeat, setInteriorSeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  const seatTimerRef = useRef<number | undefined>(undefined);
+  const [isSeated, setIsSeated] = useState(false);   // at once; the screens (interiorSeat) follow a moment later
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
@@ -333,6 +338,14 @@ export default function CityViewer({
           scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
             setInteriorBeat(next);
           });
+          // the screens open a moment after the avatar sits, so the sit itself is seen
+          scene.events.on("interiorSeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            window.clearTimeout(seatTimerRef.current);
+            setIsSeated(!!next);
+            if (!next) { setInteriorSeat(null); return; }
+            const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+            seatTimerRef.current = window.setTimeout(() => setInteriorSeat(next), reduced ? 150 : 700);
+          });
 
           // Player exited trigger zone
           scene.events.on("playerExitedZone", () => {
@@ -399,12 +412,23 @@ export default function CityViewer({
   }, [gameMode, isAdventureActive, onProjectClick]);
 
   // Stop Adventure Mode
+  // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
+  const handleStandUp = useCallback(() => {
+    const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as { standUp?: () => void } | undefined;
+    scene?.standUp?.();
+    window.clearTimeout(seatTimerRef.current);
+    setIsSeated(false);
+    setInteriorSeat(null);
+  }, []);
+
   const handleStopAdventure = useCallback(() => {
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
     setIsDialogOpen(false);
     setInteriorBeat(null);
+    setInteriorSeat(null);
+    setIsSeated(false);
     autoWalkTargetRef.current = null;
 
     const gameBoard = gameBoardRef.current;
@@ -663,8 +687,15 @@ export default function CityViewer({
       {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
       {isAdventureActive && (
         <PeekCard
-          beat={interiorBeat ? INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat] ?? null : null}
+          beat={interiorBeat && !isSeated ? INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat] ?? null : null}
           beatKey={interiorBeat ? `${interiorBeat.buildingId}:${interiorBeat.beat}` : null}
+        />
+      )}
+      {isAdventureActive && (
+        <ScreensOverlay
+          beat={interiorSeat ? INTERIOR_BEATS[interiorSeat.buildingId]?.[interiorSeat.beat] ?? null : null}
+          beatKey={interiorSeat ? `${interiorSeat.buildingId}:${interiorSeat.beat}` : null}
+          onClose={handleStandUp}
         />
       )}
 

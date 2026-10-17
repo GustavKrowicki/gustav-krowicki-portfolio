@@ -48,7 +48,7 @@ import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
-import { beatAtTile } from "@/lib/city/interiorBeats";
+import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -229,6 +229,9 @@ export class MainScene extends Phaser.Scene {
       }
       for (const [dir, path] of Object.entries(building.openSprites ?? {})) {
         this.load.image(`${building.id}_open_${dir}`, path);
+      }
+      for (const [beat, path] of Object.entries(building.seatSprites ?? {})) {
+        this.load.image(`${building.id}_sit_${beat}`, path);
       }
       if (building.door) {
         this.load.spritesheet(`${building.id}_door`, building.door.sheet, {
@@ -1576,6 +1579,7 @@ export class MainScene extends Phaser.Scene {
     const stopped = target.x === gridX && target.y === gridY;
     const beat = inside && stopped ? beatAtTile(here!.buildingId, here!.lx, here!.ly) : null;
     this.setInteriorBeat(beat ? { buildingId: here!.buildingId, beat } : null);
+    this.updateSeat(beat ? here!.buildingId : null, beat);
     const tile = here ?? next;
     if (!tile) {
       this.playerController.setDepthOverride(this.frontOfPlotDepth(gridX, gridY));
@@ -1591,7 +1595,59 @@ export class MainScene extends Phaser.Scene {
     const key = next ? `${next.buildingId}:${next.beat}` : null;
     if (key === this.activeBeat) return;
     this.activeBeat = key;
+    this.beatSince = this.time.now;
     this.events.emit("interiorBeatChanged", next);
+  }
+
+  // Sit-and-look moments (lib/city/interiorBeats.ts seat): a short pause on the stand tile, then the avatar walks into
+  // the chair and the building shows its seated sprite; React opens the screens ("interiorSeatChanged"). Any move, or
+  // standUp() from the overlay, stands it up; it does not sit again until the player has left the stand tile.
+  private seated: { buildingId: string; beat: string } | null = null;
+  private seatPending = false;
+  private seatDismissed: string | null = null;
+  private beatSince = 0;
+
+  private updateSeat(buildingId: string | null, beat: string | null): void {
+    const key = buildingId && beat ? `${buildingId}:${beat}` : null;
+    if (!key) this.seatDismissed = null;
+    const moving = this.playerController?.getState() !== PlayerState.Idle;
+    if (this.seated || this.seatPending) {
+      const seatedKey = this.seated ? `${this.seated.buildingId}:${this.seated.beat}` : this.activeBeat;
+      if (moving || key !== seatedKey) this.standUp();
+      return;
+    }
+    const seat = key ? INTERIOR_BEATS[buildingId!]?.[beat!]?.seat : undefined;
+    if (!seat || moving || this.seatDismissed === key) return;
+    if (this.time.now - this.beatSince < 450) return;
+    this.sitDown(buildingId!, beat!, seat.at);
+  }
+
+  private sitDown(buildingId: string, beat: string, at: [number, number]): void {
+    const pc = this.playerController;
+    const spot = BUILDING_INTERIORS[buildingId]?.standSpots?.[beat];
+    if (!pc || !spot) return;
+    // the chair relative to the stand spot, in plan tiles, to screen pixels (the player stands on the spot's tile centre)
+    const dx = at[0] - spot[0], dy = at[1] - spot[1];
+    const p = pc.getPosition();
+    this.seatPending = true;
+    pc.walkToSeat(p.worldX + (dx - dy) * (TILE_WIDTH / 2), p.worldY + (dx + dy) * (TILE_HEIGHT / 2), () => {
+      this.seatPending = false;
+      this.seated = { buildingId, beat };
+      this.refreshBuildingTexture(buildingId, 160);
+      this.events.emit("interiorSeatChanged", { buildingId, beat });
+    });
+  }
+
+  /** Stand the avatar up from its chair (also called by the screens overlay's close) */
+  standUp(): void {
+    if (!this.seated && !this.seatPending) return;
+    const was = this.seated;
+    this.seatDismissed = was ? `${was.buildingId}:${was.beat}` : this.activeBeat;
+    this.seated = null;
+    this.seatPending = false;
+    this.playerController?.standFromSeat();
+    if (was) this.refreshBuildingTexture(was.buildingId, 160);
+    this.events.emit("interiorSeatChanged", null);
   }
 
   // The walk-in building the player is inside (past its main door), or null
@@ -1790,6 +1846,7 @@ export class MainScene extends Phaser.Scene {
     this.cameraFollowPlayer = false;
     this.manualCameraOverrideInAdventure = false;
     this.stopCameraFollow();
+    this.standUp();
     this.setInteriorBeat(null);
 
     // Clean up
@@ -2392,7 +2449,13 @@ export class MainScene extends Phaser.Scene {
     if (!building?.openSprites || this.openBuildings.has(buildingId) === open) return;
     if (open) this.openBuildings.add(buildingId);
     else this.openBuildings.delete(buildingId);
+    this.refreshBuildingTexture(buildingId, 450);
+  }
 
+  // Cross-fade a building's sprite to the texture its state calls for (open, seated, closed)
+  private refreshBuildingTexture(buildingId: string, fadeMs: number): void {
+    const building = getBuilding(buildingId);
+    if (!building) return;
     this.buildingSpriteInfo.forEach((info, key) => {
       if (info.buildingId !== buildingId) return;
       const sprite = this.buildingSprites.get(key);
@@ -2404,19 +2467,24 @@ export class MainScene extends Phaser.Scene {
       previous.setDepth(sprite.depth + 0.001);
       sprite.setTexture(textureKey);
       sprite.setScale(this.buildingTextureScale(building, textureKey));
-      this.tweens.add({ targets: previous, alpha: 0, duration: 450, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
+      this.tweens.add({ targets: previous, alpha: 0, duration: fadeMs, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
     });
   }
 
   // Display scale of a building texture: open (roof-off) textures may have their own texel density
   private buildingTextureScale(building: BuildingDefinition, textureKey: string): number {
     const base = building.spriteScale ?? 1;
-    return textureKey.startsWith(`${building.id}_open_`) ? building.openSpriteScale ?? base : base;
+    const open = textureKey.startsWith(`${building.id}_open_`) || textureKey.startsWith(`${building.id}_sit_`);
+    return open ? building.openSpriteScale ?? base : base;
   }
 
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
 
+    if (this.openBuildings.has(building.id) && this.seated?.buildingId === building.id && dir === "south") {
+      const sitKey = `${building.id}_sit_${this.seated.beat}`;
+      if (this.textures.exists(sitKey)) return sitKey;
+    }
     if (this.openBuildings.has(building.id) && building.openSprites) {
       const openKey = `${building.id}_open_${dir}`;
       if (this.textures.exists(openKey)) return openKey;
