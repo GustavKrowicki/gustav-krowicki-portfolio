@@ -1,16 +1,14 @@
-// Roof-on / roof-off states of the LEGO HQ at avatar scale (art/img2threejs/lego-hq-avatar, board section 529:3604).
+// Roof-on / roof-off states of the LEGO HQ at avatar scale (art/img2threejs/lego-hq-avatar): the grey box on the real
+// campus outline (plan.py), five rooms on the route from Figma board node 651:3604.
 // The spec tags node ids: "roof-" = upper storeys and roofs; the ground storey walls are split into "wall-<side>-"
 // (low, always shown) and "upper-<side>-" (the rest), with "lowcap-" / "topcap-" caps; side N/S/E/W faces outward,
 // I is between rooms. Roof off keeps the walls of the two far sides of the view high and cuts all others.
 import type * as THREE from 'three';
 import { createLEGOHQAvatarScaleModel, type ProceduralModelOptions } from './legoHqAvatar';
-import { applyLEGOHQSurfaces } from './legoHqSurfaces';
 
-// Surface pass (textures, wear, contact darkening) on the whole campus, to sit with the Krea-made city buildings
+// Grey box: flat colours only. The surface pass (legoHqSurfaces.ts) comes back with the detail pass.
 function createSurfacedModel(options: ProceduralModelOptions): THREE.Group {
-  const model = createLEGOHQAvatarScaleModel(options);
-  applyLEGOHQSurfaces(model);
-  return model;
+  return createLEGOHQAvatarScaleModel(options);
 }
 
 export type CampusView = 'south' | 'west' | 'north' | 'east';

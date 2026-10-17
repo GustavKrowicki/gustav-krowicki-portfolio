@@ -108,28 +108,15 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // The real campus rebuilt at the 3D avatar's scale (art/img2threejs/lego-hq-avatar, board sections 529:3604 and
-    // 534:3604): a 14 x 9 site so the green roofs, courtyards, round building and terrace building read as the campus;
-    // wings 2 storeys, atrium and yellow blocks 3, main door south under the yellow 2x4 plate. Sprites at 2x density
-    // (1280 px, converter zoom 1.1342, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off
-    // when the player walks through the main door (lib/city/buildingInteriors.ts).
-    footprint: { width: 14, height: 9 },
-    triggerZoneRadius: 5.5,
+    // Grey box on the real campus outline (art/img2threejs/lego-hq-avatar, plan.py; Linear POR-25): 15 x 11 with the
+    // plaza row, two storeys, green roofs with courtyards, round building at the west, main door at the back of the south
+    // forecourt under the yellow 2x4 plate. Five rooms on the route from the board (node 651:3604). Sprites at 2x density
+    // (1536 px, converter zoom 1.0128, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off when
+    // the player walks through the main door (lib/city/buildingInteriors.ts). The sliding doors are in the model, but the
+    // south-east leg hides them from the city camera, so there is no door animation here yet.
+    footprint: { width: 15, height: 11 },
+    triggerZoneRadius: 6,
     spriteScale: 0.5,
-    // Sliding glass doors under the plate (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1)
-    door: {
-      sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
-      frames: 7, frameWidth: 94, frameHeight: 62, x: 354, y: 1018, at: [6.5, 7.0], radius: 1.5,
-    },
-    // Pogicity trees and bushes, downsized to the avatar scale, in the plaza planters and on the front corners
-    decor: [
-      { prop: "tree-4", x: 8.5, y: 7.5, scale: 0.45 },
-      { prop: "tree-4", x: 8.5, y: 8.55, scale: 0.45 },
-      { prop: "tree-1", x: 0.5, y: 8.55, scale: 0.55 },
-      { prop: "tree-1", x: 13.5, y: 8.55, scale: 0.55 },
-      { prop: "flower-bush", x: 2.0, y: 8.85, scale: 0.8 },
-      { prop: "flower-bush", x: 3.4, y: 8.85, scale: 0.8 },
-    ],
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
       north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
