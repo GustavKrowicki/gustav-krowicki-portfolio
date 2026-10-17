@@ -5,10 +5,14 @@
 // I is between rooms. Roof off keeps the walls of the two far sides of the view high and cuts all others.
 import type * as THREE from 'three';
 import { createLEGOHQAvatarScaleModel, type ProceduralModelOptions } from './legoHqAvatar';
+import { applyLEGOHQSurfaces } from './legoHqSurfaces';
 
-// Grey box: flat colours only. The surface pass (legoHqSurfaces.ts) comes back with the detail pass.
+// Surface pass (textures, wear, contact darkening) on the outside only; the inside stays a flat grey box for now
+// (room floors and hero places keep their flat colours).
 function createSurfacedModel(options: ProceduralModelOptions): THREE.Group {
-  return createLEGOHQAvatarScaleModel(options);
+  const model = createLEGOHQAvatarScaleModel(options);
+  applyLEGOHQSurfaces(model, (id) => !/-floor(-\d+)?$/.test(id) && !id.startsWith('hero-'));
+  return model;
 }
 
 export type CampusView = 'south' | 'west' | 'north' | 'east';

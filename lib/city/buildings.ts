@@ -108,20 +108,30 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    // Grey box on the real campus outline (art/img2threejs/lego-hq-avatar, plan.py; Linear POR-25): 15 x 11 with the
-    // plaza row, two storeys, green roofs with courtyards, round building at the west, main door on the south front facing
-    // the plaza, under the yellow 2x4 plate (the real forecourt notch is filled in). Five areas (open plan) on the route from the board (node 651:3604). Sprites at 2x density
-    // (1536 px, converter zoom 1.0128, front corner at the bottom centre), drawn at 0.5. Walk-in: the roof comes off when
-    // the player walks through the main door (lib/city/buildingInteriors.ts). A door at the back of the real forecourt is
-    // hidden from the city camera by the south-east leg, so the door is on the front like the earlier campus.
+    // The campus on the real outline (art/img2threejs/lego-hq-avatar, plan.py; Linear POR-25): 15 x 11 with the plaza
+    // row; two storeys with a three-storey glass atrium over the lobby, green roofs with courtyards, the round building at
+    // the west, the terrace building, the yellow bar and block. The main door is on the south front facing the plaza,
+    // under the yellow 2x4 plate: the real forecourt notch is filled in, because the south-east leg hides a door at its
+    // back from the city camera. Inside: five open areas on the route from the board (node 651:3604), still a grey box.
+    // Sprites at 2x density (1536 px, converter zoom 1.0128, front corner at the bottom centre), drawn at 0.5. Walk-in:
+    // the roof comes off when the player walks through the main door (lib/city/buildingInteriors.ts).
     footprint: { width: 15, height: 11 },
     triggerZoneRadius: 6,
     spriteScale: 0.5,
     // Sliding glass doors (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1, export_door.sh)
     door: {
       sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
-      frames: 7, frameWidth: 92, frameHeight: 78, x: 482, y: 1302, at: [8.5, 10.0], radius: 1.5,
+      frames: 7, frameWidth: 94, frameHeight: 78, x: 482, y: 1302, at: [8.5, 10.0], radius: 1.5,
     },
+    // Pogicity trees, downsized to the avatar scale, in the two planters and on the front grass (trees behind the building
+    // would draw over its roof)
+    decor: [
+      { prop: "tree-4", x: 2.7, y: 9.4, scale: 0.45 },
+      { prop: "tree-4", x: 3.55, y: 9.4, scale: 0.45 },
+      { prop: "tree-1", x: 1.2, y: 9.5, scale: 0.55 },
+      { prop: "tree-1", x: 13.3, y: 9.6, scale: 0.5 },
+      { prop: "tree-1", x: 14.2, y: 2.6, scale: 0.55 },
+    ],
     sprites: {
       south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
       north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
