@@ -40,7 +40,29 @@ export const AVATAR_BASE_COLORS: Record<string, string> = {
   shoe: '#1e1a1a',
   welt: '#e6c13a',
   sole: '#141212',
+  hoodie: '#6e6e73',
+  'hoodie-pocket': '#5f5f64',
+  string: '#e9e7e1',
+  beanie: '#dca528',
+  'beanie-cuff': '#c8941f',
 };
+
+// Swappable pieces in the GLB (node names) and the base pieces each one covers while it is worn.
+export const AVATAR_PIECES = {
+  hoodie: { covers: ['tee'] },
+  beanie: { covers: [] as string[] },
+} as const;
+export type AvatarPiece = keyof typeof AVATAR_PIECES;
+
+// Shows the worn pieces, hides the rest of the optional pieces and whatever the worn ones cover.
+export function applyOutfit(model: THREE.Object3D, worn: AvatarPiece[]) {
+  const hidden = new Set<string>();
+  for (const piece of Object.keys(AVATAR_PIECES) as AvatarPiece[]) {
+    if (worn.includes(piece)) AVATAR_PIECES[piece].covers.forEach((n) => hidden.add(n));
+    else hidden.add(piece);
+  }
+  for (const child of model.children) child.visible = !hidden.has(child.name);
+}
 
 const toonVertex = /* glsl */ `
   #include <common>

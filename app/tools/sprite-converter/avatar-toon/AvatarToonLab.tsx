@@ -2,10 +2,19 @@
 
 // Avatar builder toon lab: the base body in the base outfit, rendered by lib/city/models/avatarToon.ts
 // at the builder size and at the street-zoom sprite size, from the same camera and materials.
-//   ?yaw=0  model yaw in degrees (0 faces the camera)
+//   ?yaw=0              model yaw in degrees (0 faces the camera)
+//   ?wear=hoodie,beanie  optional pieces to put on (default: the base outfit)
 // window.__avatarToon = { builder, sprite } (PNG data URLs) once both are drawn.
 import { useEffect, useRef, useState } from 'react';
-import { ToonRenderer, builderView, loadAvatarBase, spriteView } from '@/lib/city/models/avatarToon';
+import {
+  AVATAR_PIECES,
+  ToonRenderer,
+  applyOutfit,
+  builderView,
+  loadAvatarBase,
+  spriteView,
+  type AvatarPiece,
+} from '@/lib/city/models/avatarToon';
 
 export default function AvatarToonLab() {
   const builderRef = useRef<HTMLCanvasElement>(null);
@@ -14,10 +23,13 @@ export default function AvatarToonLab() {
 
   useEffect(() => {
     let cancelled = false;
-    const yaw = Number(new URLSearchParams(window.location.search).get('yaw') ?? 0);
+    const params = new URLSearchParams(window.location.search);
+    const yaw = Number(params.get('yaw') ?? 0);
+    const wear = (params.get('wear') ?? '').split(',').filter((p): p is AvatarPiece => p in AVATAR_PIECES);
     (async () => {
       const model = await loadAvatarBase();
       if (cancelled || !builderRef.current || !spriteRef.current) return;
+      applyOutfit(model, wear);
       const big = new ToonRenderer(builderRef.current);
       big.render(model, { ...builderView(600), yawDeg: yaw });
       const small = new ToonRenderer(spriteRef.current);

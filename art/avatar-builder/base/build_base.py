@@ -33,6 +33,11 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'shoe': '#1e1a1a',
     'welt': '#e6c13a',
     'sole': '#141212',
+    'hoodie': '#6e6e73',
+    'hoodie-pocket': '#5f5f64',
+    'string': '#e9e7e1',
+    'beanie': '#dca528',
+    'beanie-cuff': '#c8941f',
 }
 
 
@@ -294,9 +299,81 @@ def build_shoes():
     return new_object('shoes', bm, ['shoe', 'welt', 'sole'])
 
 
+def patch(bm, uv, rows, mat_index, cols=6):
+    """Front-facing strip on an elliptic shell. rows: (z, rx, ry, half_angle); angle 0 = front (-Y)."""
+    grid = []
+    for (z, rx, ry, ha) in rows:
+        grid.append([bm.verts.new((rx * math.sin(a), -ry * math.cos(a), z))
+                     for a in (-ha + 2 * ha * c / cols for c in range(cols + 1))])
+    for r in range(len(rows) - 1):
+        for c in range(cols):
+            f = bm.faces.new((grid[r][c], grid[r + 1][c], grid[r + 1][c + 1], grid[r][c + 1]))
+            f.material_index = mat_index
+            for loop, t in zip(f.loops, ((c, r), (c, r + 1), (c + 1, r + 1), (c + 1, r))):
+                loop[uv].uv = (t[0] / cols, t[1] / (len(rows) - 1))
+
+
+HOODIE_HEM = HEM_Z - 2 * PX  # 2 px below the tee hem at street zoom
+
+
+def build_hoodie():
+    """Grey pullover hoodie: longer and wider than the tee, long sleeves, hood bunched behind the neck,
+    kangaroo pocket and two drawstrings. Worn over the tee (the tee is hidden while it is on)."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    pad = 0.018
+    body = [vring(HOODIE_HEM, 0.098, 0.068), vring(HOODIE_HEM + 0.014, 0.102, 0.070)]
+    body += [vring(z, rx + pad, ry + pad) for z, rx, ry in TORSO if HOODIE_HEM + 0.02 < z < 0.67]
+    body.append(vring(0.68, 0.050, 0.045))
+    loft(bm, uv, body, 0)
+    for side in (-1, 1):  # long sleeves with a rib cuff at the wrist; the hand stays out
+        loft(bm, uv, arm_rings(side, [(-0.02, 0.050, 0.052), (0.05, 0.046, 0.047), (0.14, 0.040, 0.041),
+                                      (0.21, 0.036, 0.036), (0.235, 0.033, 0.033), (0.25, 0.030, 0.030),
+                                      (0.258, 0.029, 0.028)]), 0, seg=10)
+    # hood, bunched behind and beside the neck (front stays inside the neck so the throat shows)
+    loft(bm, uv, [vring(0.63, 0.080, 0.060, cy=0.028), vring(0.665, 0.086, 0.062, cy=0.045),
+                  vring(0.70, 0.070, 0.056, cy=0.054), vring(0.73, 0.040, 0.034, cy=0.060)], 0)
+    # kangaroo pocket: trapezoid patch on the belly, narrower at the top
+    patch(bm, uv, [(0.385, 0.104, 0.074, 0.78), (0.425, 0.102, 0.073, 0.68), (0.465, 0.100, 0.073, 0.56)], 1)
+    # drawstrings, following the chest down from the neckline
+    for side in (-1, 1):
+        x = side * 0.022
+        loft(bm, uv, [vring(0.570, 0.006, 0.006, x, -0.075), vring(0.578, 0.0045, 0.0045, x, -0.076),
+                      vring(0.620, 0.0045, 0.0045, x, -0.074), vring(0.660, 0.0045, 0.0045, x, -0.064)], 2, seg=6)
+    return new_object('hoodie', bm, ['hoodie', 'hoodie-pocket', 'string'])
+
+
+def build_beanie():
+    """Mustard cuffed beanie over the short crop: folded cuff ~1 px wider than the head, dome, small crown bump.
+    The cuff sits level with the brow line at the front and lower at the nape."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    ch = Vector((HEAD_C[0], HEAD_C[1] + 0.002, HEAD_C[2] + 0.004))     # hair shell centre
+    front_z, back_z = ch.z + 0.040, ch.z + 0.016
+    slope = (back_z - front_z) / (2 * 0.098)                            # dz per +Y (towards the back)
+    v_axis = Vector((0, 1, slope)).normalized()
+    def cuff_ring(dz, rx, ry):
+        c = Vector((0, ch.y, (front_z + back_z) / 2 + dz))
+        return (tuple(c), X, tuple(v_axis), rx, ry)
+    # the cuff hugs the head (about 1 px wider than the hair at street zoom), only a touch proud of the dome
+    loft(bm, uv, [cuff_ring(0.0, 0.100, 0.104), cuff_ring(0.018, 0.103, 0.107), cuff_ring(0.036, 0.100, 0.104)],
+         1, cap_start=False, cap_end=False, seg=16)
+    radii = (0.100, 0.104, 0.120)
+    tilt = slope * radii[1] / radii[2]
+    def knit(p):  # fuller dome: the sides stay upright, then round over the top (no brim step at the cuff)
+        h = math.sqrt(max(1e-6, 1 - p.z * p.z))
+        k = h ** -0.65 if p.z > 0 else 1.0
+        return Vector((p.x * k, p.y * k, p.z))
+    keep = lambda p: p.z > 0.30 + tilt * p.y
+    ellipsoid(bm, uv, tuple(ch), radii, 0, segs=16, rings=12, shape=knit, keep=keep)
+    ellipsoid(bm, uv, (ch.x, ch.y + 0.008, ch.z + radii[2] - 0.006), (0.032, 0.032, 0.018), 0, segs=8, rings=5)
+    return new_object('beanie', bm, ['beanie', 'beanie-cuff'])
+
+
 def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
-    parts = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
+    base = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
+    parts = base + [build_hoodie(), build_beanie()]
     tris = 0
     for obj in parts:
         bpy.context.view_layer.objects.active = obj
@@ -314,9 +391,9 @@ def main():
         t = sum(len(p.vertices) - 2 for p in obj.data.polygons)
         tris += t
         print(f'[base] {obj.name}: {t} tris')
-    print(f'[base] TOTAL {tris} tris')
-    zs = [(o.matrix_world @ v.co).z for o in parts for v in o.data.vertices]
-    print(f'[base] height {min(zs):.4f} .. {max(zs):.4f}')
+    print(f'[base] TOTAL {tris} tris (all pieces loaded at once)')
+    zs = [(o.matrix_world @ v.co).z for o in base for v in o.data.vertices]
+    print(f'[base] base outfit height {min(zs):.4f} .. {max(zs):.4f}')
     bpy.ops.wm.save_as_mainfile(filepath=os.path.join(HERE, 'base.blend'))
     for o in parts:
         o.select_set(True)
