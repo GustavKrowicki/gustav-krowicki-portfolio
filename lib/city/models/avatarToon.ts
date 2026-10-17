@@ -14,12 +14,12 @@ export const AVATAR_BASE_GLB = '/game/pogicity/Characters/avatar-builder/base.gl
 export const AVATAR_TOON = {
   outline: '#14100e',
   // Shade = flat colour x shadeFactor, tinted a touch cool so whites read as cloth, not grey.
-  shadeFactor: 0.8,
-  shadeTint: '#dde2f6',
+  shadeFactor: 0.66,
+  shadeTint: '#cfd6f4',
   // dot(N, L) above this is lit. Low enough that the front faces read lit, the far side shaded.
-  threshold: 0.08,
+  threshold: 0.32,
   // Fixed studio light (world space; the camera never moves, the model turns): upper left, in front.
-  lightDir: new THREE.Vector3(-0.45, 0.62, 0.64).normalize(),
+  lightDir: new THREE.Vector3(-0.6, 0.6, 0.52).normalize(),
   // City camera: ortho, 30 degree pitch (same as the shipped avatar3d sheets).
   pitchDeg: 30,
   // Street zoom: 0.9 wu figure = 54 px, frame 33 x 62, feet 4 px above the frame bottom.
