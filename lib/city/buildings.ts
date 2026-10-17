@@ -41,8 +41,14 @@ export interface BuildingDefinition {
   // Animated main door: a strip of frames (closed .. open) cropped from the south sprite at full resolution (x, y = the
   // crop's top-left in sprite pixels), drawn over the building and played when the player is near the door point
   door?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number };
+  // Ambient loop (docs/city-rules.md section 9): a strip of frames cropped from the south sprite like `door` (x, y = the
+  // crop's top-left in sprite pixels), drawn over the building and played in a loop at `fps`
+  ambient?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
+  // Draw the sprite as vertical slices, one per tile diagonal, each sorted by its own front tile (docs/city-rules.md
+  // section 8), so a building or character in front of one part is not painted over by the whole sprite. Opt-in.
+  slices?: boolean;
   // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
   // walk-in buildings (lib/city/buildingInteriors.ts) show it while the player is inside, past the main door
   openSprites?: {
@@ -269,8 +275,16 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "aarhus-stadium",
     name: "Aarhus Stadium",
     category: "portfolio",
-    footprint: { width: 4, height: 4 },
-    collisionPadding: { left: 2, top: 2 },
+    // The new stadium (opens 2027), rebuilt with img2threejs at the avatar's scale
+    // (art/img2threejs/aarhus-stadium, Linear POR-36): shape A on Figma board 611:3604, a 6 x 5 plot with the white roof
+    // ring at 2.6 wu on 26 curved ribs; 8 x 5 since 2026-10-17 (Gustav: wider than shape A's 6 x 5), AARHUS in the seats.
+    // The red hall (stadionhallerne) stands centred on its south side as the entrance and a brick link joins them. Sprites
+    // at 2x density (768 px), drawn at 0.5. Turned a quarter, the footprint is 5 x 8. Drawn in slices, so the hall in front
+    // of it (and characters) sort against each 1 wu column.
+    footprint: { width: 8, height: 5 },
+    footprintByOrientation: { east: { width: 5, height: 8 }, west: { width: 5, height: 8 } },
+    slices: true,
+    spriteScale: 0.5,
     triggerZoneRadius: 4,
     sprites: {
       south: "/game/pogicity/Building/landmark/aarhus-stadium_south.png",
@@ -284,6 +298,31 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/aarhus-stadium.svg",
     logoOffset: { x: 0, y: 80 },
+  },
+  // The red heritage hall (Stadionhallerne) on the stadium's south side, as its entrance
+  // (Gustav, 2026-10-17): art/img2threejs/stadium-hall, a 4 x 2 plot, two gabled brick halls either side of the lobby.
+  stadionhallerne: {
+    id: "stadionhallerne",
+    name: "Stadionhallerne",
+    category: "portfolio",
+    footprint: { width: 4, height: 2 },
+    footprintByOrientation: { east: { width: 2, height: 4 }, west: { width: 2, height: 4 } },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Building/landmark/stadionhallerne_south.png",
+      north: "/game/pogicity/Building/landmark/stadionhallerne_north.png",
+      east: "/game/pogicity/Building/landmark/stadionhallerne_east.png",
+      west: "/game/pogicity/Building/landmark/stadionhallerne_west.png",
+    },
+    icon: "🏛️",
+    // A Danish flag waving on the lobby roof (lib/city/models/stadionHallStates.ts, export_flag.sh)
+    ambient: {
+      sheet: "/game/pogicity/Building/landmark/stadionhallerne-flag_south.png",
+      frames: 8, frameWidth: 34, frameHeight: 34, x: 208, y: 294, fps: 8,
+    },
+    description: "The stadium entrance",
+    interactable: false,
+    supportsRotation: true,
   },
   "aeroguest": {
     id: "aeroguest",
@@ -559,6 +598,34 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       south: "/game/pogicity/Props/1x1tree4.png",
     },
     icon: "🎋",
+    isDecoration: true,
+  },
+  // Kongelunden forest round the new stadium (Linear POR-36, round 5): the maple and birch trees at half size, so they
+  // match the avatar-scale stadium and don't cover its columns
+  "forest-tree-1": {
+    id: "forest-tree-1",
+    name: "Forest Maple",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    renderSize: { width: 4, height: 4 },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Props/1x1tree2.png",
+    },
+    icon: "🌳",
+    isDecoration: true,
+  },
+  "forest-tree-2": {
+    id: "forest-tree-2",
+    name: "Forest Birch",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    renderSize: { width: 4, height: 4 },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Props/1x1tree4.png",
+    },
+    icon: "🌳",
     isDecoration: true,
   },
   "stadium-fan-1": {

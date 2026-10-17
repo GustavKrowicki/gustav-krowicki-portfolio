@@ -234,6 +234,11 @@ export class MainScene extends Phaser.Scene {
           frameWidth: building.door.frameWidth, frameHeight: building.door.frameHeight,
         });
       }
+      if (building.ambient) {
+        this.load.spritesheet(`${building.id}_ambient`, building.ambient.sheet, {
+          frameWidth: building.ambient.frameWidth, frameHeight: building.ambient.frameHeight,
+        });
+      }
     }
 
     // Load car textures
@@ -345,10 +350,11 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
-  update(_time: number, delta: number): void {
+  update(time: number, delta: number): void {
     if (!this.isReady) return;
 
     this.updatePinchZoom();
+    this.updateAmbients(time);
 
     this.updateCharacters();
     this.updateCars();
@@ -2191,6 +2197,7 @@ export class MainScene extends Phaser.Scene {
     this.buildingSprites.clear();
     this.buildingSpriteInfo.clear();
     this.doors.clear();
+    this.ambients.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2234,6 +2241,12 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_door`);
     }
     this.doors.delete(buildingKey);
+    const ambientSprite = this.buildingSprites.get(`${buildingKey}_ambient`);
+    if (ambientSprite) {
+      ambientSprite.destroy();
+      this.buildingSprites.delete(`${buildingKey}_ambient`);
+    }
+    this.ambients.delete(buildingKey);
 
     for (let i = 0; i < 40; i++) {
       const decorKey = `${buildingKey}_d${i}`;
@@ -2286,6 +2299,7 @@ export class MainScene extends Phaser.Scene {
 
     this.buildingSprites.set(key, sprite);
     this.buildingSpriteInfo.set(key, { buildingId, orientation });
+    if (building.slices) this.sliceBuildingSprite(sprite, key, originX, originY, footprint.width, footprint.height);
 
     // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
     const door = building.door;
@@ -2299,6 +2313,20 @@ export class MainScene extends Phaser.Scene {
       image.setDepth(sprite.depth + 0.05);
       this.buildingSprites.set(`${key}_door`, image);
       this.doors.set(key, { image, buildingId, originX, originY, value: 0 });
+    }
+
+    // Ambient loop over the building sprite (a flag, a screen): frames cropped from the south sprite, played on a timer
+    const ambient = building.ambient;
+    if (ambient && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_ambient`)) {
+      const s = sprite.scaleX;
+      const left = sprite.x - sprite.width * s / 2;
+      const top = sprite.y - sprite.height * s;
+      const image = this.add.image(left + ambient.x * s, top + ambient.y * s, `${building.id}_ambient`, 0);
+      image.setOrigin(0, 0);
+      image.setScale(s);
+      image.setDepth(sprite.depth + 0.04);
+      this.buildingSprites.set(`${key}_ambient`, image);
+      this.ambients.set(key, { image, frames: ambient.frames, fps: ambient.fps });
     }
 
     // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
@@ -2317,6 +2345,58 @@ export class MainScene extends Phaser.Scene {
         this.buildingSprites.set(`${key}_d${i}`, image);
       });
     }
+  }
+
+  // Cut a building sprite into vertical slices along the tile diagonals (docs/city-rules.md section 8). Lines of tiles
+  // with the same local x - y share a screen column; a slice runs between the centres of two neighbouring lines and sorts
+  // by the front-most footprint tile of either line, so what stands in front of one part of a big building is drawn over
+  // that part only. The main sprite becomes the first slice; the others are `${key}_s1`.. (removeBuildingSprites).
+  private sliceBuildingSprite(
+    sprite: Phaser.GameObjects.Image, key: string, originX: number, originY: number, width: number, height: number,
+  ): void {
+    const s = sprite.scaleX;
+    const fw = sprite.frame.width, fh = sprite.frame.height;
+    const dFront = (width - 1) - (height - 1);                 // the sprite's x is the front tile's line
+    const front = (d: number) => {                              // front-most tile on line d (local x - y = d)
+      const lx = Math.min(width - 1, d + height - 1);
+      return { x: originX + lx, y: originY + lx - d, sum: 2 * lx - d };
+    };
+    const depthOf = (t: { x: number; y: number }) => {
+      const p = this.gridToScreen(t.x, t.y);
+      return this.depthFromSortPoint(p.x, p.y + TILE_HEIGHT / 2, 0.05);
+    };
+    const texX = (d: number) => Math.round(fw / 2 + ((d - dFront) * TILE_WIDTH) / 2 / s);
+    const first = -(height - 1), last = width - 1;
+    const strips: { x0: number; x1: number; depth: number }[] = [{ x0: 0, x1: texX(first), depth: depthOf(front(first)) }];
+    for (let d = first; d < last; d++) {
+      const a = front(d), b = front(d + 1);
+      strips.push({ x0: texX(d), x1: texX(d + 1), depth: depthOf(a.sum >= b.sum ? a : b) });
+    }
+    strips.push({ x0: texX(last), x1: fw, depth: depthOf(front(last)) });
+    let n = 0;
+    for (const st of strips) {
+      const x0 = Math.max(0, st.x0), x1 = Math.min(fw, st.x1);
+      if (x1 <= x0) continue;
+      let image = sprite;
+      if (n > 0) {
+        image = this.add.image(sprite.x, sprite.y, sprite.texture.key);
+        image.setOrigin(sprite.originX, sprite.originY);
+        image.setScale(s);
+        this.buildingSprites.set(`${key}_s${n}`, image);
+      }
+      image.setCrop(x0, 0, x1 - x0, fh);
+      image.setDepth(st.depth);
+      n++;
+    }
+  }
+
+  // Ambient loops by building key (docs/city-rules.md section 9: every landmark has one); frame from the scene clock
+  private ambients: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number }> = new Map();
+
+  private updateAmbients(time: number): void {
+    this.ambients.forEach((a) => {
+      if (a.image.active) a.image.setFrame(Math.floor((time / 1000) * a.fps) % a.frames);
+    });
   }
 
   // Animated doors by building key: current open value 0..1
