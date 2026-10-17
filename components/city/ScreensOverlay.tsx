@@ -1,6 +1,7 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+import { createPortal } from "react-dom";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import type { InteriorBeat } from "@/lib/city/interiorBeats";
 import { PIXEL_PANEL_CLIP, pixelButtonClass, pixelPanelOuterClass } from "./pixelModalStyles";
@@ -19,6 +20,10 @@ interface ScreensOverlayProps {
 export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverlayProps) {
   const reduced = useReducedMotion();
   const screens = beat?.seat?.screens ?? [];
+  // Rendered into the page body and fixed to the window: in the shell the city is only a strip of the screen on a phone,
+  // and the screens view must cover the whole screen above the panel, or its close is out of reach
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
     if (!beat) return;
@@ -27,12 +32,13 @@ export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverla
     return () => window.removeEventListener("keydown", onKey);
   }, [beat, onClose]);
 
-  return (
+  if (!mounted) return null;
+  return createPortal(
     <AnimatePresence>
       {beat && screens.length > 0 && (
         <motion.div
           key={beatKey}
-          className="absolute inset-0 z-40 flex items-start justify-center overflow-y-auto bg-[rgba(18,20,22,0.62)] px-3 pb-6 pt-[max(0.75rem,env(safe-area-inset-top))] md:items-center"
+          className="fixed inset-0 z-[100] flex items-start justify-center overflow-y-auto bg-[rgba(18,20,22,0.72)] px-3 pb-[max(1.5rem,env(safe-area-inset-bottom))] pt-[max(0.75rem,env(safe-area-inset-top))] md:items-center md:px-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
@@ -62,7 +68,7 @@ export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverla
                   </div>
                   <div className="mx-auto h-[10px] w-[18%] bg-[#26282b]" aria-hidden />
                   <div className="mx-auto h-[5px] w-[34%] rounded-[2px] bg-[#26282b]" aria-hidden />
-                  <figcaption className="mt-1.5 text-center font-mono text-[11px] uppercase tracking-[0.1em] text-[#f0ead6]">{s.caption}</figcaption>
+                  <figcaption className="mt-1.5 px-1 text-center font-mono text-[11px] uppercase leading-snug tracking-[0.1em] text-[#f0ead6] [overflow-wrap:anywhere]">{s.caption}</figcaption>
                 </figure>
               ))}
             </div>
@@ -90,6 +96,7 @@ export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverla
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body,
   );
 }

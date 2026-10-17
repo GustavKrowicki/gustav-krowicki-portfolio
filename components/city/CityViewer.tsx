@@ -711,7 +711,10 @@ export default function CityViewer({
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
-            if (slug) handleViewCaseStudy(slug);
+            if (!slug) return;
+            window.clearTimeout(doorTimerRef.current);
+            setDoorCard(null);
+            handleViewCaseStudy(slug);
           }}
         />
       )}

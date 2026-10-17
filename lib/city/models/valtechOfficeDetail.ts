@@ -80,26 +80,24 @@ function quizImage(): HTMLCanvasElement {
   const g = c.getContext('2d')!;
   g.fillStyle = '#2b2f2d';
   g.fillRect(0, 0, c.width, c.height);
-  g.fillStyle = 'rgba(240, 238, 228, 0.92)';
-  g.strokeStyle = 'rgba(240, 238, 228, 0.85)';
-  g.font = '700 34px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
-  g.fillText('FRIDAY QUIZ', 22, 46);
-  g.lineWidth = 3;
-  g.beginPath(); g.moveTo(22, 56); g.lineTo(232, 52); g.stroke();
-  g.font = '500 20px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
-  ['1.', '2.', '3.', '4.'].forEach((n, i) => {
-    const y = 92 + i * 28;
-    g.fillText(n, 24, y);
-    g.lineWidth = 2;
-    g.beginPath(); g.moveTo(50, y - 6); g.lineTo(150 + ((i * 37) % 50), y - 7); g.stroke();
-  });
-  // a tally of points on the right
-  g.lineWidth = 3;
-  for (let row = 0; row < 3; row++) {
-    const y0 = 86 + row * 36;
-    for (let k = 0; k < 4 + row; k++) {
-      const x = 214 + (k % 5) * 12 + (k >= 5 ? 6 : 0);
-      g.beginPath(); g.moveTo(x, y0); g.lineTo(x + 1, y0 + 22); g.stroke();
+  // few, big chalk marks: the board is about 100 x 65 px at Detail zoom, so only large letters read
+  g.fillStyle = 'rgba(242, 240, 230, 0.95)';
+  g.strokeStyle = 'rgba(242, 240, 230, 0.9)';
+  g.font = '800 58px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
+  g.fillText('FRIDAY', 18, 70);
+  g.fillText('QUIZ', 18, 136);
+  g.lineWidth = 6;
+  g.beginPath(); g.moveTo(18, 154); g.lineTo(178, 150); g.stroke();
+  g.font = '700 30px "Chalkboard SE", "Comic Sans MS", "Marker Felt", sans-serif';
+  g.fillText('16:00', 18, 192);
+  // a big tally of points on the right: two teams
+  g.lineWidth = 6;
+  for (let row = 0; row < 2; row++) {
+    const y0 = 70 + row * 70, n = row ? 3 : 5;
+    for (let k = 0; k < n; k++) {
+      const x = 214 + (k % 5) * 16;
+      if (k === 4) { g.beginPath(); g.moveTo(206, y0 + 34); g.lineTo(286, y0 + 4); g.stroke(); continue; }
+      g.beginPath(); g.moveTo(x, y0); g.lineTo(x + 2, y0 + 40); g.stroke();
     }
   }
   quizCanvas = c;
