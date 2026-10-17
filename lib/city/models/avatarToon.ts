@@ -45,23 +45,31 @@ export const AVATAR_BASE_COLORS: Record<string, string> = {
   string: '#e9e7e1',
   beanie: '#dca528',
   'beanie-cuff': '#c8941f',
+  sweater: '#3c5a46',
+  'sweater-rib': '#253a2c',
 };
 
-// Swappable pieces in the GLB (node names) and the base pieces each one covers while it is worn.
+// Swappable pieces in the GLB (node names): one piece per slot, and the base pieces each one covers.
 export const AVATAR_PIECES = {
-  hoodie: { covers: ['tee'] },
-  beanie: { covers: [] as string[] },
-} as const;
+  hoodie: { slot: 'top', covers: ['tee'] },
+  sweater: { slot: 'top', covers: ['tee'] },
+  beanie: { slot: 'head', covers: [] },
+} as const satisfies Record<string, { slot: string; covers: readonly string[] }>;
 export type AvatarPiece = keyof typeof AVATAR_PIECES;
 
-// Shows the worn pieces, hides the rest of the optional pieces and whatever the worn ones cover.
-export function applyOutfit(model: THREE.Object3D, worn: AvatarPiece[]) {
+// Shows the worn pieces (the last one wins within a slot), hides every other optional piece and
+// whatever the worn ones cover.
+export function applyOutfit(model: THREE.Object3D, worn: AvatarPiece[]): AvatarPiece[] {
+  const bySlot = new Map<string, AvatarPiece>();
+  for (const piece of worn) bySlot.set(AVATAR_PIECES[piece].slot, piece);
+  const kept = [...bySlot.values()];
   const hidden = new Set<string>();
   for (const piece of Object.keys(AVATAR_PIECES) as AvatarPiece[]) {
-    if (worn.includes(piece)) AVATAR_PIECES[piece].covers.forEach((n) => hidden.add(n));
+    if (kept.includes(piece)) AVATAR_PIECES[piece].covers.forEach((n) => hidden.add(n));
     else hidden.add(piece);
   }
   for (const child of model.children) child.visible = !hidden.has(child.name);
+  return kept;
 }
 
 const toonVertex = /* glsl */ `

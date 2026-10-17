@@ -38,6 +38,8 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'string': '#e9e7e1',
     'beanie': '#dca528',
     'beanie-cuff': '#c8941f',
+    'sweater': '#3c5a46',
+    'sweater-rib': '#253a2c',
 }
 
 
@@ -370,10 +372,30 @@ def build_beanie():
     return new_object('beanie', bm, ['beanie', 'beanie-cuff'])
 
 
+def build_sweater():
+    """Dark green crew-neck sweater: tee width, hem 1 px below the tee hem, long sleeves, darker rib at the
+    neck, hem and cuffs. Worn over the tee (hidden while it is on); shares the top slot with the hoodie."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    pad = TEE_PAD + 0.001
+    hem = HEM_Z - PX
+    rings = [vring(hem, 0.087, 0.057), vring(HEM_Z + 0.008, 0.089, 0.059)]
+    rings += [vring(z, rx + pad, ry + pad) for z, rx, ry in TORSO if HEM_Z + 0.01 < z < 0.66]
+    # crew neck: a raised rib band standing just proud of the shoulders
+    rings += [vring(0.664, 0.058, 0.046), vring(0.672, 0.052, 0.044), vring(0.684, 0.041, 0.038), vring(0.690, 0.036, 0.034)]
+    mats = [1] + [0] * (len(rings) - 5) + [1, 1, 1]
+    loft(bm, uv, rings, 0, mats_by_ring=mats)
+    for side in (-1, 1):
+        loft(bm, uv, arm_rings(side, [(-0.02, 0.041, 0.043), (0.05, 0.038, 0.039), (0.14, 0.033, 0.034),
+                                      (0.21, 0.030, 0.030), (0.232, 0.029, 0.029), (0.258, 0.027, 0.026)]),
+             0, seg=10, mats_by_ring=[0, 0, 0, 0, 1])
+    return new_object('sweater', bm, ['sweater', 'sweater-rib'])
+
+
 def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     base = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
-    parts = base + [build_hoodie(), build_beanie()]
+    parts = base + [build_hoodie(), build_beanie(), build_sweater()]
     tris = 0
     for obj in parts:
         bpy.context.view_layer.objects.active = obj
