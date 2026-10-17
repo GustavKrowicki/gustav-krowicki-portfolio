@@ -19,10 +19,19 @@ export interface InteriorBeat {
   seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
 }
 
-// Wired: the desk, meeting room 01 and lunch. The other Valtech beats (enter and leave at the gate) get their entries here when their zones
-// are detailed; the card and the scene event already handle any standSpot key.
+// Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
+// the avatar crosses the main door in or out (MainScene "interiorDoorCrossed"), not on a tile.
 export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   "valtech-office": {
+    enter: {
+      kicker: "Valtech",
+      lead: "At Valtech I learned to scope: find the system, find the fast path, take the small step.",
+    },
+    leave: {
+      kicker: "Leaving Valtech",
+      lead: "I scope before I design.",
+      caseStudy: true,
+    },
     lunch: {
       kicker: "Lunch",
       lead: "Two fields at a time.",

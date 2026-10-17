@@ -1574,6 +1574,13 @@ export class MainScene extends Phaser.Scene {
     const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
     const inside = !!here && !!code && !here.interior.outside.includes(code);
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    // Door beats: tell React when the player crosses a walk-in building's main door, in or out
+    const insideId = inside ? here!.buildingId : null;
+    if (insideId !== this.insideBuilding) {
+      if (this.insideBuilding) this.events.emit("interiorDoorCrossed", { buildingId: this.insideBuilding, inward: false });
+      if (insideId) this.events.emit("interiorDoorCrossed", { buildingId: insideId, inward: true });
+      this.insideBuilding = insideId;
+    }
     this.updateInsideZoom(inside ? here! : null);
     // Peek card: the player stands on a beat's stand tile (arrived, not passing through on the way to the next tile)
     const stopped = target.x === gridX && target.y === gridY;
@@ -1591,6 +1598,7 @@ export class MainScene extends Phaser.Scene {
 
   // The beat whose peek card is open ("buildingId:beat"); React gets "interiorBeatChanged" with the beat or null
   private activeBeat: string | null = null;
+  private insideBuilding: string | null = null;
   private setInteriorBeat(next: { buildingId: string; beat: string } | null): void {
     const key = next ? `${next.buildingId}:${next.beat}` : null;
     if (key === this.activeBeat) return;
@@ -1847,6 +1855,7 @@ export class MainScene extends Phaser.Scene {
     this.manualCameraOverrideInAdventure = false;
     this.stopCameraFollow();
     this.standUp();
+    this.insideBuilding = null;
     this.setInteriorBeat(null);
 
     // Clean up

@@ -624,7 +624,17 @@ for k, x in enumerate((rx0, rx1), 1):
     pbx(f"int-room-frame-post-{k}", f"01 frame corner {k}", x - 0.008, x + 0.008, gy1 - 0.016, gy1 + 0.004, 0.01, GS, "frame-black")
     if 0 < x < PW:
         pbx(f"int-room-frame-side-{k}", f"01 frame (side {k}, head)", x - 0.008, x + 0.008, WI, gy1, GS - 0.025, GS, "frame-black")
-pbx("int-room-door-handle", "01 door handle", rx0 + 0.42, rx0 + 0.43, gy1 + 0.004, gy1 + 0.03, 0.3, 0.8, "steel")
+# the glass door (closed; 01 is look-in only): a 0.9 x 2.1 m panel in the walkway glass at the west end, a thin black
+# frame on its top and sides with a hairline gap, and a long brushed-steel pull handle on its outer face, as in the photo
+DX0_, DX1_, DH = rx0 + 0.08, rx0 + 0.53, 1.05
+for part, a, b, h0, h1 in (("head", DX0_, DX1_, DH, DH + 0.016), ("jamb-w", DX0_, DX0_ + 0.012, 0.01, DH), ("jamb-e", DX1_ - 0.012, DX1_, 0.01, DH)):
+    pbx(f"int-room-door-{part}", f"01 door frame ({part})", a, b, gy1 - 0.014, gy1 + 0.006, h0, h1, "frame-black")
+pbx("int-room-door-gap", "01 door gap (hinge side)", DX0_ + 0.012, DX0_ + 0.016, gy1 - 0.013, gy1 + 0.002, 0.01, DH, "gb-dark")
+for part, z0, z1 in (("out", gy1 + 0.012, gy1 + 0.02), ("in", gy1 - 0.024, gy1 - 0.016)):     # pull handle on both faces
+    pbx(f"int-room-door-handle-{part}", f"01 door handle ({part})", DX1_ - 0.065, DX1_ - 0.055, z0, z1, 0.22, 0.86, "steel")
+    for q, h in enumerate((0.27, 0.81), 1):
+        pbx(f"int-room-door-handle-{part}-standoff-{q}", f"01 door handle standoff ({part} {q})", DX1_ - 0.064, DX1_ - 0.056,
+            min(z0, gy1), max(z1, gy1 - 0.012), h, h + 0.008, "steel")
 cx = (rx0 + rx1) / 2
 # the huge white "01": a decal plane just outside the south glass (texture in valtechOfficeDetail.ts)
 pbx("int-room-01-number", "01 on the glass (decal)", cx - 0.4, cx + 0.4, gy1 + 0.001, gy1 + 0.003, 0.12, 0.98, "decal")
