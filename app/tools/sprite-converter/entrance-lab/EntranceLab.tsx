@@ -8,6 +8,8 @@ import * as avatarHarness from '@/lib/city/models/gustavAvatarHarness';
 import * as workshop from '@/lib/city/models/workshop';
 import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
+import * as stadium from '@/lib/city/models/aarhusStadium';
+import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
@@ -46,6 +48,9 @@ type ModelConfig = {
   // Sprite view: normalise from the rest-pose bounds captured at load (animated models must not re-frame per pose)
   restBounds?: boolean;
 };
+
+// Flag wave phase for the red hall's ambient loop: ?flag=<0..1>
+const FLAG_PHASE = () => Number(new URLSearchParams(window.location.search).get('flag') ?? 0);
 
 const AVATAR_PARAMS = () => {
   const p = new URLSearchParams(window.location.search);
@@ -86,6 +91,36 @@ function avatarValtechScene(open: boolean): THREE.Group {
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   group.userData.plan = VALTECH_PLAN;
+  return group;
+}
+
+// The avatar on the plaza in front of the new Aarhus stadium (both in wu): on the south side, by the glass band at the
+// facade line, so the 0.9 wu avatar reads against the 2.6 wu roof edge (art/img2threejs/aarhus-stadium, POR-36).
+function avatarStadiumScene(): THREE.Group {
+  const group = new THREE.Group();
+  const building = stadium.createAarhusStadiumModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  avatar.position.set(0.6, 0.04, 2.15);
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The stadium site: the 8 x 5 stadium with the red hall (4 x 2, with its flag) on its south side as the entrance, centred
+// on the stadium's entrance link (x 0), and the avatar at the hall's main door; the site is 8 x 7 wu.
+function stadiumSiteScene(): THREE.Group {
+  const group = new THREE.Group();
+  const options = { castShadow: true, receiveShadow: true };
+  const arena = stadium.createAarhusStadiumModel(options);
+  arena.position.z = -1;
+  const hall = createStadionhallFlagModel(options, FLAG_PHASE());
+  hall.position.set(Number(new URLSearchParams(window.location.search).get('hallx') ?? 0), 0, 2.5);   // ?hallx= for size tries
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  avatar.position.set(0.55, 0.04, 3.75);
+  group.add(arena, hall, avatar);
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
   return group;
 }
 
@@ -240,6 +275,50 @@ const MODELS: Record<string, ModelConfig> = {
     ...valtechOpen('south'),
     name: 'Gustav avatar inside the Valtech office (roof off)',
     create: () => avatarValtechScene(true),
+    restBounds: true,
+  },
+  // New Aarhus stadium (art/img2threejs/aarhus-stadium, Linear POR-36): 8 x 5 footprint
+  stadium: {
+    name: 'Aarhus stadium',
+    create: stadium.createAarhusStadiumModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 3.6, target: [0, 0, 0] },
+  },
+  'avatar-stadium': {
+    name: 'Gustav avatar in front of the Aarhus stadium',
+    create: () => avatarStadiumScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 3.6, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // Stadionhallerne, the red heritage hall in front of the stadium (art/img2threejs/stadium-hall): 4 x 2 footprint
+  stadiumHall: {
+    name: 'Stadionhallerne (red hall, with its flag at ?flag=<0..1>)',
+    create: (options) => createStadionhallFlagModel(options, FLAG_PHASE()),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'stadium-site': {
+    name: 'Aarhus stadium with the red hall and the avatar',
+    create: () => stadiumSiteScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.6, target: [0, 0, 0] },
     restBounds: true,
   },
   // The desk beat's seated moment (the Valtech chair: plan (4.72, 0.74), turned 12.6 deg off north, seat top 0.24 wu)

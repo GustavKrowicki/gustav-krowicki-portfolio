@@ -159,7 +159,8 @@ export const TOUR_STOPS: TourStop[] = [
     dialogue:
       "I follow the ups-and-downs of the local football team AGF. I love to go the games, and support the team in the stands. Crossing my fingers for magical moments this summer!",
     category: "interests",
-    npcOffset: { x: 3, y: 3 },
+    // in front of the red hall's door on the south side (the site is 7 x 7 from the stadium's origin; the hall is at +2, +5)
+    npcOffset: { x: 4, y: 7 },
     cameraOffset: { x: 12.3, y: 5.9 },
     cameraOffsetMobile: { x: 15.1, y: 16.3 },
   },
