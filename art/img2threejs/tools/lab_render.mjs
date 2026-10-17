@@ -11,6 +11,8 @@ page.on('console', (m) => { if (m.type() === 'error') console.log('console:', m.
 await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/tools/sprite-converter/entrance-lab?model=${model}`, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction(() => typeof window.__render === 'function', null, { timeout: 120000 });
 await page.waitForTimeout(800);
+// textures that load after the model (lib/city/models/valtechOfficeDetail.ts: the case images on the screens)
+await page.waitForFunction(() => !(globalThis.__labPending > 0), null, { timeout: 30000 });
 for (const s of shots) {
   const i = s.indexOf('=');
   const name = s.slice(0, i), o = JSON.parse(s.slice(i + 1));

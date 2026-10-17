@@ -128,6 +128,51 @@ export class PlayerController {
     this.depthOverride = depth;
   }
 
+  // Sit-and-look moments (MainScene.sitDown): the sprite walks from the player's tile to a chair point (world px), then
+  // hides while the building shows its seated sprite. The player's grid position does not change, so any move stands
+  // it up from its stand tile. Reduced motion: no walk, it sits at once.
+  private seatPose: { x: number; y: number; hidden: boolean } | null = null;
+  private seatTween: Phaser.Tweens.Tween | null = null;
+  private seatWalk = false;
+
+  walkToSeat(worldX: number, worldY: number, done: () => void): void {
+    this.seatTween?.stop();
+    this.direction = Direction.Up;   // the chairs face their desks, to the north
+    const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      this.seatPose = { x: worldX, y: worldY, hidden: true };
+      done();
+      return;
+    }
+    const from = { x: this.worldX, y: this.worldY };
+    const p = { t: 0 };
+    this.seatWalk = true;
+    this.seatPose = { ...from, hidden: false };
+    this.seatTween = this.scene.tweens.add({
+      targets: p, t: 1, duration: 420, ease: "Sine.easeInOut",
+      onUpdate: () => {
+        this.seatPose = { x: from.x + (worldX - from.x) * p.t, y: from.y + (worldY - from.y) * p.t, hidden: false };
+      },
+      onComplete: () => {
+        this.seatWalk = false;
+        this.seatTween = null;
+        this.seatPose = { x: worldX, y: worldY, hidden: true };
+        done();
+      },
+    });
+  }
+
+  standFromSeat(): void {
+    this.seatTween?.stop();
+    this.seatTween = null;
+    this.seatWalk = false;
+    this.seatPose = null;
+  }
+
+  isSeated(): boolean {
+    return this.seatPose !== null;
+  }
+
   private canStep(fromX: number, fromY: number, toX: number, toY: number): boolean {
     return this.interiorRules ? this.interiorRules.canStep(fromX, fromY, toX, toY) : true;
   }
@@ -495,7 +540,7 @@ export class PlayerController {
     const key = getCharacterTextureKey(this.characterType, this.direction);
     if (this.characterType !== CharacterType.Gustav || !avatar3dEnabled()) return key;
     // ?avatar=3d: the 3D-rendered sheets, same compass naming as the GIFs, walk or idle by state
-    const clip = this.state === PlayerState.Idle ? "idle" : "walk";
+    const clip = this.state === PlayerState.Idle && !this.seatWalk ? "idle" : "walk";
     return `avatar3d_${clip}_${key.slice(key.indexOf("_") + 1)}`;
   }
 
@@ -530,7 +575,8 @@ export class PlayerController {
     }
 
     if (this.sprite) {
-      this.sprite.setPosition(this.worldX, this.worldY);
+      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, this.seatPose?.y ?? this.worldY);
+      this.sprite.setVisible(!this.seatPose?.hidden);
 
       // Calculate depth from grid position (consistent with NPCs and characters)
       // This ensures correct depth sorting with buildings while keeping smooth movement
@@ -555,8 +601,9 @@ export class PlayerController {
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
       // Position pointer above player (with bounce)
-      const pointerY = this.worldY - 80 - this.pointerBounceOffset;
-      this.pointer.setPosition(this.worldX, pointerY);
+      const pointerY = (this.seatPose?.y ?? this.worldY) - 80 - this.pointerBounceOffset;
+      this.pointer.setPosition(this.seatPose?.x ?? this.worldX, pointerY);
+      this.pointer.setVisible(!this.seatPose);
       this.pointer.setDepth(20_000_000); // Always on top
     }
   }

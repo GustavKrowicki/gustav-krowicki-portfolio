@@ -51,6 +51,12 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
+  // Display scale of the openSprites when they have their own texel density (default: spriteScale); they share the
+  // anchor (bottom centre = the footprint's front corner), so they may be trimmed around it
+  openSpriteScale?: number;
+  // Roof-off south sprite with the avatar seated at a beat's chair (lib/city/interiorBeats.ts seat), same frame and
+  // scale as openSprites.south; shown while the avatar sits there (the player sprite is hidden meanwhile)
+  seatSprites?: Record<string, string>;
   icon: string; // Emoji for UI
   supportsRotation?: boolean;
   isDecoration?: boolean; // If true, preserves underlying tile (like props)
@@ -156,8 +162,11 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       east: "/game/pogicity/Building/landmark/valtech-office-avatar_east.png",
       west: "/game/pogicity/Building/landmark/valtech-office-avatar_west.png",
     },
-    // Street-level interior, grey box (Figma board 597-3604, beat sheet 2026-10-16): the upper storeys and the cafe front
-    // come off when the player walks in through the gate (lib/city/buildingInteriors.ts)
+    // Street-level interior (Figma board 597-3604, beat sheet 2026-10-16): the upper storeys and the cafe front come off
+    // when the player walks in through the gate (lib/city/buildingInteriors.ts). Detail pass: 4x density (trimmed around
+    // the anchor), drawn at 0.25, so the desk zone is 1:1 at Detail zoom.
+    openSpriteScale: 0.25,
+    seatSprites: { desk: "/game/pogicity/Building/landmark/valtech-office-avatar-open-sit-desk_south.png" },
     openSprites: {
       south: "/game/pogicity/Building/landmark/valtech-office-avatar-open_south.png",
       north: "/game/pogicity/Building/landmark/valtech-office-avatar-open_north.png",

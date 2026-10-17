@@ -11,11 +11,14 @@ import {
 interface VirtualJoystickProps {
   isMobile: boolean;
   onDirectionChange: (direction: Direction | null) => void;
+  /** Inside the city view rather than the window (the shell, where the panel sheet takes the bottom of the screen) */
+  contained?: boolean;
 }
 
 export default function VirtualJoystick({
   isMobile,
   onDirectionChange,
+  contained = false,
 }: VirtualJoystickProps) {
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -98,7 +101,7 @@ export default function VirtualJoystick({
 
   return (
     <div
-      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 flex gap-4"
+      className={`${contained ? "absolute bottom-3" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))]"} left-4 z-40 flex gap-4`}
       data-testid="city-joystick"
     >
       {/* Joystick */}

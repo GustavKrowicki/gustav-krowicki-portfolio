@@ -10,6 +10,7 @@ import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
+import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
 
 // Review/test bench for the img2threejs reconstructions (?model=hqAvatar|hqAvatarOpen|hqAvatarDoor|avatar|workshop).
 // Generation sources live in art/img2threejs/. The avatar models are in wu (0.9 wu tall). Avatar-only options:
@@ -85,6 +86,22 @@ function avatarValtechScene(open: boolean): THREE.Group {
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   group.userData.plan = VALTECH_PLAN;
+  return group;
+}
+
+// The roof-off building with the avatar seated at a beat's chair (lib/city/interiorBeats.ts seat), framed by the building
+// alone so the render lines up pixel for pixel with the roof-off sprite: the city swaps to it while the avatar sits.
+// Chair point in plan tiles, turn in degrees (180 = facing north), seat top in wu above the floor.
+function valtechSeatedScene(at: [number, number], yawDeg: number, seatTop: number): THREE.Group {
+  const group = new THREE.Group();
+  const building = createValtechOfficeRoofOffModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  avatar.position.set(at[0] - VALTECH_PLAN.w / 2, 0.05, at[1] - VALTECH_PLAN.h / 2);
+  avatar.rotation.y = THREE.MathUtils.degToRad(yawDeg);
+  const rig = avatar.userData.avatar as AvatarRig;
+  poseAvatarSit(rig, seatTop);
+  group.userData.boundsFrom = building;
   return group;
 }
 
@@ -225,6 +242,12 @@ const MODELS: Record<string, ModelConfig> = {
     create: () => avatarValtechScene(true),
     restBounds: true,
   },
+  // The desk beat's seated moment (the Valtech chair: plan (4.72, 0.74), turned 12.6 deg off north, seat top 0.24 wu)
+  'valtech-open-sit-desk': {
+    ...valtechOpen('south'),
+    name: 'Valtech office, roof off, avatar seated at the desk',
+    create: () => valtechSeatedScene([4.72, 0.74], 167.4, 0.24),
+  },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {
     name: 'LEGO HQ at avatar scale (door frame)',
@@ -261,6 +284,8 @@ export type ShotOptions = {
   spin?: number; // turntable: model yaw in degrees (reference / sprite views)
   follow?: boolean; // reference view: keep the avatar's hips over the origin (root-motion clips)
   avatarAt?: [number, number]; // models with a plan (userData.plan): stand the avatar on plan point (lx, ly) in tiles
+  sit?: number; // avatar models: the seated pose, hips on a seat this high (wu above the avatar's floor)
+  avatarYaw?: number; // models with a plan: the avatar's turn in degrees
   masks?: string[]; // flat-colour mask render: entry i (node-id prefixes joined by '|') -> rgb(255, 8 * (i + 1), 0), avatar rgb(0, 0, 255), rest grey; glass left out
   only?: string[]; // draw only the nodes with these id prefixes ('avatar' = the avatar), e.g. one prop's full silhouette
 };
@@ -386,7 +411,9 @@ export default function EntranceLab() {
       return maskMats.get(key)!;
     };
     const avatar = model.userData.avatar as AvatarRig | undefined;
-    const box = new THREE.Box3().setFromObject(model);
+    // a model may frame by one of its parts (the seated-avatar scene frames by the building, as the roof-off sprite)
+    const framed = (model.userData.boundsFrom as THREE.Object3D | undefined) ?? model;
+    const box = new THREE.Box3().setFromObject(framed);
     // Rest-pose bounds in the model's parent frame (skinned vertices, so a posed frame never re-frames the sprite)
     const restBox = config.restBounds
       ? (avatar && !model.userData.avatarGroup ? skinnedBounds(model).applyMatrix4(model.matrix) : box.clone())
@@ -428,6 +455,7 @@ export default function EntranceLab() {
       // Avatar stand point (plan tiles) on models that carry a plan
       const plan = model.userData.plan as { w: number; h: number } | undefined;
       if (plan && avatarGroup && opts.avatarAt) avatarGroup.position.set(opts.avatarAt[0] - plan.w / 2, 0.05, opts.avatarAt[1] - plan.h / 2);
+      if (plan && avatarGroup && opts.avatarYaw !== undefined) avatarGroup.rotation.y = THREE.MathUtils.degToRad(opts.avatarYaw);
       // Doors
       for (const [id, dir] of Object.entries(config.leaves)) {
         const node = runtime?.nodes?.[id];
@@ -439,8 +467,10 @@ export default function EntranceLab() {
       model.rotation.set(0, THREE.MathUtils.degToRad(opts.spin ?? 0), 0);
       // Avatar pose: a clip at time t, or the bind pose
       if (avatar) {
+        standAvatar(avatar);
         if (opts.clip) avatar.seek(opts.clip, opts.t ?? 0);
         else avatar.rest();
+        if (opts.sit !== undefined) poseAvatarSit(avatar, opts.sit);
         if (opts.follow) {
           model.updateMatrixWorld(true);
           const hip = avatar.bones.pelvis.getWorldPosition(new THREE.Vector3());
@@ -455,7 +485,7 @@ export default function EntranceLab() {
         // scale to 3 / maxDim; ortho frustum 5 / zoom split by the vertical offset; iso camera
         // at distance 10 looking at the origin; square output.
         model.updateMatrixWorld(true);
-        const b = restBox ? restBox.clone() : new THREE.Box3().setFromObject(model);
+        const b = restBox ? restBox.clone() : new THREE.Box3().setFromObject(framed);
         const centre = b.getCenter(new THREE.Vector3());
         const size = b.getSize(new THREE.Vector3());
         model.position.set(-centre.x, -b.min.y, -centre.z);

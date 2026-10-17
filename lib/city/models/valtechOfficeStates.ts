@@ -6,6 +6,7 @@
 import type * as THREE from 'three';
 import { createValtechOfficeModel, type ProceduralModelOptions } from './valtechOffice';
 import { FAR_SIDES, type CampusView } from './legoHqAvatarStates';
+import { applyValtechOfficeDetail } from './valtechOfficeDetail';
 
 // Upper storeys: slabs, louvre bands, parapets, roof deck, glass top floor
 const UPPER = ['slab-', 'louvre-', 'parapet-', 'roof-deck', 'top-'];
@@ -37,12 +38,14 @@ export function setValtechOfficeState(model: THREE.Object3D, open: boolean, view
 
 export function createValtechOfficeRoofOnModel(options: ProceduralModelOptions = {}): THREE.Group {
   const model = createValtechOfficeModel(options);
+  applyValtechOfficeDetail(model);
   setValtechOfficeState(model, false);
   return model;
 }
 
 export function createValtechOfficeRoofOffModel(options: ProceduralModelOptions = {}, view: CampusView = 'south'): THREE.Group {
   const model = createValtechOfficeModel(options);
+  applyValtechOfficeDetail(model);
   setValtechOfficeState(model, true, view);
   model.userData.campusView = view;
   return model;

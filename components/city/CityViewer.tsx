@@ -7,6 +7,9 @@ import { getBuilding } from "@/lib/city/buildings";
 import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
+import PeekCard from "./PeekCard";
+import ScreensOverlay from "./ScreensOverlay";
+import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
@@ -78,6 +81,15 @@ export default function CityViewer({
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
+  // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
+  const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  // Sit-and-look moment: the beat the avatar sits at (MainScene "interiorSeatChanged"), shown by ScreensOverlay
+  const [interiorSeat, setInteriorSeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  const seatTimerRef = useRef<number | undefined>(undefined);
+  const [isSeated, setIsSeated] = useState(false);
+  // Door beats (lib/city/interiorBeats.ts "enter" / "leave"): shown for a while after crossing a main door
+  const [doorCard, setDoorCard] = useState<{ buildingId: string; beat: string } | null>(null);
+  const doorTimerRef = useRef<number | undefined>(undefined);   // at once; the screens (interiorSeat) follow a moment later
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
@@ -325,6 +337,29 @@ export default function CityViewer({
             }
           });
 
+          // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
+          scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            setInteriorBeat(next);
+            if (next) setDoorCard((card) => (card?.beat === "enter" ? null : card));
+          });
+          // enter card on the way in (until a stand tile opens its own card, or 6 s), leave card on the way out (15 s)
+          scene.events.on("interiorDoorCrossed", ({ buildingId, inward }: { buildingId: string; inward: boolean }) => {
+            window.clearTimeout(doorTimerRef.current);
+            const beat = inward ? "enter" : "leave";
+            if (!INTERIOR_BEATS[buildingId]?.[beat]) { setDoorCard(null); return; }
+            setDoorCard({ buildingId, beat });
+            doorTimerRef.current = window.setTimeout(() => setDoorCard(null), inward ? 6000 : 15000);
+          });
+
+          // the screens open a moment after the avatar sits, so the sit itself is seen
+          scene.events.on("interiorSeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            window.clearTimeout(seatTimerRef.current);
+            setIsSeated(!!next);
+            if (!next) { setInteriorSeat(null); return; }
+            const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+            seatTimerRef.current = window.setTimeout(() => setInteriorSeat(next), reduced ? 150 : 700);
+          });
+
           // Player exited trigger zone
           scene.events.on("playerExitedZone", () => {
             setCurrentEncounter(null);
@@ -390,11 +425,24 @@ export default function CityViewer({
   }, [gameMode, isAdventureActive, onProjectClick]);
 
   // Stop Adventure Mode
+  // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
+  const handleStandUp = useCallback(() => {
+    const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as { standUp?: () => void } | undefined;
+    scene?.standUp?.();
+    window.clearTimeout(seatTimerRef.current);
+    setIsSeated(false);
+    setInteriorSeat(null);
+  }, []);
+
   const handleStopAdventure = useCallback(() => {
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
     setIsDialogOpen(false);
+    setInteriorBeat(null);
+    setInteriorSeat(null);
+    setIsSeated(false);
+    setDoorCard(null);
     autoWalkTargetRef.current = null;
 
     const gameBoard = gameBoardRef.current;
@@ -600,6 +648,11 @@ export default function CityViewer({
     visitedBuildings,
   ]);
 
+  // The card on screen: a stand-tile beat first (hidden while seated), else a door beat
+  const shownCard = interiorBeat ? (isSeated ? null : interiorBeat) : doorCard;
+  // The tour dialog does not show for buildings told by beat cards (it may still be "open" for them in state)
+  const dialogShown = isDialogOpen && !BEAT_CARD_BUILDINGS.has(currentEncounter?.buildingId ?? "");
+
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
       <GameBoard
@@ -645,25 +698,49 @@ export default function CityViewer({
           <VirtualJoystick
             isMobile={isMobile}
             onDirectionChange={handleJoystickDirection}
+            contained={isShell}
           />
 
         </>
+      )}
+
+      {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
+      {isAdventureActive && (
+        <PeekCard
+          beat={shownCard ? INTERIOR_BEATS[shownCard.buildingId]?.[shownCard.beat] ?? null : null}
+          beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
+          onViewCaseStudy={() => {
+            const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
+            if (!slug) return;
+            window.clearTimeout(doorTimerRef.current);
+            setDoorCard(null);
+            handleViewCaseStudy(slug);
+          }}
+        />
+      )}
+      {isAdventureActive && (
+        <ScreensOverlay
+          beat={interiorSeat ? INTERIOR_BEATS[interiorSeat.buildingId]?.[interiorSeat.beat] ?? null : null}
+          beatKey={interiorSeat ? `${interiorSeat.buildingId}:${interiorSeat.beat}` : null}
+          onClose={handleStandUp}
+        />
       )}
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox
         isMobile={isMobile}
         tourStop={currentEncounter}
-        isVisible={isDialogOpen}
+        isVisible={dialogShown}
         onClose={handleDialogClose}
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Walk the avatar (the standalone city only; the shell gets its own walk step) */}
-      {!isShell && !isDialogOpen && (
-        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
+      {/* Walk the avatar. In the shell it sits inside the city view (the panel and its phone sheet own the window's
+          edges): bottom-left on a desktop, bottom-right on a phone where the joystick takes the bottom-left */}
+      {!dialogShown && (
+        <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
           <button
             onClick={isAdventureActive ? handleStopAdventure : handleStartAdventure}
             className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
