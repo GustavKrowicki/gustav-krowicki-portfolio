@@ -1,7 +1,8 @@
 // Detail pass of the Valtech office interior (2026-10-16): the textures the img2threejs factory cannot carry (it builds
 // flat colours only). Applied to the generated model by part id, after the factory, so a spec rebuild keeps them:
-//   side-N-desk-brick-*  pale yellow brick, running bond, true course height (75 mm = 0.0375 wu)
+//   side-N-*brick*  pale yellow brick, running bond, true course height (75 mm = 0.0375 wu)
 //   int-floor, open-floor-lunch  polished concrete: warm beige with soft mottling
+//   int-room-01-number  the huge white "01" on meeting room 01's glass (a transparent decal)
 //   *-screen-<n>-display  a downscaled case image (public/game/pogicity/Building/landmark/valtech-office-screen-<n>.png)
 //   *-planter-leaf-*, *-planter-crown-*  a low-poly sphere (8 x 5) instead of the factory's 16 x 12: flat leaves at
 //   sprite size do not need more, and the plant drops from about 4,400 to about 1,000 triangles
@@ -11,6 +12,7 @@ import * as THREE from 'three';
 const SCREENS: Record<string, string> = {
   'int-desk-screen-1-display': '/game/pogicity/Building/landmark/valtech-office-screen-1.png',
   'int-desk-screen-2-display': '/game/pogicity/Building/landmark/valtech-office-screen-2.png',
+  'int-room-screen-display': '/game/pogicity/Building/landmark/valtech-office-screen-3.png',
 };
 
 // One brick texture tile: 2 bricks x 4 courses (0.238 x 0.15 wu); mortar lighter than the brick, as in the reference
@@ -49,6 +51,22 @@ function brickImage(): HTMLCanvasElement {
     }
   }
   brickCanvas = c;
+  return c;
+}
+
+let numberCanvas: HTMLCanvasElement | null = null;
+function numberImage(): HTMLCanvasElement {
+  if (numberCanvas) return numberCanvas;
+  const c = document.createElement('canvas');
+  c.width = 256;
+  c.height = 264;   // the decal is 0.72 x 0.74 wu
+  const g = c.getContext('2d')!;
+  g.fillStyle = '#ffffff';
+  g.font = '600 236px "Helvetica Neue", Arial, sans-serif';
+  g.textAlign = 'center';
+  g.textBaseline = 'alphabetic';
+  g.fillText('01', 128, 232);
+  numberCanvas = c;
   return c;
 }
 
@@ -135,9 +153,15 @@ export function applyValtechOfficeDetail(model: THREE.Object3D): void {
   const meshes: Record<string, THREE.Mesh> = model.userData.sculptRuntime?.meshes ?? {};
   for (const [id, mesh] of Object.entries(meshes)) {
     const s = mesh.scale;   // the factory scales unit primitives to the part's size (wu)
-    if (id.startsWith('side-N-desk-brick-')) textured(mesh, canvasTexture(brickImage(), s.x / BRICK_TILE_WU.w, s.y / BRICK_TILE_WU.h));
+    if (/^side-N-.*brick/.test(id)) textured(mesh, canvasTexture(brickImage(), s.x / BRICK_TILE_WU.w, s.y / BRICK_TILE_WU.h));
     else if (id === 'int-floor' || id === 'open-floor-lunch') textured(mesh, canvasTexture(concreteImage(), s.x / 2, s.z / 2));
     else if (SCREENS[id]) screenTexture(SCREENS[id], mesh);
+    else if (id === 'int-room-01-number') {
+      const t = new THREE.CanvasTexture(numberImage());
+      t.colorSpace = THREE.SRGBColorSpace;
+      t.anisotropy = 8;
+      mesh.material = new THREE.MeshBasicMaterial({ map: t, transparent: true, depthWrite: false, color: new THREE.Color(0.97, 0.97, 0.97) });
+    }
     else if (/-planter-(leaf|crown)-/.test(id)) lowPolyEllipsoid(mesh);
   }
 }

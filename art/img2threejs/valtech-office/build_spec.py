@@ -605,22 +605,60 @@ kit_desk("int-hint-desk", "Neighbour desk (edge)", h + 0.66, DCZ, top_from=-0.4,
 for c in C:
     if c["id"] in ("int-floor", "open-floor-lunch"):
         c["material"], c["materialLayers"] = "concrete", ["concrete"]
-# 3 meeting room 01: glass on its inside sides, yellow whiteboards with sticky notes on its north wall, "01" on the glass
+# 3 meeting room 01 (detail pass, 2026-10-17; written reference of the real room): yellow brick wall with three tall
+# mustard whiteboards full of sticky notes (the zone's hero), a big screen in a mustard frame on a black stand, round
+# poufs (mustard and warm grey), black high stools, glass walls in black steel frames with a huge white "01" on the
+# glass (a texture, valtechOfficeDetail.ts). The real room's bench under the windows is left out: the north wall holds
+# the three boards, and there is no window wall left in a 2-tile room.
 rx0, rx1, ry0, ry1 = LAY["room"]
 gy1 = ry1    # south glass line (the walkway edge)
 if rx0 > 0:
-    pbx("int-room-glass-w", "01 glass (west)", rx0 - 0.01, rx0 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
+    pbx("int-room-glass-w", "01 glass (west)", rx0 - 0.006, rx0 + 0.006, WI, gy1, 0.01, GS, "gb-glass")
 if rx1 < PW:
-    pbx("int-room-glass-e", "01 glass (east)", rx1 - 0.01, rx1 + 0.01, WI, gy1, 0.01, GS, "gb-glass")
-pbx("int-room-glass-s", "01 glass (south)", rx0 + 0.01, rx1 - 0.01, gy1 - 0.02, gy1, 0.01, GS, "gb-glass")
-pbx("int-room-glass-head", "01 glass head", rx0, rx1, gy1 - 0.03, gy1, GS - 0.05, GS, "gb-dark")
+    pbx("int-room-glass-e", "01 glass (east)", rx1 - 0.006, rx1 + 0.006, WI, gy1, 0.01, GS, "gb-glass")
+pbx("int-room-glass-s", "01 glass (south)", rx0 + 0.01, rx1 - 0.01, gy1 - 0.012, gy1, 0.01, GS, "gb-glass")
+# black steel frame: head and base rails, corner posts, mullions every half tile on the south glass
+FR = 0.016
+pbx("int-room-frame-head", "01 frame (head)", rx0 - 0.01, rx1 + 0.01, gy1 - 0.02, gy1 + 0.006, GS - 0.04, GS, "frame-black")
+pbx("int-room-frame-base", "01 frame (base)", rx0 - 0.01, rx1 + 0.01, gy1 - 0.02, gy1 + 0.006, 0.01, 0.04, "frame-black")
+for k in range(int(round((rx1 - rx0) / 0.5)) + 1):
+    x = rx0 + 0.5 * k
+    pbx(f"int-room-frame-post-{k + 1}", f"01 frame post {k + 1}", x - FR / 2, x + FR / 2, gy1 - 0.018, gy1 + 0.004, 0.01, GS, "frame-black")
+for side, x in (("w", rx0), ("e", rx1)):
+    if 0 < x < PW:
+        pbx(f"int-room-frame-{side}-head", f"01 frame ({side}, head)", x - 0.01, x + 0.01, WI, gy1, GS - 0.04, GS, "frame-black")
+        pbx(f"int-room-frame-{side}-mid", f"01 frame ({side}, post)", x - 0.01, x + 0.01, (WI + gy1) / 2 - FR / 2, (WI + gy1) / 2 + FR / 2, 0.01, GS, "frame-black")
 cx = (rx0 + rx1) / 2
-pbx("int-room-01-number", "01 on the glass", cx - 0.13, cx + 0.13, gy1 + 0.0, gy1 + 0.01, 0.52, 0.72, "gb-dark")
-for i in range(rx1 - rx0):
-    b0 = rx0 + i + 0.2
-    pbx(f"side-N-room-wb-{i + 1}", f"01 whiteboard {i + 1}", b0, b0 + 0.6, WI, WI + 0.02, 0.4, 0.85, "gb-yellow")
-    for j, (sx, sy) in enumerate(((0.08, 0.7), (0.2, 0.62), (0.34, 0.72), (0.46, 0.58)), 1):
-        pbx(f"side-N-room-wb-{i + 1}-note-{j}", f"Sticky note {i + 1}.{j}", b0 + sx, b0 + sx + 0.07, WI + 0.02, WI + 0.025, sy, sy + 0.07, "gb-light")
+# the huge white "01": a decal plane just outside the south glass (texture in valtechOfficeDetail.ts)
+pbx("int-room-01-number", "01 on the glass (decal)", cx - 0.36, cx + 0.36, gy1 + 0.001, gy1 + 0.003, 0.18, 0.92, "decal")
+# yellow brick on the inside of the north wall, then three tall mustard whiteboards with sticky notes
+pbx("side-N-room-brick", "Yellow brick (meeting room 01)", rx0, rx1, WI, WI + 0.012, 0.0, GS, "brick-yellow")
+NOTE_C = ("paper", "note-pink", "note-blue", "note-orange", "paper", "note-blue", "note-pink")
+for i in range(3):
+    b0 = rx0 + 0.13 + i * 0.6
+    pbx(f"side-N-room-wb-{i + 1}", f"01 whiteboard {i + 1} (mustard)", b0, b0 + 0.5, WI + 0.012, WI + 0.03, 0.14, 1.1, "board-mustard")
+    pbx(f"side-N-room-wb-{i + 1}-tray", f"01 whiteboard {i + 1} pen tray", b0 + 0.04, b0 + 0.46, WI + 0.03, WI + 0.05, 0.14, 0.152, "frame-black")
+    for j in range(10):       # sticky notes in loose clusters, a little different on every board
+        nx = b0 + 0.05 + ((j * 0.137 + i * 0.05) % 0.36)
+        ny = 0.42 + 0.12 * ((j * 3 + i) % 5) + 0.02 * (j % 2)
+        pbx(f"side-N-room-wb-{i + 1}-note-{j + 1}", f"Sticky note {i + 1}.{j + 1}", nx, nx + 0.045, WI + 0.03, WI + 0.034, ny, ny + 0.045,
+            NOTE_C[(j + i) % len(NOTE_C)])
+# the big screen in a mustard frame on a black stand at the west end, turned to the room
+scr = Kit("int-room-screen", "01 screen on a stand", rx0 + 0.2, WI + 0.42, math.radians(55))
+scr.box("foot", "stand foot", -0.12, 0.12, 0, 0.02, -0.08, 0.08, "black")
+scr.box("pole", "stand pole", -0.015, 0.015, 0.02, 0.62, -0.015, 0.015, "black")
+scr.box("frame", "frame (mustard)", -0.27, 0.27, 0.42, 0.78, 0.015, 0.04, "mustard")
+scr.box("display", "display", -0.25, 0.25, 0.44, 0.76, 0.04, 0.043, "screen")
+# poufs: one mustard, one warm grey; two black high stools by the east glass
+for k, (x, y, r, m) in enumerate(((rx0 + 0.62, WI + 0.62, 0.095, "pouf-mustard"), (rx0 + 0.92, WI + 0.72, 0.09, "pouf-grey")), 1):
+    cyl(f"int-room-pouf-{k}", f"Pouf {k}", "micro", "interior", px(x), pz(y), FLOOR, 0.19, r, m, importance=0.4)
+    cyl(f"int-room-pouf-{k}-top", f"Pouf {k} top seam", "micro", "interior", px(x), pz(y), FLOOR + 0.19, 0.008, r * 0.94, m, importance=0.2)
+for k, (x, y) in enumerate(((rx1 - 0.5, WI + 0.5), (rx1 - 0.2, WI + 0.66)), 1):
+    st = Kit(f"int-room-stool-{k}", f"High stool {k}", x, y, 0.3 * k)
+    st.cyl("seat", "seat", 0, 0, 0.36, 0.022, 0.07, "black")
+    for q, (lx_, lz_) in enumerate(((-0.045, -0.045), (0.045, -0.045), (0.045, 0.045), (-0.045, 0.045)), 1):
+        st.box(f"leg-{q}", f"leg {q}", lx_ - 0.006, lx_ + 0.006, 0, 0.36, lz_ - 0.006, lz_ + 0.006, "black")
+    st.box("ring", "foot ring", -0.05, 0.05, 0.14, 0.148, -0.05, 0.05, "black")
 # 4 lunch: banquette along the north wall, round tables in front, Friday quiz board above the banquette
 lx0, lx1, ly0, ly1 = LAY["lunch"]
 a0 = lx0 + (WI if lx0 == 0 else 0.05)
@@ -795,6 +833,14 @@ spec["materials"] = [
     material("paper", "Paper white", "stone", "#f2f0ea", ["#e9e7e1"], 0.8, 0.0, "notebook pages, the mug", emissiveIntensity={"base": 0.45}, **flat("desk props")),
     material("notebook", "Notebook cover", "fabric", "#2a2a2d", ["#242427"], 0.8, 0.0, "black notebook", **flat("beat sheet: a notebook")),
     material("bag", "Bag", "fabric", "#26282a", ["#212325"], 0.9, 0.0, "black bags on the floor (photo ~#202222)", **flat("reference: bags on the floor")),
+    material("note-pink", "Sticky note pink", "plastic", "#ea9aa9", ["#e090a0"], 0.8, 0.0, "sticky notes", emissiveIntensity={"base": 0.4}, **flat("01 reference")),
+    material("note-blue", "Sticky note blue", "plastic", "#9ccbe2", ["#92c1d8"], 0.8, 0.0, "sticky notes", emissiveIntensity={"base": 0.4}, **flat("01 reference")),
+    material("note-orange", "Sticky note orange", "plastic", "#f0a85c", ["#e69e52"], 0.8, 0.0, "sticky notes", emissiveIntensity={"base": 0.4}, **flat("01 reference")),
+    material("board-mustard", "Whiteboard mustard", "plastic", "#ddca80", ["#d3c076"], 0.5, 0.0, "tall mustard whiteboards (ref ~#d5c680)",
+             emissiveIntensity={"base": 0.35}, **flat("01 reference")),
+    material("pouf-mustard", "Pouf mustard", "fabric", "#b08d45", ["#a6833c"], 0.95, 0.0, "mustard pouf (ref ~#a1803e)", **flat("01 reference")),
+    material("pouf-grey", "Pouf warm grey", "fabric", "#625e55", ["#59554c"], 0.95, 0.0, "warm grey pouf (ref ~#56534b)", **flat("01 reference")),
+    material("decal", "Glass decal", "plastic", "#ffffff", ["#f6f6f6"], 0.6, 0.0, "the white 01 on the glass (texture)", **flat("01 reference")),
     material("bag-dark", "Bag strap", "fabric", "#3a3d40", ["#33363a"], 0.9, 0.0, "bag flap", **flat("reference: bags on the floor")),
 ]
 

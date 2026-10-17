@@ -6,8 +6,10 @@ import { BUILDING_INTERIORS } from "./buildingInteriors";
 export interface InteriorBeat {
   /** Small label over the text: where the avatar stands */
   kicker: string;
-  /** The beat's one or two sentences */
+  /** The beat's headline */
   lead: string;
+  /** Optional sentences under the headline */
+  text?: string;
   /** Optional rows under the lead, e.g. one per field: a label and its lesson */
   items?: { label: string; text: string }[];
   /** Show the building's case study link on the card (the leave beat) */
@@ -17,10 +19,15 @@ export interface InteriorBeat {
   seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
 }
 
-// Wired this round: the desk only. The other Valtech beats (gate, room, lunch) get their entries here when their zones
+// Wired: the desk and meeting room 01. The other Valtech beats (gate, lunch) get their entries here when their zones
 // are detailed; the card and the scene event already handle any standSpot key.
 export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   "valtech-office": {
+    room: {
+      kicker: "Meeting room 01",
+      lead: "The crit.",
+      text: "My first design crits with the other designers. I showed work that was not finished, and it got better.",
+    },
     desk: {
       kicker: "My desk",
       lead: "Three fields, three lessons.",

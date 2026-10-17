@@ -71,6 +71,7 @@ export default function ScreensOverlay({ beat, beatKey, onClose }: ScreensOverla
                 <div className="min-w-0 flex-1">
                   <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5a1e]">{beat.kicker}</p>
                   <p className="mt-1 text-[15px] font-semibold leading-snug">{beat.lead}</p>
+              {beat.text && <p className="mt-1 text-[14px] leading-snug">{beat.text}</p>}
                   {beat.items && (
                     <ul className="mt-1.5 space-y-1">
                       {beat.items.map((item) => (

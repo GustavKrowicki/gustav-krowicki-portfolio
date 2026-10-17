@@ -35,6 +35,7 @@ export default function PeekCard({ beat, beatKey, onViewCaseStudy }: PeekCardPro
             <div className="border-[3px] border-[#0f1214] border-l-[8px] border-l-[#c9a93f] bg-[#f4f1e8] px-3 py-2.5 text-[#1d1f22]">
               <p className="font-mono text-[11px] uppercase tracking-[0.14em] text-[#6b5a1e]">{beat.kicker}</p>
               <p className="mt-1 text-[15px] font-semibold leading-snug">{beat.lead}</p>
+              {beat.text && <p className="mt-1 text-[14px] leading-snug">{beat.text}</p>}
               {beat.items && (
                 <ul className="mt-1.5 space-y-1">
                   {beat.items.map((item) => (
