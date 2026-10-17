@@ -14,7 +14,7 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { AVATAR3D_DISPLAY_SCALE, avatar3dEnabled, avatar3dOrigin } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin } from "@/lib/city/avatar3dSprites";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -569,7 +569,7 @@ export class PlayerController {
         this.sprite.setOrigin(0.5, 1);
         if (textureKey.startsWith("avatar3d_")) {
           this.sprite.setOrigin(...avatar3dOrigin());
-          this.sprite.setScale(AVATAR3D_DISPLAY_SCALE);
+          this.sprite.setScale(avatar3dDisplayScale());
         }
       }
     }

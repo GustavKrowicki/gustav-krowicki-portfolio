@@ -2,7 +2,13 @@
 
 import dynamic from 'next/dynamic';
 import { useEffect, useMemo, useRef, useState } from 'react';
-import { AVATAR_SLOTS, type AvatarPiece } from '@/lib/city/models/avatarPieces';
+import {
+  AVATAR_DEFAULT_CHOICE,
+  AVATAR_SLOTS,
+  AVATAR_STORAGE_KEY,
+  avatarLookPieces,
+  type AvatarChoice,
+} from '@/lib/city/models/avatarPieces';
 
 // Avatar builder (POR-22): dress the base body one piece per slot. The 3D view (three.js and the one GLB)
 // loads only when this tab opens. The choice stays in this browser (localStorage), nowhere else.
@@ -12,23 +18,19 @@ const AvatarToonView = dynamic(() => import('./AvatarToonView'), {
 });
 
 type SlotId = (typeof AVATAR_SLOTS)[number]['id'];
-type Choice = Record<SlotId, string>;
 
-const STORAGE_KEY = 'avatar-builder:v1';
-const DEFAULT_CHOICE: Choice = { top: 'tee', head: 'none', legs: 'denim' };
-
-function readSaved(): { choice: Choice; name: string } {
+function readSaved(): { choice: AvatarChoice; name: string } {
   try {
-    const raw = JSON.parse(window.localStorage.getItem(STORAGE_KEY) ?? 'null');
-    if (!raw || typeof raw !== 'object') return { choice: DEFAULT_CHOICE, name: '' };
-    const choice = { ...DEFAULT_CHOICE };
+    const raw = JSON.parse(window.localStorage.getItem(AVATAR_STORAGE_KEY) ?? 'null');
+    if (!raw || typeof raw !== 'object') return { choice: AVATAR_DEFAULT_CHOICE, name: '' };
+    const choice = { ...AVATAR_DEFAULT_CHOICE };
     for (const slot of AVATAR_SLOTS) {
       const id = raw.choice?.[slot.id];
       if (slot.options.some((o) => o.id === id)) choice[slot.id] = id;
     }
     return { choice, name: typeof raw.name === 'string' ? raw.name.slice(0, 16) : '' };
   } catch {
-    return { choice: DEFAULT_CHOICE, name: '' };
+    return { choice: AVATAR_DEFAULT_CHOICE, name: '' };
   }
 }
 
@@ -37,7 +39,7 @@ export default function AvatarSection() {
   // The shell only mounts this section on the client (it opens from the URL after load), so the saved
   // choice can be read in the initial state.
   const [saved] = useState(() => (typeof window === 'undefined' ? null : readSaved()));
-  const [choice, setChoice] = useState<Choice>(saved?.choice ?? DEFAULT_CHOICE);
+  const [choice, setChoice] = useState<AvatarChoice>(saved?.choice ?? AVATAR_DEFAULT_CHOICE);
   const [name, setName] = useState(saved?.name ?? '');
   const openedAt = useRef(0);
   const measured = useRef(false);
@@ -48,20 +50,13 @@ export default function AvatarSection() {
 
   useEffect(() => {
     try {
-      window.localStorage.setItem(STORAGE_KEY, JSON.stringify({ choice, name }));
+      window.localStorage.setItem(AVATAR_STORAGE_KEY, JSON.stringify({ choice, name }));
     } catch {
       // private mode or storage blocked: the builder still works for this visit
     }
   }, [choice, name]);
 
-  const worn = useMemo(
-    () =>
-      AVATAR_SLOTS.flatMap((s) => {
-        const piece = s.options.find((o) => o.id === choice[s.id])?.piece;
-        return piece ? [piece as AvatarPiece] : [];
-      }),
-    [choice],
-  );
+  const worn = useMemo(() => avatarLookPieces(choice), [choice]);
 
   const onReady = () => {
     if (measured.current) return;

@@ -210,11 +210,9 @@ def build_body():
     loft(bm, uv, [vring(0.64, 0.03, 0.028, cy=0.006), vring(HEAD_C[2] - SKULL[2] * 0.6, 0.03, 0.028, cy=0.006)], 0, seg=8)
     # torso
     loft(bm, uv, [vring(z, rx, ry) for z, rx, ry in TORSO], 0)
-    # legs and feet
+    # No skin legs: a legs piece (denim or cargo) is always worn, and skin legs only poked through the
+    # trousers at the knee once the walk bends them.
     for side in (-1, 1):
-        cx = side * LEG_X
-        loft(bm, uv, [vring(0.03, 0.026, 0.026, cx), vring(0.20, 0.028, 0.030, cx),
-                      vring(0.36, 0.034, 0.038, cx)], 0, seg=10)
         # arms: upper arm, elbow, forearm, wrist, hand
         loft(bm, uv, arm_rings(side, [(-0.01, 0.032, 0.034), (0.07, 0.030, 0.031), (0.14, 0.026, 0.027),
                                       (0.20, 0.024, 0.024), (0.255, 0.020, 0.019), (0.27, 0.025, 0.017),
@@ -223,18 +221,39 @@ def build_body():
     return obj
 
 
+def face_point(x, z):
+    """Point on the skin head surface (front half) at (x, z), and its outward normal; same jaw shaping
+    as build_body, so face features sit flush instead of standing off the cheek in 3/4 views."""
+    pz = (z - HEAD_C[2]) / SKULL[2]
+    kx = 1 - 0.18 * (-pz) if pz < 0 else 1.0
+    ky = 1 - 0.08 * (-pz) if pz < 0 else 1.0
+    rx, ry = SKULL[0] * kx, SKULL[1] * ky
+    px = x / rx
+    py = -math.sqrt(max(0.0, 1 - pz * pz - px * px))
+    p = Vector((x, HEAD_C[1] + py * ry, z))
+    n = Vector((px / rx, py / ry, pz / SKULL[2])).normalized()
+    return p, n
+
+
+def flush_patch(bm, uv, x, z, ru, rv, mat_index, seg=6):
+    """A thin disc lying on the face at (x, z): 1.5 mm proud, sunk 6 mm into the head."""
+    p, n = face_point(x, z)
+    u = Vector((0, 0, 1)).cross(n).normalized()
+    v = n.cross(u).normalized()
+    loft(bm, uv, [(tuple(p - n * 0.006), tuple(u), tuple(v), ru, rv),
+                  (tuple(p + n * 0.0015), tuple(u), tuple(v), ru, rv)], mat_index, seg=seg)
+
+
 def build_face():
     bm = bmesh.new()
     uv = bm.loops.layers.uv.new('UVMap')
-    front_y = HEAD_C[1] - SKULL[1]
     ez = HEAD_C[2] + 0.014
-    for side in (-1, 1):  # eyes: one dark quad each, sits on the face
-        loft(bm, uv, [((side * 0.031, front_y + 0.012, ez), X, Z, 0.012, 0.017),
-                      ((side * 0.031, front_y - 0.002, ez), X, Z, 0.012, 0.017)], 0, seg=6)
-    # light moustache: a flat bar under the nose
+    for side in (-1, 1):  # eyes: one dark disc each
+        flush_patch(bm, uv, side * 0.031, ez, 0.012, 0.017, 0)
+    # light moustache: three short bars following the curve of the face under the nose
     mz = HEAD_C[2] - SKULL[2] * 0.30
-    loft(bm, uv, [((0, front_y + 0.018, mz), X, Z, 0.030, 0.0075),
-                  ((0, front_y + 0.004, mz), X, Z, 0.030, 0.0075)], 1, seg=8)
+    for x in (-0.02, 0.0, 0.02):
+        flush_patch(bm, uv, x, mz, 0.0115, 0.0075, 1, seg=8)
     return new_object('face', bm, ['eye', 'moustache'])
 
 

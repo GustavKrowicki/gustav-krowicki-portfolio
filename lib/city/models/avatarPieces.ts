@@ -69,3 +69,50 @@ export const AVATAR_SLOTS = [
   label: string;
   options: readonly { id: string; label: string; piece: AvatarPiece | null; swatch: string }[];
 }[];
+
+// A builder choice is one option id per slot; its look key names the pre-baked city sheet folder
+// (public/game/pogicity/Characters/avatar-builder/<key>/), for example 'hoodie-beanie-cargo'.
+export type AvatarChoice = { top: string; head: string; legs: string };
+export const AVATAR_DEFAULT_CHOICE: AvatarChoice = { top: 'tee', head: 'none', legs: 'denim' };
+export const AVATAR_STORAGE_KEY = 'avatar-builder:v1';
+
+export function avatarLookKey(choice: AvatarChoice): string {
+  return `${choice.top}-${choice.head}-${choice.legs}`;
+}
+
+export function avatarLookPieces(choice: AvatarChoice): AvatarPiece[] {
+  return AVATAR_SLOTS.flatMap((slot) => {
+    const piece = (slot.options as readonly { id: string; piece: AvatarPiece | null }[]).find(
+      (o) => o.id === choice[slot.id],
+    )?.piece;
+    return piece ? [piece] : [];
+  });
+}
+
+// The looks with city sheets (art/avatar-builder/base/bake_sheets.mjs). Any other combination falls back to
+// the shipped avatar sheets until it is baked.
+export const AVATAR_BAKED_LOOKS: AvatarChoice[] = [
+  { top: 'tee', head: 'none', legs: 'denim' },
+  { top: 'hoodie', head: 'none', legs: 'denim' },
+  { top: 'hoodie', head: 'beanie', legs: 'denim' },
+  { top: 'sweater', head: 'none', legs: 'denim' },
+  { top: 'clubShirt', head: 'none', legs: 'denim' },
+  { top: 'tee', head: 'none', legs: 'cargo' },
+  { top: 'hoodie', head: 'beanie', legs: 'cargo' },
+];
+
+// The saved builder choice in this browser, or null when the visitor never opened the builder.
+export function readAvatarChoice(): AvatarChoice | null {
+  try {
+    const raw = JSON.parse(window.localStorage.getItem(AVATAR_STORAGE_KEY) ?? 'null');
+    if (!raw?.choice) return null;
+    const choice = { ...AVATAR_DEFAULT_CHOICE };
+    for (const slot of AVATAR_SLOTS) {
+      const id = raw.choice[slot.id];
+      if (slot.options.some((o) => o.id === id)) choice[slot.id] = id;
+    }
+    return choice;
+  } catch {
+    return null;
+  }
+}

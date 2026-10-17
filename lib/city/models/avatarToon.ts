@@ -25,6 +25,9 @@ export const AVATAR_TOON = {
   pitchDeg: 30,
   // Street zoom: 0.9 wu figure = 54 px, frame 33 x 62, feet 4 px above the frame bottom.
   sprite: { width: 33, height: 62, pxPerWu: 60, footPx: 4, outlinePx: 1 },
+  // City sheet frame: the same camera and scale as `sprite`, with room for the stride and the beanie. The
+  // packer doubles it (2 sheet px per street px) so displayScale 0.25 draws it 1:1 at street zoom.
+  bake: { width: 36, height: 66, pxPerWu: 60, footPx: 8, outlinePx: 1 },
   // Depth gap (wu) that counts as an overlap edge for the inner outline.
   depthEdgeWu: 0.035,
 } as const;
@@ -169,6 +172,10 @@ export function builderView(height = 600): ToonView {
 
 export function spriteView(): ToonView {
   return { ...AVATAR_TOON.sprite };
+}
+
+export function bakeView(): ToonView {
+  return { ...AVATAR_TOON.bake };
 }
 
 // Ortho camera at the city pitch, framed so the ground point under the feet sits footPx above the
