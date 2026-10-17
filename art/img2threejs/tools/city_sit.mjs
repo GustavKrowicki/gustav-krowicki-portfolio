@@ -1,6 +1,7 @@
 // Walk the avatar to a beat with a seat (lib/city/interiorBeats.ts) in the running city and screenshot the sit moment:
 // seated (before the screens open), screens open, after "Stand up", and after a move key from a second sit.
 // Usage: LAB_PORT=3109 node art/img2threejs/tools/city_sit.mjs <outDir> '<config json>'
+// CITY_BASE=<url> runs it on a deployed preview; CITY_AVATAR='' uses the default (GIF) avatar.
 // config: { viewport: [w, h], mobile: false, zoom: 8, start: [x, y], path: [[x, y], ...] (the last = the stand tile) }
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
@@ -11,7 +12,7 @@ mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ args: ['--use-gl=angle', '--enable-unsafe-swiftshader'] });
 const page = await browser.newPage({ viewport: { width: vw, height: vh }, deviceScaleFactor: cfg.mobile ? 2 : 1, isMobile: !!cfg.mobile, hasTouch: !!cfg.mobile });
 page.on('console', (m) => { if (m.type() === 'error' && !m.text().includes('ERR_CONNECTION_REFUSED')) console.log('console:', m.text().slice(0, 200)); });
-await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/city?avatar=3d&e2e=1`, { waitUntil: 'load', timeout: 120000 });
+await page.goto(`${process.env.CITY_BASE ?? `http://localhost:${process.env.LAB_PORT ?? 3100}`}/city?${process.env.CITY_AVATAR ?? 'avatar=3d&'}e2e=1`, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); return !!(s && s.isReady && s.grid.length); }, null, { timeout: 120000 });
 await page.evaluate(async () => { await new Promise((r) => setTimeout(r, 1500)); window.__CITY_E2E__.startAdventure(); await new Promise((r) => setTimeout(r, 1500)); });
 await page.waitForFunction(() => !!window.__CITY_E2E__.getScene().playerController?.isReady, null, { timeout: 60000 });

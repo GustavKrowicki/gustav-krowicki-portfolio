@@ -679,6 +679,7 @@ export default function CityViewer({
           <VirtualJoystick
             isMobile={isMobile}
             onDirectionChange={handleJoystickDirection}
+            contained={isShell}
           />
 
         </>
@@ -710,9 +711,10 @@ export default function CityViewer({
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Walk the avatar (the standalone city only; the shell gets its own walk step) */}
-      {!isShell && !isDialogOpen && (
-        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
+      {/* Walk the avatar. In the shell it sits inside the city view (the panel and its phone sheet own the window's
+          edges): bottom-left on a desktop, bottom-right on a phone where the joystick takes the bottom-left */}
+      {!isDialogOpen && (
+        <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
           <button
             onClick={isAdventureActive ? handleStopAdventure : handleStartAdventure}
             className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
