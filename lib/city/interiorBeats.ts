@@ -1,0 +1,77 @@
+// Peek cards for walk-in buildings: one per beat, shown while the avatar stands on the beat's stand tile (the tile of a
+// standSpot in lib/city/buildingInteriors.ts) and closed when it walks on. Data only; the card is components/city/PeekCard.tsx.
+// Texts are Gustav's beat sheet (2026-10-16). Colleagues stay anonymous: role tags only, no names.
+import { BUILDING_INTERIORS } from "./buildingInteriors";
+
+export interface InteriorBeat {
+  /** Small label over the text: where the avatar stands */
+  kicker: string;
+  /** The beat's headline */
+  lead: string;
+  /** Optional sentences under the headline */
+  text?: string;
+  /** Optional rows under the lead, e.g. one per field: a label and its lesson */
+  items?: { label: string; text: string }[];
+  /** Show the building's case study link on the card (the leave beat) */
+  caseStudy?: boolean;
+  /** A sit-and-look moment: on the stand tile the avatar walks to `at` (plan tiles) and sits, the building shows its
+   *  seated sprite (buildings.ts seatSprites[beat]), and the screens open large over the city (ScreensOverlay) */
+  seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
+}
+
+// Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
+// the avatar crosses the main door in or out (MainScene "interiorDoorCrossed"), not on a tile.
+export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
+  "valtech-office": {
+    enter: {
+      kicker: "Valtech",
+      lead: "At Valtech I learned to scope: find the system, find the fast path, take the small step.",
+    },
+    leave: {
+      kicker: "Leaving Valtech",
+      lead: "I scope before I design.",
+      caseStudy: true,
+    },
+    lunch: {
+      kicker: "Lunch",
+      lead: "Two fields at a time.",
+      text: "Adaptability is key, and it was fun.",
+    },
+    room: {
+      kicker: "Meeting room 01",
+      lead: "The crit.",
+      text: "My first design crits with the other designers. I showed work that was not finished, and it got better.",
+    },
+    desk: {
+      kicker: "My desk",
+      lead: "Three fields, three lessons.",
+      items: [
+        { label: "CMS design guide", text: "Find the system behind the parts." },
+        { label: "File-sharing platform", text: "Real content tells the truth." },
+        { label: "B2B webshop", text: "Small scoped steps get the work out." },
+      ],
+      // the chair (art/img2threejs/valtech-office build_spec.py kit_chair "int-desk-chair"); the full-size case images
+      seat: {
+        at: [4.72, 0.74],
+        screens: [
+          { src: "/images/valtech/vestas%201.png", alt: "B2B webshop: search results with filters and product rows", caption: "B2B webshop: search results" },
+          { src: "/images/valtech/vestas%20drawer.png", alt: "B2B webshop: the request product drawer", caption: "B2B webshop: request a product" },
+        ],
+      },
+    },
+  },
+};
+
+/** Buildings whose story is told only by their beat cards: the tour dialog (RPGDialogBox) does not open for them
+ *  (Gustav, 2026-10-16: delete the old Valtech dialog). Their case study opens from the logo and the leave card. */
+export const BEAT_CARD_BUILDINGS = new Set(Object.keys(INTERIOR_BEATS));
+
+/** The beat whose stand tile is the footprint tile (lx, ly) of a walk-in building, or null */
+export function beatAtTile(buildingId: string, lx: number, ly: number): string | null {
+  const spots = BUILDING_INTERIORS[buildingId]?.standSpots ?? {};
+  const beats = INTERIOR_BEATS[buildingId] ?? {};
+  for (const [key, [x, y]] of Object.entries(spots)) {
+    if (beats[key] && Math.floor(x) === lx && Math.floor(y) === ly) return key;
+  }
+  return null;
+}
