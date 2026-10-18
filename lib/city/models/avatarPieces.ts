@@ -36,38 +36,39 @@ export const AVATAR_PIECES = {
 } as const satisfies Record<string, { slot: string; covers: readonly string[] }>;
 export type AvatarPiece = keyof typeof AVATAR_PIECES;
 
-// Builder tabs: each slot lists its options; `piece: null` is the base outfit piece for that slot.
+// Builder tabs: each slot lists its options; `piece: null` is the base outfit piece for that slot. `nodes` are
+// the GLB pieces drawn in the option's tile thumbnail (avatarThumbUrl).
 export const AVATAR_SLOTS = [
   {
     id: 'top',
     label: 'Top',
     options: [
-      { id: 'tee', label: 'Tee', piece: null, swatch: AVATAR_BASE_COLORS.tee },
-      { id: 'hoodie', label: 'Hoodie', piece: 'hoodie', swatch: AVATAR_BASE_COLORS.hoodie },
-      { id: 'sweater', label: 'Sweater', piece: 'sweater', swatch: AVATAR_BASE_COLORS.sweater },
-      { id: 'clubShirt', label: 'Football shirt', piece: 'clubShirt', swatch: AVATAR_BASE_COLORS['club-blue'] },
+      { id: 'tee', label: 'Tee', piece: null, swatch: AVATAR_BASE_COLORS.tee, nodes: ['tee'] },
+      { id: 'hoodie', label: 'Hoodie', piece: 'hoodie', swatch: AVATAR_BASE_COLORS.hoodie, nodes: ['hoodie'] },
+      { id: 'sweater', label: 'Sweater', piece: 'sweater', swatch: AVATAR_BASE_COLORS.sweater, nodes: ['sweater'] },
+      { id: 'clubShirt', label: 'Football shirt', piece: 'clubShirt', swatch: AVATAR_BASE_COLORS['club-blue'], nodes: ['clubShirt'] },
     ],
   },
   {
     id: 'head',
     label: 'Head',
     options: [
-      { id: 'none', label: 'None', piece: null, swatch: AVATAR_BASE_COLORS.hair },
-      { id: 'beanie', label: 'Beanie', piece: 'beanie', swatch: AVATAR_BASE_COLORS.beanie },
+      { id: 'none', label: 'No hat', piece: null, swatch: AVATAR_BASE_COLORS.hair, nodes: ['hair'] },
+      { id: 'beanie', label: 'Beanie', piece: 'beanie', swatch: AVATAR_BASE_COLORS.beanie, nodes: ['beanie'] },
     ],
   },
   {
     id: 'legs',
     label: 'Legs',
     options: [
-      { id: 'denim', label: 'Denim', piece: null, swatch: AVATAR_BASE_COLORS.denim },
-      { id: 'cargo', label: 'Cargo', piece: 'cargo', swatch: AVATAR_BASE_COLORS.cargo },
+      { id: 'denim', label: 'Denim', piece: null, swatch: AVATAR_BASE_COLORS.denim, nodes: ['jeans'] },
+      { id: 'cargo', label: 'Cargo', piece: 'cargo', swatch: AVATAR_BASE_COLORS.cargo, nodes: ['cargo'] },
     ],
   },
 ] as const satisfies readonly {
   id: string;
   label: string;
-  options: readonly { id: string; label: string; piece: AvatarPiece | null; swatch: string }[];
+  options: readonly { id: string; label: string; piece: AvatarPiece | null; swatch: string; nodes: readonly string[] }[];
 }[];
 
 // A builder choice is one option id per slot; its look key names the pre-baked city sheet folder
@@ -113,4 +114,9 @@ export function readAvatarChoice(): AvatarChoice | null {
   } catch {
     return null;
   }
+}
+
+// Option tile thumbnails, baked with the city sheets (art/avatar-builder/base/bake_sheets.mjs).
+export function avatarThumbUrl(optionId: string): string {
+  return `/game/pogicity/Characters/avatar-builder/thumbs/${optionId}.png`;
 }

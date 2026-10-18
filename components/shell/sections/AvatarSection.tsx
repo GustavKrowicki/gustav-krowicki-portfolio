@@ -8,6 +8,7 @@ import {
   AVATAR_CHANGE_EVENT,
   AVATAR_STORAGE_KEY,
   avatarLookPieces,
+  avatarThumbUrl,
   type AvatarChoice,
 } from '@/lib/city/models/avatarPieces';
 
@@ -112,14 +113,17 @@ export default function AvatarSection() {
                     type="button"
                     aria-pressed={selected}
                     onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
-                    className={`flex h-16 w-full flex-col items-center justify-center gap-1 rounded-lg border bg-white text-xs ${
+                    className={`flex h-[4.5rem] w-full flex-col items-center justify-center gap-0.5 rounded-lg border bg-white text-xs ${
                       selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
                     }`}
                   >
-                    <span
-                      className="h-5 w-5 rounded-full border border-black/10"
-                      style={{ backgroundColor: o.swatch }}
-                      aria-hidden
+                    {/* eslint-disable-next-line @next/next/no-img-element -- tiny static PNG, no resizing needed */}
+                    <img
+                      src={avatarThumbUrl(o.id)}
+                      alt=""
+                      width={40}
+                      height={40}
+                      className="h-10 w-10 object-contain"
                     />
                     <span className="px-1 text-center leading-tight">{o.label}</span>
                   </button>

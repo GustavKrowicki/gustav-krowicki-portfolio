@@ -1,7 +1,7 @@
 // Bakes the city sheets for every builder look (AVATAR_BAKED_LOOKS in lib/city/models/avatarPieces.ts)
 // from the avatar toon lab, in the shipped avatar sheet format (avatar3d.json + one strip per clip and direction).
 //   node art/avatar-builder/base/bake_sheets.mjs http://localhost:3112
-// Writes public/game/pogicity/Characters/avatar-builder/<look>/.
+// Writes public/game/pogicity/Characters/avatar-builder/<look>/ and thumbs/<option>.png (the builder's tiles).
 import { createRequire } from 'node:module';
 import fs from 'node:fs';
 import path from 'node:path';
@@ -34,7 +34,7 @@ const browser = await chromium.launch({ args: ['--use-angle=metal'] });
 const page = await browser.newPage();
 await page.goto(`${base}/tools/sprite-converter/avatar-toon`, { waitUntil: 'load', timeout: 180000 });
 await page.waitForFunction(() => window.__bakeSheet, null, { timeout: 120000 });
-for (const look of looks) {
+for (const look of process.env.THUMBS_ONLY ? [] : looks) {
   const key = look.join('-');
   const wear = look.map((id) => PIECE[id]).filter(Boolean);
   const dir = path.join(out, key);
@@ -62,5 +62,15 @@ for (const look of looks) {
     yaw: YAW, animations: manifest.animations };
   fs.writeFileSync(path.join(dir, 'avatar3d.json'), JSON.stringify(sorted, null, 1) + '\n');
   console.log('baked', key);
+}
+// Tile thumbnails: each option's own GLB pieces, turned a little so the tile reads as 3D (the NODES map
+// mirrors `nodes` in AVATAR_SLOTS). 128 px for sharp tiles at 2x and 3x screens.
+const NODES = { tee: ['tee'], hoodie: ['hoodie'], sweater: ['sweater'], clubShirt: ['clubShirt'], none: ['hair'],
+  beanie: ['beanie'], denim: ['jeans'], cargo: ['cargo'] };
+fs.mkdirSync(path.join(out, 'thumbs'), { recursive: true });
+for (const [id, nodes] of Object.entries(NODES)) {
+  const png = await page.evaluate((o) => window.__thumb(o), { nodes, yawDeg: -20, size: 128 });
+  fs.writeFileSync(path.join(out, 'thumbs', `${id}.png`), Buffer.from(png.split(',')[1], 'base64'));
+  console.log('thumb', id);
 }
 await browser.close();

@@ -6,11 +6,14 @@
 //   ?wear=hoodie,beanie  optional pieces to put on (default: the base outfit)
 //   ?clip=walk-in-place&t=0.25  pose from the shipped clips (rigged copy, avatarBuilderRig.ts)
 // window.__bakeSheet({ wear, yawDeg, clip, frames }) renders one city sheet strip (bakeView frames, 2x);
-// art/avatar-builder/base/bake_sheets.mjs drives it.
+// window.__thumb({ nodes, yawDeg, size }) renders only those GLB pieces, framed to their bounds (option tiles).
+// art/avatar-builder/base/bake_sheets.mjs drives both.
 // window.__avatarToon = { builder, sprite } (PNG data URLs) once both are drawn.
 import { useEffect, useRef, useState } from 'react';
+import * as THREE from 'three';
 import {
   AVATAR_PIECES,
+  AVATAR_TOON,
   ToonRenderer,
   applyOutfit,
   bakeView,
@@ -39,6 +42,30 @@ export default function AvatarToonLab() {
       if (clip) rig.seek(clip, Number(params.get('t') ?? 0));
       const model = clip ? rig.root : base;
       applyOutfit(model, wear);
+      const thumber = new ToonRenderer(document.createElement('canvas'));
+      (window as unknown as { __thumb: unknown }).__thumb = (o: { nodes: string[]; yawDeg: number; size: number }) => {
+        for (const child of base.children) child.visible = o.nodes.includes(child.name);
+        const pivot = new THREE.Group();
+        pivot.rotation.y = THREE.MathUtils.degToRad(o.yawDeg);
+        const parent = base.parent;
+        pivot.add(base);
+        const box = new THREE.Box3();
+        pivot.updateMatrixWorld(true);
+        base.traverse((c) => {
+          if ((c as THREE.Mesh).isMesh && c.parent?.visible !== false && c.visible) box.expandByObject(c);
+        });
+        pivot.remove(base);
+        if (parent) parent.add(base);
+        const size = box.getSize(new THREE.Vector3());
+        const centre = box.getCenter(new THREE.Vector3());
+        const pitch = THREE.MathUtils.degToRad(AVATAR_TOON.pitchDeg);
+        // On screen the box spans height * cos(pitch) + depth * sin(pitch); fit the larger side to 84 %.
+        const span = Math.max(size.x, size.y * Math.cos(pitch) + size.z * Math.sin(pitch));
+        const pxPerWu = (o.size * 0.84) / span;
+        const footPx = o.size / 2 - (centre.y * Math.cos(pitch) - centre.z * Math.sin(pitch)) * pxPerWu;
+        thumber.render(base, { width: o.size, height: o.size, pxPerWu, footPx, outlinePx: 2, yawDeg: o.yawDeg });
+        return thumber.renderer.domElement.toDataURL('image/png');
+      };
       // One strip per clip and direction: frames side by side, each bakeView frame doubled with nearest
       // neighbour (2 sheet px per street px, drawn at displayScale 0.25 by the city).
       const baker = new ToonRenderer(document.createElement('canvas'));
