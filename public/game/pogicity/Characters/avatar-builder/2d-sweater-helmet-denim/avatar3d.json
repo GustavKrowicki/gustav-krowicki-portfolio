@@ -1,0 +1,82 @@
+{
+ "frameWidth": 72,
+ "frameHeight": 132,
+ "origin": [
+  0.5,
+  0.87879
+ ],
+ "displayScale": 0.25,
+ "note": "2D paper doll (art/avatar-builder/builder-2d/doll.py): hand-drawn heads, limb layers turned per frame, 2 sheet px per street px. origin = the ground point under the feet.",
+ "yaw": {
+  "east": 45,
+  "north": -45,
+  "south": 135,
+  "west": -135
+ },
+ "animations": {
+  "walk_east": {
+   "file": "walk-east.png",
+   "outlineFile": "walk-east.png",
+   "frames": 8,
+   "fps": 39.73,
+   "repeat": -1,
+   "durationS": 0.201
+  },
+  "walk_north": {
+   "file": "walk-north.png",
+   "outlineFile": "walk-north.png",
+   "frames": 8,
+   "fps": 39.73,
+   "repeat": -1,
+   "durationS": 0.201
+  },
+  "walk_west": {
+   "file": "walk-west.png",
+   "outlineFile": "walk-west.png",
+   "frames": 8,
+   "fps": 39.73,
+   "repeat": -1,
+   "durationS": 0.201
+  },
+  "walk_south": {
+   "file": "walk-south.png",
+   "outlineFile": "walk-south.png",
+   "frames": 8,
+   "fps": 39.73,
+   "repeat": -1,
+   "durationS": 0.201
+  },
+  "idle_east": {
+   "file": "idle-east.png",
+   "outlineFile": "idle-east.png",
+   "frames": 4,
+   "fps": 1.3333333333333333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "idle_north": {
+   "file": "idle-north.png",
+   "outlineFile": "idle-north.png",
+   "frames": 4,
+   "fps": 1.3333333333333333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "idle_west": {
+   "file": "idle-west.png",
+   "outlineFile": "idle-west.png",
+   "frames": 4,
+   "fps": 1.3333333333333333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "idle_south": {
+   "file": "idle-south.png",
+   "outlineFile": "idle-south.png",
+   "frames": 4,
+   "fps": 1.3333333333333333,
+   "repeat": -1,
+   "durationS": 3
+  }
+ }
+}
