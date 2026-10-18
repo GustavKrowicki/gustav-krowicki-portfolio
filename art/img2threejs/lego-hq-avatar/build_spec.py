@@ -526,7 +526,6 @@ for gx_, gy_ in ((10.5, 5.0), (12.5, 2.6), (14.3, 4.5), (11.4, 6.6), (4.5, 2.5),
 # ---------------------------------------------------------------------------------------------------------------
 # Hero object places: one grey block per room (sizes only roughly match the object to come)
 HERO_BOX = {   # code: (x0, x1, z0, z1, height) in plan tiles inside the hero tile
-    "S": (4.06, 4.42, 8.08, 8.92, 1.05),     # shelf against the west wall
     "T": (11.2, 11.8, 6.25, 6.75, 0.45),     # test desk with a laptop
     "M": (7.1, 7.9, 0.56, 0.8, 0.95),        # team screen on the north wall
     "Y": (1.0, 1.32, 6.1, 6.9, 1.05),        # map on the round wall
@@ -537,6 +536,53 @@ for code, (x0, x1, z0, z1, h) in HERO_BOX.items():
     bx(f"hero-{ROOM_ID[code]}", f"Hero object place: {name}", "meso", "prop", x0, x1, 0.02, h, z0, z1, "hero-grey", importance=0.7,
        features=[{"id": f"hero-{ROOM_ID[code]}.place", "kind": "contour", "notes": f"grey block where the {name} object goes"}],
        topo="Grey placeholder block: a box.")
+
+# 1 Shelf room hero: a store shelf, half full (board 651:3604, "One shelf. Two goals."). Big bright boxes for young
+# builders on the low shelves, slim dark sets for grown-up fans on the top shelves, and marked empty slots: the tool had
+# to plan for both. It stands against the west wall (x = 4), facing the room (+x), from z 7.8 to 9.9.
+SX0, SX1, SZ0, SZ1 = 4.14, 4.52, 7.8, 9.9
+LEVELS = (0.1, 0.36, 0.62, 0.86)       # top of each shelf board (a store shelf about 2 m tall next to the 0.9 wu avatar)
+SHELF = [   # per level: slot list along z (None = marked empty slot), slot width; low = young builders, high = grown-up
+    (["box-yellow", "box-red", None, "box-blue", "box-green", None], 0.35, 0.23),
+    (["box-orange", None, "box-blue", "box-red", None, "box-yellow"], 0.35, 0.22),
+    (["box-dark", "box-navy", None, None, "box-charcoal", "box-dark", None, "box-navy"], 0.2625, 0.2),
+    (["box-charcoal", None, "box-dark", "box-navy", None, None, "box-dark", "box-charcoal"], 0.2625, 0.18),
+]
+bx("shelf-plinth", "Shelf plinth", "meso", "prop", SX0, SX1, 0.02, LEVELS[0] - 0.02, SZ0, SZ1, "frame-dark", importance=0.6,
+   topo="Shelf base: a box.")
+bx("shelf-back", "Shelf back panel", "macro", "prop", SX0, SX0 + 0.04, 0.02, 1.08, SZ0, SZ1, "shelf-white", importance=0.85,
+   features=[{"id": "shelf-back.store", "kind": "contour", "notes": "store shelf, half full: bright boxes low, dark sets high, empty slots marked"}],
+   topo="Back panel of the store shelf: a thin box.")
+for k, z in enumerate((SZ0, SZ1 - 0.05), 1):
+    bx(f"shelf-upright-{k}", f"Shelf upright {k}", "meso", "prop", SX0, SX1, 0.02, 1.08, z, z + 0.05, "frame-dark", importance=0.5)
+bx("shelf-header", "Shelf header sign", "meso", "prop", SX0, SX1 + 0.02, 1.08, 1.24, SZ0, SZ1, "yellow", importance=0.7,
+   topo="Yellow header over the shelf: a box.")
+bx("shelf-header-stripe", "Header stripe", "micro", "trim", SX1 + 0.02, SX1 + 0.03, 1.12, 1.2, SZ0 + 0.1, SZ1 - 0.1, "box-red", contact="applied",
+   importance=0.3)
+for lv, top in enumerate(LEVELS, 1):
+    if lv > 1:
+        bx(f"shelf-board-{lv}", f"Shelf board {lv}", "meso", "prop", SX0 + 0.04, SX1, top - 0.03, top, SZ0 + 0.05, SZ1 - 0.05, "shelf-white",
+           importance=0.5)
+    bx(f"shelf-edge-{lv}", f"Shelf price strip {lv}", "micro", "trim", SX1, SX1 + 0.012, top - 0.05, top - 0.005, SZ0 + 0.05, SZ1 - 0.05,
+       "label-blue", contact="applied", importance=0.3)
+for lv, (slots, w, h) in enumerate(SHELF, 1):
+    y0 = LEVELS[lv - 1]
+    for k, mat in enumerate(slots, 1):
+        z0 = SZ0 + 0.05 + (k - 1) * w + 0.02
+        z1 = z0 + w - 0.04
+        if mat is None:
+            # marked empty slot: a pale outline on the back panel and an orange tag on the shelf edge
+            bx(f"shelf-empty-{lv}-{k}", f"Empty slot {lv}.{k}", "micro", "trim", SX0 + 0.04, SX0 + 0.05, y0 + 0.03, y0 + h - 0.02, z0, z1,
+               "slot-marker", contact="applied", importance=0.35, topo="Marked empty slot: a pale panel on the back.")
+            bx(f"shelf-tag-{lv}-{k}", f"Empty slot tag {lv}.{k}", "micro", "trim", SX1 + 0.012, SX1 + 0.02, y0 - 0.05, y0 - 0.005,
+               z0 + 0.04, z1 - 0.04, "tag-orange", contact="applied", importance=0.35)
+            continue
+        d = 0.3 if lv <= 2 else 0.22
+        bx(f"shelf-box-{lv}-{k}", f"Set box {lv}.{k}", "micro", "prop", SX1 - d, SX1 - 0.02, y0, y0 + h, z0, z1, mat, importance=0.4,
+           topo="Boxed set on the shelf: a box.")
+        band = "label-white" if lv <= 2 else "label-gold"
+        bx(f"shelf-box-{lv}-{k}-art", f"Box art {lv}.{k}", "micro", "trim", SX1 - 0.02, SX1 - 0.01, y0 + h * 0.35, y0 + h * 0.75,
+           z0 + 0.03, z1 - 0.03, band, contact="applied", importance=0.2, topo="Box front art band: a thin box.")
 
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
@@ -606,6 +652,20 @@ spec["materials"] = [
     material("glass-light", "Light glass", "glass", "#cfe6ee", ["#c5dce4"], 0.2, 0.0, "glass over the door", **F),
     material("glass-door", "Door glass", "glass", "#9cc8d8", ["#92bece"], 0.15, 0.0, "main door leaves", opacity={"base": 0.75}, **F),
     material("yellow", "LEGO yellow", "plastic", "#f2c500", ["#e8bb00"], 0.45, 0.0, "2 x 4 plate over the door", **F),
+    material("shelf-white", "Shelf white", "plastic", "#f4f3ef", ["#eae9e5"], 0.6, 0.0, "store shelf boards and back", **F),
+    material("label-blue", "Price strip", "plastic", "#2f6fc0", ["#2a66b4"], 0.5, 0.0, "shelf-edge price strips", **F),
+    material("label-white", "Box art (kids)", "plastic", "#fff6d8", ["#f5ecce"], 0.5, 0.0, "light art band on the bright boxes", **F),
+    material("label-gold", "Box art (adult)", "plastic", "#c9a24a", ["#bf9840"], 0.4, 0.3, "thin gold band on the dark sets", **F),
+    material("slot-marker", "Empty slot marker", "plastic", "#ffe7a3", ["#f5dd99"], 0.7, 0.0, "pale marked empty slot", **F),
+    material("tag-orange", "Empty slot tag", "plastic", "#f07c1e", ["#e67214"], 0.5, 0.0, "orange tag under an empty slot", **F),
+    material("box-yellow", "Box yellow", "plastic", "#f6c400", ["#ecba00"], 0.5, 0.0, "young builders' box", **F),
+    material("box-red", "Box red", "plastic", "#d8282a", ["#ce1e20"], 0.5, 0.0, "young builders' box", **F),
+    material("box-blue", "Box blue", "plastic", "#1f73d6", ["#1569cc"], 0.5, 0.0, "young builders' box", **F),
+    material("box-green", "Box green", "plastic", "#2fa84f", ["#259e45"], 0.5, 0.0, "young builders' box", **F),
+    material("box-orange", "Box orange", "plastic", "#f28a1e", ["#e88014"], 0.5, 0.0, "young builders' box", **F),
+    material("box-dark", "Box black", "plastic", "#1d1f22", ["#16181b"], 0.4, 0.0, "grown-up set", **F),
+    material("box-navy", "Box navy", "plastic", "#1d2c4a", ["#172540"], 0.4, 0.0, "grown-up set", **F),
+    material("box-charcoal", "Box charcoal", "plastic", "#383b40", ["#2f3237"], 0.4, 0.0, "grown-up set", **F),
     material("hero-grey", "Hero placeholder", "plastic", "#8d8f94", ["#85878c"], 0.6, 0.0, "grey blocks where the hero objects go", **F),
     material("floor-lobby", "Lobby floor", "stone", "#f1f0ec", ["#e7e6e2"], 0.85, 0.0, "lobby", **F),
     material("floor-shelf", "Shelf room floor", "stone", "#efe2b8", ["#e5d8ae"], 0.9, 0.0, "1 shelf room (pale tint, route colour)", **F),
@@ -699,7 +759,8 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),
-    ("hero-places", "One grey block per room for its hero object.", "hero-shelf.place"),
+    ("hero-places", "One grey block per room for its hero object (the test room's is first in this list).", "hero-test.place"),
+    ("shelf", "Shelf room: a store shelf, half full, bright boxes low, dark sets high, empty slots marked.", "shelf-back.store"),
 ]
 tmpl = (pa.get("detailInventory") or {}).get("details", [{}])[0]
 pa["detailInventory"]["details"] = [dict(copy.deepcopy(tmpl), id=i, description=d, scale="meso", affects="geometry",

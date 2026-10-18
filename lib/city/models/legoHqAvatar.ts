@@ -791,6 +791,76 @@ export function createLEGOHQAvatarScaleModel(options: ProceduralModelOptions = {
     {"id": "yellow", "name": "LEGO yellow", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f2c500", "color": "#f2c500", "albedo": {"dominant": "#f2c500", "secondary": ["#e8bb00"], "samplingNotes": "2 x 4 plate over the door"}, "colorVariation": {"palette": ["#f2c500", "#e8bb00"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.45, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "2 x 4 plate over the door", "materialClass": "plastic", "emissive": "#f2c500", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
     options
   );
+  materialMap["shelf-white"] = createSculptMaterial(
+    "shelf-white",
+    {"id": "shelf-white", "name": "Shelf white", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f4f3ef", "color": "#f4f3ef", "albedo": {"dominant": "#f4f3ef", "secondary": ["#eae9e5"], "samplingNotes": "store shelf boards and back"}, "colorVariation": {"palette": ["#f4f3ef", "#eae9e5"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.6, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "store shelf boards and back", "materialClass": "plastic", "emissive": "#f4f3ef", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["label-blue"] = createSculptMaterial(
+    "label-blue",
+    {"id": "label-blue", "name": "Price strip", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#2f6fc0", "color": "#2f6fc0", "albedo": {"dominant": "#2f6fc0", "secondary": ["#2a66b4"], "samplingNotes": "shelf-edge price strips"}, "colorVariation": {"palette": ["#2f6fc0", "#2a66b4"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "shelf-edge price strips", "materialClass": "plastic", "emissive": "#2f6fc0", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["label-white"] = createSculptMaterial(
+    "label-white",
+    {"id": "label-white", "name": "Box art (kids)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#fff6d8", "color": "#fff6d8", "albedo": {"dominant": "#fff6d8", "secondary": ["#f5ecce"], "samplingNotes": "light art band on the bright boxes"}, "colorVariation": {"palette": ["#fff6d8", "#f5ecce"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "light art band on the bright boxes", "materialClass": "plastic", "emissive": "#fff6d8", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["label-gold"] = createSculptMaterial(
+    "label-gold",
+    {"id": "label-gold", "name": "Box art (adult)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#c9a24a", "color": "#c9a24a", "albedo": {"dominant": "#c9a24a", "secondary": ["#bf9840"], "samplingNotes": "thin gold band on the dark sets"}, "colorVariation": {"palette": ["#c9a24a", "#bf9840"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.4, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.3, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "thin gold band on the dark sets", "materialClass": "plastic", "emissive": "#c9a24a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["slot-marker"] = createSculptMaterial(
+    "slot-marker",
+    {"id": "slot-marker", "name": "Empty slot marker", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#ffe7a3", "color": "#ffe7a3", "albedo": {"dominant": "#ffe7a3", "secondary": ["#f5dd99"], "samplingNotes": "pale marked empty slot"}, "colorVariation": {"palette": ["#ffe7a3", "#f5dd99"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.7, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "pale marked empty slot", "materialClass": "plastic", "emissive": "#ffe7a3", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["tag-orange"] = createSculptMaterial(
+    "tag-orange",
+    {"id": "tag-orange", "name": "Empty slot tag", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f07c1e", "color": "#f07c1e", "albedo": {"dominant": "#f07c1e", "secondary": ["#e67214"], "samplingNotes": "orange tag under an empty slot"}, "colorVariation": {"palette": ["#f07c1e", "#e67214"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "orange tag under an empty slot", "materialClass": "plastic", "emissive": "#f07c1e", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-yellow"] = createSculptMaterial(
+    "box-yellow",
+    {"id": "box-yellow", "name": "Box yellow", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f6c400", "color": "#f6c400", "albedo": {"dominant": "#f6c400", "secondary": ["#ecba00"], "samplingNotes": "young builders' box"}, "colorVariation": {"palette": ["#f6c400", "#ecba00"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "young builders' box", "materialClass": "plastic", "emissive": "#f6c400", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-red"] = createSculptMaterial(
+    "box-red",
+    {"id": "box-red", "name": "Box red", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#d8282a", "color": "#d8282a", "albedo": {"dominant": "#d8282a", "secondary": ["#ce1e20"], "samplingNotes": "young builders' box"}, "colorVariation": {"palette": ["#d8282a", "#ce1e20"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "young builders' box", "materialClass": "plastic", "emissive": "#d8282a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-blue"] = createSculptMaterial(
+    "box-blue",
+    {"id": "box-blue", "name": "Box blue", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#1f73d6", "color": "#1f73d6", "albedo": {"dominant": "#1f73d6", "secondary": ["#1569cc"], "samplingNotes": "young builders' box"}, "colorVariation": {"palette": ["#1f73d6", "#1569cc"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "young builders' box", "materialClass": "plastic", "emissive": "#1f73d6", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-green"] = createSculptMaterial(
+    "box-green",
+    {"id": "box-green", "name": "Box green", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#2fa84f", "color": "#2fa84f", "albedo": {"dominant": "#2fa84f", "secondary": ["#259e45"], "samplingNotes": "young builders' box"}, "colorVariation": {"palette": ["#2fa84f", "#259e45"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "young builders' box", "materialClass": "plastic", "emissive": "#2fa84f", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-orange"] = createSculptMaterial(
+    "box-orange",
+    {"id": "box-orange", "name": "Box orange", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f28a1e", "color": "#f28a1e", "albedo": {"dominant": "#f28a1e", "secondary": ["#e88014"], "samplingNotes": "young builders' box"}, "colorVariation": {"palette": ["#f28a1e", "#e88014"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "young builders' box", "materialClass": "plastic", "emissive": "#f28a1e", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-dark"] = createSculptMaterial(
+    "box-dark",
+    {"id": "box-dark", "name": "Box black", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#1d1f22", "color": "#1d1f22", "albedo": {"dominant": "#1d1f22", "secondary": ["#16181b"], "samplingNotes": "grown-up set"}, "colorVariation": {"palette": ["#1d1f22", "#16181b"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.4, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "grown-up set", "materialClass": "plastic", "emissive": "#1d1f22", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-navy"] = createSculptMaterial(
+    "box-navy",
+    {"id": "box-navy", "name": "Box navy", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#1d2c4a", "color": "#1d2c4a", "albedo": {"dominant": "#1d2c4a", "secondary": ["#172540"], "samplingNotes": "grown-up set"}, "colorVariation": {"palette": ["#1d2c4a", "#172540"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.4, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "grown-up set", "materialClass": "plastic", "emissive": "#1d2c4a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["box-charcoal"] = createSculptMaterial(
+    "box-charcoal",
+    {"id": "box-charcoal", "name": "Box charcoal", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#383b40", "color": "#383b40", "albedo": {"dominant": "#383b40", "secondary": ["#2f3237"], "samplingNotes": "grown-up set"}, "colorVariation": {"palette": ["#383b40", "#2f3237"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.4, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "grown-up set", "materialClass": "plastic", "emissive": "#383b40", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
   materialMap["hero-grey"] = createSculptMaterial(
     "hero-grey",
     {"id": "hero-grey", "name": "Hero placeholder", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#8d8f94", "color": "#8d8f94", "albedo": {"dominant": "#8d8f94", "secondary": ["#85878c"], "samplingNotes": "grey blocks where the hero objects go"}, "colorVariation": {"palette": ["#8d8f94", "#85878c"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.6, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "grey blocks where the hero objects go", "materialClass": "plastic", "emissive": "#8d8f94", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
@@ -21450,204 +21520,2856 @@ export function createLEGOHQAvatarScaleModel(options: ProceduralModelOptions = {
   destructionGroups["roof-skylight-small-7"] ??= [];
   destructionGroups["roof-skylight-small-7"].push(node_roof_skylight_small_7_526);
 
-  const endpoint_hero_shelf_527 = makeAttachmentEndpoint(null);
-  const node_hero_shelf_527 = new THREE.Group();
-  node_hero_shelf_527.name = "Hero object place: 1 Shelf__pivot";
-  node_hero_shelf_527.scale.set(1, 1, 1);
-  if (endpoint_hero_shelf_527) {
-    node_hero_shelf_527.position.copy(endpoint_hero_shelf_527.start);
-    node_hero_shelf_527.rotation.set(0.0, 0.0, 0.0);
+  const endpoint_hero_test_527 = makeAttachmentEndpoint(null);
+  const node_hero_test_527 = new THREE.Group();
+  node_hero_test_527.name = "Hero object place: 2 Test__pivot";
+  node_hero_test_527.scale.set(1, 1, 1);
+  if (endpoint_hero_test_527) {
+    node_hero_test_527.position.copy(endpoint_hero_test_527.start);
+    node_hero_test_527.rotation.set(0.0, 0.0, 0.0);
   } else {
-    node_hero_shelf_527.position.set(-3.26, 0.565, 3.0);
-    node_hero_shelf_527.rotation.set(0.0, 0.0, 0.0);
+    node_hero_test_527.position.set(4.0, 0.265, 1.0);
+    node_hero_test_527.rotation.set(0.0, 0.0, 0.0);
   }
-  node_hero_shelf_527.userData.sculptComponent = {"id": "hero-shelf", "name": "Hero object place: 1 Shelf", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.26, 0.05, 3.0], "localEnd": [-3.26, 1.08, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.36, "height": 1.03, "depth": 0.84, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.26, 0.565, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.36, 1.03, 0.84]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.36, 1.03, 0.84], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-shelf", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-shelf.place", "kind": "contour", "notes": "grey block where the 1 Shelf object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_shelf_527.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.36, 1.03, 0.84], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-shelf", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
-  (nodes["root"] ?? root).add(node_hero_shelf_527);
-  nodes["hero-shelf"] = node_hero_shelf_527;
-  const mesh_hero_shelf_527Geometry = endpoint_hero_shelf_527
-    ? new THREE.CylinderGeometry(endpoint_hero_shelf_527.endRadius, endpoint_hero_shelf_527.baseRadius, endpoint_hero_shelf_527.length, 16, 6)
+  node_hero_test_527.userData.sculptComponent = {"id": "hero-test", "name": "Hero object place: 2 Test", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.0, 0.05, 1.0], "localEnd": [4.0, 0.48, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.6, "height": 0.43, "depth": 0.5, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.0, 0.265, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.6, 0.43, 0.5]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-test.place", "kind": "contour", "notes": "grey block where the 2 Test object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_test_527.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
+  (nodes["root"] ?? root).add(node_hero_test_527);
+  nodes["hero-test"] = node_hero_test_527;
+  const mesh_hero_test_527Geometry = endpoint_hero_test_527
+    ? new THREE.CylinderGeometry(endpoint_hero_test_527.endRadius, endpoint_hero_test_527.baseRadius, endpoint_hero_test_527.length, 16, 6)
     : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
-  if (!endpoint_hero_shelf_527) {
-    mesh_hero_shelf_527Geometry.scale(0.36, 1.03, 0.84);
+  if (!endpoint_hero_test_527) {
+    mesh_hero_test_527Geometry.scale(0.6, 0.43, 0.5);
   }
-  const mesh_hero_shelf_527 = new THREE.Mesh(
-    mesh_hero_shelf_527Geometry,
+  const mesh_hero_test_527 = new THREE.Mesh(
+    mesh_hero_test_527Geometry,
     materialMap["hero-grey"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
-  mesh_hero_shelf_527.name = "Hero object place: 1 Shelf";
-  if (endpoint_hero_shelf_527) {
-    mesh_hero_shelf_527.position.copy(endpoint_hero_shelf_527.midpoint);
-    mesh_hero_shelf_527.quaternion.copy(endpoint_hero_shelf_527.quaternion);
+  mesh_hero_test_527.name = "Hero object place: 2 Test";
+  if (endpoint_hero_test_527) {
+    mesh_hero_test_527.position.copy(endpoint_hero_test_527.midpoint);
+    mesh_hero_test_527.quaternion.copy(endpoint_hero_test_527.quaternion);
   }
-  mesh_hero_shelf_527.castShadow = options.castShadow ?? true;
-  mesh_hero_shelf_527.receiveShadow = options.receiveShadow ?? true;
-  mesh_hero_shelf_527.userData.sculptComponent = {"id": "hero-shelf", "name": "Hero object place: 1 Shelf", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.26, 0.05, 3.0], "localEnd": [-3.26, 1.08, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.36, "height": 1.03, "depth": 0.84, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.26, 0.565, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.36, 1.03, 0.84]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.36, 1.03, 0.84], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-shelf", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-shelf.place", "kind": "contour", "notes": "grey block where the 1 Shelf object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_shelf_527.add(mesh_hero_shelf_527);
-  meshes["hero-shelf"] = mesh_hero_shelf_527;
-  colliders["hero-shelf"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.36, 1.03, 0.84], "isTrigger": false, "notes": "box proxy"};
-  destructionGroups["hero-shelf"] ??= [];
-  destructionGroups["hero-shelf"].push(node_hero_shelf_527);
-
-  const endpoint_hero_test_528 = makeAttachmentEndpoint(null);
-  const node_hero_test_528 = new THREE.Group();
-  node_hero_test_528.name = "Hero object place: 2 Test__pivot";
-  node_hero_test_528.scale.set(1, 1, 1);
-  if (endpoint_hero_test_528) {
-    node_hero_test_528.position.copy(endpoint_hero_test_528.start);
-    node_hero_test_528.rotation.set(0.0, 0.0, 0.0);
-  } else {
-    node_hero_test_528.position.set(4.0, 0.265, 1.0);
-    node_hero_test_528.rotation.set(0.0, 0.0, 0.0);
-  }
-  node_hero_test_528.userData.sculptComponent = {"id": "hero-test", "name": "Hero object place: 2 Test", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.0, 0.05, 1.0], "localEnd": [4.0, 0.48, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.6, "height": 0.43, "depth": 0.5, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.0, 0.265, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.6, 0.43, 0.5]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-test.place", "kind": "contour", "notes": "grey block where the 2 Test object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_test_528.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
-  (nodes["root"] ?? root).add(node_hero_test_528);
-  nodes["hero-test"] = node_hero_test_528;
-  const mesh_hero_test_528Geometry = endpoint_hero_test_528
-    ? new THREE.CylinderGeometry(endpoint_hero_test_528.endRadius, endpoint_hero_test_528.baseRadius, endpoint_hero_test_528.length, 16, 6)
-    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
-  if (!endpoint_hero_test_528) {
-    mesh_hero_test_528Geometry.scale(0.6, 0.43, 0.5);
-  }
-  const mesh_hero_test_528 = new THREE.Mesh(
-    mesh_hero_test_528Geometry,
-    materialMap["hero-grey"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
-  );
-  mesh_hero_test_528.name = "Hero object place: 2 Test";
-  if (endpoint_hero_test_528) {
-    mesh_hero_test_528.position.copy(endpoint_hero_test_528.midpoint);
-    mesh_hero_test_528.quaternion.copy(endpoint_hero_test_528.quaternion);
-  }
-  mesh_hero_test_528.castShadow = options.castShadow ?? true;
-  mesh_hero_test_528.receiveShadow = options.receiveShadow ?? true;
-  mesh_hero_test_528.userData.sculptComponent = {"id": "hero-test", "name": "Hero object place: 2 Test", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.0, 0.05, 1.0], "localEnd": [4.0, 0.48, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.6, "height": 0.43, "depth": 0.5, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.0, 0.265, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.6, 0.43, 0.5]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-test.place", "kind": "contour", "notes": "grey block where the 2 Test object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_test_528.add(mesh_hero_test_528);
-  meshes["hero-test"] = mesh_hero_test_528;
+  mesh_hero_test_527.castShadow = options.castShadow ?? true;
+  mesh_hero_test_527.receiveShadow = options.receiveShadow ?? true;
+  mesh_hero_test_527.userData.sculptComponent = {"id": "hero-test", "name": "Hero object place: 2 Test", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.0, 0.05, 1.0], "localEnd": [4.0, 0.48, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.6, "height": 0.43, "depth": 0.5, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.0, 0.265, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.6, 0.43, 0.5]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-test", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-test.place", "kind": "contour", "notes": "grey block where the 2 Test object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_test_527.add(mesh_hero_test_527);
+  meshes["hero-test"] = mesh_hero_test_527;
   colliders["hero-test"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.6, 0.43, 0.5], "isTrigger": false, "notes": "box proxy"};
   destructionGroups["hero-test"] ??= [];
-  destructionGroups["hero-test"].push(node_hero_test_528);
+  destructionGroups["hero-test"].push(node_hero_test_527);
 
-  const endpoint_hero_team_529 = makeAttachmentEndpoint(null);
-  const node_hero_team_529 = new THREE.Group();
-  node_hero_team_529.name = "Hero object place: 3 Team screen__pivot";
-  node_hero_team_529.scale.set(1, 1, 1);
-  if (endpoint_hero_team_529) {
-    node_hero_team_529.position.copy(endpoint_hero_team_529.start);
-    node_hero_team_529.rotation.set(0.0, 0.0, 0.0);
+  const endpoint_hero_team_528 = makeAttachmentEndpoint(null);
+  const node_hero_team_528 = new THREE.Group();
+  node_hero_team_528.name = "Hero object place: 3 Team screen__pivot";
+  node_hero_team_528.scale.set(1, 1, 1);
+  if (endpoint_hero_team_528) {
+    node_hero_team_528.position.copy(endpoint_hero_team_528.start);
+    node_hero_team_528.rotation.set(0.0, 0.0, 0.0);
   } else {
-    node_hero_team_529.position.set(0.0, 0.515, -4.82);
-    node_hero_team_529.rotation.set(0.0, 0.0, 0.0);
+    node_hero_team_528.position.set(0.0, 0.515, -4.82);
+    node_hero_team_528.rotation.set(0.0, 0.0, 0.0);
   }
-  node_hero_team_529.userData.sculptComponent = {"id": "hero-team", "name": "Hero object place: 3 Team screen", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [0.0, 0.05, -4.82], "localEnd": [0.0, 0.98, -4.82], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.8, "height": 0.93, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [0.0, 0.515, -4.82], "rotation": [0.0, 0.0, 0.0], "scale": [0.8, 0.93, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-team.place", "kind": "contour", "notes": "grey block where the 3 Team screen object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_team_529.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
-  (nodes["root"] ?? root).add(node_hero_team_529);
-  nodes["hero-team"] = node_hero_team_529;
-  const mesh_hero_team_529Geometry = endpoint_hero_team_529
-    ? new THREE.CylinderGeometry(endpoint_hero_team_529.endRadius, endpoint_hero_team_529.baseRadius, endpoint_hero_team_529.length, 16, 6)
+  node_hero_team_528.userData.sculptComponent = {"id": "hero-team", "name": "Hero object place: 3 Team screen", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [0.0, 0.05, -4.82], "localEnd": [0.0, 0.98, -4.82], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.8, "height": 0.93, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [0.0, 0.515, -4.82], "rotation": [0.0, 0.0, 0.0], "scale": [0.8, 0.93, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-team.place", "kind": "contour", "notes": "grey block where the 3 Team screen object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_team_528.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
+  (nodes["root"] ?? root).add(node_hero_team_528);
+  nodes["hero-team"] = node_hero_team_528;
+  const mesh_hero_team_528Geometry = endpoint_hero_team_528
+    ? new THREE.CylinderGeometry(endpoint_hero_team_528.endRadius, endpoint_hero_team_528.baseRadius, endpoint_hero_team_528.length, 16, 6)
     : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
-  if (!endpoint_hero_team_529) {
-    mesh_hero_team_529Geometry.scale(0.8, 0.93, 0.24);
+  if (!endpoint_hero_team_528) {
+    mesh_hero_team_528Geometry.scale(0.8, 0.93, 0.24);
   }
-  const mesh_hero_team_529 = new THREE.Mesh(
-    mesh_hero_team_529Geometry,
+  const mesh_hero_team_528 = new THREE.Mesh(
+    mesh_hero_team_528Geometry,
     materialMap["hero-grey"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
-  mesh_hero_team_529.name = "Hero object place: 3 Team screen";
-  if (endpoint_hero_team_529) {
-    mesh_hero_team_529.position.copy(endpoint_hero_team_529.midpoint);
-    mesh_hero_team_529.quaternion.copy(endpoint_hero_team_529.quaternion);
+  mesh_hero_team_528.name = "Hero object place: 3 Team screen";
+  if (endpoint_hero_team_528) {
+    mesh_hero_team_528.position.copy(endpoint_hero_team_528.midpoint);
+    mesh_hero_team_528.quaternion.copy(endpoint_hero_team_528.quaternion);
   }
-  mesh_hero_team_529.castShadow = options.castShadow ?? true;
-  mesh_hero_team_529.receiveShadow = options.receiveShadow ?? true;
-  mesh_hero_team_529.userData.sculptComponent = {"id": "hero-team", "name": "Hero object place: 3 Team screen", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [0.0, 0.05, -4.82], "localEnd": [0.0, 0.98, -4.82], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.8, "height": 0.93, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [0.0, 0.515, -4.82], "rotation": [0.0, 0.0, 0.0], "scale": [0.8, 0.93, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-team.place", "kind": "contour", "notes": "grey block where the 3 Team screen object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_team_529.add(mesh_hero_team_529);
-  meshes["hero-team"] = mesh_hero_team_529;
+  mesh_hero_team_528.castShadow = options.castShadow ?? true;
+  mesh_hero_team_528.receiveShadow = options.receiveShadow ?? true;
+  mesh_hero_team_528.userData.sculptComponent = {"id": "hero-team", "name": "Hero object place: 3 Team screen", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [0.0, 0.05, -4.82], "localEnd": [0.0, 0.98, -4.82], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.8, "height": 0.93, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [0.0, 0.515, -4.82], "rotation": [0.0, 0.0, 0.0], "scale": [0.8, 0.93, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-team", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-team.place", "kind": "contour", "notes": "grey block where the 3 Team screen object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_team_528.add(mesh_hero_team_528);
+  meshes["hero-team"] = mesh_hero_team_528;
   colliders["hero-team"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.8, 0.93, 0.24], "isTrigger": false, "notes": "box proxy"};
   destructionGroups["hero-team"] ??= [];
-  destructionGroups["hero-team"].push(node_hero_team_529);
+  destructionGroups["hero-team"].push(node_hero_team_528);
 
-  const endpoint_hero_map_530 = makeAttachmentEndpoint(null);
-  const node_hero_map_530 = new THREE.Group();
-  node_hero_map_530.name = "Hero object place: 4 Systems map__pivot";
-  node_hero_map_530.scale.set(1, 1, 1);
-  if (endpoint_hero_map_530) {
-    node_hero_map_530.position.copy(endpoint_hero_map_530.start);
-    node_hero_map_530.rotation.set(0.0, 0.0, 0.0);
+  const endpoint_hero_map_529 = makeAttachmentEndpoint(null);
+  const node_hero_map_529 = new THREE.Group();
+  node_hero_map_529.name = "Hero object place: 4 Systems map__pivot";
+  node_hero_map_529.scale.set(1, 1, 1);
+  if (endpoint_hero_map_529) {
+    node_hero_map_529.position.copy(endpoint_hero_map_529.start);
+    node_hero_map_529.rotation.set(0.0, 0.0, 0.0);
   } else {
-    node_hero_map_530.position.set(-6.34, 0.565, 1.0);
-    node_hero_map_530.rotation.set(0.0, 0.0, 0.0);
+    node_hero_map_529.position.set(-6.34, 0.565, 1.0);
+    node_hero_map_529.rotation.set(0.0, 0.0, 0.0);
   }
-  node_hero_map_530.userData.sculptComponent = {"id": "hero-map", "name": "Hero object place: 4 Systems map", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-6.34, 0.05, 1.0], "localEnd": [-6.34, 1.08, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.32, "height": 1.03, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-6.34, 0.565, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.32, 1.03, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-map.place", "kind": "contour", "notes": "grey block where the 4 Systems map object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_map_530.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
-  (nodes["root"] ?? root).add(node_hero_map_530);
-  nodes["hero-map"] = node_hero_map_530;
-  const mesh_hero_map_530Geometry = endpoint_hero_map_530
-    ? new THREE.CylinderGeometry(endpoint_hero_map_530.endRadius, endpoint_hero_map_530.baseRadius, endpoint_hero_map_530.length, 16, 6)
+  node_hero_map_529.userData.sculptComponent = {"id": "hero-map", "name": "Hero object place: 4 Systems map", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-6.34, 0.05, 1.0], "localEnd": [-6.34, 1.08, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.32, "height": 1.03, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-6.34, 0.565, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.32, 1.03, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-map.place", "kind": "contour", "notes": "grey block where the 4 Systems map object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_map_529.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
+  (nodes["root"] ?? root).add(node_hero_map_529);
+  nodes["hero-map"] = node_hero_map_529;
+  const mesh_hero_map_529Geometry = endpoint_hero_map_529
+    ? new THREE.CylinderGeometry(endpoint_hero_map_529.endRadius, endpoint_hero_map_529.baseRadius, endpoint_hero_map_529.length, 16, 6)
     : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
-  if (!endpoint_hero_map_530) {
-    mesh_hero_map_530Geometry.scale(0.32, 1.03, 0.8);
+  if (!endpoint_hero_map_529) {
+    mesh_hero_map_529Geometry.scale(0.32, 1.03, 0.8);
   }
-  const mesh_hero_map_530 = new THREE.Mesh(
-    mesh_hero_map_530Geometry,
+  const mesh_hero_map_529 = new THREE.Mesh(
+    mesh_hero_map_529Geometry,
     materialMap["hero-grey"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
-  mesh_hero_map_530.name = "Hero object place: 4 Systems map";
-  if (endpoint_hero_map_530) {
-    mesh_hero_map_530.position.copy(endpoint_hero_map_530.midpoint);
-    mesh_hero_map_530.quaternion.copy(endpoint_hero_map_530.quaternion);
+  mesh_hero_map_529.name = "Hero object place: 4 Systems map";
+  if (endpoint_hero_map_529) {
+    mesh_hero_map_529.position.copy(endpoint_hero_map_529.midpoint);
+    mesh_hero_map_529.quaternion.copy(endpoint_hero_map_529.quaternion);
   }
-  mesh_hero_map_530.castShadow = options.castShadow ?? true;
-  mesh_hero_map_530.receiveShadow = options.receiveShadow ?? true;
-  mesh_hero_map_530.userData.sculptComponent = {"id": "hero-map", "name": "Hero object place: 4 Systems map", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-6.34, 0.05, 1.0], "localEnd": [-6.34, 1.08, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.32, "height": 1.03, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-6.34, 0.565, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.32, 1.03, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-map.place", "kind": "contour", "notes": "grey block where the 4 Systems map object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_map_530.add(mesh_hero_map_530);
-  meshes["hero-map"] = mesh_hero_map_530;
+  mesh_hero_map_529.castShadow = options.castShadow ?? true;
+  mesh_hero_map_529.receiveShadow = options.receiveShadow ?? true;
+  mesh_hero_map_529.userData.sculptComponent = {"id": "hero-map", "name": "Hero object place: 4 Systems map", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-6.34, 0.05, 1.0], "localEnd": [-6.34, 1.08, 1.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.32, "height": 1.03, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-6.34, 0.565, 1.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.32, 1.03, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-map", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-map.place", "kind": "contour", "notes": "grey block where the 4 Systems map object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_map_529.add(mesh_hero_map_529);
+  meshes["hero-map"] = mesh_hero_map_529;
   colliders["hero-map"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.32, 1.03, 0.8], "isTrigger": false, "notes": "box proxy"};
   destructionGroups["hero-map"] ??= [];
-  destructionGroups["hero-map"].push(node_hero_map_530);
+  destructionGroups["hero-map"].push(node_hero_map_529);
 
-  const endpoint_hero_ailab_531 = makeAttachmentEndpoint(null);
-  const node_hero_ailab_531 = new THREE.Group();
-  node_hero_ailab_531.name = "Hero object place: 5 AI lab table__pivot";
-  node_hero_ailab_531.scale.set(1, 1, 1);
-  if (endpoint_hero_ailab_531) {
-    node_hero_ailab_531.position.copy(endpoint_hero_ailab_531.start);
-    node_hero_ailab_531.rotation.set(0.0, 0.0, 0.0);
+  const endpoint_hero_ailab_530 = makeAttachmentEndpoint(null);
+  const node_hero_ailab_530 = new THREE.Group();
+  node_hero_ailab_530.name = "Hero object place: 5 AI lab table__pivot";
+  node_hero_ailab_530.scale.set(1, 1, 1);
+  if (endpoint_hero_ailab_530) {
+    node_hero_ailab_530.position.copy(endpoint_hero_ailab_530.start);
+    node_hero_ailab_530.rotation.set(0.0, 0.0, 0.0);
   } else {
-    node_hero_ailab_531.position.set(7.0, 0.25, 0.0);
-    node_hero_ailab_531.rotation.set(0.0, 0.0, 0.0);
+    node_hero_ailab_530.position.set(7.0, 0.25, 0.0);
+    node_hero_ailab_530.rotation.set(0.0, 0.0, 0.0);
   }
-  node_hero_ailab_531.userData.sculptComponent = {"id": "hero-ailab", "name": "Hero object place: 5 AI lab table", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [7.0, 0.05, 0.0], "localEnd": [7.0, 0.45, 0.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.7, "height": 0.4, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [7.0, 0.25, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.7, 0.4, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-ailab.place", "kind": "contour", "notes": "grey block where the 5 AI lab table object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_ailab_531.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
-  (nodes["root"] ?? root).add(node_hero_ailab_531);
-  nodes["hero-ailab"] = node_hero_ailab_531;
-  const mesh_hero_ailab_531Geometry = endpoint_hero_ailab_531
-    ? new THREE.CylinderGeometry(endpoint_hero_ailab_531.endRadius, endpoint_hero_ailab_531.baseRadius, endpoint_hero_ailab_531.length, 16, 6)
+  node_hero_ailab_530.userData.sculptComponent = {"id": "hero-ailab", "name": "Hero object place: 5 AI lab table", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [7.0, 0.05, 0.0], "localEnd": [7.0, 0.45, 0.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.7, "height": 0.4, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [7.0, 0.25, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.7, 0.4, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-ailab.place", "kind": "contour", "notes": "grey block where the 5 AI lab table object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_ailab_530.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}};
+  (nodes["root"] ?? root).add(node_hero_ailab_530);
+  nodes["hero-ailab"] = node_hero_ailab_530;
+  const mesh_hero_ailab_530Geometry = endpoint_hero_ailab_530
+    ? new THREE.CylinderGeometry(endpoint_hero_ailab_530.endRadius, endpoint_hero_ailab_530.baseRadius, endpoint_hero_ailab_530.length, 16, 6)
     : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
-  if (!endpoint_hero_ailab_531) {
-    mesh_hero_ailab_531Geometry.scale(0.7, 0.4, 0.8);
+  if (!endpoint_hero_ailab_530) {
+    mesh_hero_ailab_530Geometry.scale(0.7, 0.4, 0.8);
   }
-  const mesh_hero_ailab_531 = new THREE.Mesh(
-    mesh_hero_ailab_531Geometry,
+  const mesh_hero_ailab_530 = new THREE.Mesh(
+    mesh_hero_ailab_530Geometry,
     materialMap["hero-grey"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
   );
-  mesh_hero_ailab_531.name = "Hero object place: 5 AI lab table";
-  if (endpoint_hero_ailab_531) {
-    mesh_hero_ailab_531.position.copy(endpoint_hero_ailab_531.midpoint);
-    mesh_hero_ailab_531.quaternion.copy(endpoint_hero_ailab_531.quaternion);
+  mesh_hero_ailab_530.name = "Hero object place: 5 AI lab table";
+  if (endpoint_hero_ailab_530) {
+    mesh_hero_ailab_530.position.copy(endpoint_hero_ailab_530.midpoint);
+    mesh_hero_ailab_530.quaternion.copy(endpoint_hero_ailab_530.quaternion);
   }
-  mesh_hero_ailab_531.castShadow = options.castShadow ?? true;
-  mesh_hero_ailab_531.receiveShadow = options.receiveShadow ?? true;
-  mesh_hero_ailab_531.userData.sculptComponent = {"id": "hero-ailab", "name": "Hero object place: 5 AI lab table", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [7.0, 0.05, 0.0], "localEnd": [7.0, 0.45, 0.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.7, "height": 0.4, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [7.0, 0.25, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.7, 0.4, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-ailab.place", "kind": "contour", "notes": "grey block where the 5 AI lab table object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
-  node_hero_ailab_531.add(mesh_hero_ailab_531);
-  meshes["hero-ailab"] = mesh_hero_ailab_531;
+  mesh_hero_ailab_530.castShadow = options.castShadow ?? true;
+  mesh_hero_ailab_530.receiveShadow = options.receiveShadow ?? true;
+  mesh_hero_ailab_530.userData.sculptComponent = {"id": "hero-ailab", "name": "Hero object place: 5 AI lab table", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Grey placeholder block: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [7.0, 0.05, 0.0], "localEnd": [7.0, 0.45, 0.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.7, "height": 0.4, "depth": 0.8, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [7.0, 0.25, 0.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.7, 0.4, 0.8]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "hero-ailab", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "hero-grey"}}, "material": "hero-grey", "materialLayers": ["hero-grey"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "hero-ailab.place", "kind": "contour", "notes": "grey block where the 5 AI lab table object goes"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(141, 143, 148, 1.0)", "secondaryAlbedo": "rgba(133, 135, 140, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_hero_ailab_530.add(mesh_hero_ailab_530);
+  meshes["hero-ailab"] = mesh_hero_ailab_530;
   colliders["hero-ailab"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.7, 0.4, 0.8], "isTrigger": false, "notes": "box proxy"};
   destructionGroups["hero-ailab"] ??= [];
-  destructionGroups["hero-ailab"].push(node_hero_ailab_531);
+  destructionGroups["hero-ailab"].push(node_hero_ailab_530);
+
+  const endpoint_shelf_plinth_531 = makeAttachmentEndpoint(null);
+  const node_shelf_plinth_531 = new THREE.Group();
+  node_shelf_plinth_531.name = "Shelf plinth__pivot";
+  node_shelf_plinth_531.scale.set(1, 1, 1);
+  if (endpoint_shelf_plinth_531) {
+    node_shelf_plinth_531.position.copy(endpoint_shelf_plinth_531.start);
+    node_shelf_plinth_531.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_plinth_531.position.set(-3.17, 0.08, 3.35);
+    node_shelf_plinth_531.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_plinth_531.userData.sculptComponent = {"id": "shelf-plinth", "name": "Shelf plinth", "level": "meso", "role": "prop", "importance": 0.6, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Shelf base: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 3.35], "localEnd": [-3.17, 0.11, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 0.06, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.08, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 0.06, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 0.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-plinth", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_plinth_531.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 0.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-plinth", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_plinth_531);
+  nodes["shelf-plinth"] = node_shelf_plinth_531;
+  const mesh_shelf_plinth_531Geometry = endpoint_shelf_plinth_531
+    ? new THREE.CylinderGeometry(endpoint_shelf_plinth_531.endRadius, endpoint_shelf_plinth_531.baseRadius, endpoint_shelf_plinth_531.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_plinth_531) {
+    mesh_shelf_plinth_531Geometry.scale(0.38, 0.06, 2.1);
+  }
+  const mesh_shelf_plinth_531 = new THREE.Mesh(
+    mesh_shelf_plinth_531Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_plinth_531.name = "Shelf plinth";
+  if (endpoint_shelf_plinth_531) {
+    mesh_shelf_plinth_531.position.copy(endpoint_shelf_plinth_531.midpoint);
+    mesh_shelf_plinth_531.quaternion.copy(endpoint_shelf_plinth_531.quaternion);
+  }
+  mesh_shelf_plinth_531.castShadow = options.castShadow ?? true;
+  mesh_shelf_plinth_531.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_plinth_531.userData.sculptComponent = {"id": "shelf-plinth", "name": "Shelf plinth", "level": "meso", "role": "prop", "importance": 0.6, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Shelf base: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 3.35], "localEnd": [-3.17, 0.11, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 0.06, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.08, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 0.06, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 0.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-plinth", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_plinth_531.add(mesh_shelf_plinth_531);
+  meshes["shelf-plinth"] = mesh_shelf_plinth_531;
+  colliders["shelf-plinth"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 0.06, 2.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-plinth"] ??= [];
+  destructionGroups["shelf-plinth"].push(node_shelf_plinth_531);
+
+  const endpoint_shelf_back_532 = makeAttachmentEndpoint(null);
+  const node_shelf_back_532 = new THREE.Group();
+  node_shelf_back_532.name = "Shelf back panel__pivot";
+  node_shelf_back_532.scale.set(1, 1, 1);
+  if (endpoint_shelf_back_532) {
+    node_shelf_back_532.position.copy(endpoint_shelf_back_532.start);
+    node_shelf_back_532.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_back_532.position.set(-3.34, 0.58, 3.35);
+    node_shelf_back_532.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_back_532.userData.sculptComponent = {"id": "shelf-back", "name": "Shelf back panel", "level": "macro", "role": "prop", "importance": 0.85, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Back panel of the store shelf: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.34, 0.05, 3.35], "localEnd": [-3.34, 1.11, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 1.06, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.34, 0.58, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 1.06, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 1.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "shelf-back.store", "kind": "contour", "notes": "store shelf, half full: bright boxes low, dark sets high, empty slots marked"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_back_532.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 1.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}};
+  (nodes["root"] ?? root).add(node_shelf_back_532);
+  nodes["shelf-back"] = node_shelf_back_532;
+  const mesh_shelf_back_532Geometry = endpoint_shelf_back_532
+    ? new THREE.CylinderGeometry(endpoint_shelf_back_532.endRadius, endpoint_shelf_back_532.baseRadius, endpoint_shelf_back_532.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_back_532) {
+    mesh_shelf_back_532Geometry.scale(0.04, 1.06, 2.1);
+  }
+  const mesh_shelf_back_532 = new THREE.Mesh(
+    mesh_shelf_back_532Geometry,
+    materialMap["shelf-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_back_532.name = "Shelf back panel";
+  if (endpoint_shelf_back_532) {
+    mesh_shelf_back_532.position.copy(endpoint_shelf_back_532.midpoint);
+    mesh_shelf_back_532.quaternion.copy(endpoint_shelf_back_532.quaternion);
+  }
+  mesh_shelf_back_532.castShadow = options.castShadow ?? true;
+  mesh_shelf_back_532.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_back_532.userData.sculptComponent = {"id": "shelf-back", "name": "Shelf back panel", "level": "macro", "role": "prop", "importance": 0.85, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Back panel of the store shelf: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.34, 0.05, 3.35], "localEnd": [-3.34, 1.11, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 1.06, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.34, 0.58, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 1.06, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 1.06, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "shelf-back.store", "kind": "contour", "notes": "store shelf, half full: bright boxes low, dark sets high, empty slots marked"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_back_532.add(mesh_shelf_back_532);
+  meshes["shelf-back"] = mesh_shelf_back_532;
+  colliders["shelf-back"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 1.06, 2.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-back"] ??= [];
+  destructionGroups["shelf-back"].push(node_shelf_back_532);
+
+  const endpoint_shelf_upright_1_533 = makeAttachmentEndpoint(null);
+  const node_shelf_upright_1_533 = new THREE.Group();
+  node_shelf_upright_1_533.name = "Shelf upright 1__pivot";
+  node_shelf_upright_1_533.scale.set(1, 1, 1);
+  if (endpoint_shelf_upright_1_533) {
+    node_shelf_upright_1_533.position.copy(endpoint_shelf_upright_1_533.start);
+    node_shelf_upright_1_533.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_upright_1_533.position.set(-3.17, 0.58, 2.325);
+    node_shelf_upright_1_533.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_upright_1_533.userData.sculptComponent = {"id": "shelf-upright-1", "name": "Shelf upright 1", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 2.325], "localEnd": [-3.17, 1.11, 2.325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 1.06, "depth": 0.05, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.58, 2.325], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 1.06, 0.05]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_upright_1_533.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_upright_1_533);
+  nodes["shelf-upright-1"] = node_shelf_upright_1_533;
+  const mesh_shelf_upright_1_533Geometry = endpoint_shelf_upright_1_533
+    ? new THREE.CylinderGeometry(endpoint_shelf_upright_1_533.endRadius, endpoint_shelf_upright_1_533.baseRadius, endpoint_shelf_upright_1_533.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_upright_1_533) {
+    mesh_shelf_upright_1_533Geometry.scale(0.38, 1.06, 0.05);
+  }
+  const mesh_shelf_upright_1_533 = new THREE.Mesh(
+    mesh_shelf_upright_1_533Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_upright_1_533.name = "Shelf upright 1";
+  if (endpoint_shelf_upright_1_533) {
+    mesh_shelf_upright_1_533.position.copy(endpoint_shelf_upright_1_533.midpoint);
+    mesh_shelf_upright_1_533.quaternion.copy(endpoint_shelf_upright_1_533.quaternion);
+  }
+  mesh_shelf_upright_1_533.castShadow = options.castShadow ?? true;
+  mesh_shelf_upright_1_533.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_upright_1_533.userData.sculptComponent = {"id": "shelf-upright-1", "name": "Shelf upright 1", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 2.325], "localEnd": [-3.17, 1.11, 2.325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 1.06, "depth": 0.05, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.58, 2.325], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 1.06, 0.05]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_upright_1_533.add(mesh_shelf_upright_1_533);
+  meshes["shelf-upright-1"] = mesh_shelf_upright_1_533;
+  colliders["shelf-upright-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-upright-1"] ??= [];
+  destructionGroups["shelf-upright-1"].push(node_shelf_upright_1_533);
+
+  const endpoint_shelf_upright_2_534 = makeAttachmentEndpoint(null);
+  const node_shelf_upright_2_534 = new THREE.Group();
+  node_shelf_upright_2_534.name = "Shelf upright 2__pivot";
+  node_shelf_upright_2_534.scale.set(1, 1, 1);
+  if (endpoint_shelf_upright_2_534) {
+    node_shelf_upright_2_534.position.copy(endpoint_shelf_upright_2_534.start);
+    node_shelf_upright_2_534.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_upright_2_534.position.set(-3.17, 0.58, 4.375);
+    node_shelf_upright_2_534.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_upright_2_534.userData.sculptComponent = {"id": "shelf-upright-2", "name": "Shelf upright 2", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 4.375], "localEnd": [-3.17, 1.11, 4.375], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 1.06, "depth": 0.05, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.58, 4.375], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 1.06, 0.05]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_upright_2_534.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_upright_2_534);
+  nodes["shelf-upright-2"] = node_shelf_upright_2_534;
+  const mesh_shelf_upright_2_534Geometry = endpoint_shelf_upright_2_534
+    ? new THREE.CylinderGeometry(endpoint_shelf_upright_2_534.endRadius, endpoint_shelf_upright_2_534.baseRadius, endpoint_shelf_upright_2_534.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_upright_2_534) {
+    mesh_shelf_upright_2_534Geometry.scale(0.38, 1.06, 0.05);
+  }
+  const mesh_shelf_upright_2_534 = new THREE.Mesh(
+    mesh_shelf_upright_2_534Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_upright_2_534.name = "Shelf upright 2";
+  if (endpoint_shelf_upright_2_534) {
+    mesh_shelf_upright_2_534.position.copy(endpoint_shelf_upright_2_534.midpoint);
+    mesh_shelf_upright_2_534.quaternion.copy(endpoint_shelf_upright_2_534.quaternion);
+  }
+  mesh_shelf_upright_2_534.castShadow = options.castShadow ?? true;
+  mesh_shelf_upright_2_534.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_upright_2_534.userData.sculptComponent = {"id": "shelf-upright-2", "name": "Shelf upright 2", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.17, 0.05, 4.375], "localEnd": [-3.17, 1.11, 4.375], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.38, "height": 1.06, "depth": 0.05, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.17, 0.58, 4.375], "rotation": [0.0, 0.0, 0.0], "scale": [0.38, 1.06, 0.05]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-upright-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_upright_2_534.add(mesh_shelf_upright_2_534);
+  meshes["shelf-upright-2"] = mesh_shelf_upright_2_534;
+  colliders["shelf-upright-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.38, 1.06, 0.05], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-upright-2"] ??= [];
+  destructionGroups["shelf-upright-2"].push(node_shelf_upright_2_534);
+
+  const endpoint_shelf_header_535 = makeAttachmentEndpoint(null);
+  const node_shelf_header_535 = new THREE.Group();
+  node_shelf_header_535.name = "Shelf header sign__pivot";
+  node_shelf_header_535.scale.set(1, 1, 1);
+  if (endpoint_shelf_header_535) {
+    node_shelf_header_535.position.copy(endpoint_shelf_header_535.start);
+    node_shelf_header_535.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_header_535.position.set(-3.16, 1.19, 3.35);
+    node_shelf_header_535.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_header_535.userData.sculptComponent = {"id": "shelf-header", "name": "Shelf header sign", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Yellow header over the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.16, 1.11, 3.35], "localEnd": [-3.16, 1.27, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.4, "height": 0.16, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.16, 1.19, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.4, 0.16, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.4, 0.16, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "yellow"}}, "material": "yellow", "materialLayers": ["yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 197, 0, 1.0)", "secondaryAlbedo": "rgba(232, 187, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_header_535.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.4, 0.16, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "yellow"}};
+  (nodes["root"] ?? root).add(node_shelf_header_535);
+  nodes["shelf-header"] = node_shelf_header_535;
+  const mesh_shelf_header_535Geometry = endpoint_shelf_header_535
+    ? new THREE.CylinderGeometry(endpoint_shelf_header_535.endRadius, endpoint_shelf_header_535.baseRadius, endpoint_shelf_header_535.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_header_535) {
+    mesh_shelf_header_535Geometry.scale(0.4, 0.16, 2.1);
+  }
+  const mesh_shelf_header_535 = new THREE.Mesh(
+    mesh_shelf_header_535Geometry,
+    materialMap["yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_header_535.name = "Shelf header sign";
+  if (endpoint_shelf_header_535) {
+    mesh_shelf_header_535.position.copy(endpoint_shelf_header_535.midpoint);
+    mesh_shelf_header_535.quaternion.copy(endpoint_shelf_header_535.quaternion);
+  }
+  mesh_shelf_header_535.castShadow = options.castShadow ?? true;
+  mesh_shelf_header_535.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_header_535.userData.sculptComponent = {"id": "shelf-header", "name": "Shelf header sign", "level": "meso", "role": "prop", "importance": 0.7, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Yellow header over the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.16, 1.11, 3.35], "localEnd": [-3.16, 1.27, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.4, "height": 0.16, "depth": 2.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.16, 1.19, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.4, 0.16, 2.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.4, 0.16, 2.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "yellow"}}, "material": "yellow", "materialLayers": ["yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 197, 0, 1.0)", "secondaryAlbedo": "rgba(232, 187, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_header_535.add(mesh_shelf_header_535);
+  meshes["shelf-header"] = mesh_shelf_header_535;
+  colliders["shelf-header"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.4, 0.16, 2.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-header"] ??= [];
+  destructionGroups["shelf-header"].push(node_shelf_header_535);
+
+  const endpoint_shelf_header_stripe_536 = makeAttachmentEndpoint(null);
+  const node_shelf_header_stripe_536 = new THREE.Group();
+  node_shelf_header_stripe_536.name = "Header stripe__pivot";
+  node_shelf_header_stripe_536.scale.set(1, 1, 1);
+  if (endpoint_shelf_header_stripe_536) {
+    node_shelf_header_stripe_536.position.copy(endpoint_shelf_header_stripe_536.start);
+    node_shelf_header_stripe_536.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_header_stripe_536.position.set(-2.955, 1.19, 3.35);
+    node_shelf_header_stripe_536.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_header_stripe_536.userData.sculptComponent = {"id": "shelf-header-stripe", "name": "Header stripe", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.955, 1.15, 3.35], "localEnd": [-2.955, 1.23, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 1.9, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.955, 1.19, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 1.9]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 1.9], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header-stripe", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_header_stripe_536.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 1.9], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header-stripe", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}};
+  (nodes["root"] ?? root).add(node_shelf_header_stripe_536);
+  nodes["shelf-header-stripe"] = node_shelf_header_stripe_536;
+  const mesh_shelf_header_stripe_536Geometry = endpoint_shelf_header_stripe_536
+    ? new THREE.CylinderGeometry(endpoint_shelf_header_stripe_536.endRadius, endpoint_shelf_header_stripe_536.baseRadius, endpoint_shelf_header_stripe_536.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_header_stripe_536) {
+    mesh_shelf_header_stripe_536Geometry.scale(0.01, 0.08, 1.9);
+  }
+  const mesh_shelf_header_stripe_536 = new THREE.Mesh(
+    mesh_shelf_header_stripe_536Geometry,
+    materialMap["box-red"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_header_stripe_536.name = "Header stripe";
+  if (endpoint_shelf_header_stripe_536) {
+    mesh_shelf_header_stripe_536.position.copy(endpoint_shelf_header_stripe_536.midpoint);
+    mesh_shelf_header_stripe_536.quaternion.copy(endpoint_shelf_header_stripe_536.quaternion);
+  }
+  mesh_shelf_header_stripe_536.castShadow = options.castShadow ?? true;
+  mesh_shelf_header_stripe_536.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_header_stripe_536.userData.sculptComponent = {"id": "shelf-header-stripe", "name": "Header stripe", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.955, 1.15, 3.35], "localEnd": [-2.955, 1.23, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 1.9, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.955, 1.19, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 1.9]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 1.9], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-header-stripe", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_header_stripe_536.add(mesh_shelf_header_stripe_536);
+  meshes["shelf-header-stripe"] = mesh_shelf_header_stripe_536;
+  colliders["shelf-header-stripe"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 1.9], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-header-stripe"] ??= [];
+  destructionGroups["shelf-header-stripe"].push(node_shelf_header_stripe_536);
+
+  const endpoint_shelf_edge_1_537 = makeAttachmentEndpoint(null);
+  const node_shelf_edge_1_537 = new THREE.Group();
+  node_shelf_edge_1_537.name = "Shelf price strip 1__pivot";
+  node_shelf_edge_1_537.scale.set(1, 1, 1);
+  if (endpoint_shelf_edge_1_537) {
+    node_shelf_edge_1_537.position.copy(endpoint_shelf_edge_1_537.start);
+    node_shelf_edge_1_537.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_edge_1_537.position.set(-2.974, 0.1025, 3.35);
+    node_shelf_edge_1_537.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_edge_1_537.userData.sculptComponent = {"id": "shelf-edge-1", "name": "Shelf price strip 1", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.08, 3.35], "localEnd": [-2.974, 0.125, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.1025, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_1_537.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_edge_1_537);
+  nodes["shelf-edge-1"] = node_shelf_edge_1_537;
+  const mesh_shelf_edge_1_537Geometry = endpoint_shelf_edge_1_537
+    ? new THREE.CylinderGeometry(endpoint_shelf_edge_1_537.endRadius, endpoint_shelf_edge_1_537.baseRadius, endpoint_shelf_edge_1_537.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_edge_1_537) {
+    mesh_shelf_edge_1_537Geometry.scale(0.012, 0.045, 2.0);
+  }
+  const mesh_shelf_edge_1_537 = new THREE.Mesh(
+    mesh_shelf_edge_1_537Geometry,
+    materialMap["label-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_edge_1_537.name = "Shelf price strip 1";
+  if (endpoint_shelf_edge_1_537) {
+    mesh_shelf_edge_1_537.position.copy(endpoint_shelf_edge_1_537.midpoint);
+    mesh_shelf_edge_1_537.quaternion.copy(endpoint_shelf_edge_1_537.quaternion);
+  }
+  mesh_shelf_edge_1_537.castShadow = options.castShadow ?? true;
+  mesh_shelf_edge_1_537.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_edge_1_537.userData.sculptComponent = {"id": "shelf-edge-1", "name": "Shelf price strip 1", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.08, 3.35], "localEnd": [-2.974, 0.125, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.1025, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_1_537.add(mesh_shelf_edge_1_537);
+  meshes["shelf-edge-1"] = mesh_shelf_edge_1_537;
+  colliders["shelf-edge-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-edge-1"] ??= [];
+  destructionGroups["shelf-edge-1"].push(node_shelf_edge_1_537);
+
+  const endpoint_shelf_board_2_538 = makeAttachmentEndpoint(null);
+  const node_shelf_board_2_538 = new THREE.Group();
+  node_shelf_board_2_538.name = "Shelf board 2__pivot";
+  node_shelf_board_2_538.scale.set(1, 1, 1);
+  if (endpoint_shelf_board_2_538) {
+    node_shelf_board_2_538.position.copy(endpoint_shelf_board_2_538.start);
+    node_shelf_board_2_538.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_board_2_538.position.set(-3.15, 0.375, 3.35);
+    node_shelf_board_2_538.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_board_2_538.userData.sculptComponent = {"id": "shelf-board-2", "name": "Shelf board 2", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.36, 3.35], "localEnd": [-3.15, 0.39, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.375, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_2_538.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}};
+  (nodes["root"] ?? root).add(node_shelf_board_2_538);
+  nodes["shelf-board-2"] = node_shelf_board_2_538;
+  const mesh_shelf_board_2_538Geometry = endpoint_shelf_board_2_538
+    ? new THREE.CylinderGeometry(endpoint_shelf_board_2_538.endRadius, endpoint_shelf_board_2_538.baseRadius, endpoint_shelf_board_2_538.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_board_2_538) {
+    mesh_shelf_board_2_538Geometry.scale(0.34, 0.03, 2.0);
+  }
+  const mesh_shelf_board_2_538 = new THREE.Mesh(
+    mesh_shelf_board_2_538Geometry,
+    materialMap["shelf-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_board_2_538.name = "Shelf board 2";
+  if (endpoint_shelf_board_2_538) {
+    mesh_shelf_board_2_538.position.copy(endpoint_shelf_board_2_538.midpoint);
+    mesh_shelf_board_2_538.quaternion.copy(endpoint_shelf_board_2_538.quaternion);
+  }
+  mesh_shelf_board_2_538.castShadow = options.castShadow ?? true;
+  mesh_shelf_board_2_538.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_board_2_538.userData.sculptComponent = {"id": "shelf-board-2", "name": "Shelf board 2", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.36, 3.35], "localEnd": [-3.15, 0.39, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.375, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_2_538.add(mesh_shelf_board_2_538);
+  meshes["shelf-board-2"] = mesh_shelf_board_2_538;
+  colliders["shelf-board-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-board-2"] ??= [];
+  destructionGroups["shelf-board-2"].push(node_shelf_board_2_538);
+
+  const endpoint_shelf_edge_2_539 = makeAttachmentEndpoint(null);
+  const node_shelf_edge_2_539 = new THREE.Group();
+  node_shelf_edge_2_539.name = "Shelf price strip 2__pivot";
+  node_shelf_edge_2_539.scale.set(1, 1, 1);
+  if (endpoint_shelf_edge_2_539) {
+    node_shelf_edge_2_539.position.copy(endpoint_shelf_edge_2_539.start);
+    node_shelf_edge_2_539.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_edge_2_539.position.set(-2.974, 0.3625, 3.35);
+    node_shelf_edge_2_539.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_edge_2_539.userData.sculptComponent = {"id": "shelf-edge-2", "name": "Shelf price strip 2", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.34, 3.35], "localEnd": [-2.974, 0.385, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.3625, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_2_539.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_edge_2_539);
+  nodes["shelf-edge-2"] = node_shelf_edge_2_539;
+  const mesh_shelf_edge_2_539Geometry = endpoint_shelf_edge_2_539
+    ? new THREE.CylinderGeometry(endpoint_shelf_edge_2_539.endRadius, endpoint_shelf_edge_2_539.baseRadius, endpoint_shelf_edge_2_539.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_edge_2_539) {
+    mesh_shelf_edge_2_539Geometry.scale(0.012, 0.045, 2.0);
+  }
+  const mesh_shelf_edge_2_539 = new THREE.Mesh(
+    mesh_shelf_edge_2_539Geometry,
+    materialMap["label-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_edge_2_539.name = "Shelf price strip 2";
+  if (endpoint_shelf_edge_2_539) {
+    mesh_shelf_edge_2_539.position.copy(endpoint_shelf_edge_2_539.midpoint);
+    mesh_shelf_edge_2_539.quaternion.copy(endpoint_shelf_edge_2_539.quaternion);
+  }
+  mesh_shelf_edge_2_539.castShadow = options.castShadow ?? true;
+  mesh_shelf_edge_2_539.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_edge_2_539.userData.sculptComponent = {"id": "shelf-edge-2", "name": "Shelf price strip 2", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.34, 3.35], "localEnd": [-2.974, 0.385, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.3625, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_2_539.add(mesh_shelf_edge_2_539);
+  meshes["shelf-edge-2"] = mesh_shelf_edge_2_539;
+  colliders["shelf-edge-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-edge-2"] ??= [];
+  destructionGroups["shelf-edge-2"].push(node_shelf_edge_2_539);
+
+  const endpoint_shelf_board_3_540 = makeAttachmentEndpoint(null);
+  const node_shelf_board_3_540 = new THREE.Group();
+  node_shelf_board_3_540.name = "Shelf board 3__pivot";
+  node_shelf_board_3_540.scale.set(1, 1, 1);
+  if (endpoint_shelf_board_3_540) {
+    node_shelf_board_3_540.position.copy(endpoint_shelf_board_3_540.start);
+    node_shelf_board_3_540.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_board_3_540.position.set(-3.15, 0.635, 3.35);
+    node_shelf_board_3_540.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_board_3_540.userData.sculptComponent = {"id": "shelf-board-3", "name": "Shelf board 3", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.62, 3.35], "localEnd": [-3.15, 0.65, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.635, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_3_540.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}};
+  (nodes["root"] ?? root).add(node_shelf_board_3_540);
+  nodes["shelf-board-3"] = node_shelf_board_3_540;
+  const mesh_shelf_board_3_540Geometry = endpoint_shelf_board_3_540
+    ? new THREE.CylinderGeometry(endpoint_shelf_board_3_540.endRadius, endpoint_shelf_board_3_540.baseRadius, endpoint_shelf_board_3_540.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_board_3_540) {
+    mesh_shelf_board_3_540Geometry.scale(0.34, 0.03, 2.0);
+  }
+  const mesh_shelf_board_3_540 = new THREE.Mesh(
+    mesh_shelf_board_3_540Geometry,
+    materialMap["shelf-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_board_3_540.name = "Shelf board 3";
+  if (endpoint_shelf_board_3_540) {
+    mesh_shelf_board_3_540.position.copy(endpoint_shelf_board_3_540.midpoint);
+    mesh_shelf_board_3_540.quaternion.copy(endpoint_shelf_board_3_540.quaternion);
+  }
+  mesh_shelf_board_3_540.castShadow = options.castShadow ?? true;
+  mesh_shelf_board_3_540.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_board_3_540.userData.sculptComponent = {"id": "shelf-board-3", "name": "Shelf board 3", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.62, 3.35], "localEnd": [-3.15, 0.65, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.635, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_3_540.add(mesh_shelf_board_3_540);
+  meshes["shelf-board-3"] = mesh_shelf_board_3_540;
+  colliders["shelf-board-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-board-3"] ??= [];
+  destructionGroups["shelf-board-3"].push(node_shelf_board_3_540);
+
+  const endpoint_shelf_edge_3_541 = makeAttachmentEndpoint(null);
+  const node_shelf_edge_3_541 = new THREE.Group();
+  node_shelf_edge_3_541.name = "Shelf price strip 3__pivot";
+  node_shelf_edge_3_541.scale.set(1, 1, 1);
+  if (endpoint_shelf_edge_3_541) {
+    node_shelf_edge_3_541.position.copy(endpoint_shelf_edge_3_541.start);
+    node_shelf_edge_3_541.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_edge_3_541.position.set(-2.974, 0.6225, 3.35);
+    node_shelf_edge_3_541.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_edge_3_541.userData.sculptComponent = {"id": "shelf-edge-3", "name": "Shelf price strip 3", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.6, 3.35], "localEnd": [-2.974, 0.645, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.6225, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_3_541.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_edge_3_541);
+  nodes["shelf-edge-3"] = node_shelf_edge_3_541;
+  const mesh_shelf_edge_3_541Geometry = endpoint_shelf_edge_3_541
+    ? new THREE.CylinderGeometry(endpoint_shelf_edge_3_541.endRadius, endpoint_shelf_edge_3_541.baseRadius, endpoint_shelf_edge_3_541.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_edge_3_541) {
+    mesh_shelf_edge_3_541Geometry.scale(0.012, 0.045, 2.0);
+  }
+  const mesh_shelf_edge_3_541 = new THREE.Mesh(
+    mesh_shelf_edge_3_541Geometry,
+    materialMap["label-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_edge_3_541.name = "Shelf price strip 3";
+  if (endpoint_shelf_edge_3_541) {
+    mesh_shelf_edge_3_541.position.copy(endpoint_shelf_edge_3_541.midpoint);
+    mesh_shelf_edge_3_541.quaternion.copy(endpoint_shelf_edge_3_541.quaternion);
+  }
+  mesh_shelf_edge_3_541.castShadow = options.castShadow ?? true;
+  mesh_shelf_edge_3_541.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_edge_3_541.userData.sculptComponent = {"id": "shelf-edge-3", "name": "Shelf price strip 3", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.6, 3.35], "localEnd": [-2.974, 0.645, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.6225, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_3_541.add(mesh_shelf_edge_3_541);
+  meshes["shelf-edge-3"] = mesh_shelf_edge_3_541;
+  colliders["shelf-edge-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-edge-3"] ??= [];
+  destructionGroups["shelf-edge-3"].push(node_shelf_edge_3_541);
+
+  const endpoint_shelf_board_4_542 = makeAttachmentEndpoint(null);
+  const node_shelf_board_4_542 = new THREE.Group();
+  node_shelf_board_4_542.name = "Shelf board 4__pivot";
+  node_shelf_board_4_542.scale.set(1, 1, 1);
+  if (endpoint_shelf_board_4_542) {
+    node_shelf_board_4_542.position.copy(endpoint_shelf_board_4_542.start);
+    node_shelf_board_4_542.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_board_4_542.position.set(-3.15, 0.875, 3.35);
+    node_shelf_board_4_542.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_board_4_542.userData.sculptComponent = {"id": "shelf-board-4", "name": "Shelf board 4", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.86, 3.35], "localEnd": [-3.15, 0.89, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.875, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_4_542.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}};
+  (nodes["root"] ?? root).add(node_shelf_board_4_542);
+  nodes["shelf-board-4"] = node_shelf_board_4_542;
+  const mesh_shelf_board_4_542Geometry = endpoint_shelf_board_4_542
+    ? new THREE.CylinderGeometry(endpoint_shelf_board_4_542.endRadius, endpoint_shelf_board_4_542.baseRadius, endpoint_shelf_board_4_542.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_board_4_542) {
+    mesh_shelf_board_4_542Geometry.scale(0.34, 0.03, 2.0);
+  }
+  const mesh_shelf_board_4_542 = new THREE.Mesh(
+    mesh_shelf_board_4_542Geometry,
+    materialMap["shelf-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_board_4_542.name = "Shelf board 4";
+  if (endpoint_shelf_board_4_542) {
+    mesh_shelf_board_4_542.position.copy(endpoint_shelf_board_4_542.midpoint);
+    mesh_shelf_board_4_542.quaternion.copy(endpoint_shelf_board_4_542.quaternion);
+  }
+  mesh_shelf_board_4_542.castShadow = options.castShadow ?? true;
+  mesh_shelf_board_4_542.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_board_4_542.userData.sculptComponent = {"id": "shelf-board-4", "name": "Shelf board 4", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.15, 0.86, 3.35], "localEnd": [-3.15, 0.89, 3.35], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.34, "height": 0.03, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.15, 0.875, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.34, 0.03, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-board-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "shelf-white"}}, "material": "shelf-white", "materialLayers": ["shelf-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(244, 243, 239, 1.0)", "secondaryAlbedo": "rgba(234, 233, 229, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_board_4_542.add(mesh_shelf_board_4_542);
+  meshes["shelf-board-4"] = mesh_shelf_board_4_542;
+  colliders["shelf-board-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.34, 0.03, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-board-4"] ??= [];
+  destructionGroups["shelf-board-4"].push(node_shelf_board_4_542);
+
+  const endpoint_shelf_edge_4_543 = makeAttachmentEndpoint(null);
+  const node_shelf_edge_4_543 = new THREE.Group();
+  node_shelf_edge_4_543.name = "Shelf price strip 4__pivot";
+  node_shelf_edge_4_543.scale.set(1, 1, 1);
+  if (endpoint_shelf_edge_4_543) {
+    node_shelf_edge_4_543.position.copy(endpoint_shelf_edge_4_543.start);
+    node_shelf_edge_4_543.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_edge_4_543.position.set(-2.974, 0.8625, 3.35);
+    node_shelf_edge_4_543.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_edge_4_543.userData.sculptComponent = {"id": "shelf-edge-4", "name": "Shelf price strip 4", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.84, 3.35], "localEnd": [-2.974, 0.885, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.8625, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_4_543.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_edge_4_543);
+  nodes["shelf-edge-4"] = node_shelf_edge_4_543;
+  const mesh_shelf_edge_4_543Geometry = endpoint_shelf_edge_4_543
+    ? new THREE.CylinderGeometry(endpoint_shelf_edge_4_543.endRadius, endpoint_shelf_edge_4_543.baseRadius, endpoint_shelf_edge_4_543.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_edge_4_543) {
+    mesh_shelf_edge_4_543Geometry.scale(0.012, 0.045, 2.0);
+  }
+  const mesh_shelf_edge_4_543 = new THREE.Mesh(
+    mesh_shelf_edge_4_543Geometry,
+    materialMap["label-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_edge_4_543.name = "Shelf price strip 4";
+  if (endpoint_shelf_edge_4_543) {
+    mesh_shelf_edge_4_543.position.copy(endpoint_shelf_edge_4_543.midpoint);
+    mesh_shelf_edge_4_543.quaternion.copy(endpoint_shelf_edge_4_543.quaternion);
+  }
+  mesh_shelf_edge_4_543.castShadow = options.castShadow ?? true;
+  mesh_shelf_edge_4_543.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_edge_4_543.userData.sculptComponent = {"id": "shelf-edge-4", "name": "Shelf price strip 4", "level": "micro", "role": "trim", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.974, 0.84, 3.35], "localEnd": [-2.974, 0.885, 3.35], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.012, "height": 0.045, "depth": 2.0, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.974, 0.8625, 3.35], "rotation": [0.0, 0.0, 0.0], "scale": [0.012, 0.045, 2.0]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-edge-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-blue"}}, "material": "label-blue", "materialLayers": ["label-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 111, 192, 1.0)", "secondaryAlbedo": "rgba(42, 102, 180, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_edge_4_543.add(mesh_shelf_edge_4_543);
+  meshes["shelf-edge-4"] = mesh_shelf_edge_4_543;
+  colliders["shelf-edge-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.012, 0.045, 2.0], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-edge-4"] ??= [];
+  destructionGroups["shelf-edge-4"].push(node_shelf_edge_4_543);
+
+  const endpoint_shelf_box_1_1_544 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_1_544 = new THREE.Group();
+  node_shelf_box_1_1_544.name = "Set box 1.1__pivot";
+  node_shelf_box_1_1_544.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_1_544) {
+    node_shelf_box_1_1_544.position.copy(endpoint_shelf_box_1_1_544.start);
+    node_shelf_box_1_1_544.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_1_544.position.set(-3.14, 0.245, 2.525);
+    node_shelf_box_1_1_544.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_1_544.userData.sculptComponent = {"id": "shelf-box-1-1", "name": "Set box 1.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 2.525], "localEnd": [-3.14, 0.36, 2.525], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_1_544.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_1_544);
+  nodes["shelf-box-1-1"] = node_shelf_box_1_1_544;
+  const mesh_shelf_box_1_1_544Geometry = endpoint_shelf_box_1_1_544
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_1_544.endRadius, endpoint_shelf_box_1_1_544.baseRadius, endpoint_shelf_box_1_1_544.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_1_544) {
+    mesh_shelf_box_1_1_544Geometry.scale(0.28, 0.23, 0.31);
+  }
+  const mesh_shelf_box_1_1_544 = new THREE.Mesh(
+    mesh_shelf_box_1_1_544Geometry,
+    materialMap["box-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_1_544.name = "Set box 1.1";
+  if (endpoint_shelf_box_1_1_544) {
+    mesh_shelf_box_1_1_544.position.copy(endpoint_shelf_box_1_1_544.midpoint);
+    mesh_shelf_box_1_1_544.quaternion.copy(endpoint_shelf_box_1_1_544.quaternion);
+  }
+  mesh_shelf_box_1_1_544.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_1_544.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_1_544.userData.sculptComponent = {"id": "shelf-box-1-1", "name": "Set box 1.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 2.525], "localEnd": [-3.14, 0.36, 2.525], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_1_544.add(mesh_shelf_box_1_1_544);
+  meshes["shelf-box-1-1"] = mesh_shelf_box_1_1_544;
+  colliders["shelf-box-1-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-1"] ??= [];
+  destructionGroups["shelf-box-1-1"].push(node_shelf_box_1_1_544);
+
+  const endpoint_shelf_box_1_1_art_545 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_1_art_545 = new THREE.Group();
+  node_shelf_box_1_1_art_545.name = "Box art 1.1__pivot";
+  node_shelf_box_1_1_art_545.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_1_art_545) {
+    node_shelf_box_1_1_art_545.position.copy(endpoint_shelf_box_1_1_art_545.start);
+    node_shelf_box_1_1_art_545.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_1_art_545.position.set(-2.995, 0.2565, 2.525);
+    node_shelf_box_1_1_art_545.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_1_art_545.userData.sculptComponent = {"id": "shelf-box-1-1-art", "name": "Box art 1.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 2.525], "localEnd": [-2.995, 0.3025, 2.525], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_1_art_545.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_1_art_545);
+  nodes["shelf-box-1-1-art"] = node_shelf_box_1_1_art_545;
+  const mesh_shelf_box_1_1_art_545Geometry = endpoint_shelf_box_1_1_art_545
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_1_art_545.endRadius, endpoint_shelf_box_1_1_art_545.baseRadius, endpoint_shelf_box_1_1_art_545.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_1_art_545) {
+    mesh_shelf_box_1_1_art_545Geometry.scale(0.01, 0.092, 0.25);
+  }
+  const mesh_shelf_box_1_1_art_545 = new THREE.Mesh(
+    mesh_shelf_box_1_1_art_545Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_1_art_545.name = "Box art 1.1";
+  if (endpoint_shelf_box_1_1_art_545) {
+    mesh_shelf_box_1_1_art_545.position.copy(endpoint_shelf_box_1_1_art_545.midpoint);
+    mesh_shelf_box_1_1_art_545.quaternion.copy(endpoint_shelf_box_1_1_art_545.quaternion);
+  }
+  mesh_shelf_box_1_1_art_545.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_1_art_545.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_1_art_545.userData.sculptComponent = {"id": "shelf-box-1-1-art", "name": "Box art 1.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 2.525], "localEnd": [-2.995, 0.3025, 2.525], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_1_art_545.add(mesh_shelf_box_1_1_art_545);
+  meshes["shelf-box-1-1-art"] = mesh_shelf_box_1_1_art_545;
+  colliders["shelf-box-1-1-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-1-art"] ??= [];
+  destructionGroups["shelf-box-1-1-art"].push(node_shelf_box_1_1_art_545);
+
+  const endpoint_shelf_box_1_2_546 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_2_546 = new THREE.Group();
+  node_shelf_box_1_2_546.name = "Set box 1.2__pivot";
+  node_shelf_box_1_2_546.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_2_546) {
+    node_shelf_box_1_2_546.position.copy(endpoint_shelf_box_1_2_546.start);
+    node_shelf_box_1_2_546.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_2_546.position.set(-3.14, 0.245, 2.875);
+    node_shelf_box_1_2_546.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_2_546.userData.sculptComponent = {"id": "shelf-box-1-2", "name": "Set box 1.2", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 2.875], "localEnd": [-3.14, 0.36, 2.875], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_2_546.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_2_546);
+  nodes["shelf-box-1-2"] = node_shelf_box_1_2_546;
+  const mesh_shelf_box_1_2_546Geometry = endpoint_shelf_box_1_2_546
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_2_546.endRadius, endpoint_shelf_box_1_2_546.baseRadius, endpoint_shelf_box_1_2_546.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_2_546) {
+    mesh_shelf_box_1_2_546Geometry.scale(0.28, 0.23, 0.31);
+  }
+  const mesh_shelf_box_1_2_546 = new THREE.Mesh(
+    mesh_shelf_box_1_2_546Geometry,
+    materialMap["box-red"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_2_546.name = "Set box 1.2";
+  if (endpoint_shelf_box_1_2_546) {
+    mesh_shelf_box_1_2_546.position.copy(endpoint_shelf_box_1_2_546.midpoint);
+    mesh_shelf_box_1_2_546.quaternion.copy(endpoint_shelf_box_1_2_546.quaternion);
+  }
+  mesh_shelf_box_1_2_546.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_2_546.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_2_546.userData.sculptComponent = {"id": "shelf-box-1-2", "name": "Set box 1.2", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 2.875], "localEnd": [-3.14, 0.36, 2.875], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_2_546.add(mesh_shelf_box_1_2_546);
+  meshes["shelf-box-1-2"] = mesh_shelf_box_1_2_546;
+  colliders["shelf-box-1-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-2"] ??= [];
+  destructionGroups["shelf-box-1-2"].push(node_shelf_box_1_2_546);
+
+  const endpoint_shelf_box_1_2_art_547 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_2_art_547 = new THREE.Group();
+  node_shelf_box_1_2_art_547.name = "Box art 1.2__pivot";
+  node_shelf_box_1_2_art_547.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_2_art_547) {
+    node_shelf_box_1_2_art_547.position.copy(endpoint_shelf_box_1_2_art_547.start);
+    node_shelf_box_1_2_art_547.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_2_art_547.position.set(-2.995, 0.2565, 2.875);
+    node_shelf_box_1_2_art_547.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_2_art_547.userData.sculptComponent = {"id": "shelf-box-1-2-art", "name": "Box art 1.2", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 2.875], "localEnd": [-2.995, 0.3025, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_2_art_547.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_2_art_547);
+  nodes["shelf-box-1-2-art"] = node_shelf_box_1_2_art_547;
+  const mesh_shelf_box_1_2_art_547Geometry = endpoint_shelf_box_1_2_art_547
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_2_art_547.endRadius, endpoint_shelf_box_1_2_art_547.baseRadius, endpoint_shelf_box_1_2_art_547.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_2_art_547) {
+    mesh_shelf_box_1_2_art_547Geometry.scale(0.01, 0.092, 0.25);
+  }
+  const mesh_shelf_box_1_2_art_547 = new THREE.Mesh(
+    mesh_shelf_box_1_2_art_547Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_2_art_547.name = "Box art 1.2";
+  if (endpoint_shelf_box_1_2_art_547) {
+    mesh_shelf_box_1_2_art_547.position.copy(endpoint_shelf_box_1_2_art_547.midpoint);
+    mesh_shelf_box_1_2_art_547.quaternion.copy(endpoint_shelf_box_1_2_art_547.quaternion);
+  }
+  mesh_shelf_box_1_2_art_547.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_2_art_547.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_2_art_547.userData.sculptComponent = {"id": "shelf-box-1-2-art", "name": "Box art 1.2", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 2.875], "localEnd": [-2.995, 0.3025, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_2_art_547.add(mesh_shelf_box_1_2_art_547);
+  meshes["shelf-box-1-2-art"] = mesh_shelf_box_1_2_art_547;
+  colliders["shelf-box-1-2-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-2-art"] ??= [];
+  destructionGroups["shelf-box-1-2-art"].push(node_shelf_box_1_2_art_547);
+
+  const endpoint_shelf_empty_1_3_548 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_1_3_548 = new THREE.Group();
+  node_shelf_empty_1_3_548.name = "Empty slot 1.3__pivot";
+  node_shelf_empty_1_3_548.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_1_3_548) {
+    node_shelf_empty_1_3_548.position.copy(endpoint_shelf_empty_1_3_548.start);
+    node_shelf_empty_1_3_548.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_1_3_548.position.set(-3.315, 0.25, 3.225);
+    node_shelf_empty_1_3_548.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_1_3_548.userData.sculptComponent = {"id": "shelf-empty-1-3", "name": "Empty slot 1.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.16, 3.225], "localEnd": [-3.315, 0.34, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.18, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.25, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.18, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_1_3_548.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_1_3_548);
+  nodes["shelf-empty-1-3"] = node_shelf_empty_1_3_548;
+  const mesh_shelf_empty_1_3_548Geometry = endpoint_shelf_empty_1_3_548
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_1_3_548.endRadius, endpoint_shelf_empty_1_3_548.baseRadius, endpoint_shelf_empty_1_3_548.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_1_3_548) {
+    mesh_shelf_empty_1_3_548Geometry.scale(0.01, 0.18, 0.31);
+  }
+  const mesh_shelf_empty_1_3_548 = new THREE.Mesh(
+    mesh_shelf_empty_1_3_548Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_1_3_548.name = "Empty slot 1.3";
+  if (endpoint_shelf_empty_1_3_548) {
+    mesh_shelf_empty_1_3_548.position.copy(endpoint_shelf_empty_1_3_548.midpoint);
+    mesh_shelf_empty_1_3_548.quaternion.copy(endpoint_shelf_empty_1_3_548.quaternion);
+  }
+  mesh_shelf_empty_1_3_548.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_1_3_548.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_1_3_548.userData.sculptComponent = {"id": "shelf-empty-1-3", "name": "Empty slot 1.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.16, 3.225], "localEnd": [-3.315, 0.34, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.18, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.25, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.18, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_1_3_548.add(mesh_shelf_empty_1_3_548);
+  meshes["shelf-empty-1-3"] = mesh_shelf_empty_1_3_548;
+  colliders["shelf-empty-1-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-1-3"] ??= [];
+  destructionGroups["shelf-empty-1-3"].push(node_shelf_empty_1_3_548);
+
+  const endpoint_shelf_tag_1_3_549 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_1_3_549 = new THREE.Group();
+  node_shelf_tag_1_3_549.name = "Empty slot tag 1.3__pivot";
+  node_shelf_tag_1_3_549.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_1_3_549) {
+    node_shelf_tag_1_3_549.position.copy(endpoint_shelf_tag_1_3_549.start);
+    node_shelf_tag_1_3_549.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_1_3_549.position.set(-2.964, 0.1025, 3.225);
+    node_shelf_tag_1_3_549.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_1_3_549.userData.sculptComponent = {"id": "shelf-tag-1-3", "name": "Empty slot tag 1.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.08, 3.225], "localEnd": [-2.964, 0.125, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.1025, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_1_3_549.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_1_3_549);
+  nodes["shelf-tag-1-3"] = node_shelf_tag_1_3_549;
+  const mesh_shelf_tag_1_3_549Geometry = endpoint_shelf_tag_1_3_549
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_1_3_549.endRadius, endpoint_shelf_tag_1_3_549.baseRadius, endpoint_shelf_tag_1_3_549.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_1_3_549) {
+    mesh_shelf_tag_1_3_549Geometry.scale(0.008, 0.045, 0.23);
+  }
+  const mesh_shelf_tag_1_3_549 = new THREE.Mesh(
+    mesh_shelf_tag_1_3_549Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_1_3_549.name = "Empty slot tag 1.3";
+  if (endpoint_shelf_tag_1_3_549) {
+    mesh_shelf_tag_1_3_549.position.copy(endpoint_shelf_tag_1_3_549.midpoint);
+    mesh_shelf_tag_1_3_549.quaternion.copy(endpoint_shelf_tag_1_3_549.quaternion);
+  }
+  mesh_shelf_tag_1_3_549.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_1_3_549.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_1_3_549.userData.sculptComponent = {"id": "shelf-tag-1-3", "name": "Empty slot tag 1.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.08, 3.225], "localEnd": [-2.964, 0.125, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.1025, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_1_3_549.add(mesh_shelf_tag_1_3_549);
+  meshes["shelf-tag-1-3"] = mesh_shelf_tag_1_3_549;
+  colliders["shelf-tag-1-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-1-3"] ??= [];
+  destructionGroups["shelf-tag-1-3"].push(node_shelf_tag_1_3_549);
+
+  const endpoint_shelf_box_1_4_550 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_4_550 = new THREE.Group();
+  node_shelf_box_1_4_550.name = "Set box 1.4__pivot";
+  node_shelf_box_1_4_550.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_4_550) {
+    node_shelf_box_1_4_550.position.copy(endpoint_shelf_box_1_4_550.start);
+    node_shelf_box_1_4_550.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_4_550.position.set(-3.14, 0.245, 3.575);
+    node_shelf_box_1_4_550.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_4_550.userData.sculptComponent = {"id": "shelf-box-1-4", "name": "Set box 1.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 3.575], "localEnd": [-3.14, 0.36, 3.575], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_4_550.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_4_550);
+  nodes["shelf-box-1-4"] = node_shelf_box_1_4_550;
+  const mesh_shelf_box_1_4_550Geometry = endpoint_shelf_box_1_4_550
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_4_550.endRadius, endpoint_shelf_box_1_4_550.baseRadius, endpoint_shelf_box_1_4_550.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_4_550) {
+    mesh_shelf_box_1_4_550Geometry.scale(0.28, 0.23, 0.31);
+  }
+  const mesh_shelf_box_1_4_550 = new THREE.Mesh(
+    mesh_shelf_box_1_4_550Geometry,
+    materialMap["box-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_4_550.name = "Set box 1.4";
+  if (endpoint_shelf_box_1_4_550) {
+    mesh_shelf_box_1_4_550.position.copy(endpoint_shelf_box_1_4_550.midpoint);
+    mesh_shelf_box_1_4_550.quaternion.copy(endpoint_shelf_box_1_4_550.quaternion);
+  }
+  mesh_shelf_box_1_4_550.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_4_550.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_4_550.userData.sculptComponent = {"id": "shelf-box-1-4", "name": "Set box 1.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 3.575], "localEnd": [-3.14, 0.36, 3.575], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_4_550.add(mesh_shelf_box_1_4_550);
+  meshes["shelf-box-1-4"] = mesh_shelf_box_1_4_550;
+  colliders["shelf-box-1-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-4"] ??= [];
+  destructionGroups["shelf-box-1-4"].push(node_shelf_box_1_4_550);
+
+  const endpoint_shelf_box_1_4_art_551 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_4_art_551 = new THREE.Group();
+  node_shelf_box_1_4_art_551.name = "Box art 1.4__pivot";
+  node_shelf_box_1_4_art_551.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_4_art_551) {
+    node_shelf_box_1_4_art_551.position.copy(endpoint_shelf_box_1_4_art_551.start);
+    node_shelf_box_1_4_art_551.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_4_art_551.position.set(-2.995, 0.2565, 3.575);
+    node_shelf_box_1_4_art_551.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_4_art_551.userData.sculptComponent = {"id": "shelf-box-1-4-art", "name": "Box art 1.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 3.575], "localEnd": [-2.995, 0.3025, 3.575], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_4_art_551.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_4_art_551);
+  nodes["shelf-box-1-4-art"] = node_shelf_box_1_4_art_551;
+  const mesh_shelf_box_1_4_art_551Geometry = endpoint_shelf_box_1_4_art_551
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_4_art_551.endRadius, endpoint_shelf_box_1_4_art_551.baseRadius, endpoint_shelf_box_1_4_art_551.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_4_art_551) {
+    mesh_shelf_box_1_4_art_551Geometry.scale(0.01, 0.092, 0.25);
+  }
+  const mesh_shelf_box_1_4_art_551 = new THREE.Mesh(
+    mesh_shelf_box_1_4_art_551Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_4_art_551.name = "Box art 1.4";
+  if (endpoint_shelf_box_1_4_art_551) {
+    mesh_shelf_box_1_4_art_551.position.copy(endpoint_shelf_box_1_4_art_551.midpoint);
+    mesh_shelf_box_1_4_art_551.quaternion.copy(endpoint_shelf_box_1_4_art_551.quaternion);
+  }
+  mesh_shelf_box_1_4_art_551.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_4_art_551.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_4_art_551.userData.sculptComponent = {"id": "shelf-box-1-4-art", "name": "Box art 1.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 3.575], "localEnd": [-2.995, 0.3025, 3.575], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_4_art_551.add(mesh_shelf_box_1_4_art_551);
+  meshes["shelf-box-1-4-art"] = mesh_shelf_box_1_4_art_551;
+  colliders["shelf-box-1-4-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-4-art"] ??= [];
+  destructionGroups["shelf-box-1-4-art"].push(node_shelf_box_1_4_art_551);
+
+  const endpoint_shelf_box_1_5_552 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_5_552 = new THREE.Group();
+  node_shelf_box_1_5_552.name = "Set box 1.5__pivot";
+  node_shelf_box_1_5_552.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_5_552) {
+    node_shelf_box_1_5_552.position.copy(endpoint_shelf_box_1_5_552.start);
+    node_shelf_box_1_5_552.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_5_552.position.set(-3.14, 0.245, 3.925);
+    node_shelf_box_1_5_552.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_5_552.userData.sculptComponent = {"id": "shelf-box-1-5", "name": "Set box 1.5", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 3.925], "localEnd": [-3.14, 0.36, 3.925], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}}, "material": "box-green", "materialLayers": ["box-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 168, 79, 1.0)", "secondaryAlbedo": "rgba(37, 158, 69, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_5_552.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_5_552);
+  nodes["shelf-box-1-5"] = node_shelf_box_1_5_552;
+  const mesh_shelf_box_1_5_552Geometry = endpoint_shelf_box_1_5_552
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_5_552.endRadius, endpoint_shelf_box_1_5_552.baseRadius, endpoint_shelf_box_1_5_552.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_5_552) {
+    mesh_shelf_box_1_5_552Geometry.scale(0.28, 0.23, 0.31);
+  }
+  const mesh_shelf_box_1_5_552 = new THREE.Mesh(
+    mesh_shelf_box_1_5_552Geometry,
+    materialMap["box-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_5_552.name = "Set box 1.5";
+  if (endpoint_shelf_box_1_5_552) {
+    mesh_shelf_box_1_5_552.position.copy(endpoint_shelf_box_1_5_552.midpoint);
+    mesh_shelf_box_1_5_552.quaternion.copy(endpoint_shelf_box_1_5_552.quaternion);
+  }
+  mesh_shelf_box_1_5_552.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_5_552.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_5_552.userData.sculptComponent = {"id": "shelf-box-1-5", "name": "Set box 1.5", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.13, 3.925], "localEnd": [-3.14, 0.36, 3.925], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.23, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.245, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.23, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}}, "material": "box-green", "materialLayers": ["box-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 168, 79, 1.0)", "secondaryAlbedo": "rgba(37, 158, 69, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_5_552.add(mesh_shelf_box_1_5_552);
+  meshes["shelf-box-1-5"] = mesh_shelf_box_1_5_552;
+  colliders["shelf-box-1-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.23, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-5"] ??= [];
+  destructionGroups["shelf-box-1-5"].push(node_shelf_box_1_5_552);
+
+  const endpoint_shelf_box_1_5_art_553 = makeAttachmentEndpoint(null);
+  const node_shelf_box_1_5_art_553 = new THREE.Group();
+  node_shelf_box_1_5_art_553.name = "Box art 1.5__pivot";
+  node_shelf_box_1_5_art_553.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_1_5_art_553) {
+    node_shelf_box_1_5_art_553.position.copy(endpoint_shelf_box_1_5_art_553.start);
+    node_shelf_box_1_5_art_553.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_1_5_art_553.position.set(-2.995, 0.2565, 3.925);
+    node_shelf_box_1_5_art_553.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_1_5_art_553.userData.sculptComponent = {"id": "shelf-box-1-5-art", "name": "Box art 1.5", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 3.925], "localEnd": [-2.995, 0.3025, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_5_art_553.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_1_5_art_553);
+  nodes["shelf-box-1-5-art"] = node_shelf_box_1_5_art_553;
+  const mesh_shelf_box_1_5_art_553Geometry = endpoint_shelf_box_1_5_art_553
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_1_5_art_553.endRadius, endpoint_shelf_box_1_5_art_553.baseRadius, endpoint_shelf_box_1_5_art_553.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_1_5_art_553) {
+    mesh_shelf_box_1_5_art_553Geometry.scale(0.01, 0.092, 0.25);
+  }
+  const mesh_shelf_box_1_5_art_553 = new THREE.Mesh(
+    mesh_shelf_box_1_5_art_553Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_1_5_art_553.name = "Box art 1.5";
+  if (endpoint_shelf_box_1_5_art_553) {
+    mesh_shelf_box_1_5_art_553.position.copy(endpoint_shelf_box_1_5_art_553.midpoint);
+    mesh_shelf_box_1_5_art_553.quaternion.copy(endpoint_shelf_box_1_5_art_553.quaternion);
+  }
+  mesh_shelf_box_1_5_art_553.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_1_5_art_553.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_1_5_art_553.userData.sculptComponent = {"id": "shelf-box-1-5-art", "name": "Box art 1.5", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.2105, 3.925], "localEnd": [-2.995, 0.3025, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.092, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.2565, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.092, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-1-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_1_5_art_553.add(mesh_shelf_box_1_5_art_553);
+  meshes["shelf-box-1-5-art"] = mesh_shelf_box_1_5_art_553;
+  colliders["shelf-box-1-5-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.092, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-1-5-art"] ??= [];
+  destructionGroups["shelf-box-1-5-art"].push(node_shelf_box_1_5_art_553);
+
+  const endpoint_shelf_empty_1_6_554 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_1_6_554 = new THREE.Group();
+  node_shelf_empty_1_6_554.name = "Empty slot 1.6__pivot";
+  node_shelf_empty_1_6_554.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_1_6_554) {
+    node_shelf_empty_1_6_554.position.copy(endpoint_shelf_empty_1_6_554.start);
+    node_shelf_empty_1_6_554.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_1_6_554.position.set(-3.315, 0.25, 4.275);
+    node_shelf_empty_1_6_554.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_1_6_554.userData.sculptComponent = {"id": "shelf-empty-1-6", "name": "Empty slot 1.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.16, 4.275], "localEnd": [-3.315, 0.34, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.18, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.25, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.18, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_1_6_554.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_1_6_554);
+  nodes["shelf-empty-1-6"] = node_shelf_empty_1_6_554;
+  const mesh_shelf_empty_1_6_554Geometry = endpoint_shelf_empty_1_6_554
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_1_6_554.endRadius, endpoint_shelf_empty_1_6_554.baseRadius, endpoint_shelf_empty_1_6_554.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_1_6_554) {
+    mesh_shelf_empty_1_6_554Geometry.scale(0.01, 0.18, 0.31);
+  }
+  const mesh_shelf_empty_1_6_554 = new THREE.Mesh(
+    mesh_shelf_empty_1_6_554Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_1_6_554.name = "Empty slot 1.6";
+  if (endpoint_shelf_empty_1_6_554) {
+    mesh_shelf_empty_1_6_554.position.copy(endpoint_shelf_empty_1_6_554.midpoint);
+    mesh_shelf_empty_1_6_554.quaternion.copy(endpoint_shelf_empty_1_6_554.quaternion);
+  }
+  mesh_shelf_empty_1_6_554.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_1_6_554.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_1_6_554.userData.sculptComponent = {"id": "shelf-empty-1-6", "name": "Empty slot 1.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.16, 4.275], "localEnd": [-3.315, 0.34, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.18, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.25, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.18, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_1_6_554.add(mesh_shelf_empty_1_6_554);
+  meshes["shelf-empty-1-6"] = mesh_shelf_empty_1_6_554;
+  colliders["shelf-empty-1-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.18, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-1-6"] ??= [];
+  destructionGroups["shelf-empty-1-6"].push(node_shelf_empty_1_6_554);
+
+  const endpoint_shelf_tag_1_6_555 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_1_6_555 = new THREE.Group();
+  node_shelf_tag_1_6_555.name = "Empty slot tag 1.6__pivot";
+  node_shelf_tag_1_6_555.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_1_6_555) {
+    node_shelf_tag_1_6_555.position.copy(endpoint_shelf_tag_1_6_555.start);
+    node_shelf_tag_1_6_555.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_1_6_555.position.set(-2.964, 0.1025, 4.275);
+    node_shelf_tag_1_6_555.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_1_6_555.userData.sculptComponent = {"id": "shelf-tag-1-6", "name": "Empty slot tag 1.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.08, 4.275], "localEnd": [-2.964, 0.125, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.1025, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_1_6_555.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_1_6_555);
+  nodes["shelf-tag-1-6"] = node_shelf_tag_1_6_555;
+  const mesh_shelf_tag_1_6_555Geometry = endpoint_shelf_tag_1_6_555
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_1_6_555.endRadius, endpoint_shelf_tag_1_6_555.baseRadius, endpoint_shelf_tag_1_6_555.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_1_6_555) {
+    mesh_shelf_tag_1_6_555Geometry.scale(0.008, 0.045, 0.23);
+  }
+  const mesh_shelf_tag_1_6_555 = new THREE.Mesh(
+    mesh_shelf_tag_1_6_555Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_1_6_555.name = "Empty slot tag 1.6";
+  if (endpoint_shelf_tag_1_6_555) {
+    mesh_shelf_tag_1_6_555.position.copy(endpoint_shelf_tag_1_6_555.midpoint);
+    mesh_shelf_tag_1_6_555.quaternion.copy(endpoint_shelf_tag_1_6_555.quaternion);
+  }
+  mesh_shelf_tag_1_6_555.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_1_6_555.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_1_6_555.userData.sculptComponent = {"id": "shelf-tag-1-6", "name": "Empty slot tag 1.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.08, 4.275], "localEnd": [-2.964, 0.125, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.1025, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-1-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_1_6_555.add(mesh_shelf_tag_1_6_555);
+  meshes["shelf-tag-1-6"] = mesh_shelf_tag_1_6_555;
+  colliders["shelf-tag-1-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-1-6"] ??= [];
+  destructionGroups["shelf-tag-1-6"].push(node_shelf_tag_1_6_555);
+
+  const endpoint_shelf_box_2_1_556 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_1_556 = new THREE.Group();
+  node_shelf_box_2_1_556.name = "Set box 2.1__pivot";
+  node_shelf_box_2_1_556.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_1_556) {
+    node_shelf_box_2_1_556.position.copy(endpoint_shelf_box_2_1_556.start);
+    node_shelf_box_2_1_556.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_1_556.position.set(-3.14, 0.5, 2.525);
+    node_shelf_box_2_1_556.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_1_556.userData.sculptComponent = {"id": "shelf-box-2-1", "name": "Set box 2.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 2.525], "localEnd": [-3.14, 0.61, 2.525], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}}, "material": "box-orange", "materialLayers": ["box-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 138, 30, 1.0)", "secondaryAlbedo": "rgba(232, 128, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_1_556.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_1_556);
+  nodes["shelf-box-2-1"] = node_shelf_box_2_1_556;
+  const mesh_shelf_box_2_1_556Geometry = endpoint_shelf_box_2_1_556
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_1_556.endRadius, endpoint_shelf_box_2_1_556.baseRadius, endpoint_shelf_box_2_1_556.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_1_556) {
+    mesh_shelf_box_2_1_556Geometry.scale(0.28, 0.22, 0.31);
+  }
+  const mesh_shelf_box_2_1_556 = new THREE.Mesh(
+    mesh_shelf_box_2_1_556Geometry,
+    materialMap["box-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_1_556.name = "Set box 2.1";
+  if (endpoint_shelf_box_2_1_556) {
+    mesh_shelf_box_2_1_556.position.copy(endpoint_shelf_box_2_1_556.midpoint);
+    mesh_shelf_box_2_1_556.quaternion.copy(endpoint_shelf_box_2_1_556.quaternion);
+  }
+  mesh_shelf_box_2_1_556.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_1_556.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_1_556.userData.sculptComponent = {"id": "shelf-box-2-1", "name": "Set box 2.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 2.525], "localEnd": [-3.14, 0.61, 2.525], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}}, "material": "box-orange", "materialLayers": ["box-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 138, 30, 1.0)", "secondaryAlbedo": "rgba(232, 128, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_1_556.add(mesh_shelf_box_2_1_556);
+  meshes["shelf-box-2-1"] = mesh_shelf_box_2_1_556;
+  colliders["shelf-box-2-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-1"] ??= [];
+  destructionGroups["shelf-box-2-1"].push(node_shelf_box_2_1_556);
+
+  const endpoint_shelf_box_2_1_art_557 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_1_art_557 = new THREE.Group();
+  node_shelf_box_2_1_art_557.name = "Box art 2.1__pivot";
+  node_shelf_box_2_1_art_557.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_1_art_557) {
+    node_shelf_box_2_1_art_557.position.copy(endpoint_shelf_box_2_1_art_557.start);
+    node_shelf_box_2_1_art_557.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_1_art_557.position.set(-2.995, 0.511, 2.525);
+    node_shelf_box_2_1_art_557.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_1_art_557.userData.sculptComponent = {"id": "shelf-box-2-1-art", "name": "Box art 2.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 2.525], "localEnd": [-2.995, 0.555, 2.525], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_1_art_557.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_1_art_557);
+  nodes["shelf-box-2-1-art"] = node_shelf_box_2_1_art_557;
+  const mesh_shelf_box_2_1_art_557Geometry = endpoint_shelf_box_2_1_art_557
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_1_art_557.endRadius, endpoint_shelf_box_2_1_art_557.baseRadius, endpoint_shelf_box_2_1_art_557.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_1_art_557) {
+    mesh_shelf_box_2_1_art_557Geometry.scale(0.01, 0.088, 0.25);
+  }
+  const mesh_shelf_box_2_1_art_557 = new THREE.Mesh(
+    mesh_shelf_box_2_1_art_557Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_1_art_557.name = "Box art 2.1";
+  if (endpoint_shelf_box_2_1_art_557) {
+    mesh_shelf_box_2_1_art_557.position.copy(endpoint_shelf_box_2_1_art_557.midpoint);
+    mesh_shelf_box_2_1_art_557.quaternion.copy(endpoint_shelf_box_2_1_art_557.quaternion);
+  }
+  mesh_shelf_box_2_1_art_557.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_1_art_557.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_1_art_557.userData.sculptComponent = {"id": "shelf-box-2-1-art", "name": "Box art 2.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 2.525], "localEnd": [-2.995, 0.555, 2.525], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 2.525], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_1_art_557.add(mesh_shelf_box_2_1_art_557);
+  meshes["shelf-box-2-1-art"] = mesh_shelf_box_2_1_art_557;
+  colliders["shelf-box-2-1-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-1-art"] ??= [];
+  destructionGroups["shelf-box-2-1-art"].push(node_shelf_box_2_1_art_557);
+
+  const endpoint_shelf_empty_2_2_558 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_2_2_558 = new THREE.Group();
+  node_shelf_empty_2_2_558.name = "Empty slot 2.2__pivot";
+  node_shelf_empty_2_2_558.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_2_2_558) {
+    node_shelf_empty_2_2_558.position.copy(endpoint_shelf_empty_2_2_558.start);
+    node_shelf_empty_2_2_558.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_2_2_558.position.set(-3.315, 0.505, 2.875);
+    node_shelf_empty_2_2_558.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_2_2_558.userData.sculptComponent = {"id": "shelf-empty-2-2", "name": "Empty slot 2.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.42, 2.875], "localEnd": [-3.315, 0.59, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.505, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_2_2_558.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_2_2_558);
+  nodes["shelf-empty-2-2"] = node_shelf_empty_2_2_558;
+  const mesh_shelf_empty_2_2_558Geometry = endpoint_shelf_empty_2_2_558
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_2_2_558.endRadius, endpoint_shelf_empty_2_2_558.baseRadius, endpoint_shelf_empty_2_2_558.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_2_2_558) {
+    mesh_shelf_empty_2_2_558Geometry.scale(0.01, 0.17, 0.31);
+  }
+  const mesh_shelf_empty_2_2_558 = new THREE.Mesh(
+    mesh_shelf_empty_2_2_558Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_2_2_558.name = "Empty slot 2.2";
+  if (endpoint_shelf_empty_2_2_558) {
+    mesh_shelf_empty_2_2_558.position.copy(endpoint_shelf_empty_2_2_558.midpoint);
+    mesh_shelf_empty_2_2_558.quaternion.copy(endpoint_shelf_empty_2_2_558.quaternion);
+  }
+  mesh_shelf_empty_2_2_558.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_2_2_558.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_2_2_558.userData.sculptComponent = {"id": "shelf-empty-2-2", "name": "Empty slot 2.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.42, 2.875], "localEnd": [-3.315, 0.59, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.505, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_2_2_558.add(mesh_shelf_empty_2_2_558);
+  meshes["shelf-empty-2-2"] = mesh_shelf_empty_2_2_558;
+  colliders["shelf-empty-2-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-2-2"] ??= [];
+  destructionGroups["shelf-empty-2-2"].push(node_shelf_empty_2_2_558);
+
+  const endpoint_shelf_tag_2_2_559 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_2_2_559 = new THREE.Group();
+  node_shelf_tag_2_2_559.name = "Empty slot tag 2.2__pivot";
+  node_shelf_tag_2_2_559.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_2_2_559) {
+    node_shelf_tag_2_2_559.position.copy(endpoint_shelf_tag_2_2_559.start);
+    node_shelf_tag_2_2_559.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_2_2_559.position.set(-2.964, 0.3625, 2.875);
+    node_shelf_tag_2_2_559.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_2_2_559.userData.sculptComponent = {"id": "shelf-tag-2-2", "name": "Empty slot tag 2.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.34, 2.875], "localEnd": [-2.964, 0.385, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.3625, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_2_2_559.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_2_2_559);
+  nodes["shelf-tag-2-2"] = node_shelf_tag_2_2_559;
+  const mesh_shelf_tag_2_2_559Geometry = endpoint_shelf_tag_2_2_559
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_2_2_559.endRadius, endpoint_shelf_tag_2_2_559.baseRadius, endpoint_shelf_tag_2_2_559.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_2_2_559) {
+    mesh_shelf_tag_2_2_559Geometry.scale(0.008, 0.045, 0.23);
+  }
+  const mesh_shelf_tag_2_2_559 = new THREE.Mesh(
+    mesh_shelf_tag_2_2_559Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_2_2_559.name = "Empty slot tag 2.2";
+  if (endpoint_shelf_tag_2_2_559) {
+    mesh_shelf_tag_2_2_559.position.copy(endpoint_shelf_tag_2_2_559.midpoint);
+    mesh_shelf_tag_2_2_559.quaternion.copy(endpoint_shelf_tag_2_2_559.quaternion);
+  }
+  mesh_shelf_tag_2_2_559.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_2_2_559.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_2_2_559.userData.sculptComponent = {"id": "shelf-tag-2-2", "name": "Empty slot tag 2.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.34, 2.875], "localEnd": [-2.964, 0.385, 2.875], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.3625, 2.875], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_2_2_559.add(mesh_shelf_tag_2_2_559);
+  meshes["shelf-tag-2-2"] = mesh_shelf_tag_2_2_559;
+  colliders["shelf-tag-2-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-2-2"] ??= [];
+  destructionGroups["shelf-tag-2-2"].push(node_shelf_tag_2_2_559);
+
+  const endpoint_shelf_box_2_3_560 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_3_560 = new THREE.Group();
+  node_shelf_box_2_3_560.name = "Set box 2.3__pivot";
+  node_shelf_box_2_3_560.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_3_560) {
+    node_shelf_box_2_3_560.position.copy(endpoint_shelf_box_2_3_560.start);
+    node_shelf_box_2_3_560.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_3_560.position.set(-3.14, 0.5, 3.225);
+    node_shelf_box_2_3_560.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_3_560.userData.sculptComponent = {"id": "shelf-box-2-3", "name": "Set box 2.3", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 3.225], "localEnd": [-3.14, 0.61, 3.225], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_3_560.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_3_560);
+  nodes["shelf-box-2-3"] = node_shelf_box_2_3_560;
+  const mesh_shelf_box_2_3_560Geometry = endpoint_shelf_box_2_3_560
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_3_560.endRadius, endpoint_shelf_box_2_3_560.baseRadius, endpoint_shelf_box_2_3_560.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_3_560) {
+    mesh_shelf_box_2_3_560Geometry.scale(0.28, 0.22, 0.31);
+  }
+  const mesh_shelf_box_2_3_560 = new THREE.Mesh(
+    mesh_shelf_box_2_3_560Geometry,
+    materialMap["box-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_3_560.name = "Set box 2.3";
+  if (endpoint_shelf_box_2_3_560) {
+    mesh_shelf_box_2_3_560.position.copy(endpoint_shelf_box_2_3_560.midpoint);
+    mesh_shelf_box_2_3_560.quaternion.copy(endpoint_shelf_box_2_3_560.quaternion);
+  }
+  mesh_shelf_box_2_3_560.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_3_560.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_3_560.userData.sculptComponent = {"id": "shelf-box-2-3", "name": "Set box 2.3", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 3.225], "localEnd": [-3.14, 0.61, 3.225], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_3_560.add(mesh_shelf_box_2_3_560);
+  meshes["shelf-box-2-3"] = mesh_shelf_box_2_3_560;
+  colliders["shelf-box-2-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-3"] ??= [];
+  destructionGroups["shelf-box-2-3"].push(node_shelf_box_2_3_560);
+
+  const endpoint_shelf_box_2_3_art_561 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_3_art_561 = new THREE.Group();
+  node_shelf_box_2_3_art_561.name = "Box art 2.3__pivot";
+  node_shelf_box_2_3_art_561.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_3_art_561) {
+    node_shelf_box_2_3_art_561.position.copy(endpoint_shelf_box_2_3_art_561.start);
+    node_shelf_box_2_3_art_561.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_3_art_561.position.set(-2.995, 0.511, 3.225);
+    node_shelf_box_2_3_art_561.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_3_art_561.userData.sculptComponent = {"id": "shelf-box-2-3-art", "name": "Box art 2.3", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 3.225], "localEnd": [-2.995, 0.555, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_3_art_561.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_3_art_561);
+  nodes["shelf-box-2-3-art"] = node_shelf_box_2_3_art_561;
+  const mesh_shelf_box_2_3_art_561Geometry = endpoint_shelf_box_2_3_art_561
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_3_art_561.endRadius, endpoint_shelf_box_2_3_art_561.baseRadius, endpoint_shelf_box_2_3_art_561.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_3_art_561) {
+    mesh_shelf_box_2_3_art_561Geometry.scale(0.01, 0.088, 0.25);
+  }
+  const mesh_shelf_box_2_3_art_561 = new THREE.Mesh(
+    mesh_shelf_box_2_3_art_561Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_3_art_561.name = "Box art 2.3";
+  if (endpoint_shelf_box_2_3_art_561) {
+    mesh_shelf_box_2_3_art_561.position.copy(endpoint_shelf_box_2_3_art_561.midpoint);
+    mesh_shelf_box_2_3_art_561.quaternion.copy(endpoint_shelf_box_2_3_art_561.quaternion);
+  }
+  mesh_shelf_box_2_3_art_561.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_3_art_561.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_3_art_561.userData.sculptComponent = {"id": "shelf-box-2-3-art", "name": "Box art 2.3", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 3.225], "localEnd": [-2.995, 0.555, 3.225], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 3.225], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_3_art_561.add(mesh_shelf_box_2_3_art_561);
+  meshes["shelf-box-2-3-art"] = mesh_shelf_box_2_3_art_561;
+  colliders["shelf-box-2-3-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-3-art"] ??= [];
+  destructionGroups["shelf-box-2-3-art"].push(node_shelf_box_2_3_art_561);
+
+  const endpoint_shelf_box_2_4_562 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_4_562 = new THREE.Group();
+  node_shelf_box_2_4_562.name = "Set box 2.4__pivot";
+  node_shelf_box_2_4_562.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_4_562) {
+    node_shelf_box_2_4_562.position.copy(endpoint_shelf_box_2_4_562.start);
+    node_shelf_box_2_4_562.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_4_562.position.set(-3.14, 0.5, 3.575);
+    node_shelf_box_2_4_562.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_4_562.userData.sculptComponent = {"id": "shelf-box-2-4", "name": "Set box 2.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 3.575], "localEnd": [-3.14, 0.61, 3.575], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_4_562.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_4_562);
+  nodes["shelf-box-2-4"] = node_shelf_box_2_4_562;
+  const mesh_shelf_box_2_4_562Geometry = endpoint_shelf_box_2_4_562
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_4_562.endRadius, endpoint_shelf_box_2_4_562.baseRadius, endpoint_shelf_box_2_4_562.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_4_562) {
+    mesh_shelf_box_2_4_562Geometry.scale(0.28, 0.22, 0.31);
+  }
+  const mesh_shelf_box_2_4_562 = new THREE.Mesh(
+    mesh_shelf_box_2_4_562Geometry,
+    materialMap["box-red"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_4_562.name = "Set box 2.4";
+  if (endpoint_shelf_box_2_4_562) {
+    mesh_shelf_box_2_4_562.position.copy(endpoint_shelf_box_2_4_562.midpoint);
+    mesh_shelf_box_2_4_562.quaternion.copy(endpoint_shelf_box_2_4_562.quaternion);
+  }
+  mesh_shelf_box_2_4_562.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_4_562.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_4_562.userData.sculptComponent = {"id": "shelf-box-2-4", "name": "Set box 2.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 3.575], "localEnd": [-3.14, 0.61, 3.575], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_4_562.add(mesh_shelf_box_2_4_562);
+  meshes["shelf-box-2-4"] = mesh_shelf_box_2_4_562;
+  colliders["shelf-box-2-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-4"] ??= [];
+  destructionGroups["shelf-box-2-4"].push(node_shelf_box_2_4_562);
+
+  const endpoint_shelf_box_2_4_art_563 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_4_art_563 = new THREE.Group();
+  node_shelf_box_2_4_art_563.name = "Box art 2.4__pivot";
+  node_shelf_box_2_4_art_563.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_4_art_563) {
+    node_shelf_box_2_4_art_563.position.copy(endpoint_shelf_box_2_4_art_563.start);
+    node_shelf_box_2_4_art_563.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_4_art_563.position.set(-2.995, 0.511, 3.575);
+    node_shelf_box_2_4_art_563.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_4_art_563.userData.sculptComponent = {"id": "shelf-box-2-4-art", "name": "Box art 2.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 3.575], "localEnd": [-2.995, 0.555, 3.575], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_4_art_563.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_4_art_563);
+  nodes["shelf-box-2-4-art"] = node_shelf_box_2_4_art_563;
+  const mesh_shelf_box_2_4_art_563Geometry = endpoint_shelf_box_2_4_art_563
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_4_art_563.endRadius, endpoint_shelf_box_2_4_art_563.baseRadius, endpoint_shelf_box_2_4_art_563.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_4_art_563) {
+    mesh_shelf_box_2_4_art_563Geometry.scale(0.01, 0.088, 0.25);
+  }
+  const mesh_shelf_box_2_4_art_563 = new THREE.Mesh(
+    mesh_shelf_box_2_4_art_563Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_4_art_563.name = "Box art 2.4";
+  if (endpoint_shelf_box_2_4_art_563) {
+    mesh_shelf_box_2_4_art_563.position.copy(endpoint_shelf_box_2_4_art_563.midpoint);
+    mesh_shelf_box_2_4_art_563.quaternion.copy(endpoint_shelf_box_2_4_art_563.quaternion);
+  }
+  mesh_shelf_box_2_4_art_563.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_4_art_563.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_4_art_563.userData.sculptComponent = {"id": "shelf-box-2-4-art", "name": "Box art 2.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 3.575], "localEnd": [-2.995, 0.555, 3.575], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 3.575], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_4_art_563.add(mesh_shelf_box_2_4_art_563);
+  meshes["shelf-box-2-4-art"] = mesh_shelf_box_2_4_art_563;
+  colliders["shelf-box-2-4-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-4-art"] ??= [];
+  destructionGroups["shelf-box-2-4-art"].push(node_shelf_box_2_4_art_563);
+
+  const endpoint_shelf_empty_2_5_564 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_2_5_564 = new THREE.Group();
+  node_shelf_empty_2_5_564.name = "Empty slot 2.5__pivot";
+  node_shelf_empty_2_5_564.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_2_5_564) {
+    node_shelf_empty_2_5_564.position.copy(endpoint_shelf_empty_2_5_564.start);
+    node_shelf_empty_2_5_564.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_2_5_564.position.set(-3.315, 0.505, 3.925);
+    node_shelf_empty_2_5_564.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_2_5_564.userData.sculptComponent = {"id": "shelf-empty-2-5", "name": "Empty slot 2.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.42, 3.925], "localEnd": [-3.315, 0.59, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.505, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_2_5_564.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_2_5_564);
+  nodes["shelf-empty-2-5"] = node_shelf_empty_2_5_564;
+  const mesh_shelf_empty_2_5_564Geometry = endpoint_shelf_empty_2_5_564
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_2_5_564.endRadius, endpoint_shelf_empty_2_5_564.baseRadius, endpoint_shelf_empty_2_5_564.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_2_5_564) {
+    mesh_shelf_empty_2_5_564Geometry.scale(0.01, 0.17, 0.31);
+  }
+  const mesh_shelf_empty_2_5_564 = new THREE.Mesh(
+    mesh_shelf_empty_2_5_564Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_2_5_564.name = "Empty slot 2.5";
+  if (endpoint_shelf_empty_2_5_564) {
+    mesh_shelf_empty_2_5_564.position.copy(endpoint_shelf_empty_2_5_564.midpoint);
+    mesh_shelf_empty_2_5_564.quaternion.copy(endpoint_shelf_empty_2_5_564.quaternion);
+  }
+  mesh_shelf_empty_2_5_564.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_2_5_564.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_2_5_564.userData.sculptComponent = {"id": "shelf-empty-2-5", "name": "Empty slot 2.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.42, 3.925], "localEnd": [-3.315, 0.59, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.505, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_2_5_564.add(mesh_shelf_empty_2_5_564);
+  meshes["shelf-empty-2-5"] = mesh_shelf_empty_2_5_564;
+  colliders["shelf-empty-2-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-2-5"] ??= [];
+  destructionGroups["shelf-empty-2-5"].push(node_shelf_empty_2_5_564);
+
+  const endpoint_shelf_tag_2_5_565 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_2_5_565 = new THREE.Group();
+  node_shelf_tag_2_5_565.name = "Empty slot tag 2.5__pivot";
+  node_shelf_tag_2_5_565.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_2_5_565) {
+    node_shelf_tag_2_5_565.position.copy(endpoint_shelf_tag_2_5_565.start);
+    node_shelf_tag_2_5_565.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_2_5_565.position.set(-2.964, 0.3625, 3.925);
+    node_shelf_tag_2_5_565.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_2_5_565.userData.sculptComponent = {"id": "shelf-tag-2-5", "name": "Empty slot tag 2.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.34, 3.925], "localEnd": [-2.964, 0.385, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.3625, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_2_5_565.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_2_5_565);
+  nodes["shelf-tag-2-5"] = node_shelf_tag_2_5_565;
+  const mesh_shelf_tag_2_5_565Geometry = endpoint_shelf_tag_2_5_565
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_2_5_565.endRadius, endpoint_shelf_tag_2_5_565.baseRadius, endpoint_shelf_tag_2_5_565.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_2_5_565) {
+    mesh_shelf_tag_2_5_565Geometry.scale(0.008, 0.045, 0.23);
+  }
+  const mesh_shelf_tag_2_5_565 = new THREE.Mesh(
+    mesh_shelf_tag_2_5_565Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_2_5_565.name = "Empty slot tag 2.5";
+  if (endpoint_shelf_tag_2_5_565) {
+    mesh_shelf_tag_2_5_565.position.copy(endpoint_shelf_tag_2_5_565.midpoint);
+    mesh_shelf_tag_2_5_565.quaternion.copy(endpoint_shelf_tag_2_5_565.quaternion);
+  }
+  mesh_shelf_tag_2_5_565.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_2_5_565.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_2_5_565.userData.sculptComponent = {"id": "shelf-tag-2-5", "name": "Empty slot tag 2.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.34, 3.925], "localEnd": [-2.964, 0.385, 3.925], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.23, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.3625, 3.925], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.23]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-2-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_2_5_565.add(mesh_shelf_tag_2_5_565);
+  meshes["shelf-tag-2-5"] = mesh_shelf_tag_2_5_565;
+  colliders["shelf-tag-2-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.23], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-2-5"] ??= [];
+  destructionGroups["shelf-tag-2-5"].push(node_shelf_tag_2_5_565);
+
+  const endpoint_shelf_box_2_6_566 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_6_566 = new THREE.Group();
+  node_shelf_box_2_6_566.name = "Set box 2.6__pivot";
+  node_shelf_box_2_6_566.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_6_566) {
+    node_shelf_box_2_6_566.position.copy(endpoint_shelf_box_2_6_566.start);
+    node_shelf_box_2_6_566.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_6_566.position.set(-3.14, 0.5, 4.275);
+    node_shelf_box_2_6_566.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_6_566.userData.sculptComponent = {"id": "shelf-box-2-6", "name": "Set box 2.6", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 4.275], "localEnd": [-3.14, 0.61, 4.275], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_6_566.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_6_566);
+  nodes["shelf-box-2-6"] = node_shelf_box_2_6_566;
+  const mesh_shelf_box_2_6_566Geometry = endpoint_shelf_box_2_6_566
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_6_566.endRadius, endpoint_shelf_box_2_6_566.baseRadius, endpoint_shelf_box_2_6_566.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_6_566) {
+    mesh_shelf_box_2_6_566Geometry.scale(0.28, 0.22, 0.31);
+  }
+  const mesh_shelf_box_2_6_566 = new THREE.Mesh(
+    mesh_shelf_box_2_6_566Geometry,
+    materialMap["box-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_6_566.name = "Set box 2.6";
+  if (endpoint_shelf_box_2_6_566) {
+    mesh_shelf_box_2_6_566.position.copy(endpoint_shelf_box_2_6_566.midpoint);
+    mesh_shelf_box_2_6_566.quaternion.copy(endpoint_shelf_box_2_6_566.quaternion);
+  }
+  mesh_shelf_box_2_6_566.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_6_566.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_6_566.userData.sculptComponent = {"id": "shelf-box-2-6", "name": "Set box 2.6", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.14, 0.39, 4.275], "localEnd": [-3.14, 0.61, 4.275], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.22, "depth": 0.31, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.14, 0.5, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.22, 0.31]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_6_566.add(mesh_shelf_box_2_6_566);
+  meshes["shelf-box-2-6"] = mesh_shelf_box_2_6_566;
+  colliders["shelf-box-2-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.22, 0.31], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-6"] ??= [];
+  destructionGroups["shelf-box-2-6"].push(node_shelf_box_2_6_566);
+
+  const endpoint_shelf_box_2_6_art_567 = makeAttachmentEndpoint(null);
+  const node_shelf_box_2_6_art_567 = new THREE.Group();
+  node_shelf_box_2_6_art_567.name = "Box art 2.6__pivot";
+  node_shelf_box_2_6_art_567.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_2_6_art_567) {
+    node_shelf_box_2_6_art_567.position.copy(endpoint_shelf_box_2_6_art_567.start);
+    node_shelf_box_2_6_art_567.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_2_6_art_567.position.set(-2.995, 0.511, 4.275);
+    node_shelf_box_2_6_art_567.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_2_6_art_567.userData.sculptComponent = {"id": "shelf-box-2-6-art", "name": "Box art 2.6", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 4.275], "localEnd": [-2.995, 0.555, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_6_art_567.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_shelf_box_2_6_art_567);
+  nodes["shelf-box-2-6-art"] = node_shelf_box_2_6_art_567;
+  const mesh_shelf_box_2_6_art_567Geometry = endpoint_shelf_box_2_6_art_567
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_2_6_art_567.endRadius, endpoint_shelf_box_2_6_art_567.baseRadius, endpoint_shelf_box_2_6_art_567.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_2_6_art_567) {
+    mesh_shelf_box_2_6_art_567Geometry.scale(0.01, 0.088, 0.25);
+  }
+  const mesh_shelf_box_2_6_art_567 = new THREE.Mesh(
+    mesh_shelf_box_2_6_art_567Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_2_6_art_567.name = "Box art 2.6";
+  if (endpoint_shelf_box_2_6_art_567) {
+    mesh_shelf_box_2_6_art_567.position.copy(endpoint_shelf_box_2_6_art_567.midpoint);
+    mesh_shelf_box_2_6_art_567.quaternion.copy(endpoint_shelf_box_2_6_art_567.quaternion);
+  }
+  mesh_shelf_box_2_6_art_567.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_2_6_art_567.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_2_6_art_567.userData.sculptComponent = {"id": "shelf-box-2-6-art", "name": "Box art 2.6", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.467, 4.275], "localEnd": [-2.995, 0.555, 4.275], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.088, "depth": 0.25, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.511, 4.275], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.088, 0.25]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-2-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_2_6_art_567.add(mesh_shelf_box_2_6_art_567);
+  meshes["shelf-box-2-6-art"] = mesh_shelf_box_2_6_art_567;
+  colliders["shelf-box-2-6-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.088, 0.25], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-2-6-art"] ??= [];
+  destructionGroups["shelf-box-2-6-art"].push(node_shelf_box_2_6_art_567);
+
+  const endpoint_shelf_box_3_1_568 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_1_568 = new THREE.Group();
+  node_shelf_box_3_1_568.name = "Set box 3.1__pivot";
+  node_shelf_box_3_1_568.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_1_568) {
+    node_shelf_box_3_1_568.position.copy(endpoint_shelf_box_3_1_568.start);
+    node_shelf_box_3_1_568.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_1_568.position.set(-3.1, 0.75, 2.4812);
+    node_shelf_box_3_1_568.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_1_568.userData.sculptComponent = {"id": "shelf-box-3-1", "name": "Set box 3.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 2.4812], "localEnd": [-3.1, 0.85, 2.4812], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_1_568.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_1_568);
+  nodes["shelf-box-3-1"] = node_shelf_box_3_1_568;
+  const mesh_shelf_box_3_1_568Geometry = endpoint_shelf_box_3_1_568
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_1_568.endRadius, endpoint_shelf_box_3_1_568.baseRadius, endpoint_shelf_box_3_1_568.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_1_568) {
+    mesh_shelf_box_3_1_568Geometry.scale(0.2, 0.2, 0.2225);
+  }
+  const mesh_shelf_box_3_1_568 = new THREE.Mesh(
+    mesh_shelf_box_3_1_568Geometry,
+    materialMap["box-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_1_568.name = "Set box 3.1";
+  if (endpoint_shelf_box_3_1_568) {
+    mesh_shelf_box_3_1_568.position.copy(endpoint_shelf_box_3_1_568.midpoint);
+    mesh_shelf_box_3_1_568.quaternion.copy(endpoint_shelf_box_3_1_568.quaternion);
+  }
+  mesh_shelf_box_3_1_568.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_1_568.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_1_568.userData.sculptComponent = {"id": "shelf-box-3-1", "name": "Set box 3.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 2.4812], "localEnd": [-3.1, 0.85, 2.4812], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_1_568.add(mesh_shelf_box_3_1_568);
+  meshes["shelf-box-3-1"] = mesh_shelf_box_3_1_568;
+  colliders["shelf-box-3-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-1"] ??= [];
+  destructionGroups["shelf-box-3-1"].push(node_shelf_box_3_1_568);
+
+  const endpoint_shelf_box_3_1_art_569 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_1_art_569 = new THREE.Group();
+  node_shelf_box_3_1_art_569.name = "Box art 3.1__pivot";
+  node_shelf_box_3_1_art_569.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_1_art_569) {
+    node_shelf_box_3_1_art_569.position.copy(endpoint_shelf_box_3_1_art_569.start);
+    node_shelf_box_3_1_art_569.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_1_art_569.position.set(-2.995, 0.76, 2.4812);
+    node_shelf_box_3_1_art_569.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_1_art_569.userData.sculptComponent = {"id": "shelf-box-3-1-art", "name": "Box art 3.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 2.4812], "localEnd": [-2.995, 0.8, 2.4812], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_1_art_569.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_1_art_569);
+  nodes["shelf-box-3-1-art"] = node_shelf_box_3_1_art_569;
+  const mesh_shelf_box_3_1_art_569Geometry = endpoint_shelf_box_3_1_art_569
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_1_art_569.endRadius, endpoint_shelf_box_3_1_art_569.baseRadius, endpoint_shelf_box_3_1_art_569.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_1_art_569) {
+    mesh_shelf_box_3_1_art_569Geometry.scale(0.01, 0.08, 0.1625);
+  }
+  const mesh_shelf_box_3_1_art_569 = new THREE.Mesh(
+    mesh_shelf_box_3_1_art_569Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_1_art_569.name = "Box art 3.1";
+  if (endpoint_shelf_box_3_1_art_569) {
+    mesh_shelf_box_3_1_art_569.position.copy(endpoint_shelf_box_3_1_art_569.midpoint);
+    mesh_shelf_box_3_1_art_569.quaternion.copy(endpoint_shelf_box_3_1_art_569.quaternion);
+  }
+  mesh_shelf_box_3_1_art_569.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_1_art_569.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_1_art_569.userData.sculptComponent = {"id": "shelf-box-3-1-art", "name": "Box art 3.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 2.4812], "localEnd": [-2.995, 0.8, 2.4812], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_1_art_569.add(mesh_shelf_box_3_1_art_569);
+  meshes["shelf-box-3-1-art"] = mesh_shelf_box_3_1_art_569;
+  colliders["shelf-box-3-1-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-1-art"] ??= [];
+  destructionGroups["shelf-box-3-1-art"].push(node_shelf_box_3_1_art_569);
+
+  const endpoint_shelf_box_3_2_570 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_2_570 = new THREE.Group();
+  node_shelf_box_3_2_570.name = "Set box 3.2__pivot";
+  node_shelf_box_3_2_570.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_2_570) {
+    node_shelf_box_3_2_570.position.copy(endpoint_shelf_box_3_2_570.start);
+    node_shelf_box_3_2_570.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_2_570.position.set(-3.1, 0.75, 2.7437);
+    node_shelf_box_3_2_570.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_2_570.userData.sculptComponent = {"id": "shelf-box-3-2", "name": "Set box 3.2", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 2.7437], "localEnd": [-3.1, 0.85, 2.7437], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_2_570.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_2_570);
+  nodes["shelf-box-3-2"] = node_shelf_box_3_2_570;
+  const mesh_shelf_box_3_2_570Geometry = endpoint_shelf_box_3_2_570
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_2_570.endRadius, endpoint_shelf_box_3_2_570.baseRadius, endpoint_shelf_box_3_2_570.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_2_570) {
+    mesh_shelf_box_3_2_570Geometry.scale(0.2, 0.2, 0.2225);
+  }
+  const mesh_shelf_box_3_2_570 = new THREE.Mesh(
+    mesh_shelf_box_3_2_570Geometry,
+    materialMap["box-navy"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_2_570.name = "Set box 3.2";
+  if (endpoint_shelf_box_3_2_570) {
+    mesh_shelf_box_3_2_570.position.copy(endpoint_shelf_box_3_2_570.midpoint);
+    mesh_shelf_box_3_2_570.quaternion.copy(endpoint_shelf_box_3_2_570.quaternion);
+  }
+  mesh_shelf_box_3_2_570.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_2_570.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_2_570.userData.sculptComponent = {"id": "shelf-box-3-2", "name": "Set box 3.2", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 2.7437], "localEnd": [-3.1, 0.85, 2.7437], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_2_570.add(mesh_shelf_box_3_2_570);
+  meshes["shelf-box-3-2"] = mesh_shelf_box_3_2_570;
+  colliders["shelf-box-3-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-2"] ??= [];
+  destructionGroups["shelf-box-3-2"].push(node_shelf_box_3_2_570);
+
+  const endpoint_shelf_box_3_2_art_571 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_2_art_571 = new THREE.Group();
+  node_shelf_box_3_2_art_571.name = "Box art 3.2__pivot";
+  node_shelf_box_3_2_art_571.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_2_art_571) {
+    node_shelf_box_3_2_art_571.position.copy(endpoint_shelf_box_3_2_art_571.start);
+    node_shelf_box_3_2_art_571.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_2_art_571.position.set(-2.995, 0.76, 2.7437);
+    node_shelf_box_3_2_art_571.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_2_art_571.userData.sculptComponent = {"id": "shelf-box-3-2-art", "name": "Box art 3.2", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 2.7437], "localEnd": [-2.995, 0.8, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_2_art_571.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_2_art_571);
+  nodes["shelf-box-3-2-art"] = node_shelf_box_3_2_art_571;
+  const mesh_shelf_box_3_2_art_571Geometry = endpoint_shelf_box_3_2_art_571
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_2_art_571.endRadius, endpoint_shelf_box_3_2_art_571.baseRadius, endpoint_shelf_box_3_2_art_571.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_2_art_571) {
+    mesh_shelf_box_3_2_art_571Geometry.scale(0.01, 0.08, 0.1625);
+  }
+  const mesh_shelf_box_3_2_art_571 = new THREE.Mesh(
+    mesh_shelf_box_3_2_art_571Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_2_art_571.name = "Box art 3.2";
+  if (endpoint_shelf_box_3_2_art_571) {
+    mesh_shelf_box_3_2_art_571.position.copy(endpoint_shelf_box_3_2_art_571.midpoint);
+    mesh_shelf_box_3_2_art_571.quaternion.copy(endpoint_shelf_box_3_2_art_571.quaternion);
+  }
+  mesh_shelf_box_3_2_art_571.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_2_art_571.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_2_art_571.userData.sculptComponent = {"id": "shelf-box-3-2-art", "name": "Box art 3.2", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 2.7437], "localEnd": [-2.995, 0.8, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_2_art_571.add(mesh_shelf_box_3_2_art_571);
+  meshes["shelf-box-3-2-art"] = mesh_shelf_box_3_2_art_571;
+  colliders["shelf-box-3-2-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-2-art"] ??= [];
+  destructionGroups["shelf-box-3-2-art"].push(node_shelf_box_3_2_art_571);
+
+  const endpoint_shelf_empty_3_3_572 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_3_3_572 = new THREE.Group();
+  node_shelf_empty_3_3_572.name = "Empty slot 3.3__pivot";
+  node_shelf_empty_3_3_572.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_3_3_572) {
+    node_shelf_empty_3_3_572.position.copy(endpoint_shelf_empty_3_3_572.start);
+    node_shelf_empty_3_3_572.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_3_3_572.position.set(-3.315, 0.755, 3.0062);
+    node_shelf_empty_3_3_572.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_3_3_572.userData.sculptComponent = {"id": "shelf-empty-3-3", "name": "Empty slot 3.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 3.0062], "localEnd": [-3.315, 0.83, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_3_572.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_3_3_572);
+  nodes["shelf-empty-3-3"] = node_shelf_empty_3_3_572;
+  const mesh_shelf_empty_3_3_572Geometry = endpoint_shelf_empty_3_3_572
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_3_3_572.endRadius, endpoint_shelf_empty_3_3_572.baseRadius, endpoint_shelf_empty_3_3_572.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_3_3_572) {
+    mesh_shelf_empty_3_3_572Geometry.scale(0.01, 0.15, 0.2225);
+  }
+  const mesh_shelf_empty_3_3_572 = new THREE.Mesh(
+    mesh_shelf_empty_3_3_572Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_3_3_572.name = "Empty slot 3.3";
+  if (endpoint_shelf_empty_3_3_572) {
+    mesh_shelf_empty_3_3_572.position.copy(endpoint_shelf_empty_3_3_572.midpoint);
+    mesh_shelf_empty_3_3_572.quaternion.copy(endpoint_shelf_empty_3_3_572.quaternion);
+  }
+  mesh_shelf_empty_3_3_572.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_3_3_572.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_3_3_572.userData.sculptComponent = {"id": "shelf-empty-3-3", "name": "Empty slot 3.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 3.0062], "localEnd": [-3.315, 0.83, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_3_572.add(mesh_shelf_empty_3_3_572);
+  meshes["shelf-empty-3-3"] = mesh_shelf_empty_3_3_572;
+  colliders["shelf-empty-3-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-3-3"] ??= [];
+  destructionGroups["shelf-empty-3-3"].push(node_shelf_empty_3_3_572);
+
+  const endpoint_shelf_tag_3_3_573 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_3_3_573 = new THREE.Group();
+  node_shelf_tag_3_3_573.name = "Empty slot tag 3.3__pivot";
+  node_shelf_tag_3_3_573.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_3_3_573) {
+    node_shelf_tag_3_3_573.position.copy(endpoint_shelf_tag_3_3_573.start);
+    node_shelf_tag_3_3_573.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_3_3_573.position.set(-2.964, 0.6225, 3.0062);
+    node_shelf_tag_3_3_573.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_3_3_573.userData.sculptComponent = {"id": "shelf-tag-3-3", "name": "Empty slot tag 3.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 3.0062], "localEnd": [-2.964, 0.645, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_3_573.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_3_3_573);
+  nodes["shelf-tag-3-3"] = node_shelf_tag_3_3_573;
+  const mesh_shelf_tag_3_3_573Geometry = endpoint_shelf_tag_3_3_573
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_3_3_573.endRadius, endpoint_shelf_tag_3_3_573.baseRadius, endpoint_shelf_tag_3_3_573.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_3_3_573) {
+    mesh_shelf_tag_3_3_573Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_3_3_573 = new THREE.Mesh(
+    mesh_shelf_tag_3_3_573Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_3_3_573.name = "Empty slot tag 3.3";
+  if (endpoint_shelf_tag_3_3_573) {
+    mesh_shelf_tag_3_3_573.position.copy(endpoint_shelf_tag_3_3_573.midpoint);
+    mesh_shelf_tag_3_3_573.quaternion.copy(endpoint_shelf_tag_3_3_573.quaternion);
+  }
+  mesh_shelf_tag_3_3_573.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_3_3_573.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_3_3_573.userData.sculptComponent = {"id": "shelf-tag-3-3", "name": "Empty slot tag 3.3", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 3.0062], "localEnd": [-2.964, 0.645, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_3_573.add(mesh_shelf_tag_3_3_573);
+  meshes["shelf-tag-3-3"] = mesh_shelf_tag_3_3_573;
+  colliders["shelf-tag-3-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-3-3"] ??= [];
+  destructionGroups["shelf-tag-3-3"].push(node_shelf_tag_3_3_573);
+
+  const endpoint_shelf_empty_3_4_574 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_3_4_574 = new THREE.Group();
+  node_shelf_empty_3_4_574.name = "Empty slot 3.4__pivot";
+  node_shelf_empty_3_4_574.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_3_4_574) {
+    node_shelf_empty_3_4_574.position.copy(endpoint_shelf_empty_3_4_574.start);
+    node_shelf_empty_3_4_574.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_3_4_574.position.set(-3.315, 0.755, 3.2687);
+    node_shelf_empty_3_4_574.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_3_4_574.userData.sculptComponent = {"id": "shelf-empty-3-4", "name": "Empty slot 3.4", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 3.2687], "localEnd": [-3.315, 0.83, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_4_574.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_3_4_574);
+  nodes["shelf-empty-3-4"] = node_shelf_empty_3_4_574;
+  const mesh_shelf_empty_3_4_574Geometry = endpoint_shelf_empty_3_4_574
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_3_4_574.endRadius, endpoint_shelf_empty_3_4_574.baseRadius, endpoint_shelf_empty_3_4_574.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_3_4_574) {
+    mesh_shelf_empty_3_4_574Geometry.scale(0.01, 0.15, 0.2225);
+  }
+  const mesh_shelf_empty_3_4_574 = new THREE.Mesh(
+    mesh_shelf_empty_3_4_574Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_3_4_574.name = "Empty slot 3.4";
+  if (endpoint_shelf_empty_3_4_574) {
+    mesh_shelf_empty_3_4_574.position.copy(endpoint_shelf_empty_3_4_574.midpoint);
+    mesh_shelf_empty_3_4_574.quaternion.copy(endpoint_shelf_empty_3_4_574.quaternion);
+  }
+  mesh_shelf_empty_3_4_574.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_3_4_574.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_3_4_574.userData.sculptComponent = {"id": "shelf-empty-3-4", "name": "Empty slot 3.4", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 3.2687], "localEnd": [-3.315, 0.83, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_4_574.add(mesh_shelf_empty_3_4_574);
+  meshes["shelf-empty-3-4"] = mesh_shelf_empty_3_4_574;
+  colliders["shelf-empty-3-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-3-4"] ??= [];
+  destructionGroups["shelf-empty-3-4"].push(node_shelf_empty_3_4_574);
+
+  const endpoint_shelf_tag_3_4_575 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_3_4_575 = new THREE.Group();
+  node_shelf_tag_3_4_575.name = "Empty slot tag 3.4__pivot";
+  node_shelf_tag_3_4_575.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_3_4_575) {
+    node_shelf_tag_3_4_575.position.copy(endpoint_shelf_tag_3_4_575.start);
+    node_shelf_tag_3_4_575.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_3_4_575.position.set(-2.964, 0.6225, 3.2687);
+    node_shelf_tag_3_4_575.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_3_4_575.userData.sculptComponent = {"id": "shelf-tag-3-4", "name": "Empty slot tag 3.4", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 3.2687], "localEnd": [-2.964, 0.645, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_4_575.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_3_4_575);
+  nodes["shelf-tag-3-4"] = node_shelf_tag_3_4_575;
+  const mesh_shelf_tag_3_4_575Geometry = endpoint_shelf_tag_3_4_575
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_3_4_575.endRadius, endpoint_shelf_tag_3_4_575.baseRadius, endpoint_shelf_tag_3_4_575.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_3_4_575) {
+    mesh_shelf_tag_3_4_575Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_3_4_575 = new THREE.Mesh(
+    mesh_shelf_tag_3_4_575Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_3_4_575.name = "Empty slot tag 3.4";
+  if (endpoint_shelf_tag_3_4_575) {
+    mesh_shelf_tag_3_4_575.position.copy(endpoint_shelf_tag_3_4_575.midpoint);
+    mesh_shelf_tag_3_4_575.quaternion.copy(endpoint_shelf_tag_3_4_575.quaternion);
+  }
+  mesh_shelf_tag_3_4_575.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_3_4_575.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_3_4_575.userData.sculptComponent = {"id": "shelf-tag-3-4", "name": "Empty slot tag 3.4", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 3.2687], "localEnd": [-2.964, 0.645, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_4_575.add(mesh_shelf_tag_3_4_575);
+  meshes["shelf-tag-3-4"] = mesh_shelf_tag_3_4_575;
+  colliders["shelf-tag-3-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-3-4"] ??= [];
+  destructionGroups["shelf-tag-3-4"].push(node_shelf_tag_3_4_575);
+
+  const endpoint_shelf_box_3_5_576 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_5_576 = new THREE.Group();
+  node_shelf_box_3_5_576.name = "Set box 3.5__pivot";
+  node_shelf_box_3_5_576.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_5_576) {
+    node_shelf_box_3_5_576.position.copy(endpoint_shelf_box_3_5_576.start);
+    node_shelf_box_3_5_576.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_5_576.position.set(-3.1, 0.75, 3.5312);
+    node_shelf_box_3_5_576.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_5_576.userData.sculptComponent = {"id": "shelf-box-3-5", "name": "Set box 3.5", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 3.5312], "localEnd": [-3.1, 0.85, 3.5312], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_5_576.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_5_576);
+  nodes["shelf-box-3-5"] = node_shelf_box_3_5_576;
+  const mesh_shelf_box_3_5_576Geometry = endpoint_shelf_box_3_5_576
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_5_576.endRadius, endpoint_shelf_box_3_5_576.baseRadius, endpoint_shelf_box_3_5_576.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_5_576) {
+    mesh_shelf_box_3_5_576Geometry.scale(0.2, 0.2, 0.2225);
+  }
+  const mesh_shelf_box_3_5_576 = new THREE.Mesh(
+    mesh_shelf_box_3_5_576Geometry,
+    materialMap["box-charcoal"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_5_576.name = "Set box 3.5";
+  if (endpoint_shelf_box_3_5_576) {
+    mesh_shelf_box_3_5_576.position.copy(endpoint_shelf_box_3_5_576.midpoint);
+    mesh_shelf_box_3_5_576.quaternion.copy(endpoint_shelf_box_3_5_576.quaternion);
+  }
+  mesh_shelf_box_3_5_576.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_5_576.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_5_576.userData.sculptComponent = {"id": "shelf-box-3-5", "name": "Set box 3.5", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 3.5312], "localEnd": [-3.1, 0.85, 3.5312], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_5_576.add(mesh_shelf_box_3_5_576);
+  meshes["shelf-box-3-5"] = mesh_shelf_box_3_5_576;
+  colliders["shelf-box-3-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-5"] ??= [];
+  destructionGroups["shelf-box-3-5"].push(node_shelf_box_3_5_576);
+
+  const endpoint_shelf_box_3_5_art_577 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_5_art_577 = new THREE.Group();
+  node_shelf_box_3_5_art_577.name = "Box art 3.5__pivot";
+  node_shelf_box_3_5_art_577.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_5_art_577) {
+    node_shelf_box_3_5_art_577.position.copy(endpoint_shelf_box_3_5_art_577.start);
+    node_shelf_box_3_5_art_577.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_5_art_577.position.set(-2.995, 0.76, 3.5312);
+    node_shelf_box_3_5_art_577.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_5_art_577.userData.sculptComponent = {"id": "shelf-box-3-5-art", "name": "Box art 3.5", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 3.5312], "localEnd": [-2.995, 0.8, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_5_art_577.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_5_art_577);
+  nodes["shelf-box-3-5-art"] = node_shelf_box_3_5_art_577;
+  const mesh_shelf_box_3_5_art_577Geometry = endpoint_shelf_box_3_5_art_577
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_5_art_577.endRadius, endpoint_shelf_box_3_5_art_577.baseRadius, endpoint_shelf_box_3_5_art_577.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_5_art_577) {
+    mesh_shelf_box_3_5_art_577Geometry.scale(0.01, 0.08, 0.1625);
+  }
+  const mesh_shelf_box_3_5_art_577 = new THREE.Mesh(
+    mesh_shelf_box_3_5_art_577Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_5_art_577.name = "Box art 3.5";
+  if (endpoint_shelf_box_3_5_art_577) {
+    mesh_shelf_box_3_5_art_577.position.copy(endpoint_shelf_box_3_5_art_577.midpoint);
+    mesh_shelf_box_3_5_art_577.quaternion.copy(endpoint_shelf_box_3_5_art_577.quaternion);
+  }
+  mesh_shelf_box_3_5_art_577.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_5_art_577.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_5_art_577.userData.sculptComponent = {"id": "shelf-box-3-5-art", "name": "Box art 3.5", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 3.5312], "localEnd": [-2.995, 0.8, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-5-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_5_art_577.add(mesh_shelf_box_3_5_art_577);
+  meshes["shelf-box-3-5-art"] = mesh_shelf_box_3_5_art_577;
+  colliders["shelf-box-3-5-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-5-art"] ??= [];
+  destructionGroups["shelf-box-3-5-art"].push(node_shelf_box_3_5_art_577);
+
+  const endpoint_shelf_box_3_6_578 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_6_578 = new THREE.Group();
+  node_shelf_box_3_6_578.name = "Set box 3.6__pivot";
+  node_shelf_box_3_6_578.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_6_578) {
+    node_shelf_box_3_6_578.position.copy(endpoint_shelf_box_3_6_578.start);
+    node_shelf_box_3_6_578.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_6_578.position.set(-3.1, 0.75, 3.7937);
+    node_shelf_box_3_6_578.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_6_578.userData.sculptComponent = {"id": "shelf-box-3-6", "name": "Set box 3.6", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 3.7937], "localEnd": [-3.1, 0.85, 3.7937], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_6_578.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_6_578);
+  nodes["shelf-box-3-6"] = node_shelf_box_3_6_578;
+  const mesh_shelf_box_3_6_578Geometry = endpoint_shelf_box_3_6_578
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_6_578.endRadius, endpoint_shelf_box_3_6_578.baseRadius, endpoint_shelf_box_3_6_578.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_6_578) {
+    mesh_shelf_box_3_6_578Geometry.scale(0.2, 0.2, 0.2225);
+  }
+  const mesh_shelf_box_3_6_578 = new THREE.Mesh(
+    mesh_shelf_box_3_6_578Geometry,
+    materialMap["box-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_6_578.name = "Set box 3.6";
+  if (endpoint_shelf_box_3_6_578) {
+    mesh_shelf_box_3_6_578.position.copy(endpoint_shelf_box_3_6_578.midpoint);
+    mesh_shelf_box_3_6_578.quaternion.copy(endpoint_shelf_box_3_6_578.quaternion);
+  }
+  mesh_shelf_box_3_6_578.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_6_578.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_6_578.userData.sculptComponent = {"id": "shelf-box-3-6", "name": "Set box 3.6", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 3.7937], "localEnd": [-3.1, 0.85, 3.7937], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_6_578.add(mesh_shelf_box_3_6_578);
+  meshes["shelf-box-3-6"] = mesh_shelf_box_3_6_578;
+  colliders["shelf-box-3-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-6"] ??= [];
+  destructionGroups["shelf-box-3-6"].push(node_shelf_box_3_6_578);
+
+  const endpoint_shelf_box_3_6_art_579 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_6_art_579 = new THREE.Group();
+  node_shelf_box_3_6_art_579.name = "Box art 3.6__pivot";
+  node_shelf_box_3_6_art_579.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_6_art_579) {
+    node_shelf_box_3_6_art_579.position.copy(endpoint_shelf_box_3_6_art_579.start);
+    node_shelf_box_3_6_art_579.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_6_art_579.position.set(-2.995, 0.76, 3.7937);
+    node_shelf_box_3_6_art_579.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_6_art_579.userData.sculptComponent = {"id": "shelf-box-3-6-art", "name": "Box art 3.6", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 3.7937], "localEnd": [-2.995, 0.8, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_6_art_579.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_6_art_579);
+  nodes["shelf-box-3-6-art"] = node_shelf_box_3_6_art_579;
+  const mesh_shelf_box_3_6_art_579Geometry = endpoint_shelf_box_3_6_art_579
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_6_art_579.endRadius, endpoint_shelf_box_3_6_art_579.baseRadius, endpoint_shelf_box_3_6_art_579.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_6_art_579) {
+    mesh_shelf_box_3_6_art_579Geometry.scale(0.01, 0.08, 0.1625);
+  }
+  const mesh_shelf_box_3_6_art_579 = new THREE.Mesh(
+    mesh_shelf_box_3_6_art_579Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_6_art_579.name = "Box art 3.6";
+  if (endpoint_shelf_box_3_6_art_579) {
+    mesh_shelf_box_3_6_art_579.position.copy(endpoint_shelf_box_3_6_art_579.midpoint);
+    mesh_shelf_box_3_6_art_579.quaternion.copy(endpoint_shelf_box_3_6_art_579.quaternion);
+  }
+  mesh_shelf_box_3_6_art_579.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_6_art_579.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_6_art_579.userData.sculptComponent = {"id": "shelf-box-3-6-art", "name": "Box art 3.6", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 3.7937], "localEnd": [-2.995, 0.8, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-6-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_6_art_579.add(mesh_shelf_box_3_6_art_579);
+  meshes["shelf-box-3-6-art"] = mesh_shelf_box_3_6_art_579;
+  colliders["shelf-box-3-6-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-6-art"] ??= [];
+  destructionGroups["shelf-box-3-6-art"].push(node_shelf_box_3_6_art_579);
+
+  const endpoint_shelf_empty_3_7_580 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_3_7_580 = new THREE.Group();
+  node_shelf_empty_3_7_580.name = "Empty slot 3.7__pivot";
+  node_shelf_empty_3_7_580.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_3_7_580) {
+    node_shelf_empty_3_7_580.position.copy(endpoint_shelf_empty_3_7_580.start);
+    node_shelf_empty_3_7_580.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_3_7_580.position.set(-3.315, 0.755, 4.0563);
+    node_shelf_empty_3_7_580.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_3_7_580.userData.sculptComponent = {"id": "shelf-empty-3-7", "name": "Empty slot 3.7", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 4.0563], "localEnd": [-3.315, 0.83, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_7_580.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_3_7_580);
+  nodes["shelf-empty-3-7"] = node_shelf_empty_3_7_580;
+  const mesh_shelf_empty_3_7_580Geometry = endpoint_shelf_empty_3_7_580
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_3_7_580.endRadius, endpoint_shelf_empty_3_7_580.baseRadius, endpoint_shelf_empty_3_7_580.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_3_7_580) {
+    mesh_shelf_empty_3_7_580Geometry.scale(0.01, 0.15, 0.2225);
+  }
+  const mesh_shelf_empty_3_7_580 = new THREE.Mesh(
+    mesh_shelf_empty_3_7_580Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_3_7_580.name = "Empty slot 3.7";
+  if (endpoint_shelf_empty_3_7_580) {
+    mesh_shelf_empty_3_7_580.position.copy(endpoint_shelf_empty_3_7_580.midpoint);
+    mesh_shelf_empty_3_7_580.quaternion.copy(endpoint_shelf_empty_3_7_580.quaternion);
+  }
+  mesh_shelf_empty_3_7_580.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_3_7_580.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_3_7_580.userData.sculptComponent = {"id": "shelf-empty-3-7", "name": "Empty slot 3.7", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.68, 4.0563], "localEnd": [-3.315, 0.83, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.15, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.755, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.15, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_3_7_580.add(mesh_shelf_empty_3_7_580);
+  meshes["shelf-empty-3-7"] = mesh_shelf_empty_3_7_580;
+  colliders["shelf-empty-3-7"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.15, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-3-7"] ??= [];
+  destructionGroups["shelf-empty-3-7"].push(node_shelf_empty_3_7_580);
+
+  const endpoint_shelf_tag_3_7_581 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_3_7_581 = new THREE.Group();
+  node_shelf_tag_3_7_581.name = "Empty slot tag 3.7__pivot";
+  node_shelf_tag_3_7_581.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_3_7_581) {
+    node_shelf_tag_3_7_581.position.copy(endpoint_shelf_tag_3_7_581.start);
+    node_shelf_tag_3_7_581.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_3_7_581.position.set(-2.964, 0.6225, 4.0563);
+    node_shelf_tag_3_7_581.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_3_7_581.userData.sculptComponent = {"id": "shelf-tag-3-7", "name": "Empty slot tag 3.7", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 4.0563], "localEnd": [-2.964, 0.645, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_7_581.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_3_7_581);
+  nodes["shelf-tag-3-7"] = node_shelf_tag_3_7_581;
+  const mesh_shelf_tag_3_7_581Geometry = endpoint_shelf_tag_3_7_581
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_3_7_581.endRadius, endpoint_shelf_tag_3_7_581.baseRadius, endpoint_shelf_tag_3_7_581.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_3_7_581) {
+    mesh_shelf_tag_3_7_581Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_3_7_581 = new THREE.Mesh(
+    mesh_shelf_tag_3_7_581Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_3_7_581.name = "Empty slot tag 3.7";
+  if (endpoint_shelf_tag_3_7_581) {
+    mesh_shelf_tag_3_7_581.position.copy(endpoint_shelf_tag_3_7_581.midpoint);
+    mesh_shelf_tag_3_7_581.quaternion.copy(endpoint_shelf_tag_3_7_581.quaternion);
+  }
+  mesh_shelf_tag_3_7_581.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_3_7_581.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_3_7_581.userData.sculptComponent = {"id": "shelf-tag-3-7", "name": "Empty slot tag 3.7", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.6, 4.0563], "localEnd": [-2.964, 0.645, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.6225, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-3-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_3_7_581.add(mesh_shelf_tag_3_7_581);
+  meshes["shelf-tag-3-7"] = mesh_shelf_tag_3_7_581;
+  colliders["shelf-tag-3-7"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-3-7"] ??= [];
+  destructionGroups["shelf-tag-3-7"].push(node_shelf_tag_3_7_581);
+
+  const endpoint_shelf_box_3_8_582 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_8_582 = new THREE.Group();
+  node_shelf_box_3_8_582.name = "Set box 3.8__pivot";
+  node_shelf_box_3_8_582.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_8_582) {
+    node_shelf_box_3_8_582.position.copy(endpoint_shelf_box_3_8_582.start);
+    node_shelf_box_3_8_582.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_8_582.position.set(-3.1, 0.75, 4.3187);
+    node_shelf_box_3_8_582.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_8_582.userData.sculptComponent = {"id": "shelf-box-3-8", "name": "Set box 3.8", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 4.3187], "localEnd": [-3.1, 0.85, 4.3187], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_8_582.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_8_582);
+  nodes["shelf-box-3-8"] = node_shelf_box_3_8_582;
+  const mesh_shelf_box_3_8_582Geometry = endpoint_shelf_box_3_8_582
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_8_582.endRadius, endpoint_shelf_box_3_8_582.baseRadius, endpoint_shelf_box_3_8_582.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_8_582) {
+    mesh_shelf_box_3_8_582Geometry.scale(0.2, 0.2, 0.2225);
+  }
+  const mesh_shelf_box_3_8_582 = new THREE.Mesh(
+    mesh_shelf_box_3_8_582Geometry,
+    materialMap["box-navy"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_8_582.name = "Set box 3.8";
+  if (endpoint_shelf_box_3_8_582) {
+    mesh_shelf_box_3_8_582.position.copy(endpoint_shelf_box_3_8_582.midpoint);
+    mesh_shelf_box_3_8_582.quaternion.copy(endpoint_shelf_box_3_8_582.quaternion);
+  }
+  mesh_shelf_box_3_8_582.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_8_582.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_8_582.userData.sculptComponent = {"id": "shelf-box-3-8", "name": "Set box 3.8", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.65, 4.3187], "localEnd": [-3.1, 0.85, 4.3187], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.2, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.75, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.2, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_8_582.add(mesh_shelf_box_3_8_582);
+  meshes["shelf-box-3-8"] = mesh_shelf_box_3_8_582;
+  colliders["shelf-box-3-8"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.2, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-8"] ??= [];
+  destructionGroups["shelf-box-3-8"].push(node_shelf_box_3_8_582);
+
+  const endpoint_shelf_box_3_8_art_583 = makeAttachmentEndpoint(null);
+  const node_shelf_box_3_8_art_583 = new THREE.Group();
+  node_shelf_box_3_8_art_583.name = "Box art 3.8__pivot";
+  node_shelf_box_3_8_art_583.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_3_8_art_583) {
+    node_shelf_box_3_8_art_583.position.copy(endpoint_shelf_box_3_8_art_583.start);
+    node_shelf_box_3_8_art_583.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_3_8_art_583.position.set(-2.995, 0.76, 4.3187);
+    node_shelf_box_3_8_art_583.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_3_8_art_583.userData.sculptComponent = {"id": "shelf-box-3-8-art", "name": "Box art 3.8", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 4.3187], "localEnd": [-2.995, 0.8, 4.3187], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_8_art_583.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_3_8_art_583);
+  nodes["shelf-box-3-8-art"] = node_shelf_box_3_8_art_583;
+  const mesh_shelf_box_3_8_art_583Geometry = endpoint_shelf_box_3_8_art_583
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_3_8_art_583.endRadius, endpoint_shelf_box_3_8_art_583.baseRadius, endpoint_shelf_box_3_8_art_583.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_3_8_art_583) {
+    mesh_shelf_box_3_8_art_583Geometry.scale(0.01, 0.08, 0.1625);
+  }
+  const mesh_shelf_box_3_8_art_583 = new THREE.Mesh(
+    mesh_shelf_box_3_8_art_583Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_3_8_art_583.name = "Box art 3.8";
+  if (endpoint_shelf_box_3_8_art_583) {
+    mesh_shelf_box_3_8_art_583.position.copy(endpoint_shelf_box_3_8_art_583.midpoint);
+    mesh_shelf_box_3_8_art_583.quaternion.copy(endpoint_shelf_box_3_8_art_583.quaternion);
+  }
+  mesh_shelf_box_3_8_art_583.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_3_8_art_583.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_3_8_art_583.userData.sculptComponent = {"id": "shelf-box-3-8-art", "name": "Box art 3.8", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.72, 4.3187], "localEnd": [-2.995, 0.8, 4.3187], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.08, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.76, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.08, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-3-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_3_8_art_583.add(mesh_shelf_box_3_8_art_583);
+  meshes["shelf-box-3-8-art"] = mesh_shelf_box_3_8_art_583;
+  colliders["shelf-box-3-8-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.08, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-3-8-art"] ??= [];
+  destructionGroups["shelf-box-3-8-art"].push(node_shelf_box_3_8_art_583);
+
+  const endpoint_shelf_box_4_1_584 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_1_584 = new THREE.Group();
+  node_shelf_box_4_1_584.name = "Set box 4.1__pivot";
+  node_shelf_box_4_1_584.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_1_584) {
+    node_shelf_box_4_1_584.position.copy(endpoint_shelf_box_4_1_584.start);
+    node_shelf_box_4_1_584.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_1_584.position.set(-3.1, 0.98, 2.4812);
+    node_shelf_box_4_1_584.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_1_584.userData.sculptComponent = {"id": "shelf-box-4-1", "name": "Set box 4.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 2.4812], "localEnd": [-3.1, 1.07, 2.4812], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_1_584.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_1_584);
+  nodes["shelf-box-4-1"] = node_shelf_box_4_1_584;
+  const mesh_shelf_box_4_1_584Geometry = endpoint_shelf_box_4_1_584
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_1_584.endRadius, endpoint_shelf_box_4_1_584.baseRadius, endpoint_shelf_box_4_1_584.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_1_584) {
+    mesh_shelf_box_4_1_584Geometry.scale(0.2, 0.18, 0.2225);
+  }
+  const mesh_shelf_box_4_1_584 = new THREE.Mesh(
+    mesh_shelf_box_4_1_584Geometry,
+    materialMap["box-charcoal"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_1_584.name = "Set box 4.1";
+  if (endpoint_shelf_box_4_1_584) {
+    mesh_shelf_box_4_1_584.position.copy(endpoint_shelf_box_4_1_584.midpoint);
+    mesh_shelf_box_4_1_584.quaternion.copy(endpoint_shelf_box_4_1_584.quaternion);
+  }
+  mesh_shelf_box_4_1_584.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_1_584.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_1_584.userData.sculptComponent = {"id": "shelf-box-4-1", "name": "Set box 4.1", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 2.4812], "localEnd": [-3.1, 1.07, 2.4812], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_1_584.add(mesh_shelf_box_4_1_584);
+  meshes["shelf-box-4-1"] = mesh_shelf_box_4_1_584;
+  colliders["shelf-box-4-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-1"] ??= [];
+  destructionGroups["shelf-box-4-1"].push(node_shelf_box_4_1_584);
+
+  const endpoint_shelf_box_4_1_art_585 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_1_art_585 = new THREE.Group();
+  node_shelf_box_4_1_art_585.name = "Box art 4.1__pivot";
+  node_shelf_box_4_1_art_585.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_1_art_585) {
+    node_shelf_box_4_1_art_585.position.copy(endpoint_shelf_box_4_1_art_585.start);
+    node_shelf_box_4_1_art_585.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_1_art_585.position.set(-2.995, 0.989, 2.4812);
+    node_shelf_box_4_1_art_585.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_1_art_585.userData.sculptComponent = {"id": "shelf-box-4-1-art", "name": "Box art 4.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 2.4812], "localEnd": [-2.995, 1.025, 2.4812], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_1_art_585.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_1_art_585);
+  nodes["shelf-box-4-1-art"] = node_shelf_box_4_1_art_585;
+  const mesh_shelf_box_4_1_art_585Geometry = endpoint_shelf_box_4_1_art_585
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_1_art_585.endRadius, endpoint_shelf_box_4_1_art_585.baseRadius, endpoint_shelf_box_4_1_art_585.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_1_art_585) {
+    mesh_shelf_box_4_1_art_585Geometry.scale(0.01, 0.072, 0.1625);
+  }
+  const mesh_shelf_box_4_1_art_585 = new THREE.Mesh(
+    mesh_shelf_box_4_1_art_585Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_1_art_585.name = "Box art 4.1";
+  if (endpoint_shelf_box_4_1_art_585) {
+    mesh_shelf_box_4_1_art_585.position.copy(endpoint_shelf_box_4_1_art_585.midpoint);
+    mesh_shelf_box_4_1_art_585.quaternion.copy(endpoint_shelf_box_4_1_art_585.quaternion);
+  }
+  mesh_shelf_box_4_1_art_585.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_1_art_585.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_1_art_585.userData.sculptComponent = {"id": "shelf-box-4-1-art", "name": "Box art 4.1", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 2.4812], "localEnd": [-2.995, 1.025, 2.4812], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 2.4812], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_1_art_585.add(mesh_shelf_box_4_1_art_585);
+  meshes["shelf-box-4-1-art"] = mesh_shelf_box_4_1_art_585;
+  colliders["shelf-box-4-1-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-1-art"] ??= [];
+  destructionGroups["shelf-box-4-1-art"].push(node_shelf_box_4_1_art_585);
+
+  const endpoint_shelf_empty_4_2_586 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_4_2_586 = new THREE.Group();
+  node_shelf_empty_4_2_586.name = "Empty slot 4.2__pivot";
+  node_shelf_empty_4_2_586.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_4_2_586) {
+    node_shelf_empty_4_2_586.position.copy(endpoint_shelf_empty_4_2_586.start);
+    node_shelf_empty_4_2_586.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_4_2_586.position.set(-3.315, 0.985, 2.7437);
+    node_shelf_empty_4_2_586.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_4_2_586.userData.sculptComponent = {"id": "shelf-empty-4-2", "name": "Empty slot 4.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 2.7437], "localEnd": [-3.315, 1.05, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_2_586.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_4_2_586);
+  nodes["shelf-empty-4-2"] = node_shelf_empty_4_2_586;
+  const mesh_shelf_empty_4_2_586Geometry = endpoint_shelf_empty_4_2_586
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_4_2_586.endRadius, endpoint_shelf_empty_4_2_586.baseRadius, endpoint_shelf_empty_4_2_586.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_4_2_586) {
+    mesh_shelf_empty_4_2_586Geometry.scale(0.01, 0.13, 0.2225);
+  }
+  const mesh_shelf_empty_4_2_586 = new THREE.Mesh(
+    mesh_shelf_empty_4_2_586Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_4_2_586.name = "Empty slot 4.2";
+  if (endpoint_shelf_empty_4_2_586) {
+    mesh_shelf_empty_4_2_586.position.copy(endpoint_shelf_empty_4_2_586.midpoint);
+    mesh_shelf_empty_4_2_586.quaternion.copy(endpoint_shelf_empty_4_2_586.quaternion);
+  }
+  mesh_shelf_empty_4_2_586.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_4_2_586.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_4_2_586.userData.sculptComponent = {"id": "shelf-empty-4-2", "name": "Empty slot 4.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 2.7437], "localEnd": [-3.315, 1.05, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_2_586.add(mesh_shelf_empty_4_2_586);
+  meshes["shelf-empty-4-2"] = mesh_shelf_empty_4_2_586;
+  colliders["shelf-empty-4-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-4-2"] ??= [];
+  destructionGroups["shelf-empty-4-2"].push(node_shelf_empty_4_2_586);
+
+  const endpoint_shelf_tag_4_2_587 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_4_2_587 = new THREE.Group();
+  node_shelf_tag_4_2_587.name = "Empty slot tag 4.2__pivot";
+  node_shelf_tag_4_2_587.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_4_2_587) {
+    node_shelf_tag_4_2_587.position.copy(endpoint_shelf_tag_4_2_587.start);
+    node_shelf_tag_4_2_587.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_4_2_587.position.set(-2.964, 0.8625, 2.7437);
+    node_shelf_tag_4_2_587.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_4_2_587.userData.sculptComponent = {"id": "shelf-tag-4-2", "name": "Empty slot tag 4.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 2.7437], "localEnd": [-2.964, 0.885, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_2_587.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_4_2_587);
+  nodes["shelf-tag-4-2"] = node_shelf_tag_4_2_587;
+  const mesh_shelf_tag_4_2_587Geometry = endpoint_shelf_tag_4_2_587
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_4_2_587.endRadius, endpoint_shelf_tag_4_2_587.baseRadius, endpoint_shelf_tag_4_2_587.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_4_2_587) {
+    mesh_shelf_tag_4_2_587Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_4_2_587 = new THREE.Mesh(
+    mesh_shelf_tag_4_2_587Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_4_2_587.name = "Empty slot tag 4.2";
+  if (endpoint_shelf_tag_4_2_587) {
+    mesh_shelf_tag_4_2_587.position.copy(endpoint_shelf_tag_4_2_587.midpoint);
+    mesh_shelf_tag_4_2_587.quaternion.copy(endpoint_shelf_tag_4_2_587.quaternion);
+  }
+  mesh_shelf_tag_4_2_587.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_4_2_587.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_4_2_587.userData.sculptComponent = {"id": "shelf-tag-4-2", "name": "Empty slot tag 4.2", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 2.7437], "localEnd": [-2.964, 0.885, 2.7437], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 2.7437], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_2_587.add(mesh_shelf_tag_4_2_587);
+  meshes["shelf-tag-4-2"] = mesh_shelf_tag_4_2_587;
+  colliders["shelf-tag-4-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-4-2"] ??= [];
+  destructionGroups["shelf-tag-4-2"].push(node_shelf_tag_4_2_587);
+
+  const endpoint_shelf_box_4_3_588 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_3_588 = new THREE.Group();
+  node_shelf_box_4_3_588.name = "Set box 4.3__pivot";
+  node_shelf_box_4_3_588.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_3_588) {
+    node_shelf_box_4_3_588.position.copy(endpoint_shelf_box_4_3_588.start);
+    node_shelf_box_4_3_588.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_3_588.position.set(-3.1, 0.98, 3.0062);
+    node_shelf_box_4_3_588.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_3_588.userData.sculptComponent = {"id": "shelf-box-4-3", "name": "Set box 4.3", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 3.0062], "localEnd": [-3.1, 1.07, 3.0062], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_3_588.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_3_588);
+  nodes["shelf-box-4-3"] = node_shelf_box_4_3_588;
+  const mesh_shelf_box_4_3_588Geometry = endpoint_shelf_box_4_3_588
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_3_588.endRadius, endpoint_shelf_box_4_3_588.baseRadius, endpoint_shelf_box_4_3_588.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_3_588) {
+    mesh_shelf_box_4_3_588Geometry.scale(0.2, 0.18, 0.2225);
+  }
+  const mesh_shelf_box_4_3_588 = new THREE.Mesh(
+    mesh_shelf_box_4_3_588Geometry,
+    materialMap["box-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_3_588.name = "Set box 4.3";
+  if (endpoint_shelf_box_4_3_588) {
+    mesh_shelf_box_4_3_588.position.copy(endpoint_shelf_box_4_3_588.midpoint);
+    mesh_shelf_box_4_3_588.quaternion.copy(endpoint_shelf_box_4_3_588.quaternion);
+  }
+  mesh_shelf_box_4_3_588.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_3_588.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_3_588.userData.sculptComponent = {"id": "shelf-box-4-3", "name": "Set box 4.3", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 3.0062], "localEnd": [-3.1, 1.07, 3.0062], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_3_588.add(mesh_shelf_box_4_3_588);
+  meshes["shelf-box-4-3"] = mesh_shelf_box_4_3_588;
+  colliders["shelf-box-4-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-3"] ??= [];
+  destructionGroups["shelf-box-4-3"].push(node_shelf_box_4_3_588);
+
+  const endpoint_shelf_box_4_3_art_589 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_3_art_589 = new THREE.Group();
+  node_shelf_box_4_3_art_589.name = "Box art 4.3__pivot";
+  node_shelf_box_4_3_art_589.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_3_art_589) {
+    node_shelf_box_4_3_art_589.position.copy(endpoint_shelf_box_4_3_art_589.start);
+    node_shelf_box_4_3_art_589.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_3_art_589.position.set(-2.995, 0.989, 3.0062);
+    node_shelf_box_4_3_art_589.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_3_art_589.userData.sculptComponent = {"id": "shelf-box-4-3-art", "name": "Box art 4.3", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 3.0062], "localEnd": [-2.995, 1.025, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_3_art_589.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_3_art_589);
+  nodes["shelf-box-4-3-art"] = node_shelf_box_4_3_art_589;
+  const mesh_shelf_box_4_3_art_589Geometry = endpoint_shelf_box_4_3_art_589
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_3_art_589.endRadius, endpoint_shelf_box_4_3_art_589.baseRadius, endpoint_shelf_box_4_3_art_589.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_3_art_589) {
+    mesh_shelf_box_4_3_art_589Geometry.scale(0.01, 0.072, 0.1625);
+  }
+  const mesh_shelf_box_4_3_art_589 = new THREE.Mesh(
+    mesh_shelf_box_4_3_art_589Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_3_art_589.name = "Box art 4.3";
+  if (endpoint_shelf_box_4_3_art_589) {
+    mesh_shelf_box_4_3_art_589.position.copy(endpoint_shelf_box_4_3_art_589.midpoint);
+    mesh_shelf_box_4_3_art_589.quaternion.copy(endpoint_shelf_box_4_3_art_589.quaternion);
+  }
+  mesh_shelf_box_4_3_art_589.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_3_art_589.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_3_art_589.userData.sculptComponent = {"id": "shelf-box-4-3-art", "name": "Box art 4.3", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 3.0062], "localEnd": [-2.995, 1.025, 3.0062], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 3.0062], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_3_art_589.add(mesh_shelf_box_4_3_art_589);
+  meshes["shelf-box-4-3-art"] = mesh_shelf_box_4_3_art_589;
+  colliders["shelf-box-4-3-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-3-art"] ??= [];
+  destructionGroups["shelf-box-4-3-art"].push(node_shelf_box_4_3_art_589);
+
+  const endpoint_shelf_box_4_4_590 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_4_590 = new THREE.Group();
+  node_shelf_box_4_4_590.name = "Set box 4.4__pivot";
+  node_shelf_box_4_4_590.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_4_590) {
+    node_shelf_box_4_4_590.position.copy(endpoint_shelf_box_4_4_590.start);
+    node_shelf_box_4_4_590.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_4_590.position.set(-3.1, 0.98, 3.2687);
+    node_shelf_box_4_4_590.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_4_590.userData.sculptComponent = {"id": "shelf-box-4-4", "name": "Set box 4.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 3.2687], "localEnd": [-3.1, 1.07, 3.2687], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_4_590.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_4_590);
+  nodes["shelf-box-4-4"] = node_shelf_box_4_4_590;
+  const mesh_shelf_box_4_4_590Geometry = endpoint_shelf_box_4_4_590
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_4_590.endRadius, endpoint_shelf_box_4_4_590.baseRadius, endpoint_shelf_box_4_4_590.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_4_590) {
+    mesh_shelf_box_4_4_590Geometry.scale(0.2, 0.18, 0.2225);
+  }
+  const mesh_shelf_box_4_4_590 = new THREE.Mesh(
+    mesh_shelf_box_4_4_590Geometry,
+    materialMap["box-navy"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_4_590.name = "Set box 4.4";
+  if (endpoint_shelf_box_4_4_590) {
+    mesh_shelf_box_4_4_590.position.copy(endpoint_shelf_box_4_4_590.midpoint);
+    mesh_shelf_box_4_4_590.quaternion.copy(endpoint_shelf_box_4_4_590.quaternion);
+  }
+  mesh_shelf_box_4_4_590.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_4_590.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_4_590.userData.sculptComponent = {"id": "shelf-box-4-4", "name": "Set box 4.4", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 3.2687], "localEnd": [-3.1, 1.07, 3.2687], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-navy"}}, "material": "box-navy", "materialLayers": ["box-navy"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 44, 74, 1.0)", "secondaryAlbedo": "rgba(23, 37, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_4_590.add(mesh_shelf_box_4_4_590);
+  meshes["shelf-box-4-4"] = mesh_shelf_box_4_4_590;
+  colliders["shelf-box-4-4"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-4"] ??= [];
+  destructionGroups["shelf-box-4-4"].push(node_shelf_box_4_4_590);
+
+  const endpoint_shelf_box_4_4_art_591 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_4_art_591 = new THREE.Group();
+  node_shelf_box_4_4_art_591.name = "Box art 4.4__pivot";
+  node_shelf_box_4_4_art_591.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_4_art_591) {
+    node_shelf_box_4_4_art_591.position.copy(endpoint_shelf_box_4_4_art_591.start);
+    node_shelf_box_4_4_art_591.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_4_art_591.position.set(-2.995, 0.989, 3.2687);
+    node_shelf_box_4_4_art_591.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_4_art_591.userData.sculptComponent = {"id": "shelf-box-4-4-art", "name": "Box art 4.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 3.2687], "localEnd": [-2.995, 1.025, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_4_art_591.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_4_art_591);
+  nodes["shelf-box-4-4-art"] = node_shelf_box_4_4_art_591;
+  const mesh_shelf_box_4_4_art_591Geometry = endpoint_shelf_box_4_4_art_591
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_4_art_591.endRadius, endpoint_shelf_box_4_4_art_591.baseRadius, endpoint_shelf_box_4_4_art_591.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_4_art_591) {
+    mesh_shelf_box_4_4_art_591Geometry.scale(0.01, 0.072, 0.1625);
+  }
+  const mesh_shelf_box_4_4_art_591 = new THREE.Mesh(
+    mesh_shelf_box_4_4_art_591Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_4_art_591.name = "Box art 4.4";
+  if (endpoint_shelf_box_4_4_art_591) {
+    mesh_shelf_box_4_4_art_591.position.copy(endpoint_shelf_box_4_4_art_591.midpoint);
+    mesh_shelf_box_4_4_art_591.quaternion.copy(endpoint_shelf_box_4_4_art_591.quaternion);
+  }
+  mesh_shelf_box_4_4_art_591.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_4_art_591.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_4_art_591.userData.sculptComponent = {"id": "shelf-box-4-4-art", "name": "Box art 4.4", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 3.2687], "localEnd": [-2.995, 1.025, 3.2687], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 3.2687], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-4-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_4_art_591.add(mesh_shelf_box_4_4_art_591);
+  meshes["shelf-box-4-4-art"] = mesh_shelf_box_4_4_art_591;
+  colliders["shelf-box-4-4-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-4-art"] ??= [];
+  destructionGroups["shelf-box-4-4-art"].push(node_shelf_box_4_4_art_591);
+
+  const endpoint_shelf_empty_4_5_592 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_4_5_592 = new THREE.Group();
+  node_shelf_empty_4_5_592.name = "Empty slot 4.5__pivot";
+  node_shelf_empty_4_5_592.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_4_5_592) {
+    node_shelf_empty_4_5_592.position.copy(endpoint_shelf_empty_4_5_592.start);
+    node_shelf_empty_4_5_592.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_4_5_592.position.set(-3.315, 0.985, 3.5312);
+    node_shelf_empty_4_5_592.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_4_5_592.userData.sculptComponent = {"id": "shelf-empty-4-5", "name": "Empty slot 4.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 3.5312], "localEnd": [-3.315, 1.05, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_5_592.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_4_5_592);
+  nodes["shelf-empty-4-5"] = node_shelf_empty_4_5_592;
+  const mesh_shelf_empty_4_5_592Geometry = endpoint_shelf_empty_4_5_592
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_4_5_592.endRadius, endpoint_shelf_empty_4_5_592.baseRadius, endpoint_shelf_empty_4_5_592.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_4_5_592) {
+    mesh_shelf_empty_4_5_592Geometry.scale(0.01, 0.13, 0.2225);
+  }
+  const mesh_shelf_empty_4_5_592 = new THREE.Mesh(
+    mesh_shelf_empty_4_5_592Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_4_5_592.name = "Empty slot 4.5";
+  if (endpoint_shelf_empty_4_5_592) {
+    mesh_shelf_empty_4_5_592.position.copy(endpoint_shelf_empty_4_5_592.midpoint);
+    mesh_shelf_empty_4_5_592.quaternion.copy(endpoint_shelf_empty_4_5_592.quaternion);
+  }
+  mesh_shelf_empty_4_5_592.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_4_5_592.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_4_5_592.userData.sculptComponent = {"id": "shelf-empty-4-5", "name": "Empty slot 4.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 3.5312], "localEnd": [-3.315, 1.05, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_5_592.add(mesh_shelf_empty_4_5_592);
+  meshes["shelf-empty-4-5"] = mesh_shelf_empty_4_5_592;
+  colliders["shelf-empty-4-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-4-5"] ??= [];
+  destructionGroups["shelf-empty-4-5"].push(node_shelf_empty_4_5_592);
+
+  const endpoint_shelf_tag_4_5_593 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_4_5_593 = new THREE.Group();
+  node_shelf_tag_4_5_593.name = "Empty slot tag 4.5__pivot";
+  node_shelf_tag_4_5_593.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_4_5_593) {
+    node_shelf_tag_4_5_593.position.copy(endpoint_shelf_tag_4_5_593.start);
+    node_shelf_tag_4_5_593.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_4_5_593.position.set(-2.964, 0.8625, 3.5312);
+    node_shelf_tag_4_5_593.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_4_5_593.userData.sculptComponent = {"id": "shelf-tag-4-5", "name": "Empty slot tag 4.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 3.5312], "localEnd": [-2.964, 0.885, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_5_593.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_4_5_593);
+  nodes["shelf-tag-4-5"] = node_shelf_tag_4_5_593;
+  const mesh_shelf_tag_4_5_593Geometry = endpoint_shelf_tag_4_5_593
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_4_5_593.endRadius, endpoint_shelf_tag_4_5_593.baseRadius, endpoint_shelf_tag_4_5_593.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_4_5_593) {
+    mesh_shelf_tag_4_5_593Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_4_5_593 = new THREE.Mesh(
+    mesh_shelf_tag_4_5_593Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_4_5_593.name = "Empty slot tag 4.5";
+  if (endpoint_shelf_tag_4_5_593) {
+    mesh_shelf_tag_4_5_593.position.copy(endpoint_shelf_tag_4_5_593.midpoint);
+    mesh_shelf_tag_4_5_593.quaternion.copy(endpoint_shelf_tag_4_5_593.quaternion);
+  }
+  mesh_shelf_tag_4_5_593.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_4_5_593.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_4_5_593.userData.sculptComponent = {"id": "shelf-tag-4-5", "name": "Empty slot tag 4.5", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 3.5312], "localEnd": [-2.964, 0.885, 3.5312], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 3.5312], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-5", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_5_593.add(mesh_shelf_tag_4_5_593);
+  meshes["shelf-tag-4-5"] = mesh_shelf_tag_4_5_593;
+  colliders["shelf-tag-4-5"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-4-5"] ??= [];
+  destructionGroups["shelf-tag-4-5"].push(node_shelf_tag_4_5_593);
+
+  const endpoint_shelf_empty_4_6_594 = makeAttachmentEndpoint(null);
+  const node_shelf_empty_4_6_594 = new THREE.Group();
+  node_shelf_empty_4_6_594.name = "Empty slot 4.6__pivot";
+  node_shelf_empty_4_6_594.scale.set(1, 1, 1);
+  if (endpoint_shelf_empty_4_6_594) {
+    node_shelf_empty_4_6_594.position.copy(endpoint_shelf_empty_4_6_594.start);
+    node_shelf_empty_4_6_594.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_empty_4_6_594.position.set(-3.315, 0.985, 3.7937);
+    node_shelf_empty_4_6_594.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_empty_4_6_594.userData.sculptComponent = {"id": "shelf-empty-4-6", "name": "Empty slot 4.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 3.7937], "localEnd": [-3.315, 1.05, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_6_594.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}};
+  (nodes["root"] ?? root).add(node_shelf_empty_4_6_594);
+  nodes["shelf-empty-4-6"] = node_shelf_empty_4_6_594;
+  const mesh_shelf_empty_4_6_594Geometry = endpoint_shelf_empty_4_6_594
+    ? new THREE.CylinderGeometry(endpoint_shelf_empty_4_6_594.endRadius, endpoint_shelf_empty_4_6_594.baseRadius, endpoint_shelf_empty_4_6_594.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_empty_4_6_594) {
+    mesh_shelf_empty_4_6_594Geometry.scale(0.01, 0.13, 0.2225);
+  }
+  const mesh_shelf_empty_4_6_594 = new THREE.Mesh(
+    mesh_shelf_empty_4_6_594Geometry,
+    materialMap["slot-marker"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_empty_4_6_594.name = "Empty slot 4.6";
+  if (endpoint_shelf_empty_4_6_594) {
+    mesh_shelf_empty_4_6_594.position.copy(endpoint_shelf_empty_4_6_594.midpoint);
+    mesh_shelf_empty_4_6_594.quaternion.copy(endpoint_shelf_empty_4_6_594.quaternion);
+  }
+  mesh_shelf_empty_4_6_594.castShadow = options.castShadow ?? true;
+  mesh_shelf_empty_4_6_594.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_empty_4_6_594.userData.sculptComponent = {"id": "shelf-empty-4-6", "name": "Empty slot 4.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Marked empty slot: a pale panel on the back.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.315, 0.92, 3.7937], "localEnd": [-3.315, 1.05, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.13, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.315, 0.985, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.13, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-empty-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "slot-marker"}}, "material": "slot-marker", "materialLayers": ["slot-marker"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 231, 163, 1.0)", "secondaryAlbedo": "rgba(245, 221, 153, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_empty_4_6_594.add(mesh_shelf_empty_4_6_594);
+  meshes["shelf-empty-4-6"] = mesh_shelf_empty_4_6_594;
+  colliders["shelf-empty-4-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.13, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-empty-4-6"] ??= [];
+  destructionGroups["shelf-empty-4-6"].push(node_shelf_empty_4_6_594);
+
+  const endpoint_shelf_tag_4_6_595 = makeAttachmentEndpoint(null);
+  const node_shelf_tag_4_6_595 = new THREE.Group();
+  node_shelf_tag_4_6_595.name = "Empty slot tag 4.6__pivot";
+  node_shelf_tag_4_6_595.scale.set(1, 1, 1);
+  if (endpoint_shelf_tag_4_6_595) {
+    node_shelf_tag_4_6_595.position.copy(endpoint_shelf_tag_4_6_595.start);
+    node_shelf_tag_4_6_595.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_tag_4_6_595.position.set(-2.964, 0.8625, 3.7937);
+    node_shelf_tag_4_6_595.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_tag_4_6_595.userData.sculptComponent = {"id": "shelf-tag-4-6", "name": "Empty slot tag 4.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 3.7937], "localEnd": [-2.964, 0.885, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_6_595.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}};
+  (nodes["root"] ?? root).add(node_shelf_tag_4_6_595);
+  nodes["shelf-tag-4-6"] = node_shelf_tag_4_6_595;
+  const mesh_shelf_tag_4_6_595Geometry = endpoint_shelf_tag_4_6_595
+    ? new THREE.CylinderGeometry(endpoint_shelf_tag_4_6_595.endRadius, endpoint_shelf_tag_4_6_595.baseRadius, endpoint_shelf_tag_4_6_595.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_tag_4_6_595) {
+    mesh_shelf_tag_4_6_595Geometry.scale(0.008, 0.045, 0.1425);
+  }
+  const mesh_shelf_tag_4_6_595 = new THREE.Mesh(
+    mesh_shelf_tag_4_6_595Geometry,
+    materialMap["tag-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_tag_4_6_595.name = "Empty slot tag 4.6";
+  if (endpoint_shelf_tag_4_6_595) {
+    mesh_shelf_tag_4_6_595.position.copy(endpoint_shelf_tag_4_6_595.midpoint);
+    mesh_shelf_tag_4_6_595.quaternion.copy(endpoint_shelf_tag_4_6_595.quaternion);
+  }
+  mesh_shelf_tag_4_6_595.castShadow = options.castShadow ?? true;
+  mesh_shelf_tag_4_6_595.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_tag_4_6_595.userData.sculptComponent = {"id": "shelf-tag-4-6", "name": "Empty slot tag 4.6", "level": "micro", "role": "trim", "importance": 0.35, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface trim: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.964, 0.84, 3.7937], "localEnd": [-2.964, 0.885, 3.7937], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.008, "height": 0.045, "depth": 0.1425, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.964, 0.8625, 3.7937], "rotation": [0.0, 0.0, 0.0], "scale": [0.008, 0.045, 0.1425]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-tag-4-6", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "tag-orange"}}, "material": "tag-orange", "materialLayers": ["tag-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(240, 124, 30, 1.0)", "secondaryAlbedo": "rgba(230, 114, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_tag_4_6_595.add(mesh_shelf_tag_4_6_595);
+  meshes["shelf-tag-4-6"] = mesh_shelf_tag_4_6_595;
+  colliders["shelf-tag-4-6"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.008, 0.045, 0.1425], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-tag-4-6"] ??= [];
+  destructionGroups["shelf-tag-4-6"].push(node_shelf_tag_4_6_595);
+
+  const endpoint_shelf_box_4_7_596 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_7_596 = new THREE.Group();
+  node_shelf_box_4_7_596.name = "Set box 4.7__pivot";
+  node_shelf_box_4_7_596.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_7_596) {
+    node_shelf_box_4_7_596.position.copy(endpoint_shelf_box_4_7_596.start);
+    node_shelf_box_4_7_596.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_7_596.position.set(-3.1, 0.98, 4.0563);
+    node_shelf_box_4_7_596.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_7_596.userData.sculptComponent = {"id": "shelf-box-4-7", "name": "Set box 4.7", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 4.0563], "localEnd": [-3.1, 1.07, 4.0563], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_7_596.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_7_596);
+  nodes["shelf-box-4-7"] = node_shelf_box_4_7_596;
+  const mesh_shelf_box_4_7_596Geometry = endpoint_shelf_box_4_7_596
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_7_596.endRadius, endpoint_shelf_box_4_7_596.baseRadius, endpoint_shelf_box_4_7_596.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_7_596) {
+    mesh_shelf_box_4_7_596Geometry.scale(0.2, 0.18, 0.2225);
+  }
+  const mesh_shelf_box_4_7_596 = new THREE.Mesh(
+    mesh_shelf_box_4_7_596Geometry,
+    materialMap["box-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_7_596.name = "Set box 4.7";
+  if (endpoint_shelf_box_4_7_596) {
+    mesh_shelf_box_4_7_596.position.copy(endpoint_shelf_box_4_7_596.midpoint);
+    mesh_shelf_box_4_7_596.quaternion.copy(endpoint_shelf_box_4_7_596.quaternion);
+  }
+  mesh_shelf_box_4_7_596.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_7_596.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_7_596.userData.sculptComponent = {"id": "shelf-box-4-7", "name": "Set box 4.7", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 4.0563], "localEnd": [-3.1, 1.07, 4.0563], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-dark"}}, "material": "box-dark", "materialLayers": ["box-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(22, 24, 27, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_7_596.add(mesh_shelf_box_4_7_596);
+  meshes["shelf-box-4-7"] = mesh_shelf_box_4_7_596;
+  colliders["shelf-box-4-7"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-7"] ??= [];
+  destructionGroups["shelf-box-4-7"].push(node_shelf_box_4_7_596);
+
+  const endpoint_shelf_box_4_7_art_597 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_7_art_597 = new THREE.Group();
+  node_shelf_box_4_7_art_597.name = "Box art 4.7__pivot";
+  node_shelf_box_4_7_art_597.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_7_art_597) {
+    node_shelf_box_4_7_art_597.position.copy(endpoint_shelf_box_4_7_art_597.start);
+    node_shelf_box_4_7_art_597.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_7_art_597.position.set(-2.995, 0.989, 4.0563);
+    node_shelf_box_4_7_art_597.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_7_art_597.userData.sculptComponent = {"id": "shelf-box-4-7-art", "name": "Box art 4.7", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 4.0563], "localEnd": [-2.995, 1.025, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_7_art_597.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_7_art_597);
+  nodes["shelf-box-4-7-art"] = node_shelf_box_4_7_art_597;
+  const mesh_shelf_box_4_7_art_597Geometry = endpoint_shelf_box_4_7_art_597
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_7_art_597.endRadius, endpoint_shelf_box_4_7_art_597.baseRadius, endpoint_shelf_box_4_7_art_597.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_7_art_597) {
+    mesh_shelf_box_4_7_art_597Geometry.scale(0.01, 0.072, 0.1625);
+  }
+  const mesh_shelf_box_4_7_art_597 = new THREE.Mesh(
+    mesh_shelf_box_4_7_art_597Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_7_art_597.name = "Box art 4.7";
+  if (endpoint_shelf_box_4_7_art_597) {
+    mesh_shelf_box_4_7_art_597.position.copy(endpoint_shelf_box_4_7_art_597.midpoint);
+    mesh_shelf_box_4_7_art_597.quaternion.copy(endpoint_shelf_box_4_7_art_597.quaternion);
+  }
+  mesh_shelf_box_4_7_art_597.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_7_art_597.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_7_art_597.userData.sculptComponent = {"id": "shelf-box-4-7-art", "name": "Box art 4.7", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 4.0563], "localEnd": [-2.995, 1.025, 4.0563], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 4.0563], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-7-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_7_art_597.add(mesh_shelf_box_4_7_art_597);
+  meshes["shelf-box-4-7-art"] = mesh_shelf_box_4_7_art_597;
+  colliders["shelf-box-4-7-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-7-art"] ??= [];
+  destructionGroups["shelf-box-4-7-art"].push(node_shelf_box_4_7_art_597);
+
+  const endpoint_shelf_box_4_8_598 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_8_598 = new THREE.Group();
+  node_shelf_box_4_8_598.name = "Set box 4.8__pivot";
+  node_shelf_box_4_8_598.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_8_598) {
+    node_shelf_box_4_8_598.position.copy(endpoint_shelf_box_4_8_598.start);
+    node_shelf_box_4_8_598.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_8_598.position.set(-3.1, 0.98, 4.3187);
+    node_shelf_box_4_8_598.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_8_598.userData.sculptComponent = {"id": "shelf-box-4-8", "name": "Set box 4.8", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 4.3187], "localEnd": [-3.1, 1.07, 4.3187], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_8_598.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_8_598);
+  nodes["shelf-box-4-8"] = node_shelf_box_4_8_598;
+  const mesh_shelf_box_4_8_598Geometry = endpoint_shelf_box_4_8_598
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_8_598.endRadius, endpoint_shelf_box_4_8_598.baseRadius, endpoint_shelf_box_4_8_598.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_8_598) {
+    mesh_shelf_box_4_8_598Geometry.scale(0.2, 0.18, 0.2225);
+  }
+  const mesh_shelf_box_4_8_598 = new THREE.Mesh(
+    mesh_shelf_box_4_8_598Geometry,
+    materialMap["box-charcoal"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_8_598.name = "Set box 4.8";
+  if (endpoint_shelf_box_4_8_598) {
+    mesh_shelf_box_4_8_598.position.copy(endpoint_shelf_box_4_8_598.midpoint);
+    mesh_shelf_box_4_8_598.quaternion.copy(endpoint_shelf_box_4_8_598.quaternion);
+  }
+  mesh_shelf_box_4_8_598.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_8_598.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_8_598.userData.sculptComponent = {"id": "shelf-box-4-8", "name": "Set box 4.8", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Boxed set on the shelf: a box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-3.1, 0.89, 4.3187], "localEnd": [-3.1, 1.07, 4.3187], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.18, "depth": 0.2225, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-3.1, 0.98, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.18, 0.2225]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-charcoal"}}, "material": "box-charcoal", "materialLayers": ["box-charcoal"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(56, 59, 64, 1.0)", "secondaryAlbedo": "rgba(47, 50, 55, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_8_598.add(mesh_shelf_box_4_8_598);
+  meshes["shelf-box-4-8"] = mesh_shelf_box_4_8_598;
+  colliders["shelf-box-4-8"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.18, 0.2225], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-8"] ??= [];
+  destructionGroups["shelf-box-4-8"].push(node_shelf_box_4_8_598);
+
+  const endpoint_shelf_box_4_8_art_599 = makeAttachmentEndpoint(null);
+  const node_shelf_box_4_8_art_599 = new THREE.Group();
+  node_shelf_box_4_8_art_599.name = "Box art 4.8__pivot";
+  node_shelf_box_4_8_art_599.scale.set(1, 1, 1);
+  if (endpoint_shelf_box_4_8_art_599) {
+    node_shelf_box_4_8_art_599.position.copy(endpoint_shelf_box_4_8_art_599.start);
+    node_shelf_box_4_8_art_599.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_shelf_box_4_8_art_599.position.set(-2.995, 0.989, 4.3187);
+    node_shelf_box_4_8_art_599.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_shelf_box_4_8_art_599.userData.sculptComponent = {"id": "shelf-box-4-8-art", "name": "Box art 4.8", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 4.3187], "localEnd": [-2.995, 1.025, 4.3187], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_8_art_599.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}};
+  (nodes["root"] ?? root).add(node_shelf_box_4_8_art_599);
+  nodes["shelf-box-4-8-art"] = node_shelf_box_4_8_art_599;
+  const mesh_shelf_box_4_8_art_599Geometry = endpoint_shelf_box_4_8_art_599
+    ? new THREE.CylinderGeometry(endpoint_shelf_box_4_8_art_599.endRadius, endpoint_shelf_box_4_8_art_599.baseRadius, endpoint_shelf_box_4_8_art_599.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_shelf_box_4_8_art_599) {
+    mesh_shelf_box_4_8_art_599Geometry.scale(0.01, 0.072, 0.1625);
+  }
+  const mesh_shelf_box_4_8_art_599 = new THREE.Mesh(
+    mesh_shelf_box_4_8_art_599Geometry,
+    materialMap["label-gold"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_shelf_box_4_8_art_599.name = "Box art 4.8";
+  if (endpoint_shelf_box_4_8_art_599) {
+    mesh_shelf_box_4_8_art_599.position.copy(endpoint_shelf_box_4_8_art_599.midpoint);
+    mesh_shelf_box_4_8_art_599.quaternion.copy(endpoint_shelf_box_4_8_art_599.quaternion);
+  }
+  mesh_shelf_box_4_8_art_599.castShadow = options.castShadow ?? true;
+  mesh_shelf_box_4_8_art_599.receiveShadow = options.receiveShadow ?? true;
+  mesh_shelf_box_4_8_art_599.userData.sculptComponent = {"id": "shelf-box-4-8-art", "name": "Box art 4.8", "level": "micro", "role": "trim", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Box front art band: a thin box.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [-2.995, 0.953, 4.3187], "localEnd": [-2.995, 1.025, 4.3187], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.072, "depth": 0.1625, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [-2.995, 0.989, 4.3187], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.072, 0.1625]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "shelf-box-4-8-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-gold"}}, "material": "label-gold", "materialLayers": ["label-gold"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(201, 162, 74, 1.0)", "secondaryAlbedo": "rgba(191, 152, 64, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_shelf_box_4_8_art_599.add(mesh_shelf_box_4_8_art_599);
+  meshes["shelf-box-4-8-art"] = mesh_shelf_box_4_8_art_599;
+  colliders["shelf-box-4-8-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.072, 0.1625], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["shelf-box-4-8-art"] ??= [];
+  destructionGroups["shelf-box-4-8-art"].push(node_shelf_box_4_8_art_599);
   // repetition system "ground-walls" describes 37 parts that are already built individually; not instanced.
   // repetition system "upper-walls" describes 127 parts that are already built individually; not instanced.
   // repetition system "canopy-studs" describes 8 parts that are already built individually; not instanced.
-  // repetition system "hero-places" describes 5 parts that are already built individually; not instanced.
+  // repetition system "hero-places" describes 4 parts that are already built individually; not instanced.
 
   root.userData.sculptRuntime = { nodes, meshes, sockets, colliders, destructionGroups } satisfies ProceduralModelRuntime;
   root.userData.lookDevTargets = {"qualityPriority": "game-prop", "materialPass": {"albedoPaletteRequired": true, "roughnessVariationRequired": true, "normalOrBumpRequired": true, "localOverridesRequired": true, "minimumTextureResolution": 1024, "preferredTextureResolution": 2048, "independentMapChannels": ["albedo", "roughness", "height", "normal", "ambient-occlusion"], "requiredSurfaceFrequencyBands": ["macro", "meso", "micro"], "geometryReliefRequiredWhenSilhouetteAffected": true, "referencePbrExtraction": {"requiredWhenSourceImagePresent": true, "targetThreshold": 0.7, "stopOnLowConfidence": true, "script": "forge/stage1_intake/extract_pbr_evidence.py", "acceptedLimitation": "single-image extraction is reference-derived inference, not exact photogrammetry"}, "mustAvoid": ["single flat albedo per material", "uniform roughness", "albedo texture reused as roughness/height/normal/AO", "single-frequency random noise", "plastic-looking smooth bark, stone, cloth, foliage, or aged material", "local color/detail described only in prose without material masks", "claiming exact PBR recovery when confidence is below the target threshold"]}, "lightingPass": {"requiredTerms": ["key light", "fill light", "rim or environment light", "exposure", "tone mapping", "background", "contact shadow"], "mustAvoid": ["ambient-only lighting", "flat value range", "missing contact shadow", "reference lighting copied without separating material readability"]}, "screenshotReview": ["Compare albedo palette and local color zones.", "Compare roughness/normal/bump response under light.", "Compare cavity dirt, edge wear, stains, moss, scratches, or other local masks.", "Compare key/fill/rim structure, exposure, tone mapping, background, and contact shadows.", "Capture a neutral-light render to verify material readability without reference lighting.", "Capture a grazing-light close-up to expose flat normals, uniform roughness, tiling, and plastic highlights.", "Capture a reference-matched render from the same camera framing as the source."]};

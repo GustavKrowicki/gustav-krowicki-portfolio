@@ -36,7 +36,7 @@ const LEGO_HQ: BuildingInterior = {
     "###Y##LLLLT#T#A",
     "#YYYSSSLLTTTTAA",
     "######SLLTT#T##",
-    "####SSSLLTTTT##",
+    "#####SSLLTTTT##",
     "PPPPPPPPPPPPPPP",
   ],
   outside: "P",

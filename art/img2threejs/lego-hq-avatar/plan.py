@@ -66,6 +66,7 @@ HERO = {    # room code: (tile, label) where the hero object will stand; the til
     "Y": ((1, 6), "4 Systems map"),
     "A": ((14, 5), "5 AI lab table"),
 }
+BLOCKED = {(4, 9)}   # the shelf room's store shelf runs along the west wall over two tiles (hero tile + this one)
 OUTSIDE_TILES = {(x, y) for x in range(PW) for y in (10,)}
 MARGIN = 0.3   # a tile is walkable when its centre is this far from every wall
 
@@ -104,7 +105,7 @@ def walkable(x, y):
         return False
     if any(i.distance(p) < MARGIN for i in BUILDING.interiors):
         return False
-    return (x, y) not in {t for t, _l in HERO.values()}
+    return (x, y) not in {t for t, _l in HERO.values()} | BLOCKED
 
 
 def walk_map():
