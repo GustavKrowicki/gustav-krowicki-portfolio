@@ -796,6 +796,76 @@ export function createLEGOHQAvatarScaleModel(options: ProceduralModelOptions = {
     {"id": "yellow", "name": "LEGO yellow", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f2c500", "color": "#f2c500", "albedo": {"dominant": "#f2c500", "secondary": ["#e8bb00"], "samplingNotes": "2 x 4 plate over the door"}, "colorVariation": {"palette": ["#f2c500", "#e8bb00"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.45, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "2 x 4 plate over the door", "materialClass": "plastic", "emissive": "#f2c500", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
     options
   );
+  materialMap["npc-shirt-2"] = createSculptMaterial(
+    "npc-shirt-2",
+    {"id": "npc-shirt-2", "name": "NPC shirt (observer)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#e0a93a", "color": "#e0a93a", "albedo": {"dominant": "#e0a93a", "secondary": ["#d69f30"], "samplingNotes": "generic NPC"}, "colorVariation": {"palette": ["#e0a93a", "#d69f30"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "generic NPC", "materialClass": "fabric", "emissive": "#e0a93a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["npc-shirt-3"] = createSculptMaterial(
+    "npc-shirt-3",
+    {"id": "npc-shirt-3", "name": "NPC shirt (seller)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#4a5f8f", "color": "#4a5f8f", "albedo": {"dominant": "#4a5f8f", "secondary": ["#425685"], "samplingNotes": "generic NPC"}, "colorVariation": {"palette": ["#4a5f8f", "#425685"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "generic NPC", "materialClass": "fabric", "emissive": "#4a5f8f", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["npc-shirt-4"] = createSculptMaterial(
+    "npc-shirt-4",
+    {"id": "npc-shirt-4", "name": "NPC shirt (seller 2)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#b5566a", "color": "#b5566a", "albedo": {"dominant": "#b5566a", "secondary": ["#ab4c60"], "samplingNotes": "generic NPC"}, "colorVariation": {"palette": ["#b5566a", "#ab4c60"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "generic NPC", "materialClass": "fabric", "emissive": "#b5566a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["npc-hair-2"] = createSculptMaterial(
+    "npc-hair-2",
+    {"id": "npc-hair-2", "name": "NPC hair (fair)", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#a5773f", "color": "#a5773f", "albedo": {"dominant": "#a5773f", "secondary": ["#9b6d35"], "samplingNotes": "generic NPC"}, "colorVariation": {"palette": ["#a5773f", "#9b6d35"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "generic NPC", "materialClass": "unknown", "emissive": "#a5773f", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["note-yellow"] = createSculptMaterial(
+    "note-yellow",
+    {"id": "note-yellow", "name": "Sticky note yellow", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#ffe066", "color": "#ffe066", "albedo": {"dominant": "#ffe066", "secondary": ["#f5d65c"], "samplingNotes": "sticky notes"}, "colorVariation": {"palette": ["#ffe066", "#f5d65c"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "sticky notes", "materialClass": "unknown", "emissive": "#ffe066", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["note-pink"] = createSculptMaterial(
+    "note-pink",
+    {"id": "note-pink", "name": "Sticky note pink", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#ff9cc0", "color": "#ff9cc0", "albedo": {"dominant": "#ff9cc0", "secondary": ["#f592b6"], "samplingNotes": "sticky notes"}, "colorVariation": {"palette": ["#ff9cc0", "#f592b6"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "sticky notes", "materialClass": "unknown", "emissive": "#ff9cc0", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["note-blue"] = createSculptMaterial(
+    "note-blue",
+    {"id": "note-blue", "name": "Sticky note blue", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#8fd3ff", "color": "#8fd3ff", "albedo": {"dominant": "#8fd3ff", "secondary": ["#85c9f5"], "samplingNotes": "sticky notes"}, "colorVariation": {"palette": ["#8fd3ff", "#85c9f5"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "sticky notes", "materialClass": "unknown", "emissive": "#8fd3ff", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["note-green"] = createSculptMaterial(
+    "note-green",
+    {"id": "note-green", "name": "Sticky note green", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#a8e68a", "color": "#a8e68a", "albedo": {"dominant": "#a8e68a", "secondary": ["#9edc80"], "samplingNotes": "sticky notes"}, "colorVariation": {"palette": ["#a8e68a", "#9edc80"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "sticky notes", "materialClass": "unknown", "emissive": "#a8e68a", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["prop-paper"] = createSculptMaterial(
+    "prop-paper",
+    {"id": "prop-paper", "name": "Paper / whiteboard", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#fbfbf8", "color": "#fbfbf8", "albedo": {"dominant": "#fbfbf8", "secondary": ["#f1f1ee"], "samplingNotes": "whiteboard, notepad"}, "colorVariation": {"palette": ["#fbfbf8", "#f1f1ee"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.8, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "whiteboard, notepad", "materialClass": "unknown", "emissive": "#fbfbf8", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["prop-board"] = createSculptMaterial(
+    "prop-board",
+    {"id": "prop-board", "name": "Clipboard", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#9a6b3c", "color": "#9a6b3c", "albedo": {"dominant": "#9a6b3c", "secondary": ["#906132"], "samplingNotes": "clipboard"}, "colorVariation": {"palette": ["#9a6b3c", "#906132"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.8, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "clipboard", "materialClass": "wood", "emissive": "#9a6b3c", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["prop-sofa"] = createSculptMaterial(
+    "prop-sofa",
+    {"id": "prop-sofa", "name": "Bench upholstery", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#6e7a86", "color": "#6e7a86", "albedo": {"dominant": "#6e7a86", "secondary": ["#64707c"], "samplingNotes": "waiting bench"}, "colorVariation": {"palette": ["#6e7a86", "#64707c"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.9, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "waiting bench", "materialClass": "fabric", "emissive": "#6e7a86", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["prop-wood"] = createSculptMaterial(
+    "prop-wood",
+    {"id": "prop-wood", "name": "Table wood", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#c89a64", "color": "#c89a64", "albedo": {"dominant": "#c89a64", "secondary": ["#be905a"], "samplingNotes": "table top"}, "colorVariation": {"palette": ["#c89a64", "#be905a"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.7, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "table top", "materialClass": "wood", "emissive": "#c89a64", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["prop-mug"] = createSculptMaterial(
+    "prop-mug",
+    {"id": "prop-mug", "name": "Mug", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#f6f4ee", "color": "#f6f4ee", "albedo": {"dominant": "#f6f4ee", "secondary": ["#ece9e2"], "samplingNotes": "coffee mugs"}, "colorVariation": {"palette": ["#f6f4ee", "#ece9e2"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.0, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "coffee mugs", "materialClass": "ceramic", "emissive": "#f6f4ee", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
+  materialMap["camera-black"] = createSculptMaterial(
+    "camera-black",
+    {"id": "camera-black", "name": "Camera", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#1d1f22", "color": "#1d1f22", "albedo": {"dominant": "#1d1f22", "secondary": ["#18191c"], "samplingNotes": "test camera"}, "colorVariation": {"palette": ["#1d1f22", "#18191c"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.5, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.1, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "test camera", "materialClass": "plastic", "emissive": "#1d1f22", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
+    options
+  );
   materialMap["laptop-grey"] = createSculptMaterial(
     "laptop-grey",
     {"id": "laptop-grey", "name": "Laptop", "type": "standard", "shaderModel": "MeshStandardMaterial / PBR approximation", "baseColor": "#b8bcc2", "color": "#b8bcc2", "albedo": {"dominant": "#b8bcc2", "secondary": ["#aeb2b8"], "samplingNotes": "test laptop"}, "colorVariation": {"palette": ["#b8bcc2", "#aeb2b8"], "pattern": "mottled", "amplitude": 0.02, "heightCorrelation": 0.0}, "roughness": {"base": 0.4, "variation": 0.02, "map": "independent-procedural-field", "localResponse": "flat"}, "metalness": {"base": 0.4, "variation": 0.0}, "ambientOcclusion": {"cavityStrength": 0.25, "contactShadowBias": 0.35, "notes": "Darken creases, seams, intersections, and recessed local features."}, "wear": {"edgeWear": 0.0, "scratches": [], "chips": []}, "dirt": {"amount": 0.0, "cavityBias": 0.0, "color": "#2F2A22"}, "localOverrides": [], "shaderNotes": ["Prefer MeshPhysicalMaterial when clearcoat, sheen, transmission, or thin-surface response is observed; otherwise use MeshStandardMaterial-compatible PBR channels.", "Generate albedo, roughness, height/normal, and AO independently; never alias albedo into roughness.", "Use normal/bump/displacement only when they map to observed surface relief.", "Use displacement geometry when the observed relief changes the close-up silhouette; texture-only relief is insufficient there."], "notes": "test laptop", "materialClass": "metal", "emissive": "#b8bcc2", "emissiveIntensity": {"base": 0.25}, "textureless": {"declared": true, "evidence": ["grey box: flat neutral colours, detail comes in a later pass", "flat colour at sprite size (~62 px per wu at 2x density): no texture needed", "analysis/image-analysis.md L5"]}},
@@ -25030,6 +25100,3087 @@ export function createLEGOHQAvatarScaleModel(options: ProceduralModelOptions = {
   colliders["test-screen"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.98, 0.6, 0.01], "isTrigger": false, "notes": "box proxy"};
   destructionGroups["test-screen"] ??= [];
   destructionGroups["test-screen"].push(node_test_screen_615);
+
+  const endpoint_npc_observer_leg_w_616 = makeAttachmentEndpoint(null);
+  const node_npc_observer_leg_w_616 = new THREE.Group();
+  node_npc_observer_leg_w_616.name = "Observer leg west__pivot";
+  node_npc_observer_leg_w_616.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_leg_w_616) {
+    node_npc_observer_leg_w_616.position.copy(endpoint_npc_observer_leg_w_616.start);
+    node_npc_observer_leg_w_616.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_leg_w_616.position.set(4.89, 0.25, 0.95);
+    node_npc_observer_leg_w_616.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_leg_w_616.userData.sculptComponent = {"id": "npc-observer-leg-w", "name": "Observer leg west", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.89, 0.05, 0.95], "localEnd": [4.89, 0.45, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.4, "depth": 0.12, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.89, 0.25, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.4, 0.12]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_leg_w_616.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_observer_leg_w_616);
+  nodes["npc-observer-leg-w"] = node_npc_observer_leg_w_616;
+  const mesh_npc_observer_leg_w_616Geometry = endpoint_npc_observer_leg_w_616
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_leg_w_616.endRadius, endpoint_npc_observer_leg_w_616.baseRadius, endpoint_npc_observer_leg_w_616.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_leg_w_616) {
+    mesh_npc_observer_leg_w_616Geometry.scale(0.1, 0.4, 0.12);
+  }
+  const mesh_npc_observer_leg_w_616 = new THREE.Mesh(
+    mesh_npc_observer_leg_w_616Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_leg_w_616.name = "Observer leg west";
+  if (endpoint_npc_observer_leg_w_616) {
+    mesh_npc_observer_leg_w_616.position.copy(endpoint_npc_observer_leg_w_616.midpoint);
+    mesh_npc_observer_leg_w_616.quaternion.copy(endpoint_npc_observer_leg_w_616.quaternion);
+  }
+  mesh_npc_observer_leg_w_616.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_leg_w_616.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_leg_w_616.userData.sculptComponent = {"id": "npc-observer-leg-w", "name": "Observer leg west", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.89, 0.05, 0.95], "localEnd": [4.89, 0.45, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.4, "depth": 0.12, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.89, 0.25, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.4, 0.12]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_leg_w_616.add(mesh_npc_observer_leg_w_616);
+  meshes["npc-observer-leg-w"] = mesh_npc_observer_leg_w_616;
+  colliders["npc-observer-leg-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-leg-w"] ??= [];
+  destructionGroups["npc-observer-leg-w"].push(node_npc_observer_leg_w_616);
+
+  const endpoint_npc_observer_leg_e_617 = makeAttachmentEndpoint(null);
+  const node_npc_observer_leg_e_617 = new THREE.Group();
+  node_npc_observer_leg_e_617.name = "Observer leg east__pivot";
+  node_npc_observer_leg_e_617.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_leg_e_617) {
+    node_npc_observer_leg_e_617.position.copy(endpoint_npc_observer_leg_e_617.start);
+    node_npc_observer_leg_e_617.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_leg_e_617.position.set(5.01, 0.25, 0.95);
+    node_npc_observer_leg_e_617.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_leg_e_617.userData.sculptComponent = {"id": "npc-observer-leg-e", "name": "Observer leg east", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.01, 0.05, 0.95], "localEnd": [5.01, 0.45, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.4, "depth": 0.12, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.01, 0.25, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.4, 0.12]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_leg_e_617.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_observer_leg_e_617);
+  nodes["npc-observer-leg-e"] = node_npc_observer_leg_e_617;
+  const mesh_npc_observer_leg_e_617Geometry = endpoint_npc_observer_leg_e_617
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_leg_e_617.endRadius, endpoint_npc_observer_leg_e_617.baseRadius, endpoint_npc_observer_leg_e_617.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_leg_e_617) {
+    mesh_npc_observer_leg_e_617Geometry.scale(0.1, 0.4, 0.12);
+  }
+  const mesh_npc_observer_leg_e_617 = new THREE.Mesh(
+    mesh_npc_observer_leg_e_617Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_leg_e_617.name = "Observer leg east";
+  if (endpoint_npc_observer_leg_e_617) {
+    mesh_npc_observer_leg_e_617.position.copy(endpoint_npc_observer_leg_e_617.midpoint);
+    mesh_npc_observer_leg_e_617.quaternion.copy(endpoint_npc_observer_leg_e_617.quaternion);
+  }
+  mesh_npc_observer_leg_e_617.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_leg_e_617.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_leg_e_617.userData.sculptComponent = {"id": "npc-observer-leg-e", "name": "Observer leg east", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.01, 0.05, 0.95], "localEnd": [5.01, 0.45, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.4, "depth": 0.12, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.01, 0.25, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.4, 0.12]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_leg_e_617.add(mesh_npc_observer_leg_e_617);
+  meshes["npc-observer-leg-e"] = mesh_npc_observer_leg_e_617;
+  colliders["npc-observer-leg-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.4, 0.12], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-leg-e"] ??= [];
+  destructionGroups["npc-observer-leg-e"].push(node_npc_observer_leg_e_617);
+
+  const endpoint_npc_observer_torso_618 = makeAttachmentEndpoint(null);
+  const node_npc_observer_torso_618 = new THREE.Group();
+  node_npc_observer_torso_618.name = "Observer torso__pivot";
+  node_npc_observer_torso_618.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_torso_618) {
+    node_npc_observer_torso_618.position.copy(endpoint_npc_observer_torso_618.start);
+    node_npc_observer_torso_618.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_torso_618.position.set(4.95, 0.6, 0.95);
+    node_npc_observer_torso_618.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_torso_618.userData.sculptComponent = {"id": "npc-observer-torso", "name": "Observer torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.45, 0.95], "localEnd": [4.95, 0.75, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.6, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_torso_618.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}};
+  (nodes["root"] ?? root).add(node_npc_observer_torso_618);
+  nodes["npc-observer-torso"] = node_npc_observer_torso_618;
+  const mesh_npc_observer_torso_618Geometry = endpoint_npc_observer_torso_618
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_torso_618.endRadius, endpoint_npc_observer_torso_618.baseRadius, endpoint_npc_observer_torso_618.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_torso_618) {
+    mesh_npc_observer_torso_618Geometry.scale(0.28, 0.3, 0.16);
+  }
+  const mesh_npc_observer_torso_618 = new THREE.Mesh(
+    mesh_npc_observer_torso_618Geometry,
+    materialMap["npc-shirt-2"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_torso_618.name = "Observer torso";
+  if (endpoint_npc_observer_torso_618) {
+    mesh_npc_observer_torso_618.position.copy(endpoint_npc_observer_torso_618.midpoint);
+    mesh_npc_observer_torso_618.quaternion.copy(endpoint_npc_observer_torso_618.quaternion);
+  }
+  mesh_npc_observer_torso_618.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_torso_618.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_torso_618.userData.sculptComponent = {"id": "npc-observer-torso", "name": "Observer torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.45, 0.95], "localEnd": [4.95, 0.75, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.6, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_torso_618.add(mesh_npc_observer_torso_618);
+  meshes["npc-observer-torso"] = mesh_npc_observer_torso_618;
+  colliders["npc-observer-torso"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-torso"] ??= [];
+  destructionGroups["npc-observer-torso"].push(node_npc_observer_torso_618);
+
+  const endpoint_npc_observer_arm_w_619 = makeAttachmentEndpoint(null);
+  const node_npc_observer_arm_w_619 = new THREE.Group();
+  node_npc_observer_arm_w_619.name = "Observer arm w__pivot";
+  node_npc_observer_arm_w_619.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_arm_w_619) {
+    node_npc_observer_arm_w_619.position.copy(endpoint_npc_observer_arm_w_619.start);
+    node_npc_observer_arm_w_619.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_arm_w_619.position.set(4.71, 0.605, 0.95);
+    node_npc_observer_arm_w_619.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_arm_w_619.userData.sculptComponent = {"id": "npc-observer-arm-w", "name": "Observer arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.71, 0.48, 0.95], "localEnd": [4.71, 0.73, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.25, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.71, 0.605, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.25, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_arm_w_619.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}};
+  (nodes["root"] ?? root).add(node_npc_observer_arm_w_619);
+  nodes["npc-observer-arm-w"] = node_npc_observer_arm_w_619;
+  const mesh_npc_observer_arm_w_619Geometry = endpoint_npc_observer_arm_w_619
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_arm_w_619.endRadius, endpoint_npc_observer_arm_w_619.baseRadius, endpoint_npc_observer_arm_w_619.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_arm_w_619) {
+    mesh_npc_observer_arm_w_619Geometry.scale(0.08, 0.25, 0.08);
+  }
+  const mesh_npc_observer_arm_w_619 = new THREE.Mesh(
+    mesh_npc_observer_arm_w_619Geometry,
+    materialMap["npc-shirt-2"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_arm_w_619.name = "Observer arm w";
+  if (endpoint_npc_observer_arm_w_619) {
+    mesh_npc_observer_arm_w_619.position.copy(endpoint_npc_observer_arm_w_619.midpoint);
+    mesh_npc_observer_arm_w_619.quaternion.copy(endpoint_npc_observer_arm_w_619.quaternion);
+  }
+  mesh_npc_observer_arm_w_619.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_arm_w_619.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_arm_w_619.userData.sculptComponent = {"id": "npc-observer-arm-w", "name": "Observer arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.71, 0.48, 0.95], "localEnd": [4.71, 0.73, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.25, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.71, 0.605, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.25, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_arm_w_619.add(mesh_npc_observer_arm_w_619);
+  meshes["npc-observer-arm-w"] = mesh_npc_observer_arm_w_619;
+  colliders["npc-observer-arm-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-arm-w"] ??= [];
+  destructionGroups["npc-observer-arm-w"].push(node_npc_observer_arm_w_619);
+
+  const endpoint_npc_observer_arm_e_620 = makeAttachmentEndpoint(null);
+  const node_npc_observer_arm_e_620 = new THREE.Group();
+  node_npc_observer_arm_e_620.name = "Observer arm e__pivot";
+  node_npc_observer_arm_e_620.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_arm_e_620) {
+    node_npc_observer_arm_e_620.position.copy(endpoint_npc_observer_arm_e_620.start);
+    node_npc_observer_arm_e_620.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_arm_e_620.position.set(5.07, 0.605, 0.95);
+    node_npc_observer_arm_e_620.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_arm_e_620.userData.sculptComponent = {"id": "npc-observer-arm-e", "name": "Observer arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.07, 0.48, 0.95], "localEnd": [5.07, 0.73, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.25, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.07, 0.605, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.25, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_arm_e_620.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}};
+  (nodes["root"] ?? root).add(node_npc_observer_arm_e_620);
+  nodes["npc-observer-arm-e"] = node_npc_observer_arm_e_620;
+  const mesh_npc_observer_arm_e_620Geometry = endpoint_npc_observer_arm_e_620
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_arm_e_620.endRadius, endpoint_npc_observer_arm_e_620.baseRadius, endpoint_npc_observer_arm_e_620.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_arm_e_620) {
+    mesh_npc_observer_arm_e_620Geometry.scale(0.08, 0.25, 0.08);
+  }
+  const mesh_npc_observer_arm_e_620 = new THREE.Mesh(
+    mesh_npc_observer_arm_e_620Geometry,
+    materialMap["npc-shirt-2"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_arm_e_620.name = "Observer arm e";
+  if (endpoint_npc_observer_arm_e_620) {
+    mesh_npc_observer_arm_e_620.position.copy(endpoint_npc_observer_arm_e_620.midpoint);
+    mesh_npc_observer_arm_e_620.quaternion.copy(endpoint_npc_observer_arm_e_620.quaternion);
+  }
+  mesh_npc_observer_arm_e_620.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_arm_e_620.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_arm_e_620.userData.sculptComponent = {"id": "npc-observer-arm-e", "name": "Observer arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.07, 0.48, 0.95], "localEnd": [5.07, 0.73, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.25, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.07, 0.605, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.25, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-2"}}, "material": "npc-shirt-2", "materialLayers": ["npc-shirt-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(224, 169, 58, 1.0)", "secondaryAlbedo": "rgba(214, 159, 48, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_arm_e_620.add(mesh_npc_observer_arm_e_620);
+  meshes["npc-observer-arm-e"] = mesh_npc_observer_arm_e_620;
+  colliders["npc-observer-arm-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.25, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-arm-e"] ??= [];
+  destructionGroups["npc-observer-arm-e"].push(node_npc_observer_arm_e_620);
+
+  const endpoint_npc_observer_head_621 = makeAttachmentEndpoint(null);
+  const node_npc_observer_head_621 = new THREE.Group();
+  node_npc_observer_head_621.name = "Observer head__pivot";
+  node_npc_observer_head_621.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_head_621) {
+    node_npc_observer_head_621.position.copy(endpoint_npc_observer_head_621.start);
+    node_npc_observer_head_621.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_head_621.position.set(4.95, 0.85, 0.95);
+    node_npc_observer_head_621.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_head_621.userData.sculptComponent = {"id": "npc-observer-head", "name": "Observer head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.77, 0.95], "localEnd": [4.95, 0.93, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.85, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_head_621.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}};
+  (nodes["root"] ?? root).add(node_npc_observer_head_621);
+  nodes["npc-observer-head"] = node_npc_observer_head_621;
+  const mesh_npc_observer_head_621Geometry = endpoint_npc_observer_head_621
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_head_621.endRadius, endpoint_npc_observer_head_621.baseRadius, endpoint_npc_observer_head_621.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_head_621) {
+    mesh_npc_observer_head_621Geometry.scale(0.16, 0.16, 0.16);
+  }
+  const mesh_npc_observer_head_621 = new THREE.Mesh(
+    mesh_npc_observer_head_621Geometry,
+    materialMap["npc-skin"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_head_621.name = "Observer head";
+  if (endpoint_npc_observer_head_621) {
+    mesh_npc_observer_head_621.position.copy(endpoint_npc_observer_head_621.midpoint);
+    mesh_npc_observer_head_621.quaternion.copy(endpoint_npc_observer_head_621.quaternion);
+  }
+  mesh_npc_observer_head_621.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_head_621.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_head_621.userData.sculptComponent = {"id": "npc-observer-head", "name": "Observer head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.77, 0.95], "localEnd": [4.95, 0.93, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.85, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_head_621.add(mesh_npc_observer_head_621);
+  meshes["npc-observer-head"] = mesh_npc_observer_head_621;
+  colliders["npc-observer-head"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-head"] ??= [];
+  destructionGroups["npc-observer-head"].push(node_npc_observer_head_621);
+
+  const endpoint_npc_observer_hair_622 = makeAttachmentEndpoint(null);
+  const node_npc_observer_hair_622 = new THREE.Group();
+  node_npc_observer_hair_622.name = "Observer hair__pivot";
+  node_npc_observer_hair_622.scale.set(1, 1, 1);
+  if (endpoint_npc_observer_hair_622) {
+    node_npc_observer_hair_622.position.copy(endpoint_npc_observer_hair_622.start);
+    node_npc_observer_hair_622.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_observer_hair_622.position.set(4.95, 0.925, 0.9625);
+    node_npc_observer_hair_622.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_observer_hair_622.userData.sculptComponent = {"id": "npc-observer-hair", "name": "Observer hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.89, 0.9625], "localEnd": [4.95, 0.96, 0.9625], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.925, 0.9625], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}}, "material": "npc-hair-2", "materialLayers": ["npc-hair-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(165, 119, 63, 1.0)", "secondaryAlbedo": "rgba(155, 109, 53, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_hair_622.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}};
+  (nodes["root"] ?? root).add(node_npc_observer_hair_622);
+  nodes["npc-observer-hair"] = node_npc_observer_hair_622;
+  const mesh_npc_observer_hair_622Geometry = endpoint_npc_observer_hair_622
+    ? new THREE.CylinderGeometry(endpoint_npc_observer_hair_622.endRadius, endpoint_npc_observer_hair_622.baseRadius, endpoint_npc_observer_hair_622.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_observer_hair_622) {
+    mesh_npc_observer_hair_622Geometry.scale(0.17, 0.07, 0.145);
+  }
+  const mesh_npc_observer_hair_622 = new THREE.Mesh(
+    mesh_npc_observer_hair_622Geometry,
+    materialMap["npc-hair-2"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_observer_hair_622.name = "Observer hair";
+  if (endpoint_npc_observer_hair_622) {
+    mesh_npc_observer_hair_622.position.copy(endpoint_npc_observer_hair_622.midpoint);
+    mesh_npc_observer_hair_622.quaternion.copy(endpoint_npc_observer_hair_622.quaternion);
+  }
+  mesh_npc_observer_hair_622.castShadow = options.castShadow ?? true;
+  mesh_npc_observer_hair_622.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_observer_hair_622.userData.sculptComponent = {"id": "npc-observer-hair", "name": "Observer hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.95, 0.89, 0.9625], "localEnd": [4.95, 0.96, 0.9625], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.95, 0.925, 0.9625], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-observer-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}}, "material": "npc-hair-2", "materialLayers": ["npc-hair-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(165, 119, 63, 1.0)", "secondaryAlbedo": "rgba(155, 109, 53, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_observer_hair_622.add(mesh_npc_observer_hair_622);
+  meshes["npc-observer-hair"] = mesh_npc_observer_hair_622;
+  colliders["npc-observer-hair"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-observer-hair"] ??= [];
+  destructionGroups["npc-observer-hair"].push(node_npc_observer_hair_622);
+
+  const endpoint_test_clipboard_623 = makeAttachmentEndpoint(null);
+  const node_test_clipboard_623 = new THREE.Group();
+  node_test_clipboard_623.name = "Observer clipboard__pivot";
+  node_test_clipboard_623.scale.set(1, 1, 1);
+  if (endpoint_test_clipboard_623) {
+    node_test_clipboard_623.position.copy(endpoint_test_clipboard_623.start);
+    node_test_clipboard_623.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_clipboard_623.position.set(4.7, 0.64, 0.95);
+    node_test_clipboard_623.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_clipboard_623.userData.sculptComponent = {"id": "test-clipboard", "name": "Observer clipboard", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.7, 0.53, 0.95], "localEnd": [4.7, 0.75, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.22, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.7, 0.64, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.22, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.22, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-board"}}, "material": "prop-board", "materialLayers": ["prop-board"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(154, 107, 60, 1.0)", "secondaryAlbedo": "rgba(144, 97, 50, 1.0)", "materialClass": "wood", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_clipboard_623.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.22, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-board"}};
+  (nodes["root"] ?? root).add(node_test_clipboard_623);
+  nodes["test-clipboard"] = node_test_clipboard_623;
+  const mesh_test_clipboard_623Geometry = endpoint_test_clipboard_623
+    ? new THREE.CylinderGeometry(endpoint_test_clipboard_623.endRadius, endpoint_test_clipboard_623.baseRadius, endpoint_test_clipboard_623.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_clipboard_623) {
+    mesh_test_clipboard_623Geometry.scale(0.04, 0.22, 0.24);
+  }
+  const mesh_test_clipboard_623 = new THREE.Mesh(
+    mesh_test_clipboard_623Geometry,
+    materialMap["prop-board"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_clipboard_623.name = "Observer clipboard";
+  if (endpoint_test_clipboard_623) {
+    mesh_test_clipboard_623.position.copy(endpoint_test_clipboard_623.midpoint);
+    mesh_test_clipboard_623.quaternion.copy(endpoint_test_clipboard_623.quaternion);
+  }
+  mesh_test_clipboard_623.castShadow = options.castShadow ?? true;
+  mesh_test_clipboard_623.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_clipboard_623.userData.sculptComponent = {"id": "test-clipboard", "name": "Observer clipboard", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.7, 0.53, 0.95], "localEnd": [4.7, 0.75, 0.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.22, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.7, 0.64, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.22, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.22, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-board"}}, "material": "prop-board", "materialLayers": ["prop-board"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(154, 107, 60, 1.0)", "secondaryAlbedo": "rgba(144, 97, 50, 1.0)", "materialClass": "wood", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_clipboard_623.add(mesh_test_clipboard_623);
+  meshes["test-clipboard"] = mesh_test_clipboard_623;
+  colliders["test-clipboard"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.22, 0.24], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-clipboard"] ??= [];
+  destructionGroups["test-clipboard"].push(node_test_clipboard_623);
+
+  const endpoint_test_clipboard_paper_624 = makeAttachmentEndpoint(null);
+  const node_test_clipboard_paper_624 = new THREE.Group();
+  node_test_clipboard_paper_624.name = "Clipboard paper__pivot";
+  node_test_clipboard_paper_624.scale.set(1, 1, 1);
+  if (endpoint_test_clipboard_paper_624) {
+    node_test_clipboard_paper_624.position.copy(endpoint_test_clipboard_paper_624.start);
+    node_test_clipboard_paper_624.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_clipboard_paper_624.position.set(4.675, 0.635, 0.95);
+    node_test_clipboard_paper_624.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_clipboard_paper_624.userData.sculptComponent = {"id": "test-clipboard-paper", "name": "Clipboard paper", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.675, 0.55, 0.95], "localEnd": [4.675, 0.72, 0.95], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.2, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.675, 0.635, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.2]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.2], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard-paper", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_clipboard_paper_624.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.2], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard-paper", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}};
+  (nodes["root"] ?? root).add(node_test_clipboard_paper_624);
+  nodes["test-clipboard-paper"] = node_test_clipboard_paper_624;
+  const mesh_test_clipboard_paper_624Geometry = endpoint_test_clipboard_paper_624
+    ? new THREE.CylinderGeometry(endpoint_test_clipboard_paper_624.endRadius, endpoint_test_clipboard_paper_624.baseRadius, endpoint_test_clipboard_paper_624.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_clipboard_paper_624) {
+    mesh_test_clipboard_paper_624Geometry.scale(0.01, 0.17, 0.2);
+  }
+  const mesh_test_clipboard_paper_624 = new THREE.Mesh(
+    mesh_test_clipboard_paper_624Geometry,
+    materialMap["prop-paper"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_clipboard_paper_624.name = "Clipboard paper";
+  if (endpoint_test_clipboard_paper_624) {
+    mesh_test_clipboard_paper_624.position.copy(endpoint_test_clipboard_paper_624.midpoint);
+    mesh_test_clipboard_paper_624.quaternion.copy(endpoint_test_clipboard_paper_624.quaternion);
+  }
+  mesh_test_clipboard_paper_624.castShadow = options.castShadow ?? true;
+  mesh_test_clipboard_paper_624.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_clipboard_paper_624.userData.sculptComponent = {"id": "test-clipboard-paper", "name": "Clipboard paper", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.675, 0.55, 0.95], "localEnd": [4.675, 0.72, 0.95], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.01, "height": 0.17, "depth": 0.2, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.675, 0.635, 0.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.01, 0.17, 0.2]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.2], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-clipboard-paper", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_clipboard_paper_624.add(mesh_test_clipboard_paper_624);
+  meshes["test-clipboard-paper"] = mesh_test_clipboard_paper_624;
+  colliders["test-clipboard-paper"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.01, 0.17, 0.2], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-clipboard-paper"] ??= [];
+  destructionGroups["test-clipboard-paper"].push(node_test_clipboard_paper_624);
+
+  const endpoint_test_wall_leg_w_625 = makeAttachmentEndpoint(null);
+  const node_test_wall_leg_w_625 = new THREE.Group();
+  node_test_wall_leg_w_625.name = "Test wall leg west__pivot";
+  node_test_wall_leg_w_625.scale.set(1, 1, 1);
+  if (endpoint_test_wall_leg_w_625) {
+    node_test_wall_leg_w_625.position.copy(endpoint_test_wall_leg_w_625.start);
+    node_test_wall_leg_w_625.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_leg_w_625.position.set(2.62, 0.24, -0.28);
+    node_test_wall_leg_w_625.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_leg_w_625.userData.sculptComponent = {"id": "test-wall-leg-w", "name": "Test wall leg west", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.62, 0.05, -0.28], "localEnd": [2.62, 0.43, -0.28], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.38, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.62, 0.24, -0.28], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.38, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_leg_w_625.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_leg_w_625);
+  nodes["test-wall-leg-w"] = node_test_wall_leg_w_625;
+  const mesh_test_wall_leg_w_625Geometry = endpoint_test_wall_leg_w_625
+    ? new THREE.CylinderGeometry(endpoint_test_wall_leg_w_625.endRadius, endpoint_test_wall_leg_w_625.baseRadius, endpoint_test_wall_leg_w_625.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_leg_w_625) {
+    mesh_test_wall_leg_w_625Geometry.scale(0.04, 0.38, 0.04);
+  }
+  const mesh_test_wall_leg_w_625 = new THREE.Mesh(
+    mesh_test_wall_leg_w_625Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_leg_w_625.name = "Test wall leg west";
+  if (endpoint_test_wall_leg_w_625) {
+    mesh_test_wall_leg_w_625.position.copy(endpoint_test_wall_leg_w_625.midpoint);
+    mesh_test_wall_leg_w_625.quaternion.copy(endpoint_test_wall_leg_w_625.quaternion);
+  }
+  mesh_test_wall_leg_w_625.castShadow = options.castShadow ?? true;
+  mesh_test_wall_leg_w_625.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_leg_w_625.userData.sculptComponent = {"id": "test-wall-leg-w", "name": "Test wall leg west", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.62, 0.05, -0.28], "localEnd": [2.62, 0.43, -0.28], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.38, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.62, 0.24, -0.28], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.38, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_leg_w_625.add(mesh_test_wall_leg_w_625);
+  meshes["test-wall-leg-w"] = mesh_test_wall_leg_w_625;
+  colliders["test-wall-leg-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-leg-w"] ??= [];
+  destructionGroups["test-wall-leg-w"].push(node_test_wall_leg_w_625);
+
+  const endpoint_test_wall_leg_e_626 = makeAttachmentEndpoint(null);
+  const node_test_wall_leg_e_626 = new THREE.Group();
+  node_test_wall_leg_e_626.name = "Test wall leg east__pivot";
+  node_test_wall_leg_e_626.scale.set(1, 1, 1);
+  if (endpoint_test_wall_leg_e_626) {
+    node_test_wall_leg_e_626.position.copy(endpoint_test_wall_leg_e_626.start);
+    node_test_wall_leg_e_626.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_leg_e_626.position.set(3.38, 0.24, -0.28);
+    node_test_wall_leg_e_626.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_leg_e_626.userData.sculptComponent = {"id": "test-wall-leg-e", "name": "Test wall leg east", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.38, 0.05, -0.28], "localEnd": [3.38, 0.43, -0.28], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.38, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.38, 0.24, -0.28], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.38, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_leg_e_626.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_leg_e_626);
+  nodes["test-wall-leg-e"] = node_test_wall_leg_e_626;
+  const mesh_test_wall_leg_e_626Geometry = endpoint_test_wall_leg_e_626
+    ? new THREE.CylinderGeometry(endpoint_test_wall_leg_e_626.endRadius, endpoint_test_wall_leg_e_626.baseRadius, endpoint_test_wall_leg_e_626.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_leg_e_626) {
+    mesh_test_wall_leg_e_626Geometry.scale(0.04, 0.38, 0.04);
+  }
+  const mesh_test_wall_leg_e_626 = new THREE.Mesh(
+    mesh_test_wall_leg_e_626Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_leg_e_626.name = "Test wall leg east";
+  if (endpoint_test_wall_leg_e_626) {
+    mesh_test_wall_leg_e_626.position.copy(endpoint_test_wall_leg_e_626.midpoint);
+    mesh_test_wall_leg_e_626.quaternion.copy(endpoint_test_wall_leg_e_626.quaternion);
+  }
+  mesh_test_wall_leg_e_626.castShadow = options.castShadow ?? true;
+  mesh_test_wall_leg_e_626.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_leg_e_626.userData.sculptComponent = {"id": "test-wall-leg-e", "name": "Test wall leg east", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.38, 0.05, -0.28], "localEnd": [3.38, 0.43, -0.28], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.38, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.38, 0.24, -0.28], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.38, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-leg-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_leg_e_626.add(mesh_test_wall_leg_e_626);
+  meshes["test-wall-leg-e"] = mesh_test_wall_leg_e_626;
+  colliders["test-wall-leg-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.38, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-leg-e"] ??= [];
+  destructionGroups["test-wall-leg-e"].push(node_test_wall_leg_e_626);
+
+  const endpoint_test_wall_frame_627 = makeAttachmentEndpoint(null);
+  const node_test_wall_frame_627 = new THREE.Group();
+  node_test_wall_frame_627.name = "Test wall frame__pivot";
+  node_test_wall_frame_627.scale.set(1, 1, 1);
+  if (endpoint_test_wall_frame_627) {
+    node_test_wall_frame_627.position.copy(endpoint_test_wall_frame_627.start);
+    node_test_wall_frame_627.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_frame_627.position.set(3.0, 0.76, -0.29);
+    node_test_wall_frame_627.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_frame_627.userData.sculptComponent = {"id": "test-wall-frame", "name": "Test wall frame", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.0, 0.41, -0.29], "localEnd": [3.0, 1.11, -0.29], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.88, "height": 0.7, "depth": 0.06, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.0, 0.76, -0.29], "rotation": [0.0, 0.0, 0.0], "scale": [0.88, 0.7, 0.06]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.88, 0.7, 0.06], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-frame", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "test-wall.notes", "kind": "decal", "notes": "test findings on sticky notes, three columns"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_frame_627.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.88, 0.7, 0.06], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-frame", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_frame_627);
+  nodes["test-wall-frame"] = node_test_wall_frame_627;
+  const mesh_test_wall_frame_627Geometry = endpoint_test_wall_frame_627
+    ? new THREE.CylinderGeometry(endpoint_test_wall_frame_627.endRadius, endpoint_test_wall_frame_627.baseRadius, endpoint_test_wall_frame_627.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_frame_627) {
+    mesh_test_wall_frame_627Geometry.scale(0.88, 0.7, 0.06);
+  }
+  const mesh_test_wall_frame_627 = new THREE.Mesh(
+    mesh_test_wall_frame_627Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_frame_627.name = "Test wall frame";
+  if (endpoint_test_wall_frame_627) {
+    mesh_test_wall_frame_627.position.copy(endpoint_test_wall_frame_627.midpoint);
+    mesh_test_wall_frame_627.quaternion.copy(endpoint_test_wall_frame_627.quaternion);
+  }
+  mesh_test_wall_frame_627.castShadow = options.castShadow ?? true;
+  mesh_test_wall_frame_627.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_frame_627.userData.sculptComponent = {"id": "test-wall-frame", "name": "Test wall frame", "level": "meso", "role": "prop", "importance": 0.5, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.0, 0.41, -0.29], "localEnd": [3.0, 1.11, -0.29], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.88, "height": 0.7, "depth": 0.06, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.0, 0.76, -0.29], "rotation": [0.0, 0.0, 0.0], "scale": [0.88, 0.7, 0.06]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.88, 0.7, 0.06], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-frame", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "test-wall.notes", "kind": "decal", "notes": "test findings on sticky notes, three columns"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_frame_627.add(mesh_test_wall_frame_627);
+  meshes["test-wall-frame"] = mesh_test_wall_frame_627;
+  colliders["test-wall-frame"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.88, 0.7, 0.06], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-frame"] ??= [];
+  destructionGroups["test-wall-frame"].push(node_test_wall_frame_627);
+
+  const endpoint_test_wall_board_628 = makeAttachmentEndpoint(null);
+  const node_test_wall_board_628 = new THREE.Group();
+  node_test_wall_board_628.name = "Test wall board__pivot";
+  node_test_wall_board_628.scale.set(1, 1, 1);
+  if (endpoint_test_wall_board_628) {
+    node_test_wall_board_628.position.copy(endpoint_test_wall_board_628.start);
+    node_test_wall_board_628.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_board_628.position.set(3.0, 0.76, -0.255);
+    node_test_wall_board_628.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_board_628.userData.sculptComponent = {"id": "test-wall-board", "name": "Test wall board", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.0, 0.44, -0.255], "localEnd": [3.0, 1.08, -0.255], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.82, "height": 0.64, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.0, 0.76, -0.255], "rotation": [0.0, 0.0, 0.0], "scale": [0.82, 0.64, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.82, 0.64, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-board", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_board_628.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.82, 0.64, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-board", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}};
+  (nodes["root"] ?? root).add(node_test_wall_board_628);
+  nodes["test-wall-board"] = node_test_wall_board_628;
+  const mesh_test_wall_board_628Geometry = endpoint_test_wall_board_628
+    ? new THREE.CylinderGeometry(endpoint_test_wall_board_628.endRadius, endpoint_test_wall_board_628.baseRadius, endpoint_test_wall_board_628.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_board_628) {
+    mesh_test_wall_board_628Geometry.scale(0.82, 0.64, 0.01);
+  }
+  const mesh_test_wall_board_628 = new THREE.Mesh(
+    mesh_test_wall_board_628Geometry,
+    materialMap["prop-paper"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_board_628.name = "Test wall board";
+  if (endpoint_test_wall_board_628) {
+    mesh_test_wall_board_628.position.copy(endpoint_test_wall_board_628.midpoint);
+    mesh_test_wall_board_628.quaternion.copy(endpoint_test_wall_board_628.quaternion);
+  }
+  mesh_test_wall_board_628.castShadow = options.castShadow ?? true;
+  mesh_test_wall_board_628.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_board_628.userData.sculptComponent = {"id": "test-wall-board", "name": "Test wall board", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.0, 0.44, -0.255], "localEnd": [3.0, 1.08, -0.255], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.82, "height": 0.64, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.0, 0.76, -0.255], "rotation": [0.0, 0.0, 0.0], "scale": [0.82, 0.64, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.82, 0.64, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-board", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_board_628.add(mesh_test_wall_board_628);
+  meshes["test-wall-board"] = mesh_test_wall_board_628;
+  colliders["test-wall-board"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.82, 0.64, 0.01], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-board"] ??= [];
+  destructionGroups["test-wall-board"].push(node_test_wall_board_628);
+
+  const endpoint_test_wall_head_0_629 = makeAttachmentEndpoint(null);
+  const node_test_wall_head_0_629 = new THREE.Group();
+  node_test_wall_head_0_629.name = "Test wall column head 0__pivot";
+  node_test_wall_head_0_629.scale.set(1, 1, 1);
+  if (endpoint_test_wall_head_0_629) {
+    node_test_wall_head_0_629.position.copy(endpoint_test_wall_head_0_629.start);
+    node_test_wall_head_0_629.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_head_0_629.position.set(2.75, 1.005, -0.245);
+    node_test_wall_head_0_629.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_head_0_629.userData.sculptComponent = {"id": "test-wall-head-0", "name": "Test wall column head 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.75, 0.99, -0.245], "localEnd": [2.75, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.75, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_0_629.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_head_0_629);
+  nodes["test-wall-head-0"] = node_test_wall_head_0_629;
+  const mesh_test_wall_head_0_629Geometry = endpoint_test_wall_head_0_629
+    ? new THREE.CylinderGeometry(endpoint_test_wall_head_0_629.endRadius, endpoint_test_wall_head_0_629.baseRadius, endpoint_test_wall_head_0_629.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_head_0_629) {
+    mesh_test_wall_head_0_629Geometry.scale(0.2, 0.03, 0.01);
+  }
+  const mesh_test_wall_head_0_629 = new THREE.Mesh(
+    mesh_test_wall_head_0_629Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_head_0_629.name = "Test wall column head 0";
+  if (endpoint_test_wall_head_0_629) {
+    mesh_test_wall_head_0_629.position.copy(endpoint_test_wall_head_0_629.midpoint);
+    mesh_test_wall_head_0_629.quaternion.copy(endpoint_test_wall_head_0_629.quaternion);
+  }
+  mesh_test_wall_head_0_629.castShadow = options.castShadow ?? true;
+  mesh_test_wall_head_0_629.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_head_0_629.userData.sculptComponent = {"id": "test-wall-head-0", "name": "Test wall column head 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.75, 0.99, -0.245], "localEnd": [2.75, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.75, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_0_629.add(mesh_test_wall_head_0_629);
+  meshes["test-wall-head-0"] = mesh_test_wall_head_0_629;
+  colliders["test-wall-head-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-head-0"] ??= [];
+  destructionGroups["test-wall-head-0"].push(node_test_wall_head_0_629);
+
+  const endpoint_test_wall_note_0_0_630 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_0_630 = new THREE.Group();
+  node_test_wall_note_0_0_630.name = "Sticky note 0 0__pivot";
+  node_test_wall_note_0_0_630.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_0_630) {
+    node_test_wall_note_0_0_630.position.copy(endpoint_test_wall_note_0_0_630.start);
+    node_test_wall_note_0_0_630.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_0_630.position.set(2.705, 0.905, -0.244);
+    node_test_wall_note_0_0_630.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_0_630.userData.sculptComponent = {"id": "test-wall-note-0-0", "name": "Sticky note 0 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.705, 0.85, -0.244], "localEnd": [2.705, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.705, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_0_630.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_0_630);
+  nodes["test-wall-note-0-0"] = node_test_wall_note_0_0_630;
+  const mesh_test_wall_note_0_0_630Geometry = endpoint_test_wall_note_0_0_630
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_0_630.endRadius, endpoint_test_wall_note_0_0_630.baseRadius, endpoint_test_wall_note_0_0_630.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_0_630) {
+    mesh_test_wall_note_0_0_630Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_0_0_630 = new THREE.Mesh(
+    mesh_test_wall_note_0_0_630Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_0_630.name = "Sticky note 0 0";
+  if (endpoint_test_wall_note_0_0_630) {
+    mesh_test_wall_note_0_0_630.position.copy(endpoint_test_wall_note_0_0_630.midpoint);
+    mesh_test_wall_note_0_0_630.quaternion.copy(endpoint_test_wall_note_0_0_630.quaternion);
+  }
+  mesh_test_wall_note_0_0_630.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_0_630.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_0_630.userData.sculptComponent = {"id": "test-wall-note-0-0", "name": "Sticky note 0 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.705, 0.85, -0.244], "localEnd": [2.705, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.705, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_0_630.add(mesh_test_wall_note_0_0_630);
+  meshes["test-wall-note-0-0"] = mesh_test_wall_note_0_0_630;
+  colliders["test-wall-note-0-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-0"] ??= [];
+  destructionGroups["test-wall-note-0-0"].push(node_test_wall_note_0_0_630);
+
+  const endpoint_test_wall_note_0_0b_631 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_0b_631 = new THREE.Group();
+  node_test_wall_note_0_0b_631.name = "Sticky note 0 0 b__pivot";
+  node_test_wall_note_0_0b_631.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_0b_631) {
+    node_test_wall_note_0_0b_631.position.copy(endpoint_test_wall_note_0_0b_631.start);
+    node_test_wall_note_0_0b_631.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_0b_631.position.set(2.815, 0.87, -0.244);
+    node_test_wall_note_0_0b_631.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_0b_631.userData.sculptComponent = {"id": "test-wall-note-0-0b", "name": "Sticky note 0 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.815, 0.82, -0.244], "localEnd": [2.815, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.815, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_0b_631.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_0b_631);
+  nodes["test-wall-note-0-0b"] = node_test_wall_note_0_0b_631;
+  const mesh_test_wall_note_0_0b_631Geometry = endpoint_test_wall_note_0_0b_631
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_0b_631.endRadius, endpoint_test_wall_note_0_0b_631.baseRadius, endpoint_test_wall_note_0_0b_631.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_0b_631) {
+    mesh_test_wall_note_0_0b_631Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_0_0b_631 = new THREE.Mesh(
+    mesh_test_wall_note_0_0b_631Geometry,
+    materialMap["note-pink"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_0b_631.name = "Sticky note 0 0 b";
+  if (endpoint_test_wall_note_0_0b_631) {
+    mesh_test_wall_note_0_0b_631.position.copy(endpoint_test_wall_note_0_0b_631.midpoint);
+    mesh_test_wall_note_0_0b_631.quaternion.copy(endpoint_test_wall_note_0_0b_631.quaternion);
+  }
+  mesh_test_wall_note_0_0b_631.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_0b_631.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_0b_631.userData.sculptComponent = {"id": "test-wall-note-0-0b", "name": "Sticky note 0 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.815, 0.82, -0.244], "localEnd": [2.815, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.815, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_0b_631.add(mesh_test_wall_note_0_0b_631);
+  meshes["test-wall-note-0-0b"] = mesh_test_wall_note_0_0b_631;
+  colliders["test-wall-note-0-0b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-0b"] ??= [];
+  destructionGroups["test-wall-note-0-0b"].push(node_test_wall_note_0_0b_631);
+
+  const endpoint_test_wall_note_0_1_632 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_1_632 = new THREE.Group();
+  node_test_wall_note_0_1_632.name = "Sticky note 0 1__pivot";
+  node_test_wall_note_0_1_632.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_1_632) {
+    node_test_wall_note_0_1_632.position.copy(endpoint_test_wall_note_0_1_632.start);
+    node_test_wall_note_0_1_632.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_1_632.position.set(2.735, 0.755, -0.244);
+    node_test_wall_note_0_1_632.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_1_632.userData.sculptComponent = {"id": "test-wall-note-0-1", "name": "Sticky note 0 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.735, 0.7, -0.244], "localEnd": [2.735, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.735, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_1_632.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_1_632);
+  nodes["test-wall-note-0-1"] = node_test_wall_note_0_1_632;
+  const mesh_test_wall_note_0_1_632Geometry = endpoint_test_wall_note_0_1_632
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_1_632.endRadius, endpoint_test_wall_note_0_1_632.baseRadius, endpoint_test_wall_note_0_1_632.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_1_632) {
+    mesh_test_wall_note_0_1_632Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_0_1_632 = new THREE.Mesh(
+    mesh_test_wall_note_0_1_632Geometry,
+    materialMap["note-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_1_632.name = "Sticky note 0 1";
+  if (endpoint_test_wall_note_0_1_632) {
+    mesh_test_wall_note_0_1_632.position.copy(endpoint_test_wall_note_0_1_632.midpoint);
+    mesh_test_wall_note_0_1_632.quaternion.copy(endpoint_test_wall_note_0_1_632.quaternion);
+  }
+  mesh_test_wall_note_0_1_632.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_1_632.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_1_632.userData.sculptComponent = {"id": "test-wall-note-0-1", "name": "Sticky note 0 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.735, 0.7, -0.244], "localEnd": [2.735, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.735, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_1_632.add(mesh_test_wall_note_0_1_632);
+  meshes["test-wall-note-0-1"] = mesh_test_wall_note_0_1_632;
+  colliders["test-wall-note-0-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-1"] ??= [];
+  destructionGroups["test-wall-note-0-1"].push(node_test_wall_note_0_1_632);
+
+  const endpoint_test_wall_note_0_1b_633 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_1b_633 = new THREE.Group();
+  node_test_wall_note_0_1b_633.name = "Sticky note 0 1 b__pivot";
+  node_test_wall_note_0_1b_633.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_1b_633) {
+    node_test_wall_note_0_1b_633.position.copy(endpoint_test_wall_note_0_1b_633.start);
+    node_test_wall_note_0_1b_633.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_1b_633.position.set(2.795, 0.72, -0.244);
+    node_test_wall_note_0_1b_633.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_1b_633.userData.sculptComponent = {"id": "test-wall-note-0-1b", "name": "Sticky note 0 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.795, 0.67, -0.244], "localEnd": [2.795, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.795, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_1b_633.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_1b_633);
+  nodes["test-wall-note-0-1b"] = node_test_wall_note_0_1b_633;
+  const mesh_test_wall_note_0_1b_633Geometry = endpoint_test_wall_note_0_1b_633
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_1b_633.endRadius, endpoint_test_wall_note_0_1b_633.baseRadius, endpoint_test_wall_note_0_1b_633.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_1b_633) {
+    mesh_test_wall_note_0_1b_633Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_0_1b_633 = new THREE.Mesh(
+    mesh_test_wall_note_0_1b_633Geometry,
+    materialMap["note-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_1b_633.name = "Sticky note 0 1 b";
+  if (endpoint_test_wall_note_0_1b_633) {
+    mesh_test_wall_note_0_1b_633.position.copy(endpoint_test_wall_note_0_1b_633.midpoint);
+    mesh_test_wall_note_0_1b_633.quaternion.copy(endpoint_test_wall_note_0_1b_633.quaternion);
+  }
+  mesh_test_wall_note_0_1b_633.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_1b_633.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_1b_633.userData.sculptComponent = {"id": "test-wall-note-0-1b", "name": "Sticky note 0 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.795, 0.67, -0.244], "localEnd": [2.795, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.795, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_1b_633.add(mesh_test_wall_note_0_1b_633);
+  meshes["test-wall-note-0-1b"] = mesh_test_wall_note_0_1b_633;
+  colliders["test-wall-note-0-1b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-1b"] ??= [];
+  destructionGroups["test-wall-note-0-1b"].push(node_test_wall_note_0_1b_633);
+
+  const endpoint_test_wall_note_0_2_634 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_2_634 = new THREE.Group();
+  node_test_wall_note_0_2_634.name = "Sticky note 0 2__pivot";
+  node_test_wall_note_0_2_634.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_2_634) {
+    node_test_wall_note_0_2_634.position.copy(endpoint_test_wall_note_0_2_634.start);
+    node_test_wall_note_0_2_634.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_2_634.position.set(2.705, 0.605, -0.244);
+    node_test_wall_note_0_2_634.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_2_634.userData.sculptComponent = {"id": "test-wall-note-0-2", "name": "Sticky note 0 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.705, 0.55, -0.244], "localEnd": [2.705, 0.66, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.705, 0.605, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_2_634.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_2_634);
+  nodes["test-wall-note-0-2"] = node_test_wall_note_0_2_634;
+  const mesh_test_wall_note_0_2_634Geometry = endpoint_test_wall_note_0_2_634
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_2_634.endRadius, endpoint_test_wall_note_0_2_634.baseRadius, endpoint_test_wall_note_0_2_634.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_2_634) {
+    mesh_test_wall_note_0_2_634Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_0_2_634 = new THREE.Mesh(
+    mesh_test_wall_note_0_2_634Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_2_634.name = "Sticky note 0 2";
+  if (endpoint_test_wall_note_0_2_634) {
+    mesh_test_wall_note_0_2_634.position.copy(endpoint_test_wall_note_0_2_634.midpoint);
+    mesh_test_wall_note_0_2_634.quaternion.copy(endpoint_test_wall_note_0_2_634.quaternion);
+  }
+  mesh_test_wall_note_0_2_634.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_2_634.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_2_634.userData.sculptComponent = {"id": "test-wall-note-0-2", "name": "Sticky note 0 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.705, 0.55, -0.244], "localEnd": [2.705, 0.66, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.705, 0.605, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_2_634.add(mesh_test_wall_note_0_2_634);
+  meshes["test-wall-note-0-2"] = mesh_test_wall_note_0_2_634;
+  colliders["test-wall-note-0-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-2"] ??= [];
+  destructionGroups["test-wall-note-0-2"].push(node_test_wall_note_0_2_634);
+
+  const endpoint_test_wall_note_0_2b_635 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_0_2b_635 = new THREE.Group();
+  node_test_wall_note_0_2b_635.name = "Sticky note 0 2 b__pivot";
+  node_test_wall_note_0_2b_635.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_0_2b_635) {
+    node_test_wall_note_0_2b_635.position.copy(endpoint_test_wall_note_0_2b_635.start);
+    node_test_wall_note_0_2b_635.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_0_2b_635.position.set(2.815, 0.57, -0.244);
+    node_test_wall_note_0_2b_635.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_0_2b_635.userData.sculptComponent = {"id": "test-wall-note-0-2b", "name": "Sticky note 0 2 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.815, 0.52, -0.244], "localEnd": [2.815, 0.62, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.815, 0.57, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_2b_635.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_0_2b_635);
+  nodes["test-wall-note-0-2b"] = node_test_wall_note_0_2b_635;
+  const mesh_test_wall_note_0_2b_635Geometry = endpoint_test_wall_note_0_2b_635
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_0_2b_635.endRadius, endpoint_test_wall_note_0_2b_635.baseRadius, endpoint_test_wall_note_0_2b_635.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_0_2b_635) {
+    mesh_test_wall_note_0_2b_635Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_0_2b_635 = new THREE.Mesh(
+    mesh_test_wall_note_0_2b_635Geometry,
+    materialMap["note-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_0_2b_635.name = "Sticky note 0 2 b";
+  if (endpoint_test_wall_note_0_2b_635) {
+    mesh_test_wall_note_0_2b_635.position.copy(endpoint_test_wall_note_0_2b_635.midpoint);
+    mesh_test_wall_note_0_2b_635.quaternion.copy(endpoint_test_wall_note_0_2b_635.quaternion);
+  }
+  mesh_test_wall_note_0_2b_635.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_0_2b_635.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_0_2b_635.userData.sculptComponent = {"id": "test-wall-note-0-2b", "name": "Sticky note 0 2 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.815, 0.52, -0.244], "localEnd": [2.815, 0.62, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.815, 0.57, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-0-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_0_2b_635.add(mesh_test_wall_note_0_2b_635);
+  meshes["test-wall-note-0-2b"] = mesh_test_wall_note_0_2b_635;
+  colliders["test-wall-note-0-2b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-0-2b"] ??= [];
+  destructionGroups["test-wall-note-0-2b"].push(node_test_wall_note_0_2b_635);
+
+  const endpoint_test_wall_head_1_636 = makeAttachmentEndpoint(null);
+  const node_test_wall_head_1_636 = new THREE.Group();
+  node_test_wall_head_1_636.name = "Test wall column head 1__pivot";
+  node_test_wall_head_1_636.scale.set(1, 1, 1);
+  if (endpoint_test_wall_head_1_636) {
+    node_test_wall_head_1_636.position.copy(endpoint_test_wall_head_1_636.start);
+    node_test_wall_head_1_636.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_head_1_636.position.set(3.01, 1.005, -0.245);
+    node_test_wall_head_1_636.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_head_1_636.userData.sculptComponent = {"id": "test-wall-head-1", "name": "Test wall column head 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.01, 0.99, -0.245], "localEnd": [3.01, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.01, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_1_636.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_head_1_636);
+  nodes["test-wall-head-1"] = node_test_wall_head_1_636;
+  const mesh_test_wall_head_1_636Geometry = endpoint_test_wall_head_1_636
+    ? new THREE.CylinderGeometry(endpoint_test_wall_head_1_636.endRadius, endpoint_test_wall_head_1_636.baseRadius, endpoint_test_wall_head_1_636.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_head_1_636) {
+    mesh_test_wall_head_1_636Geometry.scale(0.2, 0.03, 0.01);
+  }
+  const mesh_test_wall_head_1_636 = new THREE.Mesh(
+    mesh_test_wall_head_1_636Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_head_1_636.name = "Test wall column head 1";
+  if (endpoint_test_wall_head_1_636) {
+    mesh_test_wall_head_1_636.position.copy(endpoint_test_wall_head_1_636.midpoint);
+    mesh_test_wall_head_1_636.quaternion.copy(endpoint_test_wall_head_1_636.quaternion);
+  }
+  mesh_test_wall_head_1_636.castShadow = options.castShadow ?? true;
+  mesh_test_wall_head_1_636.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_head_1_636.userData.sculptComponent = {"id": "test-wall-head-1", "name": "Test wall column head 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.01, 0.99, -0.245], "localEnd": [3.01, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.01, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_1_636.add(mesh_test_wall_head_1_636);
+  meshes["test-wall-head-1"] = mesh_test_wall_head_1_636;
+  colliders["test-wall-head-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-head-1"] ??= [];
+  destructionGroups["test-wall-head-1"].push(node_test_wall_head_1_636);
+
+  const endpoint_test_wall_note_1_0_637 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_0_637 = new THREE.Group();
+  node_test_wall_note_1_0_637.name = "Sticky note 1 0__pivot";
+  node_test_wall_note_1_0_637.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_0_637) {
+    node_test_wall_note_1_0_637.position.copy(endpoint_test_wall_note_1_0_637.start);
+    node_test_wall_note_1_0_637.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_0_637.position.set(2.965, 0.905, -0.244);
+    node_test_wall_note_1_0_637.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_0_637.userData.sculptComponent = {"id": "test-wall-note-1-0", "name": "Sticky note 1 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.965, 0.85, -0.244], "localEnd": [2.965, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.965, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_0_637.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_0_637);
+  nodes["test-wall-note-1-0"] = node_test_wall_note_1_0_637;
+  const mesh_test_wall_note_1_0_637Geometry = endpoint_test_wall_note_1_0_637
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_0_637.endRadius, endpoint_test_wall_note_1_0_637.baseRadius, endpoint_test_wall_note_1_0_637.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_0_637) {
+    mesh_test_wall_note_1_0_637Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_1_0_637 = new THREE.Mesh(
+    mesh_test_wall_note_1_0_637Geometry,
+    materialMap["note-pink"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_0_637.name = "Sticky note 1 0";
+  if (endpoint_test_wall_note_1_0_637) {
+    mesh_test_wall_note_1_0_637.position.copy(endpoint_test_wall_note_1_0_637.midpoint);
+    mesh_test_wall_note_1_0_637.quaternion.copy(endpoint_test_wall_note_1_0_637.quaternion);
+  }
+  mesh_test_wall_note_1_0_637.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_0_637.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_0_637.userData.sculptComponent = {"id": "test-wall-note-1-0", "name": "Sticky note 1 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.965, 0.85, -0.244], "localEnd": [2.965, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.965, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_0_637.add(mesh_test_wall_note_1_0_637);
+  meshes["test-wall-note-1-0"] = mesh_test_wall_note_1_0_637;
+  colliders["test-wall-note-1-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-0"] ??= [];
+  destructionGroups["test-wall-note-1-0"].push(node_test_wall_note_1_0_637);
+
+  const endpoint_test_wall_note_1_0b_638 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_0b_638 = new THREE.Group();
+  node_test_wall_note_1_0b_638.name = "Sticky note 1 0 b__pivot";
+  node_test_wall_note_1_0b_638.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_0b_638) {
+    node_test_wall_note_1_0b_638.position.copy(endpoint_test_wall_note_1_0b_638.start);
+    node_test_wall_note_1_0b_638.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_0b_638.position.set(3.075, 0.87, -0.244);
+    node_test_wall_note_1_0b_638.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_0b_638.userData.sculptComponent = {"id": "test-wall-note-1-0b", "name": "Sticky note 1 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.075, 0.82, -0.244], "localEnd": [3.075, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.075, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_0b_638.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_0b_638);
+  nodes["test-wall-note-1-0b"] = node_test_wall_note_1_0b_638;
+  const mesh_test_wall_note_1_0b_638Geometry = endpoint_test_wall_note_1_0b_638
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_0b_638.endRadius, endpoint_test_wall_note_1_0b_638.baseRadius, endpoint_test_wall_note_1_0b_638.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_0b_638) {
+    mesh_test_wall_note_1_0b_638Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_1_0b_638 = new THREE.Mesh(
+    mesh_test_wall_note_1_0b_638Geometry,
+    materialMap["note-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_0b_638.name = "Sticky note 1 0 b";
+  if (endpoint_test_wall_note_1_0b_638) {
+    mesh_test_wall_note_1_0b_638.position.copy(endpoint_test_wall_note_1_0b_638.midpoint);
+    mesh_test_wall_note_1_0b_638.quaternion.copy(endpoint_test_wall_note_1_0b_638.quaternion);
+  }
+  mesh_test_wall_note_1_0b_638.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_0b_638.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_0b_638.userData.sculptComponent = {"id": "test-wall-note-1-0b", "name": "Sticky note 1 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.075, 0.82, -0.244], "localEnd": [3.075, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.075, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_0b_638.add(mesh_test_wall_note_1_0b_638);
+  meshes["test-wall-note-1-0b"] = mesh_test_wall_note_1_0b_638;
+  colliders["test-wall-note-1-0b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-0b"] ??= [];
+  destructionGroups["test-wall-note-1-0b"].push(node_test_wall_note_1_0b_638);
+
+  const endpoint_test_wall_note_1_1_639 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_1_639 = new THREE.Group();
+  node_test_wall_note_1_1_639.name = "Sticky note 1 1__pivot";
+  node_test_wall_note_1_1_639.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_1_639) {
+    node_test_wall_note_1_1_639.position.copy(endpoint_test_wall_note_1_1_639.start);
+    node_test_wall_note_1_1_639.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_1_639.position.set(2.995, 0.755, -0.244);
+    node_test_wall_note_1_1_639.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_1_639.userData.sculptComponent = {"id": "test-wall-note-1-1", "name": "Sticky note 1 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.995, 0.7, -0.244], "localEnd": [2.995, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.995, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_1_639.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_1_639);
+  nodes["test-wall-note-1-1"] = node_test_wall_note_1_1_639;
+  const mesh_test_wall_note_1_1_639Geometry = endpoint_test_wall_note_1_1_639
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_1_639.endRadius, endpoint_test_wall_note_1_1_639.baseRadius, endpoint_test_wall_note_1_1_639.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_1_639) {
+    mesh_test_wall_note_1_1_639Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_1_1_639 = new THREE.Mesh(
+    mesh_test_wall_note_1_1_639Geometry,
+    materialMap["note-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_1_639.name = "Sticky note 1 1";
+  if (endpoint_test_wall_note_1_1_639) {
+    mesh_test_wall_note_1_1_639.position.copy(endpoint_test_wall_note_1_1_639.midpoint);
+    mesh_test_wall_note_1_1_639.quaternion.copy(endpoint_test_wall_note_1_1_639.quaternion);
+  }
+  mesh_test_wall_note_1_1_639.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_1_639.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_1_639.userData.sculptComponent = {"id": "test-wall-note-1-1", "name": "Sticky note 1 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.995, 0.7, -0.244], "localEnd": [2.995, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.995, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_1_639.add(mesh_test_wall_note_1_1_639);
+  meshes["test-wall-note-1-1"] = mesh_test_wall_note_1_1_639;
+  colliders["test-wall-note-1-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-1"] ??= [];
+  destructionGroups["test-wall-note-1-1"].push(node_test_wall_note_1_1_639);
+
+  const endpoint_test_wall_note_1_1b_640 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_1b_640 = new THREE.Group();
+  node_test_wall_note_1_1b_640.name = "Sticky note 1 1 b__pivot";
+  node_test_wall_note_1_1b_640.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_1b_640) {
+    node_test_wall_note_1_1b_640.position.copy(endpoint_test_wall_note_1_1b_640.start);
+    node_test_wall_note_1_1b_640.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_1b_640.position.set(3.055, 0.72, -0.244);
+    node_test_wall_note_1_1b_640.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_1b_640.userData.sculptComponent = {"id": "test-wall-note-1-1b", "name": "Sticky note 1 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.055, 0.67, -0.244], "localEnd": [3.055, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.055, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_1b_640.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_1b_640);
+  nodes["test-wall-note-1-1b"] = node_test_wall_note_1_1b_640;
+  const mesh_test_wall_note_1_1b_640Geometry = endpoint_test_wall_note_1_1b_640
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_1b_640.endRadius, endpoint_test_wall_note_1_1b_640.baseRadius, endpoint_test_wall_note_1_1b_640.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_1b_640) {
+    mesh_test_wall_note_1_1b_640Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_1_1b_640 = new THREE.Mesh(
+    mesh_test_wall_note_1_1b_640Geometry,
+    materialMap["note-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_1b_640.name = "Sticky note 1 1 b";
+  if (endpoint_test_wall_note_1_1b_640) {
+    mesh_test_wall_note_1_1b_640.position.copy(endpoint_test_wall_note_1_1b_640.midpoint);
+    mesh_test_wall_note_1_1b_640.quaternion.copy(endpoint_test_wall_note_1_1b_640.quaternion);
+  }
+  mesh_test_wall_note_1_1b_640.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_1b_640.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_1b_640.userData.sculptComponent = {"id": "test-wall-note-1-1b", "name": "Sticky note 1 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.055, 0.67, -0.244], "localEnd": [3.055, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.055, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_1b_640.add(mesh_test_wall_note_1_1b_640);
+  meshes["test-wall-note-1-1b"] = mesh_test_wall_note_1_1b_640;
+  colliders["test-wall-note-1-1b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-1b"] ??= [];
+  destructionGroups["test-wall-note-1-1b"].push(node_test_wall_note_1_1b_640);
+
+  const endpoint_test_wall_note_1_2_641 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_2_641 = new THREE.Group();
+  node_test_wall_note_1_2_641.name = "Sticky note 1 2__pivot";
+  node_test_wall_note_1_2_641.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_2_641) {
+    node_test_wall_note_1_2_641.position.copy(endpoint_test_wall_note_1_2_641.start);
+    node_test_wall_note_1_2_641.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_2_641.position.set(2.965, 0.605, -0.244);
+    node_test_wall_note_1_2_641.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_2_641.userData.sculptComponent = {"id": "test-wall-note-1-2", "name": "Sticky note 1 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.965, 0.55, -0.244], "localEnd": [2.965, 0.66, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.965, 0.605, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_2_641.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_2_641);
+  nodes["test-wall-note-1-2"] = node_test_wall_note_1_2_641;
+  const mesh_test_wall_note_1_2_641Geometry = endpoint_test_wall_note_1_2_641
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_2_641.endRadius, endpoint_test_wall_note_1_2_641.baseRadius, endpoint_test_wall_note_1_2_641.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_2_641) {
+    mesh_test_wall_note_1_2_641Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_1_2_641 = new THREE.Mesh(
+    mesh_test_wall_note_1_2_641Geometry,
+    materialMap["note-pink"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_2_641.name = "Sticky note 1 2";
+  if (endpoint_test_wall_note_1_2_641) {
+    mesh_test_wall_note_1_2_641.position.copy(endpoint_test_wall_note_1_2_641.midpoint);
+    mesh_test_wall_note_1_2_641.quaternion.copy(endpoint_test_wall_note_1_2_641.quaternion);
+  }
+  mesh_test_wall_note_1_2_641.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_2_641.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_2_641.userData.sculptComponent = {"id": "test-wall-note-1-2", "name": "Sticky note 1 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.965, 0.55, -0.244], "localEnd": [2.965, 0.66, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.965, 0.605, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-pink"}}, "material": "note-pink", "materialLayers": ["note-pink"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 156, 192, 1.0)", "secondaryAlbedo": "rgba(245, 146, 182, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_2_641.add(mesh_test_wall_note_1_2_641);
+  meshes["test-wall-note-1-2"] = mesh_test_wall_note_1_2_641;
+  colliders["test-wall-note-1-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-2"] ??= [];
+  destructionGroups["test-wall-note-1-2"].push(node_test_wall_note_1_2_641);
+
+  const endpoint_test_wall_note_1_2b_642 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_1_2b_642 = new THREE.Group();
+  node_test_wall_note_1_2b_642.name = "Sticky note 1 2 b__pivot";
+  node_test_wall_note_1_2b_642.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_1_2b_642) {
+    node_test_wall_note_1_2b_642.position.copy(endpoint_test_wall_note_1_2b_642.start);
+    node_test_wall_note_1_2b_642.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_1_2b_642.position.set(3.075, 0.57, -0.244);
+    node_test_wall_note_1_2b_642.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_1_2b_642.userData.sculptComponent = {"id": "test-wall-note-1-2b", "name": "Sticky note 1 2 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.075, 0.52, -0.244], "localEnd": [3.075, 0.62, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.075, 0.57, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_2b_642.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_1_2b_642);
+  nodes["test-wall-note-1-2b"] = node_test_wall_note_1_2b_642;
+  const mesh_test_wall_note_1_2b_642Geometry = endpoint_test_wall_note_1_2b_642
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_1_2b_642.endRadius, endpoint_test_wall_note_1_2b_642.baseRadius, endpoint_test_wall_note_1_2b_642.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_1_2b_642) {
+    mesh_test_wall_note_1_2b_642Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_1_2b_642 = new THREE.Mesh(
+    mesh_test_wall_note_1_2b_642Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_1_2b_642.name = "Sticky note 1 2 b";
+  if (endpoint_test_wall_note_1_2b_642) {
+    mesh_test_wall_note_1_2b_642.position.copy(endpoint_test_wall_note_1_2b_642.midpoint);
+    mesh_test_wall_note_1_2b_642.quaternion.copy(endpoint_test_wall_note_1_2b_642.quaternion);
+  }
+  mesh_test_wall_note_1_2b_642.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_1_2b_642.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_1_2b_642.userData.sculptComponent = {"id": "test-wall-note-1-2b", "name": "Sticky note 1 2 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.075, 0.52, -0.244], "localEnd": [3.075, 0.62, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.075, 0.57, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-1-2b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_1_2b_642.add(mesh_test_wall_note_1_2b_642);
+  meshes["test-wall-note-1-2b"] = mesh_test_wall_note_1_2b_642;
+  colliders["test-wall-note-1-2b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-1-2b"] ??= [];
+  destructionGroups["test-wall-note-1-2b"].push(node_test_wall_note_1_2b_642);
+
+  const endpoint_test_wall_head_2_643 = makeAttachmentEndpoint(null);
+  const node_test_wall_head_2_643 = new THREE.Group();
+  node_test_wall_head_2_643.name = "Test wall column head 2__pivot";
+  node_test_wall_head_2_643.scale.set(1, 1, 1);
+  if (endpoint_test_wall_head_2_643) {
+    node_test_wall_head_2_643.position.copy(endpoint_test_wall_head_2_643.start);
+    node_test_wall_head_2_643.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_head_2_643.position.set(3.27, 1.005, -0.245);
+    node_test_wall_head_2_643.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_head_2_643.userData.sculptComponent = {"id": "test-wall-head-2", "name": "Test wall column head 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.27, 0.99, -0.245], "localEnd": [3.27, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.27, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_2_643.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_wall_head_2_643);
+  nodes["test-wall-head-2"] = node_test_wall_head_2_643;
+  const mesh_test_wall_head_2_643Geometry = endpoint_test_wall_head_2_643
+    ? new THREE.CylinderGeometry(endpoint_test_wall_head_2_643.endRadius, endpoint_test_wall_head_2_643.baseRadius, endpoint_test_wall_head_2_643.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_head_2_643) {
+    mesh_test_wall_head_2_643Geometry.scale(0.2, 0.03, 0.01);
+  }
+  const mesh_test_wall_head_2_643 = new THREE.Mesh(
+    mesh_test_wall_head_2_643Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_head_2_643.name = "Test wall column head 2";
+  if (endpoint_test_wall_head_2_643) {
+    mesh_test_wall_head_2_643.position.copy(endpoint_test_wall_head_2_643.midpoint);
+    mesh_test_wall_head_2_643.quaternion.copy(endpoint_test_wall_head_2_643.quaternion);
+  }
+  mesh_test_wall_head_2_643.castShadow = options.castShadow ?? true;
+  mesh_test_wall_head_2_643.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_head_2_643.userData.sculptComponent = {"id": "test-wall-head-2", "name": "Test wall column head 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.27, 0.99, -0.245], "localEnd": [3.27, 1.02, -0.245], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.03, "depth": 0.01, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.27, 1.005, -0.245], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.03, 0.01]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-head-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_head_2_643.add(mesh_test_wall_head_2_643);
+  meshes["test-wall-head-2"] = mesh_test_wall_head_2_643;
+  colliders["test-wall-head-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.03, 0.01], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-head-2"] ??= [];
+  destructionGroups["test-wall-head-2"].push(node_test_wall_head_2_643);
+
+  const endpoint_test_wall_note_2_0_644 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_2_0_644 = new THREE.Group();
+  node_test_wall_note_2_0_644.name = "Sticky note 2 0__pivot";
+  node_test_wall_note_2_0_644.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_2_0_644) {
+    node_test_wall_note_2_0_644.position.copy(endpoint_test_wall_note_2_0_644.start);
+    node_test_wall_note_2_0_644.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_2_0_644.position.set(3.225, 0.905, -0.244);
+    node_test_wall_note_2_0_644.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_2_0_644.userData.sculptComponent = {"id": "test-wall-note-2-0", "name": "Sticky note 2 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.225, 0.85, -0.244], "localEnd": [3.225, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.225, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_0_644.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_2_0_644);
+  nodes["test-wall-note-2-0"] = node_test_wall_note_2_0_644;
+  const mesh_test_wall_note_2_0_644Geometry = endpoint_test_wall_note_2_0_644
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_2_0_644.endRadius, endpoint_test_wall_note_2_0_644.baseRadius, endpoint_test_wall_note_2_0_644.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_2_0_644) {
+    mesh_test_wall_note_2_0_644Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_2_0_644 = new THREE.Mesh(
+    mesh_test_wall_note_2_0_644Geometry,
+    materialMap["note-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_2_0_644.name = "Sticky note 2 0";
+  if (endpoint_test_wall_note_2_0_644) {
+    mesh_test_wall_note_2_0_644.position.copy(endpoint_test_wall_note_2_0_644.midpoint);
+    mesh_test_wall_note_2_0_644.quaternion.copy(endpoint_test_wall_note_2_0_644.quaternion);
+  }
+  mesh_test_wall_note_2_0_644.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_2_0_644.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_2_0_644.userData.sculptComponent = {"id": "test-wall-note-2-0", "name": "Sticky note 2 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.225, 0.85, -0.244], "localEnd": [3.225, 0.96, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.225, 0.905, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-blue"}}, "material": "note-blue", "materialLayers": ["note-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(143, 211, 255, 1.0)", "secondaryAlbedo": "rgba(133, 201, 245, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_0_644.add(mesh_test_wall_note_2_0_644);
+  meshes["test-wall-note-2-0"] = mesh_test_wall_note_2_0_644;
+  colliders["test-wall-note-2-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-2-0"] ??= [];
+  destructionGroups["test-wall-note-2-0"].push(node_test_wall_note_2_0_644);
+
+  const endpoint_test_wall_note_2_0b_645 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_2_0b_645 = new THREE.Group();
+  node_test_wall_note_2_0b_645.name = "Sticky note 2 0 b__pivot";
+  node_test_wall_note_2_0b_645.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_2_0b_645) {
+    node_test_wall_note_2_0b_645.position.copy(endpoint_test_wall_note_2_0b_645.start);
+    node_test_wall_note_2_0b_645.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_2_0b_645.position.set(3.335, 0.87, -0.244);
+    node_test_wall_note_2_0b_645.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_2_0b_645.userData.sculptComponent = {"id": "test-wall-note-2-0b", "name": "Sticky note 2 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.335, 0.82, -0.244], "localEnd": [3.335, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.335, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_0b_645.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_2_0b_645);
+  nodes["test-wall-note-2-0b"] = node_test_wall_note_2_0b_645;
+  const mesh_test_wall_note_2_0b_645Geometry = endpoint_test_wall_note_2_0b_645
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_2_0b_645.endRadius, endpoint_test_wall_note_2_0b_645.baseRadius, endpoint_test_wall_note_2_0b_645.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_2_0b_645) {
+    mesh_test_wall_note_2_0b_645Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_2_0b_645 = new THREE.Mesh(
+    mesh_test_wall_note_2_0b_645Geometry,
+    materialMap["note-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_2_0b_645.name = "Sticky note 2 0 b";
+  if (endpoint_test_wall_note_2_0b_645) {
+    mesh_test_wall_note_2_0b_645.position.copy(endpoint_test_wall_note_2_0b_645.midpoint);
+    mesh_test_wall_note_2_0b_645.quaternion.copy(endpoint_test_wall_note_2_0b_645.quaternion);
+  }
+  mesh_test_wall_note_2_0b_645.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_2_0b_645.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_2_0b_645.userData.sculptComponent = {"id": "test-wall-note-2-0b", "name": "Sticky note 2 0 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.335, 0.82, -0.244], "localEnd": [3.335, 0.92, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.335, 0.87, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-0b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-green"}}, "material": "note-green", "materialLayers": ["note-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(168, 230, 138, 1.0)", "secondaryAlbedo": "rgba(158, 220, 128, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_0b_645.add(mesh_test_wall_note_2_0b_645);
+  meshes["test-wall-note-2-0b"] = mesh_test_wall_note_2_0b_645;
+  colliders["test-wall-note-2-0b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-2-0b"] ??= [];
+  destructionGroups["test-wall-note-2-0b"].push(node_test_wall_note_2_0b_645);
+
+  const endpoint_test_wall_note_2_1_646 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_2_1_646 = new THREE.Group();
+  node_test_wall_note_2_1_646.name = "Sticky note 2 1__pivot";
+  node_test_wall_note_2_1_646.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_2_1_646) {
+    node_test_wall_note_2_1_646.position.copy(endpoint_test_wall_note_2_1_646.start);
+    node_test_wall_note_2_1_646.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_2_1_646.position.set(3.255, 0.755, -0.244);
+    node_test_wall_note_2_1_646.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_2_1_646.userData.sculptComponent = {"id": "test-wall-note-2-1", "name": "Sticky note 2 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.255, 0.7, -0.244], "localEnd": [3.255, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.255, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_1_646.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_2_1_646);
+  nodes["test-wall-note-2-1"] = node_test_wall_note_2_1_646;
+  const mesh_test_wall_note_2_1_646Geometry = endpoint_test_wall_note_2_1_646
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_2_1_646.endRadius, endpoint_test_wall_note_2_1_646.baseRadius, endpoint_test_wall_note_2_1_646.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_2_1_646) {
+    mesh_test_wall_note_2_1_646Geometry.scale(0.11, 0.11, 0.012);
+  }
+  const mesh_test_wall_note_2_1_646 = new THREE.Mesh(
+    mesh_test_wall_note_2_1_646Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_2_1_646.name = "Sticky note 2 1";
+  if (endpoint_test_wall_note_2_1_646) {
+    mesh_test_wall_note_2_1_646.position.copy(endpoint_test_wall_note_2_1_646.midpoint);
+    mesh_test_wall_note_2_1_646.quaternion.copy(endpoint_test_wall_note_2_1_646.quaternion);
+  }
+  mesh_test_wall_note_2_1_646.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_2_1_646.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_2_1_646.userData.sculptComponent = {"id": "test-wall-note-2-1", "name": "Sticky note 2 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.255, 0.7, -0.244], "localEnd": [3.255, 0.81, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.11, "height": 0.11, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.255, 0.755, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.11, 0.11, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_1_646.add(mesh_test_wall_note_2_1_646);
+  meshes["test-wall-note-2-1"] = mesh_test_wall_note_2_1_646;
+  colliders["test-wall-note-2-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.11, 0.11, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-2-1"] ??= [];
+  destructionGroups["test-wall-note-2-1"].push(node_test_wall_note_2_1_646);
+
+  const endpoint_test_wall_note_2_1b_647 = makeAttachmentEndpoint(null);
+  const node_test_wall_note_2_1b_647 = new THREE.Group();
+  node_test_wall_note_2_1b_647.name = "Sticky note 2 1 b__pivot";
+  node_test_wall_note_2_1b_647.scale.set(1, 1, 1);
+  if (endpoint_test_wall_note_2_1b_647) {
+    node_test_wall_note_2_1b_647.position.copy(endpoint_test_wall_note_2_1b_647.start);
+    node_test_wall_note_2_1b_647.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wall_note_2_1b_647.position.set(3.315, 0.72, -0.244);
+    node_test_wall_note_2_1b_647.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wall_note_2_1b_647.userData.sculptComponent = {"id": "test-wall-note-2-1b", "name": "Sticky note 2 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.315, 0.67, -0.244], "localEnd": [3.315, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.315, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_1b_647.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_wall_note_2_1b_647);
+  nodes["test-wall-note-2-1b"] = node_test_wall_note_2_1b_647;
+  const mesh_test_wall_note_2_1b_647Geometry = endpoint_test_wall_note_2_1b_647
+    ? new THREE.CylinderGeometry(endpoint_test_wall_note_2_1b_647.endRadius, endpoint_test_wall_note_2_1b_647.baseRadius, endpoint_test_wall_note_2_1b_647.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wall_note_2_1b_647) {
+    mesh_test_wall_note_2_1b_647Geometry.scale(0.09, 0.1, 0.012);
+  }
+  const mesh_test_wall_note_2_1b_647 = new THREE.Mesh(
+    mesh_test_wall_note_2_1b_647Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wall_note_2_1b_647.name = "Sticky note 2 1 b";
+  if (endpoint_test_wall_note_2_1b_647) {
+    mesh_test_wall_note_2_1b_647.position.copy(endpoint_test_wall_note_2_1b_647.midpoint);
+    mesh_test_wall_note_2_1b_647.quaternion.copy(endpoint_test_wall_note_2_1b_647.quaternion);
+  }
+  mesh_test_wall_note_2_1b_647.castShadow = options.castShadow ?? true;
+  mesh_test_wall_note_2_1b_647.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wall_note_2_1b_647.userData.sculptComponent = {"id": "test-wall-note-2-1b", "name": "Sticky note 2 1 b", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.315, 0.67, -0.244], "localEnd": [3.315, 0.77, -0.244], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.09, "height": 0.1, "depth": 0.012, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.315, 0.72, -0.244], "rotation": [0.0, 0.0, 0.0], "scale": [0.09, 0.1, 0.012]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wall-note-2-1b", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wall_note_2_1b_647.add(mesh_test_wall_note_2_1b_647);
+  meshes["test-wall-note-2-1b"] = mesh_test_wall_note_2_1b_647;
+  colliders["test-wall-note-2-1b"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.09, 0.1, 0.012], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wall-note-2-1b"] ??= [];
+  destructionGroups["test-wall-note-2-1b"].push(node_test_wall_note_2_1b_647);
+
+  const endpoint_test_tripod_foot_648 = makeAttachmentEndpoint(null);
+  const node_test_tripod_foot_648 = new THREE.Group();
+  node_test_tripod_foot_648.name = "Tripod foot__pivot";
+  node_test_tripod_foot_648.scale.set(1, 1, 1);
+  if (endpoint_test_tripod_foot_648) {
+    node_test_tripod_foot_648.position.copy(endpoint_test_tripod_foot_648.start);
+    node_test_tripod_foot_648.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_tripod_foot_648.position.set(2.0, 0.06, 3.0);
+    node_test_tripod_foot_648.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_tripod_foot_648.userData.sculptComponent = {"id": "test-tripod-foot", "name": "Tripod foot", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.0, 0.05, 3.0], "localEnd": [2.0, 0.07, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.02, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.0, 0.06, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.02, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.02, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-foot", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_tripod_foot_648.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.02, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-foot", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_tripod_foot_648);
+  nodes["test-tripod-foot"] = node_test_tripod_foot_648;
+  const mesh_test_tripod_foot_648Geometry = endpoint_test_tripod_foot_648
+    ? new THREE.CylinderGeometry(endpoint_test_tripod_foot_648.endRadius, endpoint_test_tripod_foot_648.baseRadius, endpoint_test_tripod_foot_648.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_tripod_foot_648) {
+    mesh_test_tripod_foot_648Geometry.scale(0.24, 0.02, 0.24);
+  }
+  const mesh_test_tripod_foot_648 = new THREE.Mesh(
+    mesh_test_tripod_foot_648Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_tripod_foot_648.name = "Tripod foot";
+  if (endpoint_test_tripod_foot_648) {
+    mesh_test_tripod_foot_648.position.copy(endpoint_test_tripod_foot_648.midpoint);
+    mesh_test_tripod_foot_648.quaternion.copy(endpoint_test_tripod_foot_648.quaternion);
+  }
+  mesh_test_tripod_foot_648.castShadow = options.castShadow ?? true;
+  mesh_test_tripod_foot_648.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_tripod_foot_648.userData.sculptComponent = {"id": "test-tripod-foot", "name": "Tripod foot", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.0, 0.05, 3.0], "localEnd": [2.0, 0.07, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.02, "depth": 0.24, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.0, 0.06, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.02, 0.24]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.02, 0.24], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-foot", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_tripod_foot_648.add(mesh_test_tripod_foot_648);
+  meshes["test-tripod-foot"] = mesh_test_tripod_foot_648;
+  colliders["test-tripod-foot"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.02, 0.24], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-tripod-foot"] ??= [];
+  destructionGroups["test-tripod-foot"].push(node_test_tripod_foot_648);
+
+  const endpoint_test_tripod_pole_649 = makeAttachmentEndpoint(null);
+  const node_test_tripod_pole_649 = new THREE.Group();
+  node_test_tripod_pole_649.name = "Tripod pole__pivot";
+  node_test_tripod_pole_649.scale.set(1, 1, 1);
+  if (endpoint_test_tripod_pole_649) {
+    node_test_tripod_pole_649.position.copy(endpoint_test_tripod_pole_649.start);
+    node_test_tripod_pole_649.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_tripod_pole_649.position.set(2.0, 0.36, 3.0);
+    node_test_tripod_pole_649.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_tripod_pole_649.userData.sculptComponent = {"id": "test-tripod-pole", "name": "Tripod pole", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.0, 0.07, 3.0], "localEnd": [2.0, 0.65, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.58, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.0, 0.36, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.58, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.58, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-pole", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_tripod_pole_649.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.58, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-pole", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_tripod_pole_649);
+  nodes["test-tripod-pole"] = node_test_tripod_pole_649;
+  const mesh_test_tripod_pole_649Geometry = endpoint_test_tripod_pole_649
+    ? new THREE.CylinderGeometry(endpoint_test_tripod_pole_649.endRadius, endpoint_test_tripod_pole_649.baseRadius, endpoint_test_tripod_pole_649.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_tripod_pole_649) {
+    mesh_test_tripod_pole_649Geometry.scale(0.04, 0.58, 0.04);
+  }
+  const mesh_test_tripod_pole_649 = new THREE.Mesh(
+    mesh_test_tripod_pole_649Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_tripod_pole_649.name = "Tripod pole";
+  if (endpoint_test_tripod_pole_649) {
+    mesh_test_tripod_pole_649.position.copy(endpoint_test_tripod_pole_649.midpoint);
+    mesh_test_tripod_pole_649.quaternion.copy(endpoint_test_tripod_pole_649.quaternion);
+  }
+  mesh_test_tripod_pole_649.castShadow = options.castShadow ?? true;
+  mesh_test_tripod_pole_649.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_tripod_pole_649.userData.sculptComponent = {"id": "test-tripod-pole", "name": "Tripod pole", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.0, 0.07, 3.0], "localEnd": [2.0, 0.65, 3.0], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.58, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.0, 0.36, 3.0], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.58, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.58, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-tripod-pole", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_tripod_pole_649.add(mesh_test_tripod_pole_649);
+  meshes["test-tripod-pole"] = mesh_test_tripod_pole_649;
+  colliders["test-tripod-pole"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.58, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-tripod-pole"] ??= [];
+  destructionGroups["test-tripod-pole"].push(node_test_tripod_pole_649);
+
+  const endpoint_test_camera_650 = makeAttachmentEndpoint(null);
+  const node_test_camera_650 = new THREE.Group();
+  node_test_camera_650.name = "Test camera__pivot";
+  node_test_camera_650.scale.set(1, 1, 1);
+  if (endpoint_test_camera_650) {
+    node_test_camera_650.position.copy(endpoint_test_camera_650.start);
+    node_test_camera_650.rotation.set(0.0, 0.927, 0.0);
+  } else {
+    node_test_camera_650.position.set(2.03, 0.71, 2.96);
+    node_test_camera_650.rotation.set(0.0, 0.927, 0.0);
+  }
+  node_test_camera_650.userData.sculptComponent = {"id": "test-camera", "name": "Test camera", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.03, 0.03, 2.96], "localEnd": [2.03, 0.15, 2.96], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.12, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.03, 0.71, 2.96], "rotation": [0.0, 0.927, 0.0], "scale": [0.2, 0.12, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.12, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}}, "material": "camera-black", "materialLayers": ["camera-black"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "test-camera.record", "kind": "contour", "notes": "the test is recorded"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(24, 25, 28, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_650.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.12, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}};
+  (nodes["root"] ?? root).add(node_test_camera_650);
+  nodes["test-camera"] = node_test_camera_650;
+  const mesh_test_camera_650Geometry = endpoint_test_camera_650
+    ? new THREE.CylinderGeometry(endpoint_test_camera_650.endRadius, endpoint_test_camera_650.baseRadius, endpoint_test_camera_650.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_camera_650) {
+    mesh_test_camera_650Geometry.scale(0.2, 0.12, 0.1);
+  }
+  const mesh_test_camera_650 = new THREE.Mesh(
+    mesh_test_camera_650Geometry,
+    materialMap["camera-black"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_camera_650.name = "Test camera";
+  if (endpoint_test_camera_650) {
+    mesh_test_camera_650.position.copy(endpoint_test_camera_650.midpoint);
+    mesh_test_camera_650.quaternion.copy(endpoint_test_camera_650.quaternion);
+  }
+  mesh_test_camera_650.castShadow = options.castShadow ?? true;
+  mesh_test_camera_650.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_camera_650.userData.sculptComponent = {"id": "test-camera", "name": "Test camera", "level": "micro", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.03, 0.03, 2.96], "localEnd": [2.03, 0.15, 2.96], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.12, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.03, 0.71, 2.96], "rotation": [0.0, 0.927, 0.0], "scale": [0.2, 0.12, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.12, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}}, "material": "camera-black", "materialLayers": ["camera-black"], "deformations": [], "joints": [], "seams": [], "localFeatures": [{"id": "test-camera.record", "kind": "contour", "notes": "the test is recorded"}], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(24, 25, 28, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_650.add(mesh_test_camera_650);
+  meshes["test-camera"] = mesh_test_camera_650;
+  colliders["test-camera"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.12, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-camera"] ??= [];
+  destructionGroups["test-camera"].push(node_test_camera_650);
+
+  const endpoint_test_camera_lens_651 = makeAttachmentEndpoint(null);
+  const node_test_camera_lens_651 = new THREE.Group();
+  node_test_camera_lens_651.name = "Camera lens__pivot";
+  node_test_camera_lens_651.scale.set(1, 1, 1);
+  if (endpoint_test_camera_lens_651) {
+    node_test_camera_lens_651.position.copy(endpoint_test_camera_lens_651.start);
+    node_test_camera_lens_651.rotation.set(0.0, 0.927, 0.0);
+  } else {
+    node_test_camera_lens_651.position.set(2.11, 0.71, 2.85);
+    node_test_camera_lens_651.rotation.set(0.0, 0.927, 0.0);
+  }
+  node_test_camera_lens_651.userData.sculptComponent = {"id": "test-camera-lens", "name": "Camera lens", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.03, 2.85], "localEnd": [2.11, 0.11, 2.85], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.06, "height": 0.08, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.71, 2.85], "rotation": [0.0, 0.927, 0.0], "scale": [0.06, 0.08, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.06, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-lens", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}}, "material": "camera-black", "materialLayers": ["camera-black"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(24, 25, 28, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_lens_651.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.06, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-lens", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}};
+  (nodes["root"] ?? root).add(node_test_camera_lens_651);
+  nodes["test-camera-lens"] = node_test_camera_lens_651;
+  const mesh_test_camera_lens_651Geometry = endpoint_test_camera_lens_651
+    ? new THREE.CylinderGeometry(endpoint_test_camera_lens_651.endRadius, endpoint_test_camera_lens_651.baseRadius, endpoint_test_camera_lens_651.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_camera_lens_651) {
+    mesh_test_camera_lens_651Geometry.scale(0.06, 0.08, 0.08);
+  }
+  const mesh_test_camera_lens_651 = new THREE.Mesh(
+    mesh_test_camera_lens_651Geometry,
+    materialMap["camera-black"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_camera_lens_651.name = "Camera lens";
+  if (endpoint_test_camera_lens_651) {
+    mesh_test_camera_lens_651.position.copy(endpoint_test_camera_lens_651.midpoint);
+    mesh_test_camera_lens_651.quaternion.copy(endpoint_test_camera_lens_651.quaternion);
+  }
+  mesh_test_camera_lens_651.castShadow = options.castShadow ?? true;
+  mesh_test_camera_lens_651.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_camera_lens_651.userData.sculptComponent = {"id": "test-camera-lens", "name": "Camera lens", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.03, 2.85], "localEnd": [2.11, 0.11, 2.85], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.06, "height": 0.08, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.71, 2.85], "rotation": [0.0, 0.927, 0.0], "scale": [0.06, 0.08, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.06, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-lens", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "camera-black"}}, "material": "camera-black", "materialLayers": ["camera-black"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(29, 31, 34, 1.0)", "secondaryAlbedo": "rgba(24, 25, 28, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_lens_651.add(mesh_test_camera_lens_651);
+  meshes["test-camera-lens"] = mesh_test_camera_lens_651;
+  colliders["test-camera-lens"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.06, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-camera-lens"] ??= [];
+  destructionGroups["test-camera-lens"].push(node_test_camera_lens_651);
+
+  const endpoint_test_camera_light_652 = makeAttachmentEndpoint(null);
+  const node_test_camera_light_652 = new THREE.Group();
+  node_test_camera_light_652.name = "Recording light__pivot";
+  node_test_camera_light_652.scale.set(1, 1, 1);
+  if (endpoint_test_camera_light_652) {
+    node_test_camera_light_652.position.copy(endpoint_test_camera_light_652.start);
+    node_test_camera_light_652.rotation.set(0.0, 0.927, 0.0);
+  } else {
+    node_test_camera_light_652.position.set(1.98, 0.79, 3.0);
+    node_test_camera_light_652.rotation.set(0.0, 0.927, 0.0);
+  }
+  node_test_camera_light_652.userData.sculptComponent = {"id": "test-camera-light", "name": "Recording light", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.98, 0.03, 3.0], "localEnd": [1.98, 0.06, 3.0], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.03, "height": 0.03, "depth": 0.03, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.98, 0.79, 3.0], "rotation": [0.0, 0.927, 0.0], "scale": [0.03, 0.03, 0.03]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.03, 0.03, 0.03], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-light", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "logo-red"}}, "material": "logo-red", "materialLayers": ["logo-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(227, 0, 11, 1.0)", "secondaryAlbedo": "rgba(213, 0, 9, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_light_652.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.03, 0.03, 0.03], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-light", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "logo-red"}};
+  (nodes["root"] ?? root).add(node_test_camera_light_652);
+  nodes["test-camera-light"] = node_test_camera_light_652;
+  const mesh_test_camera_light_652Geometry = endpoint_test_camera_light_652
+    ? new THREE.CylinderGeometry(endpoint_test_camera_light_652.endRadius, endpoint_test_camera_light_652.baseRadius, endpoint_test_camera_light_652.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_camera_light_652) {
+    mesh_test_camera_light_652Geometry.scale(0.03, 0.03, 0.03);
+  }
+  const mesh_test_camera_light_652 = new THREE.Mesh(
+    mesh_test_camera_light_652Geometry,
+    materialMap["logo-red"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_camera_light_652.name = "Recording light";
+  if (endpoint_test_camera_light_652) {
+    mesh_test_camera_light_652.position.copy(endpoint_test_camera_light_652.midpoint);
+    mesh_test_camera_light_652.quaternion.copy(endpoint_test_camera_light_652.quaternion);
+  }
+  mesh_test_camera_light_652.castShadow = options.castShadow ?? true;
+  mesh_test_camera_light_652.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_camera_light_652.userData.sculptComponent = {"id": "test-camera-light", "name": "Recording light", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.98, 0.03, 3.0], "localEnd": [1.98, 0.06, 3.0], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.03, "height": 0.03, "depth": 0.03, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.98, 0.79, 3.0], "rotation": [0.0, 0.927, 0.0], "scale": [0.03, 0.03, 0.03]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.03, 0.03, 0.03], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-camera-light", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "logo-red"}}, "material": "logo-red", "materialLayers": ["logo-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(227, 0, 11, 1.0)", "secondaryAlbedo": "rgba(213, 0, 9, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_camera_light_652.add(mesh_test_camera_light_652);
+  meshes["test-camera-light"] = mesh_test_camera_light_652;
+  colliders["test-camera-light"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.03, 0.03, 0.03], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-camera-light"] ??= [];
+  destructionGroups["test-camera-light"].push(node_test_camera_light_652);
+
+  const endpoint_test_bench_seat_653 = makeAttachmentEndpoint(null);
+  const node_test_bench_seat_653 = new THREE.Group();
+  node_test_bench_seat_653.name = "Waiting bench seat__pivot";
+  node_test_bench_seat_653.scale.set(1, 1, 1);
+  if (endpoint_test_bench_seat_653) {
+    node_test_bench_seat_653.position.copy(endpoint_test_bench_seat_653.start);
+    node_test_bench_seat_653.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_bench_seat_653.position.set(2.5, 0.28, 4.18);
+    node_test_bench_seat_653.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_bench_seat_653.userData.sculptComponent = {"id": "test-bench-seat", "name": "Waiting bench seat", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.5, 0.25, 4.18], "localEnd": [2.5, 0.31, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.76, "height": 0.06, "depth": 0.36, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.5, 0.28, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [1.76, 0.06, 0.36]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.06, 0.36], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-seat", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}}, "material": "prop-sofa", "materialLayers": ["prop-sofa"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(110, 122, 134, 1.0)", "secondaryAlbedo": "rgba(100, 112, 124, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_seat_653.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.06, 0.36], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-seat", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}};
+  (nodes["root"] ?? root).add(node_test_bench_seat_653);
+  nodes["test-bench-seat"] = node_test_bench_seat_653;
+  const mesh_test_bench_seat_653Geometry = endpoint_test_bench_seat_653
+    ? new THREE.CylinderGeometry(endpoint_test_bench_seat_653.endRadius, endpoint_test_bench_seat_653.baseRadius, endpoint_test_bench_seat_653.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_bench_seat_653) {
+    mesh_test_bench_seat_653Geometry.scale(1.76, 0.06, 0.36);
+  }
+  const mesh_test_bench_seat_653 = new THREE.Mesh(
+    mesh_test_bench_seat_653Geometry,
+    materialMap["prop-sofa"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_bench_seat_653.name = "Waiting bench seat";
+  if (endpoint_test_bench_seat_653) {
+    mesh_test_bench_seat_653.position.copy(endpoint_test_bench_seat_653.midpoint);
+    mesh_test_bench_seat_653.quaternion.copy(endpoint_test_bench_seat_653.quaternion);
+  }
+  mesh_test_bench_seat_653.castShadow = options.castShadow ?? true;
+  mesh_test_bench_seat_653.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_bench_seat_653.userData.sculptComponent = {"id": "test-bench-seat", "name": "Waiting bench seat", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.5, 0.25, 4.18], "localEnd": [2.5, 0.31, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.76, "height": 0.06, "depth": 0.36, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.5, 0.28, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [1.76, 0.06, 0.36]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.06, 0.36], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-seat", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}}, "material": "prop-sofa", "materialLayers": ["prop-sofa"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(110, 122, 134, 1.0)", "secondaryAlbedo": "rgba(100, 112, 124, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_seat_653.add(mesh_test_bench_seat_653);
+  meshes["test-bench-seat"] = mesh_test_bench_seat_653;
+  colliders["test-bench-seat"] = {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.06, 0.36], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-bench-seat"] ??= [];
+  destructionGroups["test-bench-seat"].push(node_test_bench_seat_653);
+
+  const endpoint_test_bench_back_654 = makeAttachmentEndpoint(null);
+  const node_test_bench_back_654 = new THREE.Group();
+  node_test_bench_back_654.name = "Waiting bench back__pivot";
+  node_test_bench_back_654.scale.set(1, 1, 1);
+  if (endpoint_test_bench_back_654) {
+    node_test_bench_back_654.position.copy(endpoint_test_bench_back_654.start);
+    node_test_bench_back_654.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_bench_back_654.position.set(2.5, 0.42, 4.34);
+    node_test_bench_back_654.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_bench_back_654.userData.sculptComponent = {"id": "test-bench-back", "name": "Waiting bench back", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.5, 0.31, 4.34], "localEnd": [2.5, 0.53, 4.34], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.76, "height": 0.22, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.5, 0.42, 4.34], "rotation": [0.0, 0.0, 0.0], "scale": [1.76, 0.22, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.22, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}}, "material": "prop-sofa", "materialLayers": ["prop-sofa"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(110, 122, 134, 1.0)", "secondaryAlbedo": "rgba(100, 112, 124, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_back_654.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.22, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}};
+  (nodes["root"] ?? root).add(node_test_bench_back_654);
+  nodes["test-bench-back"] = node_test_bench_back_654;
+  const mesh_test_bench_back_654Geometry = endpoint_test_bench_back_654
+    ? new THREE.CylinderGeometry(endpoint_test_bench_back_654.endRadius, endpoint_test_bench_back_654.baseRadius, endpoint_test_bench_back_654.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_bench_back_654) {
+    mesh_test_bench_back_654Geometry.scale(1.76, 0.22, 0.08);
+  }
+  const mesh_test_bench_back_654 = new THREE.Mesh(
+    mesh_test_bench_back_654Geometry,
+    materialMap["prop-sofa"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_bench_back_654.name = "Waiting bench back";
+  if (endpoint_test_bench_back_654) {
+    mesh_test_bench_back_654.position.copy(endpoint_test_bench_back_654.midpoint);
+    mesh_test_bench_back_654.quaternion.copy(endpoint_test_bench_back_654.quaternion);
+  }
+  mesh_test_bench_back_654.castShadow = options.castShadow ?? true;
+  mesh_test_bench_back_654.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_bench_back_654.userData.sculptComponent = {"id": "test-bench-back", "name": "Waiting bench back", "level": "micro", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.5, 0.31, 4.34], "localEnd": [2.5, 0.53, 4.34], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.76, "height": 0.22, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.5, 0.42, 4.34], "rotation": [0.0, 0.0, 0.0], "scale": [1.76, 0.22, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.22, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-back", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-sofa"}}, "material": "prop-sofa", "materialLayers": ["prop-sofa"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(110, 122, 134, 1.0)", "secondaryAlbedo": "rgba(100, 112, 124, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_back_654.add(mesh_test_bench_back_654);
+  meshes["test-bench-back"] = mesh_test_bench_back_654;
+  colliders["test-bench-back"] = {"type": "box", "offset": [0, 0, 0], "scale": [1.76, 0.22, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-bench-back"] ??= [];
+  destructionGroups["test-bench-back"].push(node_test_bench_back_654);
+
+  const endpoint_test_bench_leg_0_655 = makeAttachmentEndpoint(null);
+  const node_test_bench_leg_0_655 = new THREE.Group();
+  node_test_bench_leg_0_655.name = "Bench leg 0__pivot";
+  node_test_bench_leg_0_655.scale.set(1, 1, 1);
+  if (endpoint_test_bench_leg_0_655) {
+    node_test_bench_leg_0_655.position.copy(endpoint_test_bench_leg_0_655.start);
+    node_test_bench_leg_0_655.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_bench_leg_0_655.position.set(1.68, 0.15, 4.18);
+    node_test_bench_leg_0_655.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_bench_leg_0_655.userData.sculptComponent = {"id": "test-bench-leg-0", "name": "Bench leg 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.68, 0.05, 4.18], "localEnd": [1.68, 0.25, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.2, "depth": 0.32, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.68, 0.15, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.2, 0.32]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_leg_0_655.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_bench_leg_0_655);
+  nodes["test-bench-leg-0"] = node_test_bench_leg_0_655;
+  const mesh_test_bench_leg_0_655Geometry = endpoint_test_bench_leg_0_655
+    ? new THREE.CylinderGeometry(endpoint_test_bench_leg_0_655.endRadius, endpoint_test_bench_leg_0_655.baseRadius, endpoint_test_bench_leg_0_655.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_bench_leg_0_655) {
+    mesh_test_bench_leg_0_655Geometry.scale(0.04, 0.2, 0.32);
+  }
+  const mesh_test_bench_leg_0_655 = new THREE.Mesh(
+    mesh_test_bench_leg_0_655Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_bench_leg_0_655.name = "Bench leg 0";
+  if (endpoint_test_bench_leg_0_655) {
+    mesh_test_bench_leg_0_655.position.copy(endpoint_test_bench_leg_0_655.midpoint);
+    mesh_test_bench_leg_0_655.quaternion.copy(endpoint_test_bench_leg_0_655.quaternion);
+  }
+  mesh_test_bench_leg_0_655.castShadow = options.castShadow ?? true;
+  mesh_test_bench_leg_0_655.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_bench_leg_0_655.userData.sculptComponent = {"id": "test-bench-leg-0", "name": "Bench leg 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.68, 0.05, 4.18], "localEnd": [1.68, 0.25, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.2, "depth": 0.32, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.68, 0.15, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.2, 0.32]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_leg_0_655.add(mesh_test_bench_leg_0_655);
+  meshes["test-bench-leg-0"] = mesh_test_bench_leg_0_655;
+  colliders["test-bench-leg-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-bench-leg-0"] ??= [];
+  destructionGroups["test-bench-leg-0"].push(node_test_bench_leg_0_655);
+
+  const endpoint_test_bench_leg_1_656 = makeAttachmentEndpoint(null);
+  const node_test_bench_leg_1_656 = new THREE.Group();
+  node_test_bench_leg_1_656.name = "Bench leg 1__pivot";
+  node_test_bench_leg_1_656.scale.set(1, 1, 1);
+  if (endpoint_test_bench_leg_1_656) {
+    node_test_bench_leg_1_656.position.copy(endpoint_test_bench_leg_1_656.start);
+    node_test_bench_leg_1_656.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_bench_leg_1_656.position.set(3.32, 0.15, 4.18);
+    node_test_bench_leg_1_656.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_bench_leg_1_656.userData.sculptComponent = {"id": "test-bench-leg-1", "name": "Bench leg 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.32, 0.05, 4.18], "localEnd": [3.32, 0.25, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.2, "depth": 0.32, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.32, 0.15, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.2, 0.32]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_leg_1_656.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_bench_leg_1_656);
+  nodes["test-bench-leg-1"] = node_test_bench_leg_1_656;
+  const mesh_test_bench_leg_1_656Geometry = endpoint_test_bench_leg_1_656
+    ? new THREE.CylinderGeometry(endpoint_test_bench_leg_1_656.endRadius, endpoint_test_bench_leg_1_656.baseRadius, endpoint_test_bench_leg_1_656.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_bench_leg_1_656) {
+    mesh_test_bench_leg_1_656Geometry.scale(0.04, 0.2, 0.32);
+  }
+  const mesh_test_bench_leg_1_656 = new THREE.Mesh(
+    mesh_test_bench_leg_1_656Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_bench_leg_1_656.name = "Bench leg 1";
+  if (endpoint_test_bench_leg_1_656) {
+    mesh_test_bench_leg_1_656.position.copy(endpoint_test_bench_leg_1_656.midpoint);
+    mesh_test_bench_leg_1_656.quaternion.copy(endpoint_test_bench_leg_1_656.quaternion);
+  }
+  mesh_test_bench_leg_1_656.castShadow = options.castShadow ?? true;
+  mesh_test_bench_leg_1_656.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_bench_leg_1_656.userData.sculptComponent = {"id": "test-bench-leg-1", "name": "Bench leg 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.32, 0.05, 4.18], "localEnd": [3.32, 0.25, 4.18], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.2, "depth": 0.32, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.32, 0.15, 4.18], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.2, 0.32]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-bench-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_bench_leg_1_656.add(mesh_test_bench_leg_1_656);
+  meshes["test-bench-leg-1"] = mesh_test_bench_leg_1_656;
+  colliders["test-bench-leg-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.2, 0.32], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-bench-leg-1"] ??= [];
+  destructionGroups["test-bench-leg-1"].push(node_test_bench_leg_1_656);
+
+  const endpoint_npc_wait_1_thigh_w_657 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_thigh_w_657 = new THREE.Group();
+  node_npc_wait_1_thigh_w_657.name = "Waiting seller 1 thigh w__pivot";
+  node_npc_wait_1_thigh_w_657.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_thigh_w_657) {
+    node_npc_wait_1_thigh_w_657.position.copy(endpoint_npc_wait_1_thigh_w_657.start);
+    node_npc_wait_1_thigh_w_657.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_thigh_w_657.position.set(1.99, 0.36, 4.07);
+    node_npc_wait_1_thigh_w_657.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_thigh_w_657.userData.sculptComponent = {"id": "npc-wait-1-thigh-w", "name": "Waiting seller 1 thigh w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.99, 0.31, 4.07], "localEnd": [1.99, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.99, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_thigh_w_657.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_thigh_w_657);
+  nodes["npc-wait-1-thigh-w"] = node_npc_wait_1_thigh_w_657;
+  const mesh_npc_wait_1_thigh_w_657Geometry = endpoint_npc_wait_1_thigh_w_657
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_thigh_w_657.endRadius, endpoint_npc_wait_1_thigh_w_657.baseRadius, endpoint_npc_wait_1_thigh_w_657.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_thigh_w_657) {
+    mesh_npc_wait_1_thigh_w_657Geometry.scale(0.1, 0.1, 0.3);
+  }
+  const mesh_npc_wait_1_thigh_w_657 = new THREE.Mesh(
+    mesh_npc_wait_1_thigh_w_657Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_thigh_w_657.name = "Waiting seller 1 thigh w";
+  if (endpoint_npc_wait_1_thigh_w_657) {
+    mesh_npc_wait_1_thigh_w_657.position.copy(endpoint_npc_wait_1_thigh_w_657.midpoint);
+    mesh_npc_wait_1_thigh_w_657.quaternion.copy(endpoint_npc_wait_1_thigh_w_657.quaternion);
+  }
+  mesh_npc_wait_1_thigh_w_657.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_thigh_w_657.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_thigh_w_657.userData.sculptComponent = {"id": "npc-wait-1-thigh-w", "name": "Waiting seller 1 thigh w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.99, 0.31, 4.07], "localEnd": [1.99, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.99, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_thigh_w_657.add(mesh_npc_wait_1_thigh_w_657);
+  meshes["npc-wait-1-thigh-w"] = mesh_npc_wait_1_thigh_w_657;
+  colliders["npc-wait-1-thigh-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-thigh-w"] ??= [];
+  destructionGroups["npc-wait-1-thigh-w"].push(node_npc_wait_1_thigh_w_657);
+
+  const endpoint_npc_wait_1_shin_w_658 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_shin_w_658 = new THREE.Group();
+  node_npc_wait_1_shin_w_658.name = "Waiting seller 1 shin w__pivot";
+  node_npc_wait_1_shin_w_658.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_shin_w_658) {
+    node_npc_wait_1_shin_w_658.position.copy(endpoint_npc_wait_1_shin_w_658.start);
+    node_npc_wait_1_shin_w_658.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_shin_w_658.position.set(1.99, 0.19, 3.95);
+    node_npc_wait_1_shin_w_658.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_shin_w_658.userData.sculptComponent = {"id": "npc-wait-1-shin-w", "name": "Waiting seller 1 shin w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.99, 0.05, 3.95], "localEnd": [1.99, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.99, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_shin_w_658.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_shin_w_658);
+  nodes["npc-wait-1-shin-w"] = node_npc_wait_1_shin_w_658;
+  const mesh_npc_wait_1_shin_w_658Geometry = endpoint_npc_wait_1_shin_w_658
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_shin_w_658.endRadius, endpoint_npc_wait_1_shin_w_658.baseRadius, endpoint_npc_wait_1_shin_w_658.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_shin_w_658) {
+    mesh_npc_wait_1_shin_w_658Geometry.scale(0.1, 0.28, 0.1);
+  }
+  const mesh_npc_wait_1_shin_w_658 = new THREE.Mesh(
+    mesh_npc_wait_1_shin_w_658Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_shin_w_658.name = "Waiting seller 1 shin w";
+  if (endpoint_npc_wait_1_shin_w_658) {
+    mesh_npc_wait_1_shin_w_658.position.copy(endpoint_npc_wait_1_shin_w_658.midpoint);
+    mesh_npc_wait_1_shin_w_658.quaternion.copy(endpoint_npc_wait_1_shin_w_658.quaternion);
+  }
+  mesh_npc_wait_1_shin_w_658.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_shin_w_658.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_shin_w_658.userData.sculptComponent = {"id": "npc-wait-1-shin-w", "name": "Waiting seller 1 shin w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.99, 0.05, 3.95], "localEnd": [1.99, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.99, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_shin_w_658.add(mesh_npc_wait_1_shin_w_658);
+  meshes["npc-wait-1-shin-w"] = mesh_npc_wait_1_shin_w_658;
+  colliders["npc-wait-1-shin-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-shin-w"] ??= [];
+  destructionGroups["npc-wait-1-shin-w"].push(node_npc_wait_1_shin_w_658);
+
+  const endpoint_npc_wait_1_thigh_e_659 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_thigh_e_659 = new THREE.Group();
+  node_npc_wait_1_thigh_e_659.name = "Waiting seller 1 thigh e__pivot";
+  node_npc_wait_1_thigh_e_659.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_thigh_e_659) {
+    node_npc_wait_1_thigh_e_659.position.copy(endpoint_npc_wait_1_thigh_e_659.start);
+    node_npc_wait_1_thigh_e_659.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_thigh_e_659.position.set(2.11, 0.36, 4.07);
+    node_npc_wait_1_thigh_e_659.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_thigh_e_659.userData.sculptComponent = {"id": "npc-wait-1-thigh-e", "name": "Waiting seller 1 thigh e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.31, 4.07], "localEnd": [2.11, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_thigh_e_659.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_thigh_e_659);
+  nodes["npc-wait-1-thigh-e"] = node_npc_wait_1_thigh_e_659;
+  const mesh_npc_wait_1_thigh_e_659Geometry = endpoint_npc_wait_1_thigh_e_659
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_thigh_e_659.endRadius, endpoint_npc_wait_1_thigh_e_659.baseRadius, endpoint_npc_wait_1_thigh_e_659.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_thigh_e_659) {
+    mesh_npc_wait_1_thigh_e_659Geometry.scale(0.1, 0.1, 0.3);
+  }
+  const mesh_npc_wait_1_thigh_e_659 = new THREE.Mesh(
+    mesh_npc_wait_1_thigh_e_659Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_thigh_e_659.name = "Waiting seller 1 thigh e";
+  if (endpoint_npc_wait_1_thigh_e_659) {
+    mesh_npc_wait_1_thigh_e_659.position.copy(endpoint_npc_wait_1_thigh_e_659.midpoint);
+    mesh_npc_wait_1_thigh_e_659.quaternion.copy(endpoint_npc_wait_1_thigh_e_659.quaternion);
+  }
+  mesh_npc_wait_1_thigh_e_659.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_thigh_e_659.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_thigh_e_659.userData.sculptComponent = {"id": "npc-wait-1-thigh-e", "name": "Waiting seller 1 thigh e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.31, 4.07], "localEnd": [2.11, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_thigh_e_659.add(mesh_npc_wait_1_thigh_e_659);
+  meshes["npc-wait-1-thigh-e"] = mesh_npc_wait_1_thigh_e_659;
+  colliders["npc-wait-1-thigh-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-thigh-e"] ??= [];
+  destructionGroups["npc-wait-1-thigh-e"].push(node_npc_wait_1_thigh_e_659);
+
+  const endpoint_npc_wait_1_shin_e_660 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_shin_e_660 = new THREE.Group();
+  node_npc_wait_1_shin_e_660.name = "Waiting seller 1 shin e__pivot";
+  node_npc_wait_1_shin_e_660.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_shin_e_660) {
+    node_npc_wait_1_shin_e_660.position.copy(endpoint_npc_wait_1_shin_e_660.start);
+    node_npc_wait_1_shin_e_660.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_shin_e_660.position.set(2.11, 0.19, 3.95);
+    node_npc_wait_1_shin_e_660.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_shin_e_660.userData.sculptComponent = {"id": "npc-wait-1-shin-e", "name": "Waiting seller 1 shin e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.05, 3.95], "localEnd": [2.11, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_shin_e_660.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_shin_e_660);
+  nodes["npc-wait-1-shin-e"] = node_npc_wait_1_shin_e_660;
+  const mesh_npc_wait_1_shin_e_660Geometry = endpoint_npc_wait_1_shin_e_660
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_shin_e_660.endRadius, endpoint_npc_wait_1_shin_e_660.baseRadius, endpoint_npc_wait_1_shin_e_660.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_shin_e_660) {
+    mesh_npc_wait_1_shin_e_660Geometry.scale(0.1, 0.28, 0.1);
+  }
+  const mesh_npc_wait_1_shin_e_660 = new THREE.Mesh(
+    mesh_npc_wait_1_shin_e_660Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_shin_e_660.name = "Waiting seller 1 shin e";
+  if (endpoint_npc_wait_1_shin_e_660) {
+    mesh_npc_wait_1_shin_e_660.position.copy(endpoint_npc_wait_1_shin_e_660.midpoint);
+    mesh_npc_wait_1_shin_e_660.quaternion.copy(endpoint_npc_wait_1_shin_e_660.quaternion);
+  }
+  mesh_npc_wait_1_shin_e_660.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_shin_e_660.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_shin_e_660.userData.sculptComponent = {"id": "npc-wait-1-shin-e", "name": "Waiting seller 1 shin e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.11, 0.05, 3.95], "localEnd": [2.11, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.11, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_shin_e_660.add(mesh_npc_wait_1_shin_e_660);
+  meshes["npc-wait-1-shin-e"] = mesh_npc_wait_1_shin_e_660;
+  colliders["npc-wait-1-shin-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-shin-e"] ??= [];
+  destructionGroups["npc-wait-1-shin-e"].push(node_npc_wait_1_shin_e_660);
+
+  const endpoint_npc_wait_1_torso_661 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_torso_661 = new THREE.Group();
+  node_npc_wait_1_torso_661.name = "Waiting seller 1 torso__pivot";
+  node_npc_wait_1_torso_661.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_torso_661) {
+    node_npc_wait_1_torso_661.position.copy(endpoint_npc_wait_1_torso_661.start);
+    node_npc_wait_1_torso_661.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_torso_661.position.set(2.05, 0.54, 4.22);
+    node_npc_wait_1_torso_661.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_torso_661.userData.sculptComponent = {"id": "npc-wait-1-torso", "name": "Waiting seller 1 torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.39, 4.22], "localEnd": [2.05, 0.69, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.54, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_torso_661.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_torso_661);
+  nodes["npc-wait-1-torso"] = node_npc_wait_1_torso_661;
+  const mesh_npc_wait_1_torso_661Geometry = endpoint_npc_wait_1_torso_661
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_torso_661.endRadius, endpoint_npc_wait_1_torso_661.baseRadius, endpoint_npc_wait_1_torso_661.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_torso_661) {
+    mesh_npc_wait_1_torso_661Geometry.scale(0.28, 0.3, 0.16);
+  }
+  const mesh_npc_wait_1_torso_661 = new THREE.Mesh(
+    mesh_npc_wait_1_torso_661Geometry,
+    materialMap["npc-shirt-3"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_torso_661.name = "Waiting seller 1 torso";
+  if (endpoint_npc_wait_1_torso_661) {
+    mesh_npc_wait_1_torso_661.position.copy(endpoint_npc_wait_1_torso_661.midpoint);
+    mesh_npc_wait_1_torso_661.quaternion.copy(endpoint_npc_wait_1_torso_661.quaternion);
+  }
+  mesh_npc_wait_1_torso_661.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_torso_661.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_torso_661.userData.sculptComponent = {"id": "npc-wait-1-torso", "name": "Waiting seller 1 torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.39, 4.22], "localEnd": [2.05, 0.69, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.54, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_torso_661.add(mesh_npc_wait_1_torso_661);
+  meshes["npc-wait-1-torso"] = mesh_npc_wait_1_torso_661;
+  colliders["npc-wait-1-torso"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-torso"] ??= [];
+  destructionGroups["npc-wait-1-torso"].push(node_npc_wait_1_torso_661);
+
+  const endpoint_npc_wait_1_arm_w_662 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_arm_w_662 = new THREE.Group();
+  node_npc_wait_1_arm_w_662.name = "Waiting seller 1 arm w__pivot";
+  node_npc_wait_1_arm_w_662.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_arm_w_662) {
+    node_npc_wait_1_arm_w_662.position.copy(endpoint_npc_wait_1_arm_w_662.start);
+    node_npc_wait_1_arm_w_662.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_arm_w_662.position.set(1.87, 0.54, 4.15);
+    node_npc_wait_1_arm_w_662.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_arm_w_662.userData.sculptComponent = {"id": "npc-wait-1-arm-w", "name": "Waiting seller 1 arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.87, 0.41, 4.15], "localEnd": [1.87, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.87, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_arm_w_662.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_arm_w_662);
+  nodes["npc-wait-1-arm-w"] = node_npc_wait_1_arm_w_662;
+  const mesh_npc_wait_1_arm_w_662Geometry = endpoint_npc_wait_1_arm_w_662
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_arm_w_662.endRadius, endpoint_npc_wait_1_arm_w_662.baseRadius, endpoint_npc_wait_1_arm_w_662.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_arm_w_662) {
+    mesh_npc_wait_1_arm_w_662Geometry.scale(0.08, 0.26, 0.1);
+  }
+  const mesh_npc_wait_1_arm_w_662 = new THREE.Mesh(
+    mesh_npc_wait_1_arm_w_662Geometry,
+    materialMap["npc-shirt-3"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_arm_w_662.name = "Waiting seller 1 arm w";
+  if (endpoint_npc_wait_1_arm_w_662) {
+    mesh_npc_wait_1_arm_w_662.position.copy(endpoint_npc_wait_1_arm_w_662.midpoint);
+    mesh_npc_wait_1_arm_w_662.quaternion.copy(endpoint_npc_wait_1_arm_w_662.quaternion);
+  }
+  mesh_npc_wait_1_arm_w_662.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_arm_w_662.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_arm_w_662.userData.sculptComponent = {"id": "npc-wait-1-arm-w", "name": "Waiting seller 1 arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [1.87, 0.41, 4.15], "localEnd": [1.87, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [1.87, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_arm_w_662.add(mesh_npc_wait_1_arm_w_662);
+  meshes["npc-wait-1-arm-w"] = mesh_npc_wait_1_arm_w_662;
+  colliders["npc-wait-1-arm-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-arm-w"] ??= [];
+  destructionGroups["npc-wait-1-arm-w"].push(node_npc_wait_1_arm_w_662);
+
+  const endpoint_npc_wait_1_arm_e_663 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_arm_e_663 = new THREE.Group();
+  node_npc_wait_1_arm_e_663.name = "Waiting seller 1 arm e__pivot";
+  node_npc_wait_1_arm_e_663.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_arm_e_663) {
+    node_npc_wait_1_arm_e_663.position.copy(endpoint_npc_wait_1_arm_e_663.start);
+    node_npc_wait_1_arm_e_663.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_arm_e_663.position.set(2.23, 0.54, 4.15);
+    node_npc_wait_1_arm_e_663.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_arm_e_663.userData.sculptComponent = {"id": "npc-wait-1-arm-e", "name": "Waiting seller 1 arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.23, 0.41, 4.15], "localEnd": [2.23, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.23, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_arm_e_663.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_arm_e_663);
+  nodes["npc-wait-1-arm-e"] = node_npc_wait_1_arm_e_663;
+  const mesh_npc_wait_1_arm_e_663Geometry = endpoint_npc_wait_1_arm_e_663
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_arm_e_663.endRadius, endpoint_npc_wait_1_arm_e_663.baseRadius, endpoint_npc_wait_1_arm_e_663.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_arm_e_663) {
+    mesh_npc_wait_1_arm_e_663Geometry.scale(0.08, 0.26, 0.1);
+  }
+  const mesh_npc_wait_1_arm_e_663 = new THREE.Mesh(
+    mesh_npc_wait_1_arm_e_663Geometry,
+    materialMap["npc-shirt-3"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_arm_e_663.name = "Waiting seller 1 arm e";
+  if (endpoint_npc_wait_1_arm_e_663) {
+    mesh_npc_wait_1_arm_e_663.position.copy(endpoint_npc_wait_1_arm_e_663.midpoint);
+    mesh_npc_wait_1_arm_e_663.quaternion.copy(endpoint_npc_wait_1_arm_e_663.quaternion);
+  }
+  mesh_npc_wait_1_arm_e_663.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_arm_e_663.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_arm_e_663.userData.sculptComponent = {"id": "npc-wait-1-arm-e", "name": "Waiting seller 1 arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.23, 0.41, 4.15], "localEnd": [2.23, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.23, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-3"}}, "material": "npc-shirt-3", "materialLayers": ["npc-shirt-3"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(74, 95, 143, 1.0)", "secondaryAlbedo": "rgba(66, 86, 133, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_arm_e_663.add(mesh_npc_wait_1_arm_e_663);
+  meshes["npc-wait-1-arm-e"] = mesh_npc_wait_1_arm_e_663;
+  colliders["npc-wait-1-arm-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-arm-e"] ??= [];
+  destructionGroups["npc-wait-1-arm-e"].push(node_npc_wait_1_arm_e_663);
+
+  const endpoint_npc_wait_1_head_664 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_head_664 = new THREE.Group();
+  node_npc_wait_1_head_664.name = "Waiting seller 1 head__pivot";
+  node_npc_wait_1_head_664.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_head_664) {
+    node_npc_wait_1_head_664.position.copy(endpoint_npc_wait_1_head_664.start);
+    node_npc_wait_1_head_664.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_head_664.position.set(2.05, 0.79, 4.22);
+    node_npc_wait_1_head_664.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_head_664.userData.sculptComponent = {"id": "npc-wait-1-head", "name": "Waiting seller 1 head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.71, 4.22], "localEnd": [2.05, 0.87, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.79, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_head_664.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_head_664);
+  nodes["npc-wait-1-head"] = node_npc_wait_1_head_664;
+  const mesh_npc_wait_1_head_664Geometry = endpoint_npc_wait_1_head_664
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_head_664.endRadius, endpoint_npc_wait_1_head_664.baseRadius, endpoint_npc_wait_1_head_664.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_head_664) {
+    mesh_npc_wait_1_head_664Geometry.scale(0.16, 0.16, 0.16);
+  }
+  const mesh_npc_wait_1_head_664 = new THREE.Mesh(
+    mesh_npc_wait_1_head_664Geometry,
+    materialMap["npc-skin"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_head_664.name = "Waiting seller 1 head";
+  if (endpoint_npc_wait_1_head_664) {
+    mesh_npc_wait_1_head_664.position.copy(endpoint_npc_wait_1_head_664.midpoint);
+    mesh_npc_wait_1_head_664.quaternion.copy(endpoint_npc_wait_1_head_664.quaternion);
+  }
+  mesh_npc_wait_1_head_664.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_head_664.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_head_664.userData.sculptComponent = {"id": "npc-wait-1-head", "name": "Waiting seller 1 head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.71, 4.22], "localEnd": [2.05, 0.87, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.79, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_head_664.add(mesh_npc_wait_1_head_664);
+  meshes["npc-wait-1-head"] = mesh_npc_wait_1_head_664;
+  colliders["npc-wait-1-head"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-head"] ??= [];
+  destructionGroups["npc-wait-1-head"].push(node_npc_wait_1_head_664);
+
+  const endpoint_npc_wait_1_hair_665 = makeAttachmentEndpoint(null);
+  const node_npc_wait_1_hair_665 = new THREE.Group();
+  node_npc_wait_1_hair_665.name = "Waiting seller 1 hair__pivot";
+  node_npc_wait_1_hair_665.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_1_hair_665) {
+    node_npc_wait_1_hair_665.position.copy(endpoint_npc_wait_1_hair_665.start);
+    node_npc_wait_1_hair_665.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_1_hair_665.position.set(2.05, 0.865, 4.2325);
+    node_npc_wait_1_hair_665.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_1_hair_665.userData.sculptComponent = {"id": "npc-wait-1-hair", "name": "Waiting seller 1 hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.83, 4.2325], "localEnd": [2.05, 0.9, 4.2325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.865, 4.2325], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair"}}, "material": "npc-hair", "materialLayers": ["npc-hair"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(59, 42, 32, 1.0)", "secondaryAlbedo": "rgba(51, 35, 26, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_hair_665.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair"}};
+  (nodes["root"] ?? root).add(node_npc_wait_1_hair_665);
+  nodes["npc-wait-1-hair"] = node_npc_wait_1_hair_665;
+  const mesh_npc_wait_1_hair_665Geometry = endpoint_npc_wait_1_hair_665
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_1_hair_665.endRadius, endpoint_npc_wait_1_hair_665.baseRadius, endpoint_npc_wait_1_hair_665.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_1_hair_665) {
+    mesh_npc_wait_1_hair_665Geometry.scale(0.17, 0.07, 0.145);
+  }
+  const mesh_npc_wait_1_hair_665 = new THREE.Mesh(
+    mesh_npc_wait_1_hair_665Geometry,
+    materialMap["npc-hair"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_1_hair_665.name = "Waiting seller 1 hair";
+  if (endpoint_npc_wait_1_hair_665) {
+    mesh_npc_wait_1_hair_665.position.copy(endpoint_npc_wait_1_hair_665.midpoint);
+    mesh_npc_wait_1_hair_665.quaternion.copy(endpoint_npc_wait_1_hair_665.quaternion);
+  }
+  mesh_npc_wait_1_hair_665.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_1_hair_665.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_1_hair_665.userData.sculptComponent = {"id": "npc-wait-1-hair", "name": "Waiting seller 1 hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.05, 0.83, 4.2325], "localEnd": [2.05, 0.9, 4.2325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.05, 0.865, 4.2325], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-1-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair"}}, "material": "npc-hair", "materialLayers": ["npc-hair"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(59, 42, 32, 1.0)", "secondaryAlbedo": "rgba(51, 35, 26, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_1_hair_665.add(mesh_npc_wait_1_hair_665);
+  meshes["npc-wait-1-hair"] = mesh_npc_wait_1_hair_665;
+  colliders["npc-wait-1-hair"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-1-hair"] ??= [];
+  destructionGroups["npc-wait-1-hair"].push(node_npc_wait_1_hair_665);
+
+  const endpoint_npc_wait_2_thigh_w_666 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_thigh_w_666 = new THREE.Group();
+  node_npc_wait_2_thigh_w_666.name = "Waiting seller 2 thigh w__pivot";
+  node_npc_wait_2_thigh_w_666.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_thigh_w_666) {
+    node_npc_wait_2_thigh_w_666.position.copy(endpoint_npc_wait_2_thigh_w_666.start);
+    node_npc_wait_2_thigh_w_666.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_thigh_w_666.position.set(2.84, 0.36, 4.07);
+    node_npc_wait_2_thigh_w_666.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_thigh_w_666.userData.sculptComponent = {"id": "npc-wait-2-thigh-w", "name": "Waiting seller 2 thigh w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.84, 0.31, 4.07], "localEnd": [2.84, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.84, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_thigh_w_666.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_thigh_w_666);
+  nodes["npc-wait-2-thigh-w"] = node_npc_wait_2_thigh_w_666;
+  const mesh_npc_wait_2_thigh_w_666Geometry = endpoint_npc_wait_2_thigh_w_666
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_thigh_w_666.endRadius, endpoint_npc_wait_2_thigh_w_666.baseRadius, endpoint_npc_wait_2_thigh_w_666.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_thigh_w_666) {
+    mesh_npc_wait_2_thigh_w_666Geometry.scale(0.1, 0.1, 0.3);
+  }
+  const mesh_npc_wait_2_thigh_w_666 = new THREE.Mesh(
+    mesh_npc_wait_2_thigh_w_666Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_thigh_w_666.name = "Waiting seller 2 thigh w";
+  if (endpoint_npc_wait_2_thigh_w_666) {
+    mesh_npc_wait_2_thigh_w_666.position.copy(endpoint_npc_wait_2_thigh_w_666.midpoint);
+    mesh_npc_wait_2_thigh_w_666.quaternion.copy(endpoint_npc_wait_2_thigh_w_666.quaternion);
+  }
+  mesh_npc_wait_2_thigh_w_666.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_thigh_w_666.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_thigh_w_666.userData.sculptComponent = {"id": "npc-wait-2-thigh-w", "name": "Waiting seller 2 thigh w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.84, 0.31, 4.07], "localEnd": [2.84, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.84, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_thigh_w_666.add(mesh_npc_wait_2_thigh_w_666);
+  meshes["npc-wait-2-thigh-w"] = mesh_npc_wait_2_thigh_w_666;
+  colliders["npc-wait-2-thigh-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-thigh-w"] ??= [];
+  destructionGroups["npc-wait-2-thigh-w"].push(node_npc_wait_2_thigh_w_666);
+
+  const endpoint_npc_wait_2_shin_w_667 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_shin_w_667 = new THREE.Group();
+  node_npc_wait_2_shin_w_667.name = "Waiting seller 2 shin w__pivot";
+  node_npc_wait_2_shin_w_667.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_shin_w_667) {
+    node_npc_wait_2_shin_w_667.position.copy(endpoint_npc_wait_2_shin_w_667.start);
+    node_npc_wait_2_shin_w_667.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_shin_w_667.position.set(2.84, 0.19, 3.95);
+    node_npc_wait_2_shin_w_667.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_shin_w_667.userData.sculptComponent = {"id": "npc-wait-2-shin-w", "name": "Waiting seller 2 shin w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.84, 0.05, 3.95], "localEnd": [2.84, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.84, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_shin_w_667.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_shin_w_667);
+  nodes["npc-wait-2-shin-w"] = node_npc_wait_2_shin_w_667;
+  const mesh_npc_wait_2_shin_w_667Geometry = endpoint_npc_wait_2_shin_w_667
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_shin_w_667.endRadius, endpoint_npc_wait_2_shin_w_667.baseRadius, endpoint_npc_wait_2_shin_w_667.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_shin_w_667) {
+    mesh_npc_wait_2_shin_w_667Geometry.scale(0.1, 0.28, 0.1);
+  }
+  const mesh_npc_wait_2_shin_w_667 = new THREE.Mesh(
+    mesh_npc_wait_2_shin_w_667Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_shin_w_667.name = "Waiting seller 2 shin w";
+  if (endpoint_npc_wait_2_shin_w_667) {
+    mesh_npc_wait_2_shin_w_667.position.copy(endpoint_npc_wait_2_shin_w_667.midpoint);
+    mesh_npc_wait_2_shin_w_667.quaternion.copy(endpoint_npc_wait_2_shin_w_667.quaternion);
+  }
+  mesh_npc_wait_2_shin_w_667.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_shin_w_667.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_shin_w_667.userData.sculptComponent = {"id": "npc-wait-2-shin-w", "name": "Waiting seller 2 shin w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.84, 0.05, 3.95], "localEnd": [2.84, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.84, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_shin_w_667.add(mesh_npc_wait_2_shin_w_667);
+  meshes["npc-wait-2-shin-w"] = mesh_npc_wait_2_shin_w_667;
+  colliders["npc-wait-2-shin-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-shin-w"] ??= [];
+  destructionGroups["npc-wait-2-shin-w"].push(node_npc_wait_2_shin_w_667);
+
+  const endpoint_npc_wait_2_thigh_e_668 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_thigh_e_668 = new THREE.Group();
+  node_npc_wait_2_thigh_e_668.name = "Waiting seller 2 thigh e__pivot";
+  node_npc_wait_2_thigh_e_668.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_thigh_e_668) {
+    node_npc_wait_2_thigh_e_668.position.copy(endpoint_npc_wait_2_thigh_e_668.start);
+    node_npc_wait_2_thigh_e_668.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_thigh_e_668.position.set(2.96, 0.36, 4.07);
+    node_npc_wait_2_thigh_e_668.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_thigh_e_668.userData.sculptComponent = {"id": "npc-wait-2-thigh-e", "name": "Waiting seller 2 thigh e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.96, 0.31, 4.07], "localEnd": [2.96, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.96, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_thigh_e_668.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_thigh_e_668);
+  nodes["npc-wait-2-thigh-e"] = node_npc_wait_2_thigh_e_668;
+  const mesh_npc_wait_2_thigh_e_668Geometry = endpoint_npc_wait_2_thigh_e_668
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_thigh_e_668.endRadius, endpoint_npc_wait_2_thigh_e_668.baseRadius, endpoint_npc_wait_2_thigh_e_668.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_thigh_e_668) {
+    mesh_npc_wait_2_thigh_e_668Geometry.scale(0.1, 0.1, 0.3);
+  }
+  const mesh_npc_wait_2_thigh_e_668 = new THREE.Mesh(
+    mesh_npc_wait_2_thigh_e_668Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_thigh_e_668.name = "Waiting seller 2 thigh e";
+  if (endpoint_npc_wait_2_thigh_e_668) {
+    mesh_npc_wait_2_thigh_e_668.position.copy(endpoint_npc_wait_2_thigh_e_668.midpoint);
+    mesh_npc_wait_2_thigh_e_668.quaternion.copy(endpoint_npc_wait_2_thigh_e_668.quaternion);
+  }
+  mesh_npc_wait_2_thigh_e_668.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_thigh_e_668.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_thigh_e_668.userData.sculptComponent = {"id": "npc-wait-2-thigh-e", "name": "Waiting seller 2 thigh e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.96, 0.31, 4.07], "localEnd": [2.96, 0.41, 4.07], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.1, "depth": 0.3, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.96, 0.36, 4.07], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.1, 0.3]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-thigh-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_thigh_e_668.add(mesh_npc_wait_2_thigh_e_668);
+  meshes["npc-wait-2-thigh-e"] = mesh_npc_wait_2_thigh_e_668;
+  colliders["npc-wait-2-thigh-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.1, 0.3], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-thigh-e"] ??= [];
+  destructionGroups["npc-wait-2-thigh-e"].push(node_npc_wait_2_thigh_e_668);
+
+  const endpoint_npc_wait_2_shin_e_669 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_shin_e_669 = new THREE.Group();
+  node_npc_wait_2_shin_e_669.name = "Waiting seller 2 shin e__pivot";
+  node_npc_wait_2_shin_e_669.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_shin_e_669) {
+    node_npc_wait_2_shin_e_669.position.copy(endpoint_npc_wait_2_shin_e_669.start);
+    node_npc_wait_2_shin_e_669.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_shin_e_669.position.set(2.96, 0.19, 3.95);
+    node_npc_wait_2_shin_e_669.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_shin_e_669.userData.sculptComponent = {"id": "npc-wait-2-shin-e", "name": "Waiting seller 2 shin e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.96, 0.05, 3.95], "localEnd": [2.96, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.96, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_shin_e_669.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_shin_e_669);
+  nodes["npc-wait-2-shin-e"] = node_npc_wait_2_shin_e_669;
+  const mesh_npc_wait_2_shin_e_669Geometry = endpoint_npc_wait_2_shin_e_669
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_shin_e_669.endRadius, endpoint_npc_wait_2_shin_e_669.baseRadius, endpoint_npc_wait_2_shin_e_669.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_shin_e_669) {
+    mesh_npc_wait_2_shin_e_669Geometry.scale(0.1, 0.28, 0.1);
+  }
+  const mesh_npc_wait_2_shin_e_669 = new THREE.Mesh(
+    mesh_npc_wait_2_shin_e_669Geometry,
+    materialMap["npc-trousers"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_shin_e_669.name = "Waiting seller 2 shin e";
+  if (endpoint_npc_wait_2_shin_e_669) {
+    mesh_npc_wait_2_shin_e_669.position.copy(endpoint_npc_wait_2_shin_e_669.midpoint);
+    mesh_npc_wait_2_shin_e_669.quaternion.copy(endpoint_npc_wait_2_shin_e_669.quaternion);
+  }
+  mesh_npc_wait_2_shin_e_669.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_shin_e_669.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_shin_e_669.userData.sculptComponent = {"id": "npc-wait-2-shin-e", "name": "Waiting seller 2 shin e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.96, 0.05, 3.95], "localEnd": [2.96, 0.33, 3.95], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.1, "height": 0.28, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.96, 0.19, 3.95], "rotation": [0.0, 0.0, 0.0], "scale": [0.1, 0.28, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-shin-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-trousers"}}, "material": "npc-trousers", "materialLayers": ["npc-trousers"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 58, 76, 1.0)", "secondaryAlbedo": "rgba(40, 50, 66, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_shin_e_669.add(mesh_npc_wait_2_shin_e_669);
+  meshes["npc-wait-2-shin-e"] = mesh_npc_wait_2_shin_e_669;
+  colliders["npc-wait-2-shin-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.1, 0.28, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-shin-e"] ??= [];
+  destructionGroups["npc-wait-2-shin-e"].push(node_npc_wait_2_shin_e_669);
+
+  const endpoint_npc_wait_2_torso_670 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_torso_670 = new THREE.Group();
+  node_npc_wait_2_torso_670.name = "Waiting seller 2 torso__pivot";
+  node_npc_wait_2_torso_670.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_torso_670) {
+    node_npc_wait_2_torso_670.position.copy(endpoint_npc_wait_2_torso_670.start);
+    node_npc_wait_2_torso_670.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_torso_670.position.set(2.9, 0.54, 4.22);
+    node_npc_wait_2_torso_670.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_torso_670.userData.sculptComponent = {"id": "npc-wait-2-torso", "name": "Waiting seller 2 torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.39, 4.22], "localEnd": [2.9, 0.69, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.54, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_torso_670.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_torso_670);
+  nodes["npc-wait-2-torso"] = node_npc_wait_2_torso_670;
+  const mesh_npc_wait_2_torso_670Geometry = endpoint_npc_wait_2_torso_670
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_torso_670.endRadius, endpoint_npc_wait_2_torso_670.baseRadius, endpoint_npc_wait_2_torso_670.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_torso_670) {
+    mesh_npc_wait_2_torso_670Geometry.scale(0.28, 0.3, 0.16);
+  }
+  const mesh_npc_wait_2_torso_670 = new THREE.Mesh(
+    mesh_npc_wait_2_torso_670Geometry,
+    materialMap["npc-shirt-4"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_torso_670.name = "Waiting seller 2 torso";
+  if (endpoint_npc_wait_2_torso_670) {
+    mesh_npc_wait_2_torso_670.position.copy(endpoint_npc_wait_2_torso_670.midpoint);
+    mesh_npc_wait_2_torso_670.quaternion.copy(endpoint_npc_wait_2_torso_670.quaternion);
+  }
+  mesh_npc_wait_2_torso_670.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_torso_670.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_torso_670.userData.sculptComponent = {"id": "npc-wait-2-torso", "name": "Waiting seller 2 torso", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Generic NPC body: boxes (no face detail, no name).", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.39, 4.22], "localEnd": [2.9, 0.69, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.54, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-torso", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_torso_670.add(mesh_npc_wait_2_torso_670);
+  meshes["npc-wait-2-torso"] = mesh_npc_wait_2_torso_670;
+  colliders["npc-wait-2-torso"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-torso"] ??= [];
+  destructionGroups["npc-wait-2-torso"].push(node_npc_wait_2_torso_670);
+
+  const endpoint_npc_wait_2_arm_w_671 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_arm_w_671 = new THREE.Group();
+  node_npc_wait_2_arm_w_671.name = "Waiting seller 2 arm w__pivot";
+  node_npc_wait_2_arm_w_671.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_arm_w_671) {
+    node_npc_wait_2_arm_w_671.position.copy(endpoint_npc_wait_2_arm_w_671.start);
+    node_npc_wait_2_arm_w_671.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_arm_w_671.position.set(2.72, 0.54, 4.15);
+    node_npc_wait_2_arm_w_671.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_arm_w_671.userData.sculptComponent = {"id": "npc-wait-2-arm-w", "name": "Waiting seller 2 arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.72, 0.41, 4.15], "localEnd": [2.72, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.72, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_arm_w_671.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_arm_w_671);
+  nodes["npc-wait-2-arm-w"] = node_npc_wait_2_arm_w_671;
+  const mesh_npc_wait_2_arm_w_671Geometry = endpoint_npc_wait_2_arm_w_671
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_arm_w_671.endRadius, endpoint_npc_wait_2_arm_w_671.baseRadius, endpoint_npc_wait_2_arm_w_671.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_arm_w_671) {
+    mesh_npc_wait_2_arm_w_671Geometry.scale(0.08, 0.26, 0.1);
+  }
+  const mesh_npc_wait_2_arm_w_671 = new THREE.Mesh(
+    mesh_npc_wait_2_arm_w_671Geometry,
+    materialMap["npc-shirt-4"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_arm_w_671.name = "Waiting seller 2 arm w";
+  if (endpoint_npc_wait_2_arm_w_671) {
+    mesh_npc_wait_2_arm_w_671.position.copy(endpoint_npc_wait_2_arm_w_671.midpoint);
+    mesh_npc_wait_2_arm_w_671.quaternion.copy(endpoint_npc_wait_2_arm_w_671.quaternion);
+  }
+  mesh_npc_wait_2_arm_w_671.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_arm_w_671.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_arm_w_671.userData.sculptComponent = {"id": "npc-wait-2-arm-w", "name": "Waiting seller 2 arm w", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.72, 0.41, 4.15], "localEnd": [2.72, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.72, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-w", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_arm_w_671.add(mesh_npc_wait_2_arm_w_671);
+  meshes["npc-wait-2-arm-w"] = mesh_npc_wait_2_arm_w_671;
+  colliders["npc-wait-2-arm-w"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-arm-w"] ??= [];
+  destructionGroups["npc-wait-2-arm-w"].push(node_npc_wait_2_arm_w_671);
+
+  const endpoint_npc_wait_2_arm_e_672 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_arm_e_672 = new THREE.Group();
+  node_npc_wait_2_arm_e_672.name = "Waiting seller 2 arm e__pivot";
+  node_npc_wait_2_arm_e_672.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_arm_e_672) {
+    node_npc_wait_2_arm_e_672.position.copy(endpoint_npc_wait_2_arm_e_672.start);
+    node_npc_wait_2_arm_e_672.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_arm_e_672.position.set(3.08, 0.54, 4.15);
+    node_npc_wait_2_arm_e_672.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_arm_e_672.userData.sculptComponent = {"id": "npc-wait-2-arm-e", "name": "Waiting seller 2 arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.08, 0.41, 4.15], "localEnd": [3.08, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.08, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_arm_e_672.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_arm_e_672);
+  nodes["npc-wait-2-arm-e"] = node_npc_wait_2_arm_e_672;
+  const mesh_npc_wait_2_arm_e_672Geometry = endpoint_npc_wait_2_arm_e_672
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_arm_e_672.endRadius, endpoint_npc_wait_2_arm_e_672.baseRadius, endpoint_npc_wait_2_arm_e_672.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_arm_e_672) {
+    mesh_npc_wait_2_arm_e_672Geometry.scale(0.08, 0.26, 0.1);
+  }
+  const mesh_npc_wait_2_arm_e_672 = new THREE.Mesh(
+    mesh_npc_wait_2_arm_e_672Geometry,
+    materialMap["npc-shirt-4"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_arm_e_672.name = "Waiting seller 2 arm e";
+  if (endpoint_npc_wait_2_arm_e_672) {
+    mesh_npc_wait_2_arm_e_672.position.copy(endpoint_npc_wait_2_arm_e_672.midpoint);
+    mesh_npc_wait_2_arm_e_672.quaternion.copy(endpoint_npc_wait_2_arm_e_672.quaternion);
+  }
+  mesh_npc_wait_2_arm_e_672.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_arm_e_672.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_arm_e_672.userData.sculptComponent = {"id": "npc-wait-2-arm-e", "name": "Waiting seller 2 arm e", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.08, 0.41, 4.15], "localEnd": [3.08, 0.67, 4.15], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.26, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.08, 0.54, 4.15], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.26, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-arm-e", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-shirt-4"}}, "material": "npc-shirt-4", "materialLayers": ["npc-shirt-4"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(181, 86, 106, 1.0)", "secondaryAlbedo": "rgba(171, 76, 96, 1.0)", "materialClass": "fabric", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_arm_e_672.add(mesh_npc_wait_2_arm_e_672);
+  meshes["npc-wait-2-arm-e"] = mesh_npc_wait_2_arm_e_672;
+  colliders["npc-wait-2-arm-e"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.26, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-arm-e"] ??= [];
+  destructionGroups["npc-wait-2-arm-e"].push(node_npc_wait_2_arm_e_672);
+
+  const endpoint_npc_wait_2_head_673 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_head_673 = new THREE.Group();
+  node_npc_wait_2_head_673.name = "Waiting seller 2 head__pivot";
+  node_npc_wait_2_head_673.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_head_673) {
+    node_npc_wait_2_head_673.position.copy(endpoint_npc_wait_2_head_673.start);
+    node_npc_wait_2_head_673.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_head_673.position.set(2.9, 0.79, 4.22);
+    node_npc_wait_2_head_673.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_head_673.userData.sculptComponent = {"id": "npc-wait-2-head", "name": "Waiting seller 2 head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.71, 4.22], "localEnd": [2.9, 0.87, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.79, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_head_673.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_head_673);
+  nodes["npc-wait-2-head"] = node_npc_wait_2_head_673;
+  const mesh_npc_wait_2_head_673Geometry = endpoint_npc_wait_2_head_673
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_head_673.endRadius, endpoint_npc_wait_2_head_673.baseRadius, endpoint_npc_wait_2_head_673.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_head_673) {
+    mesh_npc_wait_2_head_673Geometry.scale(0.16, 0.16, 0.16);
+  }
+  const mesh_npc_wait_2_head_673 = new THREE.Mesh(
+    mesh_npc_wait_2_head_673Geometry,
+    materialMap["npc-skin"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_head_673.name = "Waiting seller 2 head";
+  if (endpoint_npc_wait_2_head_673) {
+    mesh_npc_wait_2_head_673.position.copy(endpoint_npc_wait_2_head_673.midpoint);
+    mesh_npc_wait_2_head_673.quaternion.copy(endpoint_npc_wait_2_head_673.quaternion);
+  }
+  mesh_npc_wait_2_head_673.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_head_673.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_head_673.userData.sculptComponent = {"id": "npc-wait-2-head", "name": "Waiting seller 2 head", "level": "meso", "role": "prop", "importance": 0.3, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.71, 4.22], "localEnd": [2.9, 0.87, 4.22], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.16, "height": 0.16, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.79, 4.22], "rotation": [0.0, 0.0, 0.0], "scale": [0.16, 0.16, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-head", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-skin"}}, "material": "npc-skin", "materialLayers": ["npc-skin"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(217, 167, 127, 1.0)", "secondaryAlbedo": "rgba(207, 157, 117, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_head_673.add(mesh_npc_wait_2_head_673);
+  meshes["npc-wait-2-head"] = mesh_npc_wait_2_head_673;
+  colliders["npc-wait-2-head"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.16, 0.16, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-head"] ??= [];
+  destructionGroups["npc-wait-2-head"].push(node_npc_wait_2_head_673);
+
+  const endpoint_npc_wait_2_hair_674 = makeAttachmentEndpoint(null);
+  const node_npc_wait_2_hair_674 = new THREE.Group();
+  node_npc_wait_2_hair_674.name = "Waiting seller 2 hair__pivot";
+  node_npc_wait_2_hair_674.scale.set(1, 1, 1);
+  if (endpoint_npc_wait_2_hair_674) {
+    node_npc_wait_2_hair_674.position.copy(endpoint_npc_wait_2_hair_674.start);
+    node_npc_wait_2_hair_674.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_npc_wait_2_hair_674.position.set(2.9, 0.865, 4.2325);
+    node_npc_wait_2_hair_674.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_npc_wait_2_hair_674.userData.sculptComponent = {"id": "npc-wait-2-hair", "name": "Waiting seller 2 hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.83, 4.2325], "localEnd": [2.9, 0.9, 4.2325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.865, 4.2325], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}}, "material": "npc-hair-2", "materialLayers": ["npc-hair-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(165, 119, 63, 1.0)", "secondaryAlbedo": "rgba(155, 109, 53, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_hair_674.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}};
+  (nodes["root"] ?? root).add(node_npc_wait_2_hair_674);
+  nodes["npc-wait-2-hair"] = node_npc_wait_2_hair_674;
+  const mesh_npc_wait_2_hair_674Geometry = endpoint_npc_wait_2_hair_674
+    ? new THREE.CylinderGeometry(endpoint_npc_wait_2_hair_674.endRadius, endpoint_npc_wait_2_hair_674.baseRadius, endpoint_npc_wait_2_hair_674.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_npc_wait_2_hair_674) {
+    mesh_npc_wait_2_hair_674Geometry.scale(0.17, 0.07, 0.145);
+  }
+  const mesh_npc_wait_2_hair_674 = new THREE.Mesh(
+    mesh_npc_wait_2_hair_674Geometry,
+    materialMap["npc-hair-2"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_npc_wait_2_hair_674.name = "Waiting seller 2 hair";
+  if (endpoint_npc_wait_2_hair_674) {
+    mesh_npc_wait_2_hair_674.position.copy(endpoint_npc_wait_2_hair_674.midpoint);
+    mesh_npc_wait_2_hair_674.quaternion.copy(endpoint_npc_wait_2_hair_674.quaternion);
+  }
+  mesh_npc_wait_2_hair_674.castShadow = options.castShadow ?? true;
+  mesh_npc_wait_2_hair_674.receiveShadow = options.receiveShadow ?? true;
+  mesh_npc_wait_2_hair_674.userData.sculptComponent = {"id": "npc-wait-2-hair", "name": "Waiting seller 2 hair", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.9, 0.83, 4.2325], "localEnd": [2.9, 0.9, 4.2325], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.17, "height": 0.07, "depth": 0.145, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.9, 0.865, 4.2325], "rotation": [0.0, 0.0, 0.0], "scale": [0.17, 0.07, 0.145]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "npc-wait-2-hair", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "npc-hair-2"}}, "material": "npc-hair-2", "materialLayers": ["npc-hair-2"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(165, 119, 63, 1.0)", "secondaryAlbedo": "rgba(155, 109, 53, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_npc_wait_2_hair_674.add(mesh_npc_wait_2_hair_674);
+  meshes["npc-wait-2-hair"] = mesh_npc_wait_2_hair_674;
+  colliders["npc-wait-2-hair"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.17, 0.07, 0.145], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["npc-wait-2-hair"] ??= [];
+  destructionGroups["npc-wait-2-hair"].push(node_npc_wait_2_hair_674);
+
+  const endpoint_test_wait_cup_675 = makeAttachmentEndpoint(null);
+  const node_test_wait_cup_675 = new THREE.Group();
+  node_test_wait_cup_675.name = "Coffee cup on the bench__pivot";
+  node_test_wait_cup_675.scale.set(1, 1, 1);
+  if (endpoint_test_wait_cup_675) {
+    node_test_wait_cup_675.position.copy(endpoint_test_wait_cup_675.start);
+    node_test_wait_cup_675.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_wait_cup_675.position.set(2.48, 0.35, 4.1);
+    node_test_wait_cup_675.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_wait_cup_675.userData.sculptComponent = {"id": "test-wait-cup", "name": "Coffee cup on the bench", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.48, 0.31, 4.1], "localEnd": [2.48, 0.39, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.08, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.48, 0.35, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.08, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wait-cup", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wait_cup_675.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wait-cup", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}};
+  (nodes["root"] ?? root).add(node_test_wait_cup_675);
+  nodes["test-wait-cup"] = node_test_wait_cup_675;
+  const mesh_test_wait_cup_675Geometry = endpoint_test_wait_cup_675
+    ? new THREE.CylinderGeometry(endpoint_test_wait_cup_675.endRadius, endpoint_test_wait_cup_675.baseRadius, endpoint_test_wait_cup_675.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_wait_cup_675) {
+    mesh_test_wait_cup_675Geometry.scale(0.08, 0.08, 0.08);
+  }
+  const mesh_test_wait_cup_675 = new THREE.Mesh(
+    mesh_test_wait_cup_675Geometry,
+    materialMap["prop-mug"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_wait_cup_675.name = "Coffee cup on the bench";
+  if (endpoint_test_wait_cup_675) {
+    mesh_test_wait_cup_675.position.copy(endpoint_test_wait_cup_675.midpoint);
+    mesh_test_wait_cup_675.quaternion.copy(endpoint_test_wait_cup_675.quaternion);
+  }
+  mesh_test_wait_cup_675.castShadow = options.castShadow ?? true;
+  mesh_test_wait_cup_675.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_wait_cup_675.userData.sculptComponent = {"id": "test-wait-cup", "name": "Coffee cup on the bench", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [2.48, 0.31, 4.1], "localEnd": [2.48, 0.39, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.08, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [2.48, 0.35, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.08, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-wait-cup", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_wait_cup_675.add(mesh_test_wait_cup_675);
+  meshes["test-wait-cup"] = mesh_test_wait_cup_675;
+  colliders["test-wait-cup"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.08, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-wait-cup"] ??= [];
+  destructionGroups["test-wait-cup"].push(node_test_wait_cup_675);
+
+  const endpoint_test_table_top_676 = makeAttachmentEndpoint(null);
+  const node_test_table_top_676 = new THREE.Group();
+  node_test_table_top_676.name = "Test sets table__pivot";
+  node_test_table_top_676.scale.set(1, 1, 1);
+  if (endpoint_test_table_top_676) {
+    node_test_table_top_676.position.copy(endpoint_test_table_top_676.start);
+    node_test_table_top_676.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_top_676.position.set(4.475, 0.39, 4.11);
+    node_test_table_top_676.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_top_676.userData.sculptComponent = {"id": "test-table-top", "name": "Test sets table", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.475, 0.37, 4.11], "localEnd": [4.475, 0.41, 4.11], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.75, "height": 0.04, "depth": 0.42, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.475, 0.39, 4.11], "rotation": [0.0, 0.0, 0.0], "scale": [1.75, 0.04, 0.42]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.75, 0.04, 0.42], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-top", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-wood"}}, "material": "prop-wood", "materialLayers": ["prop-wood"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(200, 154, 100, 1.0)", "secondaryAlbedo": "rgba(190, 144, 90, 1.0)", "materialClass": "wood", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_top_676.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.75, 0.04, 0.42], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-top", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-wood"}};
+  (nodes["root"] ?? root).add(node_test_table_top_676);
+  nodes["test-table-top"] = node_test_table_top_676;
+  const mesh_test_table_top_676Geometry = endpoint_test_table_top_676
+    ? new THREE.CylinderGeometry(endpoint_test_table_top_676.endRadius, endpoint_test_table_top_676.baseRadius, endpoint_test_table_top_676.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_top_676) {
+    mesh_test_table_top_676Geometry.scale(1.75, 0.04, 0.42);
+  }
+  const mesh_test_table_top_676 = new THREE.Mesh(
+    mesh_test_table_top_676Geometry,
+    materialMap["prop-wood"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_top_676.name = "Test sets table";
+  if (endpoint_test_table_top_676) {
+    mesh_test_table_top_676.position.copy(endpoint_test_table_top_676.midpoint);
+    mesh_test_table_top_676.quaternion.copy(endpoint_test_table_top_676.quaternion);
+  }
+  mesh_test_table_top_676.castShadow = options.castShadow ?? true;
+  mesh_test_table_top_676.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_top_676.userData.sculptComponent = {"id": "test-table-top", "name": "Test sets table", "level": "meso", "role": "prop", "importance": 0.4, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.475, 0.37, 4.11], "localEnd": [4.475, 0.41, 4.11], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 1.75, "height": 0.04, "depth": 0.42, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.475, 0.39, 4.11], "rotation": [0.0, 0.0, 0.0], "scale": [1.75, 0.04, 0.42]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [1.75, 0.04, 0.42], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-top", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-wood"}}, "material": "prop-wood", "materialLayers": ["prop-wood"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(200, 154, 100, 1.0)", "secondaryAlbedo": "rgba(190, 144, 90, 1.0)", "materialClass": "wood", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_top_676.add(mesh_test_table_top_676);
+  meshes["test-table-top"] = mesh_test_table_top_676;
+  colliders["test-table-top"] = {"type": "box", "offset": [0, 0, 0], "scale": [1.75, 0.04, 0.42], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-top"] ??= [];
+  destructionGroups["test-table-top"].push(node_test_table_top_676);
+
+  const endpoint_test_table_leg_0_677 = makeAttachmentEndpoint(null);
+  const node_test_table_leg_0_677 = new THREE.Group();
+  node_test_table_leg_0_677.name = "Table leg 0__pivot";
+  node_test_table_leg_0_677.scale.set(1, 1, 1);
+  if (endpoint_test_table_leg_0_677) {
+    node_test_table_leg_0_677.position.copy(endpoint_test_table_leg_0_677.start);
+    node_test_table_leg_0_677.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_leg_0_677.position.set(3.64, 0.21, 3.94);
+    node_test_table_leg_0_677.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_leg_0_677.userData.sculptComponent = {"id": "test-table-leg-0", "name": "Table leg 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.64, 0.05, 3.94], "localEnd": [3.64, 0.37, 3.94], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.64, 0.21, 3.94], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_0_677.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_table_leg_0_677);
+  nodes["test-table-leg-0"] = node_test_table_leg_0_677;
+  const mesh_test_table_leg_0_677Geometry = endpoint_test_table_leg_0_677
+    ? new THREE.CylinderGeometry(endpoint_test_table_leg_0_677.endRadius, endpoint_test_table_leg_0_677.baseRadius, endpoint_test_table_leg_0_677.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_leg_0_677) {
+    mesh_test_table_leg_0_677Geometry.scale(0.04, 0.32, 0.04);
+  }
+  const mesh_test_table_leg_0_677 = new THREE.Mesh(
+    mesh_test_table_leg_0_677Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_leg_0_677.name = "Table leg 0";
+  if (endpoint_test_table_leg_0_677) {
+    mesh_test_table_leg_0_677.position.copy(endpoint_test_table_leg_0_677.midpoint);
+    mesh_test_table_leg_0_677.quaternion.copy(endpoint_test_table_leg_0_677.quaternion);
+  }
+  mesh_test_table_leg_0_677.castShadow = options.castShadow ?? true;
+  mesh_test_table_leg_0_677.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_leg_0_677.userData.sculptComponent = {"id": "test-table-leg-0", "name": "Table leg 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.64, 0.05, 3.94], "localEnd": [3.64, 0.37, 3.94], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.64, 0.21, 3.94], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_0_677.add(mesh_test_table_leg_0_677);
+  meshes["test-table-leg-0"] = mesh_test_table_leg_0_677;
+  colliders["test-table-leg-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-leg-0"] ??= [];
+  destructionGroups["test-table-leg-0"].push(node_test_table_leg_0_677);
+
+  const endpoint_test_table_leg_1_678 = makeAttachmentEndpoint(null);
+  const node_test_table_leg_1_678 = new THREE.Group();
+  node_test_table_leg_1_678.name = "Table leg 1__pivot";
+  node_test_table_leg_1_678.scale.set(1, 1, 1);
+  if (endpoint_test_table_leg_1_678) {
+    node_test_table_leg_1_678.position.copy(endpoint_test_table_leg_1_678.start);
+    node_test_table_leg_1_678.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_leg_1_678.position.set(5.28, 0.21, 3.94);
+    node_test_table_leg_1_678.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_leg_1_678.userData.sculptComponent = {"id": "test-table-leg-1", "name": "Table leg 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.28, 0.05, 3.94], "localEnd": [5.28, 0.37, 3.94], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.28, 0.21, 3.94], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_1_678.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_table_leg_1_678);
+  nodes["test-table-leg-1"] = node_test_table_leg_1_678;
+  const mesh_test_table_leg_1_678Geometry = endpoint_test_table_leg_1_678
+    ? new THREE.CylinderGeometry(endpoint_test_table_leg_1_678.endRadius, endpoint_test_table_leg_1_678.baseRadius, endpoint_test_table_leg_1_678.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_leg_1_678) {
+    mesh_test_table_leg_1_678Geometry.scale(0.04, 0.32, 0.04);
+  }
+  const mesh_test_table_leg_1_678 = new THREE.Mesh(
+    mesh_test_table_leg_1_678Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_leg_1_678.name = "Table leg 1";
+  if (endpoint_test_table_leg_1_678) {
+    mesh_test_table_leg_1_678.position.copy(endpoint_test_table_leg_1_678.midpoint);
+    mesh_test_table_leg_1_678.quaternion.copy(endpoint_test_table_leg_1_678.quaternion);
+  }
+  mesh_test_table_leg_1_678.castShadow = options.castShadow ?? true;
+  mesh_test_table_leg_1_678.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_leg_1_678.userData.sculptComponent = {"id": "test-table-leg-1", "name": "Table leg 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.28, 0.05, 3.94], "localEnd": [5.28, 0.37, 3.94], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.28, 0.21, 3.94], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_1_678.add(mesh_test_table_leg_1_678);
+  meshes["test-table-leg-1"] = mesh_test_table_leg_1_678;
+  colliders["test-table-leg-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-leg-1"] ??= [];
+  destructionGroups["test-table-leg-1"].push(node_test_table_leg_1_678);
+
+  const endpoint_test_table_leg_2_679 = makeAttachmentEndpoint(null);
+  const node_test_table_leg_2_679 = new THREE.Group();
+  node_test_table_leg_2_679.name = "Table leg 2__pivot";
+  node_test_table_leg_2_679.scale.set(1, 1, 1);
+  if (endpoint_test_table_leg_2_679) {
+    node_test_table_leg_2_679.position.copy(endpoint_test_table_leg_2_679.start);
+    node_test_table_leg_2_679.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_leg_2_679.position.set(3.64, 0.21, 4.24);
+    node_test_table_leg_2_679.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_leg_2_679.userData.sculptComponent = {"id": "test-table-leg-2", "name": "Table leg 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.64, 0.05, 4.24], "localEnd": [3.64, 0.37, 4.24], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.64, 0.21, 4.24], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_2_679.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_table_leg_2_679);
+  nodes["test-table-leg-2"] = node_test_table_leg_2_679;
+  const mesh_test_table_leg_2_679Geometry = endpoint_test_table_leg_2_679
+    ? new THREE.CylinderGeometry(endpoint_test_table_leg_2_679.endRadius, endpoint_test_table_leg_2_679.baseRadius, endpoint_test_table_leg_2_679.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_leg_2_679) {
+    mesh_test_table_leg_2_679Geometry.scale(0.04, 0.32, 0.04);
+  }
+  const mesh_test_table_leg_2_679 = new THREE.Mesh(
+    mesh_test_table_leg_2_679Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_leg_2_679.name = "Table leg 2";
+  if (endpoint_test_table_leg_2_679) {
+    mesh_test_table_leg_2_679.position.copy(endpoint_test_table_leg_2_679.midpoint);
+    mesh_test_table_leg_2_679.quaternion.copy(endpoint_test_table_leg_2_679.quaternion);
+  }
+  mesh_test_table_leg_2_679.castShadow = options.castShadow ?? true;
+  mesh_test_table_leg_2_679.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_leg_2_679.userData.sculptComponent = {"id": "test-table-leg-2", "name": "Table leg 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.64, 0.05, 4.24], "localEnd": [3.64, 0.37, 4.24], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.64, 0.21, 4.24], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_2_679.add(mesh_test_table_leg_2_679);
+  meshes["test-table-leg-2"] = mesh_test_table_leg_2_679;
+  colliders["test-table-leg-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-leg-2"] ??= [];
+  destructionGroups["test-table-leg-2"].push(node_test_table_leg_2_679);
+
+  const endpoint_test_table_leg_3_680 = makeAttachmentEndpoint(null);
+  const node_test_table_leg_3_680 = new THREE.Group();
+  node_test_table_leg_3_680.name = "Table leg 3__pivot";
+  node_test_table_leg_3_680.scale.set(1, 1, 1);
+  if (endpoint_test_table_leg_3_680) {
+    node_test_table_leg_3_680.position.copy(endpoint_test_table_leg_3_680.start);
+    node_test_table_leg_3_680.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_leg_3_680.position.set(5.28, 0.21, 4.24);
+    node_test_table_leg_3_680.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_leg_3_680.userData.sculptComponent = {"id": "test-table-leg-3", "name": "Table leg 3", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.28, 0.05, 4.24], "localEnd": [5.28, 0.37, 4.24], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.28, 0.21, 4.24], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_3_680.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}};
+  (nodes["root"] ?? root).add(node_test_table_leg_3_680);
+  nodes["test-table-leg-3"] = node_test_table_leg_3_680;
+  const mesh_test_table_leg_3_680Geometry = endpoint_test_table_leg_3_680
+    ? new THREE.CylinderGeometry(endpoint_test_table_leg_3_680.endRadius, endpoint_test_table_leg_3_680.baseRadius, endpoint_test_table_leg_3_680.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_leg_3_680) {
+    mesh_test_table_leg_3_680Geometry.scale(0.04, 0.32, 0.04);
+  }
+  const mesh_test_table_leg_3_680 = new THREE.Mesh(
+    mesh_test_table_leg_3_680Geometry,
+    materialMap["frame-dark"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_leg_3_680.name = "Table leg 3";
+  if (endpoint_test_table_leg_3_680) {
+    mesh_test_table_leg_3_680.position.copy(endpoint_test_table_leg_3_680.midpoint);
+    mesh_test_table_leg_3_680.quaternion.copy(endpoint_test_table_leg_3_680.quaternion);
+  }
+  mesh_test_table_leg_3_680.castShadow = options.castShadow ?? true;
+  mesh_test_table_leg_3_680.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_leg_3_680.userData.sculptComponent = {"id": "test-table-leg-3", "name": "Table leg 3", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.28, 0.05, 4.24], "localEnd": [5.28, 0.37, 4.24], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.04, "height": 0.32, "depth": 0.04, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.28, 0.21, 4.24], "rotation": [0.0, 0.0, 0.0], "scale": [0.04, 0.32, 0.04]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-leg-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "frame-dark"}}, "material": "frame-dark", "materialLayers": ["frame-dark"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(46, 50, 54, 1.0)", "secondaryAlbedo": "rgba(40, 43, 47, 1.0)", "materialClass": "metal", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_leg_3_680.add(mesh_test_table_leg_3_680);
+  meshes["test-table-leg-3"] = mesh_test_table_leg_3_680;
+  colliders["test-table-leg-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.04, 0.32, 0.04], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-leg-3"] ??= [];
+  destructionGroups["test-table-leg-3"].push(node_test_table_leg_3_680);
+
+  const endpoint_test_set_0_681 = makeAttachmentEndpoint(null);
+  const node_test_set_0_681 = new THREE.Group();
+  node_test_set_0_681.name = "Set box to test 0__pivot";
+  node_test_set_0_681.scale.set(1, 1, 1);
+  if (endpoint_test_set_0_681) {
+    node_test_set_0_681.position.copy(endpoint_test_set_0_681.start);
+    node_test_set_0_681.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_0_681.position.set(3.84, 0.53, 4.08);
+    node_test_set_0_681.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_0_681.userData.sculptComponent = {"id": "test-set-0", "name": "Set box to test 0", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.84, 0.41, 4.08], "localEnd": [3.84, 0.65, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.24, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.84, 0.53, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.24, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.24, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_0_681.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.24, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}};
+  (nodes["root"] ?? root).add(node_test_set_0_681);
+  nodes["test-set-0"] = node_test_set_0_681;
+  const mesh_test_set_0_681Geometry = endpoint_test_set_0_681
+    ? new THREE.CylinderGeometry(endpoint_test_set_0_681.endRadius, endpoint_test_set_0_681.baseRadius, endpoint_test_set_0_681.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_0_681) {
+    mesh_test_set_0_681Geometry.scale(0.28, 0.24, 0.16);
+  }
+  const mesh_test_set_0_681 = new THREE.Mesh(
+    mesh_test_set_0_681Geometry,
+    materialMap["box-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_0_681.name = "Set box to test 0";
+  if (endpoint_test_set_0_681) {
+    mesh_test_set_0_681.position.copy(endpoint_test_set_0_681.midpoint);
+    mesh_test_set_0_681.quaternion.copy(endpoint_test_set_0_681.quaternion);
+  }
+  mesh_test_set_0_681.castShadow = options.castShadow ?? true;
+  mesh_test_set_0_681.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_0_681.userData.sculptComponent = {"id": "test-set-0", "name": "Set box to test 0", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.84, 0.41, 4.08], "localEnd": [3.84, 0.65, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.28, "height": 0.24, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.84, 0.53, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.28, 0.24, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.24, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-yellow"}}, "material": "box-yellow", "materialLayers": ["box-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 196, 0, 1.0)", "secondaryAlbedo": "rgba(236, 186, 0, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_0_681.add(mesh_test_set_0_681);
+  meshes["test-set-0"] = mesh_test_set_0_681;
+  colliders["test-set-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.28, 0.24, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-0"] ??= [];
+  destructionGroups["test-set-0"].push(node_test_set_0_681);
+
+  const endpoint_test_set_0_art_682 = makeAttachmentEndpoint(null);
+  const node_test_set_0_art_682 = new THREE.Group();
+  node_test_set_0_art_682.name = "Set box art band 0__pivot";
+  node_test_set_0_art_682.scale.set(1, 1, 1);
+  if (endpoint_test_set_0_art_682) {
+    node_test_set_0_art_682.position.copy(endpoint_test_set_0_art_682.start);
+    node_test_set_0_art_682.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_0_art_682.position.set(3.84, 0.572, 4.1625);
+    node_test_set_0_art_682.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_0_art_682.userData.sculptComponent = {"id": "test-set-0-art", "name": "Set box art band 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.84, 0.542, 4.1625], "localEnd": [3.84, 0.602, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.06, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.84, 0.572, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.06, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.06, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_0_art_682.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.06, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_test_set_0_art_682);
+  nodes["test-set-0-art"] = node_test_set_0_art_682;
+  const mesh_test_set_0_art_682Geometry = endpoint_test_set_0_art_682
+    ? new THREE.CylinderGeometry(endpoint_test_set_0_art_682.endRadius, endpoint_test_set_0_art_682.baseRadius, endpoint_test_set_0_art_682.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_0_art_682) {
+    mesh_test_set_0_art_682Geometry.scale(0.24, 0.06, 0.005);
+  }
+  const mesh_test_set_0_art_682 = new THREE.Mesh(
+    mesh_test_set_0_art_682Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_0_art_682.name = "Set box art band 0";
+  if (endpoint_test_set_0_art_682) {
+    mesh_test_set_0_art_682.position.copy(endpoint_test_set_0_art_682.midpoint);
+    mesh_test_set_0_art_682.quaternion.copy(endpoint_test_set_0_art_682.quaternion);
+  }
+  mesh_test_set_0_art_682.castShadow = options.castShadow ?? true;
+  mesh_test_set_0_art_682.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_0_art_682.userData.sculptComponent = {"id": "test-set-0-art", "name": "Set box art band 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.84, 0.542, 4.1625], "localEnd": [3.84, 0.602, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.06, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.84, 0.572, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.06, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.06, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-0-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_0_art_682.add(mesh_test_set_0_art_682);
+  meshes["test-set-0-art"] = mesh_test_set_0_art_682;
+  colliders["test-set-0-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.06, 0.005], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-0-art"] ??= [];
+  destructionGroups["test-set-0-art"].push(node_test_set_0_art_682);
+
+  const endpoint_test_set_1_683 = makeAttachmentEndpoint(null);
+  const node_test_set_1_683 = new THREE.Group();
+  node_test_set_1_683.name = "Set box to test 1__pivot";
+  node_test_set_1_683.scale.set(1, 1, 1);
+  if (endpoint_test_set_1_683) {
+    node_test_set_1_683.position.copy(endpoint_test_set_1_683.start);
+    node_test_set_1_683.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_1_683.position.set(4.14, 0.56, 4.08);
+    node_test_set_1_683.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_1_683.userData.sculptComponent = {"id": "test-set-1", "name": "Set box to test 1", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.14, 0.41, 4.08], "localEnd": [4.14, 0.71, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.14, 0.56, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_1_683.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}};
+  (nodes["root"] ?? root).add(node_test_set_1_683);
+  nodes["test-set-1"] = node_test_set_1_683;
+  const mesh_test_set_1_683Geometry = endpoint_test_set_1_683
+    ? new THREE.CylinderGeometry(endpoint_test_set_1_683.endRadius, endpoint_test_set_1_683.baseRadius, endpoint_test_set_1_683.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_1_683) {
+    mesh_test_set_1_683Geometry.scale(0.24, 0.3, 0.16);
+  }
+  const mesh_test_set_1_683 = new THREE.Mesh(
+    mesh_test_set_1_683Geometry,
+    materialMap["box-red"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_1_683.name = "Set box to test 1";
+  if (endpoint_test_set_1_683) {
+    mesh_test_set_1_683.position.copy(endpoint_test_set_1_683.midpoint);
+    mesh_test_set_1_683.quaternion.copy(endpoint_test_set_1_683.quaternion);
+  }
+  mesh_test_set_1_683.castShadow = options.castShadow ?? true;
+  mesh_test_set_1_683.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_1_683.userData.sculptComponent = {"id": "test-set-1", "name": "Set box to test 1", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.14, 0.41, 4.08], "localEnd": [4.14, 0.71, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.24, "height": 0.3, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.14, 0.56, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.24, 0.3, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-red"}}, "material": "box-red", "materialLayers": ["box-red"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(216, 40, 42, 1.0)", "secondaryAlbedo": "rgba(206, 30, 32, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_1_683.add(mesh_test_set_1_683);
+  meshes["test-set-1"] = mesh_test_set_1_683;
+  colliders["test-set-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.24, 0.3, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-1"] ??= [];
+  destructionGroups["test-set-1"].push(node_test_set_1_683);
+
+  const endpoint_test_set_1_art_684 = makeAttachmentEndpoint(null);
+  const node_test_set_1_art_684 = new THREE.Group();
+  node_test_set_1_art_684.name = "Set box art band 1__pivot";
+  node_test_set_1_art_684.scale.set(1, 1, 1);
+  if (endpoint_test_set_1_art_684) {
+    node_test_set_1_art_684.position.copy(endpoint_test_set_1_art_684.start);
+    node_test_set_1_art_684.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_1_art_684.position.set(4.14, 0.6125, 4.1625);
+    node_test_set_1_art_684.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_1_art_684.userData.sculptComponent = {"id": "test-set-1-art", "name": "Set box art band 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.14, 0.575, 4.1625], "localEnd": [4.14, 0.65, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.075, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.14, 0.6125, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.075, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.075, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_1_art_684.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.075, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_test_set_1_art_684);
+  nodes["test-set-1-art"] = node_test_set_1_art_684;
+  const mesh_test_set_1_art_684Geometry = endpoint_test_set_1_art_684
+    ? new THREE.CylinderGeometry(endpoint_test_set_1_art_684.endRadius, endpoint_test_set_1_art_684.baseRadius, endpoint_test_set_1_art_684.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_1_art_684) {
+    mesh_test_set_1_art_684Geometry.scale(0.2, 0.075, 0.005);
+  }
+  const mesh_test_set_1_art_684 = new THREE.Mesh(
+    mesh_test_set_1_art_684Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_1_art_684.name = "Set box art band 1";
+  if (endpoint_test_set_1_art_684) {
+    mesh_test_set_1_art_684.position.copy(endpoint_test_set_1_art_684.midpoint);
+    mesh_test_set_1_art_684.quaternion.copy(endpoint_test_set_1_art_684.quaternion);
+  }
+  mesh_test_set_1_art_684.castShadow = options.castShadow ?? true;
+  mesh_test_set_1_art_684.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_1_art_684.userData.sculptComponent = {"id": "test-set-1-art", "name": "Set box art band 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.14, 0.575, 4.1625], "localEnd": [4.14, 0.65, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.075, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.14, 0.6125, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.075, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.075, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-1-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_1_art_684.add(mesh_test_set_1_art_684);
+  meshes["test-set-1-art"] = mesh_test_set_1_art_684;
+  colliders["test-set-1-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.075, 0.005], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-1-art"] ??= [];
+  destructionGroups["test-set-1-art"].push(node_test_set_1_art_684);
+
+  const endpoint_test_set_2_685 = makeAttachmentEndpoint(null);
+  const node_test_set_2_685 = new THREE.Group();
+  node_test_set_2_685.name = "Set box to test 2__pivot";
+  node_test_set_2_685.scale.set(1, 1, 1);
+  if (endpoint_test_set_2_685) {
+    node_test_set_2_685.position.copy(endpoint_test_set_2_685.start);
+    node_test_set_2_685.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_2_685.position.set(4.45, 0.51, 4.08);
+    node_test_set_2_685.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_2_685.userData.sculptComponent = {"id": "test-set-2", "name": "Set box to test 2", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.45, 0.41, 4.08], "localEnd": [4.45, 0.61, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.3, "height": 0.2, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.45, 0.51, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.3, 0.2, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.3, 0.2, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_2_685.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.3, 0.2, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}};
+  (nodes["root"] ?? root).add(node_test_set_2_685);
+  nodes["test-set-2"] = node_test_set_2_685;
+  const mesh_test_set_2_685Geometry = endpoint_test_set_2_685
+    ? new THREE.CylinderGeometry(endpoint_test_set_2_685.endRadius, endpoint_test_set_2_685.baseRadius, endpoint_test_set_2_685.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_2_685) {
+    mesh_test_set_2_685Geometry.scale(0.3, 0.2, 0.16);
+  }
+  const mesh_test_set_2_685 = new THREE.Mesh(
+    mesh_test_set_2_685Geometry,
+    materialMap["box-blue"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_2_685.name = "Set box to test 2";
+  if (endpoint_test_set_2_685) {
+    mesh_test_set_2_685.position.copy(endpoint_test_set_2_685.midpoint);
+    mesh_test_set_2_685.quaternion.copy(endpoint_test_set_2_685.quaternion);
+  }
+  mesh_test_set_2_685.castShadow = options.castShadow ?? true;
+  mesh_test_set_2_685.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_2_685.userData.sculptComponent = {"id": "test-set-2", "name": "Set box to test 2", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.45, 0.41, 4.08], "localEnd": [4.45, 0.61, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.3, "height": 0.2, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.45, 0.51, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.3, 0.2, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.3, 0.2, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-blue"}}, "material": "box-blue", "materialLayers": ["box-blue"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(31, 115, 214, 1.0)", "secondaryAlbedo": "rgba(21, 105, 204, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_2_685.add(mesh_test_set_2_685);
+  meshes["test-set-2"] = mesh_test_set_2_685;
+  colliders["test-set-2"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.3, 0.2, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-2"] ??= [];
+  destructionGroups["test-set-2"].push(node_test_set_2_685);
+
+  const endpoint_test_set_2_art_686 = makeAttachmentEndpoint(null);
+  const node_test_set_2_art_686 = new THREE.Group();
+  node_test_set_2_art_686.name = "Set box art band 2__pivot";
+  node_test_set_2_art_686.scale.set(1, 1, 1);
+  if (endpoint_test_set_2_art_686) {
+    node_test_set_2_art_686.position.copy(endpoint_test_set_2_art_686.start);
+    node_test_set_2_art_686.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_2_art_686.position.set(4.45, 0.545, 4.1625);
+    node_test_set_2_art_686.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_2_art_686.userData.sculptComponent = {"id": "test-set-2-art", "name": "Set box art band 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.45, 0.52, 4.1625], "localEnd": [4.45, 0.57, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.26, "height": 0.05, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.45, 0.545, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.26, 0.05, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.26, 0.05, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_2_art_686.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.26, 0.05, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_test_set_2_art_686);
+  nodes["test-set-2-art"] = node_test_set_2_art_686;
+  const mesh_test_set_2_art_686Geometry = endpoint_test_set_2_art_686
+    ? new THREE.CylinderGeometry(endpoint_test_set_2_art_686.endRadius, endpoint_test_set_2_art_686.baseRadius, endpoint_test_set_2_art_686.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_2_art_686) {
+    mesh_test_set_2_art_686Geometry.scale(0.26, 0.05, 0.005);
+  }
+  const mesh_test_set_2_art_686 = new THREE.Mesh(
+    mesh_test_set_2_art_686Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_2_art_686.name = "Set box art band 2";
+  if (endpoint_test_set_2_art_686) {
+    mesh_test_set_2_art_686.position.copy(endpoint_test_set_2_art_686.midpoint);
+    mesh_test_set_2_art_686.quaternion.copy(endpoint_test_set_2_art_686.quaternion);
+  }
+  mesh_test_set_2_art_686.castShadow = options.castShadow ?? true;
+  mesh_test_set_2_art_686.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_2_art_686.userData.sculptComponent = {"id": "test-set-2-art", "name": "Set box art band 2", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.45, 0.52, 4.1625], "localEnd": [4.45, 0.57, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.26, "height": 0.05, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.45, 0.545, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.26, 0.05, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.26, 0.05, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-2-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_2_art_686.add(mesh_test_set_2_art_686);
+  meshes["test-set-2-art"] = mesh_test_set_2_art_686;
+  colliders["test-set-2-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.26, 0.05, 0.005], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-2-art"] ??= [];
+  destructionGroups["test-set-2-art"].push(node_test_set_2_art_686);
+
+  const endpoint_test_set_3_687 = makeAttachmentEndpoint(null);
+  const node_test_set_3_687 = new THREE.Group();
+  node_test_set_3_687.name = "Set box to test 3__pivot";
+  node_test_set_3_687.scale.set(1, 1, 1);
+  if (endpoint_test_set_3_687) {
+    node_test_set_3_687.position.copy(endpoint_test_set_3_687.start);
+    node_test_set_3_687.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_3_687.position.set(4.75, 0.54, 4.08);
+    node_test_set_3_687.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_3_687.userData.sculptComponent = {"id": "test-set-3", "name": "Set box to test 3", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.75, 0.41, 4.08], "localEnd": [4.75, 0.67, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.22, "height": 0.26, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.75, 0.54, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.22, 0.26, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.22, 0.26, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}}, "material": "box-green", "materialLayers": ["box-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 168, 79, 1.0)", "secondaryAlbedo": "rgba(37, 158, 69, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_3_687.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.22, 0.26, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}};
+  (nodes["root"] ?? root).add(node_test_set_3_687);
+  nodes["test-set-3"] = node_test_set_3_687;
+  const mesh_test_set_3_687Geometry = endpoint_test_set_3_687
+    ? new THREE.CylinderGeometry(endpoint_test_set_3_687.endRadius, endpoint_test_set_3_687.baseRadius, endpoint_test_set_3_687.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_3_687) {
+    mesh_test_set_3_687Geometry.scale(0.22, 0.26, 0.16);
+  }
+  const mesh_test_set_3_687 = new THREE.Mesh(
+    mesh_test_set_3_687Geometry,
+    materialMap["box-green"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_3_687.name = "Set box to test 3";
+  if (endpoint_test_set_3_687) {
+    mesh_test_set_3_687.position.copy(endpoint_test_set_3_687.midpoint);
+    mesh_test_set_3_687.quaternion.copy(endpoint_test_set_3_687.quaternion);
+  }
+  mesh_test_set_3_687.castShadow = options.castShadow ?? true;
+  mesh_test_set_3_687.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_3_687.userData.sculptComponent = {"id": "test-set-3", "name": "Set box to test 3", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.75, 0.41, 4.08], "localEnd": [4.75, 0.67, 4.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.22, "height": 0.26, "depth": 0.16, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.75, 0.54, 4.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.22, 0.26, 0.16]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.22, 0.26, 0.16], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-green"}}, "material": "box-green", "materialLayers": ["box-green"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(47, 168, 79, 1.0)", "secondaryAlbedo": "rgba(37, 158, 69, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_3_687.add(mesh_test_set_3_687);
+  meshes["test-set-3"] = mesh_test_set_3_687;
+  colliders["test-set-3"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.22, 0.26, 0.16], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-3"] ??= [];
+  destructionGroups["test-set-3"].push(node_test_set_3_687);
+
+  const endpoint_test_set_3_art_688 = makeAttachmentEndpoint(null);
+  const node_test_set_3_art_688 = new THREE.Group();
+  node_test_set_3_art_688.name = "Set box art band 3__pivot";
+  node_test_set_3_art_688.scale.set(1, 1, 1);
+  if (endpoint_test_set_3_art_688) {
+    node_test_set_3_art_688.position.copy(endpoint_test_set_3_art_688.start);
+    node_test_set_3_art_688.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_set_3_art_688.position.set(4.75, 0.5855, 4.1625);
+    node_test_set_3_art_688.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_set_3_art_688.userData.sculptComponent = {"id": "test-set-3-art", "name": "Set box art band 3", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.75, 0.553, 4.1625], "localEnd": [4.75, 0.618, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.18, "height": 0.065, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.75, 0.5855, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.18, 0.065, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.065, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_3_art_688.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.065, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}};
+  (nodes["root"] ?? root).add(node_test_set_3_art_688);
+  nodes["test-set-3-art"] = node_test_set_3_art_688;
+  const mesh_test_set_3_art_688Geometry = endpoint_test_set_3_art_688
+    ? new THREE.CylinderGeometry(endpoint_test_set_3_art_688.endRadius, endpoint_test_set_3_art_688.baseRadius, endpoint_test_set_3_art_688.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_set_3_art_688) {
+    mesh_test_set_3_art_688Geometry.scale(0.18, 0.065, 0.005);
+  }
+  const mesh_test_set_3_art_688 = new THREE.Mesh(
+    mesh_test_set_3_art_688Geometry,
+    materialMap["label-white"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_set_3_art_688.name = "Set box art band 3";
+  if (endpoint_test_set_3_art_688) {
+    mesh_test_set_3_art_688.position.copy(endpoint_test_set_3_art_688.midpoint);
+    mesh_test_set_3_art_688.quaternion.copy(endpoint_test_set_3_art_688.quaternion);
+  }
+  mesh_test_set_3_art_688.castShadow = options.castShadow ?? true;
+  mesh_test_set_3_art_688.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_set_3_art_688.userData.sculptComponent = {"id": "test-set-3-art", "name": "Set box art band 3", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.75, 0.553, 4.1625], "localEnd": [4.75, 0.618, 4.1625], "contactType": "applied", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.18, "height": 0.065, "depth": 0.005, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.75, 0.5855, 4.1625], "rotation": [0.0, 0.0, 0.0], "scale": [0.18, 0.065, 0.005]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.065, 0.005], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-set-3-art", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "label-white"}}, "material": "label-white", "materialLayers": ["label-white"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 246, 216, 1.0)", "secondaryAlbedo": "rgba(245, 236, 206, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_set_3_art_688.add(mesh_test_set_3_art_688);
+  meshes["test-set-3-art"] = mesh_test_set_3_art_688;
+  colliders["test-set-3-art"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.065, 0.005], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-set-3-art"] ??= [];
+  destructionGroups["test-set-3-art"].push(node_test_set_3_art_688);
+
+  const endpoint_test_table_mug_0_689 = makeAttachmentEndpoint(null);
+  const node_test_table_mug_0_689 = new THREE.Group();
+  node_test_table_mug_0_689.name = "Coffee mug 0__pivot";
+  node_test_table_mug_0_689.scale.set(1, 1, 1);
+  if (endpoint_test_table_mug_0_689) {
+    node_test_table_mug_0_689.position.copy(endpoint_test_table_mug_0_689.start);
+    node_test_table_mug_0_689.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_mug_0_689.position.set(5.0, 0.455, 4.1);
+    node_test_table_mug_0_689.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_mug_0_689.userData.sculptComponent = {"id": "test-table-mug-0", "name": "Coffee mug 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.0, 0.41, 4.1], "localEnd": [5.0, 0.5, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.0, 0.455, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_mug_0_689.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}};
+  (nodes["root"] ?? root).add(node_test_table_mug_0_689);
+  nodes["test-table-mug-0"] = node_test_table_mug_0_689;
+  const mesh_test_table_mug_0_689Geometry = endpoint_test_table_mug_0_689
+    ? new THREE.CylinderGeometry(endpoint_test_table_mug_0_689.endRadius, endpoint_test_table_mug_0_689.baseRadius, endpoint_test_table_mug_0_689.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_mug_0_689) {
+    mesh_test_table_mug_0_689Geometry.scale(0.08, 0.09, 0.08);
+  }
+  const mesh_test_table_mug_0_689 = new THREE.Mesh(
+    mesh_test_table_mug_0_689Geometry,
+    materialMap["prop-mug"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_mug_0_689.name = "Coffee mug 0";
+  if (endpoint_test_table_mug_0_689) {
+    mesh_test_table_mug_0_689.position.copy(endpoint_test_table_mug_0_689.midpoint);
+    mesh_test_table_mug_0_689.quaternion.copy(endpoint_test_table_mug_0_689.quaternion);
+  }
+  mesh_test_table_mug_0_689.castShadow = options.castShadow ?? true;
+  mesh_test_table_mug_0_689.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_mug_0_689.userData.sculptComponent = {"id": "test-table-mug-0", "name": "Coffee mug 0", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.0, 0.41, 4.1], "localEnd": [5.0, 0.5, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.0, 0.455, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-0", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_mug_0_689.add(mesh_test_table_mug_0_689);
+  meshes["test-table-mug-0"] = mesh_test_table_mug_0_689;
+  colliders["test-table-mug-0"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-mug-0"] ??= [];
+  destructionGroups["test-table-mug-0"].push(node_test_table_mug_0_689);
+
+  const endpoint_test_table_mug_1_690 = makeAttachmentEndpoint(null);
+  const node_test_table_mug_1_690 = new THREE.Group();
+  node_test_table_mug_1_690.name = "Coffee mug 1__pivot";
+  node_test_table_mug_1_690.scale.set(1, 1, 1);
+  if (endpoint_test_table_mug_1_690) {
+    node_test_table_mug_1_690.position.copy(endpoint_test_table_mug_1_690.start);
+    node_test_table_mug_1_690.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_table_mug_1_690.position.set(5.16, 0.455, 4.1);
+    node_test_table_mug_1_690.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_table_mug_1_690.userData.sculptComponent = {"id": "test-table-mug-1", "name": "Coffee mug 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.16, 0.41, 4.1], "localEnd": [5.16, 0.5, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.16, 0.455, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_mug_1_690.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}};
+  (nodes["root"] ?? root).add(node_test_table_mug_1_690);
+  nodes["test-table-mug-1"] = node_test_table_mug_1_690;
+  const mesh_test_table_mug_1_690Geometry = endpoint_test_table_mug_1_690
+    ? new THREE.CylinderGeometry(endpoint_test_table_mug_1_690.endRadius, endpoint_test_table_mug_1_690.baseRadius, endpoint_test_table_mug_1_690.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_table_mug_1_690) {
+    mesh_test_table_mug_1_690Geometry.scale(0.08, 0.09, 0.08);
+  }
+  const mesh_test_table_mug_1_690 = new THREE.Mesh(
+    mesh_test_table_mug_1_690Geometry,
+    materialMap["prop-mug"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_table_mug_1_690.name = "Coffee mug 1";
+  if (endpoint_test_table_mug_1_690) {
+    mesh_test_table_mug_1_690.position.copy(endpoint_test_table_mug_1_690.midpoint);
+    mesh_test_table_mug_1_690.quaternion.copy(endpoint_test_table_mug_1_690.quaternion);
+  }
+  mesh_test_table_mug_1_690.castShadow = options.castShadow ?? true;
+  mesh_test_table_mug_1_690.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_table_mug_1_690.userData.sculptComponent = {"id": "test-table-mug-1", "name": "Coffee mug 1", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [5.16, 0.41, 4.1], "localEnd": [5.16, 0.5, 4.1], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [5.16, 0.455, 4.1], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-table-mug-1", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_table_mug_1_690.add(mesh_test_table_mug_1_690);
+  meshes["test-table-mug-1"] = mesh_test_table_mug_1_690;
+  colliders["test-table-mug-1"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-table-mug-1"] ??= [];
+  destructionGroups["test-table-mug-1"].push(node_test_table_mug_1_690);
+
+  const endpoint_test_desk_mug_691 = makeAttachmentEndpoint(null);
+  const node_test_desk_mug_691 = new THREE.Group();
+  node_test_desk_mug_691.name = "Desk mug__pivot";
+  node_test_desk_mug_691.scale.set(1, 1, 1);
+  if (endpoint_test_desk_mug_691) {
+    node_test_desk_mug_691.position.copy(endpoint_test_desk_mug_691.start);
+    node_test_desk_mug_691.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_desk_mug_691.position.set(3.54, 0.475, 1.16);
+    node_test_desk_mug_691.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_desk_mug_691.userData.sculptComponent = {"id": "test-desk-mug", "name": "Desk mug", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.54, 0.43, 1.16], "localEnd": [3.54, 0.52, 1.16], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.54, 0.475, 1.16], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-mug", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_mug_691.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-mug", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}};
+  (nodes["root"] ?? root).add(node_test_desk_mug_691);
+  nodes["test-desk-mug"] = node_test_desk_mug_691;
+  const mesh_test_desk_mug_691Geometry = endpoint_test_desk_mug_691
+    ? new THREE.CylinderGeometry(endpoint_test_desk_mug_691.endRadius, endpoint_test_desk_mug_691.baseRadius, endpoint_test_desk_mug_691.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_desk_mug_691) {
+    mesh_test_desk_mug_691Geometry.scale(0.08, 0.09, 0.08);
+  }
+  const mesh_test_desk_mug_691 = new THREE.Mesh(
+    mesh_test_desk_mug_691Geometry,
+    materialMap["prop-mug"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_desk_mug_691.name = "Desk mug";
+  if (endpoint_test_desk_mug_691) {
+    mesh_test_desk_mug_691.position.copy(endpoint_test_desk_mug_691.midpoint);
+    mesh_test_desk_mug_691.quaternion.copy(endpoint_test_desk_mug_691.quaternion);
+  }
+  mesh_test_desk_mug_691.castShadow = options.castShadow ?? true;
+  mesh_test_desk_mug_691.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_desk_mug_691.userData.sculptComponent = {"id": "test-desk-mug", "name": "Desk mug", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [3.54, 0.43, 1.16], "localEnd": [3.54, 0.52, 1.16], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.09, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [3.54, 0.475, 1.16], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.09, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-mug", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-mug"}}, "material": "prop-mug", "materialLayers": ["prop-mug"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(246, 244, 238, 1.0)", "secondaryAlbedo": "rgba(236, 233, 226, 1.0)", "materialClass": "ceramic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_mug_691.add(mesh_test_desk_mug_691);
+  meshes["test-desk-mug"] = mesh_test_desk_mug_691;
+  colliders["test-desk-mug"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.09, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-desk-mug"] ??= [];
+  destructionGroups["test-desk-mug"].push(node_test_desk_mug_691);
+
+  const endpoint_test_desk_pad_692 = makeAttachmentEndpoint(null);
+  const node_test_desk_pad_692 = new THREE.Group();
+  node_test_desk_pad_692.name = "Notepad__pivot";
+  node_test_desk_pad_692.scale.set(1, 1, 1);
+  if (endpoint_test_desk_pad_692) {
+    node_test_desk_pad_692.position.copy(endpoint_test_desk_pad_692.start);
+    node_test_desk_pad_692.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_desk_pad_692.position.set(4.21, 0.435, 1.11);
+    node_test_desk_pad_692.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_desk_pad_692.userData.sculptComponent = {"id": "test-desk-pad", "name": "Notepad", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.21, 0.43, 1.11], "localEnd": [4.21, 0.44, 1.11], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.18, "height": 0.01, "depth": 0.22, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.21, 0.435, 1.11], "rotation": [0.0, 0.0, 0.0], "scale": [0.18, 0.01, 0.22]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.01, 0.22], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-pad", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_pad_692.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.01, 0.22], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-pad", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}};
+  (nodes["root"] ?? root).add(node_test_desk_pad_692);
+  nodes["test-desk-pad"] = node_test_desk_pad_692;
+  const mesh_test_desk_pad_692Geometry = endpoint_test_desk_pad_692
+    ? new THREE.CylinderGeometry(endpoint_test_desk_pad_692.endRadius, endpoint_test_desk_pad_692.baseRadius, endpoint_test_desk_pad_692.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_desk_pad_692) {
+    mesh_test_desk_pad_692Geometry.scale(0.18, 0.01, 0.22);
+  }
+  const mesh_test_desk_pad_692 = new THREE.Mesh(
+    mesh_test_desk_pad_692Geometry,
+    materialMap["prop-paper"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_desk_pad_692.name = "Notepad";
+  if (endpoint_test_desk_pad_692) {
+    mesh_test_desk_pad_692.position.copy(endpoint_test_desk_pad_692.midpoint);
+    mesh_test_desk_pad_692.quaternion.copy(endpoint_test_desk_pad_692.quaternion);
+  }
+  mesh_test_desk_pad_692.castShadow = options.castShadow ?? true;
+  mesh_test_desk_pad_692.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_desk_pad_692.userData.sculptComponent = {"id": "test-desk-pad", "name": "Notepad", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.21, 0.43, 1.11], "localEnd": [4.21, 0.44, 1.11], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.18, "height": 0.01, "depth": 0.22, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.21, 0.435, 1.11], "rotation": [0.0, 0.0, 0.0], "scale": [0.18, 0.01, 0.22]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.01, 0.22], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-pad", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "prop-paper"}}, "material": "prop-paper", "materialLayers": ["prop-paper"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(251, 251, 248, 1.0)", "secondaryAlbedo": "rgba(241, 241, 238, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_pad_692.add(mesh_test_desk_pad_692);
+  meshes["test-desk-pad"] = mesh_test_desk_pad_692;
+  colliders["test-desk-pad"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.18, 0.01, 0.22], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-desk-pad"] ??= [];
+  destructionGroups["test-desk-pad"].push(node_test_desk_pad_692);
+
+  const endpoint_test_desk_note_693 = makeAttachmentEndpoint(null);
+  const node_test_desk_note_693 = new THREE.Group();
+  node_test_desk_note_693.name = "Sticky note on the pad__pivot";
+  node_test_desk_note_693.scale.set(1, 1, 1);
+  if (endpoint_test_desk_note_693) {
+    node_test_desk_note_693.position.copy(endpoint_test_desk_note_693.start);
+    node_test_desk_note_693.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_desk_note_693.position.set(4.2, 0.4425, 1.08);
+    node_test_desk_note_693.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_desk_note_693.userData.sculptComponent = {"id": "test-desk-note", "name": "Sticky note on the pad", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.2, 0.44, 1.08], "localEnd": [4.2, 0.445, 1.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.005, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.2, 0.4425, 1.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.005, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.005, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-note", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_note_693.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.005, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-note", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}};
+  (nodes["root"] ?? root).add(node_test_desk_note_693);
+  nodes["test-desk-note"] = node_test_desk_note_693;
+  const mesh_test_desk_note_693Geometry = endpoint_test_desk_note_693
+    ? new THREE.CylinderGeometry(endpoint_test_desk_note_693.endRadius, endpoint_test_desk_note_693.baseRadius, endpoint_test_desk_note_693.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_desk_note_693) {
+    mesh_test_desk_note_693Geometry.scale(0.08, 0.005, 0.08);
+  }
+  const mesh_test_desk_note_693 = new THREE.Mesh(
+    mesh_test_desk_note_693Geometry,
+    materialMap["note-yellow"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_desk_note_693.name = "Sticky note on the pad";
+  if (endpoint_test_desk_note_693) {
+    mesh_test_desk_note_693.position.copy(endpoint_test_desk_note_693.midpoint);
+    mesh_test_desk_note_693.quaternion.copy(endpoint_test_desk_note_693.quaternion);
+  }
+  mesh_test_desk_note_693.castShadow = options.castShadow ?? true;
+  mesh_test_desk_note_693.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_desk_note_693.userData.sculptComponent = {"id": "test-desk-note", "name": "Sticky note on the pad", "level": "micro", "role": "prop", "importance": 0.1, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.2, 0.44, 1.08], "localEnd": [4.2, 0.445, 1.08], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.08, "height": 0.005, "depth": 0.08, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.2, 0.4425, 1.08], "rotation": [0.0, 0.0, 0.0], "scale": [0.08, 0.005, 0.08]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.005, 0.08], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-note", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "note-yellow"}}, "material": "note-yellow", "materialLayers": ["note-yellow"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(255, 224, 102, 1.0)", "secondaryAlbedo": "rgba(245, 214, 92, 1.0)", "materialClass": "unknown", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_note_693.add(mesh_test_desk_note_693);
+  meshes["test-desk-note"] = mesh_test_desk_note_693;
+  colliders["test-desk-note"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.08, 0.005, 0.08], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-desk-note"] ??= [];
+  destructionGroups["test-desk-note"].push(node_test_desk_note_693);
+
+  const endpoint_test_desk_set_694 = makeAttachmentEndpoint(null);
+  const node_test_desk_set_694 = new THREE.Group();
+  node_test_desk_set_694.name = "Set on test__pivot";
+  node_test_desk_set_694.scale.set(1, 1, 1);
+  if (endpoint_test_desk_set_694) {
+    node_test_desk_set_694.position.copy(endpoint_test_desk_set_694.start);
+    node_test_desk_set_694.rotation.set(0.0, 0.0, 0.0);
+  } else {
+    node_test_desk_set_694.position.set(4.22, 0.54, 0.79);
+    node_test_desk_set_694.rotation.set(0.0, 0.0, 0.0);
+  }
+  node_test_desk_set_694.userData.sculptComponent = {"id": "test-desk-set", "name": "Set on test", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.22, 0.43, 0.79], "localEnd": [4.22, 0.65, 0.79], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.22, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.22, 0.54, 0.79], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.22, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.22, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-set", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}}, "material": "box-orange", "materialLayers": ["box-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 138, 30, 1.0)", "secondaryAlbedo": "rgba(232, 128, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_set_694.userData.actionProfile = {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.22, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-set", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}};
+  (nodes["root"] ?? root).add(node_test_desk_set_694);
+  nodes["test-desk-set"] = node_test_desk_set_694;
+  const mesh_test_desk_set_694Geometry = endpoint_test_desk_set_694
+    ? new THREE.CylinderGeometry(endpoint_test_desk_set_694.endRadius, endpoint_test_desk_set_694.baseRadius, endpoint_test_desk_set_694.length, 16, 6)
+    : new THREE.BoxGeometry(1, 1, 1, 4, 4, 4);
+  if (!endpoint_test_desk_set_694) {
+    mesh_test_desk_set_694Geometry.scale(0.2, 0.22, 0.1);
+  }
+  const mesh_test_desk_set_694 = new THREE.Mesh(
+    mesh_test_desk_set_694Geometry,
+    materialMap["box-orange"] ?? new THREE.MeshStandardMaterial({ color: 0x888888 })
+  );
+  mesh_test_desk_set_694.name = "Set on test";
+  if (endpoint_test_desk_set_694) {
+    mesh_test_desk_set_694.position.copy(endpoint_test_desk_set_694.midpoint);
+    mesh_test_desk_set_694.quaternion.copy(endpoint_test_desk_set_694.quaternion);
+  }
+  mesh_test_desk_set_694.castShadow = options.castShadow ?? true;
+  mesh_test_desk_set_694.receiveShadow = options.receiveShadow ?? true;
+  mesh_test_desk_set_694.userData.sculptComponent = {"id": "test-desk-set", "name": "Set on test", "level": "micro", "role": "prop", "importance": 0.2, "confidence": 0.75, "primitive": "box", "topologyClass": "assembled-solid", "topologyRationale": "Hard-surface prop: a box at sprite scale.", "geometryDescriptor": {"topologyIntent": "hard-surface, flat faces, crisp edges", "edgeTreatment": {"type": "none", "bevelRadius": 0.0, "segments": 1}, "deformationStack": [], "uvStrategy": "generated procedural coordinates", "normalStrategy": "vertex normals from generated geometry"}, "parent": "root", "attachment": {"parentId": "root", "parentSocket": "ground-top", "localStart": [4.22, 0.43, 0.79], "localEnd": [4.22, 0.65, 0.79], "contactType": "resting", "embedDepth": 0.002, "gapTolerance": 0.002}, "dimensions": {"width": 0.2, "height": 0.22, "depth": 0.1, "units": "wu (1 tile edge, ~2 m)", "confidence": 0.75}, "transform": {"position": [4.22, 0.54, 0.79], "rotation": [0.0, 0.0, 0.0], "scale": [0.2, 0.22, 0.1]}, "actionProfile": {"animationRole": "static", "pivot": {"mode": "center", "localPosition": [0, 0, 0], "axis": [0, 1, 0], "confidence": 0.75}, "transformChannels": {"translate": false, "rotate": false, "scale": false, "bend": false, "twist": false, "detach": false, "visibility": true, "materialState": true}, "sockets": [], "collider": {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.22, 0.1], "isTrigger": false, "notes": "box proxy"}, "constraints": [], "destruction": {"breakable": false, "fractureGroup": "test-desk-set", "seamRefs": [], "detachableFragments": [], "breakImpulse": 0.0, "debrisMaterial": "box-orange"}}, "material": "box-orange", "materialLayers": ["box-orange"], "deformations": [], "joints": [], "seams": [], "localFeatures": [], "surfaceDetail": {"macroRoughness": 0.0, "microRoughness": 0.0, "bumpAmplitude": 0.0, "normalPattern": "", "displacementPattern": "", "occlusionPattern": "", "edgeWearPattern": "", "notes": ""}, "evidenceRefs": ["ai-studio-campus", "board-plan"], "details": [], "fidelityTier": "game-prop", "colorMaterialRecipe": {"dominantAlbedo": "rgba(242, 138, 30, 1.0)", "secondaryAlbedo": "rgba(232, 128, 20, 1.0)", "materialClass": "plastic", "materialClassConfidence": 0.75, "evidenceRefs": ["ai-studio-campus", "board-plan"]}};
+  node_test_desk_set_694.add(mesh_test_desk_set_694);
+  meshes["test-desk-set"] = mesh_test_desk_set_694;
+  colliders["test-desk-set"] = {"type": "box", "offset": [0, 0, 0], "scale": [0.2, 0.22, 0.1], "isTrigger": false, "notes": "box proxy"};
+  destructionGroups["test-desk-set"] ??= [];
+  destructionGroups["test-desk-set"].push(node_test_desk_set_694);
   // repetition system "ground-walls" describes 36 parts that are already built individually; not instanced.
   // repetition system "upper-walls" describes 126 parts that are already built individually; not instanced.
   // repetition system "canopy-studs" describes 8 parts that are already built individually; not instanced.

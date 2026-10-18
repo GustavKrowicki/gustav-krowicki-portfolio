@@ -624,6 +624,98 @@ bx("test-screen", "Big screen", "meso", "prop", 12.07, 13.05, 0.49, 1.09, 5.16, 
    features=[{"id": "test-screen.animation", "kind": "decal", "notes": "plays a short animation of what the model does"}],
    topo="Screen face: a thin box painted at runtime.")
 
+# Test room props (Gustav 2026-10-18: "more stuff"): a hands-on test in progress. An observer with a clipboard, a test
+# wall with sticky notes, a camera on a tripod, sellers waiting on a bench, a table with the sets to test, desk clutter.
+def npc_standing(pre, name, nx, nz, shirt, hair, arm_dx=0.0, arm_dz=0.06):
+    bx(f"{pre}-leg-w", f"{name} leg west", "micro", "prop", nx - 0.11, nx - 0.01, 0.02, 0.42, nz - 0.06, nz + 0.06, "npc-trousers", importance=0.3)
+    bx(f"{pre}-leg-e", f"{name} leg east", "micro", "prop", nx + 0.01, nx + 0.11, 0.02, 0.42, nz - 0.06, nz + 0.06, "npc-trousers", importance=0.3)
+    bx(f"{pre}-torso", f"{name} torso", "meso", "prop", nx - 0.14, nx + 0.14, 0.42, 0.72, nz - 0.08, nz + 0.08, shirt, importance=0.4,
+       topo="Generic NPC body: boxes (no face detail, no name).")
+    for sd, ax in (("w", nx - 0.18), ("e", nx + 0.18)):
+        bx(f"{pre}-arm-{sd}", f"{name} arm {sd}", "micro", "prop", ax - 0.04 + arm_dx, ax + 0.04 + arm_dx, 0.45, 0.7, nz - 0.04 + arm_dz,
+           nz + 0.04 + arm_dz, shirt, importance=0.2)
+    bx(f"{pre}-head", f"{name} head", "meso", "prop", nx - 0.08, nx + 0.08, 0.74, 0.9, nz - 0.08, nz + 0.08, "npc-skin", importance=0.3)
+    bx(f"{pre}-hair", f"{name} hair", "micro", "prop", nx - 0.085, nx + 0.085, 0.86, 0.93, nz - 0.06, nz + 0.085, hair, importance=0.2)
+
+
+def npc_seated(pre, name, nx, nz, shirt, hair, seat):
+    """Seated, facing north (-z): back at nz, knees towards nz - 0.3; `seat` = seat top height."""
+    for sd, dx in (("w", -0.06), ("e", 0.06)):
+        bx(f"{pre}-thigh-{sd}", f"{name} thigh {sd}", "micro", "prop", nx + dx - 0.05, nx + dx + 0.05, seat, seat + 0.1, nz - 0.3, nz,
+           "npc-trousers", importance=0.2)
+        bx(f"{pre}-shin-{sd}", f"{name} shin {sd}", "micro", "prop", nx + dx - 0.05, nx + dx + 0.05, 0.02, seat + 0.02, nz - 0.32, nz - 0.22,
+           "npc-trousers", importance=0.2)
+    bx(f"{pre}-torso", f"{name} torso", "meso", "prop", nx - 0.14, nx + 0.14, seat + 0.08, seat + 0.38, nz - 0.08, nz + 0.08, shirt,
+       importance=0.4, topo="Generic NPC body: boxes (no face detail, no name).")
+    for sd, ax in (("w", nx - 0.18), ("e", nx + 0.18)):
+        bx(f"{pre}-arm-{sd}", f"{name} arm {sd}", "micro", "prop", ax - 0.04, ax + 0.04, seat + 0.1, seat + 0.36, nz - 0.12, nz - 0.02, shirt,
+           importance=0.2)
+    bx(f"{pre}-head", f"{name} head", "meso", "prop", nx - 0.08, nx + 0.08, seat + 0.4, seat + 0.56, nz - 0.08, nz + 0.08, "npc-skin",
+       importance=0.3)
+    bx(f"{pre}-hair", f"{name} hair", "micro", "prop", nx - 0.085, nx + 0.085, seat + 0.52, seat + 0.59, nz - 0.06, nz + 0.085, hair,
+       importance=0.2)
+
+
+# observer: stands east of the desk, facing the tester (west), clipboard held out in front
+npc_standing("npc-observer", "Observer", 12.45, 6.45, "npc-shirt-2", "npc-hair-2", arm_dx=-0.06, arm_dz=0.0)
+bx("test-clipboard", "Observer clipboard", "micro", "prop", 12.18, 12.22, 0.5, 0.72, 6.33, 6.57, "prop-board", importance=0.3)
+bx("test-clipboard-paper", "Clipboard paper", "micro", "prop", 12.17, 12.18, 0.52, 0.69, 6.35, 6.55, "prop-paper", contact="applied",
+   importance=0.2)
+# test wall: a whiteboard on legs at the room's north end, with three columns of sticky notes
+bx("test-wall-leg-w", "Test wall leg west", "micro", "prop", 10.1, 10.14, 0.02, 0.4, 5.2, 5.24, "frame-dark", importance=0.2)
+bx("test-wall-leg-e", "Test wall leg east", "micro", "prop", 10.86, 10.9, 0.02, 0.4, 5.2, 5.24, "frame-dark", importance=0.2)
+bx("test-wall-frame", "Test wall frame", "meso", "prop", 10.06, 10.94, 0.38, 1.08, 5.18, 5.24, "frame-dark", importance=0.5,
+   features=[{"id": "test-wall.notes", "kind": "decal", "notes": "test findings on sticky notes, three columns"}])
+bx("test-wall-board", "Test wall board", "meso", "prop", 10.09, 10.91, 0.41, 1.05, 5.24, 5.25, "prop-paper", contact="applied",
+   importance=0.4)
+NOTES = ("note-yellow", "note-pink", "note-blue", "note-green")
+for col in range(3):
+    cx0 = 10.15 + col * 0.26
+    bx(f"test-wall-head-{col}", f"Test wall column head {col}", "micro", "prop", cx0, cx0 + 0.2, 0.96, 0.99, 5.25, 5.26, "frame-dark",
+       contact="applied", importance=0.1)
+    for row in range(3 - (col == 2)):
+        y0 = 0.82 - row * 0.15
+        bx(f"test-wall-note-{col}-{row}", f"Sticky note {col} {row}", "micro", "prop", cx0 + (row % 2) * 0.03, cx0 + 0.11 + (row % 2) * 0.03,
+           y0, y0 + 0.11, 5.25, 5.262, NOTES[(col + row * 2) % 4], contact="applied", importance=0.1)
+        bx(f"test-wall-note-{col}-{row}b", f"Sticky note {col} {row} b", "micro", "prop", cx0 + 0.12 - (row % 2) * 0.02,
+           cx0 + 0.21 - (row % 2) * 0.02, y0 - 0.03, y0 + 0.07, 5.25, 5.262, NOTES[(col + row + 1) % 4], contact="applied", importance=0.1)
+# camera on a tripod in the south-west corner, aimed at the tester
+bx("test-tripod-foot", "Tripod foot", "micro", "prop", 9.38, 9.62, 0.02, 0.04, 8.38, 8.62, "frame-dark", importance=0.2)
+bx("test-tripod-pole", "Tripod pole", "micro", "prop", 9.48, 9.52, 0.04, 0.62, 8.48, 8.52, "frame-dark", importance=0.2)
+CAM = 0.927   # yaw: local +x points from the tripod to the tester
+C.append(comp("test-camera", "Test camera", "micro", "prop", "box", (0.2, 0.12, 0.1), (X(9.5 + 0.03), G + 0.68, Z(8.5 - 0.04)),
+              "camera-black", rot=[0, CAM, 0], importance=0.4, contact="resting",
+              features=[{"id": "test-camera.record", "kind": "contour", "notes": "the test is recorded"}]))
+C.append(comp("test-camera-lens", "Camera lens", "micro", "prop", "box", (0.06, 0.08, 0.08), (X(9.5 + 0.11), G + 0.68, Z(8.5 - 0.15)),
+              "camera-black", rot=[0, CAM, 0], importance=0.2, contact="applied"))
+C.append(comp("test-camera-light", "Recording light", "micro", "prop", "box", (0.03, 0.03, 0.03), (X(9.5 - 0.02), G + 0.76, Z(8.5 + 0.0)),
+              "logo-red", rot=[0, CAM, 0], importance=0.2, contact="applied"))
+# sellers waiting their turn on a bench along the south front
+bx("test-bench-seat", "Waiting bench seat", "meso", "prop", 9.12, 10.88, 0.22, 0.28, 9.5, 9.86, "prop-sofa", importance=0.4)
+bx("test-bench-back", "Waiting bench back", "micro", "prop", 9.12, 10.88, 0.28, 0.5, 9.8, 9.88, "prop-sofa", importance=0.3)
+for k, lx in enumerate((9.16, 10.8)):
+    bx(f"test-bench-leg-{k}", f"Bench leg {k}", "micro", "prop", lx, lx + 0.04, 0.02, 0.22, 9.52, 9.84, "frame-dark", importance=0.1)
+npc_seated("npc-wait-1", "Waiting seller 1", 9.55, 9.72, "npc-shirt-3", "npc-hair", 0.28)
+npc_seated("npc-wait-2", "Waiting seller 2", 10.4, 9.72, "npc-shirt-4", "npc-hair-2", 0.28)
+bx("test-wait-cup", "Coffee cup on the bench", "micro", "prop", 9.94, 10.02, 0.28, 0.36, 9.56, 9.64, "prop-mug", importance=0.1)
+# table with the sets to test and coffee
+bx("test-table-top", "Test sets table", "meso", "prop", 11.1, 12.85, 0.34, 0.38, 9.4, 9.82, "prop-wood", importance=0.4)
+for k, (lx, lz) in enumerate(((11.14, 9.44), (12.78, 9.44), (11.14, 9.74), (12.78, 9.74))):
+    bx(f"test-table-leg-{k}", f"Table leg {k}", "micro", "prop", lx - 0.02, lx + 0.02, 0.02, 0.34, lz - 0.02, lz + 0.02, "frame-dark",
+       importance=0.1)
+for k, (x0, w, h, m) in enumerate(((11.2, 0.28, 0.24, "box-yellow"), (11.52, 0.24, 0.3, "box-red"), (11.8, 0.3, 0.2, "box-blue"),
+                                    (12.14, 0.22, 0.26, "box-green"))):
+    bx(f"test-set-{k}", f"Set box to test {k}", "micro", "prop", x0, x0 + w, 0.38, 0.38 + h, 9.5, 9.66, m, importance=0.2)
+    bx(f"test-set-{k}-art", f"Set box art band {k}", "micro", "prop", x0 + 0.02, x0 + w - 0.02, 0.38 + h * 0.55, 0.38 + h * 0.8, 9.66,
+       9.665, "label-white", contact="applied", importance=0.1)
+for k, mx in enumerate((12.46, 12.62)):
+    bx(f"test-table-mug-{k}", f"Coffee mug {k}", "micro", "prop", mx, mx + 0.08, 0.38, 0.47, 9.56, 9.64, "prop-mug", importance=0.1)
+# desk clutter: a mug, a notepad with a sticky note, the set on test
+bx("test-desk-mug", "Desk mug", "micro", "prop", 11.0, 11.08, 0.4, 0.49, 6.62, 6.7, "prop-mug", importance=0.1)
+bx("test-desk-pad", "Notepad", "micro", "prop", 11.62, 11.8, 0.4, 0.41, 6.5, 6.72, "prop-paper", importance=0.1)
+bx("test-desk-note", "Sticky note on the pad", "micro", "prop", 11.66, 11.74, 0.41, 0.415, 6.54, 6.62, "note-yellow", importance=0.1)
+bx("test-desk-set", "Set on test", "micro", "prop", 11.62, 11.82, 0.4, 0.62, 6.24, 6.34, "box-orange", importance=0.2)
+
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
 json.dump({"map": walk}, open(f"{W}/walkmap.json", "w"), indent=1)
@@ -693,6 +785,20 @@ spec["materials"] = [
     material("glass-light", "Light glass", "glass", "#cfe6ee", ["#c5dce4"], 0.2, 0.0, "glass over the door", **F),
     material("glass-door", "Door glass", "glass", "#9cc8d8", ["#92bece"], 0.15, 0.0, "main door leaves", opacity={"base": 0.75}, **F),
     material("yellow", "LEGO yellow", "plastic", "#f2c500", ["#e8bb00"], 0.45, 0.0, "2 x 4 plate over the door", **F),
+    material("npc-shirt-2", "NPC shirt (observer)", "fabric", "#e0a93a", ["#d69f30"], 0.9, 0.0, "generic NPC", **F),
+    material("npc-shirt-3", "NPC shirt (seller)", "fabric", "#4a5f8f", ["#425685"], 0.9, 0.0, "generic NPC", **F),
+    material("npc-shirt-4", "NPC shirt (seller 2)", "fabric", "#b5566a", ["#ab4c60"], 0.9, 0.0, "generic NPC", **F),
+    material("npc-hair-2", "NPC hair (fair)", "unknown", "#a5773f", ["#9b6d35"], 0.9, 0.0, "generic NPC", **F),
+    material("note-yellow", "Sticky note yellow", "unknown", "#ffe066", ["#f5d65c"], 0.9, 0.0, "sticky notes", **F),
+    material("note-pink", "Sticky note pink", "unknown", "#ff9cc0", ["#f592b6"], 0.9, 0.0, "sticky notes", **F),
+    material("note-blue", "Sticky note blue", "unknown", "#8fd3ff", ["#85c9f5"], 0.9, 0.0, "sticky notes", **F),
+    material("note-green", "Sticky note green", "unknown", "#a8e68a", ["#9edc80"], 0.9, 0.0, "sticky notes", **F),
+    material("prop-paper", "Paper / whiteboard", "unknown", "#fbfbf8", ["#f1f1ee"], 0.8, 0.0, "whiteboard, notepad", **F),
+    material("prop-board", "Clipboard", "wood", "#9a6b3c", ["#906132"], 0.8, 0.0, "clipboard", **F),
+    material("prop-sofa", "Bench upholstery", "fabric", "#6e7a86", ["#64707c"], 0.9, 0.0, "waiting bench", **F),
+    material("prop-wood", "Table wood", "wood", "#c89a64", ["#be905a"], 0.7, 0.0, "table top", **F),
+    material("prop-mug", "Mug", "ceramic", "#f6f4ee", ["#ece9e2"], 0.5, 0.0, "coffee mugs", **F),
+    material("camera-black", "Camera", "plastic", "#1d1f22", ["#18191c"], 0.5, 0.1, "test camera", **F),
     material("laptop-grey", "Laptop", "metal", "#b8bcc2", ["#aeb2b8"], 0.4, 0.4, "test laptop", **F),
     material("npc-trousers", "NPC trousers", "fabric", "#2f3a4c", ["#283242"], 0.9, 0.0, "generic NPC", **F),
     material("npc-shirt", "NPC shirt", "fabric", "#3aa0a0", ["#329696"], 0.9, 0.0, "generic NPC (tester)", **F),

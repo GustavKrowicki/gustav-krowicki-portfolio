@@ -171,7 +171,7 @@ const PAINTERS: Record<string, Painter> = {
 };
 
 // Plastic toys, screens, notes and the like stay clean; everything else is architecture and gets worn
-const CLEAN = /^(mf-|npc-|laptop-|bubble-|screen-test$|chair-|note-|marker-|box-|label-|tag-|slot-|shelf-|brick-(red|blue|green)$|logo-red$|screen$|glass-door$|dome$|whiteboard$|map$|rug$|tree$|trunk$)/;
+const CLEAN = /^(mf-|npc-|prop-|camera-|laptop-|bubble-|screen-test$|chair-|note-|marker-|box-|label-|tag-|slot-|shelf-|brick-(red|blue|green)$|logo-red$|screen$|glass-door$|dome$|whiteboard$|map$|rug$|tree$|trunk$)/;
 
 function genericPainter(g: CanvasRenderingContext2D, rnd: Rnd, base: string): void {
   g.fillStyle = base; g.fillRect(0, 0, CELL, CELL);
