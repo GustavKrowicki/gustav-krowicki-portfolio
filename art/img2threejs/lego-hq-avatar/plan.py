@@ -40,7 +40,7 @@ COURTS = {   # name: polygon (all centred on tiles except the long middle court,
 }
 # Courts that are only light wells in the roof: the ground floor runs on under them, so a room has no hole to walk round
 # (Gustav, 2026-10-18: the hole in the shelf room made the shelf hard to reach). The roof keeps them as glazed wells.
-ROOF_ONLY_COURTS = {"south-west", "north", "west", "middle"}   # the room floors run under these (Gustav: no holes in the rooms)
+ROOF_ONLY_COURTS = set(COURTS)   # the room floors run under every courtyard (Gustav 2026-10-18: no holes in the rooms)
 GROUND_COURTS = {k: v for k, v in COURTS.items() if k not in ROOF_ONLY_COURTS}
 BUILDING = SHELL.difference(unary_union(list(GROUND_COURTS.values())))
 
@@ -100,7 +100,7 @@ def _polys(g):
 def room_region(code):
     """The room's floor: its tiles cut to the building, the round room is the ring inside the round wall."""
     if code == "Y":
-        return _polys(ROUND.difference(COURTS["round"]).intersection(SHELL))
+        return _polys(ROUND.difference(GROUND_COURTS.get("round", Point(RC).buffer(0))).intersection(SHELL))
     cells = [box(x, y, x + 1, y + 1) for x in range(PW) for y in range(PH) if room_of(x, y) == code]
     return _polys(unary_union(cells).intersection(BUILDING).difference(ROUND))
 
