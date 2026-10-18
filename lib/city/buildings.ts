@@ -139,6 +139,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
         sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-team_south.png",
         frames: 8, frameWidth: 70, frameHeight: 84, x: 868, y: 1060, at: [7, 1.5], radius: 3, fps: 4, loop: true,
       },
+      // the map room's round wall: the lines colour in, the notes appear, the one line lights up (&map=0..7,
+      // export_moment.sh map map)
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-map_south.png",
+        frames: 8, frameWidth: 218, frameHeight: 96, x: 308, y: 1050, at: [2.5, 6.5], radius: 2.5, fps: 4,
+      },
     ],
     // Pogicity trees, downsized to the avatar scale, in the two planters and on the front grass (trees behind the building
     // would draw over its roof)

@@ -6,15 +6,16 @@
 import type * as THREE from 'three';
 import { createLEGOHQAvatarScaleModel, type ProceduralModelOptions } from './legoHqAvatar';
 import { applyLEGOHQSurfaces } from './legoHqSurfaces';
-import { paintLEGOHQTeamClip, paintLEGOHQTestMoment } from './legoHqMoments';
+import { paintLEGOHQMap, paintLEGOHQTeamClip, paintLEGOHQTestMoment } from './legoHqMoments';
 
 // Surface pass (textures, wear, contact darkening) on the outside only; the inside stays a flat grey box for now
 // (room floors and hero places keep their flat colours). The test room's screen and bubble show moment frame 0.
 function createSurfacedModel(options: ProceduralModelOptions): THREE.Group {
   const model = createLEGOHQAvatarScaleModel(options);
-  applyLEGOHQSurfaces(model, (id) => !/-floor(-\d+)?$/.test(id) && !id.startsWith('hero-') && !/^(test-screen|test-bubble|team-screen)$/.test(id));
+  applyLEGOHQSurfaces(model, (id) => !/-floor(-\d+)?$/.test(id) && !id.startsWith('hero-') && !/^(test-screen|test-bubble|team-screen|map-panel-\d+)$/.test(id));
   paintLEGOHQTestMoment(model, 0);
   paintLEGOHQTeamClip(model, 0);
+  paintLEGOHQMap(model, 0);
   return model;
 }
 
@@ -67,10 +68,12 @@ export function createLEGOHQAvatarDoorModel(options: ProceduralModelOptions = {}
 }
 
 // Moment frames for the city (roof off, south view): the test room's screen and bubble at `frame`
-// (0..TEST_MOMENT_FRAMES-1) and the team room's clip at `clip`. The lab reads ?moment=<frame>&clip=<k> (hqAvatarMoment).
-export function createLEGOHQAvatarMomentModel(options: ProceduralModelOptions = {}, frame = 0, clip = 0): THREE.Group {
+// (0..TEST_MOMENT_FRAMES-1), the team room's clip at `clip`, the map room's map at `map`. The lab reads
+// ?moment=<frame>&clip=<k>&map=<k> (hqAvatarMoment).
+export function createLEGOHQAvatarMomentModel(options: ProceduralModelOptions = {}, frame = 0, clip = 0, map = 0): THREE.Group {
   const model = createLEGOHQAvatarRoofOffModel(options, 'south');
   paintLEGOHQTestMoment(model, frame);
   paintLEGOHQTeamClip(model, clip);
+  paintLEGOHQMap(model, map);
   return model;
 }

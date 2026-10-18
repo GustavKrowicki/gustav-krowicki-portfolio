@@ -3,10 +3,15 @@
 // the shelf, one at a time) and the "?" turns into "!". Frame 0 is the resting state, painted into every sprite; the
 // city plays frames 0..TEST_MOMENT_FRAMES-1 from a strip (lab model hqAvatarMoment&moment=<k>, export_moment.sh).
 // The team room's big screen loops a clip from the tests (a user at a laptop), TEAM_CLIP_FRAMES long (&clip=<k>).
+// The map room's round wall is one long map over MAP_PANELS panels: at rest its lines are pale; as the avatar comes near,
+// the lines colour in from left to right, sticky notes appear at the crossings, and the one line on the right lights up
+// (MAP_FRAMES long, &map=<k>).
 import * as THREE from 'three';
 
 export const TEST_MOMENT_FRAMES = 8;
 export const TEAM_CLIP_FRAMES = 8;
+export const MAP_FRAMES = 8;
+export const MAP_PANELS = 18; // build_spec.py MAP_PANELS
 const BANG_FROM = 5; // the frame where "?" becomes "!"
 
 const SETS = ['#f2c200', '#d01012', '#0a6dc2', '#2f9e44', '#f08a00', '#7a4fb5'];
@@ -102,6 +107,70 @@ function paintClip(frame: number): HTMLCanvasElement {
   return c;
 }
 
+// The systems map: many coloured lines (the ways sellers planned) come together into one line on the right; the other
+// system runs along the bottom, with links between the two. Frame 0 = at rest (pale), MAP_FRAMES - 1 = all shown.
+const MAP_W = MAP_PANELS * 90, MAP_H = 256, MERGE_Y = 100;
+const FLOWS = ['#d01012', '#0a6dc2', '#2f9e44', '#f08a00', '#7a4fb5', '#00a3da'];
+const MAP_NOTES: [number, number, string][] = [
+  [330, 70, '#ffe066'], [520, 128, '#ff9cc0'], [700, 84, '#8fd3ff'], [880, 118, '#a8e68a'], [1060, 92, '#ffe066'],
+  [1250, 180, '#ff9cc0'], [1450, 180, '#8fd3ff'],
+];
+
+function flowY(i: number, x: number): number {
+  const y0 = 36 + i * 26;
+  const t = Math.min(1, Math.max(0, (x - 120) / 1050));
+  const e = t * t * (3 - 2 * t);
+  return y0 + (MERGE_Y - y0) * e + 12 * Math.sin(x / 64 + i * 1.7) * (1 - e);
+}
+
+function paintMap(frame: number): HTMLCanvasElement {
+  const [c, g] = canvas(MAP_W, MAP_H);
+  g.fillStyle = '#f7f6f1'; g.fillRect(0, 0, MAP_W, MAP_H);
+  g.strokeStyle = 'rgba(40,60,90,0.07)'; g.lineWidth = 1;
+  for (let x = 0; x < MAP_W; x += 30) { g.beginPath(); g.moveTo(x, 0); g.lineTo(x, MAP_H); g.stroke(); }
+  for (let y = 0; y < MAP_H; y += 30) { g.beginPath(); g.moveTo(0, y); g.lineTo(MAP_W, y); g.stroke(); }
+  const shown = frame >= MAP_FRAMES - 1 ? MAP_W : (MAP_W * frame) / (MAP_FRAMES - 2);
+  const pale = '#c4c8ce';
+  g.lineCap = 'round'; g.lineJoin = 'round';
+  // the other system along the bottom, and the links into it
+  g.strokeStyle = frame > 0 ? '#5d6b78' : pale; g.lineWidth = 18;
+  g.beginPath(); g.moveTo(260, 216); g.lineTo(MAP_W - 20, 216); g.stroke();
+  g.setLineDash([8, 8]); g.lineWidth = 4;
+  for (const [x, i] of [[480, 4], [820, 2], [1250, -1], [1450, -1]] as const) {
+    const y = i < 0 ? MERGE_Y : flowY(i, x);
+    g.strokeStyle = x <= shown ? '#5d6b78' : pale;
+    g.beginPath(); g.moveTo(x, y); g.lineTo(x, 216); g.stroke();
+  }
+  g.setLineDash([]);
+  // the flows: pale everywhere, coloured up to `shown`
+  for (let i = 0; i < FLOWS.length; i++) {
+    for (const [colour, x1] of [[pale, MAP_W], [FLOWS[i], Math.min(shown, 1180)]] as const) {
+      if (x1 <= 20) continue;
+      g.strokeStyle = colour; g.lineWidth = 12;
+      g.beginPath(); g.moveTo(20, flowY(i, 20));
+      for (let x = 30; x <= Math.min(x1, 1180); x += 10) g.lineTo(x, flowY(i, x));
+      g.stroke();
+    }
+  }
+  // the one line on the right
+  const last = frame >= MAP_FRAMES - 1;
+  g.strokeStyle = last ? '#1d1f22' : shown > 1180 ? '#3a4753' : pale; g.lineWidth = last ? 36 : 28;
+  g.beginPath(); g.moveTo(1170, MERGE_Y); g.lineTo(MAP_W - 30, MERGE_Y); g.stroke();
+  if (last) {
+    g.strokeStyle = '#f2c200'; g.lineWidth = 24;
+    g.beginPath(); g.moveTo(1170, MERGE_Y); g.lineTo(MAP_W - 30, MERGE_Y); g.stroke();
+  }
+  g.fillStyle = last ? '#f2c200' : pale;
+  g.beginPath(); g.moveTo(MAP_W - 34, MERGE_Y - 26); g.lineTo(MAP_W - 6, MERGE_Y); g.lineTo(MAP_W - 34, MERGE_Y + 26); g.fill();
+  // sticky notes at the crossings, once the colour has reached them
+  for (const [x, y, colour] of MAP_NOTES) {
+    if (x > shown) continue;
+    g.fillStyle = 'rgba(0,0,0,0.15)'; g.fillRect(x - 20, y - 18, 44, 44);
+    g.fillStyle = colour; g.fillRect(x - 22, y - 22, 44, 44);
+  }
+  return c;
+}
+
 function unlit(image: HTMLCanvasElement): THREE.MeshBasicMaterial {
   const map = new THREE.CanvasTexture(image);
   map.colorSpace = THREE.SRGBColorSpace;
@@ -130,4 +199,21 @@ export function paintLEGOHQTeamClip(model: THREE.Object3D, frame = 0): void {
   node?.traverse((o) => {
     if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material;
   });
+}
+
+/** Paint the map room's round wall (panels map-panel-0..MAP_PANELS-1) with map frame `frame` (0 = at rest). */
+export function paintLEGOHQMap(model: THREE.Object3D, frame = 0): void {
+  if (typeof document === 'undefined') return;
+  const k = Math.max(0, Math.min(MAP_FRAMES - 1, Math.round(frame)));
+  const map = paintMap(k);
+  const nodes: Record<string, THREE.Object3D> = model.userData.sculptRuntime?.nodes ?? {};
+  const pw = MAP_W / MAP_PANELS;
+  for (let p = 0; p < MAP_PANELS; p++) {
+    const [slice, g] = canvas(pw, MAP_H);
+    g.drawImage(map, p * pw, 0, pw, MAP_H, 0, 0, pw, MAP_H);
+    const material = unlit(slice);
+    nodes[`map-panel-${p}`]?.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material;
+    });
+  }
 }

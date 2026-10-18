@@ -70,9 +70,9 @@ HERO = {    # room code: (tile, label) where the hero object will stand; the til
     "Y": ((1, 6), "4 Systems map"),
     "A": ((14, 5), "5 AI lab table"),
 }
-BLOCKED = {(4, 9), (11, 5), (12, 5), (12, 6), (10, 5), (9, 8), (9, 9), (10, 9), (11, 9), (12, 9), (7, 1), (7, 2), (3, 2), (9, 1)}   # the shelf runs over two tiles (hero tile + (4, 9)); the tester on (11, 5), the screen on (12, 5); test room
+BLOCKED = {(4, 9), (11, 5), (12, 5), (12, 6), (10, 5), (9, 8), (9, 9), (10, 9), (11, 9), (12, 9), (7, 1), (7, 2), (3, 2), (9, 1), (2, 6)}   # the shelf runs over two tiles (hero tile + (4, 9)); the tester on (11, 5), the screen on (12, 5); test room
 # props: observer (12, 6), test wall (10, 5), camera (9, 8), bench (9..10, 9), sets table (11..12, 9); team room:
-# chairs (7, 1..2), user cards (3, 2), developer desk (9, 1)
+# chairs (7, 1..2), user cards (3, 2), developer desk (9, 1); map room: round table (2, 6)
 OUTSIDE_TILES = {(x, y) for x in range(PW) for y in (10,)}
 MARGIN = 0.3   # a tile is walkable when its centre is this far from every wall
 

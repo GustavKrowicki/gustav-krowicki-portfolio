@@ -532,7 +532,6 @@ for gx_, gy_ in ((10.5, 5.0), (12.5, 2.6), (14.3, 4.5), (11.4, 6.6), (4.5, 2.5),
 # ---------------------------------------------------------------------------------------------------------------
 # Hero object places: one grey block per room (sizes only roughly match the object to come)
 HERO_BOX = {   # code: (x0, x1, z0, z1, height) in plan tiles inside the hero tile
-    "Y": (1.0, 1.32, 6.1, 6.9, 1.05),        # map on the round wall
     "A": (14.15, 14.85, 5.1, 5.9, 0.42),     # AI lab long table
 }
 for code, (x0, x1, z0, z1, h) in HERO_BOX.items():
@@ -769,6 +768,41 @@ for k, mx in enumerate((9.2, 9.52)):
     bx(f"team-dev-monitor-{k}-foot", f"Monitor foot {k}", "micro", "prop", mx + 0.13, mx + 0.19, 0.4, 0.46, 0.74, 0.8, "frame-dark", importance=0.05)
 npc_standing("npc-dev", "Developer", 9.55, 1.3, "npc-shirt-5", "npc-hair-2", arm_dz=-0.08)
 
+# 4 Systems map room hero (board 651:3604, "Many ways, one map."): the far half of the round wall is one long map, in
+# MAP_PANELS flat panels round the arc (painted at runtime, one slice each, lib/city/models/legoHqMoments.ts). Many
+# coloured lines on the left come together into one line on the right, sticky notes at the crossings. A side table with
+# marker pens and note pads stands at the map; a round table in the middle holds printouts.
+MAP_PANELS, MAP_T0, MAP_T1, MAP_R = 18, 135.0, 315.0, plan.RO - 0.18
+for k in range(MAP_PANELS):
+    th = math.radians(MAP_T0 + (k + 0.5) * (MAP_T1 - MAP_T0) / MAP_PANELS)
+    w = 2 * MAP_R * math.sin(math.radians((MAP_T1 - MAP_T0) / MAP_PANELS / 2)) + 0.012
+    px, pz = plan.RC[0] + MAP_R * math.cos(th), plan.RC[1] + MAP_R * math.sin(th)
+    C.append(comp(f"map-panel-{k}", f"Map panel {k}", "meso", "prop", "box", (w, 0.84, 0.02), (X(px), G + 0.78, Z(pz)), "map-paper",
+                  rot=[0, -(th + math.pi / 2), 0], importance=0.8 if k == 0 else 0.3, contact="applied",
+                  features=[{"id": "map-panel.map", "kind": "decal",
+                             "notes": "one long map: many coloured lines on the left become one line on the right"}] if k == 0 else None,
+                  topo="Map panel on the round wall: a thin box turned to face the room centre, painted at runtime."))
+    for e, y0 in (("top", 1.2), ("bottom", 0.34)):
+        C.append(comp(f"map-rail-{e}-{k}", f"Map rail {e} {k}", "micro", "trim", "box", (w, 0.025, 0.035),
+                      (X(plan.RC[0] + (MAP_R + 0.005) * math.cos(th)), G + y0 + 0.012, Z(plan.RC[1] + (MAP_R + 0.005) * math.sin(th))),
+                      "frame-dark", rot=[0, -(th + math.pi / 2), 0], importance=0.05, contact="applied"))
+# side table at the map with marker pens and note pads
+bx("map-side-table", "Map side table", "micro", "prop", 1.08, 1.62, 0.36, 0.4, 6.28, 6.72, "prop-wood", importance=0.3)
+for k, (lx, lz) in enumerate(((1.12, 6.32), (1.58, 6.32), (1.12, 6.68), (1.58, 6.68))):
+    bx(f"map-side-leg-{k}", f"Side table leg {k}", "micro", "prop", lx - 0.02, lx + 0.02, 0.02, 0.36, lz - 0.02, lz + 0.02, "frame-dark",
+       importance=0.05)
+for k, (nx, nz, m) in enumerate(((1.16, 6.36, "note-yellow"), (1.3, 6.4, "note-pink"), (1.18, 6.52, "note-blue"))):
+    bx(f"map-pad-{k}", f"Note pad {k}", "micro", "prop", nx, nx + 0.1, 0.4, 0.43, nz, nz + 0.1, m, importance=0.05)
+bx("map-pen-cup", "Marker cup", "micro", "prop", 1.45, 1.53, 0.4, 0.5, 6.5, 6.58, "frame-dark", importance=0.05)
+for k, (dx, m) in enumerate(((0.0, "logo-red"), (0.025, "label-blue"), (0.05, "box-green"))):
+    bx(f"map-pen-{k}", f"Marker {k}", "micro", "prop", 1.455 + dx, 1.47 + dx, 0.5, 0.56, 6.53, 6.545, m, importance=0.02)
+# round table in the middle with printouts of the map
+cyl("map-table-top", "Round table top", "micro", "prop", 2.5, 6.5, 0.36, 0.04, 0.34, "prop-wood", importance=0.3)
+cyl("map-table-leg", "Round table leg", "micro", "prop", 2.5, 6.5, 0.02, 0.34, 0.04, "frame-dark", importance=0.05)
+bx("map-print-0", "Printout", "micro", "prop", 2.32, 2.56, 0.4, 0.405, 6.34, 6.52, "prop-paper", importance=0.05)
+bx("map-print-1", "Printout", "micro", "prop", 2.5, 2.72, 0.4, 0.41, 6.5, 6.66, "prop-paper", importance=0.05)
+bx("map-print-note", "Note on a printout", "micro", "prop", 2.56, 2.62, 0.41, 0.415, 6.54, 6.6, "note-yellow", importance=0.02)
+
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
 json.dump({"map": walk}, open(f"{W}/walkmap.json", "w"), indent=1)
@@ -841,6 +875,7 @@ spec["materials"] = [
     material("npc-shirt-2", "NPC shirt (observer)", "fabric", "#e0a93a", ["#d69f30"], 0.9, 0.0, "generic NPC", **F),
     material("npc-shirt-3", "NPC shirt (seller)", "fabric", "#4a5f8f", ["#425685"], 0.9, 0.0, "generic NPC", **F),
     material("npc-shirt-4", "NPC shirt (seller 2)", "fabric", "#b5566a", ["#ab4c60"], 0.9, 0.0, "generic NPC", **F),
+    material("map-paper", "Map paper", "unknown", "#f7f6f1", ["#edece7"], 0.9, 0.0, "the systems map (painted at runtime)", **F),
     material("npc-shirt-5", "NPC shirt (team)", "fabric", "#5b6e4f", ["#516445"], 0.9, 0.0, "generic NPC", **F),
     material("npc-hair-2", "NPC hair (fair)", "unknown", "#a5773f", ["#9b6d35"], 0.9, 0.0, "generic NPC", **F),
     material("note-yellow", "Sticky note yellow", "unknown", "#ffe066", ["#f5d65c"], 0.9, 0.0, "sticky notes", **F),
@@ -966,10 +1001,11 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),
-    ("hero-places", "One grey block per room for its hero object (the map room's is first in this list).", "hero-map.place"),
+    ("hero-places", "One grey block per room for its hero object (the AI lab's is first in this list).", "hero-ailab.place"),
     ("shelf", "Shelf room: a store shelf, half full, bright boxes low, dark sets high, empty slots marked.", "shelf-back.store"),
     ("test", "Test room: a tester at a laptop with a speech bubble, and a big screen.", "test-desk.moment"),
     ("team", "Team room: a big screen with a clip from the tests, the team on chairs facing it.", "team-screen.clip"),
+    ("map", "Systems map room: the round wall is one long map, many lines on the left become one line on the right.", "map-panel.map"),
 ]
 tmpl = (pa.get("detailInventory") or {}).get("details", [{}])[0]
 pa["detailInventory"]["details"] = [dict(copy.deepcopy(tmpl), id=i, description=d, scale="meso", affects="geometry",
