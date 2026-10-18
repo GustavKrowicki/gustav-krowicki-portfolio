@@ -46,7 +46,7 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
-import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { avatar3dEnabled, followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 
@@ -256,6 +256,11 @@ export class MainScene extends Phaser.Scene {
   }
 
   create(): void {
+    // The avatar builder (Avatar tab) can change the player's outfit while the city runs
+    const unfollowAvatarBuilder = followAvatarBuilder(this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, unfollowAvatarBuilder);
+    this.events.once(Phaser.Scenes.Events.DESTROY, unfollowAvatarBuilder);
+
     // Snap pixel art to whole pixels whenever the camera allows it (integer zoom, see updateCamera)
     this.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, (gameObject: Phaser.GameObjects.GameObject) => {
       gameObject.setVertexRoundMode("fullAuto");

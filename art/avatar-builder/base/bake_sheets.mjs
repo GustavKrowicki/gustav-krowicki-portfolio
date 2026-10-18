@@ -1,4 +1,4 @@
-// Bakes the city sheets for the pre-baked builder looks (AVATAR_BAKED_LOOKS in lib/city/models/avatarPieces.ts)
+// Bakes the city sheets for every builder look (AVATAR_BAKED_LOOKS in lib/city/models/avatarPieces.ts)
 // from the avatar toon lab, in the shipped avatar sheet format (avatar3d.json + one strip per clip and direction).
 //   node art/avatar-builder/base/bake_sheets.mjs http://localhost:3112
 // Writes public/game/pogicity/Characters/avatar-builder/<look>/.
@@ -23,10 +23,11 @@ const CLIPS = [
 const STRIDE_WU = 0.36 * (0.285 / 0.302);
 const WALK_FPS = (1.6 / STRIDE_WU) * 8;
 
-const looks = [
-  ['tee', 'none', 'denim'], ['hoodie', 'none', 'denim'], ['hoodie', 'beanie', 'denim'], ['sweater', 'none', 'denim'],
-  ['clubShirt', 'none', 'denim'], ['tee', 'none', 'cargo'], ['hoodie', 'beanie', 'cargo'],
-];
+// Every top x head x legs combination (the option ids of AVATAR_SLOTS), so no saved choice falls back.
+const TOPS = ['tee', 'hoodie', 'sweater', 'clubShirt'];
+const HEADS = ['none', 'beanie'];
+const LEGS = ['denim', 'cargo'];
+const looks = TOPS.flatMap((t) => HEADS.flatMap((h) => LEGS.map((l) => [t, h, l])));
 const PIECE = { hoodie: 'hoodie', sweater: 'sweater', clubShirt: 'clubShirt', beanie: 'beanie', cargo: 'cargo' };
 
 const browser = await chromium.launch({ args: ['--use-angle=metal'] });

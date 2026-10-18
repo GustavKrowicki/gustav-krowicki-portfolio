@@ -5,6 +5,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import {
   AVATAR_DEFAULT_CHOICE,
   AVATAR_SLOTS,
+  AVATAR_CHANGE_EVENT,
   AVATAR_STORAGE_KEY,
   avatarLookPieces,
   type AvatarChoice,
@@ -14,7 +15,7 @@ import {
 // loads only when this tab opens. The choice stays in this browser (localStorage), nowhere else.
 const AvatarToonView = dynamic(() => import('./AvatarToonView'), {
   ssr: false,
-  loading: () => <div style={{ width: 128, height: 240 }} aria-hidden />,
+  loading: () => <div style={{ width: 117, height: 220 }} aria-hidden />,
 });
 
 type SlotId = (typeof AVATAR_SLOTS)[number]['id'];
@@ -54,6 +55,7 @@ export default function AvatarSection() {
     } catch {
       // private mode or storage blocked: the builder still works for this visit
     }
+    window.dispatchEvent(new CustomEvent(AVATAR_CHANGE_EVENT, { detail: choice }));
   }, [choice, name]);
 
   const worn = useMemo(() => avatarLookPieces(choice), [choice]);
@@ -70,70 +72,75 @@ export default function AvatarSection() {
   return (
     <div className="px-6 py-6">
       <h2 className="text-2xl font-semibold text-neutral-900">Create your own avatar</h2>
-      <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-        Dress me in my own clothes, one piece per slot, then walk the city with it.
+      <p className="mt-2 text-sm leading-relaxed text-neutral-600">
+        Dress me in my own clothes, then walk the city with it.
       </p>
 
-      <div className="mt-6 flex flex-col items-center rounded-lg bg-[#e9e4da] px-4 py-6">
-        <AvatarToonView worn={worn} onReady={onReady} />
-        <span className="mt-3 rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
-          {name.trim() || 'Your name'}
-        </span>
-      </div>
+      {/* Avatar beside the slots, so a half-height panel shows both without scrolling */}
+      <div className="mt-4 flex items-start gap-4">
+        <div className="flex shrink-0 flex-col items-center rounded-lg bg-[#e9e4da] px-2 pb-3">
+          <AvatarToonView worn={worn} onReady={onReady} />
+          <span className="-mt-1 max-w-[7rem] truncate rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
+            {name.trim() || 'Your name'}
+          </span>
+        </div>
 
-      <div role="tablist" aria-label="Avatar slots" className="mt-6 flex gap-2">
-        {AVATAR_SLOTS.map((s) => (
-          <button
-            key={s.id}
-            type="button"
-            role="tab"
-            aria-selected={s.id === slot}
-            onClick={() => setSlot(s.id)}
-            className={`rounded-full px-3 py-1 text-sm ${
-              s.id === slot ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-            }`}
-          >
-            {s.label}
-          </button>
-        ))}
-      </div>
-
-      <ul role="tabpanel" aria-label={current.label} className="mt-4 grid grid-cols-4 gap-3">
-        {current.options.map((o) => {
-          const selected = choice[current.id] === o.id;
-          return (
-            <li key={o.id}>
+        <div className="min-w-0 flex-1">
+          <div role="tablist" aria-label="Avatar slots" className="flex flex-wrap gap-1.5">
+            {AVATAR_SLOTS.map((s) => (
               <button
+                key={s.id}
                 type="button"
-                aria-pressed={selected}
-                onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
-                className={`flex aspect-square w-full flex-col items-center justify-center gap-2 rounded-lg border bg-white text-xs ${
-                  selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
+                role="tab"
+                aria-selected={s.id === slot}
+                onClick={() => setSlot(s.id)}
+                className={`rounded-full px-3 py-1 text-sm ${
+                  s.id === slot ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
                 }`}
               >
-                <span
-                  className="h-6 w-6 rounded-full border border-black/10"
-                  style={{ backgroundColor: o.swatch }}
-                  aria-hidden
-                />
-                <span className="px-1 text-center leading-tight">{o.label}</span>
+                {s.label}
               </button>
-            </li>
-          );
-        })}
-      </ul>
+            ))}
+          </div>
 
-      <label className="mt-6 block">
-        <span className="text-sm font-medium text-neutral-500">Name tag</span>
-        <input
-          type="text"
-          value={name}
-          maxLength={16}
-          onChange={(event) => setName(event.target.value)}
-          placeholder="Your name"
-          className="mt-2 w-full rounded-lg border border-neutral-300 bg-white px-3 py-2 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
-        />
-      </label>
+          <ul role="tabpanel" aria-label={current.label} className="mt-3 grid grid-cols-2 gap-2">
+            {current.options.map((o) => {
+              const selected = choice[current.id] === o.id;
+              return (
+                <li key={o.id}>
+                  <button
+                    type="button"
+                    aria-pressed={selected}
+                    onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
+                    className={`flex h-16 w-full flex-col items-center justify-center gap-1 rounded-lg border bg-white text-xs ${
+                      selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
+                    }`}
+                  >
+                    <span
+                      className="h-5 w-5 rounded-full border border-black/10"
+                      style={{ backgroundColor: o.swatch }}
+                      aria-hidden
+                    />
+                    <span className="px-1 text-center leading-tight">{o.label}</span>
+                  </button>
+                </li>
+              );
+            })}
+          </ul>
+
+          <label className="mt-3 block">
+            <span className="text-xs font-medium text-neutral-500">Name tag</span>
+            <input
+              type="text"
+              value={name}
+              maxLength={16}
+              onChange={(event) => setName(event.target.value)}
+              placeholder="Your name"
+              className="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
+            />
+          </label>
+        </div>
+      </div>
     </div>
   );
 }

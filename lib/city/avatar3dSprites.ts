@@ -2,8 +2,15 @@
 // rendered from lib/city/models/gustavAvatar.ts by art/img2threejs/gustav-avatar/render_sheets.mjs + pack_sheets.py.
 // Opt-in: ?avatar=3d, or a saved avatar builder choice (the Avatar tab), which picks that look's pre-baked sheets
 // in public/game/pogicity/Characters/avatar-builder/<look>/ (same format). The live GIFs stay the default.
+// A choice changed while the city runs (AVATAR_CHANGE_EVENT) loads that look's sheets and swaps them in.
 import type Phaser from 'phaser';
-import { AVATAR_BAKED_LOOKS, avatarLookKey, readAvatarChoice } from '@/lib/city/models/avatarPieces';
+import {
+  AVATAR_BAKED_LOOKS,
+  AVATAR_CHANGE_EVENT,
+  avatarLookKey,
+  readAvatarChoice,
+  type AvatarChoice,
+} from '@/lib/city/models/avatarPieces';
 
 export const AVATAR3D_BASE = '/game/pogicity/Characters/avatar3d';
 export const AVATAR_BUILDER_BASE = '/game/pogicity/Characters/avatar-builder';
@@ -22,77 +29,131 @@ type Manifest = {
   animations: Record<string, { file: string; outlineFile: string; frames: number; fps: number }>;
 };
 
-// The builder look to wear: ?look=<key> (for checks), else the saved choice. Null when neither names a baked
-// look, so an unbaked combination falls back to the shipped sheets.
+const BAKED = new Set(AVATAR_BAKED_LOOKS.map(avatarLookKey));
+
+function bakedLook(choice: AvatarChoice | null): string | null {
+  return choice && BAKED.has(avatarLookKey(choice)) ? avatarLookKey(choice) : null;
+}
+
+// The builder look to wear at load: ?look=<key> (for checks), else the saved choice. Null when neither names a
+// baked look, so an unbaked combination falls back to the shipped sheets.
 export function avatarBuilderLook(): string | null {
   if (typeof window === 'undefined') return null;
-  const baked = new Set(AVATAR_BAKED_LOOKS.map(avatarLookKey));
   const param = new URLSearchParams(window.location.search).get('look');
-  if (param) return baked.has(param) ? param : null;
-  const choice = readAvatarChoice();
-  return choice && baked.has(avatarLookKey(choice)) ? avatarLookKey(choice) : null;
+  if (param) return BAKED.has(param) ? param : null;
+  return bakedLook(readAvatarChoice());
 }
 
-function savedBuilderChoice(): boolean {
-  return typeof window !== 'undefined' && readAvatarChoice() !== null;
-}
-
-// Decided once per page load: a choice saved later (the Avatar tab, while the city runs) only takes effect on the
-// next load, so the player never asks for sheets that were not loaded.
+// Decided at load, then switched on once a builder look has loaded later (a visitor opening the Avatar tab while
+// the city runs), never before its sheets exist.
 let enabled: boolean | null = null;
 export function avatar3dEnabled(): boolean {
   if (typeof window === 'undefined') return false;
   if (enabled === null) {
     const params = new URLSearchParams(window.location.search);
-    enabled = params.get('avatar') === '3d' || params.has('look') || savedBuilderChoice();
+    enabled = params.get('avatar') === '3d' || params.has('look') || readAvatarChoice() !== null;
   }
   return enabled;
 }
 
-let origin: [number, number] = [0.5, 1];
+// The sheet set the player wears now. Texture keys are `<prefix>_<walk|idle>_<compass>`: 'avatar3d' for the
+// shipped sheets, `avatarb_<look>` for a builder look, so several looks can stay loaded side by side.
+type SheetSet = { prefix: string; origin: [number, number]; displayScale: number };
+let current: SheetSet = { prefix: 'avatar3d', origin: [0.5, 1], displayScale: AVATAR3D_DISPLAY_SCALE };
+const loading = new Map<string, Promise<SheetSet>>(); // one load per sheet set, shared by every caller
+
+export function avatar3dPrefix(): string {
+  return current.prefix;
+}
 export function avatar3dOrigin(): [number, number] {
-  return origin;
+  return current.origin;
 }
-
-let displayScale = AVATAR3D_DISPLAY_SCALE;
 export function avatar3dDisplayScale(): number {
-  return displayScale;
+  return current.displayScale;
 }
 
-// Texture / animation keys follow GifLoader's convention: texture `avatar3d_<walk|idle>_<compass>`,
-// animation `<texture>_anim`, so playGifAnimation() plays them unchanged.
+// Texture / animation keys follow GifLoader's convention (animation `<texture>_anim`), so playGifAnimation()
+// plays them unchanged.
 export async function loadAvatar3dSprites(scene: Phaser.Scene, outline = true): Promise<void> {
   const look = avatarBuilderLook();
-  const dir = look ? `${AVATAR_BUILDER_BASE}/${look}` : AVATAR3D_BASE;
-  let manifest: Manifest;
   try {
-    manifest = (await (await fetch(`${dir}/avatar3d.json`)).json()) as Manifest;
+    current = look ? await loadLook(scene, look, outline) : await loadShipped(scene, outline);
   } catch (err) {
     if (!look) throw err;
-    return loadSheets(scene, AVATAR3D_BASE, (await (await fetch(`${AVATAR3D_BASE}/avatar3d.json`)).json()) as Manifest, outline, false);
+    current = await loadShipped(scene, outline);
   }
-  return loadSheets(scene, dir, manifest, outline, Boolean(look));
+}
+
+function loadShipped(scene: Phaser.Scene, outline: boolean): Promise<SheetSet> {
+  return loadSheets(scene, 'avatar3d', AVATAR3D_BASE, outline, false);
+}
+
+function loadLook(scene: Phaser.Scene, look: string, outline: boolean): Promise<SheetSet> {
+  return loadSheets(scene, `avatarb_${look}`, `${AVATAR_BUILDER_BASE}/${look}`, outline, true);
 }
 
 // Builder sheets carry their own walk fps (stride matched to that figure's legs); the shipped sheets use
 // AVATAR3D_WALK_FPS.
-async function loadSheets(scene: Phaser.Scene, dir: string, manifest: Manifest, outline: boolean, ownFps: boolean): Promise<void> {
-  origin = manifest.origin;
-  displayScale = manifest.displayScale ?? AVATAR3D_DISPLAY_SCALE;
-  await Promise.all(Object.entries(manifest.animations).map(([name, a]) => new Promise<void>((resolve, reject) => {
-    const key = `avatar3d_${name}`;
-    const img = new Image();
-    img.onload = () => {
-      scene.textures.addSpriteSheet(key, img, { frameWidth: manifest.frameWidth, frameHeight: manifest.frameHeight });
-      scene.anims.create({
-        key: `${key}_anim`,
-        frames: scene.anims.generateFrameNumbers(key, { start: 0, end: a.frames - 1 }),
-        frameRate: name.startsWith('walk') && !ownFps ? AVATAR3D_WALK_FPS : a.fps,
-        repeat: -1,
-      });
-      resolve();
-    };
-    img.onerror = reject;
-    img.src = `${dir}/${outline ? a.outlineFile : a.file}`;
-  })));
+function loadSheets(scene: Phaser.Scene, prefix: string, dir: string, outline: boolean, ownFps: boolean): Promise<SheetSet> {
+  let pending = loading.get(prefix);
+  if (!pending) {
+    pending = fetchSheets(scene, prefix, dir, outline, ownFps);
+    pending.catch(() => loading.delete(prefix));
+    loading.set(prefix, pending);
+  }
+  return pending;
+}
+
+async function fetchSheets(
+  scene: Phaser.Scene,
+  prefix: string,
+  dir: string,
+  outline: boolean,
+  ownFps: boolean,
+): Promise<SheetSet> {
+  const manifest = (await (await fetch(`${dir}/avatar3d.json`)).json()) as Manifest;
+  await Promise.all(
+    Object.entries(manifest.animations).map(
+      ([name, a]) =>
+        new Promise<void>((resolve, reject) => {
+          const key = `${prefix}_${name}`;
+          if (scene.textures.exists(key)) return resolve();
+          const img = new Image();
+          img.onload = () => {
+            scene.textures.addSpriteSheet(key, img, { frameWidth: manifest.frameWidth, frameHeight: manifest.frameHeight });
+            scene.anims.create({
+              key: `${key}_anim`,
+              frames: scene.anims.generateFrameNumbers(key, { start: 0, end: a.frames - 1 }),
+              frameRate: name.startsWith('walk') && !ownFps ? AVATAR3D_WALK_FPS : a.fps,
+              repeat: -1,
+            });
+            resolve();
+          };
+          img.onerror = reject;
+          img.src = `${dir}/${outline ? a.outlineFile : a.file}`;
+        }),
+    ),
+  );
+  return { prefix, origin: manifest.origin, displayScale: manifest.displayScale ?? AVATAR3D_DISPLAY_SCALE };
+}
+
+// Follows the builder while the city runs: each saved choice loads its look (once) and the player switches to it
+// on the next frame. Unbaked choices keep whatever the player wears now. Returns the unsubscribe.
+export function followAvatarBuilder(scene: Phaser.Scene, outline = true): () => void {
+  if (typeof window === 'undefined') return () => {};
+  let latest = 0;
+  const onChange = (event: Event) => {
+    const look = bakedLook((event as CustomEvent<AvatarChoice>).detail ?? null);
+    if (!look) return;
+    const ticket = ++latest;
+    loadLook(scene, look, outline)
+      .then((set) => {
+        if (ticket !== latest) return; // a newer choice arrived while this one loaded
+        current = set;
+        enabled = true;
+      })
+      .catch(() => {});
+  };
+  window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
+  return () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
 }

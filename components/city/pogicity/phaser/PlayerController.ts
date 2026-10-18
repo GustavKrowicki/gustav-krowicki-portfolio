@@ -14,7 +14,7 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -536,12 +536,14 @@ export class PlayerController {
     return a + (b - a) * t;
   }
 
+  private sheetSet: string | null = null;
+
   private getTextureKey(): string {
     const key = getCharacterTextureKey(this.characterType, this.direction);
     if (this.characterType !== CharacterType.Gustav || !avatar3dEnabled()) return key;
-    // ?avatar=3d: the 3D-rendered sheets, same compass naming as the GIFs, walk or idle by state
+    // 3D-rendered sheets (?avatar=3d or a builder look), same compass naming as the GIFs, walk or idle by state
     const clip = this.state === PlayerState.Idle && !this.seatWalk ? "idle" : "walk";
-    return `avatar3d_${clip}_${key.slice(key.indexOf("_") + 1)}`;
+    return `${avatar3dPrefix()}_${clip}_${key.slice(key.indexOf("_") + 1)}`;
   }
 
   private emitPositionChange(): void {
@@ -566,15 +568,22 @@ export class PlayerController {
       // Create sprite
       if (this.scene.textures.exists(textureKey)) {
         this.sprite = this.scene.add.sprite(this.worldX, this.worldY, textureKey, 0);
-        this.sprite.setOrigin(0.5, 1);
-        if (textureKey.startsWith("avatar3d_")) {
-          this.sprite.setOrigin(...avatar3dOrigin());
-          this.sprite.setScale(avatar3dDisplayScale());
-        }
       }
     }
 
     if (this.sprite) {
+      // Origin and scale follow the sheet set, which can change while the city runs (the avatar builder)
+      const sheetSet = avatar3dEnabled() && this.characterType === CharacterType.Gustav ? avatar3dPrefix() : "gif";
+      if (sheetSet !== this.sheetSet && this.scene.textures.exists(textureKey)) {
+        this.sheetSet = sheetSet;
+        if (sheetSet === "gif") {
+          this.sprite.setOrigin(0.5, 1);
+          this.sprite.setScale(1);
+        } else {
+          this.sprite.setOrigin(...avatar3dOrigin());
+          this.sprite.setScale(avatar3dDisplayScale());
+        }
+      }
       this.sprite.setPosition(this.seatPose?.x ?? this.worldX, this.seatPose?.y ?? this.worldY);
       this.sprite.setVisible(!this.seatPose?.hidden);
 

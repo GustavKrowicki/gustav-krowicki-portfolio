@@ -75,6 +75,8 @@ export const AVATAR_SLOTS = [
 export type AvatarChoice = { top: string; head: string; legs: string };
 export const AVATAR_DEFAULT_CHOICE: AvatarChoice = { top: 'tee', head: 'none', legs: 'denim' };
 export const AVATAR_STORAGE_KEY = 'avatar-builder:v1';
+// Fired on window (detail: AvatarChoice) whenever the builder saves, so a running city can change outfit.
+export const AVATAR_CHANGE_EVENT = 'avatar-builder:change';
 
 export function avatarLookKey(choice: AvatarChoice): string {
   return `${choice.top}-${choice.head}-${choice.legs}`;
@@ -89,17 +91,13 @@ export function avatarLookPieces(choice: AvatarChoice): AvatarPiece[] {
   });
 }
 
-// The looks with city sheets (art/avatar-builder/base/bake_sheets.mjs). Any other combination falls back to
-// the shipped avatar sheets until it is baked.
-export const AVATAR_BAKED_LOOKS: AvatarChoice[] = [
-  { top: 'tee', head: 'none', legs: 'denim' },
-  { top: 'hoodie', head: 'none', legs: 'denim' },
-  { top: 'hoodie', head: 'beanie', legs: 'denim' },
-  { top: 'sweater', head: 'none', legs: 'denim' },
-  { top: 'clubShirt', head: 'none', legs: 'denim' },
-  { top: 'tee', head: 'none', legs: 'cargo' },
-  { top: 'hoodie', head: 'beanie', legs: 'cargo' },
-];
+// The looks with city sheets (art/avatar-builder/base/bake_sheets.mjs): every combination of the slot options.
+// A choice outside this list (a future piece not baked yet) falls back to the shipped avatar sheets.
+export const AVATAR_BAKED_LOOKS: AvatarChoice[] = AVATAR_SLOTS[0].options.flatMap((top) =>
+  AVATAR_SLOTS[1].options.flatMap((head) =>
+    AVATAR_SLOTS[2].options.map((legs) => ({ top: top.id, head: head.id, legs: legs.id })),
+  ),
+);
 
 // The saved builder choice in this browser, or null when the visitor never opened the builder.
 export function readAvatarChoice(): AvatarChoice | null {

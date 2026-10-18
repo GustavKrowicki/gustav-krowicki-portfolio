@@ -13,7 +13,7 @@ import {
   type AvatarPiece,
 } from '@/lib/city/models/avatarToon';
 
-const CSS_HEIGHT = 240; // px on screen; the canvas renders at device pixels
+const CSS_HEIGHT = 220; // px on screen; the canvas renders at device pixels
 
 type Props = {
   worn: AvatarPiece[];
