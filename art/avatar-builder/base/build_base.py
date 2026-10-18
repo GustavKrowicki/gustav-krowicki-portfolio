@@ -43,7 +43,7 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'club-white': '#fafafa',
     'club-blue': '#0046a0',
     'cargo': '#968769',
-    'cargo-dark': '#6c5f47',
+    'cargo-dark': '#5c513b',
 }
 
 
@@ -364,8 +364,9 @@ def build_hoodie():
     # drawstrings, following the chest down from the neckline
     for side in (-1, 1):
         x = side * 0.022
-        loft(bm, uv, [vring(0.570, 0.006, 0.006, x, -0.075), vring(0.578, 0.0045, 0.0045, x, -0.076),
-                      vring(0.620, 0.0045, 0.0045, x, -0.074), vring(0.660, 0.0045, 0.0045, x, -0.064)], 2, seg=6)
+        # thick cords so they survive at street zoom
+        loft(bm, uv, [vring(0.548, 0.011, 0.010, x, -0.076), vring(0.560, 0.0085, 0.008, x, -0.077),
+                      vring(0.620, 0.0085, 0.008, x, -0.076), vring(0.660, 0.0085, 0.008, x, -0.066)], 2, seg=6)
     return new_object('hoodie', bm, ['hoodie', 'hoodie-pocket', 'string'])
 
 
@@ -403,11 +404,14 @@ def build_sweater():
     uv = bm.loops.layers.uv.new('UVMap')
     pad = TEE_PAD + 0.001
     hem = HEM_Z - PX
-    rings = [vring(hem, 0.087, 0.057), vring(HEM_Z + 0.008, 0.089, 0.059)]
-    rings += [vring(z, rx + pad, ry + pad) for z, rx, ry in TORSO if HEM_Z + 0.01 < z < 0.66]
-    # crew neck: a raised rib band standing just proud of the shoulders
-    rings += [vring(0.664, 0.058, 0.046), vring(0.672, 0.052, 0.044), vring(0.684, 0.041, 0.038), vring(0.690, 0.036, 0.034)]
-    mats = [1] + [0] * (len(rings) - 5) + [1, 1, 1]
+    rib_top = hem + 2 * PX
+    # hem rib: 2 px tall and proud of the body, so the sweater's outline steps in above it (shape, not only
+    # colour, at street zoom)
+    rings = [vring(hem, 0.094, 0.064), vring(rib_top, 0.096, 0.066), vring(rib_top + 0.004, 0.089, 0.059)]
+    rings += [vring(z, rx + pad, ry + pad) for z, rx, ry in TORSO if rib_top + 0.03 < z < 0.66]
+    # thick rolled neck: a rib band standing up round the neck, high enough to hide most of it
+    rings += [vring(0.662, 0.062, 0.050), vring(0.680, 0.058, 0.048), vring(0.702, 0.050, 0.044), vring(0.714, 0.042, 0.038)]
+    mats = [1, 1] + [0] * (len(rings) - 6) + [1, 1, 1]
     loft(bm, uv, rings, 0, mats_by_ring=mats)
     for side in (-1, 1):
         loft(bm, uv, arm_rings(side, [(-0.02, 0.041, 0.043), (0.05, 0.038, 0.039), (0.14, 0.033, 0.034),
@@ -431,11 +435,14 @@ def build_club_shirt():
         raise ValueError(z)
     zs = [0.42, 0.48, band_lo, band_hi, 0.62, 0.655]
     rings = [vring(HEM_Z, 0.091, 0.061)] + [vring(z, torso_at(z)[0] + pad, torso_at(z)[1] + pad) for z in zs]
-    rings += [vring(0.667, 0.056, 0.044), vring(0.679, 0.039, 0.035)]  # collar: last band is the blue line
-    mats = [0, 0, 0, 1, 0, 0, 0, 1]
+    # standing blue collar: rises above the tee's neckline, so the shirt differs in shape at street zoom
+    rings += [vring(0.667, 0.056, 0.044), vring(0.684, 0.047, 0.041), vring(0.698, 0.041, 0.037)]
+    mats = [0, 0, 0, 1, 0, 0, 0, 1, 1]
     loft(bm, uv, rings, 0, mats_by_ring=mats)
     for side in (-1, 1):
-        loft(bm, uv, arm_rings(side, [(-0.02, 0.041, 0.043), (0.03, 0.043, 0.043), (0.085, 0.039, 0.039)]), 1, seg=10)
+        # football cut: longer, looser blue sleeves ending in a white cuff stripe
+        loft(bm, uv, arm_rings(side, [(-0.02, 0.043, 0.045), (0.04, 0.046, 0.046), (0.105, 0.043, 0.042),
+                                      (0.125, 0.042, 0.041)]), 1, seg=10, mats_by_ring=[1, 1, 0])
     return new_object('clubShirt', bm, ['club-white', 'club-blue'])
 
 
@@ -454,9 +461,10 @@ def build_cargo():
                       vring(0.124, 0.043, 0.045, cx), vring(0.17, 0.045, 0.047, cx),
                       vring(0.28, 0.044, 0.047, cx), vring(0.385, 0.042, 0.048, cx)], 0, seg=10,
              mats_by_ring=[1, 0, 0, 0, 0])
-        # thigh pocket: on the outer side, turned towards the front so it shows in the front view
-        patch(bm, uv, [(0.200, 0.049, 0.052, 0.40), (0.245, 0.049, 0.052, 0.40), (0.290, 0.048, 0.051, 0.40)],
-              1, cols=4, cx=cx, a0=side * 0.85)
+        # thigh pocket: a block that stands out of the outer leg (a bump in the outline at street zoom),
+        # turned a little towards the front so it shows in the front view
+        patch(bm, uv, [(0.185, 0.056, 0.058, 0.46), (0.245, 0.057, 0.059, 0.46), (0.305, 0.055, 0.057, 0.46)],
+              1, cols=4, cx=cx, a0=side * 0.78)
     return new_object('cargo', bm, ['cargo', 'cargo-dark'])
 
 

@@ -23,7 +23,7 @@ export const AVATAR_BASE_COLORS: Record<string, string> = {
   'club-white': '#fafafa',
   'club-blue': '#0046a0',
   cargo: '#968769',
-  'cargo-dark': '#6c5f47',
+  'cargo-dark': '#5c513b',
 };
 
 // Swappable pieces in the GLB (node names): one piece per slot, and the base pieces each one covers.
