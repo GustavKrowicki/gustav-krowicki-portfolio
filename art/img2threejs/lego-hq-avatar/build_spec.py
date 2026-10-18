@@ -532,7 +532,6 @@ for gx_, gy_ in ((10.5, 5.0), (12.5, 2.6), (14.3, 4.5), (11.4, 6.6), (4.5, 2.5),
 # ---------------------------------------------------------------------------------------------------------------
 # Hero object places: one grey block per room (sizes only roughly match the object to come)
 HERO_BOX = {   # code: (x0, x1, z0, z1, height) in plan tiles inside the hero tile
-    "M": (7.1, 7.9, 0.56, 0.8, 0.95),        # team screen on the north wall
     "Y": (1.0, 1.32, 6.1, 6.9, 1.05),        # map on the round wall
     "A": (14.15, 14.85, 5.1, 5.9, 0.42),     # AI lab long table
 }
@@ -716,6 +715,60 @@ bx("test-desk-pad", "Notepad", "micro", "prop", 11.62, 11.8, 0.4, 0.41, 6.5, 6.7
 bx("test-desk-note", "Sticky note on the pad", "micro", "prop", 11.66, 11.74, 0.41, 0.415, 6.54, 6.62, "note-yellow", importance=0.1)
 bx("test-desk-set", "Set on test", "micro", "prop", 11.62, 11.82, 0.4, 0.62, 6.24, 6.34, "box-orange", importance=0.2)
 
+# 3 Team room hero (board 651:3604, "Bring the users to the data scientists."): a big screen on the north wall plays a
+# clip of a user at a laptop (painted at runtime, lib/city/models/legoHqMoments.ts); the team sits on chairs facing it.
+# The avatar stands at the screen's west side, where the one who shows the clip stands. Plus: a wall of user cards
+# (who the users are) and a developer's desk with two monitors.
+bx("team-screen-frame", "Team screen frame", "meso", "prop", 7.04, 8.5, 0.4, 1.3, 0.63, 0.69, "frame-dark", importance=0.7,
+   features=[{"id": "team-screen.clip", "kind": "decal", "notes": "a clip from the tests: a user at a laptop"}])
+bx("team-screen", "Team screen", "meso", "prop", 7.08, 8.46, 0.44, 1.26, 0.69, 0.7, "screen-test", contact="applied", importance=0.8,
+   topo="Screen face: a thin box painted at runtime.")
+bx("team-screen-shelf", "Screen sound bar", "micro", "prop", 7.37, 8.17, 0.33, 0.38, 0.63, 0.73, "frame-dark", importance=0.2)
+
+
+def chair(cid, cx, cz):
+    """Chair facing north (-z): seat 0.32 wide, top at 0.26; back on the south side."""
+    bx(f"{cid}-seat", f"Chair seat {cid}", "micro", "prop", cx - 0.16, cx + 0.16, 0.22, 0.26, cz - 0.16, cz + 0.16, "prop-sofa", importance=0.2)
+    bx(f"{cid}-back", f"Chair back {cid}", "micro", "prop", cx - 0.16, cx + 0.16, 0.26, 0.56, cz + 0.12, cz + 0.16, "prop-sofa", importance=0.2)
+    for k, (dx, dz) in enumerate(((-0.13, -0.13), (0.13, -0.13), (-0.13, 0.13), (0.13, 0.13))):
+        bx(f"{cid}-leg-{k}", f"Chair leg {cid} {k}", "micro", "prop", cx + dx - 0.015, cx + dx + 0.015, 0.02, 0.22, cz + dz - 0.015,
+           cz + dz + 0.015, "frame-dark", importance=0.05)
+
+
+TEAM = [  # (x, z, shirt, hair): data scientists and developers, two rows facing the screen
+    (7.25, 1.45, "npc-shirt-3", "npc-hair-2"), (7.68, 1.45, "npc-shirt-5", "npc-hair"),
+    (7.25, 2.45, "npc-shirt-4", "npc-hair"), (7.68, 2.45, "npc-shirt-2", "npc-hair-2"),
+]
+for k, (cx, cz, shirt, hair) in enumerate(TEAM, 1):
+    chair(f"team-chair-{k}", cx, cz)
+    npc_seated(f"npc-team-{k}", f"Team member {k}", cx, cz + 0.04, shirt, hair, 0.26)
+bx("team-laptop-lap", "Laptop on a lap", "micro", "prop", 7.15, 7.35, 0.38, 0.4, 2.12, 2.26, "laptop-grey", importance=0.1)
+bx("team-cup", "Cup on the floor", "micro", "prop", 7.9, 7.97, 0.02, 0.1, 2.2, 2.27, "prop-mug", importance=0.1)
+# wall of user cards (who the users are), on legs in the west wing
+bx("team-cards-leg-w", "Card wall leg west", "micro", "prop", 3.1, 3.14, 0.02, 0.42, 2.2, 2.24, "frame-dark", importance=0.1)
+bx("team-cards-leg-e", "Card wall leg east", "micro", "prop", 3.86, 3.9, 0.02, 0.42, 2.2, 2.24, "frame-dark", importance=0.1)
+bx("team-cards-board", "Card wall board", "meso", "prop", 3.06, 3.94, 0.4, 1.08, 2.18, 2.24, "prop-board", importance=0.4,
+   features=[{"id": "team-cards.users", "kind": "decal", "notes": "cards with users from the tests"}])
+CARD_STRIPES = ("note-blue", "note-pink", "note-green", "note-yellow", "note-blue", "note-pink")
+for k in range(6):
+    c0, r0 = 3.12 + (k % 3) * 0.27, 0.74 - (k // 3) * 0.3
+    bx(f"team-card-{k}", f"User card {k}", "micro", "prop", c0, c0 + 0.22, r0, r0 + 0.26, 2.24, 2.25, "prop-paper", contact="applied", importance=0.1)
+    bx(f"team-card-{k}-face", f"User card face {k}", "micro", "prop", c0 + 0.07, c0 + 0.15, r0 + 0.13, r0 + 0.22, 2.25, 2.255, "npc-skin",
+       contact="applied", importance=0.05)
+    bx(f"team-card-{k}-line", f"User card line {k}", "micro", "prop", c0 + 0.03, c0 + 0.19, r0 + 0.04, r0 + 0.08, 2.25, 2.255,
+       CARD_STRIPES[k], contact="applied", importance=0.05)
+# developer's desk with two monitors, in the north-east corner of the room
+bx("team-dev-desk", "Developer desk", "meso", "prop", 9.2, 9.86, 0.36, 0.4, 0.66, 1.04, "shelf-white", importance=0.3)
+for k, (lx, lz) in enumerate(((9.24, 0.7), (9.82, 0.7), (9.24, 1.0), (9.82, 1.0))):
+    bx(f"team-dev-leg-{k}", f"Developer desk leg {k}", "micro", "prop", lx - 0.02, lx + 0.02, 0.02, 0.36, lz - 0.02, lz + 0.02, "frame-dark",
+       importance=0.05)
+for k, mx in enumerate((9.2, 9.52)):
+    bx(f"team-dev-monitor-{k}", f"Developer monitor {k}", "micro", "prop", mx, mx + 0.32, 0.46, 0.7, 0.7, 0.73, "frame-dark", importance=0.2)
+    bx(f"team-dev-monitor-{k}-face", f"Developer monitor face {k}", "micro", "prop", mx + 0.02, mx + 0.3, 0.48, 0.68, 0.73, 0.735,
+       "label-blue", contact="applied", importance=0.1)
+    bx(f"team-dev-monitor-{k}-foot", f"Monitor foot {k}", "micro", "prop", mx + 0.13, mx + 0.19, 0.4, 0.46, 0.74, 0.8, "frame-dark", importance=0.05)
+npc_standing("npc-dev", "Developer", 9.55, 1.3, "npc-shirt-5", "npc-hair-2", arm_dz=-0.08)
+
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
 json.dump({"map": walk}, open(f"{W}/walkmap.json", "w"), indent=1)
@@ -788,6 +841,7 @@ spec["materials"] = [
     material("npc-shirt-2", "NPC shirt (observer)", "fabric", "#e0a93a", ["#d69f30"], 0.9, 0.0, "generic NPC", **F),
     material("npc-shirt-3", "NPC shirt (seller)", "fabric", "#4a5f8f", ["#425685"], 0.9, 0.0, "generic NPC", **F),
     material("npc-shirt-4", "NPC shirt (seller 2)", "fabric", "#b5566a", ["#ab4c60"], 0.9, 0.0, "generic NPC", **F),
+    material("npc-shirt-5", "NPC shirt (team)", "fabric", "#5b6e4f", ["#516445"], 0.9, 0.0, "generic NPC", **F),
     material("npc-hair-2", "NPC hair (fair)", "unknown", "#a5773f", ["#9b6d35"], 0.9, 0.0, "generic NPC", **F),
     material("note-yellow", "Sticky note yellow", "unknown", "#ffe066", ["#f5d65c"], 0.9, 0.0, "sticky notes", **F),
     material("note-pink", "Sticky note pink", "unknown", "#ff9cc0", ["#f592b6"], 0.9, 0.0, "sticky notes", **F),
@@ -912,9 +966,10 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),
-    ("hero-places", "One grey block per room for its hero object (the team room's is first in this list).", "hero-team.place"),
+    ("hero-places", "One grey block per room for its hero object (the map room's is first in this list).", "hero-map.place"),
     ("shelf", "Shelf room: a store shelf, half full, bright boxes low, dark sets high, empty slots marked.", "shelf-back.store"),
     ("test", "Test room: a tester at a laptop with a speech bubble, and a big screen.", "test-desk.moment"),
+    ("team", "Team room: a big screen with a clip from the tests, the team on chairs facing it.", "team-screen.clip"),
 ]
 tmpl = (pa.get("detailInventory") or {}).get("details", [{}])[0]
 pa["detailInventory"]["details"] = [dict(copy.deepcopy(tmpl), id=i, description=d, scale="meso", affects="geometry",

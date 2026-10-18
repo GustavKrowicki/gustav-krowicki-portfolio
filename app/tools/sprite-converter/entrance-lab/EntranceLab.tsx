@@ -333,10 +333,13 @@ const MODELS: Record<string, ModelConfig> = {
     name: 'Valtech office, roof off, avatar seated at the desk',
     create: () => valtechSeatedScene([4.72, 0.74], 167.4, 0.24),
   },
-  // Test room moment frames for the city animation: ?model=hqAvatarMoment&moment=<0..7>
+  // Moment frames for the city animations: ?model=hqAvatarMoment&moment=<0..7> (test room), &clip=<0..7> (team screen)
   hqAvatarMoment: {
     name: 'LEGO HQ at avatar scale (roof off, test room moment frame)',
-    create: (options) => createLEGOHQAvatarMomentModel(options, Number(new URLSearchParams(window.location.search).get('moment') ?? 0)),
+    create: (options) => {
+      const q = new URLSearchParams(window.location.search);
+      return createLEGOHQAvatarMomentModel(options, Number(q.get('moment') ?? 0), Number(q.get('clip') ?? 0));
+    },
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
     configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,

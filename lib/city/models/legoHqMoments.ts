@@ -2,9 +2,11 @@
 // full of numbers; as the avatar comes near, the big screen plays a short animation of what the model does (sets go onto
 // the shelf, one at a time) and the "?" turns into "!". Frame 0 is the resting state, painted into every sprite; the
 // city plays frames 0..TEST_MOMENT_FRAMES-1 from a strip (lab model hqAvatarMoment&moment=<k>, export_moment.sh).
+// The team room's big screen loops a clip from the tests (a user at a laptop), TEAM_CLIP_FRAMES long (&clip=<k>).
 import * as THREE from 'three';
 
 export const TEST_MOMENT_FRAMES = 8;
+export const TEAM_CLIP_FRAMES = 8;
 const BANG_FROM = 5; // the frame where "?" becomes "!"
 
 const SETS = ['#f2c200', '#d01012', '#0a6dc2', '#2f9e44', '#f08a00', '#7a4fb5'];
@@ -69,6 +71,37 @@ function paintBubble(frame: number): HTMLCanvasElement {
   return c;
 }
 
+// Team screen: a clip from the tests. A user at a laptop leans in, a hand goes to the head, a "?" pops up; the play bar runs
+function paintClip(frame: number): HTMLCanvasElement {
+  const [c, g] = canvas(256, 150);
+  g.fillStyle = '#dfe4ea'; g.fillRect(0, 0, 256, 150);
+  g.fillStyle = '#c9d1da'; g.fillRect(0, 96, 256, 54);                       // the desk in the clip
+  const lean = frame % 4 < 2 ? 0 : 3;
+  const puzzled = frame >= 2 && frame <= 5;
+  // the user: torso, head, hair
+  g.fillStyle = '#3aa0a0'; g.fillRect(96 + lean, 58, 64, 46);
+  g.fillStyle = '#d9a77f'; g.fillRect(110 + lean, 22 + lean, 36, 36);
+  g.fillStyle = '#3b2a20'; g.fillRect(108 + lean, 18 + lean, 40, 12);
+  // arm: on the laptop, or up at the head when puzzled
+  g.fillStyle = '#3aa0a0';
+  if (puzzled) { g.fillRect(150 + lean, 30, 14, 40); g.fillStyle = '#d9a77f'; g.fillRect(146 + lean, 24, 16, 14); }
+  else g.fillRect(150 + lean, 70, 30, 14);
+  // laptop, back to the camera of the clip
+  g.fillStyle = '#9aa0a8'; g.fillRect(60, 70, 70, 40);
+  g.fillStyle = '#7d838b'; g.fillRect(56, 108, 80, 6);
+  if (puzzled) {
+    g.fillStyle = '#ffffff'; g.fillRect(178, 8, 40, 40);
+    g.fillStyle = '#1f3b70'; g.font = 'bold 36px Arial, Helvetica, sans-serif';
+    g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText('?', 198, 30);
+  }
+  // play bar
+  g.fillStyle = '#16212c'; g.fillRect(0, 132, 256, 18);
+  g.fillStyle = '#e8eef3'; g.beginPath(); g.moveTo(8, 135); g.lineTo(20, 141); g.lineTo(8, 147); g.fill();
+  g.fillStyle = '#5d6b78'; g.fillRect(28, 139, 220, 4);
+  g.fillStyle = '#d01012'; g.fillRect(28, 139, Math.round(220 * (frame + 1) / TEAM_CLIP_FRAMES), 4);
+  return c;
+}
+
 function unlit(image: HTMLCanvasElement): THREE.MeshBasicMaterial {
   const map = new THREE.CanvasTexture(image);
   map.colorSpace = THREE.SRGBColorSpace;
@@ -86,4 +119,15 @@ export function paintLEGOHQTestMoment(model: THREE.Object3D, frame = 0): void {
   });
   set('test-screen', unlit(paintScreen(k)));
   set('test-bubble', unlit(paintBubble(k)));
+}
+
+/** Paint the team room's big screen with clip frame `frame` (0 = at rest). */
+export function paintLEGOHQTeamClip(model: THREE.Object3D, frame = 0): void {
+  if (typeof document === 'undefined') return;
+  const k = ((Math.round(frame) % TEAM_CLIP_FRAMES) + TEAM_CLIP_FRAMES) % TEAM_CLIP_FRAMES;
+  const node = (model.userData.sculptRuntime?.nodes ?? {})['team-screen'] as THREE.Object3D | undefined;
+  const material = unlit(paintClip(k));
+  node?.traverse((o) => {
+    if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material;
+  });
 }

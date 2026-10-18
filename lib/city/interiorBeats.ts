@@ -40,6 +40,11 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       lead: "Hands on, not shown.",
       text: "In hands-on tests, sellers could not follow the model. Their own numbers were in another system. Before launch we added simple animations that show what the model does. Data links came later.",
     },
+    team: {
+      kicker: "3 · The team room",
+      lead: "Bring the users to the data scientists.",
+      text: "Every other week I showed short clips from the tests to the team. The data scientists and developers saw who the users were.",
+    },
     leave: {
       kicker: "Leaving LEGO",
       lead: "At LEGO I designed between the company's long game and the seller's quick win.",
