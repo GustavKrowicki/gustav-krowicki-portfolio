@@ -1,23 +1,19 @@
 'use client';
 
-import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   AVATAR_DEFAULT_CHOICE,
   AVATAR_SLOTS,
   AVATAR_CHANGE_EVENT,
   AVATAR_STORAGE_KEY,
-  avatarLookPieces,
   avatarThumbUrl,
   type AvatarChoice,
 } from '@/lib/city/models/avatarPieces';
+import AvatarLayerView from './AvatarLayerView';
 
-// Avatar builder (POR-22): dress the base body one piece per slot. The 3D view (three.js and the one GLB)
-// loads only when this tab opens. The choice stays in this browser (localStorage), nowhere else.
-const AvatarToonView = dynamic(() => import('./AvatarToonView'), {
-  ssr: false,
-  loading: () => <div style={{ width: 117, height: 220 }} aria-hidden />,
-});
+// Avatar builder (POR-22): dress the avatar one piece per slot. The figure is 2D layers drawn from the approved
+// model sheet (AvatarLayerView); the city wears the matching pre-baked 2D sheets, live. The choice stays in this
+// browser (localStorage), nowhere else.
 
 type SlotId = (typeof AVATAR_SLOTS)[number]['id'];
 
@@ -59,7 +55,7 @@ export default function AvatarSection() {
     window.dispatchEvent(new CustomEvent(AVATAR_CHANGE_EVENT, { detail: choice }));
   }, [choice, name]);
 
-  const worn = useMemo(() => avatarLookPieces(choice), [choice]);
+  const [smile, setSmile] = useState(false);
 
   const onReady = () => {
     if (measured.current) return;
@@ -80,7 +76,7 @@ export default function AvatarSection() {
       {/* Avatar beside the slots, so a half-height panel shows both without scrolling */}
       <div className="mt-4 flex items-start gap-4">
         <div className="flex shrink-0 flex-col items-center rounded-lg bg-[#e9e4da] px-2 pb-3">
-          <AvatarToonView worn={worn} onReady={onReady} />
+          <AvatarLayerView choice={choice} expression={smile ? 'smile' : 'neutral'} onReady={onReady} />
           <span className="-mt-1 max-w-[7rem] truncate rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
             {name.trim() || 'Your name'}
           </span>
@@ -132,6 +128,14 @@ export default function AvatarSection() {
             })}
           </ul>
 
+          <button
+            type="button"
+            aria-pressed={smile}
+            onClick={() => setSmile((v) => !v)}
+            className={`mt-3 rounded-full px-3 py-1 text-xs ${smile ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600'}`}
+          >
+            Smile
+          </button>
           <label className="mt-3 block">
             <span className="text-xs font-medium text-neutral-500">Name tag</span>
             <input

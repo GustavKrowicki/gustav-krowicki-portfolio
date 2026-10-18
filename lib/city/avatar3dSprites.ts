@@ -1,7 +1,7 @@
 // Phaser loader + animation config for the 3D-rendered avatar sheets (public/game/pogicity/Characters/avatar3d/),
 // rendered from lib/city/models/gustavAvatar.ts by art/img2threejs/gustav-avatar/render_sheets.mjs + pack_sheets.py.
-// Opt-in: ?avatar=3d, or a saved avatar builder choice (the Avatar tab), which picks that look's pre-baked sheets
-// in public/game/pogicity/Characters/avatar-builder/<look>/ (same format). The live GIFs stay the default.
+// Opt-in: ?avatar=3d, or a saved avatar builder choice (the Avatar tab), which picks that look's pre-baked 2D sheets
+// in public/game/pogicity/Characters/avatar-builder/2d-<look>/ (same format). The live GIFs stay the default.
 // A choice changed while the city runs (AVATAR_CHANGE_EVENT) loads that look's sheets and swaps them in.
 import type Phaser from 'phaser';
 import {
@@ -31,8 +31,9 @@ type Manifest = {
 
 const BAKED = new Set(AVATAR_BAKED_LOOKS.map(avatarLookKey));
 
+// The look folder for a choice: 2d-<key>, the 2D paper doll sheets (every combination of the slot options).
 function bakedLook(choice: AvatarChoice | null): string | null {
-  return choice && BAKED.has(avatarLookKey(choice)) ? avatarLookKey(choice) : null;
+  return choice && BAKED.has(avatarLookKey(choice)) ? `2d-${avatarLookKey(choice)}` : null;
 }
 
 // The builder look to wear at load: ?look=<key> (for checks), else the saved choice. Null when neither names a
@@ -40,7 +41,8 @@ function bakedLook(choice: AvatarChoice | null): string | null {
 export function avatarBuilderLook(): string | null {
   if (typeof window === 'undefined') return null;
   const param = new URLSearchParams(window.location.search).get('look');
-  if (param) return BAKED.has(param) ? param : null;
+  // Any safe folder name for checks (a missing folder falls back to the shipped sheets in loadAvatar3dSprites)
+  if (param) return /^[\w-]+$/.test(param) ? param : null;
   return bakedLook(readAvatarChoice());
 }
 
