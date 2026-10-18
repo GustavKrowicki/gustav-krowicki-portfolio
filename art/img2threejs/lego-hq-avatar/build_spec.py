@@ -219,7 +219,13 @@ for code, (name, _k, _r) in plan.ROOMS.items():
     ext_plan(f"{ROOM_ID[code]}-floor", f"{name} floor", "macro", "floor", REGION[code], 0, 0.02, ROOM_MAT[code], importance=0.85,
              features=[{"id": f"{ROOM_ID[code]}-floor.tone", "kind": "stain", "notes": f"{name}: one flat floor tone (grey box)"}],
              topo="Room floor: the room's tiles cut to the building, a thin extrude.")
-for cname, cg in plan.COURTS.items():
+for cname in plan.ROOF_ONLY_COURTS:
+    # a pool of daylight on the floor under the glazed light well
+    ext_plan(f"{cname}-lightpool", f"Daylight under the {cname} light well", "micro", "floor", plan.COURTS[cname], 0.02, 0.006, "light-pool",
+             importance=0.3, topo="Daylight patch on the floor: a very thin extrude.")
+    ext_plan(f"roof-{cname}-glass", f"Glazing over the {cname} light well", "micro", "roof", plan.COURTS[cname], G1 - 0.04, 0.04, "glass-light",
+             importance=0.4, topo="Glass roof of the light well at ceiling height: a thin extrude (roof on only).")
+for cname, cg in plan.GROUND_COURTS.items():
     ext_plan(f"court-{cname}", f"Courtyard lawn ({cname})", "meso", "ground", cg.intersection(plan.SHELL), 0, 0.03, "court", importance=0.5,
              features=[{"id": f"court-{cname}.lawn", "kind": "contour", "notes": f"{cname} courtyard: lawn open to the sky"}],
              topo="Courtyard lawn: a thin extrude.")
@@ -259,7 +265,7 @@ for code in plan.ROOMS:
             other = next((o for o in plan.ROOMS if o != code and REGION[o].buffer(1e-6).contains(Point(mid))), None)
             if other:
                 continue      # open plan: no wall between two areas
-            elif any(cg.buffer(1e-6).contains(Point(mid)) for cg in plan.COURTS.values()):
+            elif any(cg.buffer(1e-6).contains(Point(mid)) for cg in plan.GROUND_COURTS.values()):
                 segs.setdefault(("O", "C", code), []).append(LineString([a, b]))     # round a courtyard: always cut
             else:
                 segs.setdefault(("O", side_of(*n), code), []).append(LineString([a, b]))
@@ -618,6 +624,7 @@ def flat(*ev):
 F = flat("grey box: flat neutral colours, detail comes in a later pass")
 spec["materials"] = [
     material("grass", "Grass", "unknown", "#6fb34a", ["#67a845"], 0.95, 0.0, "plot", **F),
+    material("light-pool", "Daylight pool", "stone", "#fff3c4", ["#f5e9ba"], 0.9, 0.0, "daylight under a glazed light well", **F),
     material("court", "Courtyard lawn", "unknown", "#5aa83a", ["#539c35"], 0.95, 0.0, "courtyards", **F),
     material("paving", "Plaza paving", "stone", "#c9c6bd", ["#c0bdb4"], 0.9, 0.0, "plaza", **F),
     material("paving-light", "Light paving", "stone", "#e4e1d8", ["#dbd8cf"], 0.9, 0.0, "forecourt", **F),
@@ -755,7 +762,6 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("round-court", "Round building with a round courtyard.", "court-round.lawn"),
     ("garden-court", "Larger court that wraps the round building.", "court-garden.lawn"),
     ("north-court", "Courtyard in the north wing.", "court-north.lawn"),
-    ("south-west-court", "Courtyard in the south-west leg.", "court-south-west.lawn"),
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),

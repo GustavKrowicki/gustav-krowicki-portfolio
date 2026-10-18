@@ -38,7 +38,11 @@ COURTS = {   # name: polygon (all centred on tiles except the long middle court,
     "south-east": box(10.9, 7.85, 12.1, 8.85),
     "garden": box(3.0, 4.9, 6.1, 7.0).difference(ROUND),       # the larger court that wraps the round building
 }
-BUILDING = SHELL.difference(unary_union(list(COURTS.values())))
+# Courts that are only light wells in the roof: the ground floor runs on under them, so a room has no hole to walk round
+# (Gustav, 2026-10-18: the hole in the shelf room made the shelf hard to reach). The roof keeps them as glazed wells.
+ROOF_ONLY_COURTS = {"south-west"}
+GROUND_COURTS = {k: v for k, v in COURTS.items() if k not in ROOF_ONLY_COURTS}
+BUILDING = SHELL.difference(unary_union(list(GROUND_COURTS.values())))
 
 # Areas by tile (route approved on the board: door, lobby, 1 shelf, 2 test, 3 team, 4 map, 5 AI lab). Open plan: no
 # walls between areas, the floor tone tells them apart; only the outside walls and the courtyard walls stand.

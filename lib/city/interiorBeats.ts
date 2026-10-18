@@ -22,6 +22,25 @@ export interface InteriorBeat {
 // Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
 // the avatar crosses the main door in or out (MainScene "interiorDoorCrossed"), not on a tile.
 export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
+  // LEGO HQ: texts from the interior story board (Figma 651:3604, Gustav's picks 2026-10-17). One room has its beat so
+  // far (the shelf room); the other rooms get theirs as they are built.
+  "lego-hq": {
+    enter: {
+      kicker: "LEGO, Billund",
+      lead: "At LEGO I designed between the company's long game and the seller's quick win.",
+      text: "Product team for an internal sales tool. Student worker, then intern. Follow the rooms: the shelf comes first.",
+    },
+    shelf: {
+      kicker: "1 · The shelf room",
+      lead: "One shelf. Two goals.",
+      text: "The company plays the long game: bring young builders in. The seller wants the quick win: sets that sell fast. The shelf has room for only some of them. The tool had to plan for both.",
+    },
+    leave: {
+      kicker: "Leaving LEGO",
+      lead: "At LEGO I designed between the company's long game and the seller's quick win.",
+      caseStudy: true,
+    },
+  },
   "valtech-office": {
     enter: {
       kicker: "Valtech",
