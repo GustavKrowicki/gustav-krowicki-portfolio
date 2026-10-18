@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1010"><defs><filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs><path d="M104 312 C80 296 50 302 42 338 L32 584 L96 588 L104 420 Z" fill="#e5452b" stroke="#7d2212" stroke-width="3" stroke-linejoin="round" />
+<path d="M82 440 Q66 446 48 440" fill="none" stroke="#7d2212" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M98 580 L38 580 C32 610 32 640 38 664 C44 684 76 690 90 676 C102 660 104 620 98 580 Z" fill="#1b1a1d" stroke="#050506" stroke-width="3" stroke-linejoin="round" />
+<path d="M296 312 C320 296 350 302 358 338 L368 584 L304 588 L296 420 Z" fill="#b8341f" stroke="#7d2212" stroke-width="3" stroke-linejoin="round" />
+<path d="M318 440 Q334 446 352 440" fill="none" stroke="#7d2212" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M302 580 L362 580 C368 610 368 640 362 664 C356 684 324 690 310 676 C298 660 296 620 302 580 Z" fill="#1b1a1d" stroke="#050506" stroke-width="3" stroke-linejoin="round" />
+<path d="M146 260 Q200 276 254 260 L296 268 C324 276 340 296 344 322 L330 512 Q200 526 70 512 L56 322 C60 296 76 276 104 268 Z" fill="#e5452b" stroke="#7d2212" stroke-width="3" stroke-linejoin="round" />
+<path d="M262 284 C300 294 336 316 344 330 L330 512 Q296 518 256 520 C272 440 272 350 262 284 Z" fill="#b8341f" opacity="1.0"/>
+<path d="M70 500 Q200 514 330 500 L330 516 Q200 530 70 516 Z" fill="#b8341f" stroke="#7d2212" stroke-width="3" stroke-linejoin="round" />
+<path d="M200 262 L200 512" fill="none" stroke="#1b1a1d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M120 334 L172 326 M228 326 L280 334" fill="none" stroke="#1b1a1d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M110 400 Q150 410 186 404 M214 404 Q252 410 290 400" fill="none" stroke="#7d2212" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M160 224 L240 224 L248 286 Q200 302 152 286 Z" fill="#e5452b" stroke="#7d2212" stroke-width="3" stroke-linejoin="round" />
+<path d="M200 230 L200 296" fill="none" stroke="#1b1a1d" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" /></svg>
