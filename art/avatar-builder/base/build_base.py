@@ -44,6 +44,12 @@ COLORS = {                   # flat base colours (linear conversion happens in B
     'club-blue': '#0046a0',
     'cargo': '#968769',
     'cargo-dark': '#5c513b',
+    'ski-shell': '#e5452b',
+    'ski-black': '#1b1a1d',
+    'ski-pants': '#80838b',
+    'ski-pants-dark': '#5f626a',
+    'helmet': '#1f1f23',
+    'goggle-lens': '#f25aa6',
 }
 
 
@@ -468,10 +474,72 @@ def build_cargo():
     return new_object('cargo', bm, ['cargo', 'cargo-dark'])
 
 
+def build_ski_shell():
+    """Ski shell jacket: bright orange-red, puffier and longer than the hoodie, high stand-up collar, a black
+    zip line down the front, two black chest zips and black gloves. Top slot (hides the tee)."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    pad = 0.022
+    hem = HOODIE_HEM - PX
+    body = [vring(hem, 0.104, 0.074), vring(hem + 0.012, 0.108, 0.076)]
+    body += [vring(z, rx + pad, ry + pad) for z, rx, ry in TORSO if hem + 0.03 < z < 0.66]
+    # high collar standing round the neck, open a little at the top
+    body += [vring(0.662, 0.072, 0.060), vring(0.690, 0.056, 0.052), vring(0.728, 0.050, 0.047)]
+    loft(bm, uv, body, 0, cap_end=False)
+    for side in (-1, 1):
+        loft(bm, uv, arm_rings(side, [(-0.02, 0.054, 0.056), (0.06, 0.050, 0.051), (0.14, 0.045, 0.046),
+                                      (0.22, 0.041, 0.041), (0.248, 0.038, 0.038)]), 0, seg=10)
+        # black ski gloves over the hands: a cuff, then a chunky mitt
+        loft(bm, uv, arm_rings(side, [(0.235, 0.036, 0.036), (0.262, 0.036, 0.034), (0.29, 0.034, 0.025),
+                                      (0.322, 0.026, 0.020), (0.336, 0.012, 0.010)]), 1, seg=10)
+    # front zip: a dark line from the collar to the hem, on the front of the shell
+    patch(bm, uv, [(hem + 0.004, 0.110, 0.080, 0.06), (0.48, 0.102, 0.077, 0.06), (0.56, 0.112, 0.081, 0.06),
+                   (0.62, 0.116, 0.079, 0.07), (0.655, 0.100, 0.072, 0.09), (0.70, 0.060, 0.058, 0.14)], 1, cols=1)
+    # two chest zips, one each side, slanting down towards the middle
+    for side in (-1, 1):
+        a = side * 0.62
+        patch(bm, uv, [(0.585, 0.116, 0.080, 0.20), (0.595, 0.116, 0.080, 0.20)], 1, cols=2, a0=a)
+    return new_object('skiShell', bm, ['ski-shell', 'ski-black'])
+
+
+def build_ski_pants():
+    """Grey ski pants: baggy straight legs down over the shoe tops, a darker gaiter hem, high waist.
+    Legs slot (replaces the jeans)."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    loft(bm, uv, [vring(0.33, 0.076, 0.054), vring(0.37, 0.096, 0.064), vring(0.43, 0.088, 0.058)], 0)
+    for side in (-1, 1):
+        # legs set a little apart and narrowed on the inside, so the gap between them holds at street zoom
+        cx = side * 0.061
+        loft(bm, uv, [vring(0.058, 0.044, 0.054, cx, 0.004), vring(0.088, 0.044, 0.052, cx), vring(0.12, 0.045, 0.050, cx),
+                      vring(0.21, 0.045, 0.051, cx), vring(0.30, 0.043, 0.050, cx), vring(0.385, 0.040, 0.049, cx)], 0,
+             seg=10, mats_by_ring=[1, 0, 0, 0, 0])
+    return new_object('skiPants', bm, ['ski-pants', 'ski-pants-dark'])
+
+
+def build_helmet():
+    """Black ski helmet over the hair, with pink mirrored goggles across the eyes and a black strap.
+    Head slot."""
+    bm = bmesh.new()
+    uv = bm.loops.layers.uv.new('UVMap')
+    ch = Vector((HEAD_C[0], HEAD_C[1] + 0.002, HEAD_C[2] + 0.004))
+    radii = (0.102, 0.108, 0.124)
+    # shell: high at the front (above the goggles), down over the ears and the back of the head
+    keep = lambda p: p.z > 0.0 - 0.28 * p.y
+    ellipsoid(bm, uv, tuple(ch), radii, 0, segs=18, rings=12, keep=keep)
+    # goggles: black frame band round the head, pink lens across the front
+    ez = HEAD_C[2] + 0.014
+    loft(bm, uv, [((0, HEAD_C[1], ez - 0.024), X, Y, 0.092, 0.097), ((0, HEAD_C[1], ez + 0.024), X, Y, 0.094, 0.099)],
+         0, cap_start=False, cap_end=False, seg=16)
+    patch(bm, uv, [(ez - 0.019, 0.098, 0.103, 0.95), (ez, 0.100, 0.105, 1.0), (ez + 0.019, 0.098, 0.103, 0.95)], 1, cols=8)
+    return new_object('helmet', bm, ['helmet', 'goggle-lens'])
+
+
 def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     base = [build_body(), build_face(), build_hair(), build_tee(), build_jeans(), build_shoes()]
-    parts = base + [build_hoodie(), build_beanie(), build_sweater(), build_club_shirt(), build_cargo()]
+    parts = base + [build_hoodie(), build_beanie(), build_sweater(), build_club_shirt(), build_cargo(),
+                    build_ski_shell(), build_ski_pants(), build_helmet()]
     tris = 0
     for obj in parts:
         bpy.context.view_layer.objects.active = obj

@@ -24,11 +24,12 @@ const STRIDE_WU = 0.36 * (0.285 / 0.302);
 const WALK_FPS = (1.6 / STRIDE_WU) * 8;
 
 // Every top x head x legs combination (the option ids of AVATAR_SLOTS), so no saved choice falls back.
-const TOPS = ['tee', 'hoodie', 'sweater', 'clubShirt'];
-const HEADS = ['none', 'beanie'];
-const LEGS = ['denim', 'cargo'];
+const TOPS = ['tee', 'hoodie', 'sweater', 'clubShirt', 'skiShell'];
+const HEADS = ['none', 'beanie', 'helmet'];
+const LEGS = ['denim', 'cargo', 'skiPants'];
 const looks = TOPS.flatMap((t) => HEADS.flatMap((h) => LEGS.map((l) => [t, h, l])));
-const PIECE = { hoodie: 'hoodie', sweater: 'sweater', clubShirt: 'clubShirt', beanie: 'beanie', cargo: 'cargo' };
+const PIECE = { hoodie: 'hoodie', sweater: 'sweater', clubShirt: 'clubShirt', beanie: 'beanie', cargo: 'cargo',
+  skiShell: 'skiShell', skiPants: 'skiPants', helmet: 'helmet' };
 
 const browser = await chromium.launch({ args: ['--use-angle=metal'] });
 const page = await browser.newPage();
@@ -66,7 +67,7 @@ for (const look of process.env.THUMBS_ONLY ? [] : looks) {
 // Tile thumbnails: each option's own GLB pieces, turned a little so the tile reads as 3D (the NODES map
 // mirrors `nodes` in AVATAR_SLOTS). 128 px for sharp tiles at 2x and 3x screens.
 const NODES = { tee: ['tee'], hoodie: ['hoodie'], sweater: ['sweater'], clubShirt: ['clubShirt'], none: ['hair'],
-  beanie: ['beanie'], denim: ['jeans'], cargo: ['cargo'] };
+  beanie: ['beanie'], denim: ['jeans'], cargo: ['cargo'], skiShell: ['skiShell'], helmet: ['helmet'], skiPants: ['skiPants'] };
 fs.mkdirSync(path.join(out, 'thumbs'), { recursive: true });
 for (const [id, nodes] of Object.entries(NODES)) {
   const png = await page.evaluate((o) => window.__thumb(o), { nodes, yawDeg: -20, size: 128 });

@@ -24,6 +24,12 @@ export const AVATAR_BASE_COLORS: Record<string, string> = {
   'club-blue': '#0046a0',
   cargo: '#968769',
   'cargo-dark': '#5c513b',
+  'ski-shell': '#e5452b',
+  'ski-black': '#1b1a1d',
+  'ski-pants': '#80838b',
+  'ski-pants-dark': '#5f626a',
+  helmet: '#1f1f23',
+  'goggle-lens': '#f25aa6',
 };
 
 // Swappable pieces in the GLB (node names): one piece per slot, and the base pieces each one covers.
@@ -33,6 +39,9 @@ export const AVATAR_PIECES = {
   clubShirt: { slot: 'top', covers: ['tee'] }, // the football club shirt
   beanie: { slot: 'head', covers: [] },
   cargo: { slot: 'legs', covers: ['jeans'] },
+  skiShell: { slot: 'top', covers: ['tee'] },
+  skiPants: { slot: 'legs', covers: ['jeans'] },
+  helmet: { slot: 'head', covers: [] },
 } as const satisfies Record<string, { slot: string; covers: readonly string[] }>;
 export type AvatarPiece = keyof typeof AVATAR_PIECES;
 
@@ -47,6 +56,7 @@ export const AVATAR_SLOTS = [
       { id: 'hoodie', label: 'Hoodie', piece: 'hoodie', swatch: AVATAR_BASE_COLORS.hoodie, nodes: ['hoodie'] },
       { id: 'sweater', label: 'Sweater', piece: 'sweater', swatch: AVATAR_BASE_COLORS.sweater, nodes: ['sweater'] },
       { id: 'clubShirt', label: 'Football shirt', piece: 'clubShirt', swatch: AVATAR_BASE_COLORS['club-blue'], nodes: ['clubShirt'] },
+      { id: 'skiShell', label: 'Ski jacket', piece: 'skiShell', swatch: AVATAR_BASE_COLORS['ski-shell'], nodes: ['skiShell'] },
     ],
   },
   {
@@ -55,6 +65,7 @@ export const AVATAR_SLOTS = [
     options: [
       { id: 'none', label: 'No hat', piece: null, swatch: AVATAR_BASE_COLORS.hair, nodes: ['hair'] },
       { id: 'beanie', label: 'Beanie', piece: 'beanie', swatch: AVATAR_BASE_COLORS.beanie, nodes: ['beanie'] },
+      { id: 'helmet', label: 'Ski helmet', piece: 'helmet', swatch: AVATAR_BASE_COLORS.helmet, nodes: ['helmet'] },
     ],
   },
   {
@@ -63,6 +74,7 @@ export const AVATAR_SLOTS = [
     options: [
       { id: 'denim', label: 'Denim', piece: null, swatch: AVATAR_BASE_COLORS.denim, nodes: ['jeans'] },
       { id: 'cargo', label: 'Cargo', piece: 'cargo', swatch: AVATAR_BASE_COLORS.cargo, nodes: ['cargo'] },
+      { id: 'skiPants', label: 'Ski pants', piece: 'skiPants', swatch: AVATAR_BASE_COLORS['ski-pants'], nodes: ['skiPants'] },
     ],
   },
 ] as const satisfies readonly {

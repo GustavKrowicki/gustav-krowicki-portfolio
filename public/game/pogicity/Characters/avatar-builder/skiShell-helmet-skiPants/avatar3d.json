@@ -1,0 +1,82 @@
+{
+ "frameWidth": 72,
+ "frameHeight": 132,
+ "origin": [
+  0.5,
+  0.87879
+ ],
+ "displayScale": 0.25,
+ "note": "Builder look skiShell-helmet-skiPants. Sheets are 2 px per street-zoom px (0.9 wu = 108 px); displayScale 0.25 draws 54 px at Street zoom 2. origin = the ground point under the feet. Baked by art/avatar-builder/base/bake_sheets.mjs from lib/city/models/avatarToon.ts (ortho, pitch 30, 1 px outline). The outline is in the frames, so file and outlineFile are the same sheet.",
+ "yaw": {
+  "east": 45,
+  "north": -45,
+  "south": 135,
+  "west": -135
+ },
+ "animations": {
+  "walk_east": {
+   "file": "walk-east.png",
+   "outlineFile": "walk-east.png",
+   "frames": 8,
+   "fps": 37.68,
+   "repeat": -1,
+   "durationS": 1
+  },
+  "idle_east": {
+   "file": "idle-east.png",
+   "outlineFile": "idle-east.png",
+   "frames": 4,
+   "fps": 1.333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "walk_north": {
+   "file": "walk-north.png",
+   "outlineFile": "walk-north.png",
+   "frames": 8,
+   "fps": 37.68,
+   "repeat": -1,
+   "durationS": 1
+  },
+  "idle_north": {
+   "file": "idle-north.png",
+   "outlineFile": "idle-north.png",
+   "frames": 4,
+   "fps": 1.333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "walk_south": {
+   "file": "walk-south.png",
+   "outlineFile": "walk-south.png",
+   "frames": 8,
+   "fps": 37.68,
+   "repeat": -1,
+   "durationS": 1
+  },
+  "idle_south": {
+   "file": "idle-south.png",
+   "outlineFile": "idle-south.png",
+   "frames": 4,
+   "fps": 1.333,
+   "repeat": -1,
+   "durationS": 3
+  },
+  "walk_west": {
+   "file": "walk-west.png",
+   "outlineFile": "walk-west.png",
+   "frames": 8,
+   "fps": 37.68,
+   "repeat": -1,
+   "durationS": 1
+  },
+  "idle_west": {
+   "file": "idle-west.png",
+   "outlineFile": "idle-west.png",
+   "frames": 4,
+   "fps": 1.333,
+   "repeat": -1,
+   "durationS": 3
+  }
+ }
+}
