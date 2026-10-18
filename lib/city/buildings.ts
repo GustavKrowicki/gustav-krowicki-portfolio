@@ -44,6 +44,10 @@ export interface BuildingDefinition {
   // Ambient loop (docs/city-rules.md section 9): a strip of frames cropped from the south sprite like `door` (x, y = the
   // crop's top-left in sprite pixels), drawn over the building and played in a loop at `fps`
   ambient?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
+  // Interior moment (walk-in buildings): a strip of frames cropped from the roof-off south sprite like `door`, drawn over
+  // it while the roof is off; plays forward once at `fps` and holds when the player is within `radius` of `at` (local
+  // tiles), and goes back to frame 0 when the player leaves
+  moment?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number };
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
   // Draw the sprite as vertical slices, one per tile diagonal, each sorted by its own front tile (docs/city-rules.md
@@ -122,6 +126,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     door: {
       sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
       frames: 7, frameWidth: 94, frameHeight: 78, x: 482, y: 1302, at: [8.5, 10.0], radius: 1.5,
+    },
+    // Test room moment: the screen plays what the model does and the tester's "?" turns into "!" (lab model
+    // hqAvatarMoment, moment=0..7, export_moment.sh)
+    moment: {
+      sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-moment_south.png",
+      frames: 8, frameWidth: 126, frameHeight: 74, x: 818, y: 1266, at: [11.5, 6.5], radius: 2, fps: 5,
     },
     // Pogicity trees, downsized to the avatar scale, in the two planters and on the front grass (trees behind the building
     // would draw over its roof)

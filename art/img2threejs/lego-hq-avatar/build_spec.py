@@ -532,7 +532,6 @@ for gx_, gy_ in ((10.5, 5.0), (12.5, 2.6), (14.3, 4.5), (11.4, 6.6), (4.5, 2.5),
 # ---------------------------------------------------------------------------------------------------------------
 # Hero object places: one grey block per room (sizes only roughly match the object to come)
 HERO_BOX = {   # code: (x0, x1, z0, z1, height) in plan tiles inside the hero tile
-    "T": (11.2, 11.8, 6.25, 6.75, 0.45),     # test desk with a laptop
     "M": (7.1, 7.9, 0.56, 0.8, 0.95),        # team screen on the north wall
     "Y": (1.0, 1.32, 6.1, 6.9, 1.05),        # map on the round wall
     "A": (14.15, 14.85, 5.1, 5.9, 0.42),     # AI lab long table
@@ -589,6 +588,41 @@ for lv, (slots, w, h) in enumerate(SHELF, 1):
         band = "label-white" if lv <= 2 else "label-gold"
         bx(f"shelf-box-{lv}-{k}-art", f"Box art {lv}.{k}", "micro", "trim", SX1 - 0.02, SX1 - 0.01, y0 + h * 0.35, y0 + h * 0.75,
            z0 + 0.03, z1 - 0.03, band, contact="applied", importance=0.2, topo="Box front art band: a thin box.")
+
+# 2 Test room hero (board 651:3604, "Hands on, not shown."): a tester at a desk with a laptop and a "?" over the head; a
+# big screen on a stand next to them. In the city the "?" turns into "!" while the screen plays a short animation when
+# the avatar comes near (lib/city/models/legoHqMoments.ts paints the screen and bubble frames; buildings.ts `moments`).
+bx("test-desk", "Test desk top", "meso", "prop", 10.95, 11.85, 0.36, 0.4, 6.2, 6.78, "shelf-white", importance=0.7,
+   features=[{"id": "test-desk.moment", "kind": "contour", "notes": "tester at a laptop with a ? that turns into ! as the screen explains the model"}])
+for k, (lx, lz) in enumerate(((11.0, 6.25), (11.8, 6.25), (11.0, 6.73), (11.8, 6.73)), 1):
+    bx(f"test-desk-leg-{k}", f"Test desk leg {k}", "micro", "prop", lx - 0.025, lx + 0.025, 0.02, 0.36, lz - 0.025, lz + 0.025, "frame-dark",
+       importance=0.2)
+bx("test-laptop-base", "Laptop base", "micro", "prop", 11.2, 11.56, 0.4, 0.415, 6.4, 6.62, "laptop-grey", importance=0.4)
+bx("test-laptop-lid", "Laptop lid", "micro", "prop", 11.2, 11.56, 0.415, 0.64, 6.36, 6.39, "laptop-grey", importance=0.4)
+# the tester: generic, no name, standing behind the desk and facing the room (+z)
+NX, NZ = 11.38, 5.95
+bx("npc-test-leg-w", "Tester leg west", "micro", "prop", NX - 0.11, NX - 0.01, 0.02, 0.42, NZ - 0.06, NZ + 0.06, "npc-trousers", importance=0.4)
+bx("npc-test-leg-e", "Tester leg east", "micro", "prop", NX + 0.01, NX + 0.11, 0.02, 0.42, NZ - 0.06, NZ + 0.06, "npc-trousers", importance=0.4)
+bx("npc-test-torso", "Tester torso", "meso", "prop", NX - 0.14, NX + 0.14, 0.42, 0.72, NZ - 0.08, NZ + 0.08, "npc-shirt", importance=0.6,
+   topo="Generic NPC body: boxes (no face detail, no name).")
+for sd, ax in (("w", NX - 0.18), ("e", NX + 0.18)):
+    bx(f"npc-test-arm-{sd}", f"Tester arm {sd}", "micro", "prop", ax - 0.04, ax + 0.04, 0.45, 0.7, NZ - 0.04, NZ + 0.12, "npc-shirt", importance=0.3)
+bx("npc-test-head", "Tester head", "meso", "prop", NX - 0.08, NX + 0.08, 0.74, 0.9, NZ - 0.08, NZ + 0.08, "npc-skin", importance=0.5)
+bx("npc-test-hair", "Tester hair", "micro", "prop", NX - 0.085, NX + 0.085, 0.86, 0.93, NZ - 0.085, NZ + 0.06, "npc-hair", importance=0.3)
+# the speech bubble over the head, turned to face the default camera (yaw 45 deg); painted "?" or "!"
+C.append(comp("test-bubble", "Tester speech bubble", "meso", "prop", "box", (0.4, 0.34, 0.03), (X(NX + 0.12), G + 1.24, Z(NZ + 0.12)), "bubble-white",
+              rot=[0, math.pi / 4, 0], importance=0.7, contact="applied",
+              features=[{"id": "test-bubble.sign", "kind": "decal", "notes": "speech bubble: ? while confused, ! once the screen explained the model"}],
+              topo="Speech bubble: a thin box facing the camera, painted at runtime."))
+C.append(comp("test-bubble-tail", "Speech bubble tail", "micro", "prop", "box", (0.07, 0.1, 0.02), (X(NX + 0.06), G + 1.04, Z(NZ + 0.06)),
+              "bubble-white", rot=[0, math.pi / 4, 0.6], importance=0.3, contact="applied"))
+# the big screen on a stand at the tester's side, facing the room (+z)
+bx("test-screen-stand", "Screen stand", "micro", "prop", 12.52, 12.6, 0.02, 0.5, 5.16, 5.24, "frame-dark", importance=0.3)
+bx("test-screen-foot", "Screen stand foot", "micro", "prop", 12.32, 12.8, 0.02, 0.05, 5.05, 5.35, "frame-dark", importance=0.2)
+bx("test-screen-frame", "Big screen frame", "meso", "prop", 12.04, 13.08, 0.46, 1.12, 5.08, 5.16, "frame-dark", importance=0.6)
+bx("test-screen", "Big screen", "meso", "prop", 12.07, 13.05, 0.49, 1.09, 5.16, 5.17, "screen-test", contact="applied", importance=0.8,
+   features=[{"id": "test-screen.animation", "kind": "decal", "notes": "plays a short animation of what the model does"}],
+   topo="Screen face: a thin box painted at runtime.")
 
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
@@ -659,6 +693,13 @@ spec["materials"] = [
     material("glass-light", "Light glass", "glass", "#cfe6ee", ["#c5dce4"], 0.2, 0.0, "glass over the door", **F),
     material("glass-door", "Door glass", "glass", "#9cc8d8", ["#92bece"], 0.15, 0.0, "main door leaves", opacity={"base": 0.75}, **F),
     material("yellow", "LEGO yellow", "plastic", "#f2c500", ["#e8bb00"], 0.45, 0.0, "2 x 4 plate over the door", **F),
+    material("laptop-grey", "Laptop", "metal", "#b8bcc2", ["#aeb2b8"], 0.4, 0.4, "test laptop", **F),
+    material("npc-trousers", "NPC trousers", "fabric", "#2f3a4c", ["#283242"], 0.9, 0.0, "generic NPC", **F),
+    material("npc-shirt", "NPC shirt", "fabric", "#3aa0a0", ["#329696"], 0.9, 0.0, "generic NPC (tester)", **F),
+    material("npc-skin", "NPC skin", "unknown", "#d9a77f", ["#cf9d75"], 0.8, 0.0, "generic NPC", **F),
+    material("npc-hair", "NPC hair", "unknown", "#3b2a20", ["#33231a"], 0.9, 0.0, "generic NPC", **F),
+    material("bubble-white", "Speech bubble", "plastic", "#ffffff", ["#f5f5f5"], 0.6, 0.0, "speech bubble (painted ? or !)", **F),
+    material("screen-test", "Test screen", "glass", "#1e2a36", ["#18232e"], 0.3, 0.0, "big screen (painted animation)", **F),
     material("shelf-white", "Shelf white", "plastic", "#f4f3ef", ["#eae9e5"], 0.6, 0.0, "store shelf boards and back", **F),
     material("label-blue", "Price strip", "plastic", "#2f6fc0", ["#2a66b4"], 0.5, 0.0, "shelf-edge price strips", **F),
     material("label-white", "Box art (kids)", "plastic", "#fff6d8", ["#f5ecce"], 0.5, 0.0, "light art band on the bright boxes", **F),
@@ -765,8 +806,9 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),
-    ("hero-places", "One grey block per room for its hero object (the test room's is first in this list).", "hero-test.place"),
+    ("hero-places", "One grey block per room for its hero object (the team room's is first in this list).", "hero-team.place"),
     ("shelf", "Shelf room: a store shelf, half full, bright boxes low, dark sets high, empty slots marked.", "shelf-back.store"),
+    ("test", "Test room: a tester at a laptop with a speech bubble, and a big screen.", "test-desk.moment"),
 ]
 tmpl = (pa.get("detailInventory") or {}).get("details", [{}])[0]
 pa["detailInventory"]["details"] = [dict(copy.deepcopy(tmpl), id=i, description=d, scale="meso", affects="geometry",

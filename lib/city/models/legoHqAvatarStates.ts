@@ -6,12 +6,14 @@
 import type * as THREE from 'three';
 import { createLEGOHQAvatarScaleModel, type ProceduralModelOptions } from './legoHqAvatar';
 import { applyLEGOHQSurfaces } from './legoHqSurfaces';
+import { paintLEGOHQTestMoment } from './legoHqMoments';
 
 // Surface pass (textures, wear, contact darkening) on the outside only; the inside stays a flat grey box for now
-// (room floors and hero places keep their flat colours).
+// (room floors and hero places keep their flat colours). The test room's screen and bubble show moment frame 0.
 function createSurfacedModel(options: ProceduralModelOptions): THREE.Group {
   const model = createLEGOHQAvatarScaleModel(options);
-  applyLEGOHQSurfaces(model, (id) => !/-floor(-\d+)?$/.test(id) && !id.startsWith('hero-'));
+  applyLEGOHQSurfaces(model, (id) => !/-floor(-\d+)?$/.test(id) && !id.startsWith('hero-') && !/^test-(screen|bubble)$/.test(id));
+  paintLEGOHQTestMoment(model, 0);
   return model;
 }
 
@@ -60,5 +62,13 @@ export function createLEGOHQAvatarDoorModel(options: ProceduralModelOptions = {}
   for (const [id, dir] of [['door-leaf-left', -1], ['door-leaf-right', 1]] as const) {
     if (nodes[id]) nodes[id].position.x += dir * 0.45 * open;
   }
+  return model;
+}
+
+// Test room moment frames for the city (roof off, south view): the screen and bubble at frame `frame`
+// (0..TEST_MOMENT_FRAMES-1). The lab reads ?moment=<frame> (model hqAvatarMoment).
+export function createLEGOHQAvatarMomentModel(options: ProceduralModelOptions = {}, frame = 0): THREE.Group {
+  const model = createLEGOHQAvatarRoofOffModel(options, 'south');
+  paintLEGOHQTestMoment(model, frame);
   return model;
 }

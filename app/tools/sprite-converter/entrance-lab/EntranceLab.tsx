@@ -10,7 +10,7 @@ import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
-import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
+import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
 
@@ -332,6 +332,17 @@ const MODELS: Record<string, ModelConfig> = {
     ...valtechOpen('south'),
     name: 'Valtech office, roof off, avatar seated at the desk',
     create: () => valtechSeatedScene([4.72, 0.74], 167.4, 0.24),
+  },
+  // Test room moment frames for the city animation: ?model=hqAvatarMoment&moment=<0..7>
+  hqAvatarMoment: {
+    name: 'LEGO HQ at avatar scale (roof off, test room moment frame)',
+    create: (options) => createLEGOHQAvatarMomentModel(options, Number(new URLSearchParams(window.location.search).get('moment') ?? 0)),
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {

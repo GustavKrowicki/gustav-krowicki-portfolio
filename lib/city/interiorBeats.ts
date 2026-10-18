@@ -35,6 +35,11 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       lead: "One shelf. Two goals.",
       text: "The company plays the long game: bring young builders in. The seller wants the quick win: sets that sell fast. The shelf has room for only some of them. The tool had to plan for both.",
     },
+    test: {
+      kicker: "2 · The test room",
+      lead: "Hands on, not shown.",
+      text: "In hands-on tests, sellers could not follow the model. Their own numbers were in another system. Before launch we added simple animations that show what the model does. Data links came later.",
+    },
     leave: {
       kicker: "Leaving LEGO",
       lead: "At LEGO I designed between the company's long game and the seller's quick win.",
