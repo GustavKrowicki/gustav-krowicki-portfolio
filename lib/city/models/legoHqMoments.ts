@@ -6,11 +6,14 @@
 // The map room's round wall is one long map over MAP_PANELS panels: at rest its lines are pale; as the avatar comes near,
 // the lines colour in from left to right, sticky notes appear at the crossings, and the one line on the right lights up
 // (MAP_FRAMES long, &map=<k>).
+// The AI lab's screen shows the learning template: as the avatar comes near, its steps tick one by one and the sign-up
+// list fills (AI_FRAMES long, &ai=<k>). The "Open door" sign over the long table is static.
 import * as THREE from 'three';
 
 export const TEST_MOMENT_FRAMES = 8;
 export const TEAM_CLIP_FRAMES = 8;
 export const MAP_FRAMES = 8;
+export const AI_FRAMES = 8;
 export const MAP_PANELS = 18; // build_spec.py MAP_PANELS
 const BANG_FROM = 5; // the frame where "?" becomes "!"
 
@@ -171,6 +174,50 @@ function paintMap(frame: number): HTMLCanvasElement {
   return c;
 }
 
+// The learning template on the AI lab screen: three steps on the left (each ticks in turn), the sign-up list on the right
+function paintTemplate(frame: number): HTMLCanvasElement {
+  const [c, g] = canvas(256, 152);
+  g.fillStyle = '#f4f6f8'; g.fillRect(0, 0, 256, 152);
+  g.fillStyle = '#1f3b70'; g.fillRect(0, 0, 256, 22);                         // title bar
+  g.fillStyle = '#f2c200'; g.fillRect(8, 7, 9, 9);
+  g.fillStyle = '#e8eef3'; g.fillRect(24, 9, 70, 5);
+  const ticked = Math.min(3, Math.floor((frame + 1) / 2));
+  for (let i = 0; i < 3; i++) {
+    const y = 32 + i * 38;
+    g.fillStyle = '#ffffff'; g.fillRect(8, y, 150, 32);
+    g.strokeStyle = '#c9d1da'; g.lineWidth = 2; g.strokeRect(8, y, 150, 32);
+    g.fillStyle = '#1f3b70'; g.font = 'bold 18px Arial, Helvetica, sans-serif'; g.textAlign = 'center'; g.textBaseline = 'middle';
+    g.fillText(String(i + 1), 22, y + 17);
+    g.fillStyle = '#9aa4ae'; g.fillRect(36, y + 8, 80 + (i % 2) * 20, 5); g.fillRect(36, y + 19, 60 + i * 12, 5);
+    g.strokeStyle = i < ticked ? '#2f9e44' : '#9aa4ae'; g.lineWidth = 3; g.strokeRect(134, y + 8, 16, 16);
+    if (i < ticked) {
+      g.strokeStyle = '#2f9e44'; g.lineWidth = 4; g.lineCap = 'round';
+      g.beginPath(); g.moveTo(136, y + 16); g.lineTo(141, y + 21); g.lineTo(152, y + 6); g.stroke();
+    }
+  }
+  // sign-ups: rows of small people, more each frame
+  g.fillStyle = '#e8eef3'; g.fillRect(166, 30, 82, 116);
+  const people = Math.round(2 + (frame / (AI_FRAMES - 1)) * 18);
+  const shirts = ['#3aa0a0', '#e0a93a', '#4a5f8f', '#b5566a', '#5b6e4f'];
+  for (let i = 0; i < people; i++) {
+    const x = 172 + (i % 4) * 19, y = 36 + Math.floor(i / 4) * 21;
+    g.fillStyle = '#d9a77f'; g.fillRect(x + 4, y, 8, 8);
+    g.fillStyle = shirts[i % shirts.length]; g.fillRect(x + 1, y + 9, 14, 9);
+  }
+  return c;
+}
+
+// The "Open door" sign: an open door and the words
+function paintOpenDoor(): HTMLCanvasElement {
+  const [c, g] = canvas(256, 64);
+  g.fillStyle = '#f2c200'; g.fillRect(0, 0, 256, 64);
+  g.fillStyle = '#1d1f22'; g.fillRect(12, 8, 30, 48);
+  g.fillStyle = '#ffffff'; g.beginPath(); g.moveTo(16, 12); g.lineTo(34, 18); g.lineTo(34, 58); g.lineTo(16, 52); g.fill();
+  g.fillStyle = '#1d1f22'; g.font = 'bold 30px Arial, Helvetica, sans-serif'; g.textAlign = 'left'; g.textBaseline = 'middle';
+  g.fillText('OPEN DOOR', 54, 34);
+  return c;
+}
+
 function unlit(image: HTMLCanvasElement): THREE.MeshBasicMaterial {
   const map = new THREE.CanvasTexture(image);
   map.colorSpace = THREE.SRGBColorSpace;
@@ -213,6 +260,19 @@ export function paintLEGOHQMap(model: THREE.Object3D, frame = 0): void {
     g.drawImage(map, p * pw, 0, pw, MAP_H, 0, 0, pw, MAP_H);
     const material = unlit(slice);
     nodes[`map-panel-${p}`]?.traverse((o) => {
+      if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material;
+    });
+  }
+}
+
+/** Paint the AI lab's template screen with frame `frame` (0 = at rest) and its "Open door" sign. */
+export function paintLEGOHQAILab(model: THREE.Object3D, frame = 0): void {
+  if (typeof document === 'undefined') return;
+  const k = Math.max(0, Math.min(AI_FRAMES - 1, Math.round(frame)));
+  const nodes: Record<string, THREE.Object3D> = model.userData.sculptRuntime?.nodes ?? {};
+  for (const [id, image] of [['ai-screen', paintTemplate(k)], ['ai-sign', paintOpenDoor()]] as const) {
+    const material = unlit(image);
+    nodes[id]?.traverse((o) => {
       if ((o as THREE.Mesh).isMesh) (o as THREE.Mesh).material = material;
     });
   }

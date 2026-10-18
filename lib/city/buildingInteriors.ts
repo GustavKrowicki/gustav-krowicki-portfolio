@@ -29,11 +29,11 @@ const LEGO_HQ: BuildingInterior = {
   map: [
     "######M########",
     "######M#M######",
-    "####MMM#MMAAA##",
-    "###MMMLLLLAAA##",
+    "####MMM#MMA####",
+    "###MMMLLLL#####",
     "###MMMLLLLAAAAA",
     "#YYY##LLLL###A#",
-    "###Y##LLLLT##AA",
+    "###Y##LLLLT##A#",
     "#YYYSSSLLTTTTAA",
     "#####SSLL#TTT##",
     "#####SSLL######",
@@ -45,7 +45,7 @@ const LEGO_HQ: BuildingInterior = {
   ],
   openPlan: true,
   entrance: { outside: [8, 10], inside: [8, 9] },
-  standSpots: { shelf: [5.5, 8.5], test: [10.5, 6.5], team: [6.5, 0.5], map: [1.5, 5.5], ailab: [14.5, 4.5] },
+  standSpots: { shelf: [5.5, 8.5], test: [10.5, 6.5], team: [6.5, 0.5], map: [1.5, 5.5], ailab: [11.5, 4.5] },
 };
 
 // Valtech office, 6 x 2, street-level interior grey box (Figma board 597-3604, beat sheet 2026-10-16,

@@ -333,12 +333,12 @@ const MODELS: Record<string, ModelConfig> = {
     name: 'Valtech office, roof off, avatar seated at the desk',
     create: () => valtechSeatedScene([4.72, 0.74], 167.4, 0.24),
   },
-  // Moment frames for the city animations: ?model=hqAvatarMoment&moment=<0..7> (test room), &clip=<0..7> (team screen), &map=<0..7> (map wall)
+  // Moment frames for the city animations: ?model=hqAvatarMoment&moment=<0..7> (test room), &clip=<0..7> (team screen), &map=<0..7> (map wall), &ai=<0..7> (AI lab screen)
   hqAvatarMoment: {
     name: 'LEGO HQ at avatar scale (roof off, test room moment frame)',
     create: (options) => {
       const q = new URLSearchParams(window.location.search);
-      return createLEGOHQAvatarMomentModel(options, Number(q.get('moment') ?? 0), Number(q.get('clip') ?? 0), Number(q.get('map') ?? 0));
+      return createLEGOHQAvatarMomentModel(options, Number(q.get('moment') ?? 0), Number(q.get('clip') ?? 0), Number(q.get('map') ?? 0), Number(q.get('ai') ?? 0));
     },
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,

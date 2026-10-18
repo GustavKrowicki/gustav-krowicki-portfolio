@@ -257,6 +257,9 @@ def ring_segments(poly):
             yield a, b, (n[0] / L, n[1] / L)
 
 
+# Outside walls that stand inside the view when the roof is off and hide a room behind them: cut in every view. The AI
+# lab's north notch wall (z = 4, x 13..15) hides the lab's long table from the south camera.
+CUT_ALWAYS = box(12.95, 3.8, 15.05, 4.2)
 segs = {}      # (kind, side, owner) -> list of LineString
 for code in plan.ROOMS:
     for poly in parts(REGION[code]):
@@ -265,8 +268,8 @@ for code in plan.ROOMS:
             other = next((o for o in plan.ROOMS if o != code and REGION[o].buffer(1e-6).contains(Point(mid))), None)
             if other:
                 continue      # open plan: no wall between two areas
-            elif any(cg.buffer(1e-6).contains(Point(mid)) for cg in plan.GROUND_COURTS.values()):
-                segs.setdefault(("O", "C", code), []).append(LineString([a, b]))     # round a courtyard: always cut
+            elif any(cg.buffer(1e-6).contains(Point(mid)) for cg in plan.GROUND_COURTS.values()) or CUT_ALWAYS.contains(Point(mid)):
+                segs.setdefault(("O", "C", code), []).append(LineString([a, b]))     # round a courtyard, or in CUT_ALWAYS: always cut
             else:
                 segs.setdefault(("O", side_of(*n), code), []).append(LineString([a, b]))
 
@@ -532,7 +535,6 @@ for gx_, gy_ in ((10.5, 5.0), (12.5, 2.6), (14.3, 4.5), (11.4, 6.6), (4.5, 2.5),
 # ---------------------------------------------------------------------------------------------------------------
 # Hero object places: one grey block per room (sizes only roughly match the object to come)
 HERO_BOX = {   # code: (x0, x1, z0, z1, height) in plan tiles inside the hero tile
-    "A": (14.15, 14.85, 5.1, 5.9, 0.42),     # AI lab long table
 }
 for code, (x0, x1, z0, z1, h) in HERO_BOX.items():
     name = plan.HERO[code][1]
@@ -624,6 +626,19 @@ bx("test-screen", "Big screen", "meso", "prop", 12.07, 13.05, 0.49, 1.09, 5.16, 
 
 # Test room props (Gustav 2026-10-18: "more stuff"): a hands-on test in progress. An observer with a clipboard, a test
 # wall with sticky notes, a camera on a tripod, sellers waiting on a bench, a table with the sets to test, desk clutter.
+def _mirror_z(z0, build):
+    """Run `build` (which appends boxes to C) and mirror the new components in plan z about z0."""
+    n = len(C)
+    build()
+    for c in C[n:]:
+        p = c["transform"]["position"]
+        p[2] = round(2 * Z(z0) - p[2], 4)
+        a = c.get("attachment")
+        if a:
+            for key in ("localStart", "localEnd"):
+                a[key][2] = round(2 * Z(z0) - a[key][2], 4)
+
+
 def npc_standing(pre, name, nx, nz, shirt, hair, arm_dx=0.0, arm_dz=0.06):
     bx(f"{pre}-leg-w", f"{name} leg west", "micro", "prop", nx - 0.11, nx - 0.01, 0.02, 0.42, nz - 0.06, nz + 0.06, "npc-trousers", importance=0.3)
     bx(f"{pre}-leg-e", f"{name} leg east", "micro", "prop", nx + 0.01, nx + 0.11, 0.02, 0.42, nz - 0.06, nz + 0.06, "npc-trousers", importance=0.3)
@@ -636,8 +651,10 @@ def npc_standing(pre, name, nx, nz, shirt, hair, arm_dx=0.0, arm_dz=0.06):
     bx(f"{pre}-hair", f"{name} hair", "micro", "prop", nx - 0.085, nx + 0.085, 0.86, 0.93, nz - 0.06, nz + 0.085, hair, importance=0.2)
 
 
-def npc_seated(pre, name, nx, nz, shirt, hair, seat):
-    """Seated, facing north (-z): back at nz, knees towards nz - 0.3; `seat` = seat top height."""
+def npc_seated(pre, name, nx, nz, shirt, hair, seat, face="n"):
+    """Seated, facing north (-z): back at nz, knees towards nz - 0.3; `seat` = seat top height. face="s": mirrored in z."""
+    if face == "s":
+        return _mirror_z(nz, lambda: npc_seated(pre, name, nx, nz, shirt, hair, seat))
     for sd, dx in (("w", -0.06), ("e", 0.06)):
         bx(f"{pre}-thigh-{sd}", f"{name} thigh {sd}", "micro", "prop", nx + dx - 0.05, nx + dx + 0.05, seat, seat + 0.1, nz - 0.3, nz,
            "npc-trousers", importance=0.2)
@@ -725,8 +742,10 @@ bx("team-screen", "Team screen", "meso", "prop", 7.08, 8.46, 0.44, 1.26, 0.69, 0
 bx("team-screen-shelf", "Screen sound bar", "micro", "prop", 7.37, 8.17, 0.33, 0.38, 0.63, 0.73, "frame-dark", importance=0.2)
 
 
-def chair(cid, cx, cz):
-    """Chair facing north (-z): seat 0.32 wide, top at 0.26; back on the south side."""
+def chair(cid, cx, cz, face="n"):
+    """Chair facing north (-z): seat 0.32 wide, top at 0.26; back on the south side. face="s": mirrored in z."""
+    if face == "s":
+        return _mirror_z(cz, lambda: chair(cid, cx, cz))
     bx(f"{cid}-seat", f"Chair seat {cid}", "micro", "prop", cx - 0.16, cx + 0.16, 0.22, 0.26, cz - 0.16, cz + 0.16, "prop-sofa", importance=0.2)
     bx(f"{cid}-back", f"Chair back {cid}", "micro", "prop", cx - 0.16, cx + 0.16, 0.26, 0.56, cz + 0.12, cz + 0.16, "prop-sofa", importance=0.2)
     for k, (dx, dz) in enumerate(((-0.13, -0.13), (0.13, -0.13), (-0.13, 0.13), (0.13, 0.13))):
@@ -802,6 +821,50 @@ cyl("map-table-leg", "Round table leg", "micro", "prop", 2.5, 6.5, 0.02, 0.34, 0
 bx("map-print-0", "Printout", "micro", "prop", 2.32, 2.56, 0.4, 0.405, 6.34, 6.52, "prop-paper", importance=0.05)
 bx("map-print-1", "Printout", "micro", "prop", 2.5, 2.72, 0.4, 0.41, 6.5, 6.66, "prop-paper", importance=0.05)
 bx("map-print-note", "Note on a printout", "micro", "prop", 2.56, 2.62, 0.41, 0.415, 6.54, 6.6, "note-yellow", importance=0.02)
+
+# 5 AI lab hero (board 651:3604, "Something I started myself."): a long table with laptops in the lab's north part,
+# designers trying the template on the north side (facing the room, so their faces show), a screen on a stand at the
+# table's west end with the learning template (painted at runtime; its steps tick and the sign-up list fills when the
+# avatar comes near), and an "Open door" sign on the north wall. In the south part: a high table where two more designers
+# try it standing.
+bx("ai-table-top", "AI lab long table", "meso", "prop", 10.95, 12.55, 0.36, 0.4, 2.95, 3.4, "shelf-white", importance=0.7,
+   features=[{"id": "ai-table-top.lab", "kind": "contour", "notes": "long table with laptops: an open-door session"}])
+for k, (lx, lz) in enumerate(((11.0, 3.0), (12.5, 3.0), (11.0, 3.35), (12.5, 3.35))):
+    bx(f"ai-table-leg-{k}", f"AI lab table leg {k}", "micro", "prop", lx - 0.02, lx + 0.02, 0.02, 0.36, lz - 0.02, lz + 0.02, "frame-dark",
+       importance=0.05)
+AI_TEAM = [(11.35, "npc-shirt-4", "npc-hair"), (11.85, "npc-shirt-3", "npc-hair-2"), (12.3, "npc-shirt-2", "npc-hair")]
+for k, (cx, shirt, hair) in enumerate(AI_TEAM, 1):
+    chair(f"ai-chair-{k}", cx, 2.62, face="s")
+    npc_seated(f"npc-ai-{k}", f"Designer {k}", cx, 2.58, shirt, hair, 0.26, face="s")
+    bx(f"ai-laptop-{k}-base", f"Laptop base {k}", "micro", "prop", cx - 0.12, cx + 0.12, 0.4, 0.412, 2.98, 3.14, "laptop-grey", importance=0.1)
+    bx(f"ai-laptop-{k}-lid", f"Laptop lid {k}", "micro", "prop", cx - 0.12, cx + 0.12, 0.412, 0.57, 3.14, 3.165, "laptop-grey", importance=0.1)
+    bx(f"ai-laptop-{k}-sticker", f"Laptop sticker {k}", "micro", "prop", cx - 0.03, cx + 0.03, 0.47, 0.51, 3.165, 3.17,
+       ("note-yellow", "note-pink", "note-blue")[k - 1], contact="applied", importance=0.02)
+bx("ai-table-cup", "Cup on the long table", "micro", "prop", 12.38, 12.45, 0.4, 0.48, 3.22, 3.29, "prop-mug", importance=0.02)
+bx("ai-table-notes", "Notes on the long table", "micro", "prop", 11.5, 11.68, 0.4, 0.405, 3.2, 3.34, "prop-paper", importance=0.02)
+# the template screen on a stand at the west end, facing east along the table
+bx("ai-screen-foot", "Template screen foot", "micro", "prop", 10.25, 10.55, 0.02, 0.05, 3.15, 3.65, "frame-dark", importance=0.1)
+bx("ai-screen-stand", "Template screen stand", "micro", "prop", 10.36, 10.42, 0.05, 0.5, 3.37, 3.43, "frame-dark", importance=0.1)
+C.append(comp("ai-screen-frame", "Template screen frame", "meso", "prop", "box", (0.98, 0.6, 0.05), (X(10.42), G + 0.8, Z(3.4)),
+              "frame-dark", rot=[0, math.pi / 2, 0], importance=0.6,
+              features=[{"id": "ai-screen.template", "kind": "decal", "notes": "the learning template for AI-assisted coding"}]))
+C.append(comp("ai-screen", "Template screen", "meso", "prop", "box", (0.94, 0.56, 0.01), (X(10.45), G + 0.8, Z(3.4)), "screen-test",
+              rot=[0, math.pi / 2, 0], importance=0.6, contact="applied", topo="Screen face: a thin box painted at runtime."))
+# the "Open door" sign on the north wall over the table (painted at runtime)
+bx("ai-sign-frame", "Open door sign frame", "micro", "prop", 10.95, 12.05, 0.95, 1.27, 2.12, 2.15, "frame-dark", importance=0.4)
+bx("ai-sign", "Open door sign", "meso", "prop", 10.98, 12.02, 0.98, 1.24, 2.15, 2.16, "bubble-white", contact="applied", importance=0.6,
+   features=[{"id": "ai-sign.open", "kind": "decal", "notes": "Open door: anyone can join the sessions"}])
+# south part: a high table where two designers try it standing
+bx("ai-high-top", "High table", "micro", "prop", 14.2, 14.7, 0.54, 0.58, 5.35, 6.45, "prop-wood", importance=0.3)
+for k, lz in enumerate((5.45, 6.35)):
+    bx(f"ai-high-leg-{k}", f"High table leg {k}", "micro", "prop", 14.42, 14.48, 0.02, 0.54, lz - 0.03, lz + 0.03, "frame-dark", importance=0.05)
+for k, lz in enumerate((5.55, 6.05)):
+    bx(f"ai-high-laptop-{k}-base", f"High table laptop {k}", "micro", "prop", 14.28, 14.5, 0.58, 0.592, lz, lz + 0.26, "laptop-grey",
+       importance=0.05)
+    bx(f"ai-high-laptop-{k}-lid", f"High table laptop lid {k}", "micro", "prop", 14.5, 14.525, 0.592, 0.75, lz, lz + 0.26, "laptop-grey",
+       importance=0.05)
+npc_standing("npc-ai-4", "Designer 4", 13.92, 5.7, "npc-shirt-5", "npc-hair-2")
+npc_standing("npc-ai-5", "Designer 5", 13.92, 6.25, "npc-shirt-4", "npc-hair")
 
 # Walk map (one char per tile; lib/city/buildingInteriors.ts)
 walk = plan.walk_map()
@@ -937,11 +1000,12 @@ def rep(rid, pred, dist, target="root"):
     return {"id": rid, "target": target, "count": len(el), "elementComponentIds": el, "distribution": dist, "notes": ""}
 
 
+ROOM_HEROES = ("shelf-back", "test-desk", "team-screen-frame", "map-panel-0", "ai-table-top")   # 1 shelf, 2 test, 3 team, 4 map, 5 AI lab
 spec["repetitionSystems"] = [
     rep("ground-walls", lambda i: i.startswith("wall-"), "ground storey walls on room edges, split at doors"),
     rep("upper-walls", lambda i: i.startswith("upper-"), "upper parts of the ground storey walls"),
     rep("canopy-studs", lambda i: i.startswith("roof-canopy-stud-"), "2 x 4 grid on the plate", "roof-canopy"),
-    rep("hero-places", lambda i: i.startswith("hero-"), "one grey block per room"),
+    rep("room-heroes", lambda i: i in ROOM_HEROES, "one hero object per room on the route"),
 ]
 spec["silhouette"] = {"boundingShape": "15 x 11 wu plot; real campus outline two storeys (2.6 wu) with courtyards, round building at the west, "
                                        "south forecourt notch; roof off: far walls 1.4 wu, others 0.35 wu",
@@ -962,9 +1026,9 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["roof-canopy", "door-leaf-left", "door-leaf-right"] + [f"roof-canopy-stud-{i}" for i in range(1, 9)]},
     {"id": "cutaway", "name": "Roof off: far walls high, other walls cut with dark caps, every room floor visible", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True, "componentRefs": floors},
-    {"id": "hero-places", "name": "One grey block per room where its hero object goes", "tier": "important",
-     "passIds": ["form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False,
-     "componentRefs": [i for i in ids if i.startswith("hero-")]},
+    {"id": "room-heroes", "name": "One hero object per room on the route (shelf, test desk, team screen, map wall, AI lab table)",
+     "tier": "important", "passIds": ["form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False,
+     "componentRefs": list(ROOM_HEROES)},
 ]
 levels = {l: [c["id"] for c in C if c["level"] == l] for l in ("macro", "meso", "micro")}
 for bp in spec["buildPasses"]:
@@ -1001,7 +1065,7 @@ DETAILS = [   # grey box identity details (id, description, feature ref)
     ("south-east-court", "Courtyard in the south-east leg.", "court-south-east.lawn"),
     ("plate", "Yellow 2 x 4 plate with 8 studs over the forecourt.", "canopy.studs"),
     ("plaza", "Checkerboard plaza in front of the atrium.", "plaza.checker"),
-    ("hero-places", "One grey block per room for its hero object (the AI lab's is first in this list).", "hero-ailab.place"),
+    ("ailab", "AI lab: a long table with laptops, designers trying the template, an Open door sign.", "ai-table-top.lab"),
     ("shelf", "Shelf room: a store shelf, half full, bright boxes low, dark sets high, empty slots marked.", "shelf-back.store"),
     ("test", "Test room: a tester at a laptop with a speech bubble, and a big screen.", "test-desk.moment"),
     ("team", "Team room: a big screen with a clip from the tests, the team on chairs facing it.", "team-screen.clip"),

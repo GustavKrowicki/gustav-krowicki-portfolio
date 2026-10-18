@@ -50,6 +50,11 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       lead: "Many ways, one map.",
       text: "Sellers planned in many different ways, and our tool had to work with another big system. I mapped both: the flows people used, and how a plan moved between the two systems. When it is all on one wall, the patterns show.",
     },
+    ailab: {
+      kicker: "5 · The AI lab",
+      lead: "Something I started myself.",
+      text: "I made a learning template for AI-assisted coding and held open-door sessions for the designers. Many signed up. It was my own idea, and it taught me to learn new tools fast.",
+    },
     leave: {
       kicker: "Leaving LEGO",
       lead: "At LEGO I designed between the company's long game and the seller's quick win.",

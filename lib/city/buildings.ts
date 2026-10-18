@@ -145,6 +145,11 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
         sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-map_south.png",
         frames: 8, frameWidth: 218, frameHeight: 96, x: 308, y: 1050, at: [2.5, 6.5], radius: 2.5, fps: 4,
       },
+      // the AI lab's template screen: the steps tick and the sign-up list fills (&ai=0..7, export_moment.sh ai ai)
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-ai_south.png",
+        frames: 8, frameWidth: 52, frameHeight: 60, x: 876, y: 1194, at: [11, 3.5], radius: 2.5, fps: 4,
+      },
     ],
     // Pogicity trees, downsized to the avatar scale, in the two planters and on the front grass (trees behind the building
     // would draw over its roof)
