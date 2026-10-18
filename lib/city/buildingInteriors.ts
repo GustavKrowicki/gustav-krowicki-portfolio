@@ -28,9 +28,9 @@ export interface BuildingInterior {
 const LEGO_HQ: BuildingInterior = {
   map: [
     "######M########",
-    "######M########",
+    "######M#M######",
     "####MMM#MMAAA##",
-    "###MM#L##LA#A##",
+    "###MMMLLLLA#A##",
     "###MMMLLLLAAAAA",
     "#YYY##LLLL#####",
     "###Y##LLLLT###A",
