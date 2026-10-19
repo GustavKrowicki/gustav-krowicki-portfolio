@@ -80,6 +80,8 @@ export default function CityViewer({
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
+  // Night in the city (the moon button, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
+  const [isNight, setIsNight] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
@@ -436,6 +438,27 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("night") === "1") setIsNight(true);
+  }, []);
+
+  // Hand the night state to the scene, waiting for it to exist on first load
+  useEffect(() => {
+    let tries = 0;
+    const apply = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { setNight?: (on: boolean) => void } | undefined;
+      if (scene?.setNight) {
+        scene.setNight(isNight);
+        return true;
+      }
+      return ++tries > 40;
+    };
+    if (apply()) return;
+    const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
+    return () => window.clearInterval(timer);
+  }, [isNight]);
+
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
   const handleStandUp = useCallback(() => {
@@ -759,6 +782,15 @@ export default function CityViewer({
             style={PIXEL_INSET_CLIP}
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
+          </button>
+          <button
+            onClick={() => setIsNight((n) => !n)}
+            className={pixelButtonClass("ghost")}
+            style={PIXEL_INSET_CLIP}
+            aria-pressed={isNight}
+            aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
+          >
+            {isNight ? "Day" : "Night"}
           </button>
         </div>
       )}

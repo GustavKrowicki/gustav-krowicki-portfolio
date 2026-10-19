@@ -44,6 +44,9 @@ export interface BuildingDefinition {
   // Ambient loop (docs/city-rules.md section 9): a strip of frames cropped from the south sprite like `door` (x, y = the
   // crop's top-left in sprite pixels), drawn over the building and played in a loop at `fps`
   ambient?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
+  // Lights on at night (docs/city-rules.md section 9): frames cropped from the south sprite like `ambient`, in a grid
+  // sheet, drawn untinted over the night-tinted building while the city is dark (MainScene.setNight)
+  nightLights?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
   // Draw the sprite as vertical slices, one per tile diagonal, each sorted by its own front tile (docs/city-rules.md
@@ -307,6 +310,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/aarhus-stadium.svg",
     logoOffset: { x: 0, y: 80 },
+    // Floodlights at night: the lit bowl, 40 lamps on the roof's inner edge with a slow wave round the ring, and a haze
+    // over the roof (art/img2threejs/aarhus-stadium/export_floodlights.py, made from the south sprite)
+    nightLights: {
+      sheet: "/game/pogicity/Building/landmark/aarhus-stadium-lights_south.png",
+      frames: 12, frameWidth: 416, frameHeight: 240, x: 110, y: 364, fps: 4,
+    },
   },
   // The red heritage hall (Stadionhallerne) on the stadium's south side, as its entrance
   // (Gustav, 2026-10-17): art/img2threejs/stadium-hall, a 4 x 2 plot, two gabled brick halls either side of the lobby.

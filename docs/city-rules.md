@@ -140,6 +140,8 @@ and the model is built from it:
 - One outline: 1 px warm near-black on characters, props and building silhouettes.
 - Life: every landmark has at least one ambient loop (2-4 s: a flag, a screen, a door, lights), lights on at night,
   and reacts to the player near its entrance.
+- Night: the Night button (or `?night=1`) tints every scene object dark blue over 0.9 s. A building's `nightLights`
+  strip (cropped from its south sprite like `ambient`) is drawn untinted above all its slices, so only what is lit glows.
 - Facades follow the scale in section 2 (bay 1.0 wu, window 0.5 x 0.6 wu, plinth = ground floor, parapet 0.15 wu).
 
 ## 10. Timing

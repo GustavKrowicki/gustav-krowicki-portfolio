@@ -243,6 +243,11 @@ export class MainScene extends Phaser.Scene {
           frameWidth: building.ambient.frameWidth, frameHeight: building.ambient.frameHeight,
         });
       }
+      if (building.nightLights) {
+        this.load.spritesheet(`${building.id}_lights`, building.nightLights.sheet, {
+          frameWidth: building.nightLights.frameWidth, frameHeight: building.nightLights.frameHeight,
+        });
+      }
     }
 
     // Load car textures
@@ -359,6 +364,7 @@ export class MainScene extends Phaser.Scene {
 
     this.updatePinchZoom();
     this.updateAmbients(time);
+    this.updateNight(time);
 
     this.updateCharacters();
     this.updateCars();
@@ -2328,6 +2334,12 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_ambient`);
     }
     this.ambients.delete(buildingKey);
+    const lightsSprite = this.buildingSprites.get(`${buildingKey}_lights`);
+    if (lightsSprite) {
+      lightsSprite.destroy();
+      this.buildingSprites.delete(`${buildingKey}_lights`);
+    }
+    this.nightLights.delete(buildingKey);
 
     for (let i = 0; i < 40; i++) {
       const decorKey = `${buildingKey}_d${i}`;
@@ -2410,6 +2422,27 @@ export class MainScene extends Phaser.Scene {
       this.ambients.set(key, { image, frames: ambient.frames, fps: ambient.fps });
     }
 
+    // Night lights: same crop maths as the ambient loop, untinted and faded in with the night (updateNight)
+    const lights = building.nightLights;
+    if (lights && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_lights`)) {
+      const s = sprite.scaleX;
+      const left = sprite.x - sprite.width * s / 2;
+      const top = sprite.y - sprite.height * s;
+      const image = this.add.image(left + lights.x * s, top + lights.y * s, `${building.id}_lights`, 0);
+      image.setOrigin(0, 0);
+      image.setScale(s);
+      // Over every slice of a sliced building (the bowl spans several), so the lit part is never cut by a later slice
+      let depth = sprite.depth;
+      for (let n = 1; this.buildingSprites.has(`${key}_s${n}`); n++) {
+        depth = Math.max(depth, this.buildingSprites.get(`${key}_s${n}`)!.depth);
+      }
+      image.setDepth(depth + 0.045);
+      image.setAlpha(this.night);
+      image.setVisible(this.night > 0);
+      this.buildingSprites.set(`${key}_lights`, image);
+      this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps });
+    }
+
     // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
     // (and against the player inside the footprint) by their local ground position
     if (!orientation || orientation === Direction.Down) {
@@ -2478,6 +2511,54 @@ export class MainScene extends Phaser.Scene {
     this.ambients.forEach((a) => {
       if (a.image.active) a.image.setFrame(Math.floor((time / 1000) * a.fps) % a.frames);
     });
+  }
+
+  // Night: 0 (day) .. 1 (night), eased toward the target set by setNight. While above 0 every scene object is tinted
+  // toward NIGHT_TINT, except the night lights, which fade in over their buildings and play on the scene clock
+  private night = 0;
+  private nightTarget = 0;
+  private nightLights: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number }> = new Map();
+  private static readonly NIGHT_TINT = { r: 0x4d, g: 0x5c, b: 0x94 };
+  private static readonly DAY_BACKGROUND = { r: 0x73, g: 0x64, b: 0x5f };
+
+  setNight(on: boolean): void {
+    this.nightTarget = on ? 1 : 0;
+  }
+
+  isNight(): boolean {
+    return this.nightTarget === 1;
+  }
+
+  private nightClock = 0;
+
+  private updateNight(time: number): void {
+    const last = this.nightClock;
+    this.nightClock = time;
+    if (this.night === this.nightTarget && this.night === 0) return;
+    const step = Math.min(1, (time - last) / 900);             // a 0.9 s fade on the scene clock, not the smoothed delta
+    this.night = this.night < this.nightTarget
+      ? Math.min(this.nightTarget, this.night + step)
+      : Math.max(this.nightTarget, this.night - step);
+    const t = this.night, n = MainScene.NIGHT_TINT, bg = MainScene.DAY_BACKGROUND;
+    const mix = (c: number) => Math.round(255 + (c - 255) * t);
+    const tint = (mix(n.r) << 16) | (mix(n.g) << 8) | mix(n.b);
+    const lit = new Set<Phaser.GameObjects.GameObject>();
+    this.nightLights.forEach((l) => {
+      lit.add(l.image);
+      if (!l.image.active) return;
+      l.image.setVisible(t > 0);
+      l.image.setAlpha(t);
+      l.image.setFrame(Math.floor((time / 1000) * l.fps) % l.frames);
+    });
+    this.children.list.forEach((child) => {
+      if (lit.has(child)) return;
+      const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
+      c.setTint?.(tint);
+    });
+    const shade = (c: number, k: number) => Math.round(c + (c * k / 255 - c) * t);
+    this.cameras.main.setBackgroundColor(
+      (shade(bg.r, n.r) << 16) | (shade(bg.g, n.g) << 8) | shade(bg.b, n.b),
+    );
   }
 
   // Animated doors by building key: current open value 0..1
