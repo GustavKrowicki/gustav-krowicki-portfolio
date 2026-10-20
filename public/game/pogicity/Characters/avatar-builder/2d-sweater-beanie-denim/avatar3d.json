@@ -18,33 +18,33 @@
    "file": "walk-east.png",
    "outlineFile": "walk-east.png",
    "frames": 8,
-   "fps": 39.73,
+   "fps": 44.62,
    "repeat": -1,
-   "durationS": 0.201
+   "durationS": 0.179
   },
   "walk_north": {
    "file": "walk-north.png",
    "outlineFile": "walk-north.png",
    "frames": 8,
-   "fps": 39.73,
+   "fps": 44.62,
    "repeat": -1,
-   "durationS": 0.201
+   "durationS": 0.179
   },
   "walk_west": {
    "file": "walk-west.png",
    "outlineFile": "walk-west.png",
    "frames": 8,
-   "fps": 39.73,
+   "fps": 44.62,
    "repeat": -1,
-   "durationS": 0.201
+   "durationS": 0.179
   },
   "walk_south": {
    "file": "walk-south.png",
    "outlineFile": "walk-south.png",
    "frames": 8,
-   "fps": 39.73,
+   "fps": 44.62,
    "repeat": -1,
-   "durationS": 0.201
+   "durationS": 0.179
   },
   "idle_east": {
    "file": "idle-east.png",
