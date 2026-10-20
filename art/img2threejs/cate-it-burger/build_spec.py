@@ -224,7 +224,7 @@ bx("vent-grille", "Vent grille", "micro", "end", L / 2 - 0.004, L / 2 + 0.012, 0
    importance=0.4, features=lf("vent-grille.slots", "contour", "dark vent grille high on the tow-bar end"))
 
 # north side (the back, closed): a staff door with a small window and a step, a sliding window, a power hookup
-DX0, DX1 = 0.78, 1.18          # door, 0.4 wu wide
+DX0, DX1 = -1.18, -0.78        # door, 0.4 wu wide, at the far (west) end of the back (Gustav, 2026-10-20)
 DY0, DY1 = 0.38, 1.36          # 0.98 wu high (city door standard 1.0)
 bx("door-frame", "Staff door frame", "meso", "north", DX0 - 0.03, DX1 + 0.03, DY0 - 0.02, DY1 + 0.03, Z0 - 0.012, Z0 + 0.01, "steel-dark",
    contact="flush-mount", importance=0.5)
@@ -232,16 +232,16 @@ bx("door", "Staff door", "meso", "north", DX0, DX1, DY0, DY1, Z0 - 0.02, Z0 - 0.
    features=lf("door.staff", "contour", "steel staff door on the back with a small window"))
 bx("door-window", "Door window", "micro", "north", DX0 + 0.08, DX1 - 0.08, 1.02, 1.26, Z0 - 0.026, Z0 - 0.02, "glass-dark", contact="flush-mount",
    importance=0.4)
-bx("door-handle", "Door handle", "micro", "north", DX0 + 0.04, DX0 + 0.1, 0.84, 0.88, Z0 - 0.04, Z0 - 0.02, "steel-dark", contact="flush-mount",
+bx("door-handle", "Door handle", "micro", "north", DX1 - 0.1, DX1 - 0.04, 0.84, 0.88, Z0 - 0.04, Z0 - 0.02, "steel-dark", contact="flush-mount",
    importance=0.2)
 bx("door-step", "Door step", "micro", "north", DX0 - 0.02, DX1 + 0.02, 0.2, 0.24, Z0 - 0.05, Z0 + 0.04, "steel-dark", importance=0.3)
-bx("side-window-frame", "Sliding window frame", "micro", "north", -0.72, -0.08, 0.92, 1.26, Z0 - 0.012, Z0 + 0.01, "steel-dark",
+bx("side-window-frame", "Sliding window frame", "micro", "north", 0.08, 0.72, 0.92, 1.26, Z0 - 0.012, Z0 + 0.01, "steel-dark",
    contact="flush-mount", importance=0.4)
-bx("side-window", "Sliding window", "micro", "north", -0.69, -0.11, 0.95, 1.23, Z0 - 0.02, Z0 - 0.008, "glass-warm", contact="flush-mount",
+bx("side-window", "Sliding window", "micro", "north", 0.11, 0.69, 0.95, 1.23, Z0 - 0.02, Z0 - 0.008, "glass-warm", contact="flush-mount",
    importance=0.5, features=lf("side-window.lit", "contour", "small warm-lit sliding window on the back"))
-bx("side-window-mid", "Window slide bar", "micro", "north", -0.41, -0.39, 0.95, 1.23, Z0 - 0.026, Z0 - 0.02, "steel-dark", contact="flush-mount",
+bx("side-window-mid", "Window slide bar", "micro", "north", 0.39, 0.41, 0.95, 1.23, Z0 - 0.026, Z0 - 0.02, "steel-dark", contact="flush-mount",
    importance=0.2)
-bx("power-box", "Power hookup", "micro", "north", -1.3, -1.16, 0.44, 0.6, Z0 - 0.03, Z0 + 0.01, "band-dark", contact="flush-mount", importance=0.3)
+bx("power-box", "Power hookup", "micro", "north", 1.16, 1.3, 0.44, 0.6, Z0 - 0.03, Z0 + 0.01, "band-dark", contact="flush-mount", importance=0.3)
 
 # roof sign on two wooden posts: a blank dark board (its content is still open)
 SY0, SY1 = ZT + 0.3, ZT + 0.68
