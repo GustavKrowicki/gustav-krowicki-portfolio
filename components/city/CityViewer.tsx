@@ -80,7 +80,7 @@ export default function CityViewer({
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
-  // Night in the city (the visitor's clock, the Night button, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
+  // Night in the city (the visitor's clock, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
   const [isNight, setIsNight] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
@@ -438,21 +438,18 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
-  // The city follows the visitor's own clock (night 19:00 to 07:00) until they press the button; ?night=1 / ?night=0 on
-  // the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the visitor's clock
-  const nightTouchedRef = useRef(false);
+  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00); there is no button. ?night=1 /
+  // ?night=0 on the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the clock
   useEffect(() => {
     const search = new URLSearchParams(window.location.search);
     const param = search.get("night");
     if (param === "1" || param === "0") {
-      nightTouchedRef.current = true;
       setIsNight(param === "1");
       return;
     }
     const hourParam = search.get("hour");
     const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
     const follow = () => {
-      if (nightTouchedRef.current) return;
       const hour = fixedHour ?? new Date().getHours();
       setIsNight(hour >= 19 || hour < 7);
     };
@@ -801,16 +798,6 @@ export default function CityViewer({
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
-          {/* Hidden while walking on a phone: Stop walking is wider than Walk and would run under the joystick */}
-          {!(isMobile && isAdventureActive) && <button
-            onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
-            className={pixelButtonClass("ghost")}
-            style={PIXEL_INSET_CLIP}
-            aria-pressed={isNight}
-            aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
-          >
-            {isNight ? "Day" : "Night"}
-          </button>}
         </div>
       )}
     </div>
