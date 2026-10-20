@@ -80,6 +80,8 @@ export default function CityViewer({
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
+  // Night in the city (the visitor's clock, the Night button, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
+  const [isNight, setIsNight] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
@@ -436,6 +438,42 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
+  // The city follows the visitor's own clock (night 19:00 to 07:00) until they press the button; ?night=1 / ?night=0 on
+  // the URL forces night or day (for links and screenshots)
+  const nightTouchedRef = useRef(false);
+  useEffect(() => {
+    const param = new URLSearchParams(window.location.search).get("night");
+    if (param === "1" || param === "0") {
+      nightTouchedRef.current = true;
+      setIsNight(param === "1");
+      return;
+    }
+    const follow = () => {
+      if (nightTouchedRef.current) return;
+      const hour = new Date().getHours();
+      setIsNight(hour >= 19 || hour < 7);
+    };
+    follow();
+    const timer = window.setInterval(follow, 60_000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
+  useEffect(() => {
+    const apply = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { setNight?: (on: boolean) => void } | undefined;
+      if (scene?.setNight) {
+        scene.setNight(isNight);
+        return true;
+      }
+      return false;
+    };
+    if (apply()) return;
+    const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
+    return () => window.clearInterval(timer);
+  }, [isNight]);
+
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
   const handleStandUp = useCallback(() => {
@@ -760,6 +798,16 @@ export default function CityViewer({
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
+          {/* Hidden while walking on a phone: Stop walking is wider than Walk and would run under the joystick */}
+          {!(isMobile && isAdventureActive) && <button
+            onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
+            className={pixelButtonClass("ghost")}
+            style={PIXEL_INSET_CLIP}
+            aria-pressed={isNight}
+            aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
+          >
+            {isNight ? "Day" : "Night"}
+          </button>}
         </div>
       )}
     </div>
