@@ -80,7 +80,7 @@ export default function CityViewer({
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
-  // Night in the city (the moon button, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
+  // Night in the city (the visitor's clock, the Night button, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
   const [isNight, setIsNight] = useState(false);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
@@ -438,8 +438,24 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
+  // The city follows the visitor's own clock (night 19:00 to 07:00) until they press the button; ?night=1 / ?night=0 on
+  // the URL forces night or day (for links and screenshots)
+  const nightTouchedRef = useRef(false);
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("night") === "1") setIsNight(true);
+    const param = new URLSearchParams(window.location.search).get("night");
+    if (param === "1" || param === "0") {
+      nightTouchedRef.current = true;
+      setIsNight(param === "1");
+      return;
+    }
+    const follow = () => {
+      if (nightTouchedRef.current) return;
+      const hour = new Date().getHours();
+      setIsNight(hour >= 19 || hour < 7);
+    };
+    follow();
+    const timer = window.setInterval(follow, 60_000);
+    return () => window.clearInterval(timer);
   }, []);
 
   // Hand the night state to the scene, waiting for it to exist on first load
@@ -784,7 +800,7 @@ export default function CityViewer({
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
           <button
-            onClick={() => setIsNight((n) => !n)}
+            onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
             className={pixelButtonClass("ghost")}
             style={PIXEL_INSET_CLIP}
             aria-pressed={isNight}
