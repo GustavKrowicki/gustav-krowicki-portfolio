@@ -140,7 +140,7 @@ and the model is built from it:
 - One outline: 1 px warm near-black on characters, props and building silhouettes.
 - Life: every landmark has at least one ambient loop (2-4 s: a flag, a screen, a door, lights), lights on at night,
   and reacts to the player near its entrance.
-- Night: the visitor's own clock in their browser (19:00 to 07:00, no button), or `?night=1` / `?night=0` tints every scene object
+- Night: the visitor's own clock in their browser (19:00 to 07:00; the Night button shows only on localhost or with `?dev=1`), or `?night=1` / `?night=0` tints every scene object
   dark blue over 0.9 s. A building's `nightLights` strip (cropped from its south sprite like `ambient`) is drawn
   untinted above all its slices, so only what is lit glows.
 - Street lamps (`lib/city/streetLights.ts`): placed by hand in the editor (lamp tab) and saved on the cell as

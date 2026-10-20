@@ -438,18 +438,25 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
-  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00); there is no button. ?night=1 /
-  // ?night=0 on the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the clock
+  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00); visitors get no button. ?night=1 /
+  // ?night=0 on the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the clock.
+  // A Night/Day button for development shows on localhost or with ?dev=1; pressing it stops the clock following
+  const [showNightButton, setShowNightButton] = useState(false);
+  const nightTouchedRef = useRef(false);
   useEffect(() => {
     const search = new URLSearchParams(window.location.search);
+    const host = window.location.hostname;
+    setShowNightButton(host === "localhost" || host === "127.0.0.1" || search.get("dev") === "1");
     const param = search.get("night");
     if (param === "1" || param === "0") {
+      nightTouchedRef.current = true;
       setIsNight(param === "1");
       return;
     }
     const hourParam = search.get("hour");
     const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
     const follow = () => {
+      if (nightTouchedRef.current) return;
       const hour = fixedHour ?? new Date().getHours();
       setIsNight(hour >= 19 || hour < 7);
     };
@@ -798,6 +805,16 @@ export default function CityViewer({
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
+          {/* Development only (localhost or ?dev=1); hidden while walking on a phone, where Stop walking is wider */}
+          {showNightButton && !(isMobile && isAdventureActive) && <button
+            onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
+            className={pixelButtonClass("ghost")}
+            style={PIXEL_INSET_CLIP}
+            aria-pressed={isNight}
+            aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
+          >
+            {isNight ? "Day" : "Night"}
+          </button>}
         </div>
       )}
     </div>
