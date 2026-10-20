@@ -162,6 +162,7 @@ def cargo_34(shape, shade, line, soft=lambda e: e):
 
 # Ski set: an orange-red shell jacket (high collar, black front zip, two chest zips, black gloves), grey ski
 # pants with dark gaiters over the shoe tops, and a black helmet with pink mirrored goggles.
+GLOVE = lambda el: el.replace('<path', '<path data-w="hand"', 1)   # gloves move with the wrist (warp.py)
 PIECE_C.update({
     'ski':   ('#e5452b', '#b8341f', '#7d2212'),
     'skik':  ('#1b1a1d', '#111013', '#050506'),
@@ -177,7 +178,7 @@ def ski_front(shape, shade, line, soft=lambda e: e):
         X = lambda x: 200 + s * (x - 200)
         g.append(shape(f'M{X(296)} 312 C{X(320)} 296 {X(350)} 302 {X(358)} 338 L{X(368)} 584 L{X(304)} 588 L{X(296)} 420 Z', 'ski', shade=s > 0))
         g.append(line(f'M{X(318)} 440 Q{X(334)} 446 {X(352)} 440', PIECE_C['ski'][2], 3))
-        g.append(shape(f'M{X(302)} 580 L{X(362)} 580 C{X(368)} 610 {X(368)} 640 {X(362)} 664 C{X(356)} 684 {X(324)} 690 {X(310)} 676 C{X(298)} 660 {X(296)} 620 {X(302)} 580 Z', 'skik'))
+        g.append(GLOVE(shape(f'M{X(302)} 580 L{X(362)} 580 C{X(368)} 610 {X(368)} 640 {X(362)} 664 C{X(356)} 684 {X(324)} 690 {X(310)} 676 C{X(298)} 660 {X(296)} 620 {X(302)} 580 Z', 'skik')))
     g.append(shape('M146 260 Q200 276 254 260 L296 268 C324 276 340 296 344 322 L330 512 Q200 526 70 512 L56 322 C60 296 76 276 104 268 Z', 'ski'))
     g.append(soft(shade('M262 284 C300 294 336 316 344 330 L330 512 Q296 518 256 520 C272 440 272 350 262 284 Z', 'ski')))
     g.append(shape('M70 500 Q200 514 330 500 L330 516 Q200 530 70 516 Z', 'ski', shade=True))
@@ -199,10 +200,10 @@ def ski_34(shape, shade, line, soft=lambda e: e):
     sleeves = {
         'near': {'upper': [shape('M54 394 L122 386 C125 440 126 470 124 508 L60 510 C58 470 56 440 54 394 Z', 'ski')],
                  'fore': [shape('M60 496 L124 492 C126 530 125 560 122 586 L68 590 C64 560 62 530 60 496 Z', 'ski'),
-                          shape('M66 582 L126 580 C132 610 132 642 126 664 C120 684 88 690 74 676 C62 660 60 620 66 582 Z', 'skik')]},
+                          GLOVE(shape('M66 582 L126 580 C132 610 132 642 126 664 C120 684 88 690 74 676 C62 660 60 620 66 582 Z', 'skik'))]},
         'far': {'upper': [shape('M254 400 L306 396 C309 440 310 470 308 508 L260 510 C259 470 257 440 254 400 Z', 'ski', shade=True)],
                 'fore': [shape('M260 496 L308 492 C310 530 309 560 306 586 L264 590 C262 560 261 530 260 496 Z', 'ski', shade=True),
-                         shape('M262 582 L312 580 C318 610 318 640 312 662 C306 680 280 686 270 672 C260 656 258 620 262 582 Z', 'skik', shade=True)]},
+                         GLOVE(shape('M262 582 L312 580 C318 610 318 640 312 662 C306 680 280 686 270 672 C260 656 258 620 262 582 Z', 'skik', shade=True))]},
     }
     return torso, sleeves
 

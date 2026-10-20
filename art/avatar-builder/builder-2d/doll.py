@@ -12,6 +12,7 @@ here = os.path.dirname(os.path.abspath(__file__))
 SHEET = open(here + '/sheet.py').read()
 exec(SHEET[:SHEET.index("\nif __name__ ==")])
 sys.path.insert(0, here)
+from warp import warp, W
 from pixel_head import PAL
 from pieces2d import PIECE_C, hoodie_34, sweater_34, club_34, cargo_34, ski_34, skipants_34, BEANIE34, BEANIE_PAL, PIX, HELMET34, HELMET_BACK34
 C.update(PIECE_C)
@@ -115,7 +116,7 @@ def frame_svg(i, back=False):
     bob = (IDLE_BOB[i] if POSE == 'idle' else BOB[i]) / S
     vx = (CX_U_BACK if back else CX_U) - (FW / 2) / S; vy = FOOT_U - GROUND / S
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{FW*SS}" height="{FH*SS}" viewBox="{vx} {vy} {FW / S} {FH / S}">'
-            f'<defs>{SOFTF}</defs><g transform="translate(0 {bob})">' + ''.join(body) + '</g></svg>')
+            f'<defs>{SOFTF}</defs><g transform="translate(0 {bob})">' + warp(''.join(body)) + '</g></svg>')
 
 # --- palette and pixel passes -------------------------------------------------------------------------------
 hx = lambda h: tuple(int(h[i:i+2], 16) for i in (1, 3, 5))
@@ -273,7 +274,7 @@ def facings(down_left, up_right):
 def stride_wu():
     """One walk cycle covers two steps; a step is the swing of both feet at the widest hip angle."""
     import math
-    leg_u = FOOT_U - PARTS['near']['hip'][1]
+    leg_u = FOOT_U - W(PARTS['near']['hip'][1])          # the hip after the proportion pass (warp.py)
     step_u = 2 * leg_u * math.sin(math.radians(max(LEG)))
     return 2 * step_u * S / 60          # street px -> wu: 60 px per wu (0.9 wu = 54 px)
 def bake(look_dir, walk, idle):

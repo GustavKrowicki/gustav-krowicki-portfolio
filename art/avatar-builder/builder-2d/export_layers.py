@@ -2,13 +2,15 @@
 layer view (components/shell/sections/AvatarLayerView.tsx).  python3 export_layers.py <public dir>"""
 import os, sys
 here = os.path.dirname(os.path.abspath(__file__))
+sys.path.insert(0, here)
+from warp import warp
 B = open(here + '/body2d.py').read(); exec(B[:B.index("\nif __name__ ==")])
 H = open(here + '/head2d.py').read()
 MEET = '#3a2418'
 exec(H[H.index('def beanie():'):H.index('def head_svg(')])
 VIEW = '0 0 400 1010'
 def layer_svg(parts):
-    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VIEW}"><defs>{SOFT}</defs>' + '\n'.join(parts) + '</svg>')
+    return (f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="{VIEW}"><defs>{SOFT}</defs>' + warp('\n'.join(parts)) + '</svg>')
 if __name__ == '__main__':
     out = sys.argv[1]; os.makedirs(out, exist_ok=True)
     n = front_layers('neutral'); sm = front_layers('smile')

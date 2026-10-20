@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1010"><defs><filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs><path d="M120 124 C112 60 146 8 200 6 C254 8 288 60 280 124 L268 126 C266 106 262 96 252 90 L148 90 C138 96 134 106 132 126 Z" fill="#2a2a30" stroke="#0c0c0e" stroke-width="3" stroke-linejoin="round" />
-<path d="M236 14 C266 26 284 60 280 124 L268 126 C266 106 262 96 254 90 C258 60 252 32 236 14 Z" fill="#1c1c20" opacity="1.0"/>
-<path d="M128 108 L272 108 Q288 108 288 124 L288 140 Q288 156 272 156 L128 156 Q112 156 112 140 L112 124 Q112 108 128 108 Z" fill="#1b1a1d" stroke="#050506" stroke-width="3" stroke-linejoin="round" />
-<path d="M134 112 Q200 102 266 112 L264 152 Q200 162 136 152 Z" fill="#f25aa6" stroke="#7e2253" stroke-width="3" stroke-linejoin="round" />
-<path d="M222 108 Q248 110 266 112 L264 152 Q246 156 224 158 Z" fill="#c23f84" opacity="1.0"/>
-<path d="M146 120 Q176 114 204 116" fill="none" stroke="#ffd1ea" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1010"><defs><filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs><path d="M 120 124 C 112 60 146 8 200 6 C 254 8 288 60 280 124 L 268 126 C 266 106 262 96 252 90 L 148 90 C 138 96 134 106 132 126 Z" fill="#2a2a30" stroke="#0c0c0e" stroke-width="3" stroke-linejoin="round" />
+<path d="M 236 14 C 266 26 284 60 280 124 L 268 126 C 266 106 262 96 254 90 C 258 60 252 32 236 14 Z" fill="#1c1c20" opacity="1.0"/>
+<path d="M 128 108 L 272 108 Q 288 108 288 124 L 288 140 Q 288 156 272 156 L 128 156 Q 112 156 112 140 L 112 124 Q 112 108 128 108 Z" fill="#1b1a1d" stroke="#050506" stroke-width="3" stroke-linejoin="round" />
+<path d="M 134 112 Q 200 102 266 112 L 264 152 Q 200 162 136 152 Z" fill="#f25aa6" stroke="#7e2253" stroke-width="3" stroke-linejoin="round" />
+<path d="M 222 108 Q 248 110 266 112 L 264 152 Q 246 156 224 158 Z" fill="#c23f84" opacity="1.0"/>
+<path d="M 146 120 Q 176 114 204 116" fill="none" stroke="#ffd1ea" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" /></svg>

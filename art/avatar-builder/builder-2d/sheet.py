@@ -44,7 +44,7 @@ def hand(X, s):
     g.append(line(f'M{X(330)} 632 Q{X(342)} 628 {X(358)} 630', C['skin'][2], 1.6))
     g.append(shape(f'M{X(322)} 600 C{X(312)} 612 {X(308)} 628 {X(310)} 644 C{X(312)} 652 {X(320)} 652 {X(322)} 644 '
                    f'C{X(324)} 632 {X(326)} 620 {X(328)} 610 Z', 'skin'))
-    return g
+    return [x.replace('<path', '<path data-w="hand"', 1) for x in g]   # moves with the wrist (warp.py)
 
 def head_front(expr='neutral'):
     """Long face, squarer jaw with a defined chin, ears that stand out, high hairline with cut-in temples,
