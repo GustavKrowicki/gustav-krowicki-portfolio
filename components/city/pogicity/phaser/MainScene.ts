@@ -2637,7 +2637,7 @@ export class MainScene extends Phaser.Scene {
         const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
         const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
         const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
-        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.2) * 0.9;
+        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.4) * 0.9;
         const i = (py * w + px) * 4;
         img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = Math.round(a * 255);
       }

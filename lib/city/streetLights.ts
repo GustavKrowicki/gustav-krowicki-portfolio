@@ -28,15 +28,15 @@ export interface StreetLampSpec {
 export const WIRE_HEIGHT = 3.2; // ~6.4 m
 
 export const STREET_LAMPS: Record<StreetLampType, StreetLampSpec> = {
-  // Slim grey pole, ~3.5 m, wide open cone; light goes only down in a wide cone (a pool about 2 tiles across)
+  // Slim grey pole, ~3.5 m, wide open cone; light goes only down in a wide cone (a pool about 4 tiles across)
   post: { day: "/game/pogicity/Props/night/post_day.png", lit: "/game/pogicity/Props/night/post_lit.png", height: 2.0,
-    pool: { rx: 1.1, ry: 1.1, strength: 1 } },
-  // Rust-brown dome, gold inside, hung on a wire over the middle of the road; a long warm oval along the street
+    pool: { rx: 2.3, ry: 2.3, strength: 1 } },
+  // Rust-brown dome, gold inside, hung on a wire over the middle of the road; a long warm oval that reaches the next lamp
   wire: { day: "/game/pogicity/Props/night/wire_day.png", lit: "/game/pogicity/Props/night/wire_lit.png", height: WIRE_HEIGHT - 0.6,
-    hangHeight: WIRE_HEIGHT, pool: { rx: 1.7, ry: 1.0, strength: 1 } },
+    hangHeight: WIRE_HEIGHT, pool: { rx: 3.0, ry: 2.0, strength: 1 } },
   // The old lantern post: warm and small
   lantern: { day: "/game/pogicity/Props/night/lantern_day.png", lit: "/game/pogicity/Props/night/lantern_lit.png", height: 1.6,
-    pool: { rx: 0.75, ry: 0.75, strength: 0.85 } },
+    pool: { rx: 1.7, ry: 1.7, strength: 0.85 } },
 };
 
 const at = (grid: GridCell[][], x: number, y: number) => grid[y]?.[x];
