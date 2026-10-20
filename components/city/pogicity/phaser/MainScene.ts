@@ -46,6 +46,7 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
+import { STREET_LAMPS, StreetLamp, StreetLampType, placeStreetLamps } from "@/lib/city/streetLights";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
@@ -253,6 +254,12 @@ export class MainScene extends Phaser.Scene {
       }
     }
 
+    // Street lamps (lib/city/streetLights.ts): a day sprite, tinted with the city, and the parts that glow at night
+    for (const [type, spec] of Object.entries(STREET_LAMPS)) {
+      this.load.image(`lamp_${type}_day`, spec.day);
+      this.load.image(`lamp_${type}_lit`, spec.lit);
+    }
+
     // Load car textures
     const carTypes = ["jeep", "taxi"];
     const directions = ["n", "s", "e", "w"];
@@ -297,6 +304,7 @@ export class MainScene extends Phaser.Scene {
 
     // Initial render
     this.renderGrid();
+    this.buildStreetLamps();
 
     // Load character animations
     this.loadCharacterAnimations();
@@ -368,6 +376,7 @@ export class MainScene extends Phaser.Scene {
     this.updatePinchZoom();
     this.updateAmbients(time);
     this.updateNight(time);
+    this.updateStreetLamps(time);
 
     this.updateCharacters();
     this.updateCars();
@@ -1120,6 +1129,7 @@ export class MainScene extends Phaser.Scene {
 
     if (this.gridDirtyTiles.size > 0) {
       this.gridDirty = true;
+      this.buildStreetLamps();
     }
 
     this.updatePreview();
@@ -2569,7 +2579,7 @@ export class MainScene extends Phaser.Scene {
     const t = this.night, n = MainScene.NIGHT_TINT, bg = MainScene.DAY_BACKGROUND;
     const mix = (c: number) => Math.round(255 + (c - 255) * t);
     const tint = (mix(n.r) << 16) | (mix(n.g) << 8) | mix(n.b);
-    const lit = new Set<Phaser.GameObjects.GameObject>();
+    const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
     this.nightLights.forEach((l) => {
       lit.add(l.image);
       if (!l.image.active) return;
@@ -2592,6 +2602,161 @@ export class MainScene extends Phaser.Scene {
     // The canvas is letterboxed on a desktop (Scale.FIT): shade the box around it too, so the bars are not day brown
     const parent = this.game.canvas?.parentElement;
     if (parent) parent.style.backgroundColor = `#${background.toString(16).padStart(6, "0")}`;
+  }
+
+  // Street lamps (POR-39): placed by a rule from the grid (lib/city/streetLights.ts). At dusk they switch on one by one
+  // along each street; each throws a warm pool on the ground (additive, so it brightens the dark ground under it) and a
+  // small glow round its head. The player is lit warm while standing in a pool.
+  private streetLamps: {
+    lamp: StreetLamp; level: number; strength: number; screen: { x: number; y: number };
+    pool: { rx: number; ry: number };
+    objects: Phaser.GameObjects.GameObject[]; lit: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Image; light: Phaser.GameObjects.Image;
+  }[] = [];
+  private streetLampLit: Set<Phaser.GameObjects.GameObject> = new Set();
+  private duskStart: number | null = null;
+  private lastLampTime = 0;
+  private playerLampTinted = false;
+  private static readonly LAMP_COLOR: Record<StreetLampType, [number, number, number]> = {
+    post: [255, 232, 196], wire: [255, 196, 112], lantern: [255, 188, 104],
+  };
+
+  // A light pool texture, drawn in ground space: a soft ellipse with radii (rx, ry) in wu, projected to the 2:1 tiles
+  private lampPoolTexture(type: StreetLampType): string {
+    const key = `lamp_pool_${type}`;
+    if (this.textures.exists(key)) return key;
+    const { rx, ry } = STREET_LAMPS[type].pool;
+    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
+    const w = Math.ceil((rx + ry) * halfW * 2), h = Math.ceil((rx + ry) * halfH * 2);
+    const canvas = this.textures.createCanvas(key, w, h);
+    if (!canvas) return key;
+    const ctx = canvas.getContext();
+    const img = ctx.createImageData(w, h);
+    const [r, g, b] = MainScene.LAMP_COLOR[type];
+    for (let py = 0; py < h; py++) {
+      for (let px = 0; px < w; px++) {
+        const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
+        const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
+        const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
+        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.2) * 0.9;
+        const i = (py * w + px) * 4;
+        img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = Math.round(a * 255);
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    canvas.refresh();
+    return key;
+  }
+
+  private lampGlowTexture(): string {
+    const key = "lamp_glow";
+    if (this.textures.exists(key)) return key;
+    const size = 40;
+    const canvas = this.textures.createCanvas(key, size, size);
+    if (!canvas) return key;
+    const ctx = canvas.getContext();
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255, 220, 160, 0.55)");
+    grad.addColorStop(0.35, "rgba(255, 190, 110, 0.22)");
+    grad.addColorStop(1, "rgba(255, 170, 90, 0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    canvas.refresh();
+    return key;
+  }
+
+  private buildStreetLamps(): void {
+    this.streetLamps.forEach((l) => l.objects.forEach((o) => o.destroy()));
+    this.streetLamps = [];
+    this.streetLampLit.clear();
+    if (!this.textures.exists("lamp_post_day")) return;
+    const glowKey = this.lampGlowTexture();
+    for (const lamp of placeStreetLamps(this.grid)) {
+      const spec = STREET_LAMPS[lamp.type];
+      const ground = this.gridToScreen(lamp.x, lamp.y);
+      const depth = this.depthFromSortPoint(ground.x, ground.y, 0.05);
+      const objects: Phaser.GameObjects.GameObject[] = [];
+      let body: Phaser.GameObjects.Image;
+      if (lamp.wire && spec.hangHeight !== undefined) {
+        // The wire across the street, with a slight sag to the rod top
+        const top = gridToScreen(lamp.x, lamp.y, spec.hangHeight - 0.08);
+        const a = gridToScreen(lamp.wire.x0, lamp.wire.y0, spec.hangHeight);
+        const b = gridToScreen(lamp.wire.x1, lamp.wire.y1, spec.hangHeight);
+        const wire = this.add.graphics();
+        wire.lineStyle(1, 0x2a282e, 1);
+        wire.lineBetween(a.x, a.y, top.x, top.y);
+        wire.lineBetween(top.x, top.y, b.x, b.y);
+        wire.setDepth(depth - 0.002);
+        objects.push(wire);
+        body = this.add.image(top.x, top.y, `lamp_${lamp.type}_day`).setOrigin(0.5, 0);
+      } else {
+        body = this.add.image(ground.x, ground.y + 1, `lamp_${lamp.type}_day`).setOrigin(0.5, 1);
+      }
+      body.setDepth(depth);
+      objects.push(body);
+      const lit = this.add.image(body.x, body.y, `lamp_${lamp.type}_lit`).setOrigin(body.originX, body.originY);
+      lit.setDepth(depth + 0.001).setAlpha(0).setVisible(false);
+      const head = gridToScreen(lamp.x, lamp.y, spec.height);
+      const glow = this.add.image(head.x, head.y, glowKey).setBlendMode(Phaser.BlendModes.ADD);
+      glow.setScale(lamp.type === "post" ? 1 : 0.75).setDepth(depth + 0.002).setAlpha(0).setVisible(false);
+      // The pool sits just above the farthest-forward ground tile it covers, so the tiles do not cut it
+      const { rx, ry } = spec.pool;
+      const front = this.gridToScreen(lamp.x + rx, lamp.y + ry);
+      const light = this.add.image(ground.x, ground.y, this.lampPoolTexture(lamp.type)).setBlendMode(Phaser.BlendModes.ADD);
+      light.setDepth(this.depthFromSortPoint(front.x, front.y, 0.01)).setAlpha(0).setVisible(false);
+      objects.push(lit, glow, light);
+      [lit, glow, light].forEach((o) => this.streetLampLit.add(o));
+      this.streetLamps.push({ lamp, level: 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, light });
+    }
+    this.nightApplied = { tint: -1, count: -1 }; // re-tint so the new lamp bodies match the current night
+  }
+
+  private updateStreetLamps(time: number): void {
+    const dt = Math.min(100, time - this.lastLampTime);
+    this.lastLampTime = time;
+    if (this.streetLamps.length === 0) return;
+    const goingDark = this.nightTarget === 1 && this.night >= 0.5;
+    if (goingDark && this.duskStart === null) this.duskStart = time;
+    if (!goingDark) this.duskStart = null;
+    let any = false;
+    this.streetLamps.forEach((l, i) => {
+      const target = this.duskStart !== null && time >= this.duskStart + i * 70 ? 1 : 0;
+      if (target > l.level) l.level = Math.min(target, l.level + dt / 220);
+      else l.level = Math.min(Math.max(0, l.level - dt / 450), this.night);
+      const on = l.level > 0;
+      any ||= on;
+      l.lit.setVisible(on).setAlpha(l.level);
+      l.glow.setVisible(on).setAlpha(l.level * 0.85);
+      l.light.setVisible(on).setAlpha(l.level * l.strength);
+    });
+    this.lightPlayer(any);
+  }
+
+  // Warm the player's tint while they stand in a lamp's pool (the pools themselves sit under the characters)
+  private lightPlayer(anyLampOn: boolean): void {
+    const sprite = this.playerController?.getSprite();
+    if (!sprite) return;
+    if (!anyLampOn || this.night === 0) {
+      if (this.playerLampTinted) {
+        this.playerLampTinted = false;
+        this.nightApplied = { tint: -1, count: -1 };
+      }
+      return;
+    }
+    const p = this.playerController!.getPosition();
+    let light = 0;
+    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
+    for (const l of this.streetLamps) {
+      if (l.level === 0) continue;
+      const sx = p.worldX - l.screen.x, sy = p.worldY - l.screen.y;
+      const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
+      const d = Math.sqrt((gx / l.pool.rx) ** 2 + (gy / l.pool.ry) ** 2);
+      if (d < 1) light = Math.max(light, Math.pow(1 - d, 0.8) * l.level * l.strength);
+    }
+    const t = this.night, n = MainScene.NIGHT_TINT, warm = [255, 214, 160];
+    const k = Math.min(1, light * 0.9);
+    const ch = (c: number, w: number) => Math.round((255 + (c - 255) * t) * (1 - k) + w * k);
+    sprite.setTint((ch(n.r, warm[0]) << 16) | (ch(n.g, warm[1]) << 8) | ch(n.b, warm[2]));
+    this.playerLampTinted = true;
   }
 
   // Animated doors by building key: current open value 0..1

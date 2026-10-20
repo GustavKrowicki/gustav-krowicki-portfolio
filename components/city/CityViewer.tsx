@@ -439,18 +439,21 @@ export default function CityViewer({
   }, [gameMode, isAdventureActive, onProjectClick]);
 
   // The city follows the visitor's own clock (night 19:00 to 07:00) until they press the button; ?night=1 / ?night=0 on
-  // the URL forces night or day (for links and screenshots)
+  // the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the visitor's clock
   const nightTouchedRef = useRef(false);
   useEffect(() => {
-    const param = new URLSearchParams(window.location.search).get("night");
+    const search = new URLSearchParams(window.location.search);
+    const param = search.get("night");
     if (param === "1" || param === "0") {
       nightTouchedRef.current = true;
       setIsNight(param === "1");
       return;
     }
+    const hourParam = search.get("hour");
+    const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
     const follow = () => {
       if (nightTouchedRef.current) return;
-      const hour = new Date().getHours();
+      const hour = fixedHour ?? new Date().getHours();
       setIsNight(hour >= 19 || hour < 7);
     };
     follow();

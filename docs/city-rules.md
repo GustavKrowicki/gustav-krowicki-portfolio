@@ -143,6 +143,9 @@ and the model is built from it:
 - Night: the visitor's clock (19:00 to 07:00), the Night button, or `?night=1` / `?night=0` tints every scene object
   dark blue over 0.9 s. A building's `nightLights` strip (cropped from its south sprite like `ambient`) is drawn
   untinted above all its slices, so only what is lit glows.
+- Street lamps (`lib/city/streetLights.ts`): a rule places three types from the grid (wire lamps over avenues, post
+  lamps on squares, lanterns on old streets). At dusk they switch on one by one; each throws an additive warm pool on
+  the ground and lights the player warm inside it. `?hour=0..23` stands in for the visitor's clock.
 - Facades follow the scale in section 2 (bay 1.0 wu, window 0.5 x 0.6 wu, plinth = ground floor, parapet 0.15 wu).
 
 ## 10. Timing
