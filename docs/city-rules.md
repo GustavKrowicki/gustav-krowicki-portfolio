@@ -147,6 +147,9 @@ and the model is built from it:
   `streetLamp` in `cityGrid.json`. Three types: wire lamps over roads (the wire crosses the road by itself), post lamps
   on squares and paths, lanterns on old streets; posts and lanterns never stand on a road. At dusk they switch on one by one; each throws an additive warm pool on
   the ground and lights the player warm inside it. `?hour=0..23` stands in for the visitor's clock.
+- Four looks (`LOOKS` in `lib/city/nightSchedule.ts`): Morning (warm, about 30% darker), Day, Evening (cool, about
+  40% darker, lamps on) and Night (deep blue, lamps on), each a multiply tint eased over 0.9 s. Auto picks the look from
+  the hour (05 to 09 morning, 09 to 18 day, 18 to 21 evening, else night).
 - The hour (`lib/city/nightSchedule.ts`): filler buildings are home, food, bar or office. Their lit windows are found in
   the sprite (`lib/city/nightWindows.ts`: small upright patches of blue or blue-grey glass) and split in two random
   groups; the hour turns groups on (homes lit in the evening, a few up at 02:00; food open to 22:00 with a lit

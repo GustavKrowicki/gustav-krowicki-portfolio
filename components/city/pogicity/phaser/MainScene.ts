@@ -47,7 +47,7 @@ import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { STREET_LAMPS, StreetLamp, StreetLampType, canPlaceStreetLamp, lampsFromGrid } from "@/lib/city/streetLights";
-import { NightKind, lampDimming, nightKind, nightLevels, seedFrom, walkerShare } from "@/lib/city/nightSchedule";
+import { CityLook, LOOKS, NightKind, lampDimming, nightKind, nightLevels, seedFrom, walkerShare } from "@/lib/city/nightSchedule";
 import { findWindows } from "@/lib/city/nightWindows";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
@@ -2565,16 +2565,24 @@ export class MainScene extends Phaser.Scene {
     });
   }
 
-  // Night: 0 (day) .. 1 (night), eased toward the target set by setNight. While above 0 every scene object is tinted
-  // toward NIGHT_TINT, except the night lights, which fade in over their buildings and play on the scene clock
+  // The look (lib/city/nightSchedule.ts LOOKS): every scene object is multiplied by the look's tint (grade), eased over
+  // 0.9 s, except the lights. night is the lights' level, 0 (off: morning, day) .. 1 (on: evening, night); the night
+  // lights fade in over their buildings and play on the scene clock
   private night = 0;
   private nightTarget = 0;
+  private grade = { r: 255, g: 255, b: 255 };
+  private gradeTarget = { r: 255, g: 255, b: 255 };
   private nightLights: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number }> = new Map();
-  private static readonly NIGHT_TINT = { r: 0x4d, g: 0x5c, b: 0x94 };
   private static readonly DAY_BACKGROUND = { r: 0x73, g: 0x64, b: 0x5f };
 
+  setLook(look: CityLook): void {
+    const { tint, lights } = LOOKS[look];
+    this.gradeTarget = { r: tint[0], g: tint[1], b: tint[2] };
+    this.nightTarget = lights ? 1 : 0;
+  }
+
   setNight(on: boolean): void {
-    this.nightTarget = on ? 1 : 0;
+    this.setLook(on ? "night" : "day");
   }
 
   // The city's hour (the visitor's clock, or ?hour=): which windows are lit, how many walk, how bright the lamps are
@@ -2690,14 +2698,18 @@ export class MainScene extends Phaser.Scene {
   private updateNight(time: number): void {
     const last = this.nightClock;
     this.nightClock = time;
-    if (this.night === this.nightTarget && this.night === 0) return;
+    const g = this.grade, gt = this.gradeTarget;
+    const settled = g.r === gt.r && g.g === gt.g && g.b === gt.b && this.night === this.nightTarget;
+    if (settled && this.night === 0 && g.r === 255 && g.g === 255 && g.b === 255) return;
     const step = Math.min(1, (time - last) / 900);             // a 0.9 s fade on the scene clock, not the smoothed delta
     this.night = this.night < this.nightTarget
       ? Math.min(this.nightTarget, this.night + step)
       : Math.max(this.nightTarget, this.night - step);
-    const t = this.night, n = MainScene.NIGHT_TINT, bg = MainScene.DAY_BACKGROUND;
-    const mix = (c: number) => Math.round(255 + (c - 255) * t);
-    const tint = (mix(n.r) << 16) | (mix(n.g) << 8) | mix(n.b);
+    const ease = (c: number, target: number) =>
+      c < target ? Math.min(target, c + step * 255) : Math.max(target, c - step * 255);
+    this.grade = { r: ease(g.r, gt.r), g: ease(g.g, gt.g), b: ease(g.b, gt.b) };
+    const t = this.night, n = this.grade, bg = MainScene.DAY_BACKGROUND;
+    const tint = (Math.round(n.r) << 16) | (Math.round(n.g) << 8) | Math.round(n.b);
     const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
     this.buildingWindows.forEach((w) => {
       w.parts.forEach((part) => {
@@ -2723,7 +2735,7 @@ export class MainScene extends Phaser.Scene {
       const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
       c.setTint?.(tint);
     });
-    const shade = (c: number, k: number) => Math.round(c + (c * k / 255 - c) * t);
+    const shade = (c: number, k: number) => Math.round(c * k / 255);
     const background = (shade(bg.r, n.r) << 16) | (shade(bg.g, n.g) << 8) | shade(bg.b, n.b);
     this.cameras.main.setBackgroundColor(background);
     // The canvas is letterboxed on a desktop (Scale.FIT): shade the box around it too, so the bars are not day brown
@@ -2880,9 +2892,9 @@ export class MainScene extends Phaser.Scene {
       const d = Math.sqrt((gx / l.pool.rx) ** 2 + (gy / l.pool.ry) ** 2);
       if (d < 1) light = Math.max(light, Math.pow(1 - d, 0.8) * l.level * l.strength);
     }
-    const t = this.night, n = MainScene.NIGHT_TINT, warm = [255, 214, 160];
+    const n = this.grade, warm = [255, 214, 160];
     const k = Math.min(1, light * 0.9);
-    const ch = (c: number, w: number) => Math.round((255 + (c - 255) * t) * (1 - k) + w * k);
+    const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
     sprite.setTint((ch(n.r, warm[0]) << 16) | (ch(n.g, warm[1]) << 8) | ch(n.b, warm[2]));
     this.playerLampTinted = true;
   }

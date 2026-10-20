@@ -1,6 +1,6 @@
 "use client";
 
-import { HOUR_OF, TIMES_OF_DAY, isNightHour, type TimeOfDay } from "@/lib/city/nightSchedule";
+import { HOUR_OF, TIMES_OF_DAY, isNightHour, lookForHour, type CityLook, type TimeOfDay } from "@/lib/city/nightSchedule";
 import TimeOfDayButton from "./TimeOfDayButton";
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
@@ -488,14 +488,16 @@ export default function CityViewer({
   useEffect(() => {
     const apply = () => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-        | { setNight?: (on: boolean) => void; setHour?: (hour: number) => void } | undefined;
-      if (scene?.setNight) {
-        // Night forced in the daytime (?night=1) shows the evening
+        | { setLook?: (look: CityLook) => void; setHour?: (hour: number) => void } | undefined;
+      if (scene?.setLook) {
+        // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
+        // (night forced in the daytime shows the evening's windows)
         const pickedHour = HOUR_OF[timeOfDay];
-        const night = pickedHour === null ? isNight : isNightHour(pickedHour);
+        const look: CityLook = timeOfDay !== "auto" ? timeOfDay
+          : nightTouchedRef.current ? (isNight ? "night" : "day") : lookForHour(hour);
         const sceneHour = pickedHour ?? hour;
-        scene.setHour?.(night && !isNightHour(sceneHour) ? 21 : sceneHour);
-        scene.setNight(night);
+        scene.setHour?.(look === "night" && !isNightHour(sceneHour) ? 21 : sceneHour);
+        scene.setLook(look);
         return true;
       }
       return false;

@@ -91,3 +91,24 @@ export const TIMES_OF_DAY: { id: TimeOfDay; label: string }[] = [
 export const HOUR_OF: Record<TimeOfDay, number | null> = { auto: null, morning: 8, day: 13, evening: 20, night: 1 };
 
 export const isNightHour = (hour: number) => hour >= 19 || hour < 7;
+
+// The four looks of the city. Measured from a reference city's own time of day switch (Morning, Day, Evening as
+// screenshots, 2026-10-20): against Day, Morning is about 30% darker and warmer (green drops most), Evening about 40%
+// darker and cooler (blue kept most). Night is our deep blue. Each is a multiply tint over the whole scene
+export type CityLook = "morning" | "day" | "evening" | "night";
+
+export const LOOKS: Record<CityLook, { tint: [number, number, number]; lights: boolean }> = {
+  morning: { tint: [200, 182, 176], lights: false },
+  day: { tint: [255, 255, 255], lights: false },
+  evening: { tint: [148, 160, 180], lights: true },
+  night: { tint: [0x4d, 0x5c, 0x94], lights: true },
+};
+
+// Auto: the look for the visitor's hour
+export function lookForHour(hour: number): CityLook {
+  const h = ((hour % 24) + 24) % 24;
+  if (h >= 5 && h < 9) return "morning";
+  if (h >= 9 && h < 18) return "day";
+  if (h >= 18 && h < 21) return "evening";
+  return "night";
+}
