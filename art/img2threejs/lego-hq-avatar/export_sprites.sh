@@ -1,12 +1,12 @@
 #!/bin/sh
-# Export the city sprites (2x density, 1280 px, front corner at the bottom centre, drawn at spriteScale 0.5): roof on in 4 views, and roof off with each
+# Export the city sprites (2x density, 1536 px, front corner at the bottom centre, drawn at spriteScale 0.5): roof on in 4 views, and roof off with each
 # view's own wall cut. Dev server on $LAB_PORT (default 3104). Writes public/game/pogicity/Building/landmark/lego-hq-avatar*.png
 set -e
 W="$(cd "$(dirname "$0")" && pwd)"; R="$W/../../.."; O="$R/public/game/pogicity/Building/landmark"
-export LAB_PORT="${LAB_PORT:-3103}"
-S='"pitch":30,"zoom":1.1342,"voff":0,"size":1280,"rig":"converter","shadow":true'
-# the front corner of the 14 x 9 plot (model x, z) for each view: south (+X+Z), west (+X-Z), north (-X-Z), east (-X+Z)
-AS='"aim":[7,4.5]'; AW='"aim":[7,-4.5]'; AN='"aim":[-7,-4.5]'; AE='"aim":[-7,4.5]'
+export LAB_PORT="${LAB_PORT:-3111}"
+S='"pitch":30,"zoom":1.0128,"voff":0,"size":1536,"rig":"converter","shadow":true'
+# the front corner of the 15 x 11 plot (model x, z) for each view: south (+X+Z), west (+X-Z), north (-X-Z), east (-X+Z)
+AS='"aim":[7.5,5.5]'; AW='"aim":[7.5,-5.5]'; AN='"aim":[-7.5,-5.5]'; AE='"aim":[-7.5,5.5]'
 cd "$R"
 node art/img2threejs/tools/lab_render.mjs hqAvatar "$O" \
   "lego-hq-avatar_south={\"view\":\"sprite\",\"yaw\":45,$AS,$S}" "lego-hq-avatar_west={\"view\":\"sprite\",\"yaw\":135,$AW,$S}" \

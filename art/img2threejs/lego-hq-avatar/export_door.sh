@@ -4,8 +4,8 @@
 # Prints the crop (x, y, w, h) for the door entry in lib/city/buildings.ts.
 set -e
 W="$(cd "$(dirname "$0")" && pwd)"; R="$W/../../.."; T="$W/renders/door"
-export LAB_PORT="${LAB_PORT:-3103}"
-S='"view":"sprite","yaw":45,"pitch":30,"zoom":1.1342,"voff":0,"size":1280,"rig":"converter","shadow":true,"aim":[7,4.5]'
+export LAB_PORT="${LAB_PORT:-3111}"
+S='"view":"sprite","yaw":45,"pitch":30,"zoom":1.0128,"voff":0,"size":1536,"rig":"converter","shadow":true,"aim":[7.5,5.5]'
 cd "$R"
 for i in 0 1 2 3 4 5 6; do
   f=$(python3 -c "print(round($i / 6, 4))")

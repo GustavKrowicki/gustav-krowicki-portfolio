@@ -22,6 +22,45 @@ export interface InteriorBeat {
 // Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
 // the avatar crosses the main door in or out (MainScene "interiorDoorCrossed"), not on a tile.
 export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
+  // LEGO HQ: texts from the interior story board (Figma 651:3604, Gustav's picks 2026-10-17). One room has its beat so
+  // far (the shelf room); the other rooms get theirs as they are built.
+  "lego-hq": {
+    enter: {
+      kicker: "LEGO, Billund",
+      lead: "At LEGO I designed between the company's long game and the seller's quick win.",
+      text: "Product team for an internal sales tool. Student worker, then intern. Follow the rooms: the shelf comes first.",
+    },
+    shelf: {
+      kicker: "1 · The shelf room",
+      lead: "One shelf. Two goals.",
+      text: "The company plays the long game: bring young builders in. The seller wants the quick win: sets that sell fast. The shelf has room for only some of them. The tool had to plan for both.",
+    },
+    test: {
+      kicker: "2 · The test room",
+      lead: "Hands on, not shown.",
+      text: "In hands-on tests, sellers could not follow the model. Their own numbers were in another system. Before launch we added simple animations that show what the model does. Data links came later.",
+    },
+    team: {
+      kicker: "3 · The team room",
+      lead: "Bring the users to the data scientists.",
+      text: "Every other week I showed short clips from the tests to the team. The data scientists and developers saw who the users were.",
+    },
+    map: {
+      kicker: "4 · The systems map room",
+      lead: "Many ways, one map.",
+      text: "Sellers planned in many different ways, and our tool had to work with another big system. I mapped both: the flows people used, and how a plan moved between the two systems. When it is all on one wall, the patterns show.",
+    },
+    ailab: {
+      kicker: "5 · The AI lab",
+      lead: "Something I started myself.",
+      text: "I made a learning template for AI-assisted coding and held open-door sessions for the designers. Many signed up. It was my own idea, and it taught me to learn new tools fast.",
+    },
+    leave: {
+      kicker: "Leaving LEGO",
+      lead: "At LEGO I designed between the company's long game and the seller's quick win.",
+      caseStudy: true,
+    },
+  },
   "valtech-office": {
     enter: {
       kicker: "Valtech",

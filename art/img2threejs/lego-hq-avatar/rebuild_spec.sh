@@ -5,7 +5,8 @@ set -e
 W="$(cd "$(dirname "$0")" && pwd)"
 F="${IMG2THREEJS:-$HOME/.claude/skills/img2threejs}/forge"
 cd "$W"; . ./building.env
-[ -f object-sculpt-spec.json ] && cp object-sculpt-spec.json _prev_spec.json
+# keep the last spec that carries review state (a failed build leaves a fresh starter spec behind)
+[ -f object-sculpt-spec.json ] && grep -q '"reviewHistory"' object-sculpt-spec.json && cp object-sculpt-spec.json _prev_spec.json
 python3 $F/stage2_spec/new_sculpt_spec.py "$NAME" --image "$W/$REF" --assessment assessment.json --domain generic --out object-sculpt-spec.json --force >/dev/null
 python3 build_spec.py "$W"
 if [ -f _prev_spec.json ]; then python3 - <<'PY'

@@ -10,7 +10,7 @@ import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
-import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
+import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
 
@@ -61,17 +61,21 @@ const AVATAR_PARAMS = () => {
   };
 };
 
-// The avatar with the LEGO HQ at avatar scale (both in wu): at the main door (roof on) or in the Workshop (roof off).
+// The avatar with the LEGO HQ at avatar scale (both in wu): on the plaza in front of the main door (roof on) or in
+// the lobby (roof off); the avatarAt option moves it to any plan point. Plan tile (gx, gy) -> model (gx - 7.5, gy - 5.5)
+// on the 15 x 11 plot; the plot top is at y = 0.06.
+const HQ_PLAN = { w: 15, h: 11 };
 function avatarHqScene(open: boolean): THREE.Group {
   const group = new THREE.Group();
   const building = open ? createLEGOHQAvatarRoofOffModel({ castShadow: true, receiveShadow: true }) : createLEGOHQAvatarRoofOnModel({ castShadow: true, receiveShadow: true });
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  // plan tile (gx, gy) -> model (gx - 7, gy - 4.5) on the 14 x 9 plot; the plot top is at y = 0.06
-  if (open) { avatar.position.set(6.5 - 7, 0.06, 2.5 - 4.5); avatar.rotation.y = -Math.PI / 4; }
-  else avatar.position.set(6.5 - 7, 0.06, 7.55 - 4.5);
+  const [x, y] = open ? [8.5, 5.5] : [8.5, 10.6];
+  avatar.position.set(x - HQ_PLAN.w / 2, 0.06, y - HQ_PLAN.h / 2);
+  if (open) avatar.rotation.y = -Math.PI / 4;
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  group.userData.plan = HQ_PLAN;
   return group;
 }
 
@@ -196,6 +200,8 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
+
+    restBounds: true,   // masks/only shots keep the full model's framing
   },
   hqAvatarOpenWest: {
     name: 'LEGO HQ at avatar scale (roof off, west view)',
@@ -239,7 +245,7 @@ const MODELS: Record<string, ModelConfig> = {
     restBounds: true,
   },
   'avatar-hq-open': {
-    name: 'Gustav avatar in the LEGO HQ Workshop (roof off)',
+    name: 'Gustav avatar in the LEGO HQ lobby (roof off)',
     create: () => avatarHqScene(true),
     lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
     environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
@@ -326,6 +332,20 @@ const MODELS: Record<string, ModelConfig> = {
     ...valtechOpen('south'),
     name: 'Valtech office, roof off, avatar seated at the desk',
     create: () => valtechSeatedScene([4.72, 0.74], 167.4, 0.24),
+  },
+  // Moment frames for the city animations: ?model=hqAvatarMoment&moment=<0..7> (test room), &clip=<0..7> (team screen), &map=<0..7> (map wall), &ai=<0..7> (AI lab screen)
+  hqAvatarMoment: {
+    name: 'LEGO HQ at avatar scale (roof off, test room moment frame)',
+    create: (options) => {
+      const q = new URLSearchParams(window.location.search);
+      return createLEGOHQAvatarMomentModel(options, Number(q.get('moment') ?? 0), Number(q.get('clip') ?? 0), Number(q.get('map') ?? 0), Number(q.get('ai') ?? 0));
+    },
+    lights: hqAvatar.createLEGOHQAvatarScaleLookDevLights,
+    environment: hqAvatar.createLEGOHQAvatarScaleEnvironment,
+    configure: hqAvatar.configureLEGOHQAvatarScaleRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.8, target: [0, 0, 0] },
   },
   // Door frames for the city animation: ?model=hqAvatarDoor&door=<0..1>
   hqAvatarDoor: {

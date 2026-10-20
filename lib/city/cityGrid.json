@@ -14272,24 +14272,16 @@
       "originY": 36
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 30,
       "y": 36,
-      "isOrigin": true,
-      "originX": 30,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 31,
       "y": 36,
-      "isOrigin": false,
-      "originX": 30,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "building",
@@ -14302,24 +14294,16 @@
       "buildingOrientation": "up"
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 33,
       "y": 36,
-      "isOrigin": true,
-      "originX": 33,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 34,
       "y": 36,
-      "isOrigin": false,
-      "originX": 33,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "building",
@@ -14332,24 +14316,16 @@
       "buildingOrientation": "up"
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 36,
       "y": 36,
-      "isOrigin": true,
-      "originX": 36,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 37,
       "y": 36,
-      "isOrigin": false,
-      "originX": 36,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
       "type": "grass",
@@ -14358,25 +14334,16 @@
       "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 39,
       "y": 36,
-      "isOrigin": true,
-      "originX": 39,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down"
+      "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "grass",
       "x": 40,
       "y": 36,
-      "isOrigin": false,
-      "originX": 39,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true
     },
     {
       "type": "building",
@@ -14664,25 +14631,33 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 30,
       "y": 37,
       "isOrigin": false,
-      "originX": 30,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
@@ -14690,25 +14665,29 @@
       "x": 31,
       "y": 37,
       "isOrigin": false,
-      "originX": 30,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 33,
       "y": 37,
       "isOrigin": false,
-      "originX": 33,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
@@ -14716,25 +14695,29 @@
       "x": 34,
       "y": 37,
       "isOrigin": false,
-      "originX": 33,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 36,
       "y": 37,
       "isOrigin": false,
-      "originX": 36,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
@@ -14742,29 +14725,29 @@
       "x": 37,
       "y": 37,
       "isOrigin": false,
-      "originX": 36,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 38,
       "y": 37,
-      "isOrigin": true,
-      "originX": 38,
+      "isOrigin": false,
+      "originX": 28,
       "originY": 37,
-      "buildingId": "tree-1",
-      "buildingOrientation": "up"
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
       "x": 39,
       "y": 37,
       "isOrigin": false,
-      "originX": 39,
-      "originY": 36,
-      "buildingId": "dunkin",
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
@@ -14772,23 +14755,30 @@
       "x": 40,
       "y": 37,
       "isOrigin": false,
-      "originX": 39,
-      "originY": 36,
-      "buildingId": "dunkin",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 37,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -15064,9 +15054,9 @@
       "type": "building",
       "x": 28,
       "y": 38,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15076,7 +15066,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15086,7 +15076,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15096,7 +15086,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15106,7 +15096,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15116,7 +15106,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15126,7 +15116,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15136,7 +15126,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15146,7 +15136,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15156,7 +15146,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15166,7 +15156,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15176,7 +15166,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15186,7 +15176,7 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15196,15 +15186,19 @@
       "y": 38,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 42,
       "y": 38,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -15492,7 +15486,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15502,7 +15496,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15512,7 +15506,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15522,7 +15516,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15532,7 +15526,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15542,7 +15536,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15552,7 +15546,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15562,7 +15556,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15572,7 +15566,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15582,7 +15576,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15592,7 +15586,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15602,7 +15596,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15612,7 +15606,7 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15622,17 +15616,19 @@
       "y": 39,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 42,
       "y": 39,
-      "isOrigin": true,
-      "originX": 42,
-      "originY": 39
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -15950,7 +15946,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15960,7 +15956,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15970,7 +15966,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15980,7 +15976,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -15990,7 +15986,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16000,7 +15996,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16010,7 +16006,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16020,7 +16016,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16030,7 +16026,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16040,7 +16036,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16050,7 +16046,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16060,7 +16056,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16070,7 +16066,7 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16080,15 +16076,19 @@
       "y": 40,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 40,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -16361,7 +16361,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16371,7 +16371,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16381,7 +16381,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16391,7 +16391,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16401,7 +16401,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16411,7 +16411,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16421,7 +16421,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16431,7 +16431,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16441,7 +16441,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16451,7 +16451,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16461,7 +16461,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16471,7 +16471,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16481,7 +16481,7 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16491,15 +16491,19 @@
       "y": 41,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 41,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -16759,7 +16763,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16769,7 +16773,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16779,7 +16783,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16789,7 +16793,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16799,7 +16803,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16809,7 +16813,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16819,7 +16823,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16829,7 +16833,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16839,7 +16843,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16849,7 +16853,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16859,7 +16863,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16869,7 +16873,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16879,7 +16883,7 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -16889,15 +16893,19 @@
       "y": 42,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 42,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -17170,7 +17178,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17180,7 +17188,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17190,7 +17198,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17200,7 +17208,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17210,7 +17218,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17220,7 +17228,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17230,7 +17238,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17240,7 +17248,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17250,7 +17258,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17260,7 +17268,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17270,7 +17278,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17280,7 +17288,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17290,7 +17298,7 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17300,15 +17308,19 @@
       "y": 43,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 43,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -17595,7 +17607,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17605,7 +17617,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17615,7 +17627,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17625,7 +17637,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17635,7 +17647,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17645,7 +17657,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17655,7 +17667,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17665,7 +17677,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17675,7 +17687,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17685,7 +17697,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17695,7 +17707,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17705,7 +17717,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17715,7 +17727,7 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -17725,15 +17737,19 @@
       "y": 44,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 44,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
@@ -17999,7 +18015,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18009,7 +18025,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18019,7 +18035,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18029,7 +18045,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18039,7 +18055,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18049,7 +18065,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18059,7 +18075,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18069,7 +18085,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18079,7 +18095,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18089,7 +18105,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18099,7 +18115,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18109,7 +18125,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18119,7 +18135,7 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18129,15 +18145,19 @@
       "y": 45,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 45,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "grass",
@@ -18410,7 +18430,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18420,7 +18440,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18430,7 +18450,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18440,7 +18460,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18450,7 +18470,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18460,7 +18480,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18470,7 +18490,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18480,7 +18500,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18490,7 +18510,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18500,7 +18520,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18510,7 +18530,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18520,7 +18540,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18530,7 +18550,7 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
@@ -18540,17 +18560,19 @@
       "y": 46,
       "isOrigin": false,
       "originX": 28,
-      "originY": 38,
+      "originY": 37,
       "buildingId": "lego-hq",
       "buildingOrientation": "down"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 42,
       "y": 46,
-      "isOrigin": true,
-      "originX": 42,
-      "originY": 46
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "tile",
@@ -18825,108 +18847,154 @@
       "originY": 44
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 28,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 29,
       "y": 47,
-      "isOrigin": true,
-      "originX": 29,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 30,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 31,
       "y": 47,
-      "isOrigin": true,
-      "originX": 31,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 32,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 33,
       "y": 47,
-      "isOrigin": true,
-      "originX": 33,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 34,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 35,
       "y": 47,
-      "isOrigin": true,
-      "originX": 35,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 36,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 37,
       "y": 47,
-      "isOrigin": true,
-      "originX": 37,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 38,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 39,
       "y": 47,
-      "isOrigin": true,
-      "originX": 39,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 40,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 41,
       "y": 47,
-      "isOrigin": true,
-      "originX": 41,
-      "originY": 47
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 42,
       "y": 47,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 28,
+      "originY": 37,
+      "buildingId": "lego-hq",
+      "buildingOrientation": "down"
     },
     {
       "type": "building",
