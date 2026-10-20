@@ -458,9 +458,8 @@ export default function CityViewer({
     return () => window.clearInterval(timer);
   }, []);
 
-  // Hand the night state to the scene, waiting for it to exist on first load
+  // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
   useEffect(() => {
-    let tries = 0;
     const apply = () => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
         | { setNight?: (on: boolean) => void } | undefined;
@@ -468,7 +467,7 @@ export default function CityViewer({
         scene.setNight(isNight);
         return true;
       }
-      return ++tries > 40;
+      return false;
     };
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
@@ -799,7 +798,8 @@ export default function CityViewer({
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
-          <button
+          {/* Hidden while walking on a phone: Stop walking is wider than Walk and would run under the joystick */}
+          {!(isMobile && isAdventureActive) && <button
             onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
             className={pixelButtonClass("ghost")}
             style={PIXEL_INSET_CLIP}
@@ -807,7 +807,7 @@ export default function CityViewer({
             aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
           >
             {isNight ? "Day" : "Night"}
-          </button>
+          </button>}
         </div>
       )}
     </div>

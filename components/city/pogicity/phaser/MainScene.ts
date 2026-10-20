@@ -2525,11 +2525,8 @@ export class MainScene extends Phaser.Scene {
     this.nightTarget = on ? 1 : 0;
   }
 
-  isNight(): boolean {
-    return this.nightTarget === 1;
-  }
-
   private nightClock = 0;
+  private nightApplied = { tint: 0xffffff, count: 0 };
 
   private updateNight(time: number): void {
     const last = this.nightClock;
@@ -2550,15 +2547,21 @@ export class MainScene extends Phaser.Scene {
       l.image.setAlpha(t);
       l.image.setFrame(Math.floor((time / 1000) * l.fps) % l.frames);
     });
+    // Re-tint only while fading or when objects were added (characters, cars), not every frame of a settled night
+    const count = this.children.list.length;
+    if (tint === this.nightApplied.tint && count === this.nightApplied.count) return;
+    this.nightApplied = { tint, count };
     this.children.list.forEach((child) => {
       if (lit.has(child)) return;
       const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
       c.setTint?.(tint);
     });
     const shade = (c: number, k: number) => Math.round(c + (c * k / 255 - c) * t);
-    this.cameras.main.setBackgroundColor(
-      (shade(bg.r, n.r) << 16) | (shade(bg.g, n.g) << 8) | shade(bg.b, n.b),
-    );
+    const background = (shade(bg.r, n.r) << 16) | (shade(bg.g, n.g) << 8) | shade(bg.b, n.b);
+    this.cameras.main.setBackgroundColor(background);
+    // The canvas is letterboxed on a desktop (Scale.FIT): shade the box around it too, so the bars are not day brown
+    const parent = this.game.canvas?.parentElement;
+    if (parent) parent.style.backgroundColor = `#${background.toString(16).padStart(6, "0")}`;
   }
 
   // Animated doors by building key: current open value 0..1
