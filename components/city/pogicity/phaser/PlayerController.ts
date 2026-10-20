@@ -15,6 +15,7 @@ import {
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
 import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
+import { AVATAR_CHANGE_EVENT, readAvatarName } from "@/lib/city/models/avatarPieces";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -60,6 +61,10 @@ export class PlayerController {
   private grid: GridCell[][];
   private sprite: Phaser.GameObjects.Sprite | null = null;
   private pointer: Phaser.GameObjects.Graphics | null = null;
+  // The visitor's name from the avatar builder, over the avatar's head ('' = no tag)
+  private nameTag: Phaser.GameObjects.Text | null = null;
+  private nameTagText = "";
+  private unfollowName: (() => void) | null = null;
   private pointerBounceOffset: number = 0;
   private pointerBounceDirection: number = 1;
 
@@ -609,12 +614,50 @@ export class PlayerController {
       if (this.pointerBounceOffset > 4) this.pointerBounceDirection = -1;
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
+      this.updateNameTag();
+
       // Position pointer above player (with bounce)
       const pointerY = (this.seatPose?.y ?? this.worldY) - 80 - this.pointerBounceOffset;
       this.pointer.setPosition(this.seatPose?.x ?? this.worldX, pointerY);
       this.pointer.setVisible(!this.seatPose);
       this.pointer.setDepth(20_000_000); // Always on top
     }
+  }
+
+  // Follows the builder's name field live (it saves before firing AVATAR_CHANGE_EVENT).
+  private updateNameTag(): void {
+    if (!this.sprite) return;
+    if (!this.unfollowName && typeof window !== "undefined") {
+      this.nameTagText = readAvatarName();
+      const onChange = () => {
+        this.nameTagText = readAvatarName();
+      };
+      window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
+      this.unfollowName = () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
+    }
+    if (!this.nameTagText) {
+      this.nameTag?.setVisible(false);
+      return;
+    }
+    if (!this.nameTag) {
+      this.nameTag = this.scene.add.text(0, 0, "", {
+        fontFamily: "'Press Start 2P', monospace",
+        fontSize: "8px",
+        color: "#ffffff",
+        backgroundColor: "#1d1b18",
+        padding: { x: 3, y: 2 },
+        resolution: 4,
+      });
+      this.nameTag.setOrigin(0.5, 1);
+    }
+    if (this.nameTag.text !== this.nameTagText) this.nameTag.setText(this.nameTagText);
+    const x = this.seatPose?.x ?? this.worldX;
+    const y = this.seatPose?.y ?? this.worldY;
+    // Just above the head, snapped to whole pixels so the pixel font stays crisp
+    const head = this.sprite.displayHeight * this.sprite.originY;
+    this.nameTag.setPosition(Math.round(x), Math.round(y - head - 1));
+    this.nameTag.setVisible(this.sprite.visible);
+    this.nameTag.setDepth(19_999_999); // over the city, under the pointer
   }
 
   private drawPointer(): void {
@@ -676,6 +719,10 @@ export class PlayerController {
       this.pointer.destroy();
       this.pointer = null;
     }
+    this.unfollowName?.();
+    this.unfollowName = null;
+    this.nameTag?.destroy();
+    this.nameTag = null;
     this.isReady = false;
   }
 }

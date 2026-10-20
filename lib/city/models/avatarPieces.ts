@@ -74,3 +74,13 @@ export function readAvatarChoice(): AvatarChoice | null {
     return null;
   }
 }
+
+// The name tag the visitor typed in the builder ('' when none), shown over the city avatar.
+export function readAvatarName(): string {
+  try {
+    const raw = JSON.parse(window.localStorage.getItem(AVATAR_STORAGE_KEY) ?? 'null');
+    return typeof raw?.name === 'string' ? raw.name.trim().slice(0, 16) : '';
+  } catch {
+    return '';
+  }
+}
