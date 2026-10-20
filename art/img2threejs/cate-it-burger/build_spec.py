@@ -223,6 +223,26 @@ for s, z in (("S", Z1 - 0.1), ("N", Z0 + 0.1)):
 bx("vent-grille", "Vent grille", "micro", "end", L / 2 - 0.004, L / 2 + 0.012, 0.9, 1.06, BZ - 0.26, BZ + 0.26, "band-dark", contact="flush-mount",
    importance=0.4, features=lf("vent-grille.slots", "contour", "dark vent grille high on the tow-bar end"))
 
+# north side (the back, closed): a staff door with a small window and a step, a sliding window, a power hookup
+DX0, DX1 = 0.78, 1.18          # door, 0.4 wu wide
+DY0, DY1 = 0.38, 1.36          # 0.98 wu high (city door standard 1.0)
+bx("door-frame", "Staff door frame", "meso", "north", DX0 - 0.03, DX1 + 0.03, DY0 - 0.02, DY1 + 0.03, Z0 - 0.012, Z0 + 0.01, "steel-dark",
+   contact="flush-mount", importance=0.5)
+bx("door", "Staff door", "meso", "north", DX0, DX1, DY0, DY1, Z0 - 0.02, Z0 - 0.008, "steel", contact="flush-mount", importance=0.6,
+   features=lf("door.staff", "contour", "steel staff door on the back with a small window"))
+bx("door-window", "Door window", "micro", "north", DX0 + 0.08, DX1 - 0.08, 1.02, 1.26, Z0 - 0.026, Z0 - 0.02, "glass-dark", contact="flush-mount",
+   importance=0.4)
+bx("door-handle", "Door handle", "micro", "north", DX0 + 0.04, DX0 + 0.1, 0.84, 0.88, Z0 - 0.04, Z0 - 0.02, "steel-dark", contact="flush-mount",
+   importance=0.2)
+bx("door-step", "Door step", "micro", "north", DX0 - 0.02, DX1 + 0.02, 0.2, 0.24, Z0 - 0.05, Z0 + 0.04, "steel-dark", importance=0.3)
+bx("side-window-frame", "Sliding window frame", "micro", "north", -0.72, -0.08, 0.92, 1.26, Z0 - 0.012, Z0 + 0.01, "steel-dark",
+   contact="flush-mount", importance=0.4)
+bx("side-window", "Sliding window", "micro", "north", -0.69, -0.11, 0.95, 1.23, Z0 - 0.02, Z0 - 0.008, "glass-warm", contact="flush-mount",
+   importance=0.5, features=lf("side-window.lit", "contour", "small warm-lit sliding window on the back"))
+bx("side-window-mid", "Window slide bar", "micro", "north", -0.41, -0.39, 0.95, 1.23, Z0 - 0.026, Z0 - 0.02, "steel-dark", contact="flush-mount",
+   importance=0.2)
+bx("power-box", "Power hookup", "micro", "north", -1.3, -1.16, 0.44, 0.6, Z0 - 0.03, Z0 + 0.01, "band-dark", contact="flush-mount", importance=0.3)
+
 # roof sign on two wooden posts: a blank dark board (its content is still open)
 SY0, SY1 = ZT + 0.3, ZT + 0.68
 SW = 1.2                       # board half width: wider than half the trailer
@@ -270,6 +290,8 @@ spec["materials"] = [
     material("rubber", "Tyres", "stone", "#2e2f33", ["#2a2b2f"], 0.9, 0.0, "tyres and axles"),
     material("rim", "Silver rims", "metal", "#d4d8db", ["#cbd0d3"], 0.3, 0.3, "silver rims", emissiveIntensity={"base": 0.4}),
     material("amber", "Marker lights", "glass", "#f2a33a", ["#ea9b33"], 0.3, 0.0, "amber marker lights", emissiveIntensity={"base": 0.7}),
+    material("glass-dark", "Dark glass", "glass", "#2f3a44", ["#29333c"], 0.3, 0.0, "door window"),
+    material("glass-warm", "Warm-lit glass", "glass", "#f1b77f", ["#e9af77"], 0.3, 0.0, "back window, lit from inside", emissiveIntensity={"base": 0.55}),
     material("wood", "Wooden posts", "wood", "#a87a48", ["#9f7243"], 0.85, 0.0, "wooden sign posts"),
     material("sign-dark", "Sign board", "stone", "#212629", ["#1d2124"], 0.7, 0.0, "blank dark sign board (content open)"),
 ]
