@@ -1690,13 +1690,18 @@ export class MainScene extends Phaser.Scene {
   }
 
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
-  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null
+  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null.
+  // Never below the character's own sort depth, so the ground tiles it stands on stay under it.
   private frontOfPlotDepth(gridX: number, gridY: number): number | null {
     for (const [key, plot] of this.interiorPlots) {
       const lx = gridX - plot.originX, ly = gridY - plot.originY;
       const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
       const sprite = near && (lx >= plot.width || ly >= plot.height) ? this.buildingSprites.get(key) : undefined;
-      if (sprite) return sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5);
+      if (sprite) {
+        const screen = this.gridToScreen(gridX, gridY);
+        const own = this.depthFromSortPoint(screen.x, screen.y + TILE_HEIGHT / 2, 0.3);
+        return Math.max(own, sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5));
+      }
     }
     return null;
   }
