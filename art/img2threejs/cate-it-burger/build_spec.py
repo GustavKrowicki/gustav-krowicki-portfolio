@@ -208,7 +208,20 @@ HIT = (1.93, 0.27, BZ)
 for i, z in enumerate((BZ - 0.42, BZ + 0.42), 1):
     rod(f"towbar-{i}", f"Tow bar arm {i}", "micro", "chassis", (L / 2 - 0.05, 0.3, z), HIT, 0.05, "steel-dark", importance=0.4)
 bx("hitch", "Hitch", "micro", "chassis", 1.86, 1.97, 0.22, 0.31, BZ - 0.05, BZ + 0.05, "steel-dark", importance=0.3)
-bx("jockey", "Support leg", "micro", "chassis", 1.76, 1.8, 0.0, 0.27, BZ - 0.02, BZ + 0.02, "steel-dark", importance=0.2)
+bx("jockey", "Jockey leg", "micro", "chassis", 1.87, 1.91, 0.09, 0.27, BZ - 0.02, BZ + 0.02, "steel-dark", importance=0.2)
+zcyl("jockey-wheel", "Jockey wheel", "micro", "chassis", 1.89, 0.05, 0.05, BZ - 0.025, BZ + 0.025, "rubber", importance=0.2)
+
+# east end (the tow-bar end): gas bottle box on the A-frame, corner steadies, a vent grille and marker lights
+bx("gas-box", "Gas bottle box", "meso", "end", 1.6, 1.82, 0.3, 0.56, BZ - 0.22, BZ + 0.22, "steel-light", importance=0.5,
+   features=lf("gas-box.lid", "contour", "steel gas bottle box on the tow bar"))
+bx("gas-box-lid", "Gas box lid", "micro", "end", 1.59, 1.83, 0.56, 0.59, BZ - 0.23, BZ + 0.23, "steel-dark", importance=0.3)
+for s, z in (("S", Z1 - 0.1), ("N", Z0 + 0.1)):
+    bx(f"steady-E-{s}", f"Corner steady E{s}", "micro", "chassis", 1.36, 1.4, 0.0, ZB, z - 0.02, z + 0.02, "steel-dark", importance=0.2)
+    bx(f"steady-W-{s}", f"Corner steady W{s}", "micro", "chassis", -1.4, -1.36, 0.0, ZB, z - 0.02, z + 0.02, "steel-dark", importance=0.2)
+    bx(f"marker-E-{s}", f"Marker light E{s}", "micro", "end", L / 2 - 0.004, L / 2 + 0.012, 0.47, 0.55, z - 0.05, z + 0.05, "amber",
+       contact="flush-mount", importance=0.3)
+bx("vent-grille", "Vent grille", "micro", "end", L / 2 - 0.004, L / 2 + 0.012, 0.9, 1.06, BZ - 0.26, BZ + 0.26, "band-dark", contact="flush-mount",
+   importance=0.4, features=lf("vent-grille.slots", "contour", "dark vent grille high on the tow-bar end"))
 
 # roof sign on two wooden posts: a blank dark board (its content is still open)
 SY0, SY1 = ZT + 0.3, ZT + 0.68
@@ -256,6 +269,7 @@ spec["materials"] = [
     material("screen", "Menu screen", "glass", "#cfeaf6", ["#c4e2f0"], 0.2, 0.0, "lit menu screen", emissiveIntensity={"base": 0.9}),
     material("rubber", "Tyres", "stone", "#2e2f33", ["#2a2b2f"], 0.9, 0.0, "tyres and axles"),
     material("rim", "Silver rims", "metal", "#d4d8db", ["#cbd0d3"], 0.3, 0.3, "silver rims", emissiveIntensity={"base": 0.4}),
+    material("amber", "Marker lights", "glass", "#f2a33a", ["#ea9b33"], 0.3, 0.0, "amber marker lights", emissiveIntensity={"base": 0.7}),
     material("wood", "Wooden posts", "wood", "#a87a48", ["#9f7243"], 0.85, 0.0, "wooden sign posts"),
     material("sign-dark", "Sign board", "stone", "#212629", ["#1d2124"], 0.7, 0.0, "blank dark sign board (content open)"),
 ]
