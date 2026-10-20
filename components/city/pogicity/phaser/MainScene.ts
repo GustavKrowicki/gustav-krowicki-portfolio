@@ -275,6 +275,26 @@ export class MainScene extends Phaser.Scene {
         S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
         D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       };
+      // The keys above are captured (preventDefault) page-wide, which would stop a visitor typing W, A, S, D, space or
+      // the arrows into a text field (the avatar name tag). Let go of the keyboard while a field has focus.
+      const keyboard = this.input.keyboard;
+      const isField = (el: EventTarget | null) =>
+        el instanceof HTMLElement && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+      const onFocusChange = () => {
+        const typing = isField(document.activeElement);
+        if (typing) keyboard.disableGlobalCapture();
+        else keyboard.enableGlobalCapture();
+        keyboard.enabled = !typing;
+        if (typing) keyboard.resetKeys();
+      };
+      document.addEventListener("focusin", onFocusChange);
+      document.addEventListener("focusout", onFocusChange);
+      const releaseFocusWatch = () => {
+        document.removeEventListener("focusin", onFocusChange);
+        document.removeEventListener("focusout", onFocusChange);
+      };
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, releaseFocusWatch);
+      this.events.once(Phaser.Scenes.Events.DESTROY, releaseFocusWatch);
     }
 
     // Initialize grid - use pending grid if available, otherwise create empty
