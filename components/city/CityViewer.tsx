@@ -540,10 +540,21 @@ export default function CityViewer({
       return;
     }
     avatarTabWasOpen.current = true;
-    if (!isAdventureActive) handleStartAdventure();
-    // the player spawns on the next frames, and the canvas resizes as the panel opens
-    const timers = [80, 400, 900].map((ms) => window.setTimeout(() => focus(), ms));
-    return () => timers.forEach(window.clearTimeout);
+    if (!isAdventureActive) {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { skipNextSpawnFocus?: boolean }
+        | undefined;
+      if (scene) scene.skipNextSpawnFocus = true;
+      handleStartAdventure();
+    }
+    // once: after the player has spawned and the canvas has resized to the open panel (retry until it exists)
+    let timer = 0;
+    const tryFocus = (left: number) => {
+      if (focus() || left <= 0) return;
+      timer = window.setTimeout(() => tryFocus(left - 1), 150);
+    };
+    timer = window.setTimeout(() => tryFocus(10), 300);
+    return () => window.clearTimeout(timer);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the tab opens or closes
   }, [avatarTabOpen]);
 

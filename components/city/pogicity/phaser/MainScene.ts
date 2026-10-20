@@ -1465,12 +1465,12 @@ export class MainScene extends Phaser.Scene {
 
   // Pan (and zoom) with the standard timing: the duration follows the distance and the zoom ratio
   // (docs/city-rules.md, section 10). Scroll is the unzoomed top-left, so it does not depend on zoom.
-  private moveCamera(targetScrollX: number, targetScrollY: number, targetZoom: number): void {
+  private moveCamera(targetScrollX: number, targetScrollY: number, targetZoom: number, fixedDurationMs?: number): void {
     const camera = this.cameras.main;
     const fromZoom = camera.zoom;
     const distancePx =
       Phaser.Math.Distance.Between(camera.scrollX, camera.scrollY, targetScrollX, targetScrollY) * fromZoom;
-    const duration = Math.max(panDurationMs(distancePx), zoomDurationMs(fromZoom, targetZoom));
+    const duration = fixedDurationMs ?? Math.max(panDurationMs(distancePx), zoomDurationMs(fromZoom, targetZoom));
     const ease = Phaser.Math.Easing.Cubic.InOut;
 
     camera.pan(
@@ -1819,7 +1819,10 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
-    if (this.isMobileViewport()) {
+    if (this.skipNextSpawnFocus) {
+      this.skipNextSpawnFocus = false;
+      this.manualCameraOverrideInAdventure = false;
+    } else if (this.isMobileViewport()) {
       const playerPos = this.playerController.getPosition();
       this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
       this.manualCameraOverrideInAdventure = false;
@@ -2185,14 +2188,23 @@ export class MainScene extends Phaser.Scene {
   // the panel, and the outfit has to read) and keep following it
   // (8, past the usual MAX_ZOOM: the city view beside or above the panel is small). close = true returns to street
   // zoom for walking once the tab closes.
+  // Glides there (pan and zoom together, ease in-out) instead of cutting, and lands on a whole zoom.
+  avatarFocusZoom = 6;
+  // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
+  skipNextSpawnFocus = false;
   focusOnPlayer(close = false): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
     this.stopCameraMoves();
-    const zoom = close ? ZOOM.street : 8;
-    this.focusCameraOnPlayerForMobile(p.worldX, p.worldY - (close ? 0 : 12), zoom);
+    this.stopCameraFollow();
+    const camera = this.cameras.main;
+    const zoom = close ? ZOOM.street : this.avatarFocusZoom;
+    const y = p.worldY - (close ? 0 : 12);
+    this.cameraFollowPlayer = false;
+    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, 800);
     this.manualCameraOverrideInAdventure = false;
-    this.cameraFollowPlayer = true;
+    // follow again once the glide has landed (a follow during the tween would fight it)
+    this.time.delayedCall(820, () => { this.cameraFollowPlayer = true; });
     return true;
   }
 
