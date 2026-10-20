@@ -1,13 +1,15 @@
 {
  "map": [
-  "#####WWWAAA###",
-  "#MMM###WA##A##",
-  "#M#MWWWWAAA###",
-  "#MMM##LLRRRR##",
-  "#####LLLRRRR##",
-  "P#SSSLLLRRRR##",
-  "P#S#SLLLRRRR##",
-  "P#SSSPPP#PPPPP",
-  "PPPPP#PP#PPPPP"
+  "######M########",
+  "######M#M######",
+  "####MMM#MMA####",
+  "###MMMLLLL#####",
+  "###MMMLLLLAAAAA",
+  "#YYY##LLLL###A#",
+  "###Y##LLLLT##A#",
+  "#YYYSSSLLTTTTAA",
+  "#####SSLL#TTT##",
+  "#####SSLL######",
+  "PPPPPPPPPPPPPPP"
  ]
 }

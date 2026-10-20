@@ -238,6 +238,9 @@ export class MainScene extends Phaser.Scene {
           frameWidth: building.door.frameWidth, frameHeight: building.door.frameHeight,
         });
       }
+      (building.moments ?? []).forEach((m, i) => {
+        this.load.spritesheet(`${building.id}_moment${i}`, m.sheet, { frameWidth: m.frameWidth, frameHeight: m.frameHeight });
+      });
       if (building.ambient) {
         this.load.spritesheet(`${building.id}_ambient`, building.ambient.sheet, {
           frameWidth: building.ambient.frameWidth, frameHeight: building.ambient.frameHeight,
@@ -438,6 +441,7 @@ export class MainScene extends Phaser.Scene {
     // Walk-in buildings: roof off while inside, player drawn above the building while in its footprint
     this.updateInteriorState(playerPos.gridX, playerPos.gridY);
     this.updateDoors();
+    this.updateMoments();
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -1561,7 +1565,8 @@ export class MainScene extends Phaser.Scene {
     return tiles;
   }
 
-  // One step between neighbouring tiles: inside a building only within a room or through a door; in and out only
+  // One step between neighbouring tiles: inside a building only within a room or through a door (any step between areas in
+  // an open-plan building); in and out only
   // through the building's outside rooms (the plaza), or across a main door that opens straight onto the street
   private canStepInterior(fx: number, fy: number, tx: number, ty: number): boolean {
     const a = this.interiorTiles.get(`${fx},${fy}`);
@@ -1572,7 +1577,10 @@ export class MainScene extends Phaser.Scene {
     if (b && !cb) return false;
     if (a && b) {
       if (a.key !== b.key) return false;
-      return ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly);
+      if (ca === cb || isInteriorDoor(a.interior, a.lx, a.ly, b.lx, b.ly)) return true;
+      // Open plan: areas join freely; the outside rooms (plaza) still meet the inside only at a door
+      const outside = a.interior.outside;
+      return !!a.interior.openPlan && !outside.includes(ca!) && !outside.includes(cb!);
     }
     if (b) return b.interior.outside.includes(cb!) || isEntranceStep(b.interior, b.lx, b.ly, fx - tx, fy - ty);
     return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);
@@ -2340,6 +2348,11 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_lights`);
     }
     this.nightLights.delete(buildingKey);
+    for (let i = 0; this.buildingSprites.has(`${buildingKey}_moment${i}`); i++) {
+      this.buildingSprites.get(`${buildingKey}_moment${i}`)?.destroy();
+      this.buildingSprites.delete(`${buildingKey}_moment${i}`);
+      this.moments.delete(`${buildingKey}_moment${i}`);
+    }
 
     for (let i = 0; i < 40; i++) {
       const decorKey = `${buildingKey}_d${i}`;
@@ -2441,6 +2454,23 @@ export class MainScene extends Phaser.Scene {
       image.setVisible(this.night > 0);
       this.buildingSprites.set(`${key}_lights`, image);
       this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps });
+    }
+
+    // Interior moments over the roof-off sprite (shown only while the roof is off; updateMoments)
+    if (!orientation || orientation === Direction.Down) {
+      (building.moments ?? []).forEach((moment, i) => {
+        if (!this.textures.exists(`${building.id}_moment${i}`)) return;
+        const s = building.openSpriteScale ?? building.spriteScale ?? 1;
+        const left = sprite.x - sprite.width * sprite.scaleX / 2;
+        const top = sprite.y - sprite.height * sprite.scaleY;
+        const image = this.add.image(left + moment.x * s, top + moment.y * s, `${building.id}_moment${i}`, 0);
+        image.setOrigin(0, 0);
+        image.setScale(s);
+        image.setDepth(sprite.depth + 0.04);
+        image.setVisible(this.openBuildings.has(buildingId));
+        this.buildingSprites.set(`${key}_moment${i}`, image);
+        this.moments.set(`${key}_moment${i}`, { image, buildingId, index: i, originX, originY, value: 0 });
+      });
     }
 
     // Library props on the footprint (building.decor), drawn just above the building and sorted among themselves
@@ -2585,6 +2615,27 @@ export class MainScene extends Phaser.Scene {
       d.value = want > d.value ? Math.min(1, d.value + dt / 0.4) : Math.max(0, d.value - dt / 0.6);
       d.image.setVisible(!this.openBuildings.has(d.buildingId));
       d.image.setFrame(Math.round(d.value * (def.frames - 1)));
+    });
+  }
+
+  // Interior moments by `${building key}_moment${index}`: current frame position (0..frames)
+  private moments: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; index: number; originX: number; originY: number; value: number }> = new Map();
+
+  // A moment plays while the player is near (and the roof is off): forward once and holds, or in a loop; it resets
+  // when they leave
+  private updateMoments(): void {
+    if (!this.playerController || this.moments.size === 0) return;
+    const pos = this.playerController.getPosition();
+    const dt = this.game.loop.delta / 1000;
+    this.moments.forEach((m) => {
+      const def = getBuilding(m.buildingId)?.moments?.[m.index];
+      if (!def || !m.image.active) return;
+      const open = this.openBuildings.has(m.buildingId);
+      const near = open && Math.hypot(pos.gridX + 0.5 - (m.originX + def.at[0]), pos.gridY + 0.5 - (m.originY + def.at[1])) <= def.radius;
+      if (!near) m.value = 0;
+      else m.value = def.loop ? (m.value + dt * def.fps) % def.frames : Math.min(def.frames - 1, m.value + dt * def.fps);
+      m.image.setVisible(open);
+      m.image.setFrame(Math.floor(m.value));
     });
   }
 
