@@ -75,3 +75,19 @@ export function seedFrom(key: string): number {
   for (let i = 0; i < key.length; i++) x = Math.imul(x ^ key.charCodeAt(i), 16777619);
   return ((x >>> 0) % 10000) / 10000;
 }
+
+// The visitor's pick in the time of day menu (the shell's side rail). Auto follows their own clock
+export type TimeOfDay = "auto" | "morning" | "day" | "evening" | "night";
+
+export const TIMES_OF_DAY: { id: TimeOfDay; label: string }[] = [
+  { id: "auto", label: "Auto" },
+  { id: "morning", label: "Morning" },
+  { id: "day", label: "Day" },
+  { id: "evening", label: "Evening" },
+  { id: "night", label: "Night" },
+];
+
+// The hour each pick stands for (null: the visitor's clock)
+export const HOUR_OF: Record<TimeOfDay, number | null> = { auto: null, morning: 8, day: 13, evening: 20, night: 1 };
+
+export const isNightHour = (hour: number) => hour >= 19 || hour < 7;

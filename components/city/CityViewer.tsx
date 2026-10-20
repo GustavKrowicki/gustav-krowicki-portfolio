@@ -1,5 +1,7 @@
 "use client";
 
+import { HOUR_OF, TIMES_OF_DAY, isNightHour, type TimeOfDay } from "@/lib/city/nightSchedule";
+import TimeOfDayButton from "./TimeOfDayButton";
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
@@ -33,6 +35,8 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
     </div>
   ),
 });
+
+const TIME_OF_DAY_KEY = "city-time-of-day";
 
 interface CityViewerProps {
   initialGrid: GridCell[][];
@@ -440,15 +444,28 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
-  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00); visitors get no button. ?night=1 /
-  // ?night=0 on the URL forces night or day (for links and screenshots), and ?hour=0..23 stands in for the clock.
-  // A Night/Day button for development shows on localhost or with ?dev=1; pressing it stops the clock following
-  const [showNightButton, setShowNightButton] = useState(false);
+  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00) unless they pick a time of day on
+  // the button next to Walk (remembered in this browser). ?night=1 / ?night=0 on the URL forces night or day (for links
+  // and screenshots), and ?hour=0..23 stands in for the clock
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>(() => {
+    try {
+      const saved = window.localStorage.getItem(TIME_OF_DAY_KEY);
+      return TIMES_OF_DAY.some((t) => t.id === saved) ? (saved as TimeOfDay) : "auto";
+    } catch {
+      return "auto"; // Storage blocked: stay on Auto
+    }
+  });
+  const pickTimeOfDay = useCallback((value: TimeOfDay) => {
+    setTimeOfDay(value);
+    try {
+      window.localStorage.setItem(TIME_OF_DAY_KEY, value);
+    } catch {
+      // Storage blocked: the pick lasts for this visit
+    }
+  }, []);
   const nightTouchedRef = useRef(false);
   useEffect(() => {
     const search = new URLSearchParams(window.location.search);
-    const host = window.location.hostname;
-    setShowNightButton(host === "localhost" || host === "127.0.0.1" || search.get("dev") === "1");
     const param = search.get("night");
     const hourParam = search.get("hour");
     const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
@@ -473,9 +490,12 @@ export default function CityViewer({
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
         | { setNight?: (on: boolean) => void; setHour?: (hour: number) => void } | undefined;
       if (scene?.setNight) {
-        // Night forced in the daytime (the dev button, ?night=1) shows the evening
-        scene.setHour?.(isNight && hour >= 7 && hour < 19 ? 21 : hour);
-        scene.setNight(isNight);
+        // Night forced in the daytime (?night=1) shows the evening
+        const pickedHour = HOUR_OF[timeOfDay];
+        const night = pickedHour === null ? isNight : isNightHour(pickedHour);
+        const sceneHour = pickedHour ?? hour;
+        scene.setHour?.(night && !isNightHour(sceneHour) ? 21 : sceneHour);
+        scene.setNight(night);
         return true;
       }
       return false;
@@ -483,7 +503,7 @@ export default function CityViewer({
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
     return () => window.clearInterval(timer);
-  }, [isNight, hour]);
+  }, [isNight, hour, timeOfDay]);
 
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
@@ -809,16 +829,8 @@ export default function CityViewer({
           >
             {isAdventureActive ? "Stop walking" : "Walk"}
           </button>
-          {/* Development only (localhost or ?dev=1); hidden while walking on a phone, where Stop walking is wider */}
-          {showNightButton && !(isMobile && isAdventureActive) && <button
-            onClick={() => { nightTouchedRef.current = true; setIsNight((n) => !n); }}
-            className={pixelButtonClass("ghost")}
-            style={PIXEL_INSET_CLIP}
-            aria-pressed={isNight}
-            aria-label={isNight ? "Turn the city to day" : "Turn the city to night"}
-          >
-            {isNight ? "Day" : "Night"}
-          </button>}
+          {/* Hidden while walking on a phone, where Stop walking is wider and runs under the joystick */}
+          {!(isMobile && isAdventureActive) && <TimeOfDayButton value={timeOfDay} onChange={pickTimeOfDay} />}
         </div>
       )}
     </div>
