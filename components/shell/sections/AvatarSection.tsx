@@ -5,6 +5,7 @@ import {
   AVATAR_DEFAULT_CHOICE,
   AVATAR_SLOTS,
   AVATAR_CHANGE_EVENT,
+  AVATAR_WALK_EVENT,
   AVATAR_STORAGE_KEY,
   avatarThumbUrl,
   type AvatarChoice,
@@ -80,6 +81,9 @@ export default function AvatarSection() {
           <span className="-mt-1 max-w-[7rem] truncate rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
             {name.trim() || 'Your name'}
           </span>
+          <span className="mt-2 max-w-[7rem] text-center text-[11px] leading-tight text-neutral-500">
+            This is you in the city
+          </span>
         </div>
 
         <div className="min-w-0 flex-1">
@@ -149,6 +153,14 @@ export default function AvatarSection() {
           </label>
         </div>
       </div>
+
+      <button
+        type="button"
+        onClick={() => window.dispatchEvent(new Event(AVATAR_WALK_EVENT))}
+        className="mt-5 w-full rounded-full bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+      >
+        Walk the city as this avatar
+      </button>
     </div>
   );
 }

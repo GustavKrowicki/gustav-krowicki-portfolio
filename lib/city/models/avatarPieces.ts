@@ -47,6 +47,8 @@ export const AVATAR_DEFAULT_CHOICE: AvatarChoice = { top: 'tee', head: 'none', l
 export const AVATAR_STORAGE_KEY = 'avatar-builder:v1';
 // Fired on window (detail: AvatarChoice) whenever the builder saves, so a running city can change outfit.
 export const AVATAR_CHANGE_EVENT = 'avatar-builder:change';
+// Fired on window by the builder's "Walk the city" button: the shell closes the panel, the city walks.
+export const AVATAR_WALK_EVENT = 'avatar-builder:walk';
 
 export function avatarLookKey(choice: AvatarChoice): string {
   return `${choice.top}-${choice.head}-${choice.legs}`;

@@ -8,6 +8,7 @@ import ShellRail from './ShellRail';
 import ShellPanel, { type PanelState } from './ShellPanel';
 import type { SectionId } from './sections';
 import { readView, viewToSearch, type ShellView } from './shellUrl';
+import { AVATAR_WALK_EVENT } from '@/lib/city/models/avatarPieces';
 
 // Phaser needs the browser, so the city loads on the client only.
 const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
@@ -107,6 +108,13 @@ export default function PortfolioShell() {
     [openCase, section, pushView]
   );
 
+  // The Avatar tab's "Walk the city" button: close the panel so the city (and the joystick) take over.
+  useEffect(() => {
+    const onWalk = () => setPanel('closed');
+    window.addEventListener(AVATAR_WALK_EVENT, onWalk);
+    return () => window.removeEventListener(AVATAR_WALK_EVENT, onWalk);
+  }, []);
+
   // A project building in the city opens its case, with Back leading to Work.
   const handleProjectClick = useCallback(
     (slug: string) => {
@@ -138,6 +146,7 @@ export default function PortfolioShell() {
           initialGrid={initialGrid as GridCell[][]}
           onProjectClick={handleProjectClick}
           variant="shell"
+          avatarTabOpen={panel !== 'closed' && section === 'avatar' && !openCase}
           e2eMode={e2eMode}
         />
       </div>

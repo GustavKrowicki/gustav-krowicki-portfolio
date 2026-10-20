@@ -15,7 +15,7 @@ import {
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
 import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
-import { AVATAR_CHANGE_EVENT, readAvatarName } from "@/lib/city/models/avatarPieces";
+import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -65,6 +65,9 @@ export class PlayerController {
   private nameTag: Phaser.GameObjects.Text | null = null;
   private nameTagText = "";
   private unfollowName: (() => void) | null = null;
+  // Outfit-change cue: a short hop and a ring at the feet, so the eye goes from the builder tile to the city
+  private lastLook: string | null = null;
+  private hopUntil = 0;
   private pointerBounceOffset: number = 0;
   private pointerBounceDirection: number = 1;
 
@@ -589,7 +592,9 @@ export class PlayerController {
           this.sprite.setScale(avatar3dDisplayScale());
         }
       }
-      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, this.seatPose?.y ?? this.worldY);
+      // a 3 px hop right after an outfit change (playChangeCue)
+      const hop = this.scene.time.now < this.hopUntil ? 3 : 0;
+      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, (this.seatPose?.y ?? this.worldY) - hop);
       this.sprite.setVisible(!this.seatPose?.hidden);
 
       // Calculate depth from grid position (consistent with NPCs and characters)
@@ -617,7 +622,11 @@ export class PlayerController {
       this.updateNameTag();
 
       // Position pointer above player (with bounce)
-      const pointerY = (this.seatPose?.y ?? this.worldY) - 80 - this.pointerBounceOffset;
+      // (the builder's sheets: just above the head, or above the name tag; the GIF keeps its tuned offset)
+      const above = this.sheetSet === "gif" || !this.sprite
+        ? 80
+        : this.sprite.displayHeight * this.sprite.originY + 16 + (this.nameTag?.visible ? 12 : 0);
+      const pointerY = (this.seatPose?.y ?? this.worldY) - above - this.pointerBounceOffset;
       this.pointer.setPosition(this.seatPose?.x ?? this.worldX, pointerY);
       this.pointer.setVisible(!this.seatPose);
       this.pointer.setDepth(20_000_000); // Always on top
@@ -629,8 +638,12 @@ export class PlayerController {
     if (!this.sprite) return;
     if (!this.unfollowName && typeof window !== "undefined") {
       this.nameTagText = readAvatarName();
-      const onChange = () => {
+      const onChange = (event: Event) => {
         this.nameTagText = readAvatarName();
+        const choice = (event as CustomEvent<AvatarChoice | null>).detail;
+        const look = choice ? avatarLookKey(choice) : null;
+        if (look && this.lastLook !== null && look !== this.lastLook) this.playChangeCue();
+        if (look) this.lastLook = look;
       };
       window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
       this.unfollowName = () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
@@ -658,6 +671,23 @@ export class PlayerController {
     this.nameTag.setPosition(Math.round(x), Math.round(y - head - 1));
     this.nameTag.setVisible(this.sprite.visible);
     this.nameTag.setDepth(19_999_999); // over the city, under the pointer
+  }
+
+  private playChangeCue(): void {
+    if (!this.sprite || this.seatPose) return;
+    this.hopUntil = this.scene.time.now + 220;
+    const x = this.worldX, y = this.worldY;
+    const ring = this.scene.add.graphics();
+    ring.setPosition(x, y);
+    ring.setDepth(this.sprite.depth - 0.01);
+    const state = { r: 6, a: 0.9 };
+    const draw = () => {
+      ring.clear();
+      ring.lineStyle(2, 0xfff3b0, state.a);
+      ring.strokeEllipse(0, 0, state.r * 2, state.r);
+    };
+    draw();
+    this.scene.tweens.add({ targets: state, r: 22, a: 0, duration: 700, ease: "Cubic.easeOut", onUpdate: draw, onComplete: () => ring.destroy() });
   }
 
   private drawPointer(): void {
