@@ -47,6 +47,8 @@ import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
 import { STREET_LAMPS, StreetLamp, StreetLampType, canPlaceStreetLamp, lampsFromGrid } from "@/lib/city/streetLights";
+import { NightKind, lampDimming, nightKind, nightLevels, seedFrom, walkerShare } from "@/lib/city/nightSchedule";
+import { findWindows } from "@/lib/city/nightWindows";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
@@ -2359,6 +2361,11 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_lights`);
     }
     this.nightLights.delete(buildingKey);
+    for (const part of ["wa", "wb", "wf", "spill"]) {
+      this.buildingSprites.get(`${buildingKey}_${part}`)?.destroy();
+      this.buildingSprites.delete(`${buildingKey}_${part}`);
+    }
+    this.buildingWindows.delete(buildingKey);
     for (let i = 0; this.buildingSprites.has(`${buildingKey}_moment${i}`); i++) {
       this.buildingSprites.get(`${buildingKey}_moment${i}`)?.destroy();
       this.buildingSprites.delete(`${buildingKey}_moment${i}`);
@@ -2467,6 +2474,10 @@ export class MainScene extends Phaser.Scene {
       this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps });
     }
 
+    // Lit windows by the hour (filler buildings; lib/city/nightSchedule.ts)
+    const kind = nightKind(building.id, building.category);
+    if (kind && !building.slices) this.addBuildingWindows(key, sprite, textureKey, kind, originX, originY, footprint, orientation);
+
     // Interior moments over the roof-off sprite (shown only while the roof is off; updateMoments)
     if (!orientation || orientation === Direction.Down) {
       (building.moments ?? []).forEach((moment, i) => {
@@ -2566,6 +2577,113 @@ export class MainScene extends Phaser.Scene {
     this.nightTarget = on ? 1 : 0;
   }
 
+  // The city's hour (the visitor's clock, or ?hour=): which windows are lit, how many walk, how bright the lamps are
+  private hour = 21;
+  setHour(hour: number): void {
+    if (hour === this.hour) return;
+    this.hour = hour;
+    this.buildingWindows.forEach((w) => { w.levels = nightLevels(w.kind, hour, w.seed); });
+    this.nightApplied = { tint: -1, count: -1 };
+  }
+
+  // Lit windows: two random groups of window glass found in the sprite (lib/city/nightWindows.ts), the shopfront of
+  // food places and the bar, and a warm spill of light on the street in front of an open one. All untinted, faded in
+  // with the night and set by the hour
+  private buildingWindows: Map<string, {
+    kind: NightKind; seed: number; levels: { a: number; b: number; front: number };
+    parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[];
+  }> = new Map();
+
+  private windowTextures(textureKey: string, shopfront: "left" | "right" | null): { a: string; b: string; front: string | null } | null {
+    const base = `${textureKey}_win${shopfront ? `_${shopfront}` : ""}`;
+    const keys = { a: `${base}_a`, b: `${base}_b`, front: shopfront ? `${base}_f` : null };
+    if (this.textures.exists(keys.a)) return keys;
+    const source = this.textures.get(textureKey).getSourceImage() as HTMLImageElement | HTMLCanvasElement;
+    const w = source.width, h = source.height;
+    if (!w || !h) return null;
+    const scratch = document.createElement("canvas");
+    scratch.width = w; scratch.height = h;
+    const ctx = scratch.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return null;
+    ctx.drawImage(source, 0, 0);
+    const layers = findWindows(ctx.getImageData(0, 0, w, h), shopfront);
+    const put = (key: string, data: ImageData) => {
+      const canvas = this.textures.createCanvas(key, w, h);
+      if (!canvas) return;
+      canvas.getContext().putImageData(data, 0, 0);
+      canvas.refresh();
+    };
+    put(keys.a, layers.a);
+    put(keys.b, layers.b);
+    if (keys.front && layers.front) put(keys.front, layers.front);
+    return keys;
+  }
+
+  private addBuildingWindows(
+    key: string, sprite: Phaser.GameObjects.Image, textureKey: string, kind: NightKind,
+    originX: number, originY: number, footprint: { width: number; height: number }, orientation?: Direction
+  ): void {
+    // The front faces +y for a south sprite (the left face on screen) and +x for an east one (the right face)
+    const facing = orientation ?? Direction.Down;
+    const shopfront = kind === "food" || kind === "bar"
+      ? (facing === Direction.Down ? "left" : facing === Direction.Right ? "right" : null) : null;
+    const keys = this.windowTextures(textureKey, shopfront);
+    if (!keys) return;
+    const seed = seedFrom(key);
+    const parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[] = [];
+    const overlay = (texture: string, part: "wa" | "wb" | "wf", group: "a" | "b" | "front", depth: number) => {
+      const image = this.add.image(sprite.x, sprite.y, texture).setOrigin(sprite.originX, sprite.originY);
+      image.setScale(sprite.scaleX, sprite.scaleY).setDepth(sprite.depth + depth).setVisible(false).setAlpha(0);
+      this.buildingSprites.set(`${key}_${part}`, image);
+      parts.push({ image, group, strength: 1 });
+    };
+    overlay(keys.a, "wa", "a", 0.001);
+    overlay(keys.b, "wb", "b", 0.002);
+    if (keys.front) overlay(keys.front, "wf", "front", 0.003);
+
+    // The spill: a warm pool on the street in front of the door side
+    if (kind === "food" || kind === "bar") {
+      const { width: fw, height: fh } = footprint;
+      const at = facing === Direction.Down ? { x: originX + fw / 2, y: originY + fh + 0.6 }
+        : facing === Direction.Right ? { x: originX + fw + 0.6, y: originY + fh / 2 }
+        : facing === Direction.Up ? { x: originX + fw / 2, y: originY - 0.6 }
+        : { x: originX - 0.6, y: originY + fh / 2 };
+      const ground = this.gridToScreen(at.x, at.y);
+      const spill = this.add.image(ground.x, ground.y, this.spillTexture()).setBlendMode(Phaser.BlendModes.ADD);
+      spill.setDepth(this.depthFromSortPoint(ground.x, ground.y, 0.01)).setVisible(false).setAlpha(0);
+      this.buildingSprites.set(`${key}_spill`, spill);
+      parts.push({ image: spill, group: "front", strength: 0.8 });
+    }
+    this.buildingWindows.set(key, { kind, seed, levels: nightLevels(kind, this.hour, seed), parts });
+    this.nightApplied = { tint: -1, count: -1 };
+  }
+
+  // A shopfront spill: a soft warm ellipse on the ground, about 2 x 1.4 tiles
+  private spillTexture(): string {
+    const key = "shop_spill";
+    if (this.textures.exists(key)) return key;
+    const rx = 1.4, ry = 1.4;
+    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
+    const w = Math.ceil((rx + ry) * halfW * 2), h = Math.ceil((rx + ry) * halfH * 2);
+    const canvas = this.textures.createCanvas(key, w, h);
+    if (!canvas) return key;
+    const ctx = canvas.getContext();
+    const img = ctx.createImageData(w, h);
+    for (let py = 0; py < h; py++) {
+      for (let px = 0; px < w; px++) {
+        const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
+        const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
+        const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
+        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.6) * 0.75;
+        const i = (py * w + px) * 4;
+        img.data[i] = 255; img.data[i + 1] = 196; img.data[i + 2] = 120; img.data[i + 3] = Math.round(a * 255);
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    canvas.refresh();
+    return key;
+  }
+
   private nightClock = 0;
   private nightApplied = { tint: 0xffffff, count: 0 };
 
@@ -2581,6 +2699,14 @@ export class MainScene extends Phaser.Scene {
     const mix = (c: number) => Math.round(255 + (c - 255) * t);
     const tint = (mix(n.r) << 16) | (mix(n.g) << 8) | mix(n.b);
     const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
+    this.buildingWindows.forEach((w) => {
+      w.parts.forEach((part) => {
+        lit.add(part.image);
+        if (!part.image.active) return;
+        const level = w.levels[part.group] * t;
+        part.image.setVisible(level > 0).setAlpha(level * part.strength);
+      });
+    });
     this.nightLights.forEach((l) => {
       lit.add(l.image);
       if (!l.image.active) return;
@@ -2725,9 +2851,10 @@ export class MainScene extends Phaser.Scene {
       else l.level = Math.min(Math.max(0, l.level - dt / 450), this.night);
       const on = l.level > 0;
       any ||= on;
+      const dim = lampDimming(this.hour); // late at night the lamps dim, they never go out
       l.lit.setVisible(on).setAlpha(l.level);
-      l.glow.setVisible(on).setAlpha(l.level * 0.85);
-      l.light.setVisible(on).setAlpha(l.level * l.strength);
+      l.glow.setVisible(on).setAlpha(l.level * 0.85 * dim);
+      l.light.setVisible(on).setAlpha(l.level * l.strength * dim);
     });
     this.lightPlayer(any);
   }
@@ -2954,8 +3081,10 @@ export class MainScene extends Phaser.Scene {
         sprite.setPosition(screenPos.x, centerY);
       }
 
+      // Fewer people walk at night: the rest stay home (the same ones every night)
+      const out = this.night < 0.5 || seedFrom(char.id) < walkerShare(this.hour);
       if (this.gifsLoaded && this.textures.exists(textureKey)) {
-        sprite.setVisible(true);
+        sprite.setVisible(out);
         playGifAnimation(sprite, textureKey);
       }
 

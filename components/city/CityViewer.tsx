@@ -82,6 +82,8 @@ export default function CityViewer({
   const [isAdventureActive, setIsAdventureActive] = useState(false);
   // Night in the city (the visitor's clock, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
   const [isNight, setIsNight] = useState(false);
+  // The city's hour (the visitor's clock, or ?hour=): which windows are lit and how many people walk
+  const [hour, setHour] = useState(21);
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
@@ -448,17 +450,17 @@ export default function CityViewer({
     const host = window.location.hostname;
     setShowNightButton(host === "localhost" || host === "127.0.0.1" || search.get("dev") === "1");
     const param = search.get("night");
+    const hourParam = search.get("hour");
+    const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
     if (param === "1" || param === "0") {
       nightTouchedRef.current = true;
       setIsNight(param === "1");
-      return;
     }
-    const hourParam = search.get("hour");
-    const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
     const follow = () => {
+      const now = fixedHour ?? new Date().getHours();
+      setHour(now);
       if (nightTouchedRef.current) return;
-      const hour = fixedHour ?? new Date().getHours();
-      setIsNight(hour >= 19 || hour < 7);
+      setIsNight(now >= 19 || now < 7);
     };
     follow();
     const timer = window.setInterval(follow, 60_000);
@@ -469,8 +471,10 @@ export default function CityViewer({
   useEffect(() => {
     const apply = () => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-        | { setNight?: (on: boolean) => void } | undefined;
+        | { setNight?: (on: boolean) => void; setHour?: (hour: number) => void } | undefined;
       if (scene?.setNight) {
+        // Night forced in the daytime (the dev button, ?night=1) shows the evening
+        scene.setHour?.(isNight && hour >= 7 && hour < 19 ? 21 : hour);
         scene.setNight(isNight);
         return true;
       }
@@ -479,7 +483,7 @@ export default function CityViewer({
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
     return () => window.clearInterval(timer);
-  }, [isNight]);
+  }, [isNight, hour]);
 
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
