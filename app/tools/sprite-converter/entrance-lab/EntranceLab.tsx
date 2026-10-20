@@ -10,6 +10,7 @@ import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
+import * as burgerTrailer from '@/lib/city/models/cateItBurger';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
@@ -106,6 +107,22 @@ function avatarStadiumScene(): THREE.Group {
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
   avatar.position.set(0.6, 0.04, 2.15);
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The avatar at the burger trailer's hatch (both in wu): on the serving side (+Z, south), in front of the counter, so the
+// 0.9 wu avatar reads against the 0.76 wu counter and the 1.5 wu body top (art/img2threejs/cate-it-burger, POR-38).
+// ?ax=&az=&ayaw= (degrees) move and turn the avatar for scale tries.
+function avatarBurgerScene(): THREE.Group {
+  const q = new URLSearchParams(window.location.search);
+  const group = new THREE.Group();
+  const building = burgerTrailer.createBurgerTrailerModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  avatar.position.set(Number(q.get('ax') ?? 0.35), 0.02, Number(q.get('az') ?? 0.78));
+  avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   return group;
@@ -315,6 +332,28 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  // Burger trailer for the food truck square (art/img2threejs/cate-it-burger, Linear POR-38): 4 x 2 footprint
+  cateItBurger: {
+    name: 'Burger trailer',
+    create: burgerTrailer.createBurgerTrailerModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'avatar-cate-burger': {
+    name: 'Gustav avatar at the burger trailer hatch',
+    create: () => avatarBurgerScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
   },
   'stadium-site': {
     name: 'Aarhus stadium with the red hall and the avatar',
