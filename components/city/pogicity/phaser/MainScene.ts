@@ -2183,13 +2183,13 @@ export class MainScene extends Phaser.Scene {
 
   // The avatar builder's tab opened: centre the player at the closest zoom (the city view is small beside or above
   // the panel, and the outfit has to read) and keep following it
-  // (8 on a phone, past the usual MAX_ZOOM: the city strip above the sheet is short). close = true returns to street
+  // (8, past the usual MAX_ZOOM: the city view beside or above the panel is small). close = true returns to street
   // zoom for walking once the tab closes.
   focusOnPlayer(close = false): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
     this.stopCameraMoves();
-    const zoom = close ? ZOOM.street : this.isMobileViewport() ? 8 : MainScene.MAX_ZOOM;
+    const zoom = close ? ZOOM.street : 8;
     this.focusCameraOnPlayerForMobile(p.worldX, p.worldY - (close ? 0 : 12), zoom);
     this.manualCameraOverrideInAdventure = false;
     this.cameraFollowPlayer = true;
