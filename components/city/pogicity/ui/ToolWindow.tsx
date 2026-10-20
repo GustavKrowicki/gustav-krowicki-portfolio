@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect, MouseEvent } from "react";
-import { ToolType } from "../types";
+import { ToolType, StreetLampType } from "../types";
 import {
   CATEGORY_NAMES,
   BuildingCategory,
@@ -23,6 +23,13 @@ interface ToolWindowProps {
   isVisible: boolean;
   onClose: () => void;
 }
+
+// Street lamps for the city at night. With the lamp tool the selected id is the lamp type
+const STREET_LAMP_TOOLS: Array<{ type: StreetLampType; name: string; sprite: string; where: string }> = [
+  { type: "wire", name: "Wire lamp", sprite: "/game/pogicity/Props/night/wire_day.png", where: "Hangs over a road" },
+  { type: "post", name: "Slim post", sprite: "/game/pogicity/Props/night/post_day.png", where: "Squares and paths" },
+  { type: "lantern", name: "Old lantern", sprite: "/game/pogicity/Props/night/lantern_day.png", where: "Old streets" },
+];
 
 // Get the preview sprite for a building (prefer south, fall back to first available)
 function getBuildingPreviewSprite(building: BuildingDefinition): string {
@@ -62,7 +69,7 @@ export default function ToolWindow({
     };
   });
   const [isDragging, setIsDragging] = useState(false);
-  const [activeTab, setActiveTab] = useState<"tools" | BuildingCategory>("tools");
+  const [activeTab, setActiveTab] = useState<"tools" | "lamps" | BuildingCategory>("tools");
   const [hoveredBuilding, setHoveredBuilding] = useState<string | null>(null);
   const [windowSize, setWindowSize] = useState({
     width: typeof window !== "undefined" ? window.innerWidth : 1000,
@@ -114,6 +121,7 @@ export default function ToolWindow({
   const categories = getCategories();
   const getTabTitle = () => {
     if (activeTab === "tools") return "Tools";
+    if (activeTab === "lamps") return "Street lamps";
     return CATEGORY_NAMES[activeTab];
   };
 
@@ -173,6 +181,24 @@ export default function ToolWindow({
           }`}
         >
           🔧
+        </button>
+
+        {/* Street lamps tab */}
+        <button
+          onClick={() => {
+            if (activeTab !== "lamps") {
+              setActiveTab("lamps");
+              playDoubleClickSound();
+            }
+          }}
+          className={`px-3 py-1 rounded text-sm font-mono ${
+            activeTab === "lamps"
+              ? "bg-[#4a5568] text-white"
+              : "bg-[#2d3748] text-gray-300 hover:bg-[#4a5568]"
+          }`}
+          title="Street lamps"
+        >
+          💡
         </button>
 
         {/* Category tabs */}
@@ -315,8 +341,46 @@ export default function ToolWindow({
           </div>
         )}
 
+        {/* Street lamps: click a cell to place, eraser removes the lamp first */}
+        {activeTab === "lamps" && (
+          <div>
+            <div className="grid grid-cols-3 gap-2">
+              {STREET_LAMP_TOOLS.map((lamp) => {
+                const isSelected = selectedTool === ToolType.StreetLamp && selectedBuildingId === lamp.type;
+                return (
+                  <button
+                    key={lamp.type}
+                    onClick={() => {
+                      onToolSelect(ToolType.StreetLamp);
+                      onBuildingSelect(lamp.type);
+                      playClickSound();
+                    }}
+                    className={`flex flex-col items-center justify-end p-2 rounded border min-h-[96px] ${
+                      isSelected
+                        ? "bg-[#4a5568] border-white"
+                        : "bg-[#2d3748] border-[#4a5568] hover:border-gray-400"
+                    }`}
+                  >
+                    <img
+                      src={lamp.sprite}
+                      alt={lamp.name}
+                      className="h-14 object-contain"
+                      style={{ imageRendering: "pixelated" }}
+                    />
+                    <span className="text-xs text-white mt-1">{lamp.name}</span>
+                    <span className="text-[10px] text-gray-300">{lamp.where}</span>
+                  </button>
+                );
+              })}
+            </div>
+            <p className="text-[11px] text-gray-300 font-mono mt-2">
+              Click a cell to place. The wire runs across the road by itself. Eraser removes a lamp. Night shows them lit.
+            </p>
+          </div>
+        )}
+
         {/* Building Category Content */}
-        {activeTab !== "tools" && (
+        {activeTab !== "tools" && activeTab !== "lamps" && (
           <div className="grid grid-cols-6 gap-1">
             {getBuildingsByCategory(activeTab).map((building) => {
               const previewSprite = getBuildingPreviewSprite(building);
@@ -364,7 +428,7 @@ export default function ToolWindow({
       </div>
 
       {/* Footer */}
-      {activeTab !== "tools" && (
+      {activeTab !== "tools" && activeTab !== "lamps" && (
         <div className="flex justify-between items-center px-3 py-2 bg-[#2d3748] text-white text-sm font-mono">
           <span>
             {hoveredBuilding ||

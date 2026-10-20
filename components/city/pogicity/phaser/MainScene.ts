@@ -46,7 +46,7 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
-import { STREET_LAMPS, StreetLamp, StreetLampType, placeStreetLamps } from "@/lib/city/streetLights";
+import { STREET_LAMPS, StreetLamp, StreetLampType, canPlaceStreetLamp, lampsFromGrid } from "@/lib/city/streetLights";
 import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
@@ -1118,7 +1118,8 @@ export class MainScene extends Phaser.Scene {
           oldCell.buildingId !== newCell.buildingId ||
           oldCell.isOrigin !== newCell.isOrigin ||
           oldCell.buildingOrientation !== newCell.buildingOrientation ||
-          oldCell.underlyingTileType !== newCell.underlyingTileType
+          oldCell.underlyingTileType !== newCell.underlyingTileType ||
+          oldCell.streetLamp !== newCell.streetLamp
         ) {
           this.gridDirtyTiles.add(`${x},${y}`);
         }
@@ -2670,7 +2671,7 @@ export class MainScene extends Phaser.Scene {
     this.streetLampLit.clear();
     if (!this.textures.exists("lamp_post_day")) return;
     const glowKey = this.lampGlowTexture();
-    for (const lamp of placeStreetLamps(this.grid)) {
+    for (const lamp of lampsFromGrid(this.grid)) {
       const spec = STREET_LAMPS[lamp.type];
       const ground = this.gridToScreen(lamp.x, lamp.y);
       const depth = this.depthFromSortPoint(ground.x, ground.y, 0.05);
@@ -2996,6 +2997,23 @@ export class MainScene extends Phaser.Scene {
           preview.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 1_000_000));
           this.previewSprites.push(preview);
         }
+      }
+    }
+
+    // Street lamp tool (the selected id is the lamp type): green where it may stand, red where not
+    if (this.selectedTool === ToolType.StreetLamp && this.selectedBuildingId) {
+      const type = this.selectedBuildingId as StreetLampType;
+      const ok = canPlaceStreetLamp(this.grid[y]?.[x], type);
+      const screenPos = this.gridToScreen(x, y);
+      const tile = this.add.image(screenPos.x, screenPos.y, "road").setOrigin(0.5, 0).setAlpha(0.5);
+      tile.setTint(ok ? 0x00ff00 : 0xff3030);
+      tile.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 1_000_000));
+      this.previewSprites.push(tile);
+      if (ok && type !== "wire") {
+        const ground = this.gridToScreen(x + 0.5, y + 0.5);
+        const ghost = this.add.image(ground.x, ground.y + 1, `lamp_${type}_day`).setOrigin(0.5, 1).setAlpha(0.7);
+        ghost.setDepth(this.depthFromSortPoint(ground.x, ground.y, 1_000_001));
+        this.previewSprites.push(ghost);
       }
     }
   }

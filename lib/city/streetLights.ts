@@ -1,12 +1,12 @@
 // Street lamps for the city at night (POR-39, Figma board "City at night – light plan v1", node 678-3604).
-// A rule places the lamps from the city grid, so they follow the city when it is reorganised. This first pass covers
-// one test street: the east-west avenue (wire lamps over the road), the campus squares south of it (post lamps) and
-// the old street in the west (lanterns).
+// Lamps are placed by hand in the city editor (/city/editor, the lamp tab) and saved on their cell in cityGrid.json
+// (GridCell.streetLamp). This file turns those cells into lamps: where each one stands, and for wire lamps where the
+// wire runs.
 
-import type { GridCell } from "@/components/city/pogicity/types";
+import type { GridCell, StreetLampType } from "@/components/city/pogicity/types";
 import { TileType } from "@/components/city/pogicity/types";
 
-export type StreetLampType = "wire" | "post" | "lantern";
+export type { StreetLampType };
 
 export interface StreetLamp {
   type: StreetLampType;
@@ -39,41 +39,64 @@ export const STREET_LAMPS: Record<StreetLampType, StreetLampSpec> = {
     pool: { rx: 1.7, ry: 1.7, strength: 0.85 } },
 };
 
-const at = (grid: GridCell[][], x: number, y: number) => grid[y]?.[x];
-const isType = (grid: GridCell[][], x: number, y: number, ...types: TileType[]) => {
-  const c = at(grid, x, y);
-  return !!c && types.includes(c.type as TileType);
+const isRoad = (grid: GridCell[][], x: number, y: number) => {
+  const type = grid[y]?.[x]?.type;
+  return type === TileType.Road || type === TileType.Asphalt;
 };
-const isRoad = (grid: GridCell[][], x: number, y: number) => isType(grid, x, y, TileType.Road, TileType.Asphalt);
 
-export function placeStreetLamps(grid: GridCell[][]): StreetLamp[] {
+// A wire lamp hangs over a road; the post and the lantern stand beside it, never on the road or in a building
+export function canPlaceStreetLamp(cell: GridCell | undefined, type: StreetLampType): boolean {
+  if (!cell || cell.type === TileType.Building) return false;
+  const onRoad = cell.type === TileType.Road || cell.type === TileType.Asphalt;
+  return type === "wire" ? onRoad : !onRoad;
+}
+
+// The run of road cells through (x, y) along one axis
+function roadSpan(grid: GridCell[][], x: number, y: number, axis: "x" | "y"): [number, number] {
+  const dx = axis === "x" ? 1 : 0;
+  const dy = axis === "y" ? 1 : 0;
+  let a = 0;
+  let b = 0;
+  while (isRoad(grid, x - (a + 1) * dx, y - (a + 1) * dy)) a++;
+  while (isRoad(grid, x + (b + 1) * dx, y + (b + 1) * dy)) b++;
+  return axis === "x" ? [x - a, x + b] : [y - a, y + b];
+}
+
+export function lampsFromGrid(grid: GridCell[][]): StreetLamp[] {
   const lamps: StreetLamp[] = [];
-
-  // Wire lamps: every 4 tiles along the avenue (asphalt on rows 29 and 30), hung over the middle of the road on a
-  // wire from the building line on one side to the other
-  const avenue = { y0: 29, y1: 30, x0: 2, x1: 27 };
-  for (let x = avenue.x0; x <= avenue.x1; x += 4) {
-    if (!isType(grid, x, avenue.y0, TileType.Asphalt) || !isType(grid, x, avenue.y1, TileType.Asphalt)) continue;
-    lamps.push({ type: "wire", x: x + 0.5, y: avenue.y1, order: x,
-      wire: { x0: x + 0.5, y0: avenue.y0 - 1, x1: x + 0.5, y1: avenue.y1 + 2 } });
-  }
-
-  // Post lamps: on the paved squares south of the avenue, one every 3 tiles
-  for (let y = 31; y <= 40; y++) {
-    for (let x = 20; x <= 27; x++) {
-      if (x % 3 !== 2 || y % 3 !== 2 || !isType(grid, x, y, TileType.Tile)) continue;
-      lamps.push({ type: "post", x: x + 0.5, y: y + 0.5, order: 30 + (x - 20) + (y - 31) });
+  const seen = new Set<string>();
+  for (const row of grid) {
+    for (const cell of row) {
+      const type = cell.streetLamp;
+      if (!type || cell.type === TileType.Building) continue;
+      // A wire lamp needs a road to hang over
+      if (type === "wire" && !isRoad(grid, cell.x, cell.y)) continue;
+      let lamp: StreetLamp;
+      if (type === "wire") {
+        // Hung over the middle of the road, on a wire across it (along the shorter run of road) that reaches one
+        // tile past the road edge on each side, to the building line
+        const sx = roadSpan(grid, cell.x, cell.y, "x");
+        const sy = roadSpan(grid, cell.x, cell.y, "y");
+        if (sy[1] - sy[0] <= sx[1] - sx[0]) {
+          const mid = (sy[0] + sy[1] + 1) / 2;
+          lamp = { type, x: cell.x + 0.5, y: mid, order: 0,
+            wire: { x0: cell.x + 0.5, y0: sy[0] - 1, x1: cell.x + 0.5, y1: sy[1] + 2 } };
+        } else {
+          const mid = (sx[0] + sx[1] + 1) / 2;
+          lamp = { type, x: mid, y: cell.y + 0.5, order: 0,
+            wire: { x0: sx[0] - 1, y0: cell.y + 0.5, x1: sx[1] + 2, y1: cell.y + 0.5 } };
+        }
+      } else {
+        lamp = { type, x: cell.x + 0.5, y: cell.y + 0.5, order: 0 };
+      }
+      // Two clicks on the same road crossing give one lamp
+      const key = `${type},${lamp.x},${lamp.y}`;
+      if (seen.has(key)) continue;
+      seen.add(key);
+      // Switch on from north-west to south-east, so the lamps come on along each street
+      lamp.order = lamp.x + lamp.y;
+      lamps.push(lamp);
     }
   }
-
-  // Lanterns: along the old street in the west, on the free cells next to the road, at least 3 tiles apart
-  let last = -10;
-  for (let y = 31; y <= 47; y++) {
-    if (y - last < 3) continue;
-    if (!isType(grid, 8, y, TileType.Grass, TileType.Tile) || !isRoad(grid, 7, y)) continue;
-    lamps.push({ type: "lantern", x: 8.3, y: y + 0.5, order: 50 + y });
-    last = y;
-  }
-
   return lamps.sort((a, b) => a.order - b.order);
 }
