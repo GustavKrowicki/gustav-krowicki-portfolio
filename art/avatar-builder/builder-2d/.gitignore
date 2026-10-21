@@ -1,0 +1,6 @@
+# generated renders and frames (the scripts regenerate them)
+*.png
+*.svg
+doll/
+dollall/
+__pycache__/

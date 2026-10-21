@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1010"><defs><filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs><path d="M 176 262 Q 200 278 224 262 L 286 268 C 318 274 336 292 340 325.8 L 352 443.5 L 304 457.8 L 300 389.0 L 300 543.9 Q 200 555.4 100 543.9 L 100 389.0 L 96 457.8 L 48 443.5 L 60 325.8 C 64 292 82 274 114 268 Z" fill="#fafafa" stroke="#9aa0b4" stroke-width="3" stroke-linejoin="round" />
+<path d="M 262 300 C 286 300 300 328.7 300 389.0 L 300 543.9 Q 276 549.7 254 551.1 C 262 472.2 262 371.7 262 300 Z" fill="#ccd0dc" opacity="1.0"/>
+<path d="M 103 343.0 L 297 343.0 L 298 394.7 L 102 394.7 Z" fill="#0046a0" stroke="#00244f" stroke-width="3" stroke-linejoin="round" />
+<path d="M 114 268 C 82 274 64 292 60 325.8 L 48 443.5 L 96 457.8 L 100 389.0 L 104 300 Z" fill="#0046a0" stroke="#00244f" stroke-width="3" stroke-linejoin="round" />
+<path d="M 98 443.5 L 50 432" fill="none" stroke="#fafafa" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 286 268 C 318 274 336 292 340 325.8 L 352 443.5 L 304 457.8 L 300 389.0 L 296 300 Z" fill="#00357a" stroke="#00244f" stroke-width="3" stroke-linejoin="round" />
+<path d="M 302 443.5 L 350 432" fill="none" stroke="#fafafa" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+<path d="M 172 258 Q 200 284 228 258 L 232 272 Q 200 300 168 272 Z" fill="#0046a0" stroke="#00244f" stroke-width="3" stroke-linejoin="round" /></svg>
