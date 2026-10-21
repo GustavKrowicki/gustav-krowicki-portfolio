@@ -1,4 +1,5 @@
 // Building Registry - Single source of truth for all buildings
+import type { NightKind } from "./nightSchedule";
 // Includes both Pogicity buildings and custom portfolio buildings
 
 export type BuildingCategory =
@@ -51,7 +52,13 @@ export interface BuildingDefinition {
   reactions?: { beat: string; sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; wave: number }[];
   // Lights on at night (docs/city-rules.md section 9): frames cropped from the south sprite like `ambient`, in a grid
   // sheet, drawn untinted over the night-tinted building while the city is dark (MainScene.setNight)
-  nightLights?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
+  // `hours`: on from..to on the city's hour (wraps past midnight), off otherwise; no hours = on all night
+  nightLights?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number; hours?: [number, number] };
+  // Lit windows from the 3D model (POR-39 step 4): full-size south sprites of the glass alone, rendered from the model in
+  // flat warm light with everything else hiding what is behind it (entrance lab `glow`; the building's export_windows.sh).
+  // `a` and `b` are two groups of windows switched by `kind`'s hours (lib/city/nightSchedule.ts); `front` is the ground
+  // floor shopfront, on by `frontKind`'s hours. Hidden while the roof is off. Default orientation only.
+  nightWindows?: { a: string; b?: string; front?: string; kind: NightKind; frontKind?: NightKind };
   // Interior moments (walk-in buildings): strips of frames cropped from the roof-off south sprite like `door`, drawn over
   // it while the roof is off; each plays at `fps` while the player is within `radius` of `at` (local tiles): forward once
   // and holds, or round and round with `loop`; it goes back to frame 0 when the player leaves
@@ -229,6 +236,15 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     logoOffset: { x: 20, y: 80 },
     // brick herringbone on the approach tile in the gate awning's colour (build_spec.py GATE_AWNINGS "a")
     entrancePaving: { brick: 0x9a4a36 },
+    // At night: the louvre storeys and the glass top floor lit as an office (a: storeys 1 and 3 with the top floor, b: the
+    // middle storey), the cafe glass on the ground floor as a cafe (art/img2threejs/valtech-office/export_windows.sh)
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/valtech-office-avatar-win-a_south.png",
+      b: "/game/pogicity/Building/landmark/valtech-office-avatar-win-b_south.png",
+      front: "/game/pogicity/Building/landmark/valtech-office-avatar-win-f_south.png",
+      kind: "office",
+      frontKind: "food",
+    },
   },
   "melbourne-uni": {
     id: "melbourne-uni",
@@ -355,6 +371,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     nightLights: {
       sheet: "/game/pogicity/Building/landmark/aarhus-stadium-lights_south.png",
       frames: 12, frameWidth: 416, frameHeight: 240, x: 110, y: 364, fps: 4,
+      hours: [17, 23], // an evening match: on from 17:00, off at 23:00 (a stadium is dark on an ordinary night)
     },
   },
   // The red heritage hall (Stadionhallerne) on the stadium's south side, as its entrance

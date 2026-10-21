@@ -142,7 +142,12 @@ and the model is built from it:
   and reacts to the player near its entrance.
 - Night: the visitor's own clock in their browser (19:00 to 07:00), or the time of day the visitor picks on the button next to Walk (Auto, Morning, Day, Evening, Night; remembered in the browser), or `?night=1` / `?night=0` tints every scene object
   dark blue over 0.9 s. A building's `nightLights` strip (cropped from its south sprite like `ambient`) is drawn
-  untinted above all its slices, so only what is lit glows.
+  untinted above all its slices, so only what is lit glows. With `hours` it is on only then (the stadium's floodlights:
+  17:00 to 23:00, an evening match), switching over 2 s.
+- Walk-in and portfolio buildings get their lit windows from the 3D model (`nightWindows`): the south sprite rendered
+  again with the glass flat warm and every other part only hiding what is behind it (entrance lab `glow`, the
+  building's `export_windows.sh`), in two groups plus the ground floor shopfront, set by the hour like the filler
+  buildings and hidden while the roof is off.
 - Street lamps (`lib/city/streetLights.ts`): placed by hand in the editor (lamp tab) and saved on the cell as
   `streetLamp` in `cityGrid.json`. Three types: wire lamps over roads (the wire crosses the road by itself), post lamps
   on squares and paths, lanterns on old streets; posts and lanterns never stand on a road. At dusk they switch on one by one; each throws an additive warm pool on
