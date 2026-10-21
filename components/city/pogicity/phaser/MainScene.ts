@@ -262,6 +262,10 @@ export class MainScene extends Phaser.Scene {
       (building.reactions ?? []).forEach((r, i) => {
         this.load.spritesheet(`${building.id}_reaction${i}`, r.sheet, { frameWidth: r.frameWidth, frameHeight: r.frameHeight });
       });
+      for (const group of ["a", "b", "front"] as const) {
+        const path = building.nightWindows?.[group];
+        if (path) this.load.image(`${building.id}_win_${group}`, path);
+      }
       if (building.nightLights) {
         this.load.spritesheet(`${building.id}_lights`, building.nightLights.sheet, {
           frameWidth: building.nightLights.frameWidth, frameHeight: building.nightLights.frameHeight,
@@ -2815,12 +2819,13 @@ export class MainScene extends Phaser.Scene {
       image.setAlpha(this.night);
       image.setVisible(this.night > 0);
       this.buildingSprites.set(`${key}_lights`, image);
-      this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps });
+      this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps, hours: lights.hours, level: MainScene.onByHours(lights.hours, this.hour) });
     }
 
     // Lit windows by the hour (filler buildings; lib/city/nightSchedule.ts)
     const kind = nightKind(building.id, building.category);
     if (kind && !building.slices) this.addBuildingWindows(key, sprite, textureKey, kind, originX, originY, footprint, orientation);
+    if (building.nightWindows && (!orientation || orientation === Direction.Down)) this.addModelWindows(key, sprite, building);
 
     // Interior moments over the roof-off sprite (shown only while the roof is off; updateMoments)
     if (!orientation || orientation === Direction.Down) {
@@ -2916,7 +2921,7 @@ export class MainScene extends Phaser.Scene {
   private nightTarget = 0;
   private grade = { r: 255, g: 255, b: 255 };
   private gradeTarget = { r: 255, g: 255, b: 255 };
-  private nightLights: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number }> = new Map();
+  private nightLights: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number; hours?: [number, number]; level: number }> = new Map();
   private static readonly DAY_BACKGROUND = { r: 0x73, g: 0x64, b: 0x5f };
 
   setLook(look: CityLook): void {
@@ -2934,17 +2939,54 @@ export class MainScene extends Phaser.Scene {
   setHour(hour: number): void {
     if (hour === this.hour) return;
     this.hour = hour;
-    this.buildingWindows.forEach((w) => { w.levels = nightLevels(w.kind, hour, w.seed); });
+    this.buildingWindows.forEach((w) => { w.levels = this.windowLevels(w, hour); });
     this.nightApplied = { tint: -1, count: -1 };
   }
 
   // Lit windows: two random groups of window glass found in the sprite (lib/city/nightWindows.ts), the shopfront of
   // food places and the bar, and a warm spill of light on the street in front of an open one. All untinted, faded in
   // with the night and set by the hour
+  // A building's windows from its 3D model (nightWindows) carry buildingId, so they hide while its roof is off (`shown`)
   private buildingWindows: Map<string, {
-    kind: NightKind; seed: number; levels: { a: number; b: number; front: number };
+    kind: NightKind; frontKind?: NightKind; seed: number; levels: { a: number; b: number; front: number };
     parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[];
+    buildingId?: string; shown: number;
   }> = new Map();
+
+  private windowLevels(w: { kind: NightKind; frontKind?: NightKind; seed: number }, hour: number) {
+    const levels = nightLevels(w.kind, hour, w.seed);
+    return w.frontKind ? { ...levels, front: nightLevels(w.frontKind, hour, w.seed).front } : levels;
+  }
+
+  // On by the hour: inside from..to (wrapping past midnight), or always without hours
+  private static onByHours(hours: [number, number] | undefined, hour: number): number {
+    if (!hours) return 1;
+    const [from, to] = hours;
+    return (from <= to ? hour >= from && hour < to : hour >= from || hour < to) ? 1 : 0;
+  }
+
+  // Lit windows rendered from a building's 3D model (BuildingDefinition.nightWindows), over every slice of the sprite
+  private addModelWindows(key: string, sprite: Phaser.GameObjects.Image, building: BuildingDefinition): void {
+    const win = building.nightWindows!;
+    const seed = 0; // the portfolio buildings are the ones someone always works late in
+    let depth = sprite.depth;
+    for (let n = 1; this.buildingSprites.has(`${key}_s${n}`); n++) {
+      depth = Math.max(depth, this.buildingSprites.get(`${key}_s${n}`)!.depth);
+    }
+    const parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[] = [];
+    (["a", "b", "front"] as const).forEach((group, i) => {
+      const texture = `${building.id}_win_${group}`;
+      if (!win[group] || !this.textures.exists(texture)) return;
+      const image = this.add.image(sprite.x, sprite.y, texture).setOrigin(sprite.originX, sprite.originY);
+      image.setScale(sprite.scaleX, sprite.scaleY).setDepth(depth + 0.041 + i * 0.001).setVisible(false).setAlpha(0);
+      this.buildingSprites.set(`${key}_w${group === "front" ? "f" : group}`, image);
+      parts.push({ image, group, strength: group === "front" ? 0.9 : 0.8 });
+    });
+    const w = { kind: win.kind, frontKind: win.frontKind, seed, buildingId: building.id, shown: 1, parts, levels: { a: 0, b: 0, front: 0 } };
+    w.levels = this.windowLevels(w, this.hour);
+    this.buildingWindows.set(key, w);
+    this.nightApplied = { tint: -1, count: -1 };
+  }
 
   private windowTextures(textureKey: string, shopfront: "left" | "right" | null): { a: string; b: string; front: string | null } | null {
     const base = `${textureKey}_win${shopfront ? `_${shopfront}` : ""}`;
@@ -3006,7 +3048,7 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.set(`${key}_spill`, spill);
       parts.push({ image: spill, group: "front", strength: 0.8 });
     }
-    this.buildingWindows.set(key, { kind, seed, levels: nightLevels(kind, this.hour, seed), parts });
+    this.buildingWindows.set(key, { kind, seed, levels: nightLevels(kind, this.hour, seed), parts, shown: 1 });
     this.nightApplied = { tint: -1, count: -1 };
   }
 
@@ -3051,6 +3093,10 @@ export class MainScene extends Phaser.Scene {
   private nightClock = 0;
   private windowDusk: number | null = null;
   private nightApplied = { tint: 0xffffff, count: 0 };
+  // Room light by building key (0..1): on while the roof is off, so a visitor can see inside at night
+  private roomLight: Map<string, number> = new Map();
+  private static readonly ROOM_COLOR: [number, number, number] = [255, 240, 218];
+  private static readonly ROOM_STRENGTH = 0.85;
 
   private updateNight(time: number): void {
     const last = this.nightClock;
@@ -3071,27 +3117,56 @@ export class MainScene extends Phaser.Scene {
     // At dusk the windows come on house by house over 2.5 s (each building at its own moment), not all at once
     if (this.nightTarget === 1 && t >= 0.3 && this.windowDusk === null) this.windowDusk = time;
     if (this.nightTarget === 0) this.windowDusk = null;
+    const fade = Math.min(1, (time - last) / 450); // the roof's cross-fade (refreshBuildingTexture)
     this.buildingWindows.forEach((w) => {
       const since = this.windowDusk === null ? 0 : time - this.windowDusk - w.seed * 2500;
       const on = this.nightTarget === 0 ? 1 : Math.min(1, Math.max(0, since / 300));
+      const shown = w.buildingId && this.openBuildings.has(w.buildingId) ? 0 : 1;
+      w.shown = w.shown < shown ? Math.min(shown, w.shown + fade) : Math.max(shown, w.shown - fade);
       w.parts.forEach((part) => {
         lit.add(part.image);
         if (!part.image.active) return;
-        const level = w.levels[part.group] * t * on;
+        const level = w.levels[part.group] * t * on * w.shown;
         part.image.setVisible(level > 0).setAlpha(level * part.strength);
       });
     });
     this.nightLights.forEach((l) => {
       lit.add(l.image);
       if (!l.image.active) return;
-      l.image.setVisible(t > 0);
-      l.image.setAlpha(t);
+      // Lights with hours (the stadium's floodlights) switch on and off over 2 s when the hour crosses them
+      const on = MainScene.onByHours(l.hours, this.hour);
+      const ramp = Math.min(1, (time - last) / 2000);
+      l.level = l.level < on ? Math.min(on, l.level + ramp) : Math.max(on, l.level - ramp);
+      l.image.setVisible(t * l.level > 0);
+      l.image.setAlpha(t * l.level);
       l.image.setFrame(Math.floor((time / 1000) * l.fps) % l.frames);
+    });
+    // Rooms light up while their roof is off (a tap or the player inside), so the interior reads at night
+    let roomsMoving = false;
+    this.buildingSpriteInfo.forEach((info, key) => {
+      const want = this.openBuildings.has(info.buildingId) ? 1 : 0;
+      const was = this.roomLight.get(key) ?? 0;
+      if (was === want) return;
+      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : Math.max(want, was - fade));
+      roomsMoving = true;
+    });
+    const rooms: { image: Phaser.GameObjects.GameObject; tint: number }[] = [];
+    this.roomLight.forEach((level, key) => {
+      if (level === 0) return;
+      const k = level * t * MainScene.ROOM_STRENGTH, room = MainScene.ROOM_COLOR;
+      const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
+      const roomTint = (ch(n.r, room[0]) << 16) | (ch(n.g, room[1]) << 8) | ch(n.b, room[2]);
+      this.buildingSprites.forEach((image, k2) => {
+        if (k2 !== key && !(k2.startsWith(`${key}_`) && !/_(wa|wb|wf|spill|lights)$/.test(k2))) return;
+        lit.add(image);
+        rooms.push({ image, tint: roomTint });
+      });
     });
     // Re-tint only while fading or when objects were added (characters, cars), not every frame of a settled night
     const count = this.children.list.length;
-    if (tint === this.nightApplied.tint && count === this.nightApplied.count) return;
+    if (!roomsMoving && tint === this.nightApplied.tint && count === this.nightApplied.count) return;
     this.nightApplied = { tint, count };
+    rooms.forEach(({ image, tint: roomTint }) => (image as Phaser.GameObjects.Image).setTint(roomTint));
     this.children.list.forEach((child) => {
       if (lit.has(child)) return;
       const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
@@ -3238,8 +3313,16 @@ export class MainScene extends Phaser.Scene {
       const d = Math.sqrt((gx / l.pool.rx) ** 2 + (gy / l.pool.ry) ** 2);
       if (d < 1) light = Math.max(light, Math.pow(1 - d, 0.8) * l.level * l.strength);
     }
-    const n = this.grade, warm = [255, 214, 160];
-    const k = Math.min(1, light * 0.9);
+    // Inside a lit room the room light wins over the lamps outside
+    let roomLevel = 0;
+    if (this.insideBuilding) {
+      this.buildingSpriteInfo.forEach((info, key) => {
+        if (info.buildingId === this.insideBuilding) roomLevel = Math.max(roomLevel, this.roomLight.get(key) ?? 0);
+      });
+    }
+    const roomK = roomLevel * this.night * MainScene.ROOM_STRENGTH;
+    const n = this.grade, lampK = Math.min(1, light * 0.9);
+    const [k, warm] = roomK > lampK ? [roomK, MainScene.ROOM_COLOR] : [lampK, [255, 214, 160]];
     const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
     sprite.setTint((ch(n.r, warm[0]) << 16) | (ch(n.g, warm[1]) << 8) | ch(n.b, warm[2]));
     this.playerLampTinted = true;

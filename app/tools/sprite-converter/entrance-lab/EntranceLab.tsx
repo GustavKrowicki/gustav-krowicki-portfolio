@@ -518,6 +518,7 @@ export type ShotOptions = {
   avatarYaw?: number; // models with a plan: the avatar's turn in degrees
   masks?: string[]; // flat-colour mask render: entry i (node-id prefixes joined by '|') -> rgb(255, 8 * (i + 1), 0), avatar rgb(0, 0, 255), rest grey; glass left out
   only?: string[]; // draw only the nodes with these id prefixes ('avatar' = the avatar), e.g. one prop's full silhouette
+  glow?: string; // night window pass: nodes whose id matches this regex drawn flat warm, every other mesh only hides what is behind it (transparent bg)
 };
 
 type Runtime = { nodes: Record<string, THREE.Object3D> };
@@ -623,8 +624,10 @@ export default function EntranceLab() {
     const avatarGroup = model.userData.avatarGroup as THREE.Object3D | undefined;
     const meshNode = new Map<THREE.Mesh, string>();
     const baseVisible = new Map<THREE.Mesh, boolean>();
+    const baseOrder = new Map<THREE.Mesh, number>();
     for (const mesh of original.keys()) {
       baseVisible.set(mesh, mesh.visible);
+      baseOrder.set(mesh, mesh.renderOrder);
       let o: THREE.Object3D | null = mesh;
       let id = '';
       while (o && !id) {
@@ -635,6 +638,8 @@ export default function EntranceLab() {
       meshNode.set(mesh, id);
     }
     const maskColour = (i: number) => new THREE.Color().setRGB(i < 0 ? 0.5 : 1, i < 0 ? 0.5 : (8 * (i + 1)) / 255, i < 0 ? 0.5 : 0, THREE.SRGBColorSpace);
+    const glowMat = new THREE.MeshBasicMaterial({ color: new THREE.Color().setRGB(1, 0.8, 0.52, THREE.SRGBColorSpace) });
+    const hideMat = new THREE.MeshBasicMaterial({ colorWrite: false });
     const maskMats = new Map<string, THREE.MeshBasicMaterial>();
     const maskMat = (key: string, c: THREE.Color) => {
       if (!maskMats.has(key)) maskMats.set(key, new THREE.MeshBasicMaterial({ color: c }));
@@ -675,6 +680,7 @@ export default function EntranceLab() {
       const match = (id: string, list: string[]) => list.findIndex((entry) => entry.split('|').some((p) => (p === 'avatar' ? id === 'avatar' : id !== 'avatar' && id.startsWith(p))));
       for (const mesh of original.keys()) {
         const id = meshNode.get(mesh) ?? '';
+        mesh.renderOrder = baseOrder.get(mesh)!;
         mesh.visible = baseVisible.get(mesh)! && (!opts.only || match(id, opts.only) >= 0);
         if (!opts.masks) continue;
         if ((original.get(mesh) as THREE.Material).transparent) { mesh.visible = false; continue; }   // see-through glass hides nothing
@@ -682,6 +688,18 @@ export default function EntranceLab() {
         mesh.material = id === 'avatar' ? maskMat('avatar', new THREE.Color().setRGB(0, 0, 1, THREE.SRGBColorSpace)) : maskMat(`m${i}`, maskColour(i));
       }
       if (opts.masks) { lookdev.visible = photo.visible = converter.visible = shade.visible = false; }
+      if (opts.glow) {
+        const lit = new RegExp(opts.glow);
+        for (const mesh of original.keys()) {
+          if (!mesh.visible) continue;
+          const id = (mesh.userData.sculptComponent as { id?: string } | undefined)?.id ?? meshNode.get(mesh) ?? '';
+          // the glass draws after every hiding mesh, so what stands in front of it (a slat, a column) cuts it
+          if (lit.test(id)) { mesh.material = glowMat; mesh.renderOrder = 1; }
+          else if ((original.get(mesh) as THREE.Material).transparent) mesh.visible = false;
+          else mesh.material = hideMat;
+        }
+        shade.visible = false;
+      }
       // Avatar stand point (plan tiles) on models that carry a plan
       const plan = model.userData.plan as { w: number; h: number } | undefined;
       if (plan && avatarGroup && opts.avatarAt) avatarGroup.position.set(opts.avatarAt[0] - plan.w / 2, 0.05, opts.avatarAt[1] - plan.h / 2);
