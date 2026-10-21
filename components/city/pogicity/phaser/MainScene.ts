@@ -46,7 +46,7 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
-import { avatar3dEnabled, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { avatar3dEnabled, followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 
@@ -133,6 +133,10 @@ export class MainScene extends Phaser.Scene {
 
   // Scene ready flag
   private isReady: boolean = false;
+  // create() has run: walk mode can start (the Avatar tab may ask before the game has booted)
+  get ready(): boolean {
+    return this.isReady;
+  }
   private gifsLoaded: boolean = false;
   private pendingGrid: GridCell[][] | null = null;
 
@@ -265,6 +269,15 @@ export class MainScene extends Phaser.Scene {
   }
 
   create(): void {
+    // The avatar builder (Avatar tab) can change the player's outfit while the city runs
+    const unfollowAvatarBuilder = followAvatarBuilder(this);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, unfollowAvatarBuilder);
+    this.events.once(Phaser.Scenes.Events.DESTROY, unfollowAvatarBuilder);
+    // The player (and its window listener for the builder's name and outfit cue) goes with the scene, even mid-walk
+    const releasePlayer = () => this.playerController?.destroy();
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePlayer);
+    this.events.once(Phaser.Scenes.Events.DESTROY, releasePlayer);
+
     // Snap pixel art to whole pixels whenever the camera allows it (integer zoom, see updateCamera)
     this.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, (gameObject: Phaser.GameObjects.GameObject) => {
       gameObject.setVertexRoundMode("fullAuto");
@@ -279,6 +292,26 @@ export class MainScene extends Phaser.Scene {
         S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
         D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
       };
+      // The keys above are captured (preventDefault) page-wide, which would stop a visitor typing W, A, S, D, space or
+      // the arrows into a text field (the avatar name tag). Let go of the keyboard while a field has focus.
+      const keyboard = this.input.keyboard;
+      const isField = (el: EventTarget | null) =>
+        el instanceof HTMLElement && (el.tagName === "INPUT" || el.tagName === "TEXTAREA" || el.isContentEditable);
+      const onFocusChange = () => {
+        const typing = isField(document.activeElement);
+        if (typing) keyboard.disableGlobalCapture();
+        else keyboard.enableGlobalCapture();
+        keyboard.enabled = !typing;
+        if (typing) keyboard.resetKeys();
+      };
+      document.addEventListener("focusin", onFocusChange);
+      document.addEventListener("focusout", onFocusChange);
+      const releaseFocusWatch = () => {
+        document.removeEventListener("focusin", onFocusChange);
+        document.removeEventListener("focusout", onFocusChange);
+      };
+      this.events.once(Phaser.Scenes.Events.SHUTDOWN, releaseFocusWatch);
+      this.events.once(Phaser.Scenes.Events.DESTROY, releaseFocusWatch);
     }
 
     // Initialize grid - use pending grid if available, otherwise create empty
@@ -409,7 +442,7 @@ export class MainScene extends Phaser.Scene {
       const targetZoom = Phaser.Math.Clamp(
         camera.zoom * scale,
         MainScene.MIN_ZOOM,
-        MainScene.MAX_ZOOM
+        this.maxZoomNow()
       );
 
       if (Math.abs(targetZoom - camera.zoom) >= 0.001) {
@@ -1046,7 +1079,7 @@ export class MainScene extends Phaser.Scene {
     const targetZoom = Phaser.Math.Clamp(
       camera.zoom * zoomFactor,
       MainScene.MIN_ZOOM,
-      MainScene.MAX_ZOOM
+      this.maxZoomNow()
     );
     if (Math.abs(targetZoom - camera.zoom) < 0.001) return;
     this.applyZoomAtPointer(targetZoom, pointer.x, pointer.y);
@@ -1453,12 +1486,12 @@ export class MainScene extends Phaser.Scene {
 
   // Pan (and zoom) with the standard timing: the duration follows the distance and the zoom ratio
   // (docs/city-rules.md, section 10). Scroll is the unzoomed top-left, so it does not depend on zoom.
-  private moveCamera(targetScrollX: number, targetScrollY: number, targetZoom: number): void {
+  private moveCamera(targetScrollX: number, targetScrollY: number, targetZoom: number, fixedDurationMs?: number): void {
     const camera = this.cameras.main;
     const fromZoom = camera.zoom;
     const distancePx =
       Phaser.Math.Distance.Between(camera.scrollX, camera.scrollY, targetScrollX, targetScrollY) * fromZoom;
-    const duration = Math.max(panDurationMs(distancePx), zoomDurationMs(fromZoom, targetZoom));
+    const duration = fixedDurationMs ?? Math.max(panDurationMs(distancePx), zoomDurationMs(fromZoom, targetZoom));
     const ease = Phaser.Math.Easing.Cubic.InOut;
 
     camera.pan(
@@ -1839,16 +1872,16 @@ export class MainScene extends Phaser.Scene {
 
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
   // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null.
-  // Never below the character's own depth, or the pavement tiles south of the front corner hide its legs.
+  // Never below the character's own sort depth, so the ground tiles it stands on stay under it.
   private frontOfPlotDepth(gridX: number, gridY: number): number | null {
     for (const [key, plot] of this.interiorPlots) {
       const lx = gridX - plot.originX, ly = gridY - plot.originY;
       const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
       const sprite = near && (lx >= plot.width || ly >= plot.height) ? this.buildingSprites.get(key) : undefined;
       if (sprite) {
-        const own = gridToScreen(gridX, gridY);
-        return Math.max(sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5),
-          this.depthFromSortPoint(own.x, own.y + TILE_HEIGHT / 2, 0.3));
+        const screen = this.gridToScreen(gridX, gridY);
+        const own = this.depthFromSortPoint(screen.x, screen.y + TILE_HEIGHT / 2, 0.3);
+        return Math.max(own, sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5));
       }
     }
     return null;
@@ -1948,7 +1981,12 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
-    if (this.isMobileViewport()) {
+    if (this.skipNextSpawnFocus) {
+      // focusOnPlayer glides there next; follow anyway, in case that focus never lands
+      this.skipNextSpawnFocus = false;
+      this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
+    } else if (this.isMobileViewport()) {
       const playerPos = this.playerController.getPosition();
       this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
       this.manualCameraOverrideInAdventure = false;
@@ -2017,6 +2055,9 @@ export class MainScene extends Phaser.Scene {
     this.isAdventureActive = false;
     this.gameMode = GameMode.Viewer;
     this.cameraFollowPlayer = false;
+    this.avatarFocusActive = false;
+    this.focusFollowTimer?.remove();
+    this.focusFollowTimer = null;
     this.manualCameraOverrideInAdventure = false;
     this.stopCameraFollow();
     this.standUp();
@@ -2309,6 +2350,39 @@ export class MainScene extends Phaser.Scene {
 
   private isMobileViewport(): boolean {
     return window.innerWidth < 768;
+  }
+
+  // The avatar builder's tab opened: glide (pan and zoom together, ease in-out) to the player at a close whole zoom,
+  // past the usual MAX_ZOOM because the city view beside or above the panel is small, and keep following it.
+  // close = true glides back to street zoom for walking once the tab closes.
+  avatarFocusZoom = 6;
+  private focusFollowTimer: Phaser.Time.TimerEvent | null = null;
+  // While the Avatar tab holds the camera close, wheel and pinch may go up to that zoom instead of snapping to 4
+  private avatarFocusActive = false;
+  private maxZoomNow(): number {
+    return this.avatarFocusActive ? Math.max(MainScene.MAX_ZOOM, this.avatarFocusZoom) : MainScene.MAX_ZOOM;
+  }
+  // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
+  skipNextSpawnFocus = false;
+  focusOnPlayer(close = false): boolean {
+    if (!this.playerController || !this.isAdventureActive) return false;
+    const p = this.playerController.getPosition();
+    this.stopCameraMoves();
+    this.stopCameraFollow();
+    const camera = this.cameras.main;
+    this.avatarFocusActive = !close;
+    const zoom = close ? ZOOM.street : this.avatarFocusZoom;
+    const y = p.worldY - (close ? 0 : 12);
+    this.cameraFollowPlayer = false;
+    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, 800);
+    this.manualCameraOverrideInAdventure = false;
+    // follow again once the glide has landed (a follow during the tween would fight it)
+    this.focusFollowTimer?.remove();
+    this.focusFollowTimer = this.time.delayedCall(820, () => {
+      this.focusFollowTimer = null;
+      if (this.isAdventureActive) this.cameraFollowPlayer = true;
+    });
+    return true;
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {
