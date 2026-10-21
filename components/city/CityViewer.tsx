@@ -22,6 +22,7 @@ import {
   trackBuildingInteracted,
   trackProjectOpened,
   trackCityExited,
+  trackBeatChoice,
 } from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -93,6 +94,9 @@ export default function CityViewer({
   const [interiorSeat, setInteriorSeat] = useState<{ buildingId: string; beat: string } | null>(null);
   const seatTimerRef = useRef<number | undefined>(undefined);
   const [isSeated, setIsSeated] = useState(false);
+  // A card's button changed the card in place (beat.choices without walk, e.g. "Book for an event"); cleared on the next beat
+  const [choiceCard, setChoiceCard] = useState<{ buildingId: string; beat: string } | null>(null);
+  useEffect(() => setChoiceCard(null), [interiorBeat]);
   // Door beats (lib/city/interiorBeats.ts "enter" / "leave"): shown for a while after crossing a main door
   const [doorCard, setDoorCard] = useState<{ buildingId: string; beat: string } | null>(null);
   const doorTimerRef = useRef<number | undefined>(undefined);
@@ -749,7 +753,9 @@ export default function CityViewer({
   ]);
 
   // The card on screen: a stand-tile beat first (hidden while seated), else a door beat
-  const shownCard = interiorBeat ? (isSeated ? null : interiorBeat) : doorCard;
+  // While seated, the screens overlay replaces the card, unless the seat has no screens (the card stays, e.g. at a table)
+  const seatHasScreens = !!(interiorBeat && INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat]?.seat?.screens.length);
+  const shownCard = interiorBeat ? (isSeated && seatHasScreens ? null : choiceCard ?? interiorBeat) : doorCard;
   // The tour dialog does not show for buildings told by beat cards (it may still be "open" for them in state)
   const dialogShown = isDialogOpen && !!currentEncounter && !BEAT_CARD_BUILDINGS.has(currentEncounter.buildingId ?? "");
 
@@ -815,6 +821,19 @@ export default function CityViewer({
             window.clearTimeout(doorTimerRef.current);
             setDoorCard(null);
             handleViewCaseStudy(slug);
+          }}
+          onChoose={(choice) => {
+            if (!shownCard) return;
+            if (!choice.walk) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+              setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to });
+              return;
+            }
+            const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+            // A second tap while the cook still serves is ignored, and not counted twice
+            if (scene?.serveThenWalk(shownCard.buildingId, shownCard.beat, choice.to)) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+            }
           }}
         />
       )}

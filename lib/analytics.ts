@@ -59,3 +59,8 @@ export function trackSpotifyInteracted(
 ) {
   capture('spotify_interacted', { action, source, track_name: trackName });
 }
+
+// Walk-in beat cards: a button on a card (e.g. the food truck hatch: "eat" or "book")
+export function trackBeatChoice(buildingId: string, beat: string, choice: string) {
+  capture('beat_choice', { building_id: buildingId, beat, choice });
+}

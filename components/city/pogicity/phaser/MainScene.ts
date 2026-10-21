@@ -251,6 +251,9 @@ export class MainScene extends Phaser.Scene {
           frameWidth: building.ambient.frameWidth, frameHeight: building.ambient.frameHeight,
         });
       }
+      (building.reactions ?? []).forEach((r, i) => {
+        this.load.spritesheet(`${building.id}_reaction${i}`, r.sheet, { frameWidth: r.frameWidth, frameHeight: r.frameHeight });
+      });
       if (building.nightLights) {
         this.load.spritesheet(`${building.id}_lights`, building.nightLights.sheet, {
           frameWidth: building.nightLights.frameWidth, frameHeight: building.nightLights.frameHeight,
@@ -476,6 +479,7 @@ export class MainScene extends Phaser.Scene {
     this.updateInteriorState(playerPos.gridX, playerPos.gridY);
     this.updateDoors();
     this.updateMoments();
+    this.updateReactions();
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -1675,6 +1679,29 @@ export class MainScene extends Phaser.Scene {
     this.activeBeat = key;
     this.beatSince = this.time.now;
     this.events.emit("interiorBeatChanged", next);
+    // Leaving the hatch while the cook still serves cancels the walk to the table
+    this.serveTimer?.remove();
+    this.serveTimer = null;
+    this.updateBeatZoom(next && INTERIOR_BEATS[next.buildingId]?.[next.beat]?.zoomIn ? key : null);
+  }
+
+  // Cards with zoomIn (the food truck hatches): ease in one zoom step on the player while the card is open, back after
+  private beatZoomFrom: { key: string; zoom: number } | null = null;
+  private updateBeatZoom(key: string | null): void {
+    if ((this.beatZoomFrom?.key ?? null) === key) return;
+    const camera = this.cameras.main;
+    const p = this.playerController!.getPosition();
+    if (key && !this.beatZoomFrom) {
+      // Snap to the zoom step (powers of two) so a zoom-out still running does not leave an in-between zoom behind
+      const from = 2 ** Math.round(Math.log2(camera.zoom));
+      this.beatZoomFrom = { key, zoom: from };
+      const target = Math.min(from * 2, this.maxZoomNow());
+      if (target > from) this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
+    } else if (!key && this.beatZoomFrom) {
+      const zoom = this.beatZoomFrom.zoom;
+      this.beatZoomFrom = null;
+      this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, zoom);
+    } else if (key && this.beatZoomFrom) this.beatZoomFrom.key = key;
   }
 
   // Sit-and-look moments (lib/city/interiorBeats.ts seat): a short pause on the stand tile, then the avatar walks into
@@ -2178,6 +2205,15 @@ export class MainScene extends Phaser.Scene {
     return candidates;
   }
 
+  /** Walk the avatar to a beat's stand tile inside a walk-in building (a card's button, e.g. "Eat" walks to the table) */
+  walkPlayerToBeat(buildingId: string, beat: string): boolean {
+    const spot = BUILDING_INTERIORS[buildingId]?.standSpots?.[beat];
+    const plot = [...this.interiorTiles.values()].find((t) => t.buildingId === buildingId && t.lx === 0 && t.ly === 0);
+    if (!this.playerController || !spot || !plot) return false;
+    const origin = this.interiorPlots.get(plot.key)!;
+    return this.playerController.walkToBuilding(origin.originX + Math.floor(spot[0]), origin.originY + Math.floor(spot[1]));
+  }
+
   walkPlayerToBuilding(buildingId: string): boolean {
     if (!this.playerController) return false;
 
@@ -2403,6 +2439,8 @@ export class MainScene extends Phaser.Scene {
 
   private recordManualCameraInteraction(): void {
     this.lastManualCameraInteractionAt = this.time.now;
+    // A zoom by hand while a hatch card is open stays: leaving the hatch does not undo it
+    this.beatZoomFrom = null;
     this.stopCameraFollow();
     this.stopCameraMoves();
     if (this.isAdventureActive) {
@@ -2513,6 +2551,7 @@ export class MainScene extends Phaser.Scene {
     this.buildingSpriteInfo.clear();
     this.doors.clear();
     this.ambients.clear();
+    this.reactions.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2604,6 +2643,12 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_ambient`);
     }
     this.ambients.delete(buildingKey);
+    // By the reactions map, not by index: a reaction whose sheet failed to load leaves a gap in the numbers
+    [...this.reactions.keys()].filter((k) => k.startsWith(`${buildingKey}_reaction`)).forEach((k) => {
+      this.buildingSprites.get(k)?.destroy();
+      this.buildingSprites.delete(k);
+      this.reactions.delete(k);
+    });
     const lightsSprite = this.buildingSprites.get(`${buildingKey}_lights`);
     if (lightsSprite) {
       lightsSprite.destroy();
@@ -2710,6 +2755,22 @@ export class MainScene extends Phaser.Scene {
       image.setDepth(sprite.depth + 0.04);
       this.buildingSprites.set(`${key}_ambient`, image);
       this.ambients.set(key, { image, frames: ambient.frames, fps: ambient.fps });
+    }
+
+    // Reactions (the food truck cooks): same crop maths as the ambient loop, frame 0 shown until the visitor comes near
+    if (!orientation || orientation === Direction.Down) {
+      (building.reactions ?? []).forEach((r, i) => {
+        if (!this.textures.exists(`${building.id}_reaction${i}`)) return;
+        const s = sprite.scaleX;
+        const left = sprite.x - sprite.width * s / 2;
+        const top = sprite.y - sprite.height * s;
+        const image = this.add.image(left + r.x * s, top + r.y * s, `${building.id}_reaction${i}`, 0);
+        image.setOrigin(0, 0);
+        image.setScale(s);
+        image.setDepth(sprite.depth + 0.042);
+        this.buildingSprites.set(`${key}_reaction${i}`, image);
+        this.reactions.set(`${key}_reaction${i}`, { image, buildingId, index: i, originX, originY, mode: 'idle', value: 0, near: false });
+      });
     }
 
     // Night lights: same crop maths as the ambient loop, untinted and faded in with the night (updateNight)
@@ -2895,6 +2956,55 @@ export class MainScene extends Phaser.Scene {
     });
   }
 
+  // Reactions by `${building key}_reaction${index}` (the food truck cooks): idle at frame 0; a wave plays once when the
+  // player steps within `radius`; serve() plays the hand-over and holds it until the player leaves
+  private reactions: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; index: number; originX: number; originY: number;
+    mode: 'idle' | 'wave' | 'serve'; value: number; near: boolean }> = new Map();
+
+  private updateReactions(): void {
+    if (!this.playerController || this.reactions.size === 0) return;
+    const pos = this.playerController.getPosition();
+    const dt = this.game.loop.delta / 1000;
+    this.reactions.forEach((r) => {
+      const def = getBuilding(r.buildingId)?.reactions?.[r.index];
+      if (!def || !r.image.active) return;
+      const near = Math.hypot(pos.gridX + 0.5 - (r.originX + def.at[0]), pos.gridY + 0.5 - (r.originY + def.at[1])) <= def.radius;
+      if (near && !r.near && r.mode === 'idle') { r.mode = 'wave'; r.value = 1; }
+      if (!near && r.mode !== 'serve') r.mode = 'idle';
+      if (!near && r.mode === 'serve' && this.seated?.buildingId !== r.buildingId && !this.seatPending) r.mode = 'idle';
+      r.near = near;
+      if (r.mode === 'wave') {
+        r.value += dt * def.fps;
+        if (r.value >= def.wave) { r.mode = 'idle'; r.value = 0; }
+      } else if (r.mode === 'serve') {
+        r.value = Math.min(def.frames - 1, r.value + dt * def.fps);
+      } else r.value = 0;
+      r.image.setVisible(this.seated?.buildingId !== r.buildingId);
+      r.image.setFrame(Math.floor(r.value));
+    });
+  }
+
+  /** The cook at a hatch hands the food over (its reaction's serve frames), then the avatar walks to `to` (a card's
+   *  "Eat"). Without a reaction for the beat it walks at once. */
+  private serveTimer: Phaser.Time.TimerEvent | null = null;
+  serveThenWalk(buildingId: string, beat: string, to: string): boolean {
+    // One serve at a time: a second tap on Eat while the cook serves does nothing
+    if (this.serveTimer) return false;
+    let ms = 0;
+    this.reactions.forEach((r) => {
+      const def = getBuilding(r.buildingId)?.reactions?.[r.index];
+      if (r.buildingId !== buildingId || def?.beat !== beat) return;
+      r.mode = 'serve';
+      r.value = def.wave;
+      ms = ((def.frames - def.wave) / def.fps) * 1000 + 250;
+    });
+    this.serveTimer = this.time.delayedCall(ms, () => {
+      this.serveTimer = null;
+      if (this.activeBeat === `${buildingId}:${beat}`) this.walkPlayerToBeat(buildingId, to);
+    });
+    return true;
+  }
+
   // Interior moments by `${building key}_moment${index}`: current frame position (0..frames)
   private moments: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; index: number; originX: number; originY: number; value: number }> = new Map();
 
@@ -2961,6 +3071,11 @@ export class MainScene extends Phaser.Scene {
       if (info.buildingId !== buildingId) return;
       const sprite = this.buildingSprites.get(key);
       const textureKey = this.getBuildingTextureKey(building, info.orientation);
+      // The ambient loop is cut out of the still sprite: a seated frame is whole, so the loop pauses while the avatar sits
+      this.buildingSprites.get(`${key}_ambient`)?.setVisible(this.seated?.buildingId !== buildingId);
+      for (let i = 0; this.buildingSprites.has(`${key}_reaction${i}`); i++) {
+        this.buildingSprites.get(`${key}_reaction${i}`)?.setVisible(this.seated?.buildingId !== buildingId);
+      }
       if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
       const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
       previous.setOrigin(0.5, 1);
@@ -2982,7 +3097,8 @@ export class MainScene extends Phaser.Scene {
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
 
-    if (this.openBuildings.has(building.id) && this.seated?.buildingId === building.id && dir === "south") {
+    // seated: also for plots with no roof to take off (the food truck's table), which are never "open"
+    if (this.seated?.buildingId === building.id && dir === "south") {
       const sitKey = `${building.id}_sit_${this.seated.beat}`;
       if (this.textures.exists(sitKey)) return sitKey;
     }

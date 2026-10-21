@@ -3771,52 +3771,92 @@
       "originY": 8
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -4145,63 +4185,98 @@
       "originY": 8
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 9,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 10,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 10,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
+      "x": 9,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 10,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 11,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 12,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 13,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 14,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 15,
+      "y": 10,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "tile",
       "x": 16,
       "y": 10,
-      "isOrigin": true,
-      "originX": 16,
-      "originY": 10,
-      "buildingId": "tree-2",
-      "buildingOrientation": "right",
-      "underlyingTileType": "tile"
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -4487,63 +4562,98 @@
       "originY": 8
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 9,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 10,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 11,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
+      "x": 9,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 10,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 11,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 12,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 13,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 14,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 15,
+      "y": 11,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "road",
       "x": 16,
       "y": 11,
-      "isOrigin": true,
-      "originX": 16,
-      "originY": 11,
-      "buildingId": "tree-2",
-      "buildingOrientation": "right",
-      "underlyingTileType": "road"
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -4814,11 +4924,12 @@
       "type": "building",
       "x": 8,
       "y": 12,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -4826,9 +4937,10 @@
       "y": 12,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -4836,39 +4948,65 @@
       "y": 12,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 12,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -5143,9 +5281,10 @@
       "y": 13,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -5153,9 +5292,10 @@
       "y": 13,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -5163,50 +5303,71 @@
       "y": 13,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 13,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 13,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 13,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 13,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 13,
-      "isOrigin": true
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
+      "x": 11,
+      "y": 13,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 12,
+      "y": 13,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 13,
+      "y": 13,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 14,
+      "y": 13,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 15,
+      "y": 13,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "road",
       "x": 16,
       "y": 13,
-      "isOrigin": true,
-      "originX": 16,
-      "originY": 13,
-      "buildingId": "tree-2",
-      "buildingOrientation": "right",
-      "underlyingTileType": "road"
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -5487,9 +5648,10 @@
       "y": 14,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -5497,9 +5659,10 @@
       "y": 14,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
@@ -5507,50 +5670,71 @@
       "y": 14,
       "isOrigin": false,
       "originX": 8,
-      "originY": 12,
+      "originY": 9,
       "buildingId": "cate-it",
-      "buildingOrientation": "right"
-    },
-    {
-      "type": "grass",
-      "x": 11,
-      "y": 14,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 12,
-      "y": 14,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 13,
-      "y": 14,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 14,
-      "y": 14,
-      "isOrigin": true
-    },
-    {
-      "type": "grass",
-      "x": 15,
-      "y": 14,
-      "isOrigin": true
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "building",
+      "x": 11,
+      "y": 14,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 12,
+      "y": 14,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 13,
+      "y": 14,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 14,
+      "y": 14,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "building",
+      "x": 15,
+      "y": 14,
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
+    },
+    {
+      "type": "road",
       "x": 16,
       "y": 14,
-      "isOrigin": true,
-      "originX": 16,
-      "originY": 14,
-      "buildingId": "tree-2",
-      "buildingOrientation": "right",
-      "underlyingTileType": "road"
+      "isOrigin": true
     },
     {
       "type": "asphalt",
@@ -5859,52 +6043,92 @@
       "originY": 12
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 8,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 9,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 14,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 15,
       "y": 15,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 8,
+      "originY": 9,
+      "buildingId": "cate-it",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "road",
