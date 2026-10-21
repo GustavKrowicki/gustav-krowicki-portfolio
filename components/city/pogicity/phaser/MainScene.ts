@@ -2302,6 +2302,10 @@ export class MainScene extends Phaser.Scene {
       // Handle movement keys: a step brings the camera back to the avatar, after a pan or zoom by hand too
       // (during a glide to the avatar its own timer turns the follow on once it lands)
       if (MOVE_KEYS.has(e.key)) {
+        // panned away by hand: glide back to the avatar's centre first, then follow
+        if (this.manualCameraOverrideInAdventure && !this.focusFollowTimer && this.playerController) {
+          this.focusOnPlayer(true, 400);
+        }
         this.manualCameraOverrideInAdventure = false;
         if (!this.focusFollowTimer) this.cameraFollowPlayer = true;
       }
