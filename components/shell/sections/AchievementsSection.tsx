@@ -30,8 +30,17 @@ export default function AchievementsSection({ onOpenSection }: { onOpenSection: 
   const openedAt = useRef(count);
   useEffect(() => trackAchievementsOpened(openedAt.current), []);
 
-  // The panel scrolls, so a tile far down opens its detail at the top
-  useEffect(() => top.current?.scrollIntoView({ block: 'start' }), [openId]);
+  // The panel scrolls: a tile far down opens its page at the top, and back returns to where the visitor was
+  const listScroll = useRef(0);
+  const scroller = () => top.current?.closest('.overflow-y-auto') ?? null;
+  const openFind = (id: string) => {
+    listScroll.current = scroller()?.scrollTop ?? 0;
+    setOpenId(id);
+  };
+  useEffect(() => {
+    const el = scroller();
+    if (el) el.scrollTop = openId ? 0 : listScroll.current;
+  }, [openId]);
 
   const open = openId ? getFind(openId) : undefined;
   if (open) {
@@ -78,7 +87,7 @@ export default function AchievementsSection({ onOpenSection }: { onOpenSection: 
                 .sort((a, b) => Number(found[b.id] !== undefined) - Number(found[a.id] !== undefined))
                 .map((find) => (
                   <li key={find.id}>
-                    <FindTile find={find} isFound={found[find.id] !== undefined} onOpen={() => setOpenId(find.id)} />
+                    <FindTile find={find} isFound={found[find.id] !== undefined} onOpen={() => openFind(find.id)} />
                   </li>
                 ))}
             </ul>
@@ -127,7 +136,7 @@ function FindTile({ find, isFound, onOpen }: { find: Find; isFound: boolean; onO
           </>
         )}
       </div>
-      <p className={`mt-1.5 truncate text-[13px] leading-4 font-medium ${isFound ? 'text-neutral-900' : 'text-neutral-400'}`}>
+      <p className={`mt-1.5 truncate text-[13px] leading-4 font-medium ${isFound ? 'text-neutral-900' : 'text-neutral-500'}`}>
         {isFound ? find.title : find.where ? find.where.replace(/^the /, 'The ') : 'Secret'}
       </p>
     </button>
