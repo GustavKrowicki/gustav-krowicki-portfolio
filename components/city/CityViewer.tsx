@@ -6,7 +6,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
-import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, markFound, onFound, type Find, type FindWalkTarget } from "@/lib/achievements";
+import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, isFound, markFound, onFound, type Find, type FindWalkTarget } from "@/lib/achievements";
 import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
@@ -402,6 +402,8 @@ export default function CityViewer({
           });
           // enter card on the way in (until a stand tile opens its own card, or 6 s), leave card on the way out (15 s)
           scene.events.on("interiorDoorCrossed", ({ buildingId, inward }: { buildingId: string; inward: boolean }) => {
+            if (inward && walkHintRef.current === buildingId) showWalkHint(buildingId);
+            walkHintRef.current = null;
             window.clearTimeout(doorTimerRef.current);
             const beat = inward ? "enter" : "leave";
             if (!INTERIOR_BEATS[buildingId]?.[beat]) { setDoorCard(null); return; }
@@ -529,6 +531,17 @@ export default function CityViewer({
       window.clearTimeout(toastTimerRef.current);
     };
   }, []);
+  // After a hidden find's "Walk me close": in through the door, say how many finds still hide in these rooms
+  const [walkHint, setWalkHint] = useState<string | null>(null);
+  const walkHintTimerRef = useRef<number | undefined>(undefined);
+  const showWalkHint = (buildingId: string) => {
+    const left = FINDS.filter((find) => find.id.startsWith(`${buildingId}:`) && !isFound(find.id)).length;
+    if (left === 0) return;
+    window.clearTimeout(walkHintTimerRef.current);
+    setWalkHint(`${left} ${left === 1 ? "find hides" : "finds hide"} in here. Tap a room to walk in and look.`);
+    walkHintTimerRef.current = window.setTimeout(() => setWalkHint(null), 7000);
+  };
+  useEffect(() => () => window.clearTimeout(walkHintTimerRef.current), []);
   // Night owl: the city after midnight, on the visitor's own clock (or ?hour=0..4)
   useEffect(() => {
     if (hour < 5) markFound("night-owl");
@@ -664,20 +677,26 @@ export default function CityViewer({
     go();
   }, [isAdventureActive, handleStartAdventure, walkInScene]);
 
-  // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then walk to the room's spot or
-  // to the place. Zones passed on the way stay quiet; the place itself greets the avatar as a logo walk does.
+  // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then run to the room's spot, in
+  // through a building's door (a hidden room), or to the place. Zones passed on the way stay quiet; the place itself
+  // greets the avatar as a logo walk does.
+  const walkHintRef = useRef<string | null>(null);
   useEffect(() => {
     const onFindWalk = (e: Event) => {
-      const { buildingId, beat } = (e as CustomEvent<FindWalkTarget>).detail;
+      const { buildingId, beat, inside } = (e as CustomEvent<FindWalkTarget>).detail;
       if (!isAdventureActive) handleStartAdventure();
       walkInScene()?.closeWalkInPeek?.();
+      walkHintRef.current = inside ? buildingId : null;
       let tries = 0;
       const go = () => {
         const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
-        const started = beat ? scene?.walkPlayerToBeat(buildingId, beat) : false;
-        if (!started && !BEAT_CARD_BUILDINGS.has(buildingId)) autoWalkTargetRef.current = buildingId;
-        if (started || gameBoardRef.current?.walkPlayerToBuilding(buildingId)) return;
-        autoWalkTargetRef.current = null;
+        let started = beat ? !!scene?.walkPlayerToBeat(buildingId, beat) : inside ? !!scene?.walkPlayerIntoBuilding(buildingId) : false;
+        if (!started && !beat && !inside) {
+          if (!BEAT_CARD_BUILDINGS.has(buildingId)) autoWalkTargetRef.current = buildingId;
+          started = !!gameBoardRef.current?.walkPlayerToBuilding(buildingId);
+          if (!started) autoWalkTargetRef.current = null;
+        }
+        if (started) { scene?.runPlayer(); return; }
         if (++tries < 30) window.setTimeout(go, 100);
       };
       go();
@@ -1037,7 +1056,7 @@ export default function CityViewer({
       )}
 
       {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
-      <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} />
+      <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox

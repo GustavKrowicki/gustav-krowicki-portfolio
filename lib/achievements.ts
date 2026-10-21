@@ -56,18 +56,21 @@ const imageName = (find: Find) => find.id.replace(':', '--');
 export const findImage = (find: Find) => `/images/finds/${imageName(find)}.webp`;
 export const findHiddenImage = (find: Find) => `/images/finds/${imageName(find)}-hidden.png`;
 
-// "Walk there" from the panel: the avatar walks to a find's place. A found room walks to its spot; a hidden one only to
-// its building, so the room is still the visitor's to find. Secrets and the Avatar tab have no place.
+// "Walk there" from the panel: the avatar runs to a find's place. A found room runs to its spot; a hidden one only in
+// through the building's door, so the room is still the visitor's to find. Secrets and the Avatar tab have no place.
 export const FIND_WALK_EVENT = 'finds:walk';
 export interface FindWalkTarget {
   buildingId: string;
+  /** A found room: walk to its spot */
   beat?: string;
+  /** A hidden room: walk in through the door and say how many still hide inside */
+  inside?: boolean;
 }
 export function findWalkTarget(find: Find, found: boolean): FindWalkTarget | null {
   const [head, tail] = find.id.split(':');
   if (!tail) return null;
   if (head === 'zone') return { buildingId: tail };
-  return found ? { buildingId: head, beat: tail } : { buildingId: head };
+  return found ? { buildingId: head, beat: tail } : { buildingId: head, inside: true };
 }
 
 const STORAGE_KEY = 'portfolio_finds';

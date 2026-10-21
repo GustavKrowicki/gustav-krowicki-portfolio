@@ -2384,6 +2384,21 @@ export class MainScene extends Phaser.Scene {
     return this.playerController.walkToBuilding(origin.originX + Math.floor(spot[0]), origin.originY + Math.floor(spot[1]));
   }
 
+  /** Walk the avatar in through a walk-in building's main door (a hidden find's "Walk me close") */
+  walkPlayerIntoBuilding(buildingId: string): boolean {
+    const plot = [...this.interiorTiles.values()].find((t) => t.buildingId === buildingId && t.lx === 0 && t.ly === 0);
+    if (!this.playerController || !plot) return false;
+    const p = this.playerController.getPosition();
+    if (this.insideBuildingId(p.gridX, p.gridY) === buildingId) return true;
+    this.walkIntoPlot(plot.key);
+    return this.playerController.getState() === PlayerState.AutoWalking;
+  }
+
+  /** Run the walk that just started (walks sent from the panel) */
+  runPlayer(): void {
+    this.playerController?.run();
+  }
+
   walkPlayerToBuilding(buildingId: string): boolean {
     if (!this.playerController) return false;
 
