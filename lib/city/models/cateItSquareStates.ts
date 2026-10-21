@@ -41,13 +41,21 @@ const CREATE: Record<Truck, (options: Options) => THREE.Group> = {
 export function createCateItSquareModel(options: Options = {}): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
-  group.add(box(SQUARE.w, PAD - 0.002, SQUARE.h, '#ddd6c8', 0, (PAD - 0.002) / 2, 0, { ...options, castShadow: false }));
+  // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
+  // shadows of the trucks, tables and guests (Gustav, 2026-10-21: the square's floor differed from the rest of the plaza)
+  const ground = new THREE.Mesh(new THREE.PlaneGeometry(SQUARE.w, SQUARE.h), new THREE.ShadowMaterial({ opacity: 0.3 }));
+  ground.rotation.x = -Math.PI / 2;
+  ground.position.y = 0.001;
+  ground.receiveShadow = true;
+  ground.name = 'shadow-catcher';
+  group.add(ground);
   for (const [truck, { at, yawDeg }] of Object.entries(TRUCKS) as [Truck, (typeof TRUCKS)[Truck]][]) {
     const model = CREATE[truck](options);
     const [x, z] = plan(at);
     model.position.set(x, 0, z);
     model.rotation.y = THREE.MathUtils.degToRad(yawDeg);
     model.name = `${truck}-trailer`;
+    model.traverse((o) => { if (o.name === 'Ground pad') o.visible = false; });   // the trailer's own 4 x 2 pad
     group.add(model);
   }
   for (const t of TABLES) {
