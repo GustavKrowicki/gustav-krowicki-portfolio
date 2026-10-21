@@ -255,6 +255,49 @@ GF, DECK_TOP, HALL_TOP, SOFFIT_TOP, ROOF = 1.0, 1.2, 2.2, 2.45, 3.0
 BAND = (2.64, 2.84)
 RAIL = 0.45
 
+# Stair frame (round 6, from Gustav's stair photos; analysis on the review page): ONE grand stair at the east end of the
+# south facade, its treads parallel to the deck edge from V (plan 3.48, 6.46) to B (plan 5.60, 6.30). It is cut into the
+# deck: a notch DN deep back from that edge, so the top step reaches toward the glass hall, and it runs DOUT out onto the
+# plaza. Its west end is a long diagonal (each step down reaches further west) carrying a dense bar railing, its east end a
+# solid sloping cheek wall at the building corner.
+from shapely.geometry import Polygon, box as sbox
+from shapely import affinity
+SE0 = edges(DECK)
+V = min(DECK, key=lambda p: math.hypot(p[0] - bp(3.48, 6.46)[0], p[1] - bp(3.48, 6.46)[1]))
+B = min(DECK, key=lambda p: math.hypot(p[0] - bp(5.60, 6.30)[0], p[1] - bp(5.60, 6.30)[1]))
+si = next(i for i, e in enumerate(SE0) if {e[0], e[1]} == {V, B})
+sl = math.hypot(B[0] - V[0], B[1] - V[1])
+st = ((B[0] - V[0]) / sl, (B[1] - V[1]) / sl)             # along the edge, west to east
+sn = SE0[si][3]                                           # out from the deck (south)
+UT0, U1, UB0 = 0.45, sl - 0.08, -0.4                      # top step west end, east end, bottom step west end (along the edge from V)
+DN, DOUT = 1.0, 0.8                                       # notch depth into the deck, run out onto the plaza
+NS, SRISE = 11, 0.1                                       # 11 thin steps of 0.1 wu (the deck top is the 12th)
+SRUN = (DN + DOUT) / NS
+
+
+def spt(u, d):
+    """Plan point u along the deck edge from V, d out from it (negative: into the deck)."""
+    return V[0] + st[0] * u + sn[0] * d, V[1] + st[1] * u + sn[1] * d
+
+
+def ccw(pts):
+    a = sum(pts[i][0] * pts[(i + 1) % len(pts)][1] - pts[(i + 1) % len(pts)][0] * pts[i][1] for i in range(len(pts)))
+    return pts if a > 0 else pts[::-1]
+
+
+NOTCH = Polygon([spt(UT0, -DN), spt(U1, -DN), spt(U1, 0.3), spt(UT0, 0.3)])
+
+
+def cut(poly, pad=0.0):
+    """poly minus the stair notch (grown by pad), as a counter-clockwise point list."""
+    g = Polygon(poly).difference(NOTCH.buffer(pad, join_style=2))
+    return ccw([tuple(map(float, c)) for c in list(g.exterior.coords)[:-1]])
+
+
+for c_ in (spt(UB0, DOUT), spt(U1 + 0.1, DOUT)):
+    assert c_[1] < H - 0.02, ("stair off the plot", c_)
+DECK_CUT = cut(DECK)
+
 # Root: the water, exactly the footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Harbour water", "macro", "base", "box", (2 * H, G, 2 * H), (0, G / 2, 0), "water", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "water level"}],
@@ -283,9 +326,9 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(PLAZA)):
 
 # ---------------------------------------------------------------------------------------------------------------
 # Ground floor: a dark open space behind the column line, one closed glass block in the south-east corner
-slab("ground-shadow", "Open ground floor (in shadow)", "macro", "ground-floor", scaled(DECK, 0.8), [], Y(0), Y(GF), "underdeck",
+slab("ground-shadow", "Open ground floor (in shadow)", "macro", "ground-floor", cut(scaled(DECK, 0.8), 0.05), [], Y(0), Y(GF), "underdeck",
      importance=0.6, features=lf("ground-shadow.dark", "contour", "dark open space under the deck"), topo="Shadow core: the deck outline scaled in, extruded.")
-GB = (bp(4.2, 0)[0], bp(5.45, 0)[0], bp(0, 3.8)[1], bp(0, 5.75)[1])
+GB = (bp(4.2, 0)[0], bp(5.45, 0)[0], bp(0, 3.8)[1], min(bp(0, 5.75)[1], spt(U1, -DN)[1] - 0.08))   # stops short of the stair notch
 bx("ground-glass", "Ground floor glass block", "meso", "ground-floor", GB[0], GB[1], Y(0), Y(GF - 0.02), GB[2], GB[3], "glass-ground", importance=0.6,
    features=lf("ground-glass.block", "contour", "closed glass block in the south-east corner of the ground floor"))
 for k in range(1, 5):
@@ -294,25 +337,8 @@ for k in range(1, 5):
     z = GB[2] + (GB[3] - GB[2]) * k / 5
     bx(f"ground-mullion-e-{k}", f"Ground glass mullion E{k}", "micro", "ground-floor", GB[1], GB[1] + 0.012, Y(0), Y(GF - 0.02), z - 0.012, z + 0.012, "mullion", importance=0.2)
 
-# Stair (Gustav's photos, rounds 4-5: "wide and a bit weird angled"): ONE very wide terraced stair at the east end of the
-# south facade, rising from the plaza to the deck in many thin steps (people sit on them), on the deck edge from V
-# (plan 3.48, 6.46) to B (plan 5.60, 6.30); railings on its east edge and down the middle; the deck railing continues
-# along the rest of the facade.
-SE = edges(DECK)
-V = min(DECK, key=lambda p: math.hypot(p[0] - bp(3.48, 6.46)[0], p[1] - bp(3.48, 6.46)[1]))
-B = min(DECK, key=lambda p: math.hypot(p[0] - bp(5.60, 6.30)[0], p[1] - bp(5.60, 6.30)[1]))
-si = next(i for i, e in enumerate(SE) if {e[0], e[1]} == {V, B})
-sl = math.hypot(B[0] - V[0], B[1] - V[1])
-st = ((B[0] - V[0]) / sl, (B[1] - V[1]) / sl)             # along the edge, west to east
-sn = SE[si][3]                                            # out from the deck (south)
-U1 = sl - 0.1                                             # the wide stair's east end along the edge
-RISE, NS = 0.15, 8                                        # 8 thin steps from the deck (1.2) to the plaza
+SE = SE0
 yaw = -math.atan2(st[1], st[0])
-
-
-def spt(u, d):
-    """Plan point u along the deck edge from V, d out from it."""
-    return V[0] + st[0] * u + sn[0] * d, V[1] + st[1] * u + sn[1] * d
 
 
 def step_box(cid, name, level, u0, u1, d0, d1, top, material, **kw):
@@ -321,69 +347,65 @@ def step_box(cid, name, level, u0, u1, d0, d1, top, material, **kw):
                   contact="resting", start=(cx, G, cz), end=(cx, G + Y(top), cz), **kw))
 
 
-def sloped_rail(cid, name, pa, ya, pb, yb):
-    plate(cid, name, "meso", "stair", [pb[0], yb, pb[1]], [pa[0], ya, pa[1]], [pa[0], ya + 0.035, pa[1]], [pb[0], yb + 0.035, pb[1]], 0.03,
-          "rail-top", importance=0.4)
+def sloped_rail(cid, name, pa, ya, pb, yb, mat="rail-top", hh=0.035, th=0.03):
+    plate(cid, name, "meso", "stair", [pb[0], yb, pb[1]], [pa[0], ya, pa[1]], [pa[0], ya + hh, pa[1]], [pb[0], yb + hh, pb[1]], th,
+          mat, importance=0.4)
 
 
-# Gustav picked the skewed reading (round 5): the same width top and bottom, about a third of the south facade, the steps
-# turned SK against the facade; and a narrow flight with a railing along the facade from the plaza up to the deck beside
-# the wide stair's top, running on past the deck corner V. No trees.
-U0, SK = 0.4, math.radians(16)
-FW, FRUN, FNS = 0.34, 0.15, 8
-F0 = U0 - 0.03
-RUN = 0.09
-c_, s_ = math.cos(SK), math.sin(SK)
-tk = (st[0] * c_ - st[1] * s_, st[0] * s_ + st[1] * c_)      # the skewed tread direction
-nk = (sn[0] * c_ - sn[1] * s_, sn[0] * s_ + sn[1] * c_)      # the skewed rise direction (out of the deck)
-yawk = -math.atan2(tk[1], tk[0])
-um = (U0 + U1) / 2
-WK = U1 - U0
-p0 = spt(um, 0.0)
+def west_end(d):
+    """The stair's west end at d out from the deck edge: the notch wall inside, the diagonal outside."""
+    return UT0 if d <= 0 else UT0 + (UB0 - UT0) * min(1.0, d / DOUT)
 
-def kpt(w, d):
-    return p0[0] + tk[0] * w + nk[0] * d, p0[1] + tk[1] * w + nk[1] * d
 
-for corner in (kpt(-WK / 2, NS * RUN), kpt(WK / 2, NS * RUN)):
-    assert -H < corner[0] < H and -H < corner[1] < H - 0.02, ("skewed stair off the plot", corner)
+# the grand stair: 11 thin light stone steps, treads parallel to the facade, each from its west end to the east cheek
 stair_ids = []
 for k in range(NS):
-    top = DECK_TOP - RISE * (k + 1)
-    cx, cz = kpt(0.0, (k + 0.5) * RUN)
-    C.append(comp(f"stair-{k + 1}", f"Wide stair step {k + 1}", "macro" if k == 0 else "meso", "stair", "box", (WK, Y(top), RUN + 0.002),
-                  (cx, G + Y(top) / 2, cz), "stair" if k % 2 else "stair-alt", rot=[0, yawk, 0], contact="resting", start=(cx, G, cz),
-                  end=(cx, G + Y(top), cz), importance=0.8 if k == 0 else 0.6,
-                  features=lf("stair-1.step", "contour", "very wide terraced stair turned against the facade") if k == 0 else None,
-                  topo="Stair step: a box from the ground to its tread."))
-    ncx, ncz = kpt(0.0, (k + 1) * RUN - 0.012)
-    C.append(comp(f"stair-nose-{k + 1}", f"Wide stair nosing {k + 1}", "micro", "stair", "box", (WK, 0.012, 0.024), (ncx, G + Y(top) + 0.006, ncz),
-                  "coping", rot=[0, yawk, 0], contact="flush-mount", start=(ncx, G + Y(top), ncz), end=(ncx, G + Y(top) + 0.012, ncz), importance=0.3))
-    wx, wz = kpt(WK / 2 + 0.03, (k + 0.5) * RUN)
-    C.append(comp(f"stair-cheek-{k + 1}", f"Wide stair east wall {k + 1}", "meso", "stair", "box", (0.06, Y(top + 0.06), RUN + 0.002),
-                  (wx, G + Y(top + 0.06) / 2, wz), "stair-cheek", rot=[0, yawk, 0], contact="resting", start=(wx, G, wz), end=(wx, G + Y(top + 0.06), wz),
-                  importance=0.4, topo="Stair side wall: a thin box beside the step."))
+    d0, d1 = -DN + k * SRUN, -DN + (k + 1) * SRUN
+    top = DECK_TOP - SRISE * (k + 1)
+    u0 = west_end(d1)
+    step_box(f"stair-{k + 1}", f"Grand stair step {k + 1}", "macro" if k == 0 else "meso", u0, U1, d0, d1, top, "stair" if k % 2 else "stair-alt",
+             importance=0.8 if k == 0 else 0.6,
+             features=lf("stair-1.step", "contour", "grand stair, treads parallel to the facade, cut into the deck") if k == 0 else None,
+             topo="Stair step: a box from the ground to its tread.")
+    ncx, ncz = spt((u0 + U1) / 2, d1 - 0.012)
+    C.append(comp(f"stair-nose-{k + 1}", f"Grand stair nosing {k + 1}", "micro", "stair", "box", (U1 - u0, 0.01, 0.024), (ncx, G + Y(top) + 0.005, ncz),
+                  "coping", rot=[0, yaw, 0], contact="flush-mount", start=(ncx, G + Y(top), ncz), end=(ncx, G + Y(top) + 0.01, ncz), importance=0.3))
     stair_ids.append(f"stair-{k + 1}")
-for name, w in (("east", WK / 2 + 0.03), ("middle", 0.0)):
-    sloped_rail(f"stair-rail-{name}", f"Wide stair {name} rail", kpt(w, 0.02), Y(DECK_TOP + RAIL - 0.035), kpt(w, NS * RUN - 0.03),
-                Y(DECK_TOP - RISE * NS + RAIL - 0.035))
-    for q in range(0, NS, 2):
-        top = DECK_TOP - RISE * (q + 1)
-        vplate(f"stair-post-{name}-{q}", f"Wide stair {name} rail post {q}", "micro", "stair", kpt(w, (q + 0.5) * RUN), nk, tk, 0.018, Y(top),
-               Y(top + RAIL), -0.009, 0.018, "rail", importance=0.2)
-    stair_ids.append(f"stair-rail-{name}")
-for j in range(FNS):
-    top = DECK_TOP - RISE * (j + 1)
-    step_box(f"flight-{j + 1}", f"Narrow flight step {j + 1}", "meso", F0 - FRUN * (j + 1), F0 - FRUN * j, 0.0, FW, top, "stair" if j % 2 else "stair-alt",
-             importance=0.5, features=lf("flight.narrow", "contour", "narrow straight flight along the facade up to the deck") if j == 0 else None,
-             topo="Flight step: a box from the ground to its tread.")
-    stair_ids.append(f"flight-{j + 1}")
-    vplate(f"flight-post-{j}", f"Narrow flight rail post {j}", "micro", "stair", spt(F0 - FRUN * (j + 0.5), FW - 0.02), st, sn, 0.018, Y(top),
-           Y(top + RAIL), -0.009, 0.018, "rail", importance=0.2)
-sloped_rail("flight-rail", "Narrow flight rail", spt(F0, FW - 0.02), Y(DECK_TOP + RAIL - 0.035), spt(F0 - FRUN * FNS, FW - 0.02),
-            Y(DECK_TOP - RISE * FNS + RAIL - 0.035))
-stair_ids.append("flight-rail")
-U0 = F0 - 0.08                                        # the deck railing opens from the flight's top to the wide stair's east end
-
+    # the east cheek: a solid sloping wall in the deck edge's metal, a little above each tread
+    step_box(f"stair-cheek-{k + 1}", f"Grand stair east cheek {k + 1}", "meso", U1, U1 + 0.08, d0, d1, top + 0.4, "deck-edge", importance=0.5,
+             topo="Cheek wall: a thin box beside the step, 0.4 wu above its tread.")
+sloped_rail("stair-cheek-coping", "Grand stair cheek coping", spt(U1 + 0.04, -DN), Y(DECK_TOP + 0.3), spt(U1 + 0.04, DOUT),
+            Y(DECK_TOP - SRISE * NS + 0.3), "panel")
+stair_ids.append("stair-cheek-coping")
+# hand rails: 4 thin steel lines running the full height, evenly across the top width
+for j in range(1, 5):
+    u = UT0 + (U1 - UT0) * j / 5
+    sloped_rail(f"stair-rail-{j}", f"Grand stair hand rail {j}", spt(u, -DN + 0.05), Y(DECK_TOP + 0.3), spt(u, DOUT - 0.05),
+                Y(DECK_TOP - SRISE * NS + 0.3), "mullion", 0.02, 0.018)          # thin light steel (photos)
+    for q in range(0, NS, 3):
+        top = DECK_TOP - SRISE * (q + 1)
+        vplate(f"stair-post-{j}-{q}", f"Grand stair rail post {j}.{q}", "micro", "stair", spt(u, -DN + (q + 0.5) * SRUN), sn, st, 0.012, Y(top),
+               Y(top + 0.3), -0.006, 0.012, "mullion", importance=0.2)
+    stair_ids.append(f"stair-rail-{j}")
+# the diagonal west edge: a dense bar railing like the deck's, from the deck edge down to the bottom step's west end, and
+# along the notch's west wall at deck level
+dl = math.hypot((UB0 - UT0), DOUT)
+nb = max(2, round(dl / 0.11))
+for q in range(nb + 1):
+    f = q / nb
+    u, d = UT0 + (UB0 - UT0) * f, DOUT * f
+    top = DECK_TOP - SRISE * min(NS, max(0, round((d + DN) / SRUN)))
+    vplate(f"flight-bar-{q}", f"Diagonal railing bar {q}", "micro", "stair", spt(u - 0.02, d), st, sn, 0.016, Y(top), Y(top + RAIL), -0.008, 0.016, "rail",
+           importance=0.3, features=lf("flight.rail", "linework", "dense bar railing along the stair's diagonal west edge") if q == 0 else None)
+    stair_ids.append(f"flight-bar-{q}")
+sloped_rail("flight-rail", "Diagonal railing top rail", spt(UT0 - 0.02, 0.0), Y(DECK_TOP + RAIL - 0.035), spt(UB0 - 0.02, DOUT),
+            Y(DECK_TOP - SRISE * NS + RAIL - 0.035))
+for q in range(round(DN / 0.11) + 1):
+    d = -DN + DN * q / round(DN / 0.11)
+    vplate(f"notch-bar-{q}", f"Notch railing bar {q}", "micro", "stair", spt(UT0 - 0.03, d), sn, st, 0.016, Y(DECK_TOP), Y(DECK_TOP + RAIL), -0.008, 0.016,
+           "rail", importance=0.2)
+sloped_rail("notch-rail", "Notch railing top rail", spt(UT0 - 0.03, -DN), Y(DECK_TOP + RAIL - 0.035), spt(UT0 - 0.03, 0.0), Y(DECK_TOP + RAIL - 0.035))
+stair_ids += ["flight-rail", "notch-rail"]
 
 # Columns: round grey columns along the deck edge, set in 0.25
 col_ids = []
@@ -391,6 +413,8 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(offset(DECK, -0.25))):
     cnt = max(1, round(ln / 1.15))
     for k in range(cnt):
         x, z = x0 + (x1 - x0) * k / cnt, z0 + (z1 - z0) * k / cnt
+        if NOTCH.buffer(0.12).contains(Polygon([(x - 0.01, z - 0.01), (x + 0.01, z - 0.01), (x + 0.01, z + 0.01), (x - 0.01, z + 0.01)])):
+            continue                                   # the stair fills the notch here
         cid = f"column-{i}-{k}"
         cyl(cid, f"Column {i}.{k}", "macro" if k == 0 else "meso", "column", x, z, 0.08, Y(0), Y(GF), "column", importance=0.8,
             features=lf("column.round", "contour", "round grey column under the deck edge") if not col_ids else None)
@@ -398,16 +422,16 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(offset(DECK, -0.25))):
 
 # ---------------------------------------------------------------------------------------------------------------
 # Deck: a perforated metal edge band, a light floor, a fine railing (bars + top rail) with a gap at the stair
-slab("deck", "Deck slab", "macro", "deck", DECK, [], Y(GF), Y(DECK_TOP), "deck-edge", importance=0.9,
+slab("deck", "Deck slab", "macro", "deck", DECK_CUT, [], Y(GF), Y(DECK_TOP), "deck-edge", importance=0.9,
      features=lf("deck.slab", "contour", "lopsided 8-sided deck, thinner and wider than the box above"), topo="Deck: the outline extruded.")
-slab("deck-floor", "Deck floor", "meso", "deck", offset(DECK, -0.04), [], Y(DECK_TOP), Y(DECK_TOP + 0.008), "deck-floor", importance=0.6,
+slab("deck-floor", "Deck floor", "meso", "deck", cut(offset(DECK, -0.04), 0.04), [], Y(DECK_TOP), Y(DECK_TOP + 0.008), "deck-floor", importance=0.6,
      topo="Deck floor: the outline set in, a thin plate on top.")
 rail_ids = []
 RL = offset(DECK, -0.03)
 for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(RL)):
     spans = [(0.0, 1.0)]
     if i == si:                                        # leave the stair's top open
-        spans = [(0.0, U0 / ln), (U1 / ln, 1.0)]          # U0: the wedge's top end, or the narrow flight's top (B)
+        spans = [(0.0, (UT0 - 0.02) / ln), ((U1 + 0.08) / ln, 1.0)]   # open over the stair notch
     for j, (fa, fb) in enumerate(spans):
         pa = (x0 + (x1 - x0) * fa, z0 + (z1 - z0) * fa)
         pb = (x0 + (x1 - x0) * fb, z0 + (z1 - z0) * fb)
@@ -435,6 +459,8 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(SE):
     cnt = max(1, round(ln / 0.45))
     for k in range(1, cnt):
         f = k / cnt
+        if i == si and UT0 - 0.05 < f * ln < U1 + 0.1:
+            continue                                   # no deck edge over the stair notch
         cid = f"deck-joint-{i}-{k}"
         vplate(cid, f"Deck panel joint {i}.{k}", "micro", "deck", (x0 + (x1 - x0) * f, z0 + (z1 - z0) * f), t, n, 0.02, Y(GF), Y(DECK_TOP),
                0.0, 0.006, "panel-joint", importance=0.2,
@@ -588,7 +614,7 @@ spec["repetitionSystems"] = [
     rep("railing", rail_ids, f"{len(rail_ids)} railing bars and rails, bars every ~0.11 wu, open at the stair"),
     rep("panel-joints", joint_ids, f"{len(joint_ids)} panel joints every ~0.45 wu on the deck edge and the box"),
     rep("skylights", sky_ids, f"{len(sky_ids)} long glass ridge roof lights, staggered"),
-    rep("stair", stair_ids, f"{NS} steps of {RISE} wu, {WK:.2f} wu wide, turned {math.degrees(SK):.0f} deg; narrow flight of {FNS} steps"),
+    rep("stair", stair_ids, f"grand stair: {NS} steps of {SRISE} wu, {U1 - UT0:.2f} wu wide at the top, {U1 - UB0:.2f} wu at the bottom"),
 ]
 spec["silhouette"] = {"boundingShape": "8 x 8 wu plot, the 7 x 7 building in it; lopsided 8-sided top box 5.3 x 5.5 wu at 2.45 .. 3.0 wu over an 8-sided deck at 1.0 .. 1.2 wu",
                       "aspectRatios": ["footprint 8 : 8", "height 3.2 : width 7 (wide and flat)"],
@@ -605,8 +631,8 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["deck", "ground-shadow", col_ids[0], rail_ids[0]]},
     {"id": "hall", "name": "Dark glass hall set back under the box", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True, "componentRefs": ["hall-glass"]},
-    {"id": "stair", "name": "One very wide terraced stair turned against the south facade, a narrow flight along the facade beside it", "tier": "important",
-     "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["stair-1", "stair-5", "flight-1"]},
+    {"id": "stair", "name": "Grand stair cut into the deck, treads parallel to the facade, diagonal west edge with a bar railing, sloping east cheek", "tier": "important",
+     "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["stair-1", "stair-6", "stair-cheek-coping"]},
     {"id": "quay", "name": "Harbour on the east and north behind a quay edge with bollards, light stone plaza", "tier": "important",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["root", "plaza", quay_ids[0]]},
 ]
