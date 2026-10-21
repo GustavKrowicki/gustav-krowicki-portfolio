@@ -11,7 +11,10 @@ const steps = stepsJson ? JSON.parse(stepsJson) : [
 ];
 mkdirSync(out, { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || undefined, args: ['--use-gl=angle', '--enable-unsafe-swiftshader'] });
-const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+// CITY_PHONE=1: a 390 x 844 phone at DPR 3 instead of the desktop window
+const page = await browser.newPage(process.env.CITY_PHONE === '1'
+  ? { viewport: { width: 390, height: 844 }, deviceScaleFactor: 3, isMobile: true, hasTouch: true }
+  : { viewport: { width: 1440, height: 900 } });
 page.on('console', (m) => { if (m.type() === 'error') console.log('console:', m.text().slice(0, 200)); });
 await page.goto(`http://localhost:${process.env.LAB_PORT ?? 3100}/city?avatar=3d&e2e=1${process.env.CITY_QUERY ? `&${process.env.CITY_QUERY}` : ''}`, { waitUntil: 'load', timeout: 120000 });
 await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); return !!(s && s.isReady && s.grid.length); }, null, { timeout: 120000 });

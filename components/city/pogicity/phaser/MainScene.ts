@@ -98,6 +98,7 @@ export class MainScene extends Phaser.Scene {
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  private entrancePavings: Map<string, Phaser.GameObjects.Image> = new Map();
   // Building sprite key -> what it shows, so a roof-off swap can re-texture it in place
   private buildingSpriteInfo: Map<string, { buildingId: string; orientation?: Direction }> = new Map();
   // Buildings with openSprites whose roof is off (walk-in buildings: player inside; others: player in the trigger zone)
@@ -1715,8 +1716,8 @@ export class MainScene extends Phaser.Scene {
   }
 
   // Walk in (while walking): hovering a walk-in building, or a first tap on it on a phone, shows its way in: a faint dashed
-  // line along its two camera-facing ground edges, a lit doormat on the approach tile and a "Walk in" label over the main
-  // door. A click, or a second tap, walks the avatar to the door and in. The roof still comes off only at the door.
+  // line along its two camera-facing ground edges and a "Walk in" label over the main door (the approach tile's paving is
+  // always there, see entrancePaving). A click, or a second tap, walks the avatar to the door and in. The roof still comes off only at the door.
   private walkIn: { key: string; parts: Phaser.GameObjects.GameObject[] } | null = null;
   private walkInTimer: ReturnType<typeof setTimeout> | null = null;
   private walkInPending: string | null = null;
@@ -1814,27 +1815,21 @@ export class MainScene extends Phaser.Scene {
     dashed(corner(0, h), corner(w, h));   // south edge
     dashed(corner(w, 0), corner(w, h));   // east edge
 
-    // the doormat: the approach tile, in the city's warm night-light amber
+    // no doormat: the approach tile has its own paving all the time (entrancePaving, Gustav 2026-10-21)
     const [ox, oy] = interior.entrance.outside;
-    const mat = this.add.graphics().setDepth(top);
-    const m = [corner(ox, oy), corner(ox + 1, oy), corner(ox + 1, oy + 1), corner(ox, oy + 1)];
-    mat.fillStyle(0xffc857, 0.45);
-    mat.fillPoints(m.map((q) => new Phaser.Math.Vector2(q.x, q.y)), true);
-    mat.lineStyle(1.5, 0xffc857, 0.95);
-    mat.strokePoints(m.map((q) => new Phaser.Math.Vector2(q.x, q.y)), true);
 
     // the label over the door: the middle of the door's tile edge, lifted above a storey
     const [ix, iy] = interior.entrance.inside;
     const a = corner(ix + (ox > ix ? 1 : 0), iy + (oy > iy ? 1 : 0));
     const b = corner(ix + (ox >= ix ? 1 : 0), iy + (oy >= iy ? 1 : 0));
     const label = this.add.text((a.x + b.x) / 2, (a.y + b.y) / 2 - 44, "Walk in ▾", {
-      fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#1e2321",
-      backgroundColor: "#ffc857", padding: { x: 4, y: 2 }, resolution: 4,
+      fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
+      backgroundColor: "#9a4a36", padding: { x: 4, y: 2 }, resolution: 4,
     }).setOrigin(0.5, 1).setDepth(top + 1);
     label.setInteractive({ useHandCursor: true });
     label.on("pointerup", () => this.walkIntoPlot(key));
 
-    this.walkIn = { key, parts: [line, mat, label] };
+    this.walkIn = { key, parts: [line, label] };
   }
 
   private hideWalkIn(): void {
@@ -2473,6 +2468,46 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
+  private static readonly PAVING_DENSITY = 4;   // texels per screen pixel at zoom 1 (sharp up to Detail zoom)
+
+  // The paving texture for one tile: drawn in tile units (u east, v south, 0..1) through the isometric transform, so the
+  // pavers lie flat on the ground. Brick herringbone in the building's brick colour (Gustav picked it from six options,
+  // 2026-10-21): 2 x 1 bricks, a staircase of a horizontal brick at (a, a) and a vertical one at (a, a + 1), repeated
+  // every (2, -2), so the lattice (1, 1), (2, -2) covers the tile with no gaps.
+  private entrancePavingTexture(buildingId: string, brick: number): string {
+    const key = `${buildingId}_entrance_paving`;
+    if (this.textures.exists(key)) return key;
+    const S = MainScene.PAVING_DENSITY, w = TILE_WIDTH * S, h = TILE_HEIGHT * S;
+    const tex = this.textures.createCanvas(key, w, h);
+    if (!tex) return key;
+    const ctx = tex.getContext();
+    ctx.setTransform(w / 2, h / 2, -w / 2, h / 2, w / 2, 0);   // (u, v) -> canvas pixels
+    ctx.beginPath();
+    ctx.rect(0, 0, 1, 1);
+    ctx.clip();
+    const hex = (c: number) => `#${c.toString(16).padStart(6, "0")}`;
+    const shade = (c: number, k: number) => {
+      const ch = (s: number) => Math.max(0, Math.min(255, Math.round(((c >> s) & 255) * k)));
+      return (ch(16) << 16) | (ch(8) << 8) | ch(0);
+    };
+    const joint = 0.012, b = 1 / 9;
+    const bricks = [brick, shade(brick, 0.92), shade(brick, 1.08)].map(hex);
+    const fill = (color: string, u: number, v: number, du: number, dv: number) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(u + joint / 2, v + joint / 2, du - joint, dv - joint);
+    };
+    ctx.fillStyle = hex(shade(brick, 0.72));   // the joints
+    ctx.fillRect(0, 0, 1, 1);
+    for (let a = -20; a < 20; a++) for (let k = -10; k < 10; k++) {
+      const x = (a + 2 * k) * b, y = (a - 2 * k) * b;
+      if (x > 1.2 || y > 1.2 || x < -0.4 || y < -0.4) continue;
+      fill(bricks[((a % 3) + 3) % 3], x, y, 2 * b, b);
+      fill(bricks[(((a + 1) % 3) + 3) % 3], x, y + b, b, 2 * b);
+    }
+    tex.refresh();
+    return key;
+  }
+
   private removeBuildingSprites(buildingKey: string): void {
     const sprite = this.buildingSprites.get(buildingKey);
     if (sprite) {
@@ -2487,6 +2522,8 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_door`);
     }
     this.doors.delete(buildingKey);
+    this.entrancePavings.get(buildingKey)?.destroy();
+    this.entrancePavings.delete(buildingKey);
     const ambientSprite = this.buildingSprites.get(`${buildingKey}_ambient`);
     if (ambientSprite) {
       ambientSprite.destroy();
@@ -2557,6 +2594,21 @@ export class MainScene extends Phaser.Scene {
     this.buildingSprites.set(key, sprite);
     this.buildingSpriteInfo.set(key, { buildingId, orientation });
     if (building.slices) this.sliceBuildingSprite(sprite, key, originX, originY, footprint.width, footprint.height);
+
+    // Paving on the street tile in front of the main door: an image, so the night tint reaches it like the ground tiles
+    const interior = BUILDING_INTERIORS[buildingId];
+    const paving = building.entrancePaving;
+    if (paving && interior && (!orientation || orientation === Direction.Down)) {
+      const tx = originX + interior.entrance.outside[0];
+      const ty = originY + interior.entrance.outside[1];
+      const top = this.gridToScreen(tx, ty);
+      const image = this.add.image(top.x, top.y, this.entrancePavingTexture(buildingId, paving.brick));
+      image.setOrigin(0.5, 0);
+      image.setScale(1 / MainScene.PAVING_DENSITY);
+      const front = this.gridToScreen(tx + 1, ty + 1);
+      image.setDepth(this.depthFromSortPoint(front.x, front.y, 0.02));   // above the ground tile it lies on
+      this.entrancePavings.set(key, image);
+    }
 
     // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
     const door = building.door;
