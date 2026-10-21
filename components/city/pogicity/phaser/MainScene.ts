@@ -1586,6 +1586,19 @@ export class MainScene extends Phaser.Scene {
     return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);
   }
 
+  // A step from outside that a walk-in building's wall blocks: the tile just inside its main door, so the player walks
+  // there instead of bumping (the door is easy to miss by one tile, and the grid's "up" runs diagonally on screen)
+  private entranceGuide(fx: number, fy: number, tx: number, ty: number): { x: number; y: number } | null {
+    const b = this.interiorTiles.get(`${tx},${ty}`);
+    if (!b) return null;
+    const a = this.interiorTiles.get(`${fx},${fy}`);
+    const ca = a ? interiorCode(a.interior, a.lx, a.ly) : null;
+    if (a && ca && !a.interior.outside.includes(ca)) return null; // already inside
+    if (a && a.key !== b.key) return null;
+    const [ix, iy] = b.interior.entrance.inside;
+    return { x: tx - b.lx + ix, y: ty - b.ly + iy };
+  }
+
   private updateInteriorState(gridX: number, gridY: number): void {
     if (!this.playerController) return;
     const here = this.interiorTiles.get(`${gridX},${gridY}`);
@@ -1699,13 +1712,18 @@ export class MainScene extends Phaser.Scene {
   }
 
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
-  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null
+  // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null.
+  // Never below the character's own depth, or the pavement tiles south of the front corner hide its legs.
   private frontOfPlotDepth(gridX: number, gridY: number): number | null {
     for (const [key, plot] of this.interiorPlots) {
       const lx = gridX - plot.originX, ly = gridY - plot.originY;
       const near = lx >= -2 && ly >= -2 && lx < plot.width + 4 && ly < plot.height + 4;
       const sprite = near && (lx >= plot.width || ly >= plot.height) ? this.buildingSprites.get(key) : undefined;
-      if (sprite) return sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5);
+      if (sprite) {
+        const own = gridToScreen(gridX, gridY);
+        return Math.max(sprite.depth + this.footprintSortOffset(lx + 0.5, ly + 0.5),
+          this.depthFromSortPoint(own.x, own.y + TILE_HEIGHT / 2, 0.3));
+      }
     }
     return null;
   }
@@ -1766,6 +1784,7 @@ export class MainScene extends Phaser.Scene {
         return t ? interiorCode(t.interior, t.lx, t.ly) !== null : null;
       },
       canStep: (fx, fy, tx, ty) => this.canStepInterior(fx, fy, tx, ty),
+      entranceGuide: (fx, fy, tx, ty) => this.entranceGuide(fx, fy, tx, ty),
     });
 
     // Set up trigger zone callbacks
