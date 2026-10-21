@@ -13,8 +13,9 @@ Heights (wu): ground floor 0 .. 1.0, deck slab 1.0 .. 1.2 (railing 0.45 high), g
 sloping out from 64 % of its outline at 2.2 to the full outline at 2.45, facade 2.45 .. 3.0 with the band at 2.64 .. 2.84,
 roof at 3.0 (skylights to about 3.1).
 
-Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the 7 x 7 footprint centred on the origin: X east, Z south. Plan
-points below are given as (x, y) from the plot's north-west corner (y south), as on the board, and moved by -3.5.
+Frame: 1 unit = 1 wu (one tile edge, ~2 m). +Y up, the 8 x 8 footprint centred on the origin: X east, Z south. Building
+plan points are given as (x, y) from blockout D's north-west corner (y south), as on the board, moved by (OX, OY) into the
+plot and by -4 to the centre.
 The south (+Z) and east (+X) sides face the default camera.
 """
 import copy
@@ -40,7 +41,9 @@ spec["viewEvidence"] = [
 
 G = 0.04                          # water level: the root pad's top
 PL = 0.04                         # plaza slab above the water (the quay edge)
-H = 3.5                           # half footprint (7 x 7)
+H = 4.0                           # half footprint: the 7 x 7 building on an 8 x 8 plot, so the harbour wraps the north-east corner
+OX, OY = 0.3, 0.8                 # the building's plan (blockout D) inside the plot: room for the water on the east and north,
+                                  # and for the stair flights on the south
 def r4(v):
     return [round(float(x), 4) for x in v]
 
@@ -166,9 +169,9 @@ def rgba(h, a=1.0):
 C = []
 
 
-def m(pts):
-    """Plan points (x, y from the north-west corner) to model (x, z), counter-clockwise in (x, z) like the slab loops."""
-    out = [(x - H, y - H) for x, y in pts]
+def m(pts, ox=0.0, oy=0.0):
+    """Plot points (x, y from the north-west corner) to model (x, z), counter-clockwise in (x, z) like the slab loops."""
+    out = [(x + ox - H, y + oy - H) for x, y in pts]
     area = sum(out[i][0] * out[(i + 1) % len(out)][1] - out[(i + 1) % len(out)][0] * out[i][1] for i in range(len(out)))
     return out if area > 0 else out[::-1]
 
@@ -234,11 +237,20 @@ Y = lambda v: PL + v              # heights above the plaza top
 
 # ---------------------------------------------------------------------------------------------------------------
 # Plan (blockout D, Gustav 2026-10-21), in plot coordinates
-DECK = m([(0.42, 0.83), (4.65, 0.00), (6.55, 0.97), (6.77, 4.07), (5.60, 6.30), (3.48, 6.46), (1.02, 5.58), (0.00, 2.44)])
-BOX = m([(1.02, 1.08), (2.99, 0.44), (5.98, 1.16), (6.09, 3.77), (5.18, 5.89), (2.38, 5.96), (0.87, 5.51), (0.79, 2.71)])
-HALL = (1.93 - H, 4.99 - H, 1.75 - H, 4.81 - H)       # x0, x1, z0, z1
-WATER = m([(6.88, 0.0), (7.0, 0.0), (7.0, 7.0), (5.63, 7.0), (6.88, 4.61)])
-PLAZA = m([(0.0, 0.0), (6.88, 0.0), (6.88, 4.61), (5.63, 7.0), (0.0, 7.0)])
+def bplan(pts):
+    """Building plan points (blockout D) to model."""
+    return m(pts, OX, OY)
+
+
+def bp(x, y):
+    return x + OX - H, y + OY - H
+
+
+DECK = bplan([(0.42, 0.83), (4.65, 0.00), (6.55, 0.97), (6.77, 4.07), (5.60, 6.30), (3.48, 6.46), (1.02, 5.58), (0.00, 2.44)])
+BOX = bplan([(1.02, 1.08), (2.99, 0.44), (5.98, 1.16), (6.09, 3.77), (5.18, 5.89), (2.38, 5.96), (0.87, 5.51), (0.79, 2.71)])
+HALL = (bp(1.93, 0)[0], bp(4.99, 0)[0], bp(0, 1.75)[1], bp(0, 4.81)[1])       # x0, x1, z0, z1
+QX, QY = 7.25, 0.6                # quay edges (plot): the harbour lies east of x = QX and north of y = QY (photos: water on two sides)
+PLAZA = m([(0.0, QY), (QX, QY), (QX, 8.0), (0.0, 8.0)])
 GF, DECK_TOP, HALL_TOP, SOFFIT_TOP, ROOF = 1.0, 1.2, 2.2, 2.45, 3.0
 BAND = (2.64, 2.84)
 RAIL = 0.45
@@ -246,7 +258,7 @@ RAIL = 0.45
 # Root: the water, exactly the footprint, so the converter bbox starts at the footprint
 C.append(comp("root", "Harbour water", "macro", "base", "box", (2 * H, G, 2 * H), (0, G / 2, 0), "water", parent=None,
               importance=0.7, conf=0.95, sockets=[{"id": "ground-top", "localPosition": [0, G / 2, 0], "notes": "water level"}],
-              features=lf("root.water", "contour", "7 x 7 wu pad = the footprint; the harbour shows along the east edge"),
+              features=lf("root.water", "contour", "8 x 8 wu pad = the footprint; the harbour shows on the east and north"),
               topo="Flat pad: a box exactly the size of the footprint."))
 slab("plaza", "Stone plaza", "macro", "ground", PLAZA, [], 0.0, PL, "paving", importance=0.7,
      features=lf("plaza.stone", "contour", "wide light stone plaza on the quay"), topo="Plaza: the plot minus the water, extruded.")
@@ -254,7 +266,9 @@ slab("plaza", "Stone plaza", "macro", "ground", PLAZA, [], 0.0, PL, "paving", im
 # Quay edge: a light coping along the water and dark bollards on it
 quay_ids = []
 for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(PLAZA)):
-    if abs(z0 - z1) < 1e-6 or min(x0, x1) < 2.0:     # only the two edges along the water
+    on_east = abs(x0 - (QX - H)) < 1e-6 and abs(x1 - (QX - H)) < 1e-6
+    on_north = abs(z0 - (QY - H)) < 1e-6 and abs(z1 - (QY - H)) < 1e-6
+    if not (on_east or on_north):                 # only the two edges along the water
         continue
     vplate(f"quay-edge-{i}", f"Quay edge {i}", "meso", "ground", ((x0 + x1) / 2, (z0 + z1) / 2), t, n, ln, G, G + PL + 0.03, -0.12, 0.12,
            "coping", importance=0.6, features=lf("quay-edge.coping", "contour", "light stone quay edge along the harbour") if not quay_ids else None,
@@ -271,7 +285,7 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(PLAZA)):
 # Ground floor: a dark open space behind the column line, one closed glass block in the south-east corner
 slab("ground-shadow", "Open ground floor (in shadow)", "macro", "ground-floor", scaled(DECK, 0.8), [], Y(0), Y(GF), "underdeck",
      importance=0.6, features=lf("ground-shadow.dark", "contour", "dark open space under the deck"), topo="Shadow core: the deck outline scaled in, extruded.")
-GB = (4.2 - H, 5.45 - H, 3.8 - H, 5.75 - H)
+GB = (bp(4.2, 0)[0], bp(5.45, 0)[0], bp(0, 3.8)[1], bp(0, 5.75)[1])
 bx("ground-glass", "Ground floor glass block", "meso", "ground-floor", GB[0], GB[1], Y(0), Y(GF - 0.02), GB[2], GB[3], "glass-ground", importance=0.6,
    features=lf("ground-glass.block", "contour", "closed glass block in the south-east corner of the ground floor"))
 for k in range(1, 5):
@@ -280,45 +294,59 @@ for k in range(1, 5):
     z = GB[2] + (GB[3] - GB[2]) * k / 5
     bx(f"ground-mullion-e-{k}", f"Ground glass mullion E{k}", "micro", "ground-floor", GB[1], GB[1] + 0.012, Y(0), Y(GF - 0.02), z - 0.012, z + 0.012, "mullion", importance=0.2)
 
-# Stair (south side): from the deck edge between the 7th and 8th deck points straight out, 6 steps of 0.2 wu, the top one
-# level with the deck
+# Stairs (photos: wide flights along the facade up to the deck): two flights outside the south deck edges, each rising
+# along its edge toward the deck point between them, where a landing at deck level joins them to the deck
 SE = edges(DECK)
-si = next(i for i, e in enumerate(SE) if {tuple(round(v, 2) for v in e[0]), tuple(round(v, 2) for v in e[1])} == {(round(1.02 - H, 2), round(5.58 - H, 2)), (round(3.48 - H, 2), round(6.46 - H, 2))})
-(sa, sb, st, sn, sl) = SE[si]
-f0 = (1.9 - H - sa[0]) / (sb[0] - sa[0])          # the stair's centre on that edge, at plan x 1.9
-SC = (sa[0] + (sb[0] - sa[0]) * f0, sa[1] + (sb[1] - sa[1]) * f0)
-SW, RUN, NS = 1.3, 0.14, 6
-yaw = -math.atan2(st[1], st[0])
+V = min(DECK, key=lambda p: math.hypot(p[0] - bp(3.48, 6.46)[0], p[1] - bp(3.48, 6.46)[1]))
+SW, RUN, RISE, NS, L0 = 0.6, 0.2, 0.15, 7, 0.35   # flight width, step run and rise, steps, landing length along each edge
+FLIGHTS = []
+for i, (a0, a1, t, n, ln) in enumerate(SE):
+    if math.hypot(a0[0] - V[0], a0[1] - V[1]) < 1e-6:
+        FLIGHTS.append((i, t, n))
+    elif math.hypot(a1[0] - V[0], a1[1] - V[1]) < 1e-6:
+        FLIGHTS.append((i, (-t[0], -t[1]), n))
+assert len(FLIGHTS) == 2
 stair_ids = []
-for k in range(1, NS + 1):
-    d = (k - 0.5) * RUN
-    cx, cz = SC[0] + sn[0] * d, SC[1] + sn[1] * d
-    top = DECK_TOP - 0.2 * (k - 1)
-    C.append(comp(f"stair-{k}", f"Stair step {k}", "macro" if k == 1 else "meso", "stair", "box", (SW, Y(top), RUN + 0.002),
-                  (cx, G + Y(top) / 2, cz), "stair" if k % 2 else "stair-alt", rot=[0, yaw, 0], contact="resting",
-                  start=(cx, G, cz), end=(cx, G + Y(top), cz), importance=0.8 if k == 1 else 0.6,
-                  features=lf("stair-1.step", "contour", "wide light stone stair down from the deck to the plaza") if k == 1 else None,
-                  topo="Stair step: a box from the ground to its tread."))
-    stair_ids.append(f"stair-{k}")
-    # a light nosing line on each tread
-    ncx, ncz = SC[0] + sn[0] * (d + RUN / 2 - 0.015), SC[1] + sn[1] * (d + RUN / 2 - 0.015)
-    C.append(comp(f"stair-nose-{k}", f"Stair nosing {k}", "micro", "stair", "box", (SW, 0.012, 0.03), (ncx, G + Y(top) + 0.006, ncz), "coping",
-                  rot=[0, yaw, 0], contact="flush-mount", start=(ncx, G + Y(top), ncz), end=(ncx, G + Y(top) + 0.012, ncz), importance=0.3))
-# the stair's two side walls (stringers): a thin stone block at each end of every step, a little above its tread
-for k in range(1, NS + 1):
-    d = (k - 0.5) * RUN
-    top = DECK_TOP - 0.2 * (k - 1) + 0.06
-    for s, side in ((-1, "w"), (1, "e")):
-        cx = SC[0] + sn[0] * d + st[0] * s * (SW / 2 + 0.03)
-        cz = SC[1] + sn[1] * d + st[1] * s * (SW / 2 + 0.03)
-        C.append(comp(f"stair-cheek-{side}-{k}", f"Stair side wall {side} {k}", "meso", "stair", "box", (0.06, Y(top), RUN + 0.002),
-                      (cx, G + Y(top) / 2, cz), "stair-cheek", rot=[0, yaw, 0], contact="resting", start=(cx, G, cz), end=(cx, G + Y(top), cz),
-                      importance=0.4, topo="Stair side wall: a thin box beside the step."))
-
-
-def in_stair(x, z, pad=0.1):
-    u = (x - SC[0]) * st[0] + (z - SC[1]) * st[1]
-    return abs(u) < SW / 2 + pad
+for fi, (ei, u, n) in enumerate(FLIGHTS):
+    side = "w" if u[0] < 0 else "e"
+    yaw = -math.atan2(u[1], u[0])
+    for k in range(NS):
+        d = L0 + (k + 0.5) * RUN
+        top = DECK_TOP - RISE * (k + 1)
+        cx, cz = V[0] + u[0] * d + n[0] * (SW / 2 + 0.005), V[1] + u[1] * d + n[1] * (SW / 2 + 0.005)
+        cid = f"stair-{side}-{k + 1}"
+        C.append(comp(cid, f"Stair {side} step {k + 1}", "macro" if k == 0 else "meso", "stair", "box", (RUN + 0.002, Y(top), SW),
+                      (cx, G + Y(top) / 2, cz), "stair" if k % 2 else "stair-alt", rot=[0, yaw, 0], contact="resting",
+                      start=(cx, G, cz), end=(cx, G + Y(top), cz), importance=0.8 if k == 0 else 0.6,
+                      features=lf("stair-1.step", "contour", "wide stone flight along the facade up to the deck") if not stair_ids else None,
+                      topo="Stair step: a box from the ground to its tread."))
+        stair_ids.append(cid)
+        # a light nosing on the tread's upper edge and an open railing bar on the outer side (photos: no solid side wall)
+        ncx, ncz = V[0] + u[0] * (d - RUN / 2 + 0.015) + n[0] * (SW / 2 + 0.005), V[1] + u[1] * (d - RUN / 2 + 0.015) + n[1] * (SW / 2 + 0.005)
+        C.append(comp(f"stair-nose-{side}-{k + 1}", f"Stair {side} nosing {k + 1}", "micro", "stair", "box", (0.03, 0.012, SW), (ncx, G + Y(top) + 0.006, ncz),
+                      "coping", rot=[0, yaw, 0], contact="flush-mount", start=(ncx, G + Y(top), ncz), end=(ncx, G + Y(top) + 0.012, ncz), importance=0.3))
+        wx, wz = V[0] + u[0] * d + n[0] * (SW - 0.02), V[1] + u[1] * d + n[1] * (SW - 0.02)
+        vplate(f"stair-bar-{side}-{k + 1}", f"Stair {side} railing bar {k + 1}", "micro", "stair", (wx, wz), u, n, 0.018, Y(top), Y(top + RAIL),
+               -0.01, 0.01, "rail", importance=0.2)
+    # the sloped hand rail along the outer side, from the bottom step up to the landing
+    e0 = (V[0] + u[0] * (L0 + NS * RUN) + n[0] * (SW - 0.02), V[1] + u[1] * (L0 + NS * RUN) + n[1] * (SW - 0.02))
+    e1 = (V[0] + u[0] * L0 + n[0] * (SW - 0.02), V[1] + u[1] * L0 + n[1] * (SW - 0.02))
+    yb0, yb1 = Y(DECK_TOP - RISE * NS + RAIL - 0.035), Y(DECK_TOP + RAIL - 0.035)
+    plate(f"stair-rail-{side}", f"Stair {side} hand rail", "meso", "stair", [e0[0], yb0, e0[1]], [e1[0], yb1, e1[1]], [e1[0], yb1 + 0.035, e1[1]],
+          [e0[0], yb0 + 0.035, e0[1]], 0.03, "rail-top", importance=0.4)
+    stair_ids.append(f"stair-rail-{side}")
+# the landing: the deck carried out over the two flights' tops
+(_, ua, na), (_, ub, nb) = FLIGHTS
+nm = (na[0] + nb[0], na[1] + nb[1]); nl = math.hypot(*nm); cosh = (na[0] * nm[0] + na[1] * nm[1]) / nl
+LAND = [V, (V[0] + ua[0] * L0, V[1] + ua[1] * L0), (V[0] + ua[0] * L0 + na[0] * SW, V[1] + ua[1] * L0 + na[1] * SW),
+        (V[0] + nm[0] / nl * SW / cosh, V[1] + nm[1] / nl * SW / cosh),
+        (V[0] + ub[0] * L0 + nb[0] * SW, V[1] + ub[1] * L0 + nb[1] * SW), (V[0] + ub[0] * L0, V[1] + ub[1] * L0)]
+if sum(LAND[i][0] * LAND[(i + 1) % 6][1] - LAND[(i + 1) % 6][0] * LAND[i][1] for i in range(6)) < 0:
+    LAND = LAND[::-1]
+slab("stair-landing", "Stair landing", "meso", "stair", LAND, [], Y(GF), Y(DECK_TOP), "deck-edge", importance=0.6,
+     topo="Landing: a plate at deck level joining the two flights to the deck.")
+slab("stair-landing-floor", "Stair landing floor", "micro", "stair", LAND, [], Y(DECK_TOP), Y(DECK_TOP + 0.008), "deck-floor", importance=0.3)
+stair_ids += ["stair-landing", "stair-landing-floor"]
 
 
 # Columns: round grey columns along the deck edge, set in 0.25
@@ -327,8 +355,6 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(offset(DECK, -0.25))):
     cnt = max(1, round(ln / 1.15))
     for k in range(cnt):
         x, z = x0 + (x1 - x0) * k / cnt, z0 + (z1 - z0) * k / cnt
-        if i == si and in_stair(x, z):
-            continue
         cid = f"column-{i}-{k}"
         cyl(cid, f"Column {i}.{k}", "macro" if k == 0 else "meso", "column", x, z, 0.08, Y(0), Y(GF), "column", importance=0.8,
             features=lf("column.round", "contour", "round grey column under the deck edge") if not col_ids else None)
@@ -344,9 +370,10 @@ rail_ids = []
 RL = offset(DECK, -0.03)
 for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(RL)):
     spans = [(0.0, 1.0)]
-    if i == si:                                        # leave the stair's width open
-        u0 = (SC[0] - x0) * t[0] + (SC[1] - z0) * t[1]
-        spans = [(0.0, (u0 - SW / 2) / ln), ((u0 + SW / 2) / ln, 1.0)]
+    if math.hypot(x0 - V[0], z0 - V[1]) < 0.1:          # leave the landing open (the railing line is set in 0.03)
+        spans = [(L0 / ln, 1.0)]
+    elif math.hypot(x1 - V[0], z1 - V[1]) < 0.1:
+        spans = [(0.0, 1.0 - L0 / ln)]
     for j, (fa, fb) in enumerate(spans):
         pa = (x0 + (x1 - x0) * fa, z0 + (z1 - z0) * fa)
         pb = (x0 + (x1 - x0) * fb, z0 + (z1 - z0) * fb)
@@ -425,16 +452,53 @@ for i, ((x0, z0), (x1, z1), t, n, ln) in enumerate(edges(BOX)):
         vplate(cid, f"Band mullion {i}.{k}", "micro", "box", p, t, n, 0.015, Y(BAND[0]), Y(BAND[1]), 0.012, 0.006, "band-mullion", importance=0.2)
         joint_ids.append(cid)
 
-# Skylights (3 x 3 white boxes) and solar panels on the roof
+# Roof (photos): long low glass ridge roof lights, rows of solar panels between them, small grey vent boxes
+
+
+def inside(poly, x, z):
+    hit = False
+    for i in range(len(poly)):
+        (x0, z0), (x1, z1) = poly[i], poly[(i + 1) % len(poly)]
+        if (z0 > z) != (z1 > z) and x < x0 + (z - z0) * (x1 - x0) / (z1 - z0):
+            hit = not hit
+    return hit
+
+
+ROOF_SAFE = offset(BOX, -0.2)
+RT = Y(ROOF + 0.005)
 sky_ids = []
-for r, zp in enumerate((1.65, 3.2, 4.75)):
-    for c, xp in enumerate((1.85, 3.35, 4.85)):
-        x, z = xp - H, zp - H
-        bx(f"skylight-{r}{c}", f"Skylight {r}{c}", "meso", "roof", x - 0.22, x + 0.22, Y(ROOF + 0.005), Y(ROOF + 0.11), z - 0.2, z + 0.2, "skylight",
-           importance=0.6, features=lf("skylight-1.box", "contour", "small white skylight box") if not sky_ids else None)
-        bx(f"solar-{r}{c}", f"Solar panel {r}{c}", "micro", "roof", x + 0.3, x + 0.72, Y(ROOF + 0.005), Y(ROOF + 0.03), z - 0.12, z + 0.26, "solar", importance=0.4)
-        bx(f"solar-joint-{r}{c}", f"Solar joint {r}{c}", "micro", "roof", x + 0.505, x + 0.515, Y(ROOF + 0.03), Y(ROOF + 0.035), z - 0.12, z + 0.26, "solar-joint", importance=0.1)
-        sky_ids.append(f"skylight-{r}{c}")
+RL_, RW, RH = 1.3, 0.5, 0.15                     # ridge length (x), width (z), height above its curb
+for j, (px, py) in enumerate(((2.6, 1.6), (4.6, 1.6), (1.9, 2.95), (3.9, 2.95), (4.6, 4.3), (2.4, 4.3), (3.6, 5.3))):
+    x, z = bp(px, py)
+    x0, x1 = x - RL_ / 2, x + RL_ / 2
+    for cx_, cz_ in ((x0, z - RW / 2), (x1, z - RW / 2), (x0, z + RW / 2), (x1, z + RW / 2)):
+        assert inside(ROOF_SAFE, cx_, cz_), ("ridge off the roof", px, py)
+    cid = f"skylight-{j}"
+    bx(cid, f"Roof light {j} curb", "meso", "roof", x0, x1, RT, RT + 0.05, z - RW / 2, z + RW / 2, "curb", importance=0.6,
+       features=lf("skylight-1.box", "contour", "long low glass ridge roof light") if not sky_ids else None)
+    for s in (-1, 1):                                # the two glass slopes, meeting at the ridge
+        plate(f"skylight-{j}-glass-{'s' if s > 0 else 'n'}", f"Roof light {j} glass", "meso", "roof",
+              [x0, RT + 0.05, z + s * RW / 2], [x1, RT + 0.05, z + s * RW / 2], [x1, RT + 0.05 + RH, z], [x0, RT + 0.05 + RH, z], 0.02,
+              "skylight-glass" if s > 0 else "skylight-glass-shade", importance=0.6)
+        for q in range(1, 6):                        # glazing bars across each slope
+            gx = x0 + RL_ * q / 6
+            plate(f"skylight-{j}-bar-{'s' if s > 0 else 'n'}{q}", f"Roof light {j} glazing bar", "micro", "roof",
+                  [gx - 0.01, RT + 0.05, z + s * RW / 2], [gx + 0.01, RT + 0.05, z + s * RW / 2], [gx + 0.01, RT + 0.05 + RH, z],
+                  [gx - 0.01, RT + 0.05 + RH, z], 0.03, "mullion", importance=0.2)
+    bx(f"skylight-{j}-ridge", f"Roof light {j} ridge", "micro", "roof", x0, x1, RT + 0.05 + RH - 0.01, RT + 0.07 + RH, z - 0.015, z + 0.015, "mullion", importance=0.3)
+    sky_ids.append(cid)
+for j, (px0, px1, py) in enumerate(((1.7, 3.1, 2.3), (3.5, 5.4, 2.3), (1.5, 3.2, 3.65), (3.6, 5.5, 3.65), (1.6, 3.6, 4.9), (4.1, 5.0, 4.9))):
+    (x0, z), (x1, _) = bp(px0, py), bp(px1, py)
+    for cx_ in (x0, x1):
+        assert inside(ROOF_SAFE, cx_, z - 0.13) and inside(ROOF_SAFE, cx_, z + 0.13), ("solar off the roof", px0, py)
+    bx(f"solar-{j}", f"Solar row {j}", "micro", "roof", x0, x1, RT, RT + 0.03, z - 0.13, z + 0.13, "solar", importance=0.4)
+    for q in range(1, round((x1 - x0) / 0.3)):
+        gx = x0 + q * 0.3
+        bx(f"solar-joint-{j}-{q}", f"Solar joint {j}.{q}", "micro", "roof", gx - 0.006, gx + 0.006, RT + 0.03, RT + 0.034, z - 0.13, z + 0.13, "solar-joint", importance=0.1)
+for j, (px, py) in enumerate(((1.5, 2.0), (5.3, 2.0), (3.6, 1.2), (1.5, 4.7), (5.2, 3.3), (4.7, 5.4))):
+    x, z = bp(px, py)
+    assert inside(ROOF_SAFE, x, z), ("vent off the roof", px, py)
+    bx(f"vent-{j}", f"Roof vent {j}", "micro", "roof", x - 0.13, x + 0.13, RT, RT + 0.1, z - 0.13, z + 0.13, "vent", importance=0.3)
 
 # ---------------------------------------------------------------------------------------------------------------
 SPR = "flat colour at sprite size (~62 px per wu at 2x density): no texture"
@@ -442,7 +506,7 @@ WHITE = {"emissiveIntensity": {"base": 0.45}}
 # Contrast between the bands (Valtech lesson: never one flat white or grey mass): light skin, dark band, mid roof,
 # darker underside in shadow, light deck edge over a dark ground floor.
 spec["materials"] = [
-    material("water", "Harbour water", "unknown", "#2f6c93", ["#2b6489"], 0.9, 0.0, "harbour water along the east edge (grey result)"),
+    material("water", "Harbour water", "unknown", "#2f6c93", ["#2b6489"], 0.9, 0.0, "harbour water on the east and north (photos)"),
     material("paving", "Plaza stone", "stone", "#d8d1c4", ["#cec7ba"], 0.9, 0.0, "wide light stone plaza (grey result)"),
     material("coping", "Quay stone", "stone", "#e6e1d6", ["#dcd7cc"], 0.9, 0.0, "light stone quay edge and stair nosings", **WHITE),
     material("bollard", "Bollard", "metal", "#2b2f33", ["#262a2e"], 0.6, 0.4, "dark mooring bollards"),
@@ -466,7 +530,10 @@ spec["materials"] = [
     material("band", "Window band", "glass", "#2a7b80", ["#267177"], 0.3, 0.0, "the one thin blue-green window band"),
     material("band-mullion", "Band mullion", "metal", "#5f9599", ["#588c90"], 0.5, 0.3, "mullions in the window band"),
     material("roof", "Roof grey", "stone", "#8f9497", ["#878c8f"], 0.9, 0.0, "flat grey roof (grey result)"),
-    material("skylight", "Skylight", "plastic", "#f1f2f2", ["#e7e8e8"], 0.6, 0.0, "small white skylight boxes", **WHITE),
+    material("curb", "Roof light curb", "metal", "#a2a8ab", ["#9aa0a3"], 0.7, 0.2, "grey curb under each roof light"),
+    material("skylight-glass", "Roof light glass (lit side)", "plastic", "#c9dbe4", ["#c1d3dc"], 0.3, 0.1, "long glass ridge roof lights (photos)", **WHITE),
+    material("skylight-glass-shade", "Roof light glass (far side)", "plastic", "#8fa9b8", ["#87a1b0"], 0.3, 0.1, "the far slope of each roof light, in shade"),
+    material("vent", "Roof vent", "metal", "#b3b8bb", ["#abb0b3"], 0.7, 0.2, "small grey vent boxes on the roof (photos)"),
     material("solar", "Solar panel", "plastic", "#253f68", ["#223a60"], 0.7, 0.1, "solar panels by the skylights"),
     material("solar-joint", "Solar joint", "metal", "#a9b6c8", ["#a1aec0"], 0.5, 0.3, "light line across each solar panel"),
 ]
@@ -486,14 +553,14 @@ spec["repetitionSystems"] = [
     rep("columns", col_ids, f"{len(col_ids)} round columns along the deck edge, about every 1.15 wu"),
     rep("railing", rail_ids, f"{len(rail_ids)} railing bars and rails, bars every ~0.11 wu, open at the stair"),
     rep("panel-joints", joint_ids, f"{len(joint_ids)} panel joints every ~0.45 wu on the deck edge and the box"),
-    rep("skylights", sky_ids, "3 x 3 skylight boxes on the roof, each with a solar panel"),
-    rep("stair", stair_ids, f"{len(stair_ids)} steps of 0.2 wu"),
+    rep("skylights", sky_ids, f"{len(sky_ids)} long glass ridge roof lights, staggered"),
+    rep("stair", stair_ids, f"two flights of {NS} steps ({RISE} wu rise) along the south deck edges, joined by a landing"),
 ]
-spec["silhouette"] = {"boundingShape": "7 x 7 wu plot; lopsided 8-sided top box 5.3 x 5.5 wu at 2.45 .. 3.0 wu over an 8-sided deck at 1.0 .. 1.2 wu",
-                      "aspectRatios": ["footprint 7 : 7", "height 3.1 : width 7 (wide and flat)"],
-                      "symmetry": "none: lopsided outlines, the stair on the south side, the water on the east",
+spec["silhouette"] = {"boundingShape": "8 x 8 wu plot, the 7 x 7 building in it; lopsided 8-sided top box 5.3 x 5.5 wu at 2.45 .. 3.0 wu over an 8-sided deck at 1.0 .. 1.2 wu",
+                      "aspectRatios": ["footprint 8 : 8", "height 3.2 : width 7 (wide and flat)"],
+                      "symmetry": "none: lopsided outlines, the stairs on the south side, the water on the east and north",
                       "dominantCurves": [], "negativeSpaces": ["dark open ground floor under the deck", "the hall set back under the box"],
-                      "landmarks": ["hovering grey box with one blue-green band", "deck with railing on round columns", "wide south stair", "quay with bollards"]}
+                      "landmarks": ["hovering grey box with one blue-green band", "deck with railing on round columns", "two stair flights on the south", "quay with bollards on two sides", "glass ridge roof lights"]}
 spec["coordinateFrame"] = {"front": "+Z south", "up": "+Y", "scaleReference": "1.0 = 1 wu = one tile edge (~2 m); avatar 0.9"}
 spec["featureReviewTargets"] = [
     {"id": "top-box", "name": "Lopsided many-sided top box, flat roof, light perforated skin with one blue-green band, hanging far out", "tier": "critical",
@@ -504,9 +571,9 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["deck", "ground-shadow", col_ids[0], rail_ids[0]]},
     {"id": "hall", "name": "Dark glass hall set back under the box", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True, "componentRefs": ["hall-glass"]},
-    {"id": "stair", "name": "Wide light stone stair down from the deck on the south side", "tier": "important",
-     "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["stair-1", "stair-3"]},
-    {"id": "quay", "name": "Harbour on the east behind a quay edge with bollards, light stone plaza", "tier": "important",
+    {"id": "stair", "name": "Two wide flights along the south facade up to the deck", "tier": "important",
+     "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["stair-w-1", "stair-e-1", "stair-landing"]},
+    {"id": "quay", "name": "Harbour on the east and north behind a quay edge with bollards, light stone plaza", "tier": "important",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False, "componentRefs": ["root", "plaza", quay_ids[0]]},
 ]
 levels = {l: [c["id"] for c in C if c["level"] == l] for l in ("macro", "meso", "micro")}

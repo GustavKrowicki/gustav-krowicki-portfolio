@@ -333,10 +333,10 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     name: "Dokk1 Library",
     category: "portfolio",
     // The harbour library, rebuilt with img2threejs at the avatar's scale (art/img2threejs/harbour-library, Linear
-    // POR-49): blockout D on Figma board 732:3604, a low 7 x 7 plot with the top box's roof at 3.0 wu over a glass hall on a
-    // deck, a wide stair on the south side and the harbour along the east edge. Sprites at 2x density (768 px), drawn at
-    // 0.5, in slices so characters sort against each 1 wu column.
-    footprint: { width: 7, height: 7 },
+    // POR-49): blockout D on Figma board 732:3604, a low 7 x 7 building with the top box's roof at 3.0 wu over a glass hall on
+    // a deck, two stair flights along the south facade, on an 8 x 8 plot so the harbour wraps its east and north sides.
+    // Sprites at 2x density (768 px), drawn at 0.5, in slices so characters sort against each 1 wu column.
+    footprint: { width: 8, height: 8 },
     slices: true,
     spriteScale: 0.5,
     sprites: {

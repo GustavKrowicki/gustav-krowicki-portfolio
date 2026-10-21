@@ -15,7 +15,7 @@ await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); re
 await page.evaluate(async () => { await new Promise((r) => setTimeout(r, 1500)); window.__CITY_E2E__.startAdventure(); await new Promise((r) => setTimeout(r, 1500)); });
 await page.waitForFunction(() => !!window.__CITY_E2E__.getScene().playerController?.isReady, null, { timeout: 60000 });
 await page.evaluate(([x, y]) => { const pc = window.__CITY_E2E__.getScene().playerController; pc.spawn(x, y, pc.characterType); }, [Number(gx), Number(gy)]);
-for (const [name, z, at] of [['street', 2, null], ['wide', 1, [20, 8]]]) {
+for (const [name, z, at] of [['street', 2, null], ['wide', 1, [21, 7]]]) {
   const r = await page.evaluate(async ([z, at]) => {
     const api = window.__CITY_E2E__; const s = api.getScene(); const pc = s.playerController; const cam = s.cameras.main;
     await new Promise((r) => setTimeout(r, 900));

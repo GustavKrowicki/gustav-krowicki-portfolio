@@ -116,7 +116,7 @@ function avatarStadiumScene(): THREE.Group {
   return group;
 }
 
-// The avatar on the plaza at the foot of the harbour library's south stair (both in wu), so the 0.9 wu avatar reads against
+// The avatar on the plaza at the foot of the harbour library's west stair flight (both in wu), so the 0.9 wu avatar reads against
 // the 1.2 wu deck and the 3.0 wu roof (art/img2threejs/harbour-library, POR-49). ?ax=&az= move it for scale tries.
 function avatarHarbourLibraryScene(): THREE.Group {
   const q = new URLSearchParams(window.location.search);
@@ -124,7 +124,7 @@ function avatarHarbourLibraryScene(): THREE.Group {
   const building = harbourLibrary.createHarbourLibraryModel({ castShadow: true, receiveShadow: true });
   const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
   group.add(building, avatar);
-  avatar.position.set(Number(q.get('ax') ?? -1.0), 0.08, Number(q.get('az') ?? 3.25));
+  avatar.position.set(Number(q.get('ax') ?? -2.5), 0.08, Number(q.get('az') ?? 3.4));
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   group.userData.boundsFrom = building;
