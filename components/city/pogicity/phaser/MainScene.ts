@@ -52,6 +52,7 @@ import { findWindows } from "@/lib/city/nightWindows";
 import { avatar3dEnabled, followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
+import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -289,6 +290,7 @@ export class MainScene extends Phaser.Scene {
     const unfollowAvatarBuilder = followAvatarBuilder(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, unfollowAvatarBuilder);
     this.events.once(Phaser.Scenes.Events.DESTROY, unfollowAvatarBuilder);
+    redrawWhenCityFontLoads(this);
     // The player (and its window listener for the builder's name and outfit cue) goes with the scene, even mid-walk
     const releasePlayer = () => this.playerController?.destroy();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePlayer);
@@ -1902,7 +1904,7 @@ export class MainScene extends Phaser.Scene {
     const a = corner(ix + (ox > ix ? 1 : 0), iy + (oy > iy ? 1 : 0));
     const b = corner(ix + (ox >= ix ? 1 : 0), iy + (oy >= iy ? 1 : 0));
     const label = this.add.text((a.x + b.x) / 2, (a.y + b.y) / 2 - 44, "Walk in ▾", {
-      fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
+      fontFamily: cityFont(), fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
       backgroundColor: "#9a4a36", padding: { x: 4, y: 2 }, resolution: 4,
     }).setOrigin(0.5, 1).setDepth(top + 1);
     this.walkIn = { key, parts: [line, label] };

@@ -16,6 +16,7 @@ import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
 import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
+import { cityFont } from "@/lib/city/cityFont";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -679,7 +680,7 @@ export class PlayerController {
     }
     if (!this.nameTag) {
       this.nameTag = this.scene.add.text(0, 0, "", {
-        fontFamily: "'Press Start 2P', monospace",
+        fontFamily: cityFont(),
         fontSize: "8px",
         color: "#ffffff",
         backgroundColor: "#1d1b18",
