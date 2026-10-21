@@ -2966,7 +2966,7 @@ export class MainScene extends Phaser.Scene {
   // Lit windows rendered from a building's 3D model (BuildingDefinition.nightWindows), over every slice of the sprite
   private addModelWindows(key: string, sprite: Phaser.GameObjects.Image, building: BuildingDefinition): void {
     const win = building.nightWindows!;
-    const seed = seedFrom(key);
+    const seed = 0; // the portfolio buildings are the ones someone always works late in
     let depth = sprite.depth;
     for (let n = 1; this.buildingSprites.has(`${key}_s${n}`); n++) {
       depth = Math.max(depth, this.buildingSprites.get(`${key}_s${n}`)!.depth);

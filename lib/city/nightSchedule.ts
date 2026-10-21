@@ -2,7 +2,7 @@
 // visitor's own clock (or ?hour= on the URL). Each lit building has two groups of windows (A and B, split at random per
 // window) and, for food places and the bar, a lit shopfront and a warm spill of light on the street in front.
 
-export type NightKind = "home" | "food" | "bar" | "office";
+export type NightKind = "home" | "food" | "bar" | "office" | "venue";
 
 // Filler buildings by id. Portfolio buildings get their window light from their 3D scenes later (step 4 of the brief)
 const KIND_BY_ID: Record<string, NightKind> = {
@@ -46,6 +46,10 @@ export function nightLevels(kind: NightKind, hour: number, seed: number): NightL
     case "bar":
       if (h >= 16 || h < 2) return { a: 1, b: 1, front: 1 };                       // open to 02:00
       if (h >= 2 && h < 3) return { a: 1, b: 0, front: 0 };                        // last ones out
+      return OFF;
+    case "venue":
+      // A sports hall on a match night, with the stadium's floodlights (17:00 to 23:00)
+      if (h >= 17 && h < 23) return { a: 1, b: 1, front: 1 };
       return OFF;
     case "office":
       if (h >= 7 && h < 18) return { a: 1, b: 1, front: 0 };

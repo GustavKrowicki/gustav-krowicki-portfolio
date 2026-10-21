@@ -1320,7 +1320,8 @@
       "y": 3,
       "isOrigin": true,
       "originX": 11,
-      "originY": 3
+      "originY": 3,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -1704,7 +1705,8 @@
       "y": 4,
       "isOrigin": true,
       "originX": 7,
-      "originY": 4
+      "originY": 4,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -3359,7 +3361,8 @@
       "y": 8,
       "isOrigin": false,
       "originX": 4,
-      "originY": 8
+      "originY": 8,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -3453,7 +3456,8 @@
       "y": 8,
       "isOrigin": false,
       "originX": 16,
-      "originY": 8
+      "originY": 8,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -3913,7 +3917,8 @@
       "y": 9,
       "isOrigin": true,
       "originX": 21,
-      "originY": 9
+      "originY": 9,
+      "streetLamp": "post"
     },
     {
       "type": "snow",
@@ -5249,7 +5254,8 @@
       "y": 13,
       "isOrigin": false,
       "originX": 4,
-      "originY": 12
+      "originY": 12,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -5383,7 +5389,8 @@
       "y": 13,
       "isOrigin": false,
       "originX": 16,
-      "originY": 12
+      "originY": 12,
+      "streetLamp": "wire"
     },
     {
       "type": "building",
@@ -6440,7 +6447,8 @@
       "y": 16,
       "isOrigin": false,
       "originX": 8,
-      "originY": 16
+      "originY": 16,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -7303,7 +7311,8 @@
       "y": 18,
       "isOrigin": false,
       "originX": 4,
-      "originY": 16
+      "originY": 16,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -7429,7 +7438,8 @@
       "originY": 18,
       "buildingId": "tree-2",
       "buildingOrientation": "right",
-      "underlyingTileType": "road"
+      "underlyingTileType": "road",
+      "streetLamp": "wire"
     },
     {
       "type": "building",
@@ -7524,7 +7534,8 @@
       "y": 18,
       "isOrigin": true,
       "originX": 29,
-      "originY": 18
+      "originY": 18,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -7556,7 +7567,8 @@
       "y": 18,
       "isOrigin": true,
       "originX": 33,
-      "originY": 18
+      "originY": 18,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -7588,7 +7600,8 @@
       "y": 18,
       "isOrigin": true,
       "originX": 37,
-      "originY": 18
+      "originY": 18,
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -7626,7 +7639,8 @@
       "y": 18,
       "isOrigin": true,
       "originX": 41,
-      "originY": 18
+      "originY": 18,
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -7664,7 +7678,8 @@
       "y": 18,
       "isOrigin": true,
       "originX": 45,
-      "originY": 18
+      "originY": 18,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -7794,7 +7809,8 @@
       "y": 19,
       "isOrigin": false,
       "originX": 12,
-      "originY": 16
+      "originY": 16,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -8261,7 +8277,8 @@
       "y": 20,
       "isOrigin": false,
       "originX": 24,
-      "originY": 20
+      "originY": 20,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -9163,7 +9180,8 @@
       "y": 23,
       "isOrigin": false,
       "originX": 16,
-      "originY": 20
+      "originY": 20,
+      "streetLamp": "wire"
     },
     {
       "type": "grass",
@@ -9247,7 +9265,8 @@
       "y": 23,
       "isOrigin": true,
       "originX": 32,
-      "originY": 23
+      "originY": 23,
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -11299,7 +11318,8 @@
       "y": 28,
       "isOrigin": false,
       "originX": 32,
-      "originY": 28
+      "originY": 28,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -11364,7 +11384,8 @@
       "y": 28,
       "isOrigin": true,
       "originX": 40,
-      "originY": 28
+      "originY": 28,
+      "streetLamp": "wire"
     },
     {
       "type": "road",
@@ -11808,7 +11829,8 @@
       "y": 29,
       "isOrigin": false,
       "originX": 44,
-      "originY": 28
+      "originY": 28,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -12952,7 +12974,8 @@
       "type": "tile",
       "x": 40,
       "y": 32,
-      "isOrigin": true
+      "isOrigin": true,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -13277,7 +13300,8 @@
       "y": 33,
       "isOrigin": true,
       "originX": 29,
-      "originY": 33
+      "originY": 33,
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -13413,7 +13437,8 @@
       "y": 33,
       "isOrigin": true,
       "originX": 44,
-      "originY": 33
+      "originY": 33,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -13577,7 +13602,8 @@
       "y": 34,
       "isOrigin": true,
       "originX": 15,
-      "originY": 34
+      "originY": 34,
+      "streetLamp": "post"
     },
     {
       "type": "road",
@@ -14142,7 +14168,8 @@
       "y": 35,
       "isOrigin": true,
       "originX": 33,
-      "originY": 35
+      "originY": 35,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -15446,7 +15473,8 @@
       "y": 38,
       "isOrigin": true,
       "originX": 43,
-      "originY": 38
+      "originY": 38,
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -15600,7 +15628,8 @@
       "y": 39,
       "isOrigin": true,
       "originX": 12,
-      "originY": 39
+      "originY": 39,
+      "streetLamp": "post"
     },
     {
       "type": "tile",
@@ -16086,7 +16115,8 @@
       "y": 40,
       "isOrigin": true,
       "originX": 16,
-      "originY": 40
+      "originY": 40,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -18161,7 +18191,8 @@
       "y": 45,
       "isOrigin": false,
       "originX": 16,
-      "originY": 44
+      "originY": 44,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -18201,7 +18232,8 @@
       "y": 45,
       "isOrigin": false,
       "originX": 20,
-      "originY": 44
+      "originY": 44,
+      "streetLamp": "wire"
     },
     {
       "type": "asphalt",
@@ -18249,7 +18281,8 @@
       "y": 45,
       "isOrigin": false,
       "originX": 24,
-      "originY": 44
+      "originY": 44,
+      "streetLamp": "wire"
     },
     {
       "type": "building",

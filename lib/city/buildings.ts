@@ -197,6 +197,13 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
     logoOffset: { x: 0, y: 34 },
+    // At night (art/img2threejs/lego-hq-avatar/export_windows.sh): a, the office wings' windows, the roof pavilions and the
+    // door glass; b, the glass of the round building, the atrium and the yellow blocks
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/lego-hq-avatar-win-a_south.png",
+      b: "/game/pogicity/Building/landmark/lego-hq-avatar-win-b_south.png",
+      kind: "office",
+    },
   },
   "valtech-office": {
     id: "valtech-office",
@@ -398,6 +405,13 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     description: "The stadium entrance",
     interactable: false,
     supportsRotation: true,
+    // Lit on a match night with the stadium's floodlights (art/img2threejs/stadium-hall/export_windows.sh): the halls'
+    // windows, and the lobby's windows and door
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/stadionhallerne-win-a_south.png",
+      front: "/game/pogicity/Building/landmark/stadionhallerne-win-f_south.png",
+      kind: "venue",
+    },
   },
   "aeroguest": {
     id: "aeroguest",
