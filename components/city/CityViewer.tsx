@@ -579,7 +579,7 @@ export default function CityViewer({
     onProjectClick?.(projectSlug);
   }, [currentEncounter, onProjectClick]);
 
-  // A tap on Valtech or LEGO HQ opens it in place (MainScene openWalkInPeek): follow it here for the card. The scene may
+  // A tap on a walk-in building opens it in place (MainScene openWalkInPeek): follow it here for the card. The scene may
   // still be booting, so wait for it.
   useEffect(() => {
     type PeekListener = (next: { buildingId: string } | null) => void;
@@ -672,6 +672,7 @@ export default function CityViewer({
       return;
     }
     avatarTabWasOpen.current = true;
+    walkInScene()?.closeWalkInPeek?.(); // the tab hides the card, so put the roof back too
     // Wait for the scene (a deep link to the tab can arrive before Phaser has booted), start walk mode so the
     // avatar exists, then focus once the player has spawned and the canvas has resized to the open panel.
     let timer = 0;

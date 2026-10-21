@@ -18,7 +18,7 @@ interface WalkInCardProps {
   onClose: () => void;
 }
 
-// The card for a walk-in building opened in place (a tap on Valtech or LEGO HQ takes its roof off, MainScene
+// The card for a walk-in building opened in place (a tap takes its roof off, MainScene
 // openWalkInPeek): its place and one sentence, then the two ways on: walk in, or read the case. Same look and place as
 // the beat cards (PeekCard), over the top of the city, so the open building below stays in view.
 export default function WalkInCard({ buildingId, onWalkIn, onReadCase, onClose }: WalkInCardProps) {

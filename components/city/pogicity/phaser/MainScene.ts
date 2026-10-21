@@ -52,7 +52,7 @@ import { findWindows } from "@/lib/city/nightWindows";
 import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
-import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
+import { redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -350,6 +350,7 @@ export class MainScene extends Phaser.Scene {
 
     // Enable input
     this.input.on("pointermove", this.handlePointerMove, this);
+    this.input.on("gameout", () => this.walkHover?.setVisible(false)); // the tile hint leaves with the mouse
     this.input.on("pointerdown", this.handlePointerDown, this);
     this.input.on("pointerup", this.handlePointerUp, this);
     this.input.on("wheel", this.handleWheel, this);
@@ -1810,11 +1811,11 @@ export class MainScene extends Phaser.Scene {
     this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
   }
 
-  // Walk-in buildings (Valtech, LEGO HQ), walking or not. Hovering one (mouse) draws a faint dashed line along its two
-  // camera-facing ground edges. A tap or click opens it in place, as in Pilgrimage: the roof comes off, the line stays,
+  // Walk-in buildings (BUILDING_INTERIORS), walking or not. Hovering one (mouse) draws a faint dashed line along its two
+  // camera-facing ground edges. A tap or click opens it in place: the roof comes off, the line stays,
   // and React shows a small card (Walk in / Read the case, "walkInPeek"). A tap on it again, a tap elsewhere or Esc
   // puts the roof back. While walking, a tap on the ground or on the open building's floor walks the avatar there, through
-  // the main door when it has to (Gustav, 2026-10-21: picks E and W).
+  // the main door when it has to.
   private walkIn: { key: string; parts: Phaser.GameObjects.GameObject[] } | null = null;
   private walkInTimer: ReturnType<typeof setTimeout> | null = null;
   private walkInPending: string | null = null;
