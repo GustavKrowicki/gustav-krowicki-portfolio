@@ -498,6 +498,9 @@ export default function CityViewer({
       // Storage blocked: the pick lasts for this visit
     }
   }, []);
+  // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
+  const look: CityLook = timeOfDay !== "auto" ? timeOfDay
+    : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
   useEffect(() => {
     if (urlTime.hour !== null) return;
     const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
@@ -510,11 +513,8 @@ export default function CityViewer({
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
         | { setLook?: (look: CityLook) => void; setHour?: (hour: number) => void } | undefined;
       if (scene?.setLook) {
-        // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
         // (night forced in the daytime shows the evening's windows)
         const pickedHour = HOUR_OF[timeOfDay];
-        const look: CityLook = timeOfDay !== "auto" ? timeOfDay
-          : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
         const sceneHour = pickedHour ?? hour;
         scene.setHour?.(look === "night" && !isNightHour(sceneHour) ? 21 : sceneHour);
         scene.setLook(look);
@@ -525,7 +525,7 @@ export default function CityViewer({
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
     return () => window.clearInterval(timer);
-  }, [urlTime.night, hour, timeOfDay]);
+  }, [look, hour, timeOfDay]);
 
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
@@ -1004,7 +1004,7 @@ export default function CityViewer({
             </button>
           )}
           {/* Hidden while walking on a phone on /city, where Stop walking is wider and runs under the joystick */}
-          {(isShell || !(isMobile && isAdventureActive)) && <TimeOfDayButton value={timeOfDay} onChange={pickTimeOfDay} />}
+          {(isShell || !(isMobile && isAdventureActive)) && <TimeOfDayButton value={timeOfDay} look={look} onChange={pickTimeOfDay} />}
         </div>
       )}
     </div>

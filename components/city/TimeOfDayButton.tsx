@@ -1,17 +1,22 @@
 "use client";
 
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
-import { TIMES_OF_DAY, type TimeOfDay } from "@/lib/city/nightSchedule";
+import { Moon, Sun, Sunrise, Sunset } from "lucide-react";
+import { TIMES_OF_DAY, type CityLook, type TimeOfDay } from "@/lib/city/nightSchedule";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 
 interface TimeOfDayButtonProps {
   value: TimeOfDay;
+  // What the city shows now (on Auto, from the visitor's clock)
+  look: CityLook;
   onChange: (value: TimeOfDay) => void;
 }
 
-// The time of day button on the city, next to Walk: Auto (the visitor's clock, the default), Morning, Day, Evening,
-// Night. The list opens upward, over the city.
-export default function TimeOfDayButton({ value, onChange }: TimeOfDayButtonProps) {
+const LOOK_ICON = { morning: Sunrise, day: Sun, evening: Sunset, night: Moon } as const;
+
+// The time of day button on the city. It shows what the city shows now (a sun or moon and the time of day, also on
+// Auto); its list picks Auto (the visitor's clock, the default), Morning, Day, Evening or Night, and opens upward
+export default function TimeOfDayButton({ value, look, onChange }: TimeOfDayButtonProps) {
   const [open, setOpen] = useState(false);
   const [maxHeight, setMaxHeight] = useState<number | null>(null);
   const rootRef = useRef<HTMLDivElement>(null);
@@ -57,7 +62,8 @@ export default function TimeOfDayButton({ value, onChange }: TimeOfDayButtonProp
     };
   }, [open]);
 
-  const current = TIMES_OF_DAY.find((t) => t.id === value)?.label ?? "Auto";
+  const shown = TIMES_OF_DAY.find((t) => t.id === look)?.label ?? look;
+  const Icon = LOOK_ICON[look];
 
   return (
     <div ref={rootRef} className="relative">
@@ -68,9 +74,12 @@ export default function TimeOfDayButton({ value, onChange }: TimeOfDayButtonProp
         style={PIXEL_INSET_CLIP}
         aria-haspopup="menu"
         aria-expanded={open}
-        aria-label={`Time of day: ${current}`}
+        aria-label={`Time of day: ${shown}${value === "auto" ? " (Auto)" : ""}`}
       >
-        {current}
+        <span className="flex items-center gap-2">
+          <Icon aria-hidden className="h-4 w-4" strokeWidth={2.25} />
+          {shown}
+        </span>
       </button>
       {open && (
         <div
