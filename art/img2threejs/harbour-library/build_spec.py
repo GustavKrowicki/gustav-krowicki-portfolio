@@ -377,9 +377,9 @@ for k in range(NS):
 sloped_rail("stair-cheek-coping", "Grand stair cheek coping", spt(U1 + 0.04, -DN), Y(DECK_TOP + 0.3), spt(U1 + 0.04, DOUT),
             Y(DECK_TOP - SRISE * NS + 0.3), "panel")
 stair_ids.append("stair-cheek-coping")
-# hand rails (Gustav, round 7: "a bit diagonal", one fewer): 3 thin steel lines running the full height at a slant, each
+# hand rails (Gustav, round 7: "a bit diagonal", fewer): 2 thin steel lines running the full height at a slant, each
 # bottom end RSH further west than its top, leaning with the stair's diagonal west edge
-RSH, NR = 0.4, int(os.environ.get("RAILS", "3"))         # RAILS=2 renders the two-rail try
+RSH, NR = 0.4, int(os.environ.get("RAILS", "2"))         # Gustav picked 2 (round 7); RAILS=3 renders the three-rail try
 for j in range(1, NR + 1):
     u = UT0 + (U1 - UT0) * j / (NR + 1) + RSH / 2
     pa, pb = spt(u, -DN + 0.05), spt(u - RSH, DOUT - 0.05)
