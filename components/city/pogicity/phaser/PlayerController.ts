@@ -61,6 +61,8 @@ export interface InteriorRules {
 
 // Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
 const ENTRANCE_GUIDE_MAX_STEPS = 12;
+// World px per frame on a run: about 15 tiles a second, so a walk across the city takes 2 to 3 s
+const RUN_PX_PER_FRAME = 6;
 
 export class PlayerController {
   private scene: Phaser.Scene;
@@ -103,6 +105,8 @@ export class PlayerController {
   private isAutoWalking: boolean = false;
   // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
   private guideDirection: Direction | null = null;
+  // A long walk sent from the panel ("Walk there"): the avatar runs at a steady pace instead of easing into each tile
+  private running: boolean = false;
 
   // External direction input (for mobile joystick)
   private externalDirection: Direction | null = null;
@@ -349,9 +353,20 @@ export class PlayerController {
     }
 
     if (this.isMoving) {
-      // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+      if (this.running) {
+        // A steady step per frame, so a run does not slow down at every tile
+        const rx = this.targetWorldX - this.worldX, ry = this.targetWorldY - this.worldY;
+        const left = Math.hypot(rx, ry);
+        const step = Math.min(RUN_PX_PER_FRAME, left);
+        if (left > 0) {
+          this.worldX += (rx / left) * step;
+          this.worldY += (ry / left) * step;
+        }
+      } else {
+        // Interpolate toward target position
+        this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
+        this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+      }
 
       const dx = Math.abs(this.worldX - this.targetWorldX);
       const dy = Math.abs(this.worldY - this.targetWorldY);
@@ -433,8 +448,14 @@ export class PlayerController {
     this.emitPositionChange();
   }
 
+  /** Run the walk that just started; it ends with the walk */
+  run(): void {
+    if (this.isAutoWalking) this.running = true;
+  }
+
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
+    this.running = false;
     this.guideDirection = null;
     this.autoWalkPath = [];
     this.autoWalkIndex = 0;

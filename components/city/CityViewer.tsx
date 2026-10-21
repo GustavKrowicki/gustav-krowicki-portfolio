@@ -6,7 +6,8 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
-import { markPlaceFound } from "@/lib/achievements";
+import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, isFound, markFound, onFound, type Find, type FindWalkTarget } from "@/lib/achievements";
+import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
 import PeekCard from "./PeekCard";
@@ -26,6 +27,7 @@ import {
   trackProjectOpened,
   trackCityExited,
   trackBeatChoice,
+  trackFind,
 } from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -39,6 +41,7 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
 });
 
 const TIME_OF_DAY_KEY = "city-time-of-day";
+const FIND_TOTAL = FINDS.length;
 
 function readUrlTime(): { night: boolean | null; hour: number | null } {
   try {
@@ -367,6 +370,7 @@ export default function CityViewer({
           // Suppress dialog when passing through zones en route to a different target
           scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
+            markFound(`zone:${buildingId}`);
             // buildings told by beat cards never open the tour dialog (it would stay "open" unseen and hide Walk)
             if (BEAT_CARD_BUILDINGS.has(buildingId)) {
               if (autoWalkTargetRef.current === buildingId) autoWalkTargetRef.current = null;
@@ -393,10 +397,13 @@ export default function CityViewer({
           // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
           scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
             setInteriorBeat(next);
+            if (next) markFound(`${next.buildingId}:${next.beat}`);
             if (next) setDoorCard((card) => (card?.beat === "enter" ? null : card));
           });
           // enter card on the way in (until a stand tile opens its own card, or 6 s), leave card on the way out (15 s)
           scene.events.on("interiorDoorCrossed", ({ buildingId, inward }: { buildingId: string; inward: boolean }) => {
+            if (inward && walkHintRef.current === buildingId) showWalkHint(buildingId);
+            walkHintRef.current = null;
             window.clearTimeout(doorTimerRef.current);
             const beat = inward ? "enter" : "leave";
             if (!INTERIOR_BEATS[buildingId]?.[beat]) { setDoorCard(null); return; }
@@ -437,7 +444,6 @@ export default function CityViewer({
           // Building visited
           scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
             setVisitedBuildings((prev) => new Set([...prev, buildingId]));
-            markPlaceFound(buildingId);
           });
         }
       }
@@ -445,8 +451,6 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
-    markPlaceFound(buildingId);
-
     // A logo opens the same thing as its building: the case, when there is one
     const building = getBuilding(buildingId);
     if (building?.interactable && building.projectSlug) {
@@ -506,6 +510,51 @@ export default function CityViewer({
     const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
     return () => window.clearInterval(timer);
   }, [urlTime.hour]);
+
+  // Finds (lib/achievements.ts). A beat card shows its own "Found" tag; every other find gets a short toast.
+  const [freshFinds, setFreshFinds] = useState<Record<string, string>>({});
+  const [toast, setToast] = useState<{ find: Find; count: number } | null>(null);
+  const toastTimerRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const off = onFound((find, count) => {
+      trackFind(find.id, find.group, count);
+      if (find.onCard) {
+        setFreshFinds((prev) => ({ ...prev, [find.id]: `Found · ${count} of ${FIND_TOTAL}` }));
+        return;
+      }
+      window.clearTimeout(toastTimerRef.current);
+      setToast({ find, count });
+      toastTimerRef.current = window.setTimeout(() => setToast(null), 5000);
+    });
+    return () => {
+      off();
+      window.clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+  // After a hidden find's "Walk me close": in through the door, say how many finds still hide in these rooms
+  const [walkHint, setWalkHint] = useState<string | null>(null);
+  const walkHintTimerRef = useRef<number | undefined>(undefined);
+  const showWalkHint = (buildingId: string) => {
+    const left = FINDS.filter((find) => find.id.startsWith(`${buildingId}:`) && !isFound(find.id)).length;
+    if (left === 0) return;
+    window.clearTimeout(walkHintTimerRef.current);
+    setWalkHint(`${left} ${left === 1 ? "find hides" : "finds hide"} in here. Tap a room to walk in and look.`);
+    walkHintTimerRef.current = window.setTimeout(() => setWalkHint(null), 7000);
+  };
+  useEffect(() => () => window.clearTimeout(walkHintTimerRef.current), []);
+  // Night owl: the city after midnight, on the visitor's own clock (or ?hour=0..4)
+  useEffect(() => {
+    if (hour < 5) markFound("night-owl");
+  }, [hour]);
+  // Bounce rate: five minutes in the city, counted across every visit while the tab is in view
+  useEffect(() => {
+    const step = 15;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      if (addCitySeconds(step) >= BOUNCE_RATE_SECONDS) markFound("bounce-rate");
+    }, step * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
   useEffect(() => {
@@ -594,7 +643,6 @@ export default function CityViewer({
     const onPeek = (next: { buildingId: string } | null) => {
       setWalkInPeek(next?.buildingId ?? null);
       if (!next) return;
-      markPlaceFound(next.buildingId);
       const building = getBuilding(next.buildingId);
       if (building) trackBuildingInteracted(building.name, selectedModeRef.current, 'open_in_place');
     };
@@ -629,6 +677,34 @@ export default function CityViewer({
     go();
   }, [isAdventureActive, handleStartAdventure, walkInScene]);
 
+  // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then run to the room's spot, in
+  // through a building's door (a hidden room), or to the place. Zones passed on the way stay quiet; the place itself
+  // greets the avatar as a logo walk does.
+  const walkHintRef = useRef<string | null>(null);
+  useEffect(() => {
+    const onFindWalk = (e: Event) => {
+      const { buildingId, beat, inside } = (e as CustomEvent<FindWalkTarget>).detail;
+      if (!isAdventureActive) handleStartAdventure();
+      walkInScene()?.closeWalkInPeek?.();
+      walkHintRef.current = inside ? buildingId : null;
+      let tries = 0;
+      const go = () => {
+        const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+        let started = beat ? !!scene?.walkPlayerToBeat(buildingId, beat) : inside ? !!scene?.walkPlayerIntoBuilding(buildingId) : false;
+        if (!started && !beat && !inside) {
+          if (!BEAT_CARD_BUILDINGS.has(buildingId)) autoWalkTargetRef.current = buildingId;
+          started = !!gameBoardRef.current?.walkPlayerToBuilding(buildingId);
+          if (!started) autoWalkTargetRef.current = null;
+        }
+        if (started) { scene?.runPlayer(); return; }
+        if (++tries < 30) window.setTimeout(go, 100);
+      };
+      go();
+    };
+    window.addEventListener(FIND_WALK_EVENT, onFindWalk);
+    return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
+  }, [isAdventureActive, handleStartAdventure, walkInScene]);
+
   const handleReadCasePeek = useCallback(() => {
     const slug = walkInPeek ? getBuilding(walkInPeek)?.projectSlug : undefined;
     walkInScene()?.closeWalkInPeek?.();
@@ -641,7 +717,6 @@ export default function CityViewer({
       const building = getBuilding(buildingId);
       if (!building) return;
 
-      markPlaceFound(buildingId);
       trackBuildingInteracted(building.name, gameMode, 'click');
 
       if (building.interactable && building.projectSlug) {
@@ -948,6 +1023,7 @@ export default function CityViewer({
         <PeekCard
           beat={shownCard ? INTERIOR_BEATS[shownCard.buildingId]?.[shownCard.beat] ?? null : null}
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
+          foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
             if (!slug) return;
@@ -960,6 +1036,7 @@ export default function CityViewer({
             if (!choice.walk) {
               trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
               setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to });
+              markFound(`${shownCard.buildingId}:${choice.to}`);
               return;
             }
             const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
@@ -977,6 +1054,9 @@ export default function CityViewer({
           onClose={handleStandUp}
         />
       )}
+
+      {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
+      <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox

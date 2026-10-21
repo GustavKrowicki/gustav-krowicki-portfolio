@@ -48,7 +48,6 @@ export function SectionContent({ id, openCase, onOpenCase, onOpenSection }: Sect
       return <AboutSection />;
     case 'cv':
       return <CvSection />;
-    // Placeholders until the art and content exist (POR-21, POR-22).
     case 'achievements':
       return <AchievementsSection onOpenSection={onOpenSection} />;
     case 'avatar':

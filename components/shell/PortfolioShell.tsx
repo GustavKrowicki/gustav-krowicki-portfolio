@@ -9,6 +9,7 @@ import ShellPanel, { type PanelState } from './ShellPanel';
 import type { SectionId } from './sections';
 import { readView, viewToSearch, type ShellView } from './shellUrl';
 import { AVATAR_WALK_EVENT } from '@/lib/city/models/avatarPieces';
+import { FIND_WALK_EVENT } from '@/lib/achievements';
 
 // Phaser needs the browser, so the city loads on the client only.
 const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
@@ -113,6 +114,15 @@ export default function PortfolioShell() {
     const onWalk = () => setPanel('closed');
     window.addEventListener(AVATAR_WALK_EVENT, onWalk);
     return () => window.removeEventListener(AVATAR_WALK_EVENT, onWalk);
+  }, []);
+
+  // A find's "Walk there": on a phone the panel covers the city, so it closes; on desktop the city is beside it.
+  useEffect(() => {
+    const onFindWalk = () => {
+      if (!window.matchMedia('(min-width: 768px)').matches) setPanel('closed');
+    };
+    window.addEventListener(FIND_WALK_EVENT, onFindWalk);
+    return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
   }, []);
 
   // A project building in the city opens its case, with Back leading to Work.
