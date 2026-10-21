@@ -2579,7 +2579,8 @@ export class MainScene extends Phaser.Scene {
     this.stopCameraFollow();
     const camera = this.cameras.main;
     this.avatarFocusActive = !close;
-    const zoom = close ? ZOOM.street : this.avatarFocusZoom;
+    // phones walk a little closer than street zoom: at 2 the avatar is a few pixels tall in the small city strip
+    const zoom = close ? (this.isMobileViewport() ? 3 : ZOOM.street) : this.avatarFocusZoom;
     const y = p.worldY - (close ? 0 : 12);
     this.cameraFollowPlayer = false;
     this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, durationMs);
@@ -2593,8 +2594,8 @@ export class MainScene extends Phaser.Scene {
     return true;
   }
 
-  // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom to show the streets
-  // around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
+  // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom (3 on a phone) to show the
+  // streets around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
   landWalking(delayMs: number, glideMs: number): void {
     if (!this.playerController) return;
     if (delayMs > 0) {
