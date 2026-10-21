@@ -12,6 +12,7 @@ import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
 import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
+import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
 import { createBurgerSiteModel, createBurgerMeal, BURGER_SITE, BENCH_TOP } from '@/lib/city/models/cateItBurgerStates';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
@@ -390,6 +391,28 @@ const MODELS: Record<string, ModelConfig> = {
   'avatar-cate-pizza': {
     name: 'Gustav avatar at the pizza trailer hatch',
     create: () => avatarBurgerScene(pizzaTrailer.createPizzaTrailerModel),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // African street food trailer (art/img2threejs/cate-it-african: the burger trailer's spec with TRAILER=african)
+  cateItAfrican: {
+    name: 'African street food trailer',
+    create: streetFoodTrailer.createStreetFoodTrailerModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'avatar-cate-african': {
+    name: 'Gustav avatar at the street food trailer hatch',
+    create: () => avatarBurgerScene(streetFoodTrailer.createStreetFoodTrailerModel),
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
     configure: stadium.configureAarhusStadiumRenderer,

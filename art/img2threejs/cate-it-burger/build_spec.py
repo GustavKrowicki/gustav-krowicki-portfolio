@@ -15,13 +15,14 @@ import math
 import os
 import sys
 
-# One spec, three trailers: TRAILER=burger (polished steel, this folder) or pizza (art/img2threejs/cate-it-pizza runs this
-# file with TRAILER=pizza): the same body, wheels, tow bar and sign; its own colours, awning and kitchen.
+# One spec, three trailers: TRAILER=burger (polished steel, this folder), pizza or african (art/img2threejs/cate-it-pizza and
+# cate-it-african run this file with TRAILER set): the same body, wheels, tow bar and sign; its own colours, awning and kitchen.
 TRAILER = os.environ.get("TRAILER", "burger")
 PIZZA = TRAILER == "pizza"
-BODY = "paint" if PIZZA else "steel"              # body, closed north plate, door
-SKIRT = "paint-red" if PIZZA else "steel-dark"
-BAND = "paint-green" if PIZZA else "band-dark"
+AFRICAN = TRAILER == "african"
+BODY = {"pizza": "paint", "african": "paint-ochre"}.get(TRAILER, "steel")              # body, closed north plate, door
+SKIRT = {"pizza": "paint-red", "african": "paint-terracotta"}.get(TRAILER, "steel-dark")
+BAND = {"pizza": "paint-green"}.get(TRAILER, "band-dark")
 
 W = sys.argv[1]
 spec = json.load(open(f"{W}/object-sculpt-spec.json"))
@@ -170,6 +171,14 @@ for s, z in (("S", Z1), ("N", Z0)):
        BAND, contact="flush-mount", importance=0.6,
        features=lf("roof-band-S.blank", "contour", "dark band along the roof edge, no text") if s == "S" else None)
 
+if AFRICAN:
+    # a row of small cream diamonds on the dark roof band (south side): a simple geometric pattern, no text
+    for k in range(13):
+        dx = -L / 2 + RT + (L - 2 * RT) * (k + 0.5) / 13
+        bx(f"band-diamond-{k + 1}", f"Band diamond {k + 1}", "micro", "body", dx - 0.035, dx + 0.035, 1.37, 1.44, Z1 + 0.012, Z1 + 0.018,
+           "canvas-cream", contact="flush-mount", rot=[0, 0, math.pi / 4], importance=0.3,
+           features=lf("band-diamond-1.pattern", "contour", "cream diamonds on the roof band") if k == 0 else None)
+
 # inside: warm-lit back wall of steel, warm end walls and ceiling light, a steel work top, the hood and the menu screen
 bx("hatch-back", "Inside back wall", "meso", "inside", -HXO, HXO, HY0, HY1, Z0 + 0.04, BACK, "back-wall", importance=0.8,
    features=lf("hatch-back.lit", "contour", "warm-lit inside with a steel back wall"), topo="Back wall: a box filling the body behind the opening.")
@@ -189,11 +198,22 @@ if PIZZA:
                   contact="resting", start=(-1.32, G + ZT - 0.08, BZ - 0.36), end=(-1.32, G + ZT + 0.57, BZ - 0.36), radius=0.05, importance=0.7,
                   features=lf("flue.pipe", "contour", "steel flue pipe from the oven up through the roof")))
     bx("flue-cap", "Flue cap", "micro", "roof", -1.41, -1.23, ZT + 0.57, ZT + 0.61, BZ - 0.45, BZ - 0.27, "steel-dark", importance=0.4)
+elif AFRICAN:
+    # a charcoal grill at the west end of the hatch (its coals glowing) and a big cooking pot on the work top
+    bx("grill", "Charcoal grill", "meso", "inside", -1.1, -0.5, HY0 + 0.05, HY0 + 0.2, BACK + 0.02, Z1 - 0.08, "steel-dark", importance=0.6,
+       features=lf("grill.coals", "contour", "charcoal grill with glowing coals"))
+    bx("grill-coals", "Glowing coals", "micro", "inside", -1.06, -0.54, HY0 + 0.2, HY0 + 0.215, BACK + 0.05, Z1 - 0.11, "fire", importance=0.6)
+    bx("grill-vents", "Grill air vents", "micro", "inside", -1.04, -0.56, HY0 + 0.09, HY0 + 0.15, Z1 - 0.08, Z1 - 0.07, "fire", contact="flush-mount",
+       importance=0.5)
+    C.append(comp("pot", "Cooking pot", "meso", "inside", "cylinder", (0.26, 0.2, 0.26), (-0.12, G + HY0 + 0.15, BACK + 0.15), "pot",
+                  contact="resting", start=(-0.12, G + HY0 + 0.05, BACK + 0.15), end=(-0.12, G + HY0 + 0.25, BACK + 0.15), radius=0.13,
+                  importance=0.6, features=lf("pot.big", "contour", "big cooking pot on the work top")))
+    bx("pot-lid", "Pot lid", "micro", "inside", -0.24, 0.0, HY0 + 0.25, HY0 + 0.27, BACK + 0.03, BACK + 0.27, "steel-light", importance=0.3)
 else:
     bx("hood", "Extractor hood", "micro", "inside", -0.9, -0.1, HY1 - 0.13, HY1 - 0.03, BACK, BACK + 0.13, "steel-dark", importance=0.5,
        features=lf("hood.box", "contour", "steel extractor hood over the grill"))
 bx("menu-screen", "Chalkboard menu" if PIZZA else "Menu screen", "micro", "inside", 0.74, 1.04, HY0 + 0.06, HY1 - 0.1, Z1 - 0.1, Z1 - 0.07,
-   "chalk" if PIZZA else "screen", importance=0.5,
+   {"pizza": "chalk", "african": "wood-board"}.get(TRAILER, "screen"), importance=0.5,
    features=lf("menu-screen.lit", "contour", "lit menu screen standing at one end of the hatch, facing out"))
 
 # serving counter under the opening, full width
@@ -214,7 +234,8 @@ if PIZZA:
                       rot=[-aw_tilt, 0, 0], contact="flush-mount", start=(x0, G + HY1 + 0.03, Z1), end=(x0, G + aw_y, Z1 + AW_OUT),
                       importance=0.7, features=lf("awning.lid", "contour", "striped canvas awning") if k == 0 else None))
 else:
-    C.append(comp("awning", "Hatch lid awning", "meso", "hatch", "box", (2 * HXO + 0.08, AW_T, AW_OUT), (0, G + aw_y, Z1 + AW_OUT / 2 * math.cos(aw_tilt)), "steel",
+    # burger: the steel lid; african: a terracotta canvas awning, the same shape
+    C.append(comp("awning", "Canvas awning" if AFRICAN else "Hatch lid awning", "meso", "hatch", "box", (2 * HXO + 0.08, AW_T, AW_OUT), (0, G + aw_y, Z1 + AW_OUT / 2 * math.cos(aw_tilt)), "canvas-terracotta" if AFRICAN else "steel",
                   rot=[-aw_tilt, 0, 0], contact="flush-mount", start=(0, G + HY1 + 0.03, Z1), end=(0, G + aw_y, Z1 + AW_OUT), importance=0.8,
                   features=lf("awning.lid", "contour", "hatch lid lifted as a flat awning")))
 bx("hinge", "Lid hinge strip", "micro", "hatch", -HXO - 0.04, HXO + 0.04, HY1, HY1 + 0.04, Z1, Z1 + 0.03, "steel-dark", contact="flush-mount",
@@ -344,6 +365,13 @@ spec["materials"] = [
     material("brick", "Oven stone", "stone", "#a8553a", ["#9e4f35"], 0.9, 0.0, "stone pizza oven"),
     material("fire", "Oven fire", "stone", "#ff9a3c", ["#ff9033"], 0.5, 0.0, "glowing oven mouth", emissiveIntensity={"base": 1.0}),
     material("chalk", "Chalkboard", "stone", "#2b3a33", ["#27352e"], 0.8, 0.0, "chalkboard menu"),
+    material("paint-ochre", "Ochre paint", "stone", "#d9a23f", ["#cf9a3a"], 0.6, 0.0, "warm ochre painted body (african trailer)",
+             emissiveIntensity={"base": 0.3}, localOverrides=[{"id": "paint.flat", "kind": "linework", "notes": "panel seams below sprite size: flat ochre"}]),
+    material("paint-terracotta", "Terracotta paint", "stone", "#a8492e", ["#9e442b"], 0.6, 0.0, "terracotta lower band (african trailer)"),
+    material("canvas-terracotta", "Terracotta canvas", "fabric", "#b5533a", ["#ab4d35"], 0.9, 0.0, "canvas awning (african trailer)",
+             emissiveIntensity={"base": 0.3}),
+    material("pot", "Cooking pot", "metal", "#3a3633", ["#34302d"], 0.6, 0.3, "big dark cooking pot"),
+    material("wood-board", "Wooden menu board", "wood", "#7a5232", ["#724c2e"], 0.85, 0.0, "wooden menu board"),
     material("wood", "Wooden posts", "wood", "#a87a48", ["#9f7243"], 0.85, 0.0, "wooden sign posts"),
     material("sign-dark", "Sign board", "stone", "#212629", ["#1d2124"], 0.7, 0.0, "blank dark sign board (content open)"),
 ]
