@@ -54,7 +54,12 @@ export interface InteriorRules {
   /** null when (x, y) is not inside a walk-in building */
   isWalkable(x: number, y: number): boolean | null;
   canStep(fromX: number, fromY: number, toX: number, toY: number): boolean;
+  /** A blocked step from outside into a walk-in building's wall: the tile just inside its main door, or null */
+  entranceGuide?(fromX: number, fromY: number, toX: number, toY: number): { x: number; y: number } | null;
 }
+
+// Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
+const ENTRANCE_GUIDE_MAX_STEPS = 12;
 
 export class PlayerController {
   private scene: Phaser.Scene;
@@ -95,6 +100,8 @@ export class PlayerController {
   private autoWalkPath: { x: number; y: number }[] = [];
   private autoWalkIndex: number = 0;
   private isAutoWalking: boolean = false;
+  // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
+  private guideDirection: Direction | null = null;
 
   // External direction input (for mobile joystick)
   private externalDirection: Direction | null = null;
@@ -231,8 +238,8 @@ export class PlayerController {
   handleKeyDown(key: string): void {
     this.pressedKeys.add(key);
 
-    // Cancel auto-walk on any movement key
-    if (keyDirectionMap[key]) {
+    // Cancel auto-walk on any movement key, except the held one (and its key repeats) that started a walk to the door
+    if (keyDirectionMap[key] && keyDirectionMap[key] !== this.guideDirection) {
       this.cancelAutoWalk();
     }
   }
@@ -307,8 +314,24 @@ export class PlayerController {
         this.isMoving = true;
         this.state = PlayerState.Walking;
         this.emitPositionChange();
+      } else {
+        this.guideToEntrance(newGridX, newGridY);
       }
     }
+  }
+
+  // Walking into a walk-in building's wall from outside: walk along to its main door and in, when the door is close
+  private guideToEntrance(toX: number, toY: number): void {
+    const goal = this.interiorRules?.entranceGuide?.(this.gridX, this.gridY, toX, toY);
+    if (!goal) return;
+    const path = this.findPath(this.gridX, this.gridY, goal.x, goal.y);
+    if (path.length < 2 || path.length - 1 > ENTRANCE_GUIDE_MAX_STEPS) return;
+    this.autoWalkPath = path.slice(1);
+    this.autoWalkIndex = 0;
+    this.isAutoWalking = true;
+    this.guideDirection = this.inputDirection;
+    this.state = PlayerState.AutoWalking;
+    this.emitPositionChange();
   }
 
   private updateAutoWalk(): void {
@@ -318,7 +341,8 @@ export class PlayerController {
     }
 
     // Check for manual input interruption
-    if (this.getCurrentInputDirection() && !this.externalDirection) {
+    const input = this.getCurrentInputDirection();
+    if (input && !this.externalDirection && input !== this.guideDirection) {
       this.cancelAutoWalk();
       return;
     }
@@ -410,6 +434,7 @@ export class PlayerController {
 
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
+    this.guideDirection = null;
     this.autoWalkPath = [];
     this.autoWalkIndex = 0;
     this.state = this.isMoving ? PlayerState.Walking : PlayerState.Idle;

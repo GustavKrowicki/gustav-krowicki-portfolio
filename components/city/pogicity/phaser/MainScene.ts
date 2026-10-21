@@ -98,6 +98,7 @@ export class MainScene extends Phaser.Scene {
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
   private buildingSprites: Map<string, Phaser.GameObjects.Image> = new Map();
+  private entrancePavings: Map<string, Phaser.GameObjects.Image> = new Map();
   // Building sprite key -> what it shows, so a roof-off swap can re-texture it in place
   private buildingSpriteInfo: Map<string, { buildingId: string; orientation?: Direction }> = new Map();
   // Buildings with openSprites whose roof is off (walk-in buildings: player inside; others: player in the trigger zone)
@@ -926,6 +927,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    if (!pointer.wasTouch) this.hoverWalkIn(this.walkInBuildingAt(worldPoint.x, worldPoint.y));
     const gridPos = this.screenToGrid(worldPoint.x, worldPoint.y);
     const tileX = Math.floor(gridPos.x);
     const tileY = Math.floor(gridPos.y);
@@ -1037,6 +1039,7 @@ export class MainScene extends Phaser.Scene {
       const shouldTriggerTap = this.panPointerButton === "left";
       const wasTap = this.panDragDistance < this.TAP_DRAG_THRESHOLD;
       this.stopPanning();
+      if (shouldTriggerTap && wasTap && this.tapWalkIn(_pointer)) return;
       if (shouldTriggerTap && wasTap && this.hoverTile) {
         this.events_.onTileClick(this.hoverTile.x, this.hoverTile.y);
       }
@@ -1619,6 +1622,19 @@ export class MainScene extends Phaser.Scene {
     return !ca || a!.interior.outside.includes(ca) || isEntranceStep(a!.interior, a!.lx, a!.ly, tx - fx, ty - fy);
   }
 
+  // A step from outside that a walk-in building's wall blocks: the tile just inside its main door, so the player walks
+  // there instead of bumping (the door is easy to miss by one tile, and the grid's "up" runs diagonally on screen)
+  private entranceGuide(fx: number, fy: number, tx: number, ty: number): { x: number; y: number } | null {
+    const b = this.interiorTiles.get(`${tx},${ty}`);
+    if (!b) return null;
+    const a = this.interiorTiles.get(`${fx},${fy}`);
+    const ca = a ? interiorCode(a.interior, a.lx, a.ly) : null;
+    if (a && ca && !a.interior.outside.includes(ca)) return null; // already inside
+    if (a && a.key !== b.key) return null;
+    const [ix, iy] = b.interior.entrance.inside;
+    return { x: tx - b.lx + ix, y: ty - b.ly + iy };
+  }
+
   private updateInteriorState(gridX: number, gridY: number): void {
     if (!this.playerController) return;
     const here = this.interiorTiles.get(`${gridX},${gridY}`);
@@ -1629,6 +1645,7 @@ export class MainScene extends Phaser.Scene {
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     // Door beats: tell React when the player crosses a walk-in building's main door, in or out
     const insideId = inside ? here!.buildingId : null;
+    if (insideId && this.walkIn) this.hideWalkIn();
     if (insideId !== this.insideBuilding) {
       if (this.insideBuilding) this.events.emit("interiorDoorCrossed", { buildingId: this.insideBuilding, inward: false });
       if (insideId) this.events.emit("interiorDoorCrossed", { buildingId: insideId, inward: true });
@@ -1731,6 +1748,128 @@ export class MainScene extends Phaser.Scene {
     this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
   }
 
+  // Walk in (while walking): hovering a walk-in building, or a first tap on it on a phone, shows its way in: a faint dashed
+  // line along its two camera-facing ground edges and a "Walk in" label over the main door (the approach tile's paving is
+  // always there, see entrancePaving). A click, or a second tap, walks the avatar to the door and in. The roof still comes off only at the door.
+  private walkIn: { key: string; parts: Phaser.GameObjects.GameObject[] } | null = null;
+  private walkInTimer: ReturnType<typeof setTimeout> | null = null;
+  private walkInPending: string | null = null;
+
+  // The walk-in plot whose building is under a world point (its drawn pixels, or its footprint), or null
+  private walkInBuildingAt(wx: number, wy: number): string | null {
+    if (!this.isAdventureActive) return null;
+    for (const key of this.interiorPlots.keys()) {
+      const sprite = this.buildingSprites.get(key) as Phaser.GameObjects.Image | undefined;
+      if (!sprite?.visible || !sprite.getBounds().contains(wx, wy)) continue;
+      const fx = (wx - sprite.x) / sprite.scaleX + sprite.displayOriginX;
+      const fy = (wy - sprite.y) / sprite.scaleY + sprite.displayOriginY;
+      const frame = sprite.frame;
+      const alpha = this.textures.getPixelAlpha(Math.floor(fx), Math.floor(fy), sprite.texture.key, frame.name);
+      if (alpha && alpha > 0) return key;
+    }
+    const g = this.screenToGrid(wx, wy);
+    const t = this.interiorTiles.get(`${Math.floor(g.x)},${Math.floor(g.y)}`);
+    return t ? t.key : null;
+  }
+
+  private hoverWalkIn(key: string | null): void {
+    if (key && key === this.walkInPending) return;
+    if (this.walkInTimer) clearTimeout(this.walkInTimer);
+    this.walkInTimer = null;
+    this.walkInPending = null;
+    if (!key) { this.hideWalkIn(); return; }
+    if (key === this.walkIn?.key) return;
+    this.walkInPending = key;
+    // a short wait, so moving the mouse across the city does not flash every building on the way
+    this.walkInTimer = setTimeout(() => {
+      this.walkInTimer = null;
+      this.walkInPending = null;
+      if (this.isAdventureActive) this.showWalkIn(key);
+    }, 200);
+  }
+
+  /** A tap on the city: true when it was used to show or follow a walk-in building's way in */
+  private tapWalkIn(pointer: Phaser.Input.Pointer): boolean {
+    const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const label = this.walkIn?.parts[this.walkIn.parts.length - 1] as Phaser.GameObjects.Text | undefined;
+    const key = label?.getBounds().contains(world.x, world.y) ? this.walkIn!.key : this.walkInBuildingAt(world.x, world.y);
+    if (!key) {
+      if (pointer.wasTouch) this.hideWalkIn();
+      return false;
+    }
+    if (pointer.wasTouch && this.walkIn?.key !== key) {
+      this.showWalkIn(key);
+      return true;
+    }
+    this.walkIntoPlot(key);
+    return true;
+  }
+
+  private walkIntoPlot(key: string): void {
+    const plot = this.interiorPlots.get(key);
+    const pc = this.playerController;
+    this.hideWalkIn();
+    if (!plot || !pc) return;
+    const cell = this.grid[plot.originY]?.[plot.originX];
+    const interior = cell?.buildingId ? BUILDING_INTERIORS[cell.buildingId] : undefined;
+    if (!interior) return;
+    const p = pc.getPosition();
+    if (this.insideBuildingId(p.gridX, p.gridY) === cell!.buildingId) return;
+    const [ix, iy] = interior.entrance.inside;
+    if (pc.walkToBuilding(plot.originX + ix, plot.originY + iy)) {
+      this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
+    }
+  }
+
+  private showWalkIn(key: string): void {
+    if (this.walkIn?.key === key) return;
+    this.hideWalkIn();
+    const plot = this.interiorPlots.get(key);
+    const cell = plot && this.grid[plot.originY]?.[plot.originX];
+    const interior = cell?.buildingId ? BUILDING_INTERIORS[cell.buildingId] : undefined;
+    if (!plot || !interior) return;
+    const pc = this.playerController;
+    if (pc) {
+      const p = pc.getPosition();
+      if (this.insideBuildingId(p.gridX, p.gridY) === cell!.buildingId) return;
+    }
+    const corner = (x: number, y: number) => gridToScreen(plot.originX + x, plot.originY + y);
+    const { width: w, height: h } = plot;
+    const top = 19_000_000; // above the city, below the player's pointer
+
+    const line = this.add.graphics().setDepth(top);
+    line.lineStyle(1.5, 0xffffff, 0.7 * (1 - 0.6 * this.night)); // Graphics take no night tint: dim the line instead
+    const dashed = (a: { x: number; y: number }, b: { x: number; y: number }) => {
+      const len = Math.hypot(b.x - a.x, b.y - a.y), dash = 4, gap = 3;
+      for (let d = 0; d < len; d += dash + gap) {
+        const t0 = d / len, t1 = Math.min(len, d + dash) / len;
+        line.lineBetween(a.x + (b.x - a.x) * t0, a.y + (b.y - a.y) * t0, a.x + (b.x - a.x) * t1, a.y + (b.y - a.y) * t1);
+      }
+    };
+    dashed(corner(0, h), corner(w, h));   // south edge
+    dashed(corner(w, 0), corner(w, h));   // east edge
+
+    // no doormat: the approach tile has its own paving all the time (entrancePaving, Gustav 2026-10-21)
+    const [ox, oy] = interior.entrance.outside;
+
+    // the label over the door: the middle of the door's tile edge, lifted above a storey
+    const [ix, iy] = interior.entrance.inside;
+    const a = corner(ix + (ox > ix ? 1 : 0), iy + (oy > iy ? 1 : 0));
+    const b = corner(ix + (ox >= ix ? 1 : 0), iy + (oy >= iy ? 1 : 0));
+    const label = this.add.text((a.x + b.x) / 2, (a.y + b.y) / 2 - 44, "Walk in ▾", {
+      fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
+      backgroundColor: "#9a4a36", padding: { x: 4, y: 2 }, resolution: 4,
+    }).setOrigin(0.5, 1).setDepth(top + 1);
+    this.walkIn = { key, parts: [line, label] };
+    this.nightApplied.count = -1; // the night tint re-applies to the new label on the next frame
+  }
+
+  private hideWalkIn(): void {
+    this.walkIn?.parts.forEach((p) => p.destroy());
+    this.walkIn = null;
+  }
+
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
   // sorts by the plot's front corner and would paint over it: the depth that draws the character above it, or null.
   // Never below the character's own sort depth, so the ground tiles it stands on stay under it.
@@ -1804,6 +1943,7 @@ export class MainScene extends Phaser.Scene {
         return t ? interiorCode(t.interior, t.lx, t.ly) !== null : null;
       },
       canStep: (fx, fy, tx, ty) => this.canStepInterior(fx, fy, tx, ty),
+      entranceGuide: (fx, fy, tx, ty) => this.entranceGuide(fx, fy, tx, ty),
     });
 
     // Set up trigger zone callbacks
@@ -1923,6 +2063,7 @@ export class MainScene extends Phaser.Scene {
     this.standUp();
     this.insideBuilding = null;
     this.setInteriorBeat(null);
+    this.hideWalkIn();
 
     // Clean up
     if (this.playerController) {
@@ -2401,6 +2542,46 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
+  private static readonly PAVING_DENSITY = 4;   // texels per screen pixel at zoom 1 (sharp up to Detail zoom)
+
+  // The paving texture for one tile: drawn in tile units (u east, v south, 0..1) through the isometric transform, so the
+  // pavers lie flat on the ground. Brick herringbone in the building's brick colour (Gustav picked it from six options,
+  // 2026-10-21): 2 x 1 bricks, a staircase of a horizontal brick at (a, a) and a vertical one at (a, a + 1), repeated
+  // every (2, -2), so the lattice (1, 1), (2, -2) covers the tile with no gaps.
+  private entrancePavingTexture(buildingId: string, brick: number): string {
+    const key = `${buildingId}_entrance_paving`;
+    if (this.textures.exists(key)) return key;
+    const S = MainScene.PAVING_DENSITY, w = TILE_WIDTH * S, h = TILE_HEIGHT * S;
+    const tex = this.textures.createCanvas(key, w, h);
+    if (!tex) return key;
+    const ctx = tex.getContext();
+    ctx.setTransform(w / 2, h / 2, -w / 2, h / 2, w / 2, 0);   // (u, v) -> canvas pixels
+    ctx.beginPath();
+    ctx.rect(0, 0, 1, 1);
+    ctx.clip();
+    const hex = (c: number) => `#${c.toString(16).padStart(6, "0")}`;
+    const shade = (c: number, k: number) => {
+      const ch = (s: number) => Math.max(0, Math.min(255, Math.round(((c >> s) & 255) * k)));
+      return (ch(16) << 16) | (ch(8) << 8) | ch(0);
+    };
+    const joint = 0.012, b = 1 / 9;
+    const bricks = [brick, shade(brick, 0.92), shade(brick, 1.08)].map(hex);
+    const fill = (color: string, u: number, v: number, du: number, dv: number) => {
+      ctx.fillStyle = color;
+      ctx.fillRect(u + joint / 2, v + joint / 2, du - joint, dv - joint);
+    };
+    ctx.fillStyle = hex(shade(brick, 0.72));   // the joints
+    ctx.fillRect(0, 0, 1, 1);
+    for (let a = -20; a < 20; a++) for (let k = -10; k < 10; k++) {
+      const x = (a + 2 * k) * b, y = (a - 2 * k) * b;
+      if (x > 1.2 || y > 1.2 || x < -0.4 || y < -0.4) continue;
+      fill(bricks[((a % 3) + 3) % 3], x, y, 2 * b, b);
+      fill(bricks[(((a + 1) % 3) + 3) % 3], x, y + b, b, 2 * b);
+    }
+    tex.refresh();
+    return key;
+  }
+
   private removeBuildingSprites(buildingKey: string): void {
     const sprite = this.buildingSprites.get(buildingKey);
     if (sprite) {
@@ -2415,6 +2596,8 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_door`);
     }
     this.doors.delete(buildingKey);
+    this.entrancePavings.get(buildingKey)?.destroy();
+    this.entrancePavings.delete(buildingKey);
     const ambientSprite = this.buildingSprites.get(`${buildingKey}_ambient`);
     if (ambientSprite) {
       ambientSprite.destroy();
@@ -2485,6 +2668,21 @@ export class MainScene extends Phaser.Scene {
     this.buildingSprites.set(key, sprite);
     this.buildingSpriteInfo.set(key, { buildingId, orientation });
     if (building.slices) this.sliceBuildingSprite(sprite, key, originX, originY, footprint.width, footprint.height);
+
+    // Paving on the street tile in front of the main door: an image, so the night tint reaches it like the ground tiles
+    const interior = BUILDING_INTERIORS[buildingId];
+    const paving = building.entrancePaving;
+    if (paving && interior && (!orientation || orientation === Direction.Down)) {
+      const tx = originX + interior.entrance.outside[0];
+      const ty = originY + interior.entrance.outside[1];
+      const top = this.gridToScreen(tx, ty);
+      const image = this.add.image(top.x, top.y, this.entrancePavingTexture(buildingId, paving.brick));
+      image.setOrigin(0.5, 0);
+      image.setScale(1 / MainScene.PAVING_DENSITY);
+      const front = this.gridToScreen(tx + 1, ty + 1);
+      image.setDepth(this.depthFromSortPoint(front.x, front.y, 0.02));   // above the ground tile it lies on
+      this.entrancePavings.set(key, image);
+    }
 
     // Animated main door over the building sprite (frames cropped from the same sprite, so it lines up exactly)
     const door = building.door;
