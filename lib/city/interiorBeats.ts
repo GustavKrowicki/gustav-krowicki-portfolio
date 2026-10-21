@@ -102,25 +102,57 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       },
     },
   },
-  // The burger trailer's plot (Linear POR-38): at the hatch the visitor eats (the avatar sits at the beer table) or books
-  // the truck for an event (the inquiry card). One finding of the case per truck. Draft texts for Gustav to edit.
-  "cate-it-burger": {
-    hatch: {
+  // The food truck square (Linear POR-38): at each hatch the visitor eats (the avatar sits at a beer table; each truck's
+  // table card tells one finding of the case) or books the truck for an event (the inquiry card, the same for all three).
+  // Seats: lib/city/models/cateItSquareStates.ts SEATS, no screens, so the card stays. Draft texts for Gustav to edit.
+  "cate-it": {
+    "hatch-burger": {
       kicker: "Cate it · burger trailer",
       lead: "Hungry, or planning an event?",
       text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
       choices: [
-        { id: "eat", label: "Eat", to: "table", walk: true },
+        { id: "eat", label: "Eat", to: "table-burger", walk: true },
         { id: "book", label: "Book for an event", to: "booked" },
       ],
     },
-    table: {
+    "hatch-pizza": {
+      kicker: "Cate it · pizza trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table-pizza", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    "hatch-african": {
+      kicker: "Cate it · street food trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table-african", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    "table-burger": {
       kicker: "Cate it · what the trucks taught us",
       lead: "Winter is slow for a food truck.",
       text: "So we dropped the subscription for a fee per booking: no fixed costs, and we only earn when the trucks do.",
       caseStudy: true,
-      // the north bench of the beer table, facing south (lib/city/models/cateItBurgerStates.ts); no screens: the card stays
-      seat: { at: [1.35, 3.25], screens: [] },
+      seat: { at: [4.3, 4.25], screens: [] },
+    },
+    "table-pizza": {
+      kicker: "Cate it · how we found the trucks",
+      lead: "The food truck community is open.",
+      text: "Owners remember starting out. After each talk they sent us on to the next truck, so eight conversations came quickly.",
+      caseStudy: true,
+      seat: { at: [3.7, 4.25], screens: [] },
+    },
+    "table-african": {
+      kicker: "Cate it · the hardest part",
+      lead: "Three founders, three reasons to build.",
+      text: "Shipping was easy. Agreeing on the scope was hard: we had to line up three different motivations first.",
+      caseStudy: true,
+      seat: { at: [6.3, 5.25], screens: [] },
     },
     booked: {
       kicker: "Inquiry sent",

@@ -475,46 +475,33 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
   },
-  // The burger trailer's walk-in plot (Linear POR-38, the Eat / Book loop): art/img2threejs/cate-it-burger, a 4 x 4 plaza with
-  // the trailer on its north half (hatch south) and one beer table. Lab model "burgerSite", export_sprites.sh; the walk map
-  // is in lib/city/buildingInteriors.ts, the hatch and table beats in lib/city/interiorBeats.ts. A stand-in for the square.
-  "cate-it-burger": {
-    id: "cate-it-burger",
-    name: "Cate it burger trailer",
-    category: "portfolio",
-    footprint: { width: 4, height: 4 },
-    spriteScale: 0.5,
-    sprites: {
-      south: "/game/pogicity/Building/landmark/cate-it-burger_south.png",
-      north: "/game/pogicity/Building/landmark/cate-it-burger_north.png",
-      east: "/game/pogicity/Building/landmark/cate-it-burger_east.png",
-      west: "/game/pogicity/Building/landmark/cate-it-burger_west.png",
-    },
-    seatSprites: { table: "/game/pogicity/Building/landmark/cate-it-burger-sit-table_south.png" },
-    icon: "🍔",
-    projectSlug: "cate-it",
-    description: "Cate it: food trucks for events",
-    interactable: true,
-    supportsRotation: false,
-  },
+  // Cate it: the food truck square (Linear POR-38), art/img2threejs/cate-it-burger (+ cate-it-pizza, cate-it-african): one
+  // 8 x 7 walk-in plot with the street food and burger trailers along the back (hatches south), the pizza trailer on the west
+  // side (hatch east) and two beer tables (lib/city/models/cateItSquareStates.ts, lab model cateItSquare, export_square.sh).
+  // At each hatch: Eat (the avatar sits at a table) or Book for an event (lib/city/interiorBeats.ts). Replaces the old 3 x 3
+  // Cate it building; the id stays, so its tour stop and the places checklist keep working.
   "cate-it": {
     id: "cate-it",
     name: "Cate it",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
-    collisionPadding: { right: 0, top: 0 },
-    triggerZoneRadius: 3.5,
+    footprint: { width: 8, height: 7 },
+    spriteScale: 0.5,
     sprites: {
-      south: "/game/pogicity/Building/landmark/cate-it_south.png",
-      north: "/game/pogicity/Building/landmark/cate-it_north.png",
-      east: "/game/pogicity/Building/landmark/cate-it_east.png",
-      west: "/game/pogicity/Building/landmark/cate-it_west.png",
+      south: "/game/pogicity/Building/landmark/cate-it-square_south.png",
+      north: "/game/pogicity/Building/landmark/cate-it-square_north.png",
+      east: "/game/pogicity/Building/landmark/cate-it-square_east.png",
+      west: "/game/pogicity/Building/landmark/cate-it-square_west.png",
+    },
+    seatSprites: {
+      "table-burger": "/game/pogicity/Building/landmark/cate-it-square-sit-burger_south.png",
+      "table-pizza": "/game/pogicity/Building/landmark/cate-it-square-sit-pizza_south.png",
+      "table-african": "/game/pogicity/Building/landmark/cate-it-square-sit-african_south.png",
     },
     icon: "🚚",
     projectSlug: "cate-it",
-    description: "AI-powered catering platform - Co-founder & Designer",
+    description: "Cate it: food trucks for events - Co-founder & Designer",
     interactable: true,
-    supportsRotation: true,
+    supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/cate-it logo.png",
     logoOffset: { x: 0, y: 70 },
   },
