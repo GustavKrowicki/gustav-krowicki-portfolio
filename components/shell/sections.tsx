@@ -41,14 +41,13 @@ export function SectionContent({ id, openCase, onOpenCase, onOpenSection }: Sect
 
   switch (id) {
     case 'home':
-      return <HomeSection onOpenCase={onOpenCase} />;
+      return <HomeSection onOpenCase={onOpenCase} onOpenSection={onOpenSection} />;
     case 'work':
       return <WorkSection onOpenCase={onOpenCase} />;
     case 'hobbies':
       return <AboutSection />;
     case 'cv':
       return <CvSection />;
-    // Placeholders until the art and content exist (POR-21, POR-22).
     case 'achievements':
       return <AchievementsSection onOpenSection={onOpenSection} />;
     case 'avatar':

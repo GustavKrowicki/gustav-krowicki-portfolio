@@ -6,7 +6,8 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
-import { markPlaceFound } from "@/lib/achievements";
+import { BOUNCE_RATE_SECONDS, FINDS, addCitySeconds, markFound, onFound, type Find } from "@/lib/achievements";
+import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
 import PeekCard from "./PeekCard";
@@ -25,6 +26,7 @@ import {
   trackProjectOpened,
   trackCityExited,
   trackBeatChoice,
+  trackFind,
 } from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -38,6 +40,7 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
 });
 
 const TIME_OF_DAY_KEY = "city-time-of-day";
+const FIND_TOTAL = FINDS.length;
 
 function readUrlTime(): { night: boolean | null; hour: number | null } {
   try {
@@ -359,6 +362,7 @@ export default function CityViewer({
           // Suppress dialog when passing through zones en route to a different target
           scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
+            markFound(`zone:${buildingId}`);
             // buildings told by beat cards never open the tour dialog (it would stay "open" unseen and hide Walk)
             if (BEAT_CARD_BUILDINGS.has(buildingId)) {
               if (autoWalkTargetRef.current === buildingId) autoWalkTargetRef.current = null;
@@ -385,6 +389,7 @@ export default function CityViewer({
           // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
           scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
             setInteriorBeat(next);
+            if (next) markFound(`${next.buildingId}:${next.beat}`);
             if (next) setDoorCard((card) => (card?.beat === "enter" ? null : card));
           });
           // enter card on the way in (until a stand tile opens its own card, or 6 s), leave card on the way out (15 s)
@@ -429,7 +434,6 @@ export default function CityViewer({
           // Building visited
           scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
             setVisitedBuildings((prev) => new Set([...prev, buildingId]));
-            markPlaceFound(buildingId);
           });
         }
       }
@@ -437,8 +441,6 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
-    markPlaceFound(buildingId);
-
     // A logo opens the same thing as its building: the case, when there is one
     const building = getBuilding(buildingId);
     if (building?.interactable && building.projectSlug) {
@@ -495,6 +497,40 @@ export default function CityViewer({
     const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
     return () => window.clearInterval(timer);
   }, [urlTime.hour]);
+
+  // Finds (lib/achievements.ts). A beat card shows its own "Found" tag; every other find gets a short toast.
+  const [freshFinds, setFreshFinds] = useState<Record<string, string>>({});
+  const [toast, setToast] = useState<{ find: Find; count: number } | null>(null);
+  const toastTimerRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const off = onFound((find, count) => {
+      trackFind(find.id, find.group, count);
+      if (find.onCard) {
+        setFreshFinds((prev) => ({ ...prev, [find.id]: `Found · ${count} of ${FIND_TOTAL}` }));
+        return;
+      }
+      window.clearTimeout(toastTimerRef.current);
+      setToast({ find, count });
+      toastTimerRef.current = window.setTimeout(() => setToast(null), 5000);
+    });
+    return () => {
+      off();
+      window.clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+  // Night owl: the city after midnight, on the visitor's own clock (or ?hour=0..4)
+  useEffect(() => {
+    if (hour < 5) markFound("night-owl");
+  }, [hour]);
+  // Bounce rate: five minutes in the city, counted across every visit while the tab is in view
+  useEffect(() => {
+    const step = 15;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      if (addCitySeconds(step) >= BOUNCE_RATE_SECONDS) markFound("bounce-rate");
+    }, step * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
 
   // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
   useEffect(() => {
@@ -582,7 +618,6 @@ export default function CityViewer({
       const building = getBuilding(buildingId);
       if (!building) return;
 
-      markPlaceFound(buildingId);
       trackBuildingInteracted(building.name, gameMode, 'click');
 
       if (building.interactable && building.projectSlug) {
@@ -851,6 +886,7 @@ export default function CityViewer({
         <PeekCard
           beat={shownCard ? INTERIOR_BEATS[shownCard.buildingId]?.[shownCard.beat] ?? null : null}
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
+          foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
             if (!slug) return;
@@ -863,6 +899,7 @@ export default function CityViewer({
             if (!choice.walk) {
               trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
               setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to });
+              markFound(`${shownCard.buildingId}:${choice.to}`);
               return;
             }
             const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
@@ -880,6 +917,9 @@ export default function CityViewer({
           onClose={handleStandUp}
         />
       )}
+
+      {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
+      <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} />
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox

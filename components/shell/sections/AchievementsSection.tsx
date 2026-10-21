@@ -1,78 +1,94 @@
 'use client';
 
-import { Check, Lock } from 'lucide-react';
-import { ACHIEVEMENT_PLACES, useFoundPlaces } from '@/lib/achievements';
-import { getBuilding } from '@/lib/city/buildings';
+import { useEffect, useRef } from 'react';
+import { FIND_GROUPS, FINDS, VISIT_STARTED_AT, useFound, type Find } from '@/lib/achievements';
+import { trackAchievementsOpened } from '@/lib/analytics';
 import type { SectionId } from '../sections';
 
-// The free time areas still need content in About me. Until then they show as "coming soon" (POR-21).
-const MORE_TO_FIND = ['Photos', 'Workshop', 'Music', 'Food', 'Books', 'Forest trail', 'Ski slope', 'AGF'];
-
-// Placeholder for shell step 5: progress only. The content lives in Work and About me.
+// What the visitor found in the city (POR-21). A plain page: found tiles say what they show about Gustav, grey tiles
+// say where the rest hide, and secrets stay a question mark until found. Progress stays in this browser.
 export default function AchievementsSection({ onOpenSection }: { onOpenSection: (id: SectionId) => void }) {
-  const found = useFoundPlaces();
-  const count = ACHIEVEMENT_PLACES.filter((id) => found.includes(id)).length;
-  const total = ACHIEVEMENT_PLACES.length;
+  const found = useFound();
+  const count = FINDS.filter((find) => found[find.id] !== undefined).length;
+  const total = FINDS.length;
+
+  // Once per opening of the section, with the count it opened at
+  const openedAt = useRef(count);
+  useEffect(() => trackAchievementsOpened(openedAt.current), []);
 
   return (
     <div className="px-6 py-6">
-      <h2 className="text-2xl font-semibold text-neutral-900">Achievements</h2>
+      <h2 className="text-2xl font-semibold text-neutral-900">What you found</h2>
       <p className="mt-3 text-sm leading-relaxed text-neutral-600">
-        Click a place in the city to find it. Your progress stays in this browser.
+        {count === 0
+          ? 'Small things are hidden in the city: rooms, places and a few secrets. Walk around to find them.'
+          : count === total
+            ? `You found all ${total}. Thank you for looking this closely.`
+            : `You found ${count} of ${total}. The grey ones are still hidden in the city.`}
       </p>
+      <div className="mt-3 h-1.5 overflow-hidden rounded-full bg-neutral-200">
+        <div
+          className="h-full bg-neutral-900 transition-[width]"
+          style={{ width: `${(count / total) * 100}%` }}
+          data-testid="finds-count"
+          data-count={count}
+        />
+      </div>
 
-      <section className="mt-6">
-        <div className="flex items-baseline justify-between">
-          <h3 className="text-sm font-medium text-neutral-500">Places found</h3>
-          <span className="font-semibold text-neutral-900" data-testid="places-found">
-            {count}/{total}
-          </span>
-        </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-neutral-200">
-          <div className="h-full bg-neutral-900 transition-[width]" style={{ width: `${(count / total) * 100}%` }} />
-        </div>
+      {FIND_GROUPS.map((group) => {
+        const finds = FINDS.filter((find) => find.group === group.id);
+        const groupFound = finds.filter((find) => found[find.id] !== undefined).length;
+        return (
+          <section key={group.id} className="mt-8">
+            <div className="flex items-baseline justify-between">
+              <h3 className="text-sm font-medium text-neutral-500">{group.label}</h3>
+              <span className="text-sm text-neutral-500">
+                {groupFound} of {finds.length}
+              </span>
+            </div>
+            <ul className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-2">
+              {finds
+                .filter((find) => found[find.id] !== undefined)
+                .map((find) => (
+                  <li key={find.id} className="rounded-lg border border-neutral-200 bg-white px-4 py-3" data-testid="find-tile">
+                    <p className="font-medium text-neutral-900">{find.title}</p>
+                    <p className="mt-1 text-sm leading-relaxed text-neutral-700">{find.about}</p>
+                    <p className="mt-1 text-xs text-neutral-500">
+                      {find.how}
+                      {found[find.id] < VISIT_STARTED_AT ? ' during an earlier visit.' : '.'}
+                    </p>
+                  </li>
+                ))}
+              {/* What is still hidden: one grey row per place, so the list stays short on a phone */}
+              {hiddenRows(finds.filter((find) => found[find.id] === undefined)).map((row) => (
+                <li key={row} className="rounded-lg bg-neutral-100 px-4 py-3 text-sm text-neutral-500">
+                  {row}
+                </li>
+              ))}
+            </ul>
+          </section>
+        );
+      })}
 
-        <ul className="mt-4 grid grid-cols-2 gap-3">
-          {ACHIEVEMENT_PLACES.map((id) => {
-            const isFound = found.includes(id);
-            return (
-              <li
-                key={id}
-                className={`flex items-center gap-3 rounded-lg px-3 py-3 ${isFound ? 'bg-white' : 'bg-neutral-100'}`}
-              >
-                <span
-                  className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-                    isFound ? 'bg-neutral-900 text-white' : 'bg-neutral-200 text-neutral-400'
-                  }`}
-                >
-                  {isFound ? <Check className="h-4 w-4" /> : <Lock className="h-4 w-4" />}
-                </span>
-                <span className={`text-sm ${isFound ? 'font-medium text-neutral-900' : 'text-neutral-500'}`}>
-                  {isFound ? getBuilding(id)?.name : 'Not found yet'}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-      </section>
-
-      <section className="mt-8">
-        <h3 className="text-sm font-medium text-neutral-500">More to find (coming soon)</h3>
-        <ul className="mt-3 flex flex-wrap gap-2">
-          {MORE_TO_FIND.map((area) => (
-            <li key={area} className="rounded-full bg-neutral-100 px-3 py-1 text-sm text-neutral-500">
-              {area}
-            </li>
-          ))}
-        </ul>
-        <button
-          type="button"
-          onClick={() => onOpenSection('hobbies')}
-          className="mt-4 text-sm font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
-        >
-          See them in About me
-        </button>
-      </section>
+      <button
+        type="button"
+        onClick={() => onOpenSection('hobbies')}
+        className="mt-8 text-sm font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
+      >
+        More about me
+      </button>
     </div>
+  );
+}
+
+// "2 hidden at LEGO HQ", "1 hidden at the stadium"; secrets say only how many are left
+function hiddenRows(hidden: Find[]): string[] {
+  const counts = new Map<string, number>();
+  for (const find of hidden) {
+    const key = find.where ?? '';
+    counts.set(key, (counts.get(key) ?? 0) + 1);
+  }
+  return [...counts].map(([where, n]) =>
+    where ? `${n} hidden at ${where}` : `${n} ${n === 1 ? 'secret' : 'secrets'} still hidden`
   );
 }

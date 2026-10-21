@@ -4,10 +4,17 @@ import { contactInfo } from '@/components/contact/ContactLinks';
 import { trackContactClicked } from '@/lib/analytics';
 import { posts } from '@/components/home/LinkedInPosts';
 import UniWorkCarousel from '../UniWorkCarousel';
+import type { SectionId } from '../sections';
 
 
 // Short version of the classic home: introduction, case studies, uni work and contact.
-export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string) => void }) {
+export default function HomeSection({
+  onOpenCase,
+  onOpenSection,
+}: {
+  onOpenCase: (slug: string) => void;
+  onOpenSection: (id: SectionId) => void;
+}) {
   return (
     <div className="space-y-10 px-6 py-6">
       <section>
@@ -16,6 +23,17 @@ export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string)
           I design digital products with a focus on user research, strategic thinking, and emerging technologies.
           Currently working on ML-assisted tools at the LEGO group. Happy to chat on new opportunities in second
           half&nbsp;2026.
+        </p>
+        {/* The hook for the finds (POR-21): one quiet line, no score */}
+        <p className="mt-3 text-sm leading-relaxed text-neutral-500">
+          Small things are hidden in the city.{' '}
+          <button
+            type="button"
+            onClick={() => onOpenSection('achievements')}
+            className="font-medium text-neutral-700 underline underline-offset-4 hover:text-neutral-900"
+          >
+            See what you found
+          </button>
         </p>
       </section>
 

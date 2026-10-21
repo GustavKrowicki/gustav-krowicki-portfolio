@@ -11,6 +11,7 @@ import {
   type AvatarChoice,
 } from '@/lib/city/models/avatarPieces';
 import AvatarLayerView from './AvatarLayerView';
+import { markFound } from '@/lib/achievements';
 
 // Avatar builder (POR-22): dress the avatar one piece per slot. The figure is 2D layers drawn from the approved
 // model sheet (AvatarLayerView); the city wears the matching pre-baked 2D sheets, live. The choice stays in this
@@ -41,6 +42,8 @@ export default function AvatarSection() {
   const [choice, setChoice] = useState<AvatarChoice>(saved?.choice ?? AVATAR_DEFAULT_CHOICE);
   const [name, setName] = useState(saved?.name ?? '');
   const openedAt = useRef(0);
+  // The outfit this tab opened with: changing it is the "Try-on haul" find
+  const openedChoice = useRef(JSON.stringify(saved?.choice ?? AVATAR_DEFAULT_CHOICE));
   const measured = useRef(false);
 
   useEffect(() => {
@@ -54,6 +57,7 @@ export default function AvatarSection() {
       // private mode or storage blocked: the builder still works for this visit
     }
     window.dispatchEvent(new CustomEvent(AVATAR_CHANGE_EVENT, { detail: choice }));
+    if (JSON.stringify(choice) !== openedChoice.current) markFound('avatar');
   }, [choice, name]);
 
   const [smile, setSmile] = useState(false);
