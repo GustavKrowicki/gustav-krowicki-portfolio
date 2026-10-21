@@ -4,8 +4,10 @@ import { useEffect, useRef, useState } from 'react';
 import {
   FIND_GROUPS,
   FINDS,
+  FIND_WALK_EVENT,
   VISIT_STARTED_AT,
   findHiddenImage,
+  findWalkTarget,
   findImage,
   getFind,
   useFound,
@@ -134,6 +136,7 @@ function FindTile({ find, isFound, onOpen }: { find: Find; isFound: boolean; onO
 
 function FindDetail({ find, foundAt, onBack }: { find: Find; foundAt: number | undefined; onBack: () => void }) {
   const isFound = foundAt !== undefined;
+  const walkTarget = findWalkTarget(find, isFound);
   return (
     <div data-testid="find-detail">
       <button
@@ -176,6 +179,16 @@ function FindDetail({ find, foundAt, onBack }: { find: Find; foundAt: number | u
             {find.where ? `Look around ${find.where}.` : 'A secret. It shows up when the moment is right.'}
           </p>
         </>
+      )}
+      {walkTarget && (
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new CustomEvent(FIND_WALK_EVENT, { detail: walkTarget }))}
+          className="mt-6 w-full rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-700"
+          data-testid="find-walk"
+        >
+          {isFound ? 'Walk there' : 'Walk me close'}
+        </button>
       )}
     </div>
   );

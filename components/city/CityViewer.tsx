@@ -6,7 +6,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
-import { BOUNCE_RATE_SECONDS, FINDS, addCitySeconds, markFound, onFound, type Find } from "@/lib/achievements";
+import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, markFound, onFound, type Find, type FindWalkTarget } from "@/lib/achievements";
 import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
@@ -624,7 +624,6 @@ export default function CityViewer({
     const onPeek = (next: { buildingId: string } | null) => {
       setWalkInPeek(next?.buildingId ?? null);
       if (!next) return;
-      markPlaceFound(next.buildingId);
       const building = getBuilding(next.buildingId);
       if (building) trackBuildingInteracted(building.name, selectedModeRef.current, 'open_in_place');
     };
@@ -657,6 +656,28 @@ export default function CityViewer({
       if (++tries < 30) window.setTimeout(go, 100);
     };
     go();
+  }, [isAdventureActive, handleStartAdventure, walkInScene]);
+
+  // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then walk to the room's spot or
+  // to the place. Zones passed on the way stay quiet; the place itself greets the avatar as a logo walk does.
+  useEffect(() => {
+    const onFindWalk = (e: Event) => {
+      const { buildingId, beat } = (e as CustomEvent<FindWalkTarget>).detail;
+      if (!isAdventureActive) handleStartAdventure();
+      walkInScene()?.closeWalkInPeek?.();
+      let tries = 0;
+      const go = () => {
+        const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+        const started = beat ? scene?.walkPlayerToBeat(buildingId, beat) : false;
+        if (!started && !BEAT_CARD_BUILDINGS.has(buildingId)) autoWalkTargetRef.current = buildingId;
+        if (started || gameBoardRef.current?.walkPlayerToBuilding(buildingId)) return;
+        autoWalkTargetRef.current = null;
+        if (++tries < 30) window.setTimeout(go, 100);
+      };
+      go();
+    };
+    window.addEventListener(FIND_WALK_EVENT, onFindWalk);
+    return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
   }, [isAdventureActive, handleStartAdventure, walkInScene]);
 
   const handleReadCasePeek = useCallback(() => {
