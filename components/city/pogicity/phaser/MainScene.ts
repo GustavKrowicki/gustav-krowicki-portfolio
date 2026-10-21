@@ -3093,6 +3093,10 @@ export class MainScene extends Phaser.Scene {
   private nightClock = 0;
   private windowDusk: number | null = null;
   private nightApplied = { tint: 0xffffff, count: 0 };
+  // Room light by building key (0..1): on while the roof is off, so a visitor can see inside at night
+  private roomLight: Map<string, number> = new Map();
+  private static readonly ROOM_COLOR: [number, number, number] = [255, 240, 218];
+  private static readonly ROOM_STRENGTH = 0.85;
 
   private updateNight(time: number): void {
     const last = this.nightClock;
@@ -3137,10 +3141,32 @@ export class MainScene extends Phaser.Scene {
       l.image.setAlpha(t * l.level);
       l.image.setFrame(Math.floor((time / 1000) * l.fps) % l.frames);
     });
+    // Rooms light up while their roof is off (a tap or the player inside), so the interior reads at night
+    let roomsMoving = false;
+    this.buildingSpriteInfo.forEach((info, key) => {
+      const want = this.openBuildings.has(info.buildingId) ? 1 : 0;
+      const was = this.roomLight.get(key) ?? 0;
+      if (was === want) return;
+      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : Math.max(want, was - fade));
+      roomsMoving = true;
+    });
+    const rooms: { image: Phaser.GameObjects.GameObject; tint: number }[] = [];
+    this.roomLight.forEach((level, key) => {
+      if (level === 0) return;
+      const k = level * t * MainScene.ROOM_STRENGTH, room = MainScene.ROOM_COLOR;
+      const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
+      const roomTint = (ch(n.r, room[0]) << 16) | (ch(n.g, room[1]) << 8) | ch(n.b, room[2]);
+      this.buildingSprites.forEach((image, k2) => {
+        if (k2 !== key && !(k2.startsWith(`${key}_`) && !/_(wa|wb|wf|spill|lights)$/.test(k2))) return;
+        lit.add(image);
+        rooms.push({ image, tint: roomTint });
+      });
+    });
     // Re-tint only while fading or when objects were added (characters, cars), not every frame of a settled night
     const count = this.children.list.length;
-    if (tint === this.nightApplied.tint && count === this.nightApplied.count) return;
+    if (!roomsMoving && tint === this.nightApplied.tint && count === this.nightApplied.count) return;
     this.nightApplied = { tint, count };
+    rooms.forEach(({ image, tint: roomTint }) => (image as Phaser.GameObjects.Image).setTint(roomTint));
     this.children.list.forEach((child) => {
       if (lit.has(child)) return;
       const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
@@ -3287,8 +3313,16 @@ export class MainScene extends Phaser.Scene {
       const d = Math.sqrt((gx / l.pool.rx) ** 2 + (gy / l.pool.ry) ** 2);
       if (d < 1) light = Math.max(light, Math.pow(1 - d, 0.8) * l.level * l.strength);
     }
-    const n = this.grade, warm = [255, 214, 160];
-    const k = Math.min(1, light * 0.9);
+    // Inside a lit room the room light wins over the lamps outside
+    let roomLevel = 0;
+    if (this.insideBuilding) {
+      this.buildingSpriteInfo.forEach((info, key) => {
+        if (info.buildingId === this.insideBuilding) roomLevel = Math.max(roomLevel, this.roomLight.get(key) ?? 0);
+      });
+    }
+    const roomK = roomLevel * this.night * MainScene.ROOM_STRENGTH;
+    const n = this.grade, lampK = Math.min(1, light * 0.9);
+    const [k, warm] = roomK > lampK ? [roomK, MainScene.ROOM_COLOR] : [lampK, [255, 214, 160]];
     const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
     sprite.setTint((ch(n.r, warm[0]) << 16) | (ch(n.g, warm[1]) << 8) | ch(n.b, warm[2]));
     this.playerLampTinted = true;
