@@ -69,14 +69,14 @@ const VALTECH_OFFICE: BuildingInterior = {
 
 // The food truck square, 8 x 7 (lib/city/models/cateItSquareStates.ts): rows 0-1 the street food and burger trailers, the
 // pizza trailer in columns 0-1 of rows 3-6, four beer tables (tiles 3-4 and 6-7 of rows 4 and 6). Rows 2-3 run along the
-// back hatches, row 5 to the pizza hatch (it faces (2,5)), column 5 is the aisle from the way in. Tiles (7,2) and (7,3) hold the queue at the burger hatch. No roof to take off: the plot counts as "inside" only so its stand tiles open their
+// back hatches, row 5 to the pizza hatch (it faces (2,5)), column 5 is the aisle from the way in. Tile (7,2) holds the two people waiting at the burger hatch. No roof to take off: the plot counts as "inside" only so its stand tiles open their
 // cards. Way in and out: the street tile south of (5,6).
 const CATE_IT_SQUARE: BuildingInterior = {
   map: [
     "########",
     "########",
     "QQQQQQQ#",
-    "##QQQQQ#",
+    "##QQQQQQ",
     "##Q##Q##",
     "##QQQQQQ",
     "##Q##Q##",

@@ -299,10 +299,10 @@ export const GUESTS: Guest[] = [
   { at: [4.0, 4.75], yawDeg: 180, meal: 'african', move: 'look', skin: '#7a4e35', hair: '#1c1714', jacket: '#c9852f', tee: '#f1ece2', jeans: '#2f3440' },
   { at: [4.0, 6.75], yawDeg: 180, meal: 'burger', move: 'chat', skin: '#e6b79a', hair: '#b07a3e', jacket: '#7b3b4a', tee: '#e9e4d8', jeans: '#4a5568' },
   { at: [4.3, 6.25], yawDeg: 0, meal: 'african', move: 'bite', skin: '#5e3b28', hair: '#151110', jacket: '#2f4c6e', tee: '#d9c9a8', jeans: '#2b2f36' },
-  // a small queue at the burger hatch's east end (Gustav, 2026-10-21), standing on tile (7, 2) and (7, 3)
-  { at: [7.2, 2.35], yawDeg: 180, meal: 'burger', move: 'look', stand: true, skin: '#c99a7a', hair: '#3b2a20', jacket: '#4d6b8a', tee: '#efe9dd', jeans: '#2f3440' },
-  { at: [7.5, 2.9], yawDeg: 170, meal: 'burger', move: 'chat', stand: true, skin: '#6d4430', hair: '#141110', jacket: '#b5533a', tee: '#e9e4d8', jeans: '#3b4252' },
-  { at: [7.55, 3.5], yawDeg: 215, meal: 'burger', move: 'look', stand: true, skin: '#e4b596', hair: '#8a5a2b', jacket: '#3f5d3f', tee: '#f1ece2', jeans: '#2b2f36' },
+  // just a few people at the burger hatch's far (east) end, one served and one waiting, so the front of the hatch stays
+  // open and inviting (Gustav, 2026-10-21); both on tile (7, 2)
+  { at: [7.25, 2.3], yawDeg: 180, meal: 'burger', move: 'look', stand: true, skin: '#c99a7a', hair: '#3b2a20', jacket: '#4d6b8a', tee: '#efe9dd', jeans: '#2f3440' },
+  { at: [7.65, 2.8], yawDeg: 200, meal: 'burger', move: 'chat', stand: true, skin: '#6d4430', hair: '#141110', jacket: '#b5533a', tee: '#e9e4d8', jeans: '#3b4252' },
   { at: [7.0, 6.75], yawDeg: 180, meal: 'burger', move: 'look', skin: '#d9a07c', hair: '#5a3b26', jacket: '#8c8f3a', tee: '#efe9dd', jeans: '#3b4252' },
 ];
 
