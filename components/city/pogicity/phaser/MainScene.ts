@@ -52,7 +52,7 @@ import { findWindows } from "@/lib/city/nightWindows";
 import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
-import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
+import { redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -299,6 +299,9 @@ export class MainScene extends Phaser.Scene {
     const releasePlayer = () => this.playerController?.destroy();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePlayer);
     this.events.once(Phaser.Scenes.Events.DESTROY, releasePlayer);
+    const releasePeek = () => { if (this.peekEscHandler) window.removeEventListener("keydown", this.peekEscHandler); };
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePeek);
+    this.events.once(Phaser.Scenes.Events.DESTROY, releasePeek);
 
     // Snap pixel art to whole pixels whenever the camera allows it (integer zoom, see updateCamera)
     this.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, (gameObject: Phaser.GameObjects.GameObject) => {
@@ -347,6 +350,7 @@ export class MainScene extends Phaser.Scene {
 
     // Enable input
     this.input.on("pointermove", this.handlePointerMove, this);
+    this.input.on("gameout", () => this.walkHover?.setVisible(false)); // the tile hint leaves with the mouse
     this.input.on("pointerdown", this.handlePointerDown, this);
     this.input.on("pointerup", this.handlePointerUp, this);
     this.input.on("wheel", this.handleWheel, this);
@@ -952,7 +956,12 @@ export class MainScene extends Phaser.Scene {
     }
 
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-    if (!pointer.wasTouch) this.hoverWalkIn(this.walkInBuildingAt(worldPoint.x, worldPoint.y));
+    if (!pointer.wasTouch) {
+      const key = this.walkInBuildingAt(worldPoint.x, worldPoint.y);
+      this.hoverWalkIn(key);
+      const g = this.screenToGrid(worldPoint.x, worldPoint.y);
+      this.hoverWalkTarget(this.walkTargetAt(Math.floor(g.x), Math.floor(g.y), key));
+    }
     const gridPos = this.screenToGrid(worldPoint.x, worldPoint.y);
     const tileX = Math.floor(gridPos.x);
     const tileY = Math.floor(gridPos.y);
@@ -1669,7 +1678,9 @@ export class MainScene extends Phaser.Scene {
     const next = this.interiorTiles.get(`${target.x},${target.y}`);
     const code = here ? interiorCode(here.interior, here.lx, here.ly) : null;
     const inside = !!here && !!code && !here.interior.outside.includes(code);
-    for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
+    for (const id of Object.keys(BUILDING_INTERIORS)) {
+      this.setBuildingOpen(id, (inside && here!.buildingId === id) || this.peek?.buildingId === id);
+    }
     // Door beats: tell React when the player crosses a walk-in building's main door, in or out
     const insideId = inside ? here!.buildingId : null;
     if (insideId && this.walkIn) this.hideWalkIn();
@@ -1678,6 +1689,8 @@ export class MainScene extends Phaser.Scene {
       if (insideId) this.events.emit("interiorDoorCrossed", { buildingId: insideId, inward: true });
       this.insideBuilding = insideId;
     }
+    // walked into the building opened in place: its card closes, its roof stays off (insideBuilding is set by now)
+    if (insideId && this.peek?.buildingId === insideId) this.closeWalkInPeek();
     this.updateInsideZoom(inside ? here! : null);
     // Peek card: the player stands on a beat's stand tile (arrived, not passing through on the way to the next tile)
     const stopped = target.x === gridX && target.y === gridY;
@@ -1798,16 +1811,25 @@ export class MainScene extends Phaser.Scene {
     this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
   }
 
-  // Walk in (while walking): hovering a walk-in building, or a first tap on it on a phone, shows its way in: a faint dashed
-  // line along its two camera-facing ground edges and a "Walk in" label over the main door (the approach tile's paving is
-  // always there, see entrancePaving). A click, or a second tap, walks the avatar to the door and in. The roof still comes off only at the door.
+  // Walk-in buildings (BUILDING_INTERIORS), walking or not. Hovering one (mouse) draws a faint dashed line along its two
+  // camera-facing ground edges. A tap or click opens it in place: the roof comes off, the line stays,
+  // and React shows a small card (Walk in / Read the case, "walkInPeek"). A tap on it again, a tap elsewhere or Esc
+  // puts the roof back. While walking, a tap on the ground or on the open building's floor walks the avatar there, through
+  // the main door when it has to.
   private walkIn: { key: string; parts: Phaser.GameObjects.GameObject[] } | null = null;
   private walkInTimer: ReturnType<typeof setTimeout> | null = null;
   private walkInPending: string | null = null;
+  private peek: { key: string; buildingId: string; line: Phaser.GameObjects.Graphics } | null = null;
+  private peekEscHandler: ((e: KeyboardEvent) => void) | null = null;
+
+  // The walk-in plots and their tiles are indexed when walking starts; opening a building in place needs them before that
+  private ensureInteriorTiles(): void {
+    if (this.interiorPlots.size === 0) this.interiorTiles = this.computeInteriorTiles();
+  }
 
   // The walk-in plot whose building is under a world point (its drawn pixels, or its footprint), or null
   private walkInBuildingAt(wx: number, wy: number): string | null {
-    if (!this.isAdventureActive) return null;
+    this.ensureInteriorTiles();
     for (const key of this.interiorPlots.keys()) {
       const sprite = this.buildingSprites.get(key) as Phaser.GameObjects.Image | undefined;
       if (!sprite?.visible || !sprite.getBounds().contains(wx, wy)) continue;
@@ -1823,6 +1845,8 @@ export class MainScene extends Phaser.Scene {
   }
 
   private hoverWalkIn(key: string | null): void {
+    if (key && key === this.peek?.key) key = null; // already open: its own line shows
+    this.input.setDefaultCursor(key ? "pointer" : "default");
     if (key && key === this.walkInPending) return;
     if (this.walkInTimer) clearTimeout(this.walkInTimer);
     this.walkInTimer = null;
@@ -1834,23 +1858,145 @@ export class MainScene extends Phaser.Scene {
     this.walkInTimer = setTimeout(() => {
       this.walkInTimer = null;
       this.walkInPending = null;
-      if (this.isAdventureActive) this.showWalkIn(key);
+      if (this.peek?.key !== key) this.showWalkIn(key);
     }, 200);
   }
 
-  /** A tap on the city: true when it was used to show or follow a walk-in building's way in */
+  /** A tap on the city: true when it opened or closed a walk-in building, or sent the avatar walking */
   private tapWalkIn(pointer: Phaser.Input.Pointer): boolean {
     const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-    const label = this.walkIn?.parts[this.walkIn.parts.length - 1] as Phaser.GameObjects.Text | undefined;
-    const key = label?.getBounds().contains(world.x, world.y) ? this.walkIn!.key : this.walkInBuildingAt(world.x, world.y);
-    if (!key) {
-      if (pointer.wasTouch) this.hideWalkIn();
-      return false;
-    }
-    if (pointer.wasTouch && this.walkIn?.key !== key) {
-      this.showWalkIn(key);
+    const g = this.screenToGrid(world.x, world.y);
+    const tx = Math.floor(g.x), ty = Math.floor(g.y);
+    const key = this.walkInBuildingAt(world.x, world.y);
+    const target = this.walkTargetAt(tx, ty, key);
+    // the open building's floor first: its open sprite covers it
+    const open = this.openPlotKey();
+    if (target && open && this.interiorTiles.get(`${tx},${ty}`)?.key === open) return this.walkToTarget(target);
+    // inside a building, a tap on its open sprite walks (out onto the street in front of it, too)
+    if (key && key === this.insidePlotKey()) return target ? this.walkToTarget(target) : true;
+    if (key) {
+      if (key === this.peek?.key) this.closeWalkInPeek();
+      else this.openWalkInPeek(key);
       return true;
     }
+    this.closeWalkInPeek();
+    // Other buildings fall through to their own click (their case, or tour card)
+    return target ? this.walkToTarget(target) : false;
+  }
+
+  // Where a tap on tile (tx, ty) sends the avatar while walking, or null: in the building opened in place, its floor tile
+  // nearest the tap (its desks and walls count too); else the tile itself, when it is ground the avatar may stand on
+  // (`overKey`: the walk-in building under the pointer, whose tap opens it instead)
+  private walkTargetAt(tx: number, ty: number, overKey: string | null): { x: number; y: number } | null {
+    const pc = this.playerController;
+    if (!this.isAdventureActive || !pc) return null;
+    const open = this.openPlotKey();
+    const t = open ? this.interiorTiles.get(`${tx},${ty}`) : undefined;
+    if (t && t.key === open) {
+      const plot = this.interiorPlots.get(t.key)!;
+      let best: { x: number; y: number; d: number } | null = pc.canStandOn(tx, ty) ? { x: tx, y: ty, d: 0 } : null;
+      for (let y = plot.originY; y < plot.originY + plot.height; y++) {
+        for (let x = plot.originX; x < plot.originX + plot.width; x++) {
+          const f = this.interiorTiles.get(`${x},${y}`);
+          const code = f ? interiorCode(f.interior, f.lx, f.ly) : null;
+          if (!code || f!.interior.outside.includes(code) || !pc.canStandOn(x, y)) continue;
+          const d = Math.abs(x - tx) + Math.abs(y - ty);
+          if (!best || d < best.d) best = { x, y, d };
+        }
+      }
+      return best;
+    }
+    if (overKey && overKey !== this.insidePlotKey()) return null;
+    return pc.canStandOn(tx, ty) ? { x: tx, y: ty } : null;
+  }
+
+  // The plot of the walk-in building the avatar is inside, or null
+  private insidePlotKey(): string | null {
+    if (!this.insideBuilding) return null;
+    for (const [key, plot] of this.interiorPlots) {
+      if (this.grid[plot.originY]?.[plot.originX]?.buildingId === this.insideBuilding) return key;
+    }
+    return null;
+  }
+
+  // The plot whose roof is off: the building opened in place, else the one the avatar is inside
+  private openPlotKey(): string | null {
+    return this.peek?.key ?? this.insidePlotKey();
+  }
+
+  // Point and walk: a tile diamond under the mouse where a click would walk to, and a marker where a tap sent the avatar
+  private walkHover: Phaser.GameObjects.Graphics | null = null;
+  private walkMarker: Phaser.GameObjects.Graphics | null = null;
+
+  private tileDiamond(g: Phaser.GameObjects.Graphics, x: number, y: number): void {
+    const pts = [gridToScreen(x, y), gridToScreen(x + 1, y), gridToScreen(x + 1, y + 1), gridToScreen(x, y + 1)]
+      .map((p) => new Phaser.Math.Vector2(p.x, p.y));
+    g.fillPoints(pts, true);
+    g.strokePoints(pts, true);
+  }
+
+  private hoverWalkTarget(target: { x: number; y: number } | null): void {
+    if (!target) { this.walkHover?.setVisible(false); return; }
+    if (!this.walkHover) this.walkHover = this.add.graphics().setDepth(19_000_000);
+    this.walkHover.clear().setVisible(true);
+    const dim = 1 - 0.6 * this.night; // Graphics take no night tint
+    this.walkHover.fillStyle(0xffffff, 0.18 * dim).lineStyle(1, 0xffffff, 0.6 * dim);
+    this.tileDiamond(this.walkHover, target.x, target.y);
+    this.input.setDefaultCursor("pointer");
+  }
+
+  private walkToTarget(target: { x: number; y: number }): boolean {
+    const pc = this.playerController;
+    if (!pc?.walkToBuilding(target.x, target.y)) return false;
+    this.manualCameraOverrideInAdventure = false;
+    this.cameraFollowPlayer = true;
+    this.walkMarker?.destroy();
+    const marker = this.add.graphics().setDepth(19_000_000);
+    marker.fillStyle(0xffd23f, 0.3).lineStyle(1.5, 0xffd23f, 1);
+    this.tileDiamond(marker, target.x, target.y);
+    this.walkMarker = marker;
+    this.tweens.add({ targets: marker, alpha: 0, delay: 700, duration: 600, onComplete: () => marker.destroy() });
+    return true;
+  }
+
+  /** Open a walk-in building in place: roof off, its outline, and the card in React */
+  private openWalkInPeek(key: string): void {
+    const plot = this.interiorPlots.get(key);
+    const buildingId = plot ? this.grid[plot.originY]?.[plot.originX]?.buildingId : undefined;
+    if (!buildingId || this.insideBuilding === buildingId) return;
+    this.closeWalkInPeek();
+    this.hideWalkIn();
+    this.peek = { key, buildingId, line: this.drawWalkInOutline(key) };
+    this.setBuildingOpen(buildingId, true);
+    // Keep the open building clear of the card over the top of the view: its ground centre in the lower middle
+    const c = gridToScreen(plot!.originX + plot!.width / 2, plot!.originY + plot!.height / 2);
+    const camera = this.cameras.main, view = camera.worldView;
+    const fx = (c.x - view.x) / view.width, fy = (c.y - view.y) / view.height;
+    if (fx < 0.2 || fx > 0.8 || fy < 0.55 || fy > 0.85) {
+      this.cameraFollowPlayer = false;
+      this.moveCamera(Math.round(c.x - camera.width / 2), Math.round(c.y - 0.18 * view.height - camera.height / 2), camera.zoom);
+    }
+    this.peekEscHandler = (e: KeyboardEvent) => { if (e.key === "Escape") this.closeWalkInPeek(); };
+    window.addEventListener("keydown", this.peekEscHandler);
+    this.events.emit("walkInPeek", { buildingId });
+  }
+
+  /** Put the roof back on the building opened in place (unless the avatar is inside it) and close its card */
+  closeWalkInPeek(): void {
+    if (!this.peek) return;
+    const { buildingId, line } = this.peek;
+    this.peek = null;
+    line.destroy();
+    if (this.peekEscHandler) window.removeEventListener("keydown", this.peekEscHandler);
+    this.peekEscHandler = null;
+    this.setBuildingOpen(buildingId, this.insideBuilding === buildingId);
+    this.events.emit("walkInPeek", null);
+  }
+
+  /** The card's Walk in: the avatar walks to the open building's main door and in (walk mode must be on) */
+  walkIntoPeek(): boolean {
+    const key = this.peek?.key;
+    if (!key || !this.isAdventureActive || !this.playerController) return false;
     this.walkIntoPlot(key);
     return true;
   }
@@ -1872,23 +2018,12 @@ export class MainScene extends Phaser.Scene {
     }
   }
 
-  private showWalkIn(key: string): void {
-    if (this.walkIn?.key === key) return;
-    this.hideWalkIn();
-    const plot = this.interiorPlots.get(key);
-    const cell = plot && this.grid[plot.originY]?.[plot.originX];
-    const interior = cell?.buildingId ? BUILDING_INTERIORS[cell.buildingId] : undefined;
-    if (!plot || !interior) return;
-    const pc = this.playerController;
-    if (pc) {
-      const p = pc.getPosition();
-      if (this.insideBuildingId(p.gridX, p.gridY) === cell!.buildingId) return;
-    }
+  // The faint dashed line along a walk-in plot's two camera-facing ground edges
+  private drawWalkInOutline(key: string): Phaser.GameObjects.Graphics {
+    const plot = this.interiorPlots.get(key)!;
     const corner = (x: number, y: number) => gridToScreen(plot.originX + x, plot.originY + y);
     const { width: w, height: h } = plot;
-    const top = 19_000_000; // above the city, below the player's pointer
-
-    const line = this.add.graphics().setDepth(top);
+    const line = this.add.graphics().setDepth(19_000_000); // above the city, below the player's pointer
     line.lineStyle(1.5, 0xffffff, 0.7 * (1 - 0.6 * this.night)); // Graphics take no night tint: dim the line instead
     const dashed = (a: { x: number; y: number }, b: { x: number; y: number }) => {
       const len = Math.hypot(b.x - a.x, b.y - a.y), dash = 4, gap = 3;
@@ -1899,20 +2034,16 @@ export class MainScene extends Phaser.Scene {
     };
     dashed(corner(0, h), corner(w, h));   // south edge
     dashed(corner(w, 0), corner(w, h));   // east edge
+    return line;
+  }
 
-    // no doormat: the approach tile has its own paving all the time (entrancePaving, Gustav 2026-10-21)
-    const [ox, oy] = interior.entrance.outside;
-
-    // the label over the door: the middle of the door's tile edge, lifted above a storey
-    const [ix, iy] = interior.entrance.inside;
-    const a = corner(ix + (ox > ix ? 1 : 0), iy + (oy > iy ? 1 : 0));
-    const b = corner(ix + (ox >= ix ? 1 : 0), iy + (oy >= iy ? 1 : 0));
-    const label = this.add.text((a.x + b.x) / 2, (a.y + b.y) / 2 - 44, "Walk in ▾", {
-      fontFamily: cityFont(), fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
-      backgroundColor: "#9a4a36", padding: { x: 4, y: 2 }, resolution: 4,
-    }).setOrigin(0.5, 1).setDepth(top + 1);
-    this.walkIn = { key, parts: [line, label] };
-    this.nightApplied.count = -1; // the night tint re-applies to the new label on the next frame
+  private showWalkIn(key: string): void {
+    if (this.walkIn?.key === key) return;
+    this.hideWalkIn();
+    const plot = this.interiorPlots.get(key);
+    const buildingId = plot ? this.grid[plot.originY]?.[plot.originX]?.buildingId : undefined;
+    if (!buildingId || this.insideBuilding === buildingId) return;
+    this.walkIn = { key, parts: [this.drawWalkInOutline(key)] };
   }
 
   private hideWalkIn(): void {
@@ -2114,6 +2245,9 @@ export class MainScene extends Phaser.Scene {
     this.insideBuilding = null;
     this.setInteriorBeat(null);
     this.hideWalkIn();
+    this.walkHover?.setVisible(false);
+    // the avatar is gone: only a building opened in place keeps its roof off
+    for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, this.peek?.buildingId === id);
 
     // Clean up
     if (this.playerController) {
@@ -3095,6 +3229,8 @@ export class MainScene extends Phaser.Scene {
   private nightApplied = { tint: 0xffffff, count: 0 };
   // Room light by building key (0..1): on while the roof is off, so a visitor can see inside at night
   private roomLight: Map<string, number> = new Map();
+  // The old textures of a cross-fading building (refreshBuildingTexture): tinted once, left out of the night re-tint
+  private crossFades: Set<Phaser.GameObjects.Image> = new Set();
   private static readonly ROOM_COLOR: [number, number, number] = [255, 240, 218];
   private static readonly ROOM_STRENGTH = 0.85;
 
@@ -3113,7 +3249,7 @@ export class MainScene extends Phaser.Scene {
     this.grade = { r: ease(g.r, gt.r), g: ease(g.g, gt.g), b: ease(g.b, gt.b) };
     const t = this.night, n = this.grade, bg = MainScene.DAY_BACKGROUND;
     const tint = (Math.round(n.r) << 16) | (Math.round(n.g) << 8) | Math.round(n.b);
-    const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
+    const lit = new Set<Phaser.GameObjects.GameObject>([...this.streetLampLit, ...this.crossFades]);
     // At dusk the windows come on house by house over 2.5 s (each building at its own moment), not all at once
     if (this.nightTarget === 1 && t >= 0.3 && this.windowDusk === null) this.windowDusk = time;
     if (this.nightTarget === 0) this.windowDusk = null;
@@ -3147,7 +3283,9 @@ export class MainScene extends Phaser.Scene {
       const want = this.openBuildings.has(info.buildingId) ? 1 : 0;
       const was = this.roomLight.get(key) ?? 0;
       if (was === want) return;
-      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : Math.max(want, was - fade));
+      // On: fade up with the roof. Off: at once, as the closed roof fades in over the open rooms (the fading-out rooms
+      // keep their own tint, refreshBuildingTexture), so the roof never shows lit warm for a moment
+      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : want);
       roomsMoving = true;
     });
     const rooms: { image: Phaser.GameObjects.GameObject; tint: number }[] = [];
@@ -3477,9 +3615,11 @@ export class MainScene extends Phaser.Scene {
       previous.setOrigin(0.5, 1);
       previous.setScale(sprite.scaleX, sprite.scaleY);
       previous.setDepth(sprite.depth + 0.001);
+      previous.setTint(sprite.tint); // the old look keeps its light (night, room) while it fades out
+      this.crossFades.add(previous);
       sprite.setTexture(textureKey);
       sprite.setScale(this.buildingTextureScale(building, textureKey));
-      this.tweens.add({ targets: previous, alpha: 0, duration: fadeMs, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
+      this.tweens.add({ targets: previous, alpha: 0, duration: fadeMs, ease: "Sine.easeInOut", onComplete: () => { this.crossFades.delete(previous); previous.destroy(); } });
     });
   }
 

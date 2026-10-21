@@ -10,6 +10,7 @@ import { markPlaceFound } from "@/lib/achievements";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
 import PeekCard from "./PeekCard";
+import WalkInCard from "./WalkInCard";
 import ScreensOverlay from "./ScreensOverlay";
 import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
 import VirtualJoystick from "./VirtualJoystick";
@@ -110,6 +111,8 @@ export default function CityViewer({
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  // A walk-in building opened in place by a tap (roof off, MainScene "walkInPeek"): its card shows
+  const [walkInPeek, setWalkInPeek] = useState<string | null>(null);
   // Sit-and-look moment: the beat the avatar sits at (MainScene "interiorSeatChanged"), shown by ScreensOverlay
   const [interiorSeat, setInteriorSeat] = useState<{ buildingId: string; beat: string } | null>(null);
   const seatTimerRef = useRef<number | undefined>(undefined);
@@ -576,6 +579,56 @@ export default function CityViewer({
     onProjectClick?.(projectSlug);
   }, [currentEncounter, onProjectClick]);
 
+  // A tap on a walk-in building opens it in place (MainScene openWalkInPeek): follow it here for the card. The scene may
+  // still be booting, so wait for it.
+  useEffect(() => {
+    type PeekListener = (next: { buildingId: string } | null) => void;
+    let scene: { events?: { on: (name: string, fn: PeekListener) => void; off: (name: string, fn: PeekListener) => void } } | undefined;
+    let timer = 0;
+    const onPeek = (next: { buildingId: string } | null) => {
+      setWalkInPeek(next?.buildingId ?? null);
+      if (!next) return;
+      markPlaceFound(next.buildingId);
+      const building = getBuilding(next.buildingId);
+      if (building) trackBuildingInteracted(building.name, selectedModeRef.current, 'open_in_place');
+    };
+    const attach = () => {
+      scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as typeof scene;
+      if (!scene?.events) { timer = window.setTimeout(attach, 200); return; }
+      scene.events.on("walkInPeek", onPeek);
+    };
+    attach();
+    return () => {
+      window.clearTimeout(timer);
+      scene?.events?.off("walkInPeek", onPeek);
+    };
+  }, []);
+
+  const walkInScene = useCallback(
+    () =>
+      gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { walkIntoPeek?: () => boolean; closeWalkInPeek?: () => void }
+        | undefined,
+    []
+  );
+
+  // The card's Walk in: start walking first when needed (the avatar spawns), then walk to the open building's door
+  const handleWalkInPeek = useCallback(() => {
+    if (!isAdventureActive) handleStartAdventure();
+    let tries = 0;
+    const go = () => {
+      if (walkInScene()?.walkIntoPeek?.()) return;
+      if (++tries < 30) window.setTimeout(go, 100);
+    };
+    go();
+  }, [isAdventureActive, handleStartAdventure, walkInScene]);
+
+  const handleReadCasePeek = useCallback(() => {
+    const slug = walkInPeek ? getBuilding(walkInPeek)?.projectSlug : undefined;
+    walkInScene()?.closeWalkInPeek?.();
+    if (slug) handleViewCaseStudy(slug);
+  }, [walkInPeek, handleViewCaseStudy, walkInScene]);
+
   // Handle building click
   const handleBuildingClick = useCallback(
     (buildingId: string) => {
@@ -619,6 +672,7 @@ export default function CityViewer({
       return;
     }
     avatarTabWasOpen.current = true;
+    walkInScene()?.closeWalkInPeek?.(); // the tab hides the card, so put the roof back too
     // Wait for the scene (a deep link to the tab can arrive before Phaser has booted), start walk mode so the
     // avatar exists, then focus once the player has spawned and the canvas has resized to the open panel.
     let timer = 0;
@@ -845,6 +899,14 @@ export default function CityViewer({
 
         </>
       )}
+
+      {/* A walk-in building opened in place by a tap: walk in, or read the case */}
+      <WalkInCard
+        buildingId={avatarTabOpen ? null : walkInPeek}
+        onWalkIn={handleWalkInPeek}
+        onReadCase={handleReadCasePeek}
+        onClose={() => walkInScene()?.closeWalkInPeek?.()}
+      />
 
       {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
       {isAdventureActive && (
