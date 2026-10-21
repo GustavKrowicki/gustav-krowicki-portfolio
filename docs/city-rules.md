@@ -140,9 +140,21 @@ and the model is built from it:
 - One outline: 1 px warm near-black on characters, props and building silhouettes.
 - Life: every landmark has at least one ambient loop (2-4 s: a flag, a screen, a door, lights), lights on at night,
   and reacts to the player near its entrance.
-- Night: the visitor's clock (19:00 to 07:00), the Night button, or `?night=1` / `?night=0` tints every scene object
+- Night: the visitor's own clock in their browser (19:00 to 07:00), or the time of day the visitor picks on the button next to Walk (Auto, Morning, Day, Evening, Night; remembered in the browser), or `?night=1` / `?night=0` tints every scene object
   dark blue over 0.9 s. A building's `nightLights` strip (cropped from its south sprite like `ambient`) is drawn
   untinted above all its slices, so only what is lit glows.
+- Street lamps (`lib/city/streetLights.ts`): placed by hand in the editor (lamp tab) and saved on the cell as
+  `streetLamp` in `cityGrid.json`. Three types: wire lamps over roads (the wire crosses the road by itself), post lamps
+  on squares and paths, lanterns on old streets; posts and lanterns never stand on a road. At dusk they switch on one by one; each throws an additive warm pool on
+  the ground and lights the player warm inside it. `?hour=0..23` stands in for the visitor's clock.
+- Four looks (`LOOKS` in `lib/city/nightSchedule.ts`): Morning (warm, about 30% darker), Day, Evening (cool, about
+  40% darker, lamps on) and Night (deep blue, lamps on), each a multiply tint eased over 0.9 s. Auto picks the look from
+  the hour (05 to 09 morning, 09 to 18 day, 18 to 21 evening, else night).
+- The hour (`lib/city/nightSchedule.ts`): filler buildings are home, food, bar or office. Their lit windows are found in
+  the sprite (`lib/city/nightWindows.ts`: small upright patches of blue or blue-grey glass) and split in two random
+  groups; the hour turns groups on (homes lit in the evening, a few up at 02:00; food open to 22:00 with a lit
+  shopfront and a spill on the street; the bar to 02:00; offices dark after 21:00). Fewer walkers at night, and the
+  lamps dim from 01:00 to 05:00.
 - Facades follow the scale in section 2 (bay 1.0 wu, window 0.5 x 0.6 wu, plinth = ground floor, parapet 0.15 wu).
 
 ## 10. Timing

@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import type { InteriorBeat } from "@/lib/city/interiorBeats";
-import { PIXEL_PANEL_CLIP, pixelPanelOuterClass } from "./pixelModalStyles";
+import { PIXEL_PANEL_CLIP, pixelButtonClass, pixelPanelOuterClass } from "./pixelModalStyles";
 
 interface PeekCardProps {
   /** The open beat (lib/city/interiorBeats.ts), or null when the avatar is not on a stand tile */
@@ -10,12 +10,14 @@ interface PeekCardProps {
   /** Remount key, so walking from one beat to the next plays the change */
   beatKey: string | null;
   onViewCaseStudy?: () => void;
+  /** A button on the card was pressed (beat.choices) */
+  onChoose?: (choice: NonNullable<InteriorBeat["choices"]>[number]) => void;
 }
 
 // A peek card over the top of the city view while the avatar stands on a beat's stand tile inside a walk-in building.
 // Real text (sharp on a phone), above the scene so the zone the avatar looks at stays in view below it; it does not
 // take pointer events, so walking (joystick, clicks on the map) goes on underneath and closes it.
-export default function PeekCard({ beat, beatKey, onViewCaseStudy }: PeekCardProps) {
+export default function PeekCard({ beat, beatKey, onViewCaseStudy, onChoose }: PeekCardProps) {
   return (
     <div className="pointer-events-none absolute inset-x-0 top-[max(0.75rem,env(safe-area-inset-top))] z-30 flex justify-center px-3">
       <AnimatePresence mode="wait">
@@ -44,6 +46,20 @@ export default function PeekCard({ beat, beatKey, onViewCaseStudy }: PeekCardPro
                     </li>
                   ))}
                 </ul>
+              )}
+              {beat.choices && onChoose && (
+                <div className="mt-2.5 flex flex-wrap gap-2">
+                  {beat.choices.map((choice, i) => (
+                    <button
+                      key={choice.id}
+                      onClick={() => onChoose(choice)}
+                      className={`pointer-events-auto ${pixelButtonClass(i === 0 ? "primary" : "secondary")} min-h-[44px]`}
+                      data-testid={`peek-choice-${choice.id}`}
+                    >
+                      {choice.label}
+                    </button>
+                  ))}
+                </div>
               )}
               {beat.caseStudy && onViewCaseStudy && (
                 <button

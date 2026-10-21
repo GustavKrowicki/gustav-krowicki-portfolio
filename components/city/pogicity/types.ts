@@ -15,8 +15,12 @@ export enum ToolType {
   Tile = "tile",
   Snow = "snow",
   Building = "building", // Generic - actual building ID stored separately
+  StreetLamp = "streetLamp", // Actual lamp type stored separately
   Eraser = "eraser",
 }
+
+// Street lamps for the city at night (lib/city/streetLights.ts). A lamp sits on top of a cell and does not change its type
+export type StreetLampType = "wire" | "post" | "lantern";
 
 export interface GridCell {
   type: TileType;
@@ -32,6 +36,8 @@ export interface GridCell {
   buildingOrientation?: Direction;
   // For props, store the underlying tile type (so props don't render their own floor)
   underlyingTileType?: TileType;
+  // A street lamp placed on this cell in the editor
+  streetLamp?: StreetLampType;
 }
 
 export enum Direction {

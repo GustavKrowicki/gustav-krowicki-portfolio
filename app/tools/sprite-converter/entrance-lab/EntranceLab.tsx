@@ -10,6 +10,10 @@ import * as hqAvatar from '@/lib/city/models/legoHqAvatar';
 import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
+import * as burgerTrailer from '@/lib/city/models/cateItBurger';
+import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
+import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
+import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Signs, type Truck } from '@/lib/city/models/cateItSquareStates';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
@@ -108,6 +112,39 @@ function avatarStadiumScene(): THREE.Group {
   avatar.position.set(0.6, 0.04, 2.15);
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The avatar at the burger trailer's hatch (both in wu): on the serving side (+Z, south), in front of the counter, so the
+// 0.9 wu avatar reads against the 0.76 wu counter and the 1.5 wu body top (art/img2threejs/cate-it-burger, POR-38).
+// ?ax=&az=&ayaw= (degrees) move and turn the avatar for scale tries.
+function avatarBurgerScene(create = burgerTrailer.createBurgerTrailerModel): THREE.Group {
+  const q = new URLSearchParams(window.location.search);
+  const group = new THREE.Group();
+  const building = create({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  avatar.position.set(Number(q.get('ax') ?? 0.35), 0.02, Number(q.get('az') ?? 0.78));
+  avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The food truck square (8 x 7) with the avatar seated at one truck's seat (?seat=burger|pizza|african), its meal in front:
+// framed by the square alone, so it lines up with the square's sprite (the city swaps to it while the avatar sits there).
+function cateItSquareSeatedScene(): THREE.Group {
+  const truck = (new URLSearchParams(window.location.search).get('seat') ?? 'burger') as Truck;
+  const [x, z] = squarePlanToModel(SEATS[truck]);
+  const group = new THREE.Group();
+  const square = createCateItSquareModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  avatar.position.set(x, 0.02, z);
+  poseAvatarSit(avatar.userData.avatar as AvatarRig, 0.02 + BENCH_TOP);
+  const meal = createSquareMeal(truck, { castShadow: true });
+  meal.position.set(x, 0, z + 0.22);
+  group.add(square, avatar, meal);
+  group.userData.boundsFrom = square;
   return group;
 }
 
@@ -315,6 +352,100 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  // Burger trailer for the food truck square (art/img2threejs/cate-it-burger, Linear POR-38): 4 x 2 footprint
+  cateItBurger: {
+    name: 'Burger trailer',
+    create: burgerTrailer.createBurgerTrailerModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'avatar-cate-burger': {
+    name: 'Gustav avatar at the burger trailer hatch',
+    create: () => avatarBurgerScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // Pizza trailer (art/img2threejs/cate-it-pizza: the burger trailer's spec with TRAILER=pizza), alone and with the avatar
+  cateItPizza: {
+    name: 'Pizza trailer',
+    create: pizzaTrailer.createPizzaTrailerModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'avatar-cate-pizza': {
+    name: 'Gustav avatar at the pizza trailer hatch',
+    create: () => avatarBurgerScene(pizzaTrailer.createPizzaTrailerModel),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // African street food trailer (art/img2threejs/cate-it-african: the burger trailer's spec with TRAILER=african)
+  cateItAfrican: {
+    name: 'African street food trailer',
+    create: streetFoodTrailer.createStreetFoodTrailerModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  'avatar-cate-african': {
+    name: 'Gustav avatar at the street food trailer hatch',
+    create: () => avatarBurgerScene(streetFoodTrailer.createStreetFoodTrailerModel),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // The food truck square for the city (8 x 7: the three trailers, four beer tables, guests) and its seated frames
+  cateItSquare: {
+    name: 'Food truck square',
+    // ?t= guests' loop phase, ?signs=logo|food|blank, ?lights=1 the night lights pass, ?twinkle=1 its second frame
+    create: (options) => {
+      const q = new URLSearchParams(window.location.search);
+      const cook = q.get('cook') as Truck | null;   // ?cook=<truck>&cf=<frame>: a cook's reaction frame
+      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs, q.get('lights') === '1',
+        Number(q.get('twinkle') ?? 0), cook ? { truck: cook, frame: Number(q.get('cf') ?? 0) } : null);
+    },
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.6, target: [0, 0, 0] },
+  },
+  cateItSquareSit: {
+    name: 'Food truck square, avatar seated (?seat=burger|pizza|african)',
+    create: () => cateItSquareSeatedScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 4.6, target: [0, 0, 0] },
+    restBounds: true,
   },
   'stadium-site': {
     name: 'Aarhus stadium with the red hall and the avatar',

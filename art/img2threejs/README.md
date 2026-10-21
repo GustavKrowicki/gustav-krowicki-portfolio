@@ -57,3 +57,4 @@ Buildings use the base skill with the `generic` profile; no plugins are needed. 
 | Folder | Factory | Sprite export |
 | --- | --- | --- |
 | `lego-hq-avatar/` | `lib/city/models/legoHqAvatar.ts` (+ `legoHqAvatarStates.ts`) | the live LEGO HQ: the real campus at avatar scale, 8 x 8, 2x density 768 px, pitch 30 deg, zoom 1.0803, vOff 0.2250, drawn at `spriteScale` 0.5; roof off per view (`hqAvatarOpen*`). `run_pass.sh <pass>` then `review.sh`; `export_sprites.sh` writes the 8 city sprites; walk map in `lib/city/buildingInteriors.ts`. Check in the city with `tools/city_walkin.mjs` |
+| `cate-it-burger/` | `lib/city/models/cateItBurger.ts` | the burger trailer for the food truck square (POR-38), 4 x 2 (size B: plan x1.35, height true); south side first, sprites not exported yet. `shoot.sh <pass>` renders the 4 views; the lab's `avatar-cate-burger` model adds the avatar at the hatch (`ax`, `az`, `ayaw`) |

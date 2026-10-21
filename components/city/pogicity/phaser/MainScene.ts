@@ -46,9 +46,13 @@ import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
 import { TourStop, TOUR_STOPS, findBuildingPosition } from "@/lib/city/tourStops";
 import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/units";
-import { avatar3dEnabled, followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { STREET_LAMPS, StreetLamp, StreetLampType, canPlaceStreetLamp, lampsFromGrid } from "@/lib/city/streetLights";
+import { CityLook, LOOKS, NightKind, lampDimming, nightKind, nightLevels, seedFrom, walkerShare } from "@/lib/city/nightSchedule";
+import { findWindows } from "@/lib/city/nightWindows";
+import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
+import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -94,6 +98,10 @@ function getSnowTextureKey(x: number, y: number): string {
 
 export class MainScene extends Phaser.Scene {
   private readonly DEPTH_Y_MULT = 10000;
+  // Ground tiles sit in their own layer under everything; light pools on the ground sit just above that layer, so a pool
+  // lights the street and never a roof, a wall or a person in front of it
+  private static readonly GROUND_DEPTH = -100_000_000;
+  private static readonly POOL_DEPTH = -50_000_000;
 
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
@@ -251,11 +259,20 @@ export class MainScene extends Phaser.Scene {
           frameWidth: building.ambient.frameWidth, frameHeight: building.ambient.frameHeight,
         });
       }
+      (building.reactions ?? []).forEach((r, i) => {
+        this.load.spritesheet(`${building.id}_reaction${i}`, r.sheet, { frameWidth: r.frameWidth, frameHeight: r.frameHeight });
+      });
       if (building.nightLights) {
         this.load.spritesheet(`${building.id}_lights`, building.nightLights.sheet, {
           frameWidth: building.nightLights.frameWidth, frameHeight: building.nightLights.frameHeight,
         });
       }
+    }
+
+    // Street lamps (lib/city/streetLights.ts): a day sprite, tinted with the city, and the parts that glow at night
+    for (const [type, spec] of Object.entries(STREET_LAMPS)) {
+      this.load.image(`lamp_${type}_day`, spec.day);
+      this.load.image(`lamp_${type}_lit`, spec.lit);
     }
 
     // Load car textures
@@ -273,6 +290,7 @@ export class MainScene extends Phaser.Scene {
     const unfollowAvatarBuilder = followAvatarBuilder(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, unfollowAvatarBuilder);
     this.events.once(Phaser.Scenes.Events.DESTROY, unfollowAvatarBuilder);
+    redrawWhenCityFontLoads(this);
     // The player (and its window listener for the builder's name and outfit cue) goes with the scene, even mid-walk
     const releasePlayer = () => this.playerController?.destroy();
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePlayer);
@@ -334,6 +352,7 @@ export class MainScene extends Phaser.Scene {
 
     // Initial render
     this.renderGrid();
+    this.buildStreetLamps();
 
     // Load character animations
     this.loadCharacterAnimations();
@@ -372,7 +391,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private async loadCharacterAnimations(): Promise<void> {
-    const charTypes = ["banana", "apple", "gustav"];
+    const charTypes = ["banana", "apple"];
     const charDirs = ["north", "south", "east", "west"];
 
     const loadPromises: Promise<void>[] = [];
@@ -385,8 +404,8 @@ export class MainScene extends Phaser.Scene {
       }
     }
 
-    // Opt-in 3D-rendered player sheets (?avatar=3d); the GIFs above stay loaded for NPCs and as the default.
-    if (avatar3dEnabled()) loadPromises.push(loadAvatar3dSprites(this));
+    // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit); the GIFs are NPCs.
+    loadPromises.push(loadAvatar3dSprites(this));
 
     try {
       await Promise.all(loadPromises);
@@ -405,6 +424,7 @@ export class MainScene extends Phaser.Scene {
     this.updatePinchZoom();
     this.updateAmbients(time);
     this.updateNight(time);
+    this.updateStreetLamps(time);
 
     this.updateCharacters();
     this.updateCars();
@@ -479,6 +499,7 @@ export class MainScene extends Phaser.Scene {
     this.updateInteriorState(playerPos.gridX, playerPos.gridY);
     this.updateDoors();
     this.updateMoments();
+    this.updateReactions();
 
     // Render player
     this.playerController.render((x, y, offset) => this.depthFromSortPoint(x, y, offset));
@@ -1153,7 +1174,8 @@ export class MainScene extends Phaser.Scene {
           oldCell.buildingId !== newCell.buildingId ||
           oldCell.isOrigin !== newCell.isOrigin ||
           oldCell.buildingOrientation !== newCell.buildingOrientation ||
-          oldCell.underlyingTileType !== newCell.underlyingTileType
+          oldCell.underlyingTileType !== newCell.underlyingTileType ||
+          oldCell.streetLamp !== newCell.streetLamp
         ) {
           this.gridDirtyTiles.add(`${x},${y}`);
         }
@@ -1164,6 +1186,7 @@ export class MainScene extends Phaser.Scene {
 
     if (this.gridDirtyTiles.size > 0) {
       this.gridDirty = true;
+      this.buildStreetLamps();
     }
 
     this.updatePreview();
@@ -1262,7 +1285,7 @@ export class MainScene extends Phaser.Scene {
       tileSprite = this.add.image(screenPos.x, screenPos.y, textureKey);
       tileSprite.setOrigin(0.5, 0);
       tileSprite.setScale(scale);
-      tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+      tileSprite.setDepth(MainScene.GROUND_DEPTH + this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
       this.tileSprites.set(key, tileSprite);
     }
   }
@@ -1686,6 +1709,29 @@ export class MainScene extends Phaser.Scene {
     this.activeBeat = key;
     this.beatSince = this.time.now;
     this.events.emit("interiorBeatChanged", next);
+    // Leaving the hatch while the cook still serves cancels the walk to the table
+    this.serveTimer?.remove();
+    this.serveTimer = null;
+    this.updateBeatZoom(next && INTERIOR_BEATS[next.buildingId]?.[next.beat]?.zoomIn ? key : null);
+  }
+
+  // Cards with zoomIn (the food truck hatches): ease in one zoom step on the player while the card is open, back after
+  private beatZoomFrom: { key: string; zoom: number } | null = null;
+  private updateBeatZoom(key: string | null): void {
+    if ((this.beatZoomFrom?.key ?? null) === key) return;
+    const camera = this.cameras.main;
+    const p = this.playerController!.getPosition();
+    if (key && !this.beatZoomFrom) {
+      // Snap to the zoom step (powers of two) so a zoom-out still running does not leave an in-between zoom behind
+      const from = 2 ** Math.round(Math.log2(camera.zoom));
+      this.beatZoomFrom = { key, zoom: from };
+      const target = Math.min(from * 2, this.maxZoomNow());
+      if (target > from) this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
+    } else if (!key && this.beatZoomFrom) {
+      const zoom = this.beatZoomFrom.zoom;
+      this.beatZoomFrom = null;
+      this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, zoom);
+    } else if (key && this.beatZoomFrom) this.beatZoomFrom.key = key;
   }
 
   // Sit-and-look moments (lib/city/interiorBeats.ts seat): a short pause on the stand tile, then the avatar walks into
@@ -1795,12 +1841,13 @@ export class MainScene extends Phaser.Scene {
   private hoverWalkIn(key: string | null): void {
     if (key && key === this.peek?.key) key = null; // already open: its own line shows
     this.input.setDefaultCursor(key ? "pointer" : "default");
-    if (key === (this.walkIn?.key ?? null) && !this.walkInTimer) return;
-    if (key === this.walkInPending) return;
+    if (key && key === this.walkInPending) return;
     if (this.walkInTimer) clearTimeout(this.walkInTimer);
     this.walkInTimer = null;
-    this.walkInPending = key;
+    this.walkInPending = null;
     if (!key) { this.hideWalkIn(); return; }
+    if (key === this.walkIn?.key) return;
+    this.walkInPending = key;
     // a short wait, so moving the mouse across the city does not flash every building on the way
     this.walkInTimer = setTimeout(() => {
       this.walkInTimer = null;
@@ -1868,7 +1915,8 @@ export class MainScene extends Phaser.Scene {
     if (!target) { this.walkHover?.setVisible(false); return; }
     if (!this.walkHover) this.walkHover = this.add.graphics().setDepth(19_000_000);
     this.walkHover.clear().setVisible(true);
-    this.walkHover.fillStyle(0xffffff, 0.18).lineStyle(1, 0xffffff, 0.6);
+    const dim = 1 - 0.6 * this.night; // Graphics take no night tint
+    this.walkHover.fillStyle(0xffffff, 0.18 * dim).lineStyle(1, 0xffffff, 0.6 * dim);
     this.tileDiamond(this.walkHover, target.x, target.y);
     this.input.setDefaultCursor("pointer");
   }
@@ -1952,7 +2000,7 @@ export class MainScene extends Phaser.Scene {
     const corner = (x: number, y: number) => gridToScreen(plot.originX + x, plot.originY + y);
     const { width: w, height: h } = plot;
     const line = this.add.graphics().setDepth(19_000_000); // above the city, below the player's pointer
-    line.lineStyle(1.5, 0xffffff, 0.7);
+    line.lineStyle(1.5, 0xffffff, 0.7 * (1 - 0.6 * this.night)); // Graphics take no night tint: dim the line instead
     const dashed = (a: { x: number; y: number }, b: { x: number; y: number }) => {
       const len = Math.hypot(b.x - a.x, b.y - a.y), dash = 4, gap = 3;
       for (let d = 0; d < len; d += dash + gap) {
@@ -2290,6 +2338,15 @@ export class MainScene extends Phaser.Scene {
     return candidates;
   }
 
+  /** Walk the avatar to a beat's stand tile inside a walk-in building (a card's button, e.g. "Eat" walks to the table) */
+  walkPlayerToBeat(buildingId: string, beat: string): boolean {
+    const spot = BUILDING_INTERIORS[buildingId]?.standSpots?.[beat];
+    const plot = [...this.interiorTiles.values()].find((t) => t.buildingId === buildingId && t.lx === 0 && t.ly === 0);
+    if (!this.playerController || !spot || !plot) return false;
+    const origin = this.interiorPlots.get(plot.key)!;
+    return this.playerController.walkToBuilding(origin.originX + Math.floor(spot[0]), origin.originY + Math.floor(spot[1]));
+  }
+
   walkPlayerToBuilding(buildingId: string): boolean {
     if (!this.playerController) return false;
 
@@ -2515,6 +2572,8 @@ export class MainScene extends Phaser.Scene {
 
   private recordManualCameraInteraction(): void {
     this.lastManualCameraInteractionAt = this.time.now;
+    // A zoom by hand while a hatch card is open stays: leaving the hatch does not undo it
+    this.beatZoomFrom = null;
     this.stopCameraFollow();
     this.stopCameraMoves();
     if (this.isAdventureActive) {
@@ -2625,6 +2684,7 @@ export class MainScene extends Phaser.Scene {
     this.buildingSpriteInfo.clear();
     this.doors.clear();
     this.ambients.clear();
+    this.reactions.clear();
 
     for (let y = 0; y < GRID_HEIGHT; y++) {
       for (let x = 0; x < GRID_WIDTH; x++) {
@@ -2644,7 +2704,7 @@ export class MainScene extends Phaser.Scene {
         const tileSprite = this.add.image(screenPos.x, screenPos.y, textureKey);
         tileSprite.setOrigin(0.5, 0);
         tileSprite.setScale(textureKey.startsWith("snow_") ? 0.5 * 1.02 : 1.02);
-        tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+        tileSprite.setDepth(MainScene.GROUND_DEPTH + this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
         this.tileSprites.set(key, tileSprite);
 
         if (cell.type === TileType.Building && cell.isOrigin && cell.buildingId) {
@@ -2716,12 +2776,23 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_ambient`);
     }
     this.ambients.delete(buildingKey);
+    // By the reactions map, not by index: a reaction whose sheet failed to load leaves a gap in the numbers
+    [...this.reactions.keys()].filter((k) => k.startsWith(`${buildingKey}_reaction`)).forEach((k) => {
+      this.buildingSprites.get(k)?.destroy();
+      this.buildingSprites.delete(k);
+      this.reactions.delete(k);
+    });
     const lightsSprite = this.buildingSprites.get(`${buildingKey}_lights`);
     if (lightsSprite) {
       lightsSprite.destroy();
       this.buildingSprites.delete(`${buildingKey}_lights`);
     }
     this.nightLights.delete(buildingKey);
+    for (const part of ["wa", "wb", "wf", "spill"]) {
+      this.buildingSprites.get(`${buildingKey}_${part}`)?.destroy();
+      this.buildingSprites.delete(`${buildingKey}_${part}`);
+    }
+    this.buildingWindows.delete(buildingKey);
     for (let i = 0; this.buildingSprites.has(`${buildingKey}_moment${i}`); i++) {
       this.buildingSprites.get(`${buildingKey}_moment${i}`)?.destroy();
       this.buildingSprites.delete(`${buildingKey}_moment${i}`);
@@ -2792,7 +2863,7 @@ export class MainScene extends Phaser.Scene {
       image.setOrigin(0.5, 0);
       image.setScale(1 / MainScene.PAVING_DENSITY);
       const front = this.gridToScreen(tx + 1, ty + 1);
-      image.setDepth(this.depthFromSortPoint(front.x, front.y, 0.02));   // above the ground tile it lies on
+      image.setDepth(MainScene.GROUND_DEPTH + this.depthFromSortPoint(front.x, front.y, 0.02)); // in the ground layer, above its tile
       this.entrancePavings.set(key, image);
     }
 
@@ -2824,6 +2895,22 @@ export class MainScene extends Phaser.Scene {
       this.ambients.set(key, { image, frames: ambient.frames, fps: ambient.fps });
     }
 
+    // Reactions (the food truck cooks): same crop maths as the ambient loop, frame 0 shown until the visitor comes near
+    if (!orientation || orientation === Direction.Down) {
+      (building.reactions ?? []).forEach((r, i) => {
+        if (!this.textures.exists(`${building.id}_reaction${i}`)) return;
+        const s = sprite.scaleX;
+        const left = sprite.x - sprite.width * s / 2;
+        const top = sprite.y - sprite.height * s;
+        const image = this.add.image(left + r.x * s, top + r.y * s, `${building.id}_reaction${i}`, 0);
+        image.setOrigin(0, 0);
+        image.setScale(s);
+        image.setDepth(sprite.depth + 0.042);
+        this.buildingSprites.set(`${key}_reaction${i}`, image);
+        this.reactions.set(`${key}_reaction${i}`, { image, buildingId, index: i, originX, originY, mode: 'idle', value: 0, near: false });
+      });
+    }
+
     // Night lights: same crop maths as the ambient loop, untinted and faded in with the night (updateNight)
     const lights = building.nightLights;
     if (lights && (!orientation || orientation === Direction.Down) && this.textures.exists(`${building.id}_lights`)) {
@@ -2844,6 +2931,10 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.set(`${key}_lights`, image);
       this.nightLights.set(key, { image, frames: lights.frames, fps: lights.fps });
     }
+
+    // Lit windows by the hour (filler buildings; lib/city/nightSchedule.ts)
+    const kind = nightKind(building.id, building.category);
+    if (kind && !building.slices) this.addBuildingWindows(key, sprite, textureKey, kind, originX, originY, footprint, orientation);
 
     // Interior moments over the roof-off sprite (shown only while the roof is off; updateMoments)
     if (!orientation || orientation === Direction.Down) {
@@ -2932,33 +3023,178 @@ export class MainScene extends Phaser.Scene {
     });
   }
 
-  // Night: 0 (day) .. 1 (night), eased toward the target set by setNight. While above 0 every scene object is tinted
-  // toward NIGHT_TINT, except the night lights, which fade in over their buildings and play on the scene clock
+  // The look (lib/city/nightSchedule.ts LOOKS): every scene object is multiplied by the look's tint (grade), eased over
+  // 0.9 s, except the lights. night is the lights' level, 0 (off: morning, day) .. 1 (on: evening, night); the night
+  // lights fade in over their buildings and play on the scene clock
   private night = 0;
   private nightTarget = 0;
+  private grade = { r: 255, g: 255, b: 255 };
+  private gradeTarget = { r: 255, g: 255, b: 255 };
   private nightLights: Map<string, { image: Phaser.GameObjects.Image; frames: number; fps: number }> = new Map();
-  private static readonly NIGHT_TINT = { r: 0x4d, g: 0x5c, b: 0x94 };
   private static readonly DAY_BACKGROUND = { r: 0x73, g: 0x64, b: 0x5f };
 
+  setLook(look: CityLook): void {
+    const { tint, lights } = LOOKS[look];
+    this.gradeTarget = { r: tint[0], g: tint[1], b: tint[2] };
+    this.nightTarget = lights ? 1 : 0;
+  }
+
   setNight(on: boolean): void {
-    this.nightTarget = on ? 1 : 0;
+    this.setLook(on ? "night" : "day");
+  }
+
+  // The city's hour (the visitor's clock, or ?hour=): which windows are lit, how many walk, how bright the lamps are
+  private hour = 21;
+  setHour(hour: number): void {
+    if (hour === this.hour) return;
+    this.hour = hour;
+    this.buildingWindows.forEach((w) => { w.levels = nightLevels(w.kind, hour, w.seed); });
+    this.nightApplied = { tint: -1, count: -1 };
+  }
+
+  // Lit windows: two random groups of window glass found in the sprite (lib/city/nightWindows.ts), the shopfront of
+  // food places and the bar, and a warm spill of light on the street in front of an open one. All untinted, faded in
+  // with the night and set by the hour
+  private buildingWindows: Map<string, {
+    kind: NightKind; seed: number; levels: { a: number; b: number; front: number };
+    parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[];
+  }> = new Map();
+
+  private windowTextures(textureKey: string, shopfront: "left" | "right" | null): { a: string; b: string; front: string | null } | null {
+    const base = `${textureKey}_win${shopfront ? `_${shopfront}` : ""}`;
+    const keys = { a: `${base}_a`, b: `${base}_b`, front: shopfront ? `${base}_f` : null };
+    if (this.textures.exists(keys.a)) return keys;
+    const source = this.textures.get(textureKey).getSourceImage() as HTMLImageElement | HTMLCanvasElement;
+    const w = source.width, h = source.height;
+    if (!w || !h) return null;
+    const scratch = document.createElement("canvas");
+    scratch.width = w; scratch.height = h;
+    const ctx = scratch.getContext("2d", { willReadFrequently: true });
+    if (!ctx) return null;
+    ctx.drawImage(source, 0, 0);
+    const layers = findWindows(ctx.getImageData(0, 0, w, h), shopfront);
+    const put = (key: string, data: ImageData) => {
+      const canvas = this.textures.createCanvas(key, w, h);
+      if (!canvas) return;
+      canvas.getContext().putImageData(data, 0, 0);
+      canvas.refresh();
+    };
+    put(keys.a, layers.a);
+    put(keys.b, layers.b);
+    if (keys.front && layers.front) put(keys.front, layers.front);
+    return keys;
+  }
+
+  private addBuildingWindows(
+    key: string, sprite: Phaser.GameObjects.Image, textureKey: string, kind: NightKind,
+    originX: number, originY: number, footprint: { width: number; height: number }, orientation?: Direction
+  ): void {
+    // The front faces +y for a south sprite (the left face on screen) and +x for an east one (the right face)
+    const facing = orientation ?? Direction.Down;
+    const shopfront = kind === "food" || kind === "bar"
+      ? (facing === Direction.Down ? "left" : facing === Direction.Right ? "right" : null) : null;
+    const keys = this.windowTextures(textureKey, shopfront);
+    if (!keys) return;
+    const seed = seedFrom(key);
+    const parts: { image: Phaser.GameObjects.Image; group: "a" | "b" | "front"; strength: number }[] = [];
+    const overlay = (texture: string, part: "wa" | "wb" | "wf", group: "a" | "b" | "front", depth: number) => {
+      const image = this.add.image(sprite.x, sprite.y, texture).setOrigin(sprite.originX, sprite.originY);
+      image.setScale(sprite.scaleX, sprite.scaleY).setDepth(sprite.depth + depth).setVisible(false).setAlpha(0);
+      this.buildingSprites.set(`${key}_${part}`, image);
+      parts.push({ image, group, strength: 1 });
+    };
+    overlay(keys.a, "wa", "a", 0.001);
+    overlay(keys.b, "wb", "b", 0.002);
+    if (keys.front) overlay(keys.front, "wf", "front", 0.003);
+
+    // The spill: a warm pool on the street in front of the door side
+    if (kind === "food" || kind === "bar") {
+      const { width: fw, height: fh } = footprint;
+      const at = facing === Direction.Down ? { x: originX + fw / 2, y: originY + fh + 0.6 }
+        : facing === Direction.Right ? { x: originX + fw + 0.6, y: originY + fh / 2 }
+        : facing === Direction.Up ? { x: originX + fw / 2, y: originY - 0.6 }
+        : { x: originX - 0.6, y: originY + fh / 2 };
+      const ground = this.gridToScreen(at.x, at.y);
+      const spill = this.add.image(ground.x, ground.y, this.spillTexture()).setBlendMode(Phaser.BlendModes.ADD);
+      spill.setDepth(MainScene.POOL_DEPTH).setVisible(false).setAlpha(0);
+      this.buildingSprites.set(`${key}_spill`, spill);
+      parts.push({ image: spill, group: "front", strength: 0.8 });
+    }
+    this.buildingWindows.set(key, { kind, seed, levels: nightLevels(kind, this.hour, seed), parts });
+    this.nightApplied = { tint: -1, count: -1 };
+  }
+
+  // A shopfront spill: a soft warm ellipse on the ground, about 2 x 1.4 tiles
+  private spillTexture(): string {
+    const key = "shop_spill";
+    if (this.textures.exists(key)) return key;
+    this.drawPool(key, 1.4, 1.4, [255, 196, 120], 0.75, 1.6);
+    return key;
+  }
+
+  // A light pool on the ground in ground space: an ellipse with radii (rx, ry) in wu, projected to the 2:1 tiles. The
+  // falloff is cut into a few hard brightness steps with a 4 x 4 dither between them, so it reads as pixel art rather
+  // than a blur (the way a pixel-art game shades its light)
+  private static readonly BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+  private drawPool(key: string, rx: number, ry: number, [r, g, b]: number[], peak: number, falloff: number): void {
+    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
+    const w = Math.ceil((rx + ry) * halfW * 2), h = Math.ceil((rx + ry) * halfH * 2);
+    const canvas = this.textures.createCanvas(key, w, h);
+    if (!canvas) return;
+    const ctx = canvas.getContext();
+    const img = ctx.createImageData(w, h);
+    const steps = 5;
+    for (let py = 0; py < h; py++) {
+      for (let px = 0; px < w; px++) {
+        const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
+        const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
+        const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
+        if (d >= 1) continue;
+        const v = Math.pow(1 - d, falloff) * steps;
+        const base = Math.floor(v);
+        const level = base + (v - base > (MainScene.BAYER4[(py % 4) * 4 + (px % 4)] + 0.5) / 16 ? 1 : 0);
+        const i = (py * w + px) * 4;
+        img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b;
+        img.data[i + 3] = Math.round((Math.min(steps, level) / steps) * peak * 255);
+      }
+    }
+    ctx.putImageData(img, 0, 0);
+    canvas.refresh();
   }
 
   private nightClock = 0;
+  private windowDusk: number | null = null;
   private nightApplied = { tint: 0xffffff, count: 0 };
 
   private updateNight(time: number): void {
     const last = this.nightClock;
     this.nightClock = time;
-    if (this.night === this.nightTarget && this.night === 0) return;
+    const g = this.grade, gt = this.gradeTarget;
+    const settled = g.r === gt.r && g.g === gt.g && g.b === gt.b && this.night === this.nightTarget;
+    if (settled && this.night === 0 && g.r === 255 && g.g === 255 && g.b === 255) return;
     const step = Math.min(1, (time - last) / 900);             // a 0.9 s fade on the scene clock, not the smoothed delta
     this.night = this.night < this.nightTarget
       ? Math.min(this.nightTarget, this.night + step)
       : Math.max(this.nightTarget, this.night - step);
-    const t = this.night, n = MainScene.NIGHT_TINT, bg = MainScene.DAY_BACKGROUND;
-    const mix = (c: number) => Math.round(255 + (c - 255) * t);
-    const tint = (mix(n.r) << 16) | (mix(n.g) << 8) | mix(n.b);
-    const lit = new Set<Phaser.GameObjects.GameObject>();
+    const ease = (c: number, target: number) =>
+      c < target ? Math.min(target, c + step * 255) : Math.max(target, c - step * 255);
+    this.grade = { r: ease(g.r, gt.r), g: ease(g.g, gt.g), b: ease(g.b, gt.b) };
+    const t = this.night, n = this.grade, bg = MainScene.DAY_BACKGROUND;
+    const tint = (Math.round(n.r) << 16) | (Math.round(n.g) << 8) | Math.round(n.b);
+    const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
+    // At dusk the windows come on house by house over 2.5 s (each building at its own moment), not all at once
+    if (this.nightTarget === 1 && t >= 0.3 && this.windowDusk === null) this.windowDusk = time;
+    if (this.nightTarget === 0) this.windowDusk = null;
+    this.buildingWindows.forEach((w) => {
+      const since = this.windowDusk === null ? 0 : time - this.windowDusk - w.seed * 2500;
+      const on = this.nightTarget === 0 ? 1 : Math.min(1, Math.max(0, since / 300));
+      w.parts.forEach((part) => {
+        lit.add(part.image);
+        if (!part.image.active) return;
+        const level = w.levels[part.group] * t * on;
+        part.image.setVisible(level > 0).setAlpha(level * part.strength);
+      });
+    });
     this.nightLights.forEach((l) => {
       lit.add(l.image);
       if (!l.image.active) return;
@@ -2975,12 +3211,152 @@ export class MainScene extends Phaser.Scene {
       const c = child as Phaser.GameObjects.GameObject & { setTint?: (color: number) => unknown };
       c.setTint?.(tint);
     });
-    const shade = (c: number, k: number) => Math.round(c + (c * k / 255 - c) * t);
+    const shade = (c: number, k: number) => Math.round(c * k / 255);
     const background = (shade(bg.r, n.r) << 16) | (shade(bg.g, n.g) << 8) | shade(bg.b, n.b);
     this.cameras.main.setBackgroundColor(background);
     // The canvas is letterboxed on a desktop (Scale.FIT): shade the box around it too, so the bars are not day brown
     const parent = this.game.canvas?.parentElement;
     if (parent) parent.style.backgroundColor = `#${background.toString(16).padStart(6, "0")}`;
+  }
+
+  // Street lamps (POR-39): placed by a rule from the grid (lib/city/streetLights.ts). At dusk they switch on one by one
+  // along each street; each throws a warm pool on the ground (additive, so it brightens the dark ground under it) and a
+  // small glow round its head. The player is lit warm while standing in a pool.
+  private streetLamps: {
+    lamp: StreetLamp; level: number; strength: number; screen: { x: number; y: number };
+    pool: { rx: number; ry: number };
+    objects: Phaser.GameObjects.GameObject[]; lit: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Image; light: Phaser.GameObjects.Image;
+  }[] = [];
+  private streetLampLit: Set<Phaser.GameObjects.GameObject> = new Set();
+  private duskStart: number | null = null;
+  private lastLampTime = 0;
+  private playerLampTinted = false;
+  private static readonly LAMP_COLOR: Record<StreetLampType, [number, number, number]> = {
+    post: [255, 232, 196], wire: [255, 196, 112], lantern: [255, 188, 104],
+  };
+
+  // A light pool texture, drawn in ground space: a soft ellipse with radii (rx, ry) in wu, projected to the 2:1 tiles
+  private lampPoolTexture(type: StreetLampType): string {
+    const key = `lamp_pool_${type}`;
+    if (this.textures.exists(key)) return key;
+    const { rx, ry, falloff = 1.4 } = STREET_LAMPS[type].pool;
+    this.drawPool(key, rx, ry, MainScene.LAMP_COLOR[type], 0.9, falloff);
+    return key;
+  }
+
+  private lampGlowTexture(): string {
+    const key = "lamp_glow";
+    if (this.textures.exists(key)) return key;
+    const size = 40;
+    const canvas = this.textures.createCanvas(key, size, size);
+    if (!canvas) return key;
+    const ctx = canvas.getContext();
+    const grad = ctx.createRadialGradient(size / 2, size / 2, 0, size / 2, size / 2, size / 2);
+    grad.addColorStop(0, "rgba(255, 220, 160, 0.55)");
+    grad.addColorStop(0.35, "rgba(255, 190, 110, 0.22)");
+    grad.addColorStop(1, "rgba(255, 170, 90, 0)");
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, size, size);
+    canvas.refresh();
+    return key;
+  }
+
+  private buildStreetLamps(): void {
+    // Keep each lamp's level across a rebuild (an edit in the editor), so the other lamps do not blink off and on
+    const lampKey = (l: { type: string; x: number; y: number }) => `${l.type},${l.x},${l.y}`;
+    const levels = new Map(this.streetLamps.map((l) => [lampKey(l.lamp), l.level]));
+    this.streetLamps.forEach((l) => l.objects.forEach((o) => o.destroy()));
+    this.streetLamps = [];
+    this.streetLampLit.clear();
+    if (!this.textures.exists("lamp_post_day")) return;
+    const glowKey = this.lampGlowTexture();
+    for (const lamp of lampsFromGrid(this.grid)) {
+      const spec = STREET_LAMPS[lamp.type];
+      const ground = this.gridToScreen(lamp.x, lamp.y);
+      const depth = this.depthFromSortPoint(ground.x, ground.y, 0.05);
+      const objects: Phaser.GameObjects.GameObject[] = [];
+      let body: Phaser.GameObjects.Image;
+      if (lamp.wire && spec.hangHeight !== undefined) {
+        // The wire across the street, with a slight sag to the rod top
+        const top = gridToScreen(lamp.x, lamp.y, spec.hangHeight - 0.08);
+        const a = gridToScreen(lamp.wire.x0, lamp.wire.y0, spec.hangHeight);
+        const b = gridToScreen(lamp.wire.x1, lamp.wire.y1, spec.hangHeight);
+        const wire = this.add.graphics();
+        wire.lineStyle(1, 0x2a282e, 1);
+        wire.lineBetween(a.x, a.y, top.x, top.y);
+        wire.lineBetween(top.x, top.y, b.x, b.y);
+        wire.setDepth(depth - 0.002);
+        objects.push(wire);
+        body = this.add.image(top.x, top.y, `lamp_${lamp.type}_day`).setOrigin(0.5, 0);
+      } else {
+        body = this.add.image(ground.x, ground.y + 1, `lamp_${lamp.type}_day`).setOrigin(0.5, 1);
+      }
+      body.setDepth(depth);
+      objects.push(body);
+      const lit = this.add.image(body.x, body.y, `lamp_${lamp.type}_lit`).setOrigin(body.originX, body.originY);
+      lit.setDepth(depth + 0.001).setAlpha(0).setVisible(false);
+      const head = gridToScreen(lamp.x, lamp.y, spec.height);
+      const glow = this.add.image(head.x, head.y, glowKey).setBlendMode(Phaser.BlendModes.ADD);
+      glow.setScale(lamp.type === "post" ? 1 : 0.75).setDepth(depth + 0.002).setAlpha(0).setVisible(false);
+      const { rx, ry } = spec.pool;
+      const light = this.add.image(ground.x, ground.y, this.lampPoolTexture(lamp.type)).setBlendMode(Phaser.BlendModes.ADD);
+      light.setDepth(MainScene.POOL_DEPTH).setAlpha(0).setVisible(false);
+      objects.push(lit, glow, light);
+      [lit, glow, light].forEach((o) => this.streetLampLit.add(o));
+      this.streetLamps.push({ lamp, level: levels.get(lampKey(lamp)) ?? 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, light });
+    }
+    this.nightApplied = { tint: -1, count: -1 }; // re-tint so the new lamp bodies match the current night
+  }
+
+  private updateStreetLamps(time: number): void {
+    const dt = Math.min(100, time - this.lastLampTime);
+    this.lastLampTime = time;
+    if (this.streetLamps.length === 0) return;
+    const goingDark = this.nightTarget === 1 && this.night >= 0.5;
+    if (goingDark && this.duskStart === null) this.duskStart = time;
+    if (!goingDark) this.duskStart = null;
+    let any = false;
+    this.streetLamps.forEach((l, i) => {
+      const target = this.duskStart !== null && time >= this.duskStart + i * 70 ? 1 : 0;
+      if (target > l.level) l.level = Math.min(target, l.level + dt / 220);
+      else if (target < l.level) l.level = Math.max(target, l.level - dt / 450);
+      l.level = Math.min(l.level, Math.max(this.night, target)); // never brighter than the night allows while fading out
+      const on = l.level > 0;
+      any ||= on;
+      const dim = lampDimming(this.hour); // late at night the lamps dim, they never go out
+      l.lit.setVisible(on).setAlpha(l.level);
+      l.glow.setVisible(on).setAlpha(l.level * 0.85 * dim);
+      l.light.setVisible(on).setAlpha(l.level * l.strength * dim);
+    });
+    this.lightPlayer(any);
+  }
+
+  // Warm the player's tint while they stand in a lamp's pool (the pools themselves sit under the characters)
+  private lightPlayer(anyLampOn: boolean): void {
+    const sprite = this.playerController?.getSprite();
+    if (!sprite) return;
+    if (!anyLampOn || this.night === 0) {
+      if (this.playerLampTinted) {
+        this.playerLampTinted = false;
+        this.nightApplied = { tint: -1, count: -1 };
+      }
+      return;
+    }
+    const p = this.playerController!.getPosition();
+    let light = 0;
+    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
+    for (const l of this.streetLamps) {
+      if (l.level === 0) continue;
+      const sx = p.worldX - l.screen.x, sy = p.worldY - l.screen.y;
+      const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
+      const d = Math.sqrt((gx / l.pool.rx) ** 2 + (gy / l.pool.ry) ** 2);
+      if (d < 1) light = Math.max(light, Math.pow(1 - d, 0.8) * l.level * l.strength);
+    }
+    const n = this.grade, warm = [255, 214, 160];
+    const k = Math.min(1, light * 0.9);
+    const ch = (c: number, w: number) => Math.round(c * (1 - k) + w * k);
+    sprite.setTint((ch(n.r, warm[0]) << 16) | (ch(n.g, warm[1]) << 8) | ch(n.b, warm[2]));
+    this.playerLampTinted = true;
   }
 
   // Animated doors by building key: current open value 0..1
@@ -3005,6 +3381,55 @@ export class MainScene extends Phaser.Scene {
       d.image.setVisible(!this.openBuildings.has(d.buildingId));
       d.image.setFrame(Math.round(d.value * (def.frames - 1)));
     });
+  }
+
+  // Reactions by `${building key}_reaction${index}` (the food truck cooks): idle at frame 0; a wave plays once when the
+  // player steps within `radius`; serve() plays the hand-over and holds it until the player leaves
+  private reactions: Map<string, { image: Phaser.GameObjects.Image; buildingId: string; index: number; originX: number; originY: number;
+    mode: 'idle' | 'wave' | 'serve'; value: number; near: boolean }> = new Map();
+
+  private updateReactions(): void {
+    if (!this.playerController || this.reactions.size === 0) return;
+    const pos = this.playerController.getPosition();
+    const dt = this.game.loop.delta / 1000;
+    this.reactions.forEach((r) => {
+      const def = getBuilding(r.buildingId)?.reactions?.[r.index];
+      if (!def || !r.image.active) return;
+      const near = Math.hypot(pos.gridX + 0.5 - (r.originX + def.at[0]), pos.gridY + 0.5 - (r.originY + def.at[1])) <= def.radius;
+      if (near && !r.near && r.mode === 'idle') { r.mode = 'wave'; r.value = 1; }
+      if (!near && r.mode !== 'serve') r.mode = 'idle';
+      if (!near && r.mode === 'serve' && this.seated?.buildingId !== r.buildingId && !this.seatPending) r.mode = 'idle';
+      r.near = near;
+      if (r.mode === 'wave') {
+        r.value += dt * def.fps;
+        if (r.value >= def.wave) { r.mode = 'idle'; r.value = 0; }
+      } else if (r.mode === 'serve') {
+        r.value = Math.min(def.frames - 1, r.value + dt * def.fps);
+      } else r.value = 0;
+      r.image.setVisible(this.seated?.buildingId !== r.buildingId);
+      r.image.setFrame(Math.floor(r.value));
+    });
+  }
+
+  /** The cook at a hatch hands the food over (its reaction's serve frames), then the avatar walks to `to` (a card's
+   *  "Eat"). Without a reaction for the beat it walks at once. */
+  private serveTimer: Phaser.Time.TimerEvent | null = null;
+  serveThenWalk(buildingId: string, beat: string, to: string): boolean {
+    // One serve at a time: a second tap on Eat while the cook serves does nothing
+    if (this.serveTimer) return false;
+    let ms = 0;
+    this.reactions.forEach((r) => {
+      const def = getBuilding(r.buildingId)?.reactions?.[r.index];
+      if (r.buildingId !== buildingId || def?.beat !== beat) return;
+      r.mode = 'serve';
+      r.value = def.wave;
+      ms = ((def.frames - def.wave) / def.fps) * 1000 + 250;
+    });
+    this.serveTimer = this.time.delayedCall(ms, () => {
+      this.serveTimer = null;
+      if (this.activeBeat === `${buildingId}:${beat}`) this.walkPlayerToBeat(buildingId, to);
+    });
+    return true;
   }
 
   // Interior moments by `${building key}_moment${index}`: current frame position (0..frames)
@@ -3073,6 +3498,11 @@ export class MainScene extends Phaser.Scene {
       if (info.buildingId !== buildingId) return;
       const sprite = this.buildingSprites.get(key);
       const textureKey = this.getBuildingTextureKey(building, info.orientation);
+      // The ambient loop is cut out of the still sprite: a seated frame is whole, so the loop pauses while the avatar sits
+      this.buildingSprites.get(`${key}_ambient`)?.setVisible(this.seated?.buildingId !== buildingId);
+      for (let i = 0; this.buildingSprites.has(`${key}_reaction${i}`); i++) {
+        this.buildingSprites.get(`${key}_reaction${i}`)?.setVisible(this.seated?.buildingId !== buildingId);
+      }
       if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
       const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
       previous.setOrigin(0.5, 1);
@@ -3094,7 +3524,8 @@ export class MainScene extends Phaser.Scene {
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
 
-    if (this.openBuildings.has(building.id) && this.seated?.buildingId === building.id && dir === "south") {
+    // seated: also for plots with no roof to take off (the food truck's table), which are never "open"
+    if (this.seated?.buildingId === building.id && dir === "south") {
       const sitKey = `${building.id}_sit_${this.seated.beat}`;
       if (this.textures.exists(sitKey)) return sitKey;
     }
@@ -3177,8 +3608,10 @@ export class MainScene extends Phaser.Scene {
         sprite.setPosition(screenPos.x, centerY);
       }
 
+      // Fewer people walk at night: the rest stay home (the same ones every night)
+      const out = this.night < 0.5 || seedFrom(char.id) < walkerShare(this.hour);
       if (this.gifsLoaded && this.textures.exists(textureKey)) {
-        sprite.setVisible(true);
+        sprite.setVisible(out);
         playGifAnimation(sprite, textureKey);
       }
 
@@ -3220,6 +3653,23 @@ export class MainScene extends Phaser.Scene {
           preview.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 1_000_000));
           this.previewSprites.push(preview);
         }
+      }
+    }
+
+    // Street lamp tool (the selected id is the lamp type): green where it may stand, red where not
+    if (this.selectedTool === ToolType.StreetLamp && this.selectedBuildingId) {
+      const type = this.selectedBuildingId as StreetLampType;
+      const ok = canPlaceStreetLamp(this.grid[y]?.[x], type);
+      const screenPos = this.gridToScreen(x, y);
+      const tile = this.add.image(screenPos.x, screenPos.y, "road").setOrigin(0.5, 0).setAlpha(0.5);
+      tile.setTint(ok ? 0x00ff00 : 0xff3030);
+      tile.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 1_000_000));
+      this.previewSprites.push(tile);
+      if (ok && type !== "wire") {
+        const ground = this.gridToScreen(x + 0.5, y + 0.5);
+        const ghost = this.add.image(ground.x, ground.y + 1, `lamp_${type}_day`).setOrigin(0.5, 1).setAlpha(0.7);
+        ghost.setDepth(this.depthFromSortPoint(ground.x, ground.y, 1_000_001));
+        this.previewSprites.push(ghost);
       }
     }
   }

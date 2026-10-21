@@ -1,6 +1,6 @@
 #!/bin/sh
 # Rebuild the authored spec from the sprite measurements and carry over review state.
-# Needs ref/ (python3 -I measure_ref.py "$W" <repo> extracts it from the GIFs in public/).
+# Needs ref/ from an earlier run (the walk GIFs it was measured from are gone; the city avatar is now 2D).
 set -e
 W="$(cd "$(dirname "$0")" && pwd)"
 F="${IMG2THREEJS:-$HOME/.claude/skills/img2threejs}/forge"

@@ -17,6 +17,11 @@ export interface InteriorBeat {
   /** A sit-and-look moment: on the stand tile the avatar walks to `at` (plan tiles) and sits, the building shows its
    *  seated sprite (buildings.ts seatSprites[beat]), and the screens open large over the city (ScreensOverlay) */
   seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
+  /** Buttons on the card. `to` is another beat of the same building: with `walk` the avatar walks to its stand tile
+   *  (its card opens there), without it the card changes to that beat in place. `id` names the choice for analytics. */
+  choices?: { id: string; label: string; to: string; walk?: boolean }[];
+  /** Ease the camera in one zoom step on the player while this card is open, and back out when it closes (the hatches) */
+  zoomIn?: boolean;
 }
 
 // Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
@@ -97,6 +102,77 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
           { src: "/images/valtech/vestas%20drawer.png", alt: "B2B webshop: the request product drawer", caption: "B2B webshop: request a product" },
         ],
       },
+    },
+  },
+  // The food truck square (Linear POR-38): at each hatch the visitor eats (the avatar sits at a beer table; each truck's
+  // table card tells one finding of the case) or books the truck for an event (the inquiry card, the same for all three).
+  // Seats: lib/city/models/cateItSquareStates.ts SEATS, no screens, so the card stays. Draft texts for Gustav to edit.
+  "cate-it": {
+    enter: {
+      kicker: "Cate it",
+      lead: "Step up to a hatch: eat, or book a truck for your event.",
+    },
+    leave: {
+      kicker: "Leaving the food trucks",
+      lead: "Cate it connects local food trucks with people who plan events.",
+      caseStudy: true,
+    },
+    "hatch-burger": {
+      zoomIn: true,
+      kicker: "Cate it · burger trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table-burger", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    "hatch-pizza": {
+      zoomIn: true,
+      kicker: "Cate it · pizza trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table-pizza", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    "hatch-african": {
+      zoomIn: true,
+      kicker: "Cate it · street food trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table-african", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    "table-burger": {
+      kicker: "Cate it · what the trucks taught us",
+      lead: "Winter is slow for a food truck.",
+      text: "So we dropped the subscription for a fee per booking: no fixed costs, and we only earn when the trucks do.",
+      caseStudy: true,
+      seat: { at: [4.3, 4.25], screens: [] },
+    },
+    "table-pizza": {
+      kicker: "Cate it · how we found the trucks",
+      lead: "The food truck community is open.",
+      text: "Owners remember starting out. After each talk they sent us on to the next truck, so eight conversations came quickly.",
+      caseStudy: true,
+      seat: { at: [3.7, 6.25], screens: [] },
+    },
+    "table-african": {
+      kicker: "Cate it · the hardest part",
+      lead: "Three founders, three reasons to build.",
+      text: "Shipping was easy. Agreeing on the scope was hard: we had to line up three different motivations first.",
+      caseStudy: true,
+      seat: { at: [7.3, 4.25], screens: [] },
+    },
+    booked: {
+      kicker: "Inquiry sent",
+      lead: "The truck replies by email within 1 to 2 days.",
+      text: "That is our first version: no booking system, just the owner's inbox. Truck owners were fine with email, so we could launch small.",
+      caseStudy: true,
     },
   },
 };

@@ -13,6 +13,7 @@ import {
   Car,
   CharacterType,
   PlayerState,
+  StreetLampType,
 } from "./types";
 import {
   getRoadSegmentOrigin,
@@ -27,6 +28,7 @@ import {
   getBuilding,
   getBuildingFootprint,
 } from "@/lib/city/buildings";
+import { canPlaceStreetLamp } from "@/lib/city/streetLights";
 import { playBuildSound, playBuildRoadSound, playDestructionSound } from "@/lib/city/sounds";
 
 // Dynamically import Phaser components to avoid SSR issues
@@ -202,6 +204,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   const [buildingOrientation, setBuildingOrientation] = useState<Direction>(Direction.Down);
   const [zoom, setZoom] = useState(1); // Scale.FIT handles fitting the city to viewport
   const [showToolWindow, setShowToolWindow] = useState(editable);
+  const [editorNight, setEditorNight] = useState(false); // editor only: see the placed lamps lit
   const gameRef = useRef<PhaserGameHandle>(null);
 
   // Expose methods to parent component via ref
@@ -460,6 +463,12 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
 
           const cell = newGrid[y][x];
 
+          // A street lamp on the cell is erased first, the cell under it stays
+          if (cell.streetLamp) {
+            delete cell.streetLamp;
+            continue;
+          }
+
           // Handle building tiles - erase entire building
           if (cell.type === TileType.Building && cell.originX !== undefined && cell.originY !== undefined) {
             const buildingKey = `${cell.originX},${cell.originY}`;
@@ -585,6 +594,17 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
   const eraseTile = useCallback((x: number, y: number) => {
     const cell = grid[y]?.[x];
     if (!cell) return;
+    if (cell.streetLamp) {
+      pushHistory();
+      setGrid((prev) => prev.map((row) => row.map((c) => {
+        if (c.x !== x || c.y !== y) return c;
+        const rest = { ...c };
+        delete rest.streetLamp;
+        return rest;
+      })));
+      playDestructionSound();
+      return;
+    }
     if (cell.type === TileType.Grass) return;
 
     pushHistory();
@@ -641,6 +661,18 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
     playDestructionSound();
   }, [grid, pushHistory]);
 
+  // Place a street lamp on a cell (the cell keeps its type)
+  const placeStreetLamp = useCallback(
+    (x: number, y: number, type: StreetLampType) => {
+      const cell = grid[y]?.[x];
+      if (!canPlaceStreetLamp(cell, type) || cell?.streetLamp === type) return;
+      pushHistory();
+      setGrid((prev) => prev.map((row) => row.map((c) => (c.x === x && c.y === y ? { ...c, streetLamp: type } : c))));
+      playBuildSound();
+    },
+    [grid, pushHistory]
+  );
+
   // Handle tile click
   const handleTileClick = useCallback(
     (x: number, y: number) => {
@@ -656,6 +688,8 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
 
       if (selectedTool === ToolType.Building && selectedBuildingId) {
         placeBuilding(x, y, selectedBuildingId, buildingOrientation);
+      } else if (selectedTool === ToolType.StreetLamp && selectedBuildingId) {
+        placeStreetLamp(x, y, selectedBuildingId as StreetLampType);
       } else if (selectedTool === ToolType.Eraser) {
         eraseTile(x, y);
       }
@@ -667,6 +701,7 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
       grid,
       onBuildingClick,
       placeBuilding,
+      placeStreetLamp,
       selectedBuildingId,
       selectedTool,
     ]
@@ -762,6 +797,19 @@ const GameBoard = forwardRef<GameBoardHandle, GameBoardProps>(function GameBoard
             title="Undo (Ctrl+Z)"
           >
             Undo {history.length > 0 && `(${history.length})`}
+          </button>
+          <button
+            onClick={() => {
+              const next = !editorNight;
+              setEditorNight(next);
+              const scene = gameRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+                | { setNight?: (on: boolean) => void } | undefined;
+              scene?.setNight?.(next);
+            }}
+            className="px-4 py-2 bg-black/50 text-white rounded hover:bg-black/70 font-mono"
+            title="See the street lamps at night"
+          >
+            {editorNight ? "Day" : "Night"}
           </button>
           {onSave && (
             <button
