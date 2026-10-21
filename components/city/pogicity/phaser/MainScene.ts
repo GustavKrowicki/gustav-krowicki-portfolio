@@ -3228,6 +3228,8 @@ export class MainScene extends Phaser.Scene {
   private nightApplied = { tint: 0xffffff, count: 0 };
   // Room light by building key (0..1): on while the roof is off, so a visitor can see inside at night
   private roomLight: Map<string, number> = new Map();
+  // The old textures of a cross-fading building (refreshBuildingTexture): tinted once, left out of the night re-tint
+  private crossFades: Set<Phaser.GameObjects.Image> = new Set();
   private static readonly ROOM_COLOR: [number, number, number] = [255, 240, 218];
   private static readonly ROOM_STRENGTH = 0.85;
 
@@ -3246,7 +3248,7 @@ export class MainScene extends Phaser.Scene {
     this.grade = { r: ease(g.r, gt.r), g: ease(g.g, gt.g), b: ease(g.b, gt.b) };
     const t = this.night, n = this.grade, bg = MainScene.DAY_BACKGROUND;
     const tint = (Math.round(n.r) << 16) | (Math.round(n.g) << 8) | Math.round(n.b);
-    const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
+    const lit = new Set<Phaser.GameObjects.GameObject>([...this.streetLampLit, ...this.crossFades]);
     // At dusk the windows come on house by house over 2.5 s (each building at its own moment), not all at once
     if (this.nightTarget === 1 && t >= 0.3 && this.windowDusk === null) this.windowDusk = time;
     if (this.nightTarget === 0) this.windowDusk = null;
@@ -3280,7 +3282,9 @@ export class MainScene extends Phaser.Scene {
       const want = this.openBuildings.has(info.buildingId) ? 1 : 0;
       const was = this.roomLight.get(key) ?? 0;
       if (was === want) return;
-      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : Math.max(want, was - fade));
+      // On: fade up with the roof. Off: at once, as the closed roof fades in over the open rooms (the fading-out rooms
+      // keep their own tint, refreshBuildingTexture), so the roof never shows lit warm for a moment
+      this.roomLight.set(key, was < want ? Math.min(want, was + fade) : want);
       roomsMoving = true;
     });
     const rooms: { image: Phaser.GameObjects.GameObject; tint: number }[] = [];
@@ -3610,9 +3614,11 @@ export class MainScene extends Phaser.Scene {
       previous.setOrigin(0.5, 1);
       previous.setScale(sprite.scaleX, sprite.scaleY);
       previous.setDepth(sprite.depth + 0.001);
+      previous.setTint(sprite.tint); // the old look keeps its light (night, room) while it fades out
+      this.crossFades.add(previous);
       sprite.setTexture(textureKey);
       sprite.setScale(this.buildingTextureScale(building, textureKey));
-      this.tweens.add({ targets: previous, alpha: 0, duration: fadeMs, ease: "Sine.easeInOut", onComplete: () => previous.destroy() });
+      this.tweens.add({ targets: previous, alpha: 0, duration: fadeMs, ease: "Sine.easeInOut", onComplete: () => { this.crossFades.delete(previous); previous.destroy(); } });
     });
   }
 
