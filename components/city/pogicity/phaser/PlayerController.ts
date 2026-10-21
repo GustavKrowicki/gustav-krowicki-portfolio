@@ -740,6 +740,10 @@ export class PlayerController {
     this.pointer.fillRect(-1, 6, 2, 4);    // Third row inner
   }
 
+  getSprite(): Phaser.GameObjects.Sprite | null {
+    return this.sprite;
+  }
+
   getPosition(): { gridX: number; gridY: number; worldX: number; worldY: number } {
     return {
       gridX: this.gridX,

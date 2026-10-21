@@ -80,6 +80,8 @@ export default function CityEditor({ initialGrid, onSave }: CityEditorProps) {
           <li>• Click + drag to place roads/tiles</li>
           <li>• Select building then click to place</li>
           <li>• Press R to rotate buildings</li>
+          <li>• 💡 tab: click to place street lamps</li>
+          <li>• Night button shows the lamps lit</li>
           <li>• Use eraser to remove</li>
           <li>• Ctrl/Cmd+Z to undo</li>
           <li>• Arrow keys / WASD to pan</li>
