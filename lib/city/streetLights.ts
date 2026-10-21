@@ -22,15 +22,18 @@ export interface StreetLampSpec {
   lit: string;
   height: number;       // where the lamp head sits above the ground, in wu (the light source for the glow)
   hangHeight?: number;  // wire lamps: the top of the rod, in wu above the ground
-  pool: { rx: number; ry: number; strength: number }; // light pool on the ground, radii in wu
+  // Light pool on the ground: radii in wu; falloff is how fast it fades (lower = more even light out to the edge)
+  pool: { rx: number; ry: number; strength: number; falloff?: number };
 }
 
 export const WIRE_HEIGHT = 3.2; // ~6.4 m
 
 export const STREET_LAMPS: Record<StreetLampType, StreetLampSpec> = {
   // Slim grey pole, ~3.5 m, wide open cone; light goes only down in a wide cone (a pool about 4 tiles across)
+  // Squares are the brightest tier of the light plan: wide, even pools that overlap, so a square at night feels safe
+  // and welcoming, with faces readable across it
   post: { day: "/game/pogicity/Props/night/post_day.png", lit: "/game/pogicity/Props/night/post_lit.png", height: 2.0,
-    pool: { rx: 2.3, ry: 2.3, strength: 1 } },
+    pool: { rx: 2.9, ry: 2.9, strength: 0.8, falloff: 0.9 } },
   // Rust-brown dome, gold inside, hung on a wire over the middle of the road; a long warm oval that reaches the next lamp
   wire: { day: "/game/pogicity/Props/night/wire_day.png", lit: "/game/pogicity/Props/night/wire_lit.png", height: WIRE_HEIGHT - 0.6,
     hangHeight: WIRE_HEIGHT, pool: { rx: 3.0, ry: 2.0, strength: 1 } },

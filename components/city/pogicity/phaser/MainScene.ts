@@ -2670,29 +2670,42 @@ export class MainScene extends Phaser.Scene {
   private spillTexture(): string {
     const key = "shop_spill";
     if (this.textures.exists(key)) return key;
-    const rx = 1.4, ry = 1.4;
+    this.drawPool(key, 1.4, 1.4, [255, 196, 120], 0.75, 1.6);
+    return key;
+  }
+
+  // A light pool on the ground in ground space: an ellipse with radii (rx, ry) in wu, projected to the 2:1 tiles. The
+  // falloff is cut into a few hard brightness steps with a 4 x 4 dither between them, so it reads as pixel art rather
+  // than a blur (the way a pixel-art game shades its light)
+  private static readonly BAYER4 = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+  private drawPool(key: string, rx: number, ry: number, [r, g, b]: number[], peak: number, falloff: number): void {
     const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
     const w = Math.ceil((rx + ry) * halfW * 2), h = Math.ceil((rx + ry) * halfH * 2);
     const canvas = this.textures.createCanvas(key, w, h);
-    if (!canvas) return key;
+    if (!canvas) return;
     const ctx = canvas.getContext();
     const img = ctx.createImageData(w, h);
+    const steps = 5;
     for (let py = 0; py < h; py++) {
       for (let px = 0; px < w; px++) {
         const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
         const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
         const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
-        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.6) * 0.75;
+        if (d >= 1) continue;
+        const v = Math.pow(1 - d, falloff) * steps;
+        const base = Math.floor(v);
+        const level = base + (v - base > (MainScene.BAYER4[(py % 4) * 4 + (px % 4)] + 0.5) / 16 ? 1 : 0);
         const i = (py * w + px) * 4;
-        img.data[i] = 255; img.data[i + 1] = 196; img.data[i + 2] = 120; img.data[i + 3] = Math.round(a * 255);
+        img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b;
+        img.data[i + 3] = Math.round((Math.min(steps, level) / steps) * peak * 255);
       }
     }
     ctx.putImageData(img, 0, 0);
     canvas.refresh();
-    return key;
   }
 
   private nightClock = 0;
+  private windowDusk: number | null = null;
   private nightApplied = { tint: 0xffffff, count: 0 };
 
   private updateNight(time: number): void {
@@ -2711,11 +2724,16 @@ export class MainScene extends Phaser.Scene {
     const t = this.night, n = this.grade, bg = MainScene.DAY_BACKGROUND;
     const tint = (Math.round(n.r) << 16) | (Math.round(n.g) << 8) | Math.round(n.b);
     const lit = new Set<Phaser.GameObjects.GameObject>(this.streetLampLit);
+    // At dusk the windows come on house by house over 2.5 s (each building at its own moment), not all at once
+    if (this.nightTarget === 1 && t >= 0.3 && this.windowDusk === null) this.windowDusk = time;
+    if (this.nightTarget === 0) this.windowDusk = null;
     this.buildingWindows.forEach((w) => {
+      const since = this.windowDusk === null ? 0 : time - this.windowDusk - w.seed * 2500;
+      const on = this.nightTarget === 0 ? 1 : Math.min(1, Math.max(0, since / 300));
       w.parts.forEach((part) => {
         lit.add(part.image);
         if (!part.image.active) return;
-        const level = w.levels[part.group] * t;
+        const level = w.levels[part.group] * t * on;
         part.image.setVisible(level > 0).setAlpha(level * part.strength);
       });
     });
@@ -2763,26 +2781,8 @@ export class MainScene extends Phaser.Scene {
   private lampPoolTexture(type: StreetLampType): string {
     const key = `lamp_pool_${type}`;
     if (this.textures.exists(key)) return key;
-    const { rx, ry } = STREET_LAMPS[type].pool;
-    const halfW = TILE_WIDTH / 2, halfH = TILE_HEIGHT / 2;
-    const w = Math.ceil((rx + ry) * halfW * 2), h = Math.ceil((rx + ry) * halfH * 2);
-    const canvas = this.textures.createCanvas(key, w, h);
-    if (!canvas) return key;
-    const ctx = canvas.getContext();
-    const img = ctx.createImageData(w, h);
-    const [r, g, b] = MainScene.LAMP_COLOR[type];
-    for (let py = 0; py < h; py++) {
-      for (let px = 0; px < w; px++) {
-        const sx = px + 0.5 - w / 2, sy = py + 0.5 - h / 2;
-        const gx = (sx / halfW + sy / halfH) / 2, gy = (sy / halfH - sx / halfW) / 2;
-        const d = Math.sqrt((gx / rx) ** 2 + (gy / ry) ** 2);
-        const a = d >= 1 ? 0 : Math.pow(1 - d, 1.4) * 0.9;
-        const i = (py * w + px) * 4;
-        img.data[i] = r; img.data[i + 1] = g; img.data[i + 2] = b; img.data[i + 3] = Math.round(a * 255);
-      }
-    }
-    ctx.putImageData(img, 0, 0);
-    canvas.refresh();
+    const { rx, ry, falloff = 1.4 } = STREET_LAMPS[type].pool;
+    this.drawPool(key, rx, ry, MainScene.LAMP_COLOR[type], 0.9, falloff);
     return key;
   }
 
