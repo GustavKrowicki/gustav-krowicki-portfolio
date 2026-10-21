@@ -62,7 +62,9 @@ export function avatar3dEnabled(): boolean {
 // shipped sheets, `avatarb_<look>` for a builder look, so several looks can stay loaded side by side.
 type SheetSet = { prefix: string; origin: [number, number]; displayScale: number };
 let current: SheetSet = { prefix: 'avatar3d', origin: [0.5, 1], displayScale: AVATAR3D_DISPLAY_SCALE };
-const loading = new Map<string, Promise<SheetSet>>(); // one load per sheet set, shared by every caller
+// One load per sheet set and game, shared by every caller (a new game after a route change or HMR has an empty
+// texture manager, so it loads again)
+const loadingByGame = new WeakMap<Phaser.Game, Map<string, Promise<SheetSet>>>();
 
 export function avatar3dPrefix(): string {
   return current.prefix;
@@ -97,10 +99,12 @@ function loadLook(scene: Phaser.Scene, look: string, outline: boolean): Promise<
 // Builder sheets carry their own walk fps (stride matched to that figure's legs); the shipped sheets use
 // AVATAR3D_WALK_FPS.
 function loadSheets(scene: Phaser.Scene, prefix: string, dir: string, outline: boolean, ownFps: boolean): Promise<SheetSet> {
+  let loading = loadingByGame.get(scene.game);
+  if (!loading) loadingByGame.set(scene.game, (loading = new Map()));
   let pending = loading.get(prefix);
   if (!pending) {
     pending = fetchSheets(scene, prefix, dir, outline, ownFps);
-    pending.catch(() => loading.delete(prefix));
+    pending.catch(() => loading.delete(prefix));   // a failed load can be tried again
     loading.set(prefix, pending);
   }
   return pending;

@@ -132,6 +132,10 @@ export class MainScene extends Phaser.Scene {
 
   // Scene ready flag
   private isReady: boolean = false;
+  // create() has run: walk mode can start (the Avatar tab may ask before the game has booted)
+  get ready(): boolean {
+    return this.isReady;
+  }
   private gifsLoaded: boolean = false;
   private pendingGrid: GridCell[][] | null = null;
 
@@ -260,6 +264,10 @@ export class MainScene extends Phaser.Scene {
     const unfollowAvatarBuilder = followAvatarBuilder(this);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, unfollowAvatarBuilder);
     this.events.once(Phaser.Scenes.Events.DESTROY, unfollowAvatarBuilder);
+    // The player (and its window listener for the builder's name and outfit cue) goes with the scene, even mid-walk
+    const releasePlayer = () => this.playerController?.destroy();
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, releasePlayer);
+    this.events.once(Phaser.Scenes.Events.DESTROY, releasePlayer);
 
     // Snap pixel art to whole pixels whenever the camera allows it (integer zoom, see updateCamera)
     this.events.on(Phaser.Scenes.Events.ADDED_TO_SCENE, (gameObject: Phaser.GameObjects.GameObject) => {
@@ -2184,12 +2192,11 @@ export class MainScene extends Phaser.Scene {
     return window.innerWidth < 768;
   }
 
-  // The avatar builder's tab opened: centre the player at the closest zoom (the city view is small beside or above
-  // the panel, and the outfit has to read) and keep following it
-  // (8, past the usual MAX_ZOOM: the city view beside or above the panel is small). close = true returns to street
-  // zoom for walking once the tab closes.
-  // Glides there (pan and zoom together, ease in-out) instead of cutting, and lands on a whole zoom.
+  // The avatar builder's tab opened: glide (pan and zoom together, ease in-out) to the player at a close whole zoom,
+  // past the usual MAX_ZOOM because the city view beside or above the panel is small, and keep following it.
+  // close = true glides back to street zoom for walking once the tab closes.
   avatarFocusZoom = 6;
+  private focusFollowTimer: Phaser.Time.TimerEvent | null = null;
   // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
   skipNextSpawnFocus = false;
   focusOnPlayer(close = false): boolean {
@@ -2204,13 +2211,17 @@ export class MainScene extends Phaser.Scene {
     this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, 800);
     this.manualCameraOverrideInAdventure = false;
     // follow again once the glide has landed (a follow during the tween would fight it)
-    this.time.delayedCall(820, () => { this.cameraFollowPlayer = true; });
+    this.focusFollowTimer?.remove();
+    this.focusFollowTimer = this.time.delayedCall(820, () => {
+      this.focusFollowTimer = null;
+      if (this.isAdventureActive) this.cameraFollowPlayer = true;
+    });
     return true;
   }
 
-  private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number, atZoom?: number): void {
+  private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {
     const camera = this.cameras.main;
-    const zoom = atZoom ?? Math.max(camera.zoom, ZOOM.street);
+    const zoom = Math.max(camera.zoom, ZOOM.street);
 
     camera.setZoom(zoom);
     camera.scrollX = Math.round(playerWorldX - camera.width / 2);
