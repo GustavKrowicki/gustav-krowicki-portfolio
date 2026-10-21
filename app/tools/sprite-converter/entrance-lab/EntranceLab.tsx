@@ -11,6 +11,7 @@ import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
+import { createBurgerSiteModel, createBurgerMeal, BURGER_SITE, BENCH_TOP } from '@/lib/city/models/cateItBurgerStates';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
@@ -125,6 +126,25 @@ function avatarBurgerScene(): THREE.Group {
   avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The burger trailer's walk-in plot (4 x 4) with the avatar seated on the beer table's north bench, facing south: framed by
+// the plot alone, so it lines up pixel for pixel with the plot sprite (the city swaps to it while the avatar sits).
+// ?seat=<lx>,<ly> moves the seat (plan tiles).
+function burgerSiteSeatedScene(): THREE.Group {
+  const q = new URLSearchParams(window.location.search).get('seat');
+  const at = q ? (q.split(',').map(Number) as [number, number]) : ([1.35, 3.25] as [number, number]);
+  const group = new THREE.Group();
+  const site = createBurgerSiteModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(site, avatar);
+  avatar.position.set(at[0] - BURGER_SITE.w / 2, 0.02, at[1] - BURGER_SITE.h / 2);
+  poseAvatarSit(avatar.userData.avatar as AvatarRig, 0.02 + BENCH_TOP);
+  const meal = createBurgerMeal({ castShadow: true });
+  meal.position.set(at[0] - BURGER_SITE.w / 2, 0, at[1] - BURGER_SITE.h / 2 + 0.22);   // on the table, in front of the avatar
+  group.add(meal);
+  group.userData.boundsFrom = site;
   return group;
 }
 
@@ -353,6 +373,28 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // The burger trailer's walk-in plot for the city (4 x 4: trailer, hatch walkway, one beer table) and its seated frame
+  burgerSite: {
+    name: 'Burger trailer plot',
+    create: createBurgerSiteModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.6, target: [0, 0, 0] },
+  },
+  burgerSiteSit: {
+    name: 'Burger trailer plot, avatar seated at the table',
+    create: () => burgerSiteSeatedScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 2.6, target: [0, 0, 0] },
     restBounds: true,
   },
   'stadium-site': {

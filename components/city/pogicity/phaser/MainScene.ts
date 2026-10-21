@@ -1991,6 +1991,15 @@ export class MainScene extends Phaser.Scene {
     return candidates;
   }
 
+  /** Walk the avatar to a beat's stand tile inside a walk-in building (a card's button, e.g. "Eat" walks to the table) */
+  walkPlayerToBeat(buildingId: string, beat: string): boolean {
+    const spot = BUILDING_INTERIORS[buildingId]?.standSpots?.[beat];
+    const plot = [...this.interiorTiles.values()].find((t) => t.buildingId === buildingId && t.lx === 0 && t.ly === 0);
+    if (!this.playerController || !spot || !plot) return false;
+    const origin = this.interiorPlots.get(plot.key)!;
+    return this.playerController.walkToBuilding(origin.originX + Math.floor(spot[0]), origin.originY + Math.floor(spot[1]));
+  }
+
   walkPlayerToBuilding(buildingId: string): boolean {
     if (!this.playerController) return false;
 
@@ -2705,7 +2714,8 @@ export class MainScene extends Phaser.Scene {
   private getBuildingTextureKey(building: BuildingDefinition, orientation?: Direction): string {
     const dir = orientation ? DIRECTION_TO_COMPASS[orientation] : "south";
 
-    if (this.openBuildings.has(building.id) && this.seated?.buildingId === building.id && dir === "south") {
+    // seated: also for plots with no roof to take off (the food truck's table), which are never "open"
+    if (this.seated?.buildingId === building.id && dir === "south") {
       const sitKey = `${building.id}_sit_${this.seated.beat}`;
       if (this.textures.exists(sitKey)) return sitKey;
     }

@@ -17,6 +17,9 @@ export interface InteriorBeat {
   /** A sit-and-look moment: on the stand tile the avatar walks to `at` (plan tiles) and sits, the building shows its
    *  seated sprite (buildings.ts seatSprites[beat]), and the screens open large over the city (ScreensOverlay) */
   seat?: { at: [number, number]; screens: { src: string; alt: string; caption: string }[] };
+  /** Buttons on the card. `to` is another beat of the same building: with `walk` the avatar walks to its stand tile
+   *  (its card opens there), without it the card changes to that beat in place. `id` names the choice for analytics. */
+  choices?: { id: string; label: string; to: string; walk?: boolean }[];
 }
 
 // Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
@@ -97,6 +100,33 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
           { src: "/images/valtech/vestas%20drawer.png", alt: "B2B webshop: the request product drawer", caption: "B2B webshop: request a product" },
         ],
       },
+    },
+  },
+  // The burger trailer's plot (Linear POR-38): at the hatch the visitor eats (the avatar sits at the beer table) or books
+  // the truck for an event (the inquiry card). One finding of the case per truck. Draft texts for Gustav to edit.
+  "cate-it-burger": {
+    hatch: {
+      kicker: "Cate it · burger trailer",
+      lead: "Hungry, or planning an event?",
+      text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
+      choices: [
+        { id: "eat", label: "Eat", to: "table", walk: true },
+        { id: "book", label: "Book for an event", to: "booked" },
+      ],
+    },
+    table: {
+      kicker: "Cate it · what the trucks taught us",
+      lead: "Winter is slow for a food truck.",
+      text: "So we dropped the subscription for a fee per booking: no fixed costs, and we only earn when the trucks do.",
+      caseStudy: true,
+      // the north bench of the beer table, facing south (lib/city/models/cateItBurgerStates.ts); no screens: the card stays
+      seat: { at: [1.35, 3.25], screens: [] },
+    },
+    booked: {
+      kicker: "Inquiry sent",
+      lead: "The truck replies by email within 1 to 2 days.",
+      text: "That is our first version: no booking system, just the owner's inbox. Truck owners were fine with email, so we could launch small.",
+      caseStudy: true,
     },
   },
 };

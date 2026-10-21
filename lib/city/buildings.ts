@@ -475,6 +475,28 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
   },
+  // The burger trailer's walk-in plot (Linear POR-38, the Eat / Book loop): art/img2threejs/cate-it-burger, a 4 x 4 plaza with
+  // the trailer on its north half (hatch south) and one beer table. Lab model "burgerSite", export_sprites.sh; the walk map
+  // is in lib/city/buildingInteriors.ts, the hatch and table beats in lib/city/interiorBeats.ts. A stand-in for the square.
+  "cate-it-burger": {
+    id: "cate-it-burger",
+    name: "Cate it burger trailer",
+    category: "portfolio",
+    footprint: { width: 4, height: 4 },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Building/landmark/cate-it-burger_south.png",
+      north: "/game/pogicity/Building/landmark/cate-it-burger_north.png",
+      east: "/game/pogicity/Building/landmark/cate-it-burger_east.png",
+      west: "/game/pogicity/Building/landmark/cate-it-burger_west.png",
+    },
+    seatSprites: { table: "/game/pogicity/Building/landmark/cate-it-burger-sit-table_south.png" },
+    icon: "🍔",
+    projectSlug: "cate-it",
+    description: "Cate it: food trucks for events",
+    interactable: true,
+    supportsRotation: false,
+  },
   "cate-it": {
     id: "cate-it",
     name: "Cate it",

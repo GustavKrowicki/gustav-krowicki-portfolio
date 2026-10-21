@@ -67,9 +67,27 @@ const VALTECH_OFFICE: BuildingInterior = {
   insideZoom: ZOOM.detail,
 };
 
+// The burger trailer's plot, 4 x 4 (lib/city/models/cateItBurgerStates.ts): rows 0-1 the trailer, row 2 the walkway along
+// the hatch, row 3 the beer table (tiles 0-1) and the way in from the street (tiles 2-3). No roof to take off: the plot
+// counts as "inside" only so its stand tiles open their cards. Way in and out: the street tile south of (3,3).
+const CATE_IT_BURGER: BuildingInterior = {
+  map: [
+    "####",
+    "####",
+    "QQQQ",
+    "##QQ",
+  ],
+  outside: "",
+  doors: [],
+  openPlan: true,
+  entrance: { outside: [3, 4], inside: [3, 3] },
+  standSpots: { hatch: [2.5, 2.5], table: [2.5, 3.5] },
+};
+
 export const BUILDING_INTERIORS: Record<string, BuildingInterior> = {
   "lego-hq": LEGO_HQ,
   "valtech-office": VALTECH_OFFICE,
+  "cate-it-burger": CATE_IT_BURGER,
 };
 
 export function interiorCode(interior: BuildingInterior, x: number, y: number): string | null {

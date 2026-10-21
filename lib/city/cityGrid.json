@@ -3401,28 +3401,48 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": true,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 8,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "grass",
@@ -3783,28 +3803,48 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 9,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "grass",
@@ -4157,28 +4197,48 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 10,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "grass",
@@ -4499,28 +4559,48 @@
       "isOrigin": true
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 10,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 11,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 12,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
-      "type": "grass",
+      "type": "building",
       "x": 13,
       "y": 11,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 10,
+      "originY": 8,
+      "buildingId": "cate-it-burger",
+      "buildingOrientation": "down",
+      "underlyingTileType": "grass"
     },
     {
       "type": "grass",
