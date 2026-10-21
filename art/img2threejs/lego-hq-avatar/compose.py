@@ -2,13 +2,13 @@ import sys
 sys.path.insert(0, __import__('os').path.dirname(__file__))
 from massing import *
 from PIL import Image
-AV = 'public/game/pogicity/Characters/avatar3d/'
+AV = 'public/game/pogicity/Characters/avatar-builder/2d-tee-none-denim/'   # the city avatar's base outfit
 def frame(name, i=0):
-    sh = Image.open(AV + name).convert('RGBA'); f = sh.crop((66 * i, 0, 66 * i + 66, 124))
-    return f.resize((33, 62), Image.LANCZOS)
+    sh = Image.open(AV + name).convert('RGBA'); f = sh.crop((72 * i, 0, 72 * i + 72, 132))
+    return f.resize((36, 66), Image.NEAREST)
 def paste_avatar(img, to_px, x, y, name='idle-south.png'):
     f = frame(name); px, py = to_px(x, y)
-    img.alpha_composite(f, (int(px - 16.5), int(py - 0.879 * 62)))
+    img.alpha_composite(f, (int(px - 18), int(py - 0.879 * 66)))
 on, tp = render(roof_on(), 'massing-roof-on.png', 2)
 paste_avatar(on, tp, 4.5, 7.55); on.save('massing-roof-on.png')
 off, tp2 = render(roof_off(), 'massing-roof-off.png', 2)

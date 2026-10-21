@@ -49,7 +49,7 @@ import { ZOOM, logZoomEase, panDurationMs, zoomDurationMs } from "@/lib/city/uni
 import { STREET_LAMPS, StreetLamp, StreetLampType, canPlaceStreetLamp, lampsFromGrid } from "@/lib/city/streetLights";
 import { CityLook, LOOKS, NightKind, lampDimming, nightKind, nightLevels, seedFrom, walkerShare } from "@/lib/city/nightSchedule";
 import { findWindows } from "@/lib/city/nightWindows";
-import { avatar3dEnabled, followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
+import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 
@@ -386,7 +386,7 @@ export class MainScene extends Phaser.Scene {
   }
 
   private async loadCharacterAnimations(): Promise<void> {
-    const charTypes = ["banana", "apple", "gustav"];
+    const charTypes = ["banana", "apple"];
     const charDirs = ["north", "south", "east", "west"];
 
     const loadPromises: Promise<void>[] = [];
@@ -399,8 +399,8 @@ export class MainScene extends Phaser.Scene {
       }
     }
 
-    // Opt-in 3D-rendered player sheets (?avatar=3d); the GIFs above stay loaded for NPCs and as the default.
-    if (avatar3dEnabled()) loadPromises.push(loadAvatar3dSprites(this));
+    // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit); the GIFs are NPCs.
+    loadPromises.push(loadAvatar3dSprites(this));
 
     try {
       await Promise.all(loadPromises);

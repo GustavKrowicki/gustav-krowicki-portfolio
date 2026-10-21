@@ -7,7 +7,8 @@ W, R, d = sys.argv[1], sys.argv[2], sys.argv[3]
 TW, TH = 44, 22
 VARIANTS = [('A', 'live settings: 35.26 deg, zoom 1.0', 3), ('B', 'same at 30 deg pitch', 3),
             ('C', '30 deg, grid-locked to the 3x3 footprint', 3), ('D', '30 deg, current size on an honest 7x7 footprint', 7)]
-player = Image.open(f'{R}/Characters/gustavwalk{"south" if d == "south" else "west"}.gif'); player.seek(0); player = player.convert('RGBA')
+# the city avatar's base outfit, first idle frame at zoom 1 (72x132 sheet frame x 0.25); feet at 0.879 of the frame
+player = Image.open(f'{R}/Characters/avatar-builder/2d-tee-none-denim/idle-{"south" if d == "south" else "west"}.png').convert('RGBA').crop((0, 0, 72, 116)).resize((18, 29), Image.NEAREST)
 panels = []
 for key, label, fp in VARIANTS:
     PW, PH = 700, 560
