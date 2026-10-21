@@ -238,8 +238,8 @@ export class PlayerController {
   handleKeyDown(key: string): void {
     this.pressedKeys.add(key);
 
-    // Cancel auto-walk on any movement key
-    if (keyDirectionMap[key]) {
+    // Cancel auto-walk on any movement key, except the held one (and its key repeats) that started a walk to the door
+    if (keyDirectionMap[key] && keyDirectionMap[key] !== this.guideDirection) {
       this.cancelAutoWalk();
     }
   }

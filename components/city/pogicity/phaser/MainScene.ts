@@ -1773,12 +1773,13 @@ export class MainScene extends Phaser.Scene {
   }
 
   private hoverWalkIn(key: string | null): void {
-    if (key === (this.walkIn?.key ?? null) && !this.walkInTimer) return;
-    if (key === this.walkInPending) return;
+    if (key && key === this.walkInPending) return;
     if (this.walkInTimer) clearTimeout(this.walkInTimer);
     this.walkInTimer = null;
-    this.walkInPending = key;
+    this.walkInPending = null;
     if (!key) { this.hideWalkIn(); return; }
+    if (key === this.walkIn?.key) return;
+    this.walkInPending = key;
     // a short wait, so moving the mouse across the city does not flash every building on the way
     this.walkInTimer = setTimeout(() => {
       this.walkInTimer = null;
@@ -1790,7 +1791,8 @@ export class MainScene extends Phaser.Scene {
   /** A tap on the city: true when it was used to show or follow a walk-in building's way in */
   private tapWalkIn(pointer: Phaser.Input.Pointer): boolean {
     const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
-    const key = this.walkInBuildingAt(world.x, world.y);
+    const label = this.walkIn?.parts[this.walkIn.parts.length - 1] as Phaser.GameObjects.Text | undefined;
+    const key = label?.getBounds().contains(world.x, world.y) ? this.walkIn!.key : this.walkInBuildingAt(world.x, world.y);
     if (!key) {
       if (pointer.wasTouch) this.hideWalkIn();
       return false;
@@ -1837,7 +1839,7 @@ export class MainScene extends Phaser.Scene {
     const top = 19_000_000; // above the city, below the player's pointer
 
     const line = this.add.graphics().setDepth(top);
-    line.lineStyle(1.5, 0xffffff, 0.7);
+    line.lineStyle(1.5, 0xffffff, 0.7 * (1 - 0.6 * this.night)); // Graphics take no night tint: dim the line instead
     const dashed = (a: { x: number; y: number }, b: { x: number; y: number }) => {
       const len = Math.hypot(b.x - a.x, b.y - a.y), dash = 4, gap = 3;
       for (let d = 0; d < len; d += dash + gap) {
@@ -1859,10 +1861,8 @@ export class MainScene extends Phaser.Scene {
       fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#f6efe6",
       backgroundColor: "#9a4a36", padding: { x: 4, y: 2 }, resolution: 4,
     }).setOrigin(0.5, 1).setDepth(top + 1);
-    label.setInteractive({ useHandCursor: true });
-    label.on("pointerup", () => this.walkIntoPlot(key));
-
     this.walkIn = { key, parts: [line, label] };
+    this.nightApplied.count = -1; // the night tint re-applies to the new label on the next frame
   }
 
   private hideWalkIn(): void {
