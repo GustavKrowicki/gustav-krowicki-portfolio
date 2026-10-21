@@ -14,8 +14,9 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
+import { cityFont } from "@/lib/city/cityFont";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -573,8 +574,8 @@ export class PlayerController {
 
   private getTextureKey(): string {
     const key = getCharacterTextureKey(this.characterType, this.direction);
-    if (this.characterType !== CharacterType.Gustav || !avatar3dEnabled()) return key;
-    // 3D-rendered sheets (?avatar=3d or a builder look), same compass naming as the GIFs, walk or idle by state
+    if (this.characterType !== CharacterType.Gustav) return key;
+    // The avatar builder's sheets, same compass naming as the GIFs, walk or idle by state
     const clip = this.state === PlayerState.Idle && !this.seatWalk ? "idle" : "walk";
     return `${avatar3dPrefix()}_${clip}_${key.slice(key.indexOf("_") + 1)}`;
   }
@@ -606,7 +607,7 @@ export class PlayerController {
 
     if (this.sprite) {
       // Origin and scale follow the sheet set, which can change while the city runs (the avatar builder)
-      const sheetSet = avatar3dEnabled() && this.characterType === CharacterType.Gustav ? avatar3dPrefix() : "gif";
+      const sheetSet = this.characterType === CharacterType.Gustav ? avatar3dPrefix() : "gif";
       if (sheetSet !== this.sheetSet && this.scene.textures.exists(textureKey)) {
         this.sheetSet = sheetSet;
         if (sheetSet === "gif") {
@@ -679,7 +680,7 @@ export class PlayerController {
     }
     if (!this.nameTag) {
       this.nameTag = this.scene.add.text(0, 0, "", {
-        fontFamily: "'Press Start 2P', monospace",
+        fontFamily: cityFont(),
         fontSize: "8px",
         color: "#ffffff",
         backgroundColor: "#1d1b18",
