@@ -432,7 +432,7 @@ export class MainScene extends Phaser.Scene {
       const targetZoom = Phaser.Math.Clamp(
         camera.zoom * scale,
         MainScene.MIN_ZOOM,
-        MainScene.MAX_ZOOM
+        this.maxZoomNow()
       );
 
       if (Math.abs(targetZoom - camera.zoom) >= 0.001) {
@@ -1066,7 +1066,7 @@ export class MainScene extends Phaser.Scene {
     const targetZoom = Phaser.Math.Clamp(
       camera.zoom * zoomFactor,
       MainScene.MIN_ZOOM,
-      MainScene.MAX_ZOOM
+      this.maxZoomNow()
     );
     if (Math.abs(targetZoom - camera.zoom) < 0.001) return;
     this.applyZoomAtPointer(targetZoom, pointer.x, pointer.y);
@@ -1828,8 +1828,10 @@ export class MainScene extends Phaser.Scene {
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
     if (this.skipNextSpawnFocus) {
+      // focusOnPlayer glides there next; follow anyway, in case that focus never lands
       this.skipNextSpawnFocus = false;
       this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
     } else if (this.isMobileViewport()) {
       const playerPos = this.playerController.getPosition();
       this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
@@ -1899,6 +1901,9 @@ export class MainScene extends Phaser.Scene {
     this.isAdventureActive = false;
     this.gameMode = GameMode.Viewer;
     this.cameraFollowPlayer = false;
+    this.avatarFocusActive = false;
+    this.focusFollowTimer?.remove();
+    this.focusFollowTimer = null;
     this.manualCameraOverrideInAdventure = false;
     this.stopCameraFollow();
     this.standUp();
@@ -2197,6 +2202,11 @@ export class MainScene extends Phaser.Scene {
   // close = true glides back to street zoom for walking once the tab closes.
   avatarFocusZoom = 6;
   private focusFollowTimer: Phaser.Time.TimerEvent | null = null;
+  // While the Avatar tab holds the camera close, wheel and pinch may go up to that zoom instead of snapping to 4
+  private avatarFocusActive = false;
+  private maxZoomNow(): number {
+    return this.avatarFocusActive ? Math.max(MainScene.MAX_ZOOM, this.avatarFocusZoom) : MainScene.MAX_ZOOM;
+  }
   // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
   skipNextSpawnFocus = false;
   focusOnPlayer(close = false): boolean {
@@ -2205,6 +2215,7 @@ export class MainScene extends Phaser.Scene {
     this.stopCameraMoves();
     this.stopCameraFollow();
     const camera = this.cameras.main;
+    this.avatarFocusActive = !close;
     const zoom = close ? ZOOM.street : this.avatarFocusZoom;
     const y = p.worldY - (close ? 0 : 12);
     this.cameraFollowPlayer = false;

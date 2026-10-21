@@ -161,5 +161,12 @@ export function followAvatarBuilder(scene: Phaser.Scene, outline = true): () => 
       .catch(() => {});
   };
   window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
+  // A choice saved before this subscribed (the Avatar tab saves on mount, which can land between preload and
+  // create) would otherwise never load: wear it now
+  const saved = readAvatarChoice();
+  const forced = new URLSearchParams(window.location.search).has('look');   // ?look= wins, for checks
+  if (!forced && saved && bakedLook(saved) && current.prefix !== `avatarb_${bakedLook(saved)}`) {
+    onChange(new CustomEvent(AVATAR_CHANGE_EVENT, { detail: saved }));
+  }
   return () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
 }
