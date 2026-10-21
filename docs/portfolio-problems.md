@@ -89,17 +89,17 @@ A design lead in an interview (October 2026):
 
 ## 6. Smaller problems
 
-These problems were found on 2026-10-10 or later:
+These problems were found on 2026-10-10 or later. All are closed (2026-10-21):
 
-- The Viz generator case is not in the city.
+- ~~The Viz generator case is not in the city.~~ Not planned: the case stays in the panel.
 - ~~A click on the LEGO logo opens a pop-up, but a click on the LEGO building opens the case.~~ Fixed: a logo now opens the same thing as its building.
-- The building highlight stays on the screen when a visitor stops the tour early.
-- The key G shows a debug overlay to visitors.
-- The city code uses a pixel font, but the site does not load it.
-- Day and night are in the code but not in use. The branch `living-city-polish` uses them.
-- The image `erhvervsakademiet_east.png` is missing (status 404). The file in the repository has a space in its name.
-- The city tour data shows the Swinburne logo for the University of Melbourne.
-- The PDF viewer shows the CV and the recommendation letter as images. Visitors cannot select the text, and the links do not operate. Fixed on the branch for POR-18: the viewer has the text and link layers, and the uni letter file has real text.
+- ~~The building highlight stays on the screen when a visitor stops the tour early.~~ Not relevant: the tour is removed.
+- ~~The key G shows a debug overlay to visitors.~~ Fixed: the overlay is deleted.
+- ~~The city code uses a pixel font, but the site does not load it.~~ Fixed: the city uses Geist Mono, and the site loads it.
+- ~~Day and night are in the code but not in use.~~ Fixed: the city has night, with lamps and a time-of-day button.
+- ~~The image `erhvervsakademiet_east.png` is missing (status 404).~~ Fixed: the file name has no space now.
+- ~~The city tour data shows the Swinburne logo for the University of Melbourne.~~ Not relevant: the tour data is removed.
+- ~~The PDF viewer shows the CV and the recommendation letter as images.~~ Fixed: the viewer has the text and link layers, and the uni letter file has real text.
 
 ## 7. Keep this document current
 
