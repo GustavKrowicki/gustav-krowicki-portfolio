@@ -377,15 +377,18 @@ for k in range(NS):
 sloped_rail("stair-cheek-coping", "Grand stair cheek coping", spt(U1 + 0.04, -DN), Y(DECK_TOP + 0.3), spt(U1 + 0.04, DOUT),
             Y(DECK_TOP - SRISE * NS + 0.3), "panel")
 stair_ids.append("stair-cheek-coping")
-# hand rails: 4 thin steel lines running the full height, evenly across the top width
-for j in range(1, 5):
-    u = UT0 + (U1 - UT0) * j / 5
-    sloped_rail(f"stair-rail-{j}", f"Grand stair hand rail {j}", spt(u, -DN + 0.05), Y(DECK_TOP + 0.3), spt(u, DOUT - 0.05),
-                Y(DECK_TOP - SRISE * NS + 0.3), "mullion", 0.02, 0.018)          # thin light steel (photos)
+# hand rails (Gustav, round 7: "a bit diagonal", one fewer): 3 thin steel lines running the full height at a slant, each
+# bottom end RSH further west than its top, leaning with the stair's diagonal west edge
+RSH, NR = 0.4, int(os.environ.get("RAILS", "3"))         # RAILS=2 renders the two-rail try
+for j in range(1, NR + 1):
+    u = UT0 + (U1 - UT0) * j / (NR + 1) + RSH / 2
+    pa, pb = spt(u, -DN + 0.05), spt(u - RSH, DOUT - 0.05)
+    sloped_rail(f"stair-rail-{j}", f"Grand stair hand rail {j}", pa, Y(DECK_TOP + 0.3), pb, Y(DECK_TOP - SRISE * NS + 0.3), "mullion", 0.02, 0.018)
     for q in range(0, NS, 3):
+        f = (q + 0.5) / NS
         top = DECK_TOP - SRISE * (q + 1)
-        vplate(f"stair-post-{j}-{q}", f"Grand stair rail post {j}.{q}", "micro", "stair", spt(u, -DN + (q + 0.5) * SRUN), sn, st, 0.012, Y(top),
-               Y(top + 0.3), -0.006, 0.012, "mullion", importance=0.2)
+        vplate(f"stair-post-{j}-{q}", f"Grand stair rail post {j}.{q}", "micro", "stair", (pa[0] + (pb[0] - pa[0]) * f, pa[1] + (pb[1] - pa[1]) * f), sn, st,
+               0.012, Y(top), Y(top + 0.3), -0.006, 0.012, "mullion", importance=0.2)
     stair_ids.append(f"stair-rail-{j}")
 # the diagonal west edge: a dense bar railing like the deck's, from the deck edge down to the bottom step's west end, and
 # along the notch's west wall at deck level
