@@ -1679,12 +1679,13 @@ export class MainScene extends Phaser.Scene {
     // Door beats: tell React when the player crosses a walk-in building's main door, in or out
     const insideId = inside ? here!.buildingId : null;
     if (insideId && this.walkIn) this.hideWalkIn();
-    if (insideId && this.peek?.buildingId === insideId) this.closeWalkInPeek();
     if (insideId !== this.insideBuilding) {
       if (this.insideBuilding) this.events.emit("interiorDoorCrossed", { buildingId: this.insideBuilding, inward: false });
       if (insideId) this.events.emit("interiorDoorCrossed", { buildingId: insideId, inward: true });
       this.insideBuilding = insideId;
     }
+    // walked into the building opened in place: its card closes, its roof stays off (insideBuilding is set by now)
+    if (insideId && this.peek?.buildingId === insideId) this.closeWalkInPeek();
     this.updateInsideZoom(inside ? here! : null);
     // Peek card: the player stands on a beat's stand tile (arrived, not passing through on the way to the next tile)
     const stopped = target.x === gridX && target.y === gridY;
@@ -1864,7 +1865,10 @@ export class MainScene extends Phaser.Scene {
     const key = this.walkInBuildingAt(world.x, world.y);
     const target = this.walkTargetAt(tx, ty, key);
     // the open building's floor first: its open sprite covers it
-    if (target && this.peek && this.interiorTiles.get(`${tx},${ty}`)?.key === this.peek.key) return this.walkToTarget(target);
+    const open = this.openPlotKey();
+    if (target && open && this.interiorTiles.get(`${tx},${ty}`)?.key === open) return this.walkToTarget(target);
+    // inside a building, a tap on its open sprite walks (out onto the street in front of it, too)
+    if (key && key === this.insidePlotKey()) return target ? this.walkToTarget(target) : true;
     if (key) {
       if (key === this.peek?.key) this.closeWalkInPeek();
       else this.openWalkInPeek(key);
@@ -1881,8 +1885,9 @@ export class MainScene extends Phaser.Scene {
   private walkTargetAt(tx: number, ty: number, overKey: string | null): { x: number; y: number } | null {
     const pc = this.playerController;
     if (!this.isAdventureActive || !pc) return null;
-    const t = this.peek ? this.interiorTiles.get(`${tx},${ty}`) : undefined;
-    if (t && t.key === this.peek!.key) {
+    const open = this.openPlotKey();
+    const t = open ? this.interiorTiles.get(`${tx},${ty}`) : undefined;
+    if (t && t.key === open) {
       const plot = this.interiorPlots.get(t.key)!;
       let best: { x: number; y: number; d: number } | null = pc.canStandOn(tx, ty) ? { x: tx, y: ty, d: 0 } : null;
       for (let y = plot.originY; y < plot.originY + plot.height; y++) {
@@ -1896,8 +1901,22 @@ export class MainScene extends Phaser.Scene {
       }
       return best;
     }
-    if (overKey) return null;
+    if (overKey && overKey !== this.insidePlotKey()) return null;
     return pc.canStandOn(tx, ty) ? { x: tx, y: ty } : null;
+  }
+
+  // The plot of the walk-in building the avatar is inside, or null
+  private insidePlotKey(): string | null {
+    if (!this.insideBuilding) return null;
+    for (const [key, plot] of this.interiorPlots) {
+      if (this.grid[plot.originY]?.[plot.originX]?.buildingId === this.insideBuilding) return key;
+    }
+    return null;
+  }
+
+  // The plot whose roof is off: the building opened in place, else the one the avatar is inside
+  private openPlotKey(): string | null {
+    return this.peek?.key ?? this.insidePlotKey();
   }
 
   // Point and walk: a tile diamond under the mouse where a click would walk to, and a marker where a tap sent the avatar
