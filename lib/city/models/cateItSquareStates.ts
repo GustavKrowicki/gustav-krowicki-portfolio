@@ -113,37 +113,41 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
   return group;
 }
 
-/** The Cate it banner on two poles over the way in (Gustav, 2026-10-21: food names on the trucks, Cate it on a banner
- *  across the square): plan centre, width, and the banner's bottom and top (wu above the ground); it faces south. */
-// Low and narrow on purpose: from the city camera a banner at height h shows over the ground about 1.2 h tiles further
-// back, so this one lands over the empty walkway between the tables and never hides a seat or the hatches.
-export const BANNER = { at: [5.5, 6.9] as [number, number], width: 1.6, bottom: 1.3, top: 1.7 };
+/** The Cate it banner on two tall poles across the square's south-east corner (Gustav, 2026-10-21: food names on the
+ *  trucks, Cate it on a banner in the corner, big). It runs diagonally from `from` to `to` (plan tiles), so it faces the
+ *  default camera square on. High on purpose: from the city camera a thing at height h shows over the ground about
+ *  1.2 h tiles further back, and at 3 wu it lands above the tables and between the back hatches, hiding no seat. */
+export const BANNER = { from: [6.2, 7.0] as [number, number], to: [8.0, 5.2] as [number, number], bottom: 3.1, top: 3.7 };
 
 function createBanner(options: Options): THREE.Group {
   const g = new THREE.Group();
   g.name = 'banner';
-  const [x, z] = plan(BANNER.at);
+  const [x0, z0] = plan(BANNER.from), [x1, z1] = plan(BANNER.to);
+  const length = Math.hypot(x1 - x0, z1 - z0);
   const h = BANNER.top - BANNER.bottom;
-  for (const dx of [-BANNER.width / 2 - 0.04, BANNER.width / 2 + 0.04]) {
+  g.position.set((x0 + x1) / 2, 0, (z0 + z1) / 2);
+  g.rotation.y = Math.atan2(z0 - z1, x1 - x0);   // local +X along the banner, local +Z (its face) toward the camera
+  for (const dx of [-length / 2 + 0.05, length / 2 - 0.05]) {
     const pole = new THREE.Mesh(
-      new THREE.CylinderGeometry(0.03, 0.035, BANNER.top + 0.1, 8),
+      new THREE.CylinderGeometry(0.035, 0.045, BANNER.top + 0.12, 8),
       new THREE.MeshStandardMaterial({ color: '#4b4f54', roughness: 0.6, emissive: '#4b4f54', emissiveIntensity: 0.25 }),
     );
-    pole.position.set(x + dx, (BANNER.top + 0.1) / 2, z);
+    pole.position.set(dx, (BANNER.top + 0.12) / 2, -0.03);
     pole.castShadow = options?.castShadow ?? true;
     g.add(pole);
   }
-  g.add(box(BANNER.width, h, 0.025, '#22272a', x, BANNER.bottom + h / 2, z, options ?? {}));
-  const g2 = globalThis as { __labPending?: number };
-  g2.__labPending = (g2.__labPending ?? 0) + 1;
+  g.add(box(length - 0.04, h, 0.025, '#22272a', 0, BANNER.bottom + h / 2, 0, options ?? {}));
+  const pending = globalThis as { __labPending?: number };
+  pending.__labPending = (pending.__labPending ?? 0) + 1;
   const material = new THREE.MeshBasicMaterial({ transparent: true });
   material.map = new THREE.TextureLoader().load('/game/pogicity/Building/logos/cate-it-sign.png', () => {
-    g2.__labPending = (g2.__labPending ?? 1) - 1;
+    pending.__labPending = (pending.__labPending ?? 1) - 1;
     material.needsUpdate = true;
   });
   material.map.colorSpace = THREE.SRGBColorSpace;
-  const face = new THREE.Mesh(new THREE.PlaneGeometry(BANNER.width - 0.04, h - 0.03), material);
-  face.position.set(x, BANNER.bottom + h / 2, z + 0.014);
+  const w = Math.min(length - 0.12, (h - 0.06) * 512 / 77);   // the logo strip keeps its own proportions
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(w, w * 77 / 512), material);
+  face.position.set(0, BANNER.bottom + h / 2, 0.014);
   g.add(face);
   return g;
 }
