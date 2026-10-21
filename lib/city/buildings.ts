@@ -198,11 +198,11 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
     logoOffset: { x: 0, y: 34 },
     // At night (art/img2threejs/lego-hq-avatar/export_windows.sh): a, the office wings' windows, the roof pavilions and the
-    // door glass; b, the glass of the round building, the atrium and the yellow blocks
+    // door glass; b, the glass of the round building, the atrium and the yellow blocks. Lit all night (a walk-in)
     nightWindows: {
       a: "/game/pogicity/Building/landmark/lego-hq-avatar-win-a_south.png",
       b: "/game/pogicity/Building/landmark/lego-hq-avatar-win-b_south.png",
-      kind: "office",
+      kind: "walkin",
     },
   },
   "valtech-office": {
@@ -244,12 +244,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     // brick herringbone on the approach tile in the gate awning's colour (build_spec.py GATE_AWNINGS "a")
     entrancePaving: { brick: 0x9a4a36 },
     // At night: the louvre storeys and the glass top floor lit as an office (a: storeys 1 and 3 with the top floor, b: the
-    // middle storey), the cafe glass on the ground floor as a cafe (art/img2threejs/valtech-office/export_windows.sh)
+    // middle storey; lit all night as a walk-in), the cafe glass on the ground floor as a cafe (art/img2threejs/valtech-office/export_windows.sh)
     nightWindows: {
       a: "/game/pogicity/Building/landmark/valtech-office-avatar-win-a_south.png",
       b: "/game/pogicity/Building/landmark/valtech-office-avatar-win-b_south.png",
       front: "/game/pogicity/Building/landmark/valtech-office-avatar-win-f_south.png",
-      kind: "office",
+      kind: "walkin",
       frontKind: "food",
     },
   },

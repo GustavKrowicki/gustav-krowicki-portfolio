@@ -155,7 +155,7 @@ and the model is built from it:
 - Four looks (`LOOKS` in `lib/city/nightSchedule.ts`): Morning (warm, about 30% darker), Day, Evening (cool, about
   40% darker, lamps on) and Night (deep blue, lamps on), each a multiply tint eased over 0.9 s. Auto picks the look from
   the hour (05 to 09 morning, 09 to 18 day, 18 to 21 evening, else night).
-- The hour (`lib/city/nightSchedule.ts`): filler buildings are home, food, bar or office (and a venue: lit 17:00 to 23:00 with the floodlights). Their lit windows are found in
+- The hour (`lib/city/nightSchedule.ts`): filler buildings are home, food, bar or office (and a venue: lit 17:00 to 23:00 with the floodlights); the walk-in buildings are lit all night, and their rooms are lit while the roof is off. Their lit windows are found in
   the sprite (`lib/city/nightWindows.ts`: small upright patches of blue or blue-grey glass) and split in two random
   groups; the hour turns groups on (homes lit in the evening, a few up at 02:00; food open to 22:00 with a lit
   shopfront and a spill on the street; the bar to 02:00; offices dark after 21:00). Fewer walkers at night, and the
