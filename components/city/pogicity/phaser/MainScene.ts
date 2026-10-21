@@ -2589,9 +2589,17 @@ export class MainScene extends Phaser.Scene {
     return true;
   }
 
-  // Landing walking (POR-47): the whole city for a moment, then a glide to the avatar at street zoom. A pan or zoom by
-  // hand in the meantime keeps the visitor's own framing.
+  // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom to show the streets
+  // around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
   landWalking(delayMs: number, glideMs: number): void {
+    if (!this.playerController) return;
+    if (delayMs > 0) {
+      const p = this.playerController.getPosition();
+      const camera = this.cameras.main;
+      this.stopCameraMoves();
+      this.cameraFollowPlayer = false;
+      this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(p.worldY - 12 - camera.height / 2), ZOOM.detail, 1);
+    }
     const since = this.time.now;
     this.time.delayedCall(delayMs, () => {
       if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;

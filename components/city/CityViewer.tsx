@@ -659,9 +659,9 @@ export default function CityViewer({
   );
 
 
-  // The new site lands walking (POR-47): once the scene is up the avatar spawns by Valtech while the camera keeps the
-  // whole city, then glides to it at street zoom after a moment (at once with reduced motion). The Avatar tab, when a
-  // link opens on it, does its own focus.
+  // The new site lands walking (POR-47): once the scene is up the avatar spawns by Valtech, the camera starts close on
+  // it and after a moment zooms out to street zoom (straight to street zoom with reduced motion). The Avatar tab, when
+  // a link opens on it, does its own focus.
   const avatarTabOpenRef = useRef(avatarTabOpen);
   avatarTabOpenRef.current = avatarTabOpen;
   useEffect(() => {
