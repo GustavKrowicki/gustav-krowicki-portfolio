@@ -555,14 +555,6 @@ export default function CityViewer({
     }
   }, []);
 
-  // Find me (the new site, where the avatar is always there): back to the avatar at street zoom
-  const handleFindMe = useCallback(() => {
-    const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-      | { focusOnPlayer?: (close?: boolean) => boolean }
-      | undefined;
-    scene?.focusOnPlayer?.(true);
-  }, []);
-
   // Handle dialog close
   const handleDialogClose = useCallback(() => {
     setIsDialogOpen(false);
@@ -997,18 +989,12 @@ export default function CityViewer({
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Walk the avatar (the /city page), or find it again (the new site, which is always walking). In the shell it sits
-          inside the city view (the panel and its phone sheet own the window's edges): bottom-left on a desktop,
-          bottom-right on a phone */}
+      {/* Walk the avatar (the /city page; the new site is always walking, the yellow marker shows where). In the shell
+          the time of day button sits inside the city view (the panel and its phone sheet own the window's edges):
+          bottom-left on a desktop, bottom-right on a phone */}
       {!dialogShown && !avatarTabOpen && (
         <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
-          {isShell ? (
-            isAdventureActive && (
-              <button onClick={handleFindMe} className={pixelButtonClass("ghost")} style={PIXEL_INSET_CLIP}>
-                Find me
-              </button>
-            )
-          ) : (
+          {!isShell && (
             <button
               onClick={isAdventureActive ? handleStopAdventure : () => handleStartAdventure()}
               className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}

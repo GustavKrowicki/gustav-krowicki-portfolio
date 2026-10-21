@@ -96,6 +96,9 @@ function getSnowTextureKey(x: number, y: number): string {
   return `snow_${variant}`;
 }
 
+// Keys that walk the avatar (PlayerController.handleKeyDown)
+const MOVE_KEYS = new Set(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"]);
+
 export class MainScene extends Phaser.Scene {
   private readonly DEPTH_Y_MULT = 10000;
   // Ground tiles sit in their own layer under everything; light pools on the ground sit just above that layer, so a pool
@@ -533,8 +536,7 @@ export class MainScene extends Phaser.Scene {
     const shouldFollowPlayer =
       this.cameraFollowPlayer &&
       !this.manualCameraOverrideInAdventure &&
-      (playerState === PlayerState.AutoWalking ||
-       (isMobile && playerState === PlayerState.Walking));
+      (playerState === PlayerState.AutoWalking || playerState === PlayerState.Walking);
 
     if (shouldFollowPlayer) {
       // On mobile, always use smooth lerp follow (joystick AND auto-walk).
@@ -542,7 +544,7 @@ export class MainScene extends Phaser.Scene {
       // spans most of the screen, so the camera appears frozen during auto-walk.
       this.cameraFollowTarget.x = playerPos.worldX;
       this.cameraFollowTarget.y = playerPos.worldY;
-      this.startCameraFollow(isMobile || playerState === PlayerState.Walking ? "lerp" : "deadzone");
+      this.startCameraFollow(isMobile ? "lerp" : "deadzone");
     } else {
       this.stopCameraFollow();
     }
@@ -2297,7 +2299,12 @@ export class MainScene extends Phaser.Scene {
         }
       }
 
-      // Handle movement keys
+      // Handle movement keys: a step brings the camera back to the avatar, after a pan or zoom by hand too
+      // (during a glide to the avatar its own timer turns the follow on once it lands)
+      if (MOVE_KEYS.has(e.key)) {
+        this.manualCameraOverrideInAdventure = false;
+        if (!this.focusFollowTimer) this.cameraFollowPlayer = true;
+      }
       this.playerController?.handleKeyDown(e.key);
     };
 
