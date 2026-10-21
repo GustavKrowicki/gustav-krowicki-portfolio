@@ -1,7 +1,8 @@
 // Play the food truck loop (Eat / Book at a trailer's hatch, lib/city/interiorBeats.ts choices) in the running city, time it
 // and screenshot each step: the hatch card, Eat -> seated at the table with its card, then Book -> the inquiry card.
 // Usage: LAB_PORT=3112 node art/img2threejs/tools/city_truck_loop.mjs <outDir> '<config json>'
-// config: { viewport: [w, h], mobile: false, zoom: 4, start: [x, y], path: [[x, y], ...] (the last = the hatch tile) }
+// config: { viewport: [w, h], mobile: false, zoom: 4, start: [x, y], path: [[x, y], ...] (the last = the hatch tile),
+//   natural: true keeps the city's own camera (the hatch zoom) instead of framing each shot at `zoom` }
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 const [, , out, cfgJson] = process.argv;
@@ -29,23 +30,29 @@ const frame = (z) => page.evaluate((z) => {
   cam.scrollX = Math.round(p.worldX - cam.width / 2); cam.scrollY = Math.round(p.worldY - 30 - cam.height / 2);
   s.baseScrollX = cam.scrollX; s.baseScrollY = cam.scrollY; s.zoomLevel = z; s.zoomHandledInternally = true; s.events.emit('zoomChanged', z);
 }, z);
+const zoomNow = () => page.evaluate(() => window.__CITY_E2E__.getScene().cameras.main.zoom);
 const card = () => page.evaluate(() => document.querySelector('[data-testid="peek-card"]')?.innerText.replace(/\s+/g, ' ').trim() ?? null);
 
 // Eat
 await spawn();
 const t0 = Date.now();
 for (const [x, y] of cfg.path) await walk(x, y);
-await frame(cfg.zoom ?? 4);
+if (!cfg.natural) await frame(cfg.zoom ?? 4);
+const z0 = await zoomNow();
 await page.waitForSelector('[data-testid="peek-choice-eat"]', { timeout: 8000 });
 const tCard = Date.now();
 await page.waitForTimeout(300);
 await page.screenshot({ path: `${out}/1-hatch.png` });
+await page.waitForTimeout(900);
+console.log('camera zoom at arrival', z0, 'with the hatch card', await zoomNow());
 console.log('hatch card', JSON.stringify(await card()));
 await page.click('[data-testid="peek-choice-eat"]');
 const tEat = Date.now();
+await page.waitForTimeout(450);
+await page.screenshot({ path: `${out}/1b-serve.png` });
 await page.waitForFunction(() => !!window.__CITY_E2E__.getScene().seated, null, { timeout: 15000 });
 const tSeated = Date.now();
-await frame(cfg.zoom ?? 4);
+if (!cfg.natural) await frame(cfg.zoom ?? 4);
 await page.waitForTimeout(500);
 await page.screenshot({ path: `${out}/2-seated.png` });
 console.log('seated card', JSON.stringify(await card()));
@@ -53,7 +60,7 @@ console.log(`timing eat: walk to hatch ${tCard - t0} ms (scripted walk), Eat -> 
 
 // Book: step off and back onto the hatch tile, then Book
 const [hx, hy] = cfg.path[cfg.path.length - 1];
-await walk(hx + 1, hy); await walk(hx, hy); await frame(cfg.zoom ?? 4);
+await walk(hx + 1, hy); await walk(hx, hy); if (!cfg.natural) await frame(cfg.zoom ?? 4);
 await page.waitForSelector('[data-testid="peek-choice-book"]', { timeout: 8000 });
 await page.click('[data-testid="peek-choice-book"]');
 await page.waitForTimeout(400);

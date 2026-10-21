@@ -425,7 +425,9 @@ const MODELS: Record<string, ModelConfig> = {
     // ?t= guests' loop phase, ?signs=logo|food|blank, ?lights=1 the night lights pass, ?twinkle=1 its second frame
     create: (options) => {
       const q = new URLSearchParams(window.location.search);
-      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs, q.get('lights') === '1', Number(q.get('twinkle') ?? 0));   // ?lights=1 night pass, ?twinkle=1
+      const cook = q.get('cook') as Truck | null;   // ?cook=<truck>&cf=<frame>: a cook's reaction frame
+      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs, q.get('lights') === '1',
+        Number(q.get('twinkle') ?? 0), cook ? { truck: cook, frame: Number(q.get('cf') ?? 0) } : null);
     },
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,

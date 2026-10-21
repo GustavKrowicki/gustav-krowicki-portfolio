@@ -20,6 +20,8 @@ export interface InteriorBeat {
   /** Buttons on the card. `to` is another beat of the same building: with `walk` the avatar walks to its stand tile
    *  (its card opens there), without it the card changes to that beat in place. `id` names the choice for analytics. */
   choices?: { id: string; label: string; to: string; walk?: boolean }[];
+  /** Ease the camera in one zoom step on the player while this card is open, and back out when it closes (the hatches) */
+  zoomIn?: boolean;
 }
 
 // Stand-tile beats (desk, room, lunch) open on their standSpot tile. "enter" and "leave" are door beats: they open when
@@ -107,6 +109,7 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   // Seats: lib/city/models/cateItSquareStates.ts SEATS, no screens, so the card stays. Draft texts for Gustav to edit.
   "cate-it": {
     "hatch-burger": {
+      zoomIn: true,
       kicker: "Cate it · burger trailer",
       lead: "Hungry, or planning an event?",
       text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
@@ -116,6 +119,7 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       ],
     },
     "hatch-pizza": {
+      zoomIn: true,
       kicker: "Cate it · pizza trailer",
       lead: "Hungry, or planning an event?",
       text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",
@@ -125,6 +129,7 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       ],
     },
     "hatch-african": {
+      zoomIn: true,
       kicker: "Cate it · street food trailer",
       lead: "Hungry, or planning an event?",
       text: "Cate it connects local food trucks with people who plan events. I co-founded it and designed it.",

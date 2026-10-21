@@ -44,6 +44,11 @@ export interface BuildingDefinition {
   // Ambient loop (docs/city-rules.md section 9): a strip of frames cropped from the south sprite like `door` (x, y = the
   // crop's top-left in sprite pixels), drawn over the building and played in a loop at `fps`
   ambient?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
+  // Reactions to the visitor (the food truck cooks): strips of frames cropped from the south sprite like `ambient` (the
+  // moving pixels are cut out of the still sprite, so frame 0 is always drawn). When the player comes within `radius` of
+  // `at` (local tiles) frames 1..wave-1 play once (a wave); serve() plays frames wave..frames-1 and holds (the hand-over);
+  // away again, it goes back to frame 0. `beat` ties it to a walk-in stand tile (lib/city/interiorBeats.ts).
+  reactions?: { beat: string; sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; wave: number }[];
   // Lights on at night (docs/city-rules.md section 9): frames cropped from the south sprite like `ambient`, in a grid
   // sheet, drawn untinted over the night-tinted building while the city is dark (MainScene.setNight)
   nightLights?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
@@ -501,13 +506,20 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     // south sprite and renders them per frame; paused while the visitor sits (the seated frames are whole)
     ambient: {
       sheet: "/game/pogicity/Building/landmark/cate-it-square-guests_south.png",
-      frames: 12, frameWidth: 396, frameHeight: 144, x: 210, y: 562, fps: 4,
+      frames: 12, frameWidth: 396, frameHeight: 146, x: 210, y: 560, fps: 4,
     },
+    // The cooks: a wave when the visitor steps up to the hatch, the hand-over after "Eat" (export_square.sh, frames 0 idle,
+    // 1-5 wave, 6-9 serve)
+    reactions: [
+      { beat: "hatch-burger", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-burger_south.png", frames: 10, frameWidth: 56, frameHeight: 72, x: 522, y: 526, at: [6.5, 2.5], radius: 1, fps: 7, wave: 6 },
+      { beat: "hatch-pizza", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-pizza_south.png", frames: 10, frameWidth: 34, frameHeight: 38, x: 178, y: 502, at: [2.5, 5.5], radius: 1, fps: 7, wave: 6 },
+      { beat: "hatch-african", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-african_south.png", frames: 10, frameWidth: 54, frameHeight: 72, x: 356, y: 442, at: [2.5, 2.5], radius: 1, fps: 7, wave: 6 },
+    ],
     // Lit at night: the hatches, the neon food names, the fairy lights across the trucks, the marker lights and the banner
     // (export_square.sh lights pass); two frames, every third bulb dimmer on the second, so the strings twinkle slowly
     nightLights: {
       sheet: "/game/pogicity/Building/landmark/cate-it-square-lights_south.png",
-      frames: 2, frameWidth: 616, frameHeight: 400, x: 54, y: 350, fps: 1,
+      frames: 2, frameWidth: 616, frameHeight: 400, x: 54, y: 348, fps: 1,
     },
     icon: "🚚",
     projectSlug: "cate-it",

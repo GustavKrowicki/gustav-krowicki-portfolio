@@ -63,6 +63,46 @@ still[m] = 0
 Image.fromarray(still).save(f'{O}/cate-it-square_south.png')
 print('guests crop x', x0, 'y', y0, 'w', w, 'h', h, 'frames', N, 'moving px', int(m.sum()))
 PY
+# The cooks' reactions: per truck COOK frames (0 idle, 1-5 a wave when the visitor steps up, 6-9 the hand-over with the
+# food on the counter), cut out of the still south sprite like the guests' loop. Prints the crops for `reactions`.
+NC=10
+for TR in burger pizza african; do
+  k=0
+  while [ $k -lt $NC ]; do
+    node art/img2threejs/tools/lab_render.mjs "cateItSquare&cook=$TR&cf=$k" "$T" "c-$TR-$k={\"view\":\"sprite\",\"yaw\":45,\"aim\":[4,3.5],$S}" | tail -1
+    k=$((k + 1))
+  done
+done
+python3 - "$T" "$O" "$NC" <<'PY2'
+import sys
+import numpy as np
+from PIL import Image
+T, O, N = sys.argv[1], sys.argv[2], int(sys.argv[3])
+still = np.asarray(Image.open(f'{O}/cate-it-square_south.png').convert('RGBA')).copy()
+for tr in ('burger', 'pizza', 'african'):
+    fr = [np.asarray(Image.open(f'{T}/c-{tr}-{k}.png').convert('RGBA')).astype(int) for k in range(N)]
+    mask = np.zeros(fr[0].shape[:2], bool)
+    for f in fr[1:]:
+        mask |= (np.abs(f - fr[0]).max(axis=2) > 6)
+    m = mask.copy()
+    for dy in (-2, -1, 0, 1, 2):
+        for dx in (-2, -1, 0, 1, 2):
+            m |= np.roll(np.roll(mask, dy, 0), dx, 1)
+    ys, xs = np.nonzero(m)
+    x0, y0 = int(xs.min()) // 2 * 2, int(ys.min()) // 2 * 2
+    x1, y1 = (int(xs.max()) + 2) // 2 * 2, (int(ys.max()) + 2) // 2 * 2
+    w, h = x1 - x0, y1 - y0
+    sheet = np.zeros((h, w * N, 4), np.uint8)
+    for i, f in enumerate(fr):
+        crop = f[y0:y1, x0:x1].copy()
+        crop[~m[y0:y1, x0:x1]] = 0
+        sheet[:, i * w:(i + 1) * w] = crop
+    Image.fromarray(sheet).save(f'{O}/cate-it-square-cook-{tr}_south.png')
+    still[m] = 0
+    print(f'cook {tr} crop x', x0, 'y', y0, 'w', w, 'h', h, 'frames', N)
+Image.fromarray(still).save(f'{O}/cate-it-square_south.png')
+PY2
+
 # Night lights (docs/city-rules.md section 9): the lit parts only (hatches, neon letters, fairy lights, marker lights, the
 # banner), everything else depth only; two frames, every third bulb dimmer on the second (a slow twinkle). Prints the crop
 # for the `nightLights` entry in lib/city/buildings.ts.

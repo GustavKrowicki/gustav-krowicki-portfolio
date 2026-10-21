@@ -777,7 +777,7 @@ export default function CityViewer({
             trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
             if (!choice.walk) { setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to }); return; }
             const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
-            scene?.walkPlayerToBeat(shownCard.buildingId, choice.to);
+            scene?.serveThenWalk(shownCard.buildingId, shownCard.beat, choice.to);
           }}
         />
       )}

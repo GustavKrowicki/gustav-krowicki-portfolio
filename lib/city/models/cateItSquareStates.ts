@@ -82,7 +82,11 @@ function signFace(truck: Truck, signs: Signs): THREE.Mesh | null {
 
 /** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite.
  *  `signs`: what the roof signs show. */
-export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'food', lightsPass = false, twinkle = 0): THREE.Group {
+/** A cook's reaction frame (export_square.sh renders the strips): `truck`'s cook at frame `frame` of COOK_FRAMES */
+export type CookFrame = { truck: Truck; frame: number } | null;
+
+export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'food', lightsPass = false, twinkle = 0,
+  cookFrame: CookFrame = null): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
   // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
@@ -102,6 +106,7 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
     model.traverse((o) => { if (o.name === 'Ground pad') o.visible = false; });   // the trailer's own 4 x 2 pad
     const face = signFace(truck, signs);
     if (face) model.add(face);
+    model.add(createCook(truck, options, cookFrame?.truck === truck ? cookFrame.frame : 0));
     group.add(model);
   }
   for (const t of TABLES) {
@@ -291,6 +296,52 @@ function addHalos(g: THREE.Group, material: THREE.SpriteMaterial): void {
   }
 }
 
+/** The cooks (Gustav, 2026-10-21: someone in each hatch, who reacts when you step up and hands the food over). Each stands
+ *  in its trailer's shallow kitchen, in the trailer's own frame (x along it, +Z out through the hatch), right behind the counter,
+ *  in whites. Frames: 0 idle, 1..COOK_WAVE-1 a wave (arm up, two wags, down), then COOK_SERVE frames of the hand-over
+ *  (arms forward, the food box on the counter from the third). */
+export const COOK_WAVE = 6;
+export const COOK_SERVE = 4;
+export const COOK_FRAMES = COOK_WAVE + COOK_SERVE;
+const COOK: Record<Truck, { x: number; skin: string; hair: string }> = {
+  burger: { x: 0.15, skin: '#d9a07c', hair: '#2b211b' },
+  pizza: { x: 0.1, skin: '#e6b79a', hair: '#5a3b26' },
+  african: { x: 0.35, skin: '#5e3b28', hair: '#151110' },
+};
+
+function createCook(truck: Truck, options: Options, frame: number): THREE.Group {
+  const g = new THREE.Group();
+  g.name = `cook-${truck}`;
+  const { x, skin, hair } = COOK[truck];
+  const look: Guest = { at: [0, 0], yawDeg: 0, meal: truck, move: 'look', stand: true, skin, hair, jacket: '#f3f0e8', tee: '#f3f0e8', jeans: '#2b2f36' };
+  const person = createGustavAvatar({ laptop: false, castShadow: options?.castShadow ?? true });
+  dress(person, look);
+  person.position.set(x, 0.22, 0.42);   // low and forward: the awning hides the upper kitchen from the city camera
+  const rig = person.userData.avatar as AvatarRig;
+  rig.rest();
+  if (frame > 0 && frame < COOK_WAVE) {
+    const k = frame / (COOK_WAVE - 1);
+    const up = Math.sin(Math.PI * Math.min(1, k * 1.25));             // arm up, then down at the end
+    rig.bones['upper-arm-r']?.rotateX(-2.3 * up);
+    rig.bones['forearm-r']?.rotateZ(0.5 * Math.sin(4 * Math.PI * k) * up);
+    rig.bones.head?.rotateZ(0.08 * up);
+  } else if (frame >= COOK_WAVE) {
+    const p = (frame - COOK_WAVE + 1) / COOK_SERVE;
+    for (const side of ['l', 'r']) {
+      rig.bones[`upper-arm-${side}`]?.rotateX(-1.1 * p);
+      rig.bones[`forearm-${side}`]?.rotateX(-0.5 * p);
+    }
+    if (frame - COOK_WAVE >= 2) {
+      const meal = createSquareMeal(truck, options);
+      meal.position.set(x, 0.76 - 0.02 - TABLE_TOP, 0.56);   // on the counter shelf
+      g.add(meal);
+    }
+  }
+  person.updateMatrixWorld(true);
+  g.add(person);
+  return g;
+}
+
 /** Guests at the tables, baked into the square's sprite: seat (plan tiles), facing (0 = south, 180 = north), their food,
  *  and clothes. They keep clear of the three seats the visitor's avatar uses (SEATS). */
 type Guest = { at: [number, number]; yawDeg: number; meal: Truck; move: 'bite' | 'look' | 'chat'; stand?: boolean; skin: string; hair: string; jacket: string; tee: string; jeans: string };
@@ -310,12 +361,8 @@ const GUEST_COLOURS: Record<string, keyof Guest> = {
   skin: 'skin', hair: 'hair', 'hair-light': 'hair', jacket: 'jacket', 'jacket-shade': 'jacket', tee: 'tee', jeans: 'jeans',
 };
 
-/** One seated guest: the city avatar's model in other clothes, no glasses or laptop, with a meal in front. `u` is the
- *  guest's own phase in the loop: a bite (right hand up to the mouth), a look around, or a lean in to chat. */
-function createGuest(guest: Guest, options: Options, u = 0): THREE.Group {
-  const g = new THREE.Group();
-  g.name = 'guest';
-  const person = createGustavAvatar({ laptop: false, castShadow: options?.castShadow ?? true });
+/** The city avatar's model in other clothes, skin and hair; no glasses */
+function dress(person: THREE.Group, guest: Guest): void {
   const shade = (hex: string, f: number) => new THREE.Color(hex).multiplyScalar(f);
   person.traverse((o) => {
     const mesh = o as THREE.Mesh;
@@ -329,6 +376,15 @@ function createGuest(guest: Guest, options: Options, u = 0): THREE.Group {
     if (m.emissive) m.emissive.copy(m.color);
     mesh.material = m;
   });
+}
+
+/** One seated guest: the city avatar's model in other clothes, no glasses or laptop, with a meal in front. `u` is the
+ *  guest's own phase in the loop: a bite (right hand up to the mouth), a look around, or a lean in to chat. */
+function createGuest(guest: Guest, options: Options, u = 0): THREE.Group {
+  const g = new THREE.Group();
+  g.name = 'guest';
+  const person = createGustavAvatar({ laptop: false, castShadow: options?.castShadow ?? true });
+  dress(person, guest);
   const [x, z] = plan(guest.at);
   person.position.set(x, 0.02, z);
   person.rotation.y = THREE.MathUtils.degToRad(guest.yawDeg);
