@@ -82,7 +82,7 @@ function signFace(truck: Truck, signs: Signs): THREE.Mesh | null {
 
 /** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite.
  *  `signs`: what the roof signs show. */
-export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'logo'): THREE.Group {
+export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'food'): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
   // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
@@ -109,7 +109,43 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
     group.add(beerTableSet(x, z, options));
   }
   GUESTS.forEach((guest, k) => group.add(createGuest(guest, options, t + k / GUESTS.length)));
+  group.add(createBanner(options));
   return group;
+}
+
+/** The Cate it banner on two poles over the way in (Gustav, 2026-10-21: food names on the trucks, Cate it on a banner
+ *  across the square): plan centre, width, and the banner's bottom and top (wu above the ground); it faces south. */
+// Low and narrow on purpose: from the city camera a banner at height h shows over the ground about 1.2 h tiles further
+// back, so this one lands over the empty walkway between the tables and never hides a seat or the hatches.
+export const BANNER = { at: [5.5, 6.9] as [number, number], width: 1.6, bottom: 1.3, top: 1.7 };
+
+function createBanner(options: Options): THREE.Group {
+  const g = new THREE.Group();
+  g.name = 'banner';
+  const [x, z] = plan(BANNER.at);
+  const h = BANNER.top - BANNER.bottom;
+  for (const dx of [-BANNER.width / 2 - 0.04, BANNER.width / 2 + 0.04]) {
+    const pole = new THREE.Mesh(
+      new THREE.CylinderGeometry(0.03, 0.035, BANNER.top + 0.1, 8),
+      new THREE.MeshStandardMaterial({ color: '#4b4f54', roughness: 0.6, emissive: '#4b4f54', emissiveIntensity: 0.25 }),
+    );
+    pole.position.set(x + dx, (BANNER.top + 0.1) / 2, z);
+    pole.castShadow = options?.castShadow ?? true;
+    g.add(pole);
+  }
+  g.add(box(BANNER.width, h, 0.025, '#22272a', x, BANNER.bottom + h / 2, z, options ?? {}));
+  const g2 = globalThis as { __labPending?: number };
+  g2.__labPending = (g2.__labPending ?? 0) + 1;
+  const material = new THREE.MeshBasicMaterial({ transparent: true });
+  material.map = new THREE.TextureLoader().load('/game/pogicity/Building/logos/cate-it-sign.png', () => {
+    g2.__labPending = (g2.__labPending ?? 1) - 1;
+    material.needsUpdate = true;
+  });
+  material.map.colorSpace = THREE.SRGBColorSpace;
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(BANNER.width - 0.04, h - 0.03), material);
+  face.position.set(x, BANNER.bottom + h / 2, z + 0.014);
+  g.add(face);
+  return g;
 }
 
 /** Guests at the tables, baked into the square's sprite: seat (plan tiles), facing (0 = south, 180 = north), their food,

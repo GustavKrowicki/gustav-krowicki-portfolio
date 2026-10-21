@@ -425,7 +425,7 @@ const MODELS: Record<string, ModelConfig> = {
     // ?t= guests' loop phase, ?signs=logo|food|blank
     create: (options) => {
       const q = new URLSearchParams(window.location.search);
-      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'logo') as Signs);
+      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs);
     },
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
