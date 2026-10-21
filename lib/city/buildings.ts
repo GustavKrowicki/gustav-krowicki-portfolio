@@ -51,6 +51,9 @@ export interface BuildingDefinition {
   // it while the roof is off; each plays at `fps` while the player is within `radius` of `at` (local tiles): forward once
   // and holds, or round and round with `loop`; it goes back to frame 0 when the player leaves
   moments?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; loop?: boolean }[];
+  // Paving on the street tile in front of a walk-in building's main door (lib/city/buildingInteriors.ts entrance.outside),
+  // always shown, so the way in reads at Street zoom without hovering: brick herringbone in `brick`; default orientation only
+  entrancePaving?: { brick: number };
   // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
   spriteScale?: number;
   // Draw the sprite as vertical slices, one per tile diagonal, each sorted by its own front tile (docs/city-rules.md
@@ -219,6 +222,8 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/valtech-office.svg",
     logoOffset: { x: 20, y: 80 },
+    // brick herringbone on the approach tile in the gate awning's colour (build_spec.py GATE_AWNINGS "a")
+    entrancePaving: { brick: 0x9a4a36 },
   },
   "melbourne-uni": {
     id: "melbourne-uni",

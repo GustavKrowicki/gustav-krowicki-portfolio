@@ -59,6 +59,9 @@ interface CityViewerProps {
   // "page" is the standalone /city route, with its own mode toggle and a Walk button for the avatar.
   // "shell" sits beside the portfolio panel, which owns the navigation, so the city hides those.
   variant?: "page" | "shell";
+  // Shell only: the Avatar tab is showing. The avatar is put in the city and the camera holds it in view, so each
+  // outfit change is seen on it; the walk controls wait until the panel closes.
+  avatarTabOpen?: boolean;
 }
 
 
@@ -92,6 +95,7 @@ export default function CityViewer({
   onProjectClick,
   e2eMode = false,
   variant = "page",
+  avatarTabOpen = false,
 }: CityViewerProps) {
   const isShell = variant === "shell";
 
@@ -330,11 +334,12 @@ export default function CityViewer({
   }, []);
 
   // Start Adventure Mode
-  const handleStartAdventure = useCallback(() => {
+  // (fromAvatarTab: walk mode only to show the avatar while the visitor dresses it, not a mode choice to track)
+  const handleStartAdventure = useCallback((options?: { fromAvatarTab?: boolean }) => {
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
-    trackModeSelected('adventure', 'gustav');
+    if (!options?.fromAvatarTab) trackModeSelected('adventure', 'gustav');
     selectedModeRef.current = 'adventure';
 
     // Start adventure mode in Phaser
@@ -591,6 +596,51 @@ export default function CityViewer({
   );
 
 
+  // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it
+  // and it closed: back to street zoom on the avatar, ready to walk
+  const avatarTabWasOpen = useRef(false);
+  useEffect(() => {
+    const focus = (close = false) => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { focusOnPlayer?: (close?: boolean) => boolean }
+        | undefined;
+      return scene?.focusOnPlayer?.(close) ?? false;
+    };
+    if (!avatarTabOpen) {
+      if (avatarTabWasOpen.current) {
+        avatarTabWasOpen.current = false;
+        const t = window.setTimeout(() => focus(true), 250);   // after the canvas grows back
+        return () => window.clearTimeout(t);
+      }
+      return;
+    }
+    avatarTabWasOpen.current = true;
+    // Wait for the scene (a deep link to the tab can arrive before Phaser has booted), start walk mode so the
+    // avatar exists, then focus once the player has spawned and the canvas has resized to the open panel.
+    let timer = 0;
+    let started = isAdventureActive;
+    const step = (left: number) => {
+      if (left <= 0) return;
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { ready?: boolean; skipNextSpawnFocus?: boolean }
+        | undefined;
+      if (!started) {
+        if (!scene?.ready) {
+          timer = window.setTimeout(() => step(left - 1), 150);
+          return;
+        }
+        scene.skipNextSpawnFocus = true;
+        handleStartAdventure({ fromAvatarTab: true });
+        started = true;
+      }
+      if (focus()) return;
+      timer = window.setTimeout(() => step(left - 1), 150);
+    };
+    timer = window.setTimeout(() => step(60), 300);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the tab opens or closes
+  }, [avatarTabOpen]);
+
   useEffect(() => {
     if (!e2eMode || typeof window === "undefined") return;
 
@@ -774,8 +824,8 @@ export default function CityViewer({
         />
       )}
 
-      {/* Adventure Mode UI */}
-      {isAdventureActive && (
+      {/* Adventure Mode UI (held back while the Avatar tab is showing: the visitor is dressing, not walking) */}
+      {isAdventureActive && !avatarTabOpen && (
         <>
           {/* Directional Compass */}
           <DirectionalCompass isMobile={isMobile} walkableDirections={walkableDirections} />
@@ -825,10 +875,10 @@ export default function CityViewer({
 
       {/* Walk the avatar. In the shell it sits inside the city view (the panel and its phone sheet own the window's
           edges): bottom-left on a desktop, bottom-right on a phone where the joystick takes the bottom-left */}
-      {!dialogShown && (
+      {!dialogShown && !avatarTabOpen && (
         <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
           <button
-            onClick={isAdventureActive ? handleStopAdventure : handleStartAdventure}
+            onClick={isAdventureActive ? handleStopAdventure : () => handleStartAdventure()}
             className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
             style={PIXEL_INSET_CLIP}
           >

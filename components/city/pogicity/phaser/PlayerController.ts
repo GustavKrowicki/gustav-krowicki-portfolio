@@ -14,7 +14,8 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { AVATAR3D_DISPLAY_SCALE, avatar3dEnabled, avatar3dOrigin } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dEnabled, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
+import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -53,13 +54,25 @@ export interface InteriorRules {
   /** null when (x, y) is not inside a walk-in building */
   isWalkable(x: number, y: number): boolean | null;
   canStep(fromX: number, fromY: number, toX: number, toY: number): boolean;
+  /** A blocked step from outside into a walk-in building's wall: the tile just inside its main door, or null */
+  entranceGuide?(fromX: number, fromY: number, toX: number, toY: number): { x: number; y: number } | null;
 }
+
+// Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
+const ENTRANCE_GUIDE_MAX_STEPS = 12;
 
 export class PlayerController {
   private scene: Phaser.Scene;
   private grid: GridCell[][];
   private sprite: Phaser.GameObjects.Sprite | null = null;
   private pointer: Phaser.GameObjects.Graphics | null = null;
+  // The visitor's name from the avatar builder, over the avatar's head ('' = no tag)
+  private nameTag: Phaser.GameObjects.Text | null = null;
+  private nameTagText = "";
+  private unfollowName: (() => void) | null = null;
+  // Outfit-change cue: a short hop and a ring at the feet, so the eye goes from the builder tile to the city
+  private lastLook: string | null = null;
+  private hopUntil = 0;
   private pointerBounceOffset: number = 0;
   private pointerBounceDirection: number = 1;
 
@@ -87,6 +100,8 @@ export class PlayerController {
   private autoWalkPath: { x: number; y: number }[] = [];
   private autoWalkIndex: number = 0;
   private isAutoWalking: boolean = false;
+  // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
+  private guideDirection: Direction | null = null;
 
   // External direction input (for mobile joystick)
   private externalDirection: Direction | null = null;
@@ -223,8 +238,8 @@ export class PlayerController {
   handleKeyDown(key: string): void {
     this.pressedKeys.add(key);
 
-    // Cancel auto-walk on any movement key
-    if (keyDirectionMap[key]) {
+    // Cancel auto-walk on any movement key, except the held one (and its key repeats) that started a walk to the door
+    if (keyDirectionMap[key] && keyDirectionMap[key] !== this.guideDirection) {
       this.cancelAutoWalk();
     }
   }
@@ -299,8 +314,24 @@ export class PlayerController {
         this.isMoving = true;
         this.state = PlayerState.Walking;
         this.emitPositionChange();
+      } else {
+        this.guideToEntrance(newGridX, newGridY);
       }
     }
+  }
+
+  // Walking into a walk-in building's wall from outside: walk along to its main door and in, when the door is close
+  private guideToEntrance(toX: number, toY: number): void {
+    const goal = this.interiorRules?.entranceGuide?.(this.gridX, this.gridY, toX, toY);
+    if (!goal) return;
+    const path = this.findPath(this.gridX, this.gridY, goal.x, goal.y);
+    if (path.length < 2 || path.length - 1 > ENTRANCE_GUIDE_MAX_STEPS) return;
+    this.autoWalkPath = path.slice(1);
+    this.autoWalkIndex = 0;
+    this.isAutoWalking = true;
+    this.guideDirection = this.inputDirection;
+    this.state = PlayerState.AutoWalking;
+    this.emitPositionChange();
   }
 
   private updateAutoWalk(): void {
@@ -310,7 +341,8 @@ export class PlayerController {
     }
 
     // Check for manual input interruption
-    if (this.getCurrentInputDirection() && !this.externalDirection) {
+    const input = this.getCurrentInputDirection();
+    if (input && !this.externalDirection && input !== this.guideDirection) {
       this.cancelAutoWalk();
       return;
     }
@@ -402,6 +434,7 @@ export class PlayerController {
 
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
+    this.guideDirection = null;
     this.autoWalkPath = [];
     this.autoWalkIndex = 0;
     this.state = this.isMoving ? PlayerState.Walking : PlayerState.Idle;
@@ -536,12 +569,14 @@ export class PlayerController {
     return a + (b - a) * t;
   }
 
+  private sheetSet: string | null = null;
+
   private getTextureKey(): string {
     const key = getCharacterTextureKey(this.characterType, this.direction);
     if (this.characterType !== CharacterType.Gustav || !avatar3dEnabled()) return key;
-    // ?avatar=3d: the 3D-rendered sheets, same compass naming as the GIFs, walk or idle by state
+    // 3D-rendered sheets (?avatar=3d or a builder look), same compass naming as the GIFs, walk or idle by state
     const clip = this.state === PlayerState.Idle && !this.seatWalk ? "idle" : "walk";
-    return `avatar3d_${clip}_${key.slice(key.indexOf("_") + 1)}`;
+    return `${avatar3dPrefix()}_${clip}_${key.slice(key.indexOf("_") + 1)}`;
   }
 
   private emitPositionChange(): void {
@@ -566,16 +601,25 @@ export class PlayerController {
       // Create sprite
       if (this.scene.textures.exists(textureKey)) {
         this.sprite = this.scene.add.sprite(this.worldX, this.worldY, textureKey, 0);
-        this.sprite.setOrigin(0.5, 1);
-        if (textureKey.startsWith("avatar3d_")) {
-          this.sprite.setOrigin(...avatar3dOrigin());
-          this.sprite.setScale(AVATAR3D_DISPLAY_SCALE);
-        }
       }
     }
 
     if (this.sprite) {
-      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, this.seatPose?.y ?? this.worldY);
+      // Origin and scale follow the sheet set, which can change while the city runs (the avatar builder)
+      const sheetSet = avatar3dEnabled() && this.characterType === CharacterType.Gustav ? avatar3dPrefix() : "gif";
+      if (sheetSet !== this.sheetSet && this.scene.textures.exists(textureKey)) {
+        this.sheetSet = sheetSet;
+        if (sheetSet === "gif") {
+          this.sprite.setOrigin(0.5, 1);
+          this.sprite.setScale(1);
+        } else {
+          this.sprite.setOrigin(...avatar3dOrigin());
+          this.sprite.setScale(avatar3dDisplayScale());
+        }
+      }
+      // a 3 px hop right after an outfit change (playChangeCue)
+      const hop = this.scene.time.now < this.hopUntil ? 3 : 0;
+      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, (this.seatPose?.y ?? this.worldY) - hop);
       this.sprite.setVisible(!this.seatPose?.hidden);
 
       // Calculate depth from grid position (consistent with NPCs and characters)
@@ -600,12 +644,75 @@ export class PlayerController {
       if (this.pointerBounceOffset > 4) this.pointerBounceDirection = -1;
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
+      this.updateNameTag();
+
       // Position pointer above player (with bounce)
-      const pointerY = (this.seatPose?.y ?? this.worldY) - 80 - this.pointerBounceOffset;
+      // (the builder's sheets: just above the head, or above the name tag; the GIF keeps its tuned offset)
+      const above = this.sheetSet === "gif" || !this.sprite
+        ? 80
+        : this.sprite.displayHeight * this.sprite.originY + 16 + (this.nameTag?.visible ? 12 : 0);
+      const pointerY = (this.seatPose?.y ?? this.worldY) - above - this.pointerBounceOffset;
       this.pointer.setPosition(this.seatPose?.x ?? this.worldX, pointerY);
       this.pointer.setVisible(!this.seatPose);
       this.pointer.setDepth(20_000_000); // Always on top
     }
+  }
+
+  // Follows the builder's name field live (it saves before firing AVATAR_CHANGE_EVENT).
+  private updateNameTag(): void {
+    if (!this.sprite) return;
+    if (!this.unfollowName && typeof window !== "undefined") {
+      this.nameTagText = readAvatarName();
+      const onChange = (event: Event) => {
+        this.nameTagText = readAvatarName();
+        const choice = (event as CustomEvent<AvatarChoice | null>).detail;
+        const look = choice ? avatarLookKey(choice) : null;
+        if (look && this.lastLook !== null && look !== this.lastLook) this.playChangeCue();
+        if (look) this.lastLook = look;
+      };
+      window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
+      this.unfollowName = () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
+    }
+    if (!this.nameTagText) {
+      this.nameTag?.setVisible(false);
+      return;
+    }
+    if (!this.nameTag) {
+      this.nameTag = this.scene.add.text(0, 0, "", {
+        fontFamily: "'Press Start 2P', monospace",
+        fontSize: "8px",
+        color: "#ffffff",
+        backgroundColor: "#1d1b18",
+        padding: { x: 3, y: 2 },
+        resolution: 4,
+      });
+      this.nameTag.setOrigin(0.5, 1);
+    }
+    if (this.nameTag.text !== this.nameTagText) this.nameTag.setText(this.nameTagText);
+    const x = this.seatPose?.x ?? this.worldX;
+    const y = this.seatPose?.y ?? this.worldY;
+    // Just above the head, snapped to whole pixels so the pixel font stays crisp
+    const head = this.sprite.displayHeight * this.sprite.originY;
+    this.nameTag.setPosition(Math.round(x), Math.round(y - head - 1));
+    this.nameTag.setVisible(this.sprite.visible);
+    this.nameTag.setDepth(19_999_999); // over the city, under the pointer
+  }
+
+  private playChangeCue(): void {
+    if (!this.sprite || this.seatPose) return;
+    this.hopUntil = this.scene.time.now + 220;
+    const x = this.worldX, y = this.worldY;
+    const ring = this.scene.add.graphics();
+    ring.setPosition(x, y);
+    ring.setDepth(this.sprite.depth - 0.01);
+    const state = { r: 6, a: 0.9 };
+    const draw = () => {
+      ring.clear();
+      ring.lineStyle(2, 0xfff3b0, state.a);
+      ring.strokeEllipse(0, 0, state.r * 2, state.r);
+    };
+    draw();
+    this.scene.tweens.add({ targets: state, r: 22, a: 0, duration: 700, ease: "Cubic.easeOut", onUpdate: draw, onComplete: () => ring.destroy() });
   }
 
   private drawPointer(): void {
@@ -671,6 +778,10 @@ export class PlayerController {
       this.pointer.destroy();
       this.pointer = null;
     }
+    this.unfollowName?.();
+    this.unfollowName = null;
+    this.nameTag?.destroy();
+    this.nameTag = null;
     this.isReady = false;
   }
 }

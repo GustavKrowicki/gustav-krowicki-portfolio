@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Local art pipeline scripts (CommonJS for Node), not app code
+    "art/avatar-builder/**",
   ]),
 ]);
 

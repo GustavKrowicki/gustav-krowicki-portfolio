@@ -43,6 +43,13 @@ NL = 3                        # louvre storeys
 ROOF = GS + NL * ST           # top of the louvre block = 5.0 (the top slab sits on it)
 TOP0, TOPH = ROOF + TS, 1.1   # recessed glass top floor
 HX, HZ = 3.0, 1.0             # half footprint: 6 x 2 (Gustav, 2026-10-16: room for the street-level interior; was 4 x 2)
+# gate awning colour (base, secondary, valance, note): warm brick red like the gate's brick lining, apart from the cafe
+# green (gate art brief, 2026-10-21; Gustav picked it over a warm amber canopy)
+GATE_AWNING = ("#9a4a36", "#8f4431", "#7a3a2b", "warm brick red gate awning, matching the brick lining")
+# path cues in front of the gate (Gustav, 2026-10-21: "I still do not know where to enter"): a runner in the awning
+# colour from the door to the south edge, two lit bollards at the passage mouth, a blade sign over the gate. The street
+# tile in front carries the runner on as brick herringbone (lib/city/buildings.ts entrancePaving).
+GATE_CUES = {"runner", "lights", "sign"}
 
 
 def r4(v):
@@ -171,8 +178,25 @@ bx("gate-art", "Art panel (red)", "micro", "entrance", GX0, DW, 0.1, 1.0, -0.35,
    features=lf("gate-art.stripes", "stain", "red and blue art panel beside the door"))
 bx("gate-art-blue", "Art panel (blue)", "micro", "entrance", GX0, DW + 0.01, 0.35, 0.7, -0.3, -0.15, "art-blue", importance=0.3)
 bx("gate-sign", "House number plate", "micro", "entrance", GX0, DW + 0.01, 0.55, 0.8, 0.62, 0.74, "frame-dark", importance=0.2)
-bx("gate-threshold", "Threshold path", "micro", "entrance", GX0, GX1, 0.01, 0.015, 0.85, HZ, "paving-light", contact="flush-mount", importance=0.4,
-   topo="Light threshold at the passage mouth: a thin box (path ending at the entrance).")
+bx("gate-threshold", "Threshold path", "micro", "entrance", GB, GX1, 0.01, 0.02, DZ0, HZ, "paving-light", contact="flush-mount", importance=0.5,
+   topo="Light path through the passage, full passage width, from the door to the footprint's south edge: a thin box.")
+if "runner" in GATE_CUES:
+    bx("gate-runner", "Entrance runner", "micro", "entrance", GX0 + 0.14, GX1 - 0.14, 0.02, 0.03, DZ0 + 0.05, HZ, "awning-gate",
+       contact="flush-mount", importance=0.6, features=lf("gate-runner.path", "contour", "runner from the door out to the pavement"),
+       topo="Runner on the threshold path: a thin box.")
+if "lights" in GATE_CUES:
+    for side, lx in (("w", GX0 + 0.06), ("e", GX1 - 0.08)):
+        cyl(f"gate-bollard-{side}", f"Bollard light ({side})", "micro", "entrance", lx, HZ - 0.07, 0.0, 0.28, 0.04, "frame-dark", importance=0.4)
+        cyl(f"gate-bollard-{side}-lamp", f"Bollard lamp ({side})", "micro", "entrance", lx, HZ - 0.07, 0.22, 0.05, 0.042, "bollard-lamp",
+            importance=0.4)
+if "sign" in GATE_CUES:
+    # blade sign on the first louvre storey, square to the facade, west edge of the gate bay
+    bx("gate-sign-blade", "Blade sign", "meso", "entrance", GB - 0.03, GB + 0.03, 1.75, 2.35, HZ, HZ + 0.42, "awning-gate", importance=0.6,
+       features=lf("gate-sign-blade.panel", "contour", "blade sign over the gate, seen edge-on from the street"))
+    bx("gate-sign-blade-face", "Blade sign face", "micro", "entrance", GB + 0.03, GB + 0.035, 1.85, 2.25, HZ + 0.06, HZ + 0.36, "menu-card",
+       importance=0.4)
+    bx("gate-sign-arm", "Blade sign arm", "micro", "entrance", GB - 0.015, GB + 0.015, 2.33, 2.37, HZ - 0.05, HZ + 0.42, "frame-dark",
+       importance=0.2)
 
 # cafe bays: one per wu from the west corner to the gate bay; columns on the bay lines, shop glazing behind them
 NCAFE = int(round(GB + HX))
@@ -199,14 +223,38 @@ for i, (x0, x1) in enumerate([(b0 + (COL if i == 0 else COL / 2) + 0.02, b1 - (C
            features=lf(f"awning-S-{i}.slope", "contour", "dark green awning sloping out to the column line") if i == 1 else None,
            topo="Sloped canvas plate: a thin box tilted about X.")
     bx(f"awning-S-{i}-valance", f"Awning S{i} valance", "micro", "awning", x0, x1, 0.88, 0.98, HZ - 0.05, HZ - 0.02, "awning", importance=0.4)
-tilted("awning-gate", "Gate awning", "meso", "entrance", GX0 - 0.03, GX1 + 0.03, HZ - 0.05, 1.32, HZ + 0.45, 1.14, 0.03, "awning", importance=0.85,
+tilted("awning-gate", "Gate awning", "meso", "entrance", GX0 - 0.03, GX1 + 0.03, HZ - 0.05, 1.32, HZ + 0.45, 1.14, 0.03, "awning-gate", importance=0.85,
        features=lf("awning-gate.canopy", "contour", "awning over the gate, projecting 0.5 wu over the approach tile"),
        topo="Sloped canvas plate over the gate: a thin box tilted about X.")
-bx("awning-gate-valance", "Gate awning valance", "micro", "entrance", GX0 - 0.03, GX1 + 0.03, 1.04, 1.14, HZ + 0.43, HZ + 0.46, "awning-trim",
-   importance=0.5, topo="White-edged valance: the accent on the entrance.")
+bx("awning-gate-valance", "Gate awning valance", "micro", "entrance", GX0 - 0.03, GX1 + 0.03, 1.04, 1.14, HZ + 0.43, HZ + 0.46, "awning-gate-trim",
+   importance=0.5, topo="Valance in the gate awning's colour, a shade darker: the canopy reads as one block.")
 
-# planters with shrubs in front of the shop glazing (inside the footprint)
+# planters with shrubs in front of the shop glazing (inside the footprint); two bays get cafe furniture instead, so the
+# bays read as cafes, not doors (gate art brief, 2026-10-21): a table with two chairs and an A-frame menu board
+CAFE_TABLE_BAY, MENU_BAY = 2, 4
+FZ = 0.77          # middle of the front strip (z 0.68 .. 0.86)
 for i, x in enumerate([(b0 + b1) / 2 for b0, b1 in BAYS], 1):
+    if i == CAFE_TABLE_BAY:
+        cyl("cafe-table-top", "Cafe table top", "micro", "cafe", x, FZ, 0.34, 0.03, 0.12, "table-top", importance=0.45,
+            features=lf("cafe-table.set", "contour", "small round cafe table with two chairs in front of the bay"))
+        cyl("cafe-table-leg", "Cafe table leg", "micro", "cafe", x, FZ, 0.0, 0.34, 0.02, "frame-dark", importance=0.2)
+        for side, sx in (("w", -1), ("e", 1)):
+            cx = x + sx * 0.23
+            bx(f"cafe-chair-{side}-seat", f"Cafe chair ({side}) seat", "micro", "cafe", cx - 0.06, cx + 0.06, 0.2, 0.23, FZ - 0.06, FZ + 0.06,
+               "frame-dark", importance=0.3)
+            bx(f"cafe-chair-{side}-leg", f"Cafe chair ({side}) legs", "micro", "cafe", cx - 0.04, cx + 0.04, 0.0, 0.2, FZ - 0.04, FZ + 0.04,
+               "frame-dark", importance=0.2)
+            bx(f"cafe-chair-{side}-back", f"Cafe chair ({side}) back", "micro", "cafe", cx + sx * 0.05, cx + sx * 0.07, 0.23, 0.42, FZ - 0.06,
+               FZ + 0.06, "frame-dark", importance=0.25)
+        continue
+    if i == MENU_BAY:
+        tilted("menu-board-front", "Menu board (front)", "micro", "cafe", x - 0.1, x + 0.1, FZ, 0.44, FZ + 0.08, 0.0, 0.02, "menu-board",
+               importance=0.45, features=lf("menu-board.aframe", "contour", "A-frame menu board on the pavement in front of the bay"))
+        tilted("menu-board-back", "Menu board (back)", "micro", "cafe", x - 0.1, x + 0.1, FZ, 0.44, FZ - 0.08, 0.0, 0.02, "menu-board",
+               importance=0.25)
+        tilted("menu-board-card", "Menu card", "micro", "cafe", x - 0.07, x + 0.07, FZ + 0.02, 0.38, FZ + 0.07, 0.1, 0.005, "menu-card",
+               importance=0.3)
+        continue
     bx(f"planter-{i}", f"Planter {i}", "micro", "planter", x - 0.25, x + 0.25, 0, 0.2, 0.68, 0.86, "planter", importance=0.5,
        features=lf(f"planter-{i}.shrub", "contour", "black box planter with green shrubs") if i == 1 else None)
     for j, dx in enumerate((-0.15, 0.0, 0.15), 1):
@@ -836,7 +884,8 @@ def flat(why):
 
 spec["materials"] = [
     material("paving", "Pavement", "stone", "#b9b2a8", ["#b0a99f"], 0.9, 0.0, "pad under the block (ref A ground)", **flat("ref A pad")),
-    material("paving-light", "Threshold paving", "stone", "#ddd8cf", ["#d3cec5"], 0.9, 0.0, "path at the gate mouth", **flat("entrance cue")),
+    material("paving-light", "Threshold paving", "stone", "#efebe3", ["#e6e2da"], 0.9, 0.0, "light path through the gate", emissiveIntensity={"base": 0.4},
+             **flat("entrance cue")),
     material("white", "White concrete", "stone", "#ebe9e3", ["#e1dfd9"], 0.85, 0.0, "slabs, columns, walls (photo #d8d7d3, lifted)",
              localOverrides=[{"id": "white.boardmarks", "kind": "stain", "notes": "board-marked concrete: below sprite size, flat white"}],
              emissiveIntensity={"base": 0.45}, **ev("slab")),
@@ -862,8 +911,19 @@ spec["materials"] = [
              **ev("gate")),
     material("brick", "Brick lining", "stone", "#7c4636", ["#713f31"], 0.9, 0.0, "brick reveals in the passage (photo zone r2c2)",
              **flat("photo-6 zone r2c2: brick passage walls")),
-    material("door-lit", "Lit door glass", "glass", "#f2dca6", ["#e8d29c"], 0.2, 0.0, "entrance door, lit from inside",
-             **flat("entrance cue: a glazed, lit door")),
+    material("door-lit", "Lit door glass", "glass", "#ffd27a", ["#f8c86c"], 0.2, 0.0, "entrance door, lit from inside: warm and bright so it "
+             "reads in daylight (gate art brief, 2026-10-21)", emissiveIntensity={"base": 0.7}, **flat("entrance cue: a glazed, lit door")),
+    material("awning-gate", "Gate awning canvas", "fabric", GATE_AWNING[0], [GATE_AWNING[1]], 0.8, 0.0, GATE_AWNING[3],
+             **flat("entrance cue: the gate awning apart from the cafe green (gate art brief, 2026-10-21)")),
+    material("awning-gate-trim", "Gate awning valance", "fabric", GATE_AWNING[2], [GATE_AWNING[2]], 0.8, 0.0, "valance, a shade darker",
+             **flat("entrance cue")),
+    material("bollard-lamp", "Bollard lamp", "glass", "#ffd27a", ["#f8c86c"], 0.2, 0.0, "warm lamp head on the bollards",
+             emissiveIntensity={"base": 0.9}, **flat("entrance cue")),
+    material("table-top", "Cafe table top", "stone", "#ebe9e3", ["#e1dfd9"], 0.6, 0.0, "white cafe table top", emissiveIntensity={"base": 0.45},
+             **flat("cafe cue")),
+    material("menu-board", "Menu board", "wood", "#2a2f2c", ["#252a27"], 0.9, 0.0, "A-frame board", **flat("cafe cue")),
+    material("menu-card", "Menu card", "stone", "#f2f0ea", ["#e9e7e1"], 0.8, 0.0, "light menu card on the board", emissiveIntensity={"base": 0.45},
+             **flat("cafe cue")),
     material("frame-dark", "Dark frame", "metal", "#2e3236", ["#282b2f"], 0.6, 0.2, "door frame, number plate", **flat("photo door frame")),
     material("art-red", "Art panel red", "plastic", "#c63a2f", ["#bc3429"], 0.6, 0.0, "art panel by the door", **flat("photo-6 zone r2c2")),
     material("art-blue", "Art panel blue", "plastic", "#33539e", ["#2d4c94"], 0.6, 0.0, "art panel by the door", **flat("photo-6 zone r2c2")),
@@ -997,7 +1057,7 @@ spec["lightingFromPhoto"] = [
     {"id": "contact", "role": "shadow", "notes": "soft contact shadows under the slabs and awnings"},
 ]
 spec["entrance"] = {"side": "south", "at": int(round(GB + HX)), "width": 1.0, "approachTile": [int(round(GB + HX)), int(2 * HZ)],
-                    "cues": ["green awning projecting 0.5 wu with a white valance", "lit glass door on the passage wall, facing the camera",
+                    "cues": [GATE_AWNING[3] + ", projecting 0.5 wu", "lit glass door on the passage wall, facing the camera",
                              "brick-lined passage", "light threshold path"]}
 spec["states"] = {"roofOn": "hide open-* and lowcap-*",
                   "roofOff": "hide the upper storeys (slab-, louvre-, parapet-, roof-deck, top-) and the cafe front (shop-core, col-S-, shop-glass-, "
