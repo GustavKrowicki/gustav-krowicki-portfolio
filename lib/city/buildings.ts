@@ -503,6 +503,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       sheet: "/game/pogicity/Building/landmark/cate-it-square-guests_south.png",
       frames: 12, frameWidth: 284, frameHeight: 146, x: 210, y: 562, fps: 4,
     },
+    // Lit at night: the hatches, the neon food names, the fairy lights across the trucks, the marker lights and the banner
+    // (export_square.sh lights pass); two frames, every third bulb dimmer on the second, so the strings twinkle slowly
+    nightLights: {
+      sheet: "/game/pogicity/Building/landmark/cate-it-square-lights_south.png",
+      frames: 2, frameWidth: 616, frameHeight: 244, x: 54, y: 350, fps: 1,
+    },
     icon: "🚚",
     projectSlug: "cate-it",
     description: "Cate it: food trucks for events - Co-founder & Designer",

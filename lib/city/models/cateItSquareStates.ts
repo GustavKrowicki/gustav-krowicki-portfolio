@@ -82,7 +82,7 @@ function signFace(truck: Truck, signs: Signs): THREE.Mesh | null {
 
 /** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite.
  *  `signs`: what the roof signs show. */
-export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'food'): THREE.Group {
+export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'food', lightsPass = false, twinkle = 0): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
   // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
@@ -110,6 +110,8 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
   }
   GUESTS.forEach((guest, k) => group.add(createGuest(guest, options, t + k / GUESTS.length)));
   group.add(createBanner(options));
+  group.add(createFairyLights(options, twinkle));
+  if (lightsPass) toLightsPass(group);
   return group;
 }
 
@@ -149,8 +151,71 @@ function createBanner(options: Options): THREE.Group {
   const w = Math.min(length - 0.12, (h - 0.06) * 512 / 77);   // the logo strip keeps its own proportions
   const face = new THREE.Mesh(new THREE.PlaneGeometry(w, w * 77 / 512), material);
   face.position.set(0, BANNER.bottom + h / 2, 0.014);
+  face.name = 'banner-face';
   g.add(face);
   return g;
+}
+
+/** Fairy lights: strings of warm bulbs from the truck signs across the square to the banner poles (Gustav, 2026-10-21).
+ *  Ends in plan tiles and height (wu). Routed so that from the city camera no string crosses a seated visitor. */
+const SIGN_TOP = 2.22;
+export const LIGHT_STRINGS: { from: [number, number, number]; to: [number, number, number] }[] = [
+  { from: [0.84, 3.8, SIGN_TOP], to: [4.8, 0.84, SIGN_TOP] },      // pizza sign -> burger sign, over the back walkway
+  { from: [3.2, 0.84, SIGN_TOP], to: [7.95, 5.25, 3.55] },          // street food sign -> banner pole, across the middle
+  { from: [7.2, 0.84, SIGN_TOP], to: [7.95, 5.25, 3.55] },          // burger sign -> banner pole, down the east side
+  { from: [0.84, 6.2, SIGN_TOP], to: [6.25, 6.95, 3.55] },          // pizza sign -> banner pole, along the front
+];
+const BULB = '#ffd877';
+
+function createFairyLights(options: Options, twinkle: number): THREE.Group {
+  const g = new THREE.Group();
+  g.name = 'fairy-lights';
+  const wire = new THREE.MeshStandardMaterial({ color: '#3a3532', roughness: 0.8 });
+  const on = new THREE.MeshBasicMaterial({ color: BULB });
+  const dim = new THREE.MeshBasicMaterial({ color: '#c9a45a' });
+  const bulbGeo = new THREE.SphereGeometry(0.035, 8, 6);
+  let n = 0;
+  for (const { from, to } of LIGHT_STRINGS) {
+    const [ax, az] = plan([from[0], from[1]]), [bx, bz] = plan([to[0], to[1]]);
+    const a = new THREE.Vector3(ax, from[2], az), b = new THREE.Vector3(bx, to[2], bz);
+    const sag = 0.08 * a.distanceTo(b);
+    const point = (u: number) => new THREE.Vector3().lerpVectors(a, b, u).setY(a.y + (b.y - a.y) * u - sag * 4 * u * (1 - u));
+    const curve = new THREE.CatmullRomCurve3(Array.from({ length: 13 }, (_, i) => point(i / 12)));
+    const cable = new THREE.Mesh(new THREE.TubeGeometry(curve, 40, 0.008, 4, false), wire);
+    cable.castShadow = false;
+    g.add(cable);
+    const count = Math.max(4, Math.round(a.distanceTo(b) / 0.32));
+    for (let i = 1; i < count; i++) {
+      // every third bulb dims on the second twinkle frame (the night loop)
+      const bulb = new THREE.Mesh(bulbGeo, twinkle && (n + i) % 3 === 0 ? dim : on);
+      bulb.position.copy(point(i / count)).add(new THREE.Vector3(0, -0.03, 0));
+      bulb.userData.lit = true;
+      g.add(bulb);
+    }
+    n++;
+  }
+  g.userData.castShadow = options?.castShadow;
+  return g;
+}
+
+/** The trailers' lit materials (by their spec ids) and the square's own lit parts glow at night */
+const LIT_MATERIALS = new Set(['back-wall', 'inside-warm', 'light-warm', 'fire', 'screen', 'glass-warm', 'amber', 'red-light']);
+
+/** The night lights pass: only what is lit keeps its colour; everything else writes depth only, so it still hides the
+ *  lit parts behind it (export_square.sh crops this into the building's `nightLights` strip) */
+function toLightsPass(group: THREE.Group): void {
+  group.traverse((o) => {
+    const mesh = o as THREE.Mesh;
+    if (!mesh.isMesh) return;
+    const id = (mesh.userData.sculptComponent as { material?: string } | undefined)?.material;
+    const lit = mesh.userData.lit || mesh.name === 'sign-face' || mesh.name === 'banner-face' || (id && LIT_MATERIALS.has(id));
+    if (lit) return;
+    if (mesh.name === 'shadow-catcher') { mesh.visible = false; return; }
+    const m = (Array.isArray(mesh.material) ? mesh.material[0] : mesh.material).clone();
+    m.colorWrite = false;
+    mesh.material = m;
+    mesh.renderOrder = -1;   // depth first, so the lit parts behind it are hidden whatever the draw order
+  });
 }
 
 /** Guests at the tables, baked into the square's sprite: seat (plan tiles), facing (0 = south, 180 = north), their food,

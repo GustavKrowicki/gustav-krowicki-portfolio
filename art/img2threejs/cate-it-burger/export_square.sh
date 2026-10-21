@@ -63,3 +63,26 @@ still[m] = 0
 Image.fromarray(still).save(f'{O}/cate-it-square_south.png')
 print('guests crop x', x0, 'y', y0, 'w', w, 'h', h, 'frames', N, 'moving px', int(m.sum()))
 PY
+# Night lights (docs/city-rules.md section 9): the lit parts only (hatches, neon letters, fairy lights, marker lights, the
+# banner), everything else depth only; two frames, every third bulb dimmer on the second (a slow twinkle). Prints the crop
+# for the `nightLights` entry in lib/city/buildings.ts.
+for k in 0 1; do
+  node art/img2threejs/tools/lab_render.mjs "cateItSquare&lights=1&twinkle=$k" "$T" "l$k={\"view\":\"sprite\",\"yaw\":45,\"aim\":[4,3.5],$S}" | tail -1
+done
+python3 - "$T" "$O" <<'PY'
+import sys
+import numpy as np
+from PIL import Image
+T, O = sys.argv[1], sys.argv[2]
+fr = [np.asarray(Image.open(f'{T}/l{k}.png').convert('RGBA')) for k in (0, 1)]
+alpha = (fr[0][:, :, 3] > 0) | (fr[1][:, :, 3] > 0)
+ys, xs = np.nonzero(alpha)
+x0, y0 = int(xs.min()) // 2 * 2, int(ys.min()) // 2 * 2
+x1, y1 = (int(xs.max()) + 2) // 2 * 2, (int(ys.max()) + 2) // 2 * 2
+w, h = x1 - x0, y1 - y0
+sheet = np.zeros((h, w * 2, 4), np.uint8)
+for k, f in enumerate(fr):
+    sheet[:, k * w:(k + 1) * w] = f[y0:y1, x0:x1]
+Image.fromarray(sheet).save(f'{O}/cate-it-square-lights_south.png')
+print('lights crop x', x0, 'y', y0, 'w', w, 'h', h, 'frames 2')
+PY

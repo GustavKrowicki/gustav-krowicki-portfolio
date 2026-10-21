@@ -422,10 +422,10 @@ const MODELS: Record<string, ModelConfig> = {
   // The food truck square for the city (8 x 7: the three trailers, four beer tables, guests) and its seated frames
   cateItSquare: {
     name: 'Food truck square',
-    // ?t= guests' loop phase, ?signs=logo|food|blank
+    // ?t= guests' loop phase, ?signs=logo|food|blank, ?lights=1 the night lights pass, ?twinkle=1 its second frame
     create: (options) => {
       const q = new URLSearchParams(window.location.search);
-      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs);
+      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'food') as Signs, q.get('lights') === '1', Number(q.get('twinkle') ?? 0));   // ?lights=1 night pass, ?twinkle=1
     },
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
