@@ -12,7 +12,16 @@ The body sits back from the serving edge (centre z = BZ) so the lifted awning st
 import copy
 import json
 import math
+import os
 import sys
+
+# One spec, three trailers: TRAILER=burger (polished steel, this folder) or pizza (art/img2threejs/cate-it-pizza runs this
+# file with TRAILER=pizza): the same body, wheels, tow bar and sign; its own colours, awning and kitchen.
+TRAILER = os.environ.get("TRAILER", "burger")
+PIZZA = TRAILER == "pizza"
+BODY = "paint" if PIZZA else "steel"              # body, closed north plate, door
+SKIRT = "paint-red" if PIZZA else "steel-dark"
+BAND = "paint-green" if PIZZA else "band-dark"
 
 W = sys.argv[1]
 spec = json.load(open(f"{W}/object-sculpt-spec.json"))
@@ -147,18 +156,18 @@ C.append(comp("root", "Ground pad", "macro", "base", "box", (2 * HX, G, 2 * HZ),
 # again by a plate, so only the serving side is open)
 hole = [(-HXO, HY0), (-HXO, HY1), (HXO, HY1), (HXO, HY0)]          # clockwise: against the outer loop
 profile = {"points": [r4(p) for p in side_profile(L / 2, ZB, ZT, RT, RB)], "depth": WD, "holes": [[r4(p) for p in hole]]}
-C.append(comp("body", "Steel body", "macro", "body", "extrude", (L, ZT - ZB, WD), (0, G, Z0), "steel", scale=[1, 1, 1],
+C.append(comp("body", "Steel body", "macro", "body", "extrude", (L, ZT - ZB, WD), (0, G, Z0), BODY, scale=[1, 1, 1],
               descriptor={"profile2D": profile}, contact="resting", start=(0, G + ZB, BZ), end=(0, G + ZT, BZ), importance=0.95,
               features=lf("body.rounded", "contour", "long steel box with rounded ends and rounded roof edge"),
               topo="Body: the side elevation (rounded corners) extruded across, the hatch opening as a hole."))
-bx("body-north-plate", "Closed north side", "meso", "body", -HXO - 0.02, HXO + 0.02, HY0 - 0.02, HY1 + 0.02, Z0 - 0.004, Z0 + 0.04, "steel",
+bx("body-north-plate", "Closed north side", "meso", "body", -HXO - 0.02, HXO + 0.02, HY0 - 0.02, HY1 + 0.02, Z0 - 0.004, Z0 + 0.04, BODY,
    contact="flush-mount", importance=0.3)
-bx("skirt", "Lower steel band", "meso", "body", -L / 2 + 0.06, L / 2 - 0.06, ZB, ZB + 0.1, Z0 - 0.01, Z1 + 0.01, "steel-dark",
+bx("skirt", "Lower steel band", "meso", "body", -L / 2 + 0.06, L / 2 - 0.06, ZB, ZB + (0.16 if PIZZA else 0.1), Z0 - 0.01, Z1 + 0.01, SKIRT,
    importance=0.4, topo="Darker steel along the bottom of the body: a box.")
 for s, z in (("S", Z1), ("N", Z0)):
     zz = (z, z + 0.012) if s == "S" else (z - 0.012, z)
     bx(f"roof-band-{s}", f"Dark roof band {s}", "meso", "body", -L / 2 + RT - 0.06, L / 2 - RT + 0.06, 1.35, 1.46, min(zz), max(zz),
-       "band-dark", contact="flush-mount", importance=0.6,
+       BAND, contact="flush-mount", importance=0.6,
        features=lf("roof-band-S.blank", "contour", "dark band along the roof edge, no text") if s == "S" else None)
 
 # inside: warm-lit back wall of steel, warm end walls and ceiling light, a steel work top, the hood and the menu screen
@@ -168,9 +177,23 @@ for s, x0, x1 in (("W", -HXO, -HXO + 0.03), ("E", HXO - 0.03, HXO)):
     bx(f"inside-end-{s}", f"Inside end wall {s}", "micro", "inside", x0, x1, HY0, HY1, BACK, Z1 - 0.01, "inside-warm", importance=0.4)
 bx("inside-light", "Ceiling light", "micro", "inside", -HXO, HXO, HY1 - 0.03, HY1, BACK, Z1 - 0.01, "light-warm", importance=0.5)
 bx("inside-floor", "Inside work top", "micro", "inside", -HXO, HXO, HY0, HY0 + 0.05, BACK, Z1 - 0.06, "back-wall", importance=0.4)
-bx("hood", "Extractor hood", "micro", "inside", -0.9, -0.1, HY1 - 0.13, HY1 - 0.03, BACK, BACK + 0.13, "steel-dark", importance=0.5,
-   features=lf("hood.box", "contour", "steel extractor hood over the grill"))
-bx("menu-screen", "Menu screen", "micro", "inside", 0.74, 1.04, HY0 + 0.06, HY1 - 0.1, Z1 - 0.1, Z1 - 0.07, "screen", importance=0.5,
+if PIZZA:
+    # a stone pizza oven on the work top at the west end of the hatch, its mouth glowing, its flue up through the roof
+    bx("oven", "Pizza oven", "meso", "inside", -1.1, -0.42, HY0 + 0.05, HY0 + 0.36, BACK, BACK + 0.24, "brick", importance=0.7,
+       features=lf("oven.dome", "contour", "stone pizza oven with a glowing mouth"))
+    C.append(comp("oven-dome", "Oven dome", "micro", "inside", "ellipsoid", (0.62, 0.3, 0.26), (-0.76, G + HY0 + 0.36, BACK + 0.12), "brick",
+                  contact="resting", importance=0.5))
+    bx("oven-mouth", "Oven mouth", "micro", "inside", -0.9, -0.62, HY0 + 0.1, HY0 + 0.26, BACK + 0.24, BACK + 0.25, "fire", contact="flush-mount",
+       importance=0.6)
+    C.append(comp("flue", "Oven flue", "meso", "roof", "cylinder", (0.1, 0.62, 0.1), (-1.32, G + ZT + 0.26, BZ - 0.36), "steel-dark",
+                  contact="resting", start=(-1.32, G + ZT - 0.08, BZ - 0.36), end=(-1.32, G + ZT + 0.57, BZ - 0.36), radius=0.05, importance=0.7,
+                  features=lf("flue.pipe", "contour", "steel flue pipe from the oven up through the roof")))
+    bx("flue-cap", "Flue cap", "micro", "roof", -1.41, -1.23, ZT + 0.57, ZT + 0.61, BZ - 0.45, BZ - 0.27, "steel-dark", importance=0.4)
+else:
+    bx("hood", "Extractor hood", "micro", "inside", -0.9, -0.1, HY1 - 0.13, HY1 - 0.03, BACK, BACK + 0.13, "steel-dark", importance=0.5,
+       features=lf("hood.box", "contour", "steel extractor hood over the grill"))
+bx("menu-screen", "Chalkboard menu" if PIZZA else "Menu screen", "micro", "inside", 0.74, 1.04, HY0 + 0.06, HY1 - 0.1, Z1 - 0.1, Z1 - 0.07,
+   "chalk" if PIZZA else "screen", importance=0.5,
    features=lf("menu-screen.lit", "contour", "lit menu screen standing at one end of the hatch, facing out"))
 
 # serving counter under the opening, full width
@@ -181,9 +204,19 @@ bx("counter", "Steel counter shelf", "meso", "hatch", -HXO - 0.04, HXO + 0.04, H
 AW_OUT, AW_T = 0.44, 0.03
 aw_tilt = math.radians(5)            # nearly flat: steeper lids are seen edge-on from the city camera
 aw_y = HY1 + 0.03 + AW_OUT / 2 * math.sin(aw_tilt)
-C.append(comp("awning", "Hatch lid awning", "meso", "hatch", "box", (2 * HXO + 0.08, AW_T, AW_OUT), (0, G + aw_y, Z1 + AW_OUT / 2 * math.cos(aw_tilt)), "steel",
-              rot=[-aw_tilt, 0, 0], contact="flush-mount", start=(0, G + HY1 + 0.03, Z1), end=(0, G + aw_y, Z1 + AW_OUT), importance=0.8,
-              features=lf("awning.lid", "contour", "hatch lid lifted as a flat awning")))
+if PIZZA:
+    # a striped canvas awning in place of the steel lid: red and cream stripes across, the same tilt
+    n = 8
+    for k in range(n):
+        x0 = -HXO - 0.04 + k * (2 * HXO + 0.08) / n
+        C.append(comp(f"awning-{k + 1}", f"Awning stripe {k + 1}", "meso", "hatch", "box", ((2 * HXO + 0.08) / n, AW_T, AW_OUT),
+                      (x0 + (HXO + 0.04) / n, G + aw_y, Z1 + AW_OUT / 2 * math.cos(aw_tilt)), "canvas-red" if k % 2 == 0 else "canvas-cream",
+                      rot=[-aw_tilt, 0, 0], contact="flush-mount", start=(x0, G + HY1 + 0.03, Z1), end=(x0, G + aw_y, Z1 + AW_OUT),
+                      importance=0.7, features=lf("awning.lid", "contour", "striped canvas awning") if k == 0 else None))
+else:
+    C.append(comp("awning", "Hatch lid awning", "meso", "hatch", "box", (2 * HXO + 0.08, AW_T, AW_OUT), (0, G + aw_y, Z1 + AW_OUT / 2 * math.cos(aw_tilt)), "steel",
+                  rot=[-aw_tilt, 0, 0], contact="flush-mount", start=(0, G + HY1 + 0.03, Z1), end=(0, G + aw_y, Z1 + AW_OUT), importance=0.8,
+                  features=lf("awning.lid", "contour", "hatch lid lifted as a flat awning")))
 bx("hinge", "Lid hinge strip", "micro", "hatch", -HXO - 0.04, HXO + 0.04, HY1, HY1 + 0.04, Z1, Z1 + 0.03, "steel-dark", contact="flush-mount",
    importance=0.3)
 for i, x in enumerate((-HXO + 0.05, HXO - 0.05), 1):
@@ -231,7 +264,7 @@ DZ0, DZ1 = BZ - 0.2, BZ + 0.2  # door, 0.4 wu wide, centred on the end
 DY0, DY1 = 0.38, 1.3           # 0.92 wu high: as tall as the flat part of the rounded end allows
 bx("door-frame", "Staff door frame", "meso", "west", WX - 0.03, WX + 0.12, DY0 - 0.02, DY1 + 0.04, DZ0 - 0.04, DZ1 + 0.04, "steel-dark",
    contact="flush-mount", importance=0.5)
-bx("door", "Staff door", "meso", "west", WX - 0.045, WX - 0.03, DY0, DY1, DZ0, DZ1, "steel", contact="flush-mount", importance=0.6,
+bx("door", "Staff door", "meso", "west", WX - 0.045, WX - 0.03, DY0, DY1, DZ0, DZ1, BODY, contact="flush-mount", importance=0.6,
    features=lf("door.staff", "contour", "steel staff door in the far end wall with a small window"))
 bx("door-window", "Door window", "micro", "west", WX - 0.052, WX - 0.045, 0.98, 1.2, DZ0 + 0.08, DZ1 - 0.08, "glass-dark", contact="flush-mount",
    importance=0.4)
@@ -302,6 +335,15 @@ spec["materials"] = [
     material("glass-dark", "Dark glass", "glass", "#2f3a44", ["#29333c"], 0.3, 0.0, "door window"),
     material("glass-warm", "Warm-lit glass", "glass", "#f1b77f", ["#e9af77"], 0.3, 0.0, "back window, lit from inside", emissiveIntensity={"base": 0.55}),
     material("red-light", "Rear marker lights", "glass", "#d8423a", ["#cf3b34"], 0.3, 0.0, "red rear marker lights", emissiveIntensity={"base": 0.6}),
+    material("paint", "Cream paint", "stone", "#efe4c8", ["#e7dcc0"], 0.6, 0.0, "cream painted body (pizza trailer)", emissiveIntensity={"base": 0.3},
+             localOverrides=[{"id": "paint.flat", "kind": "linework", "notes": "panel seams below sprite size: flat cream"}]),
+    material("paint-red", "Red paint", "stone", "#b8392c", ["#ae3328"], 0.6, 0.0, "red lower band (pizza trailer)"),
+    material("paint-green", "Green paint", "stone", "#2f5a3c", ["#2a5236"], 0.6, 0.0, "green roof band (pizza trailer)"),
+    material("canvas-red", "Red canvas", "fabric", "#c7402f", ["#bd3a2a"], 0.9, 0.0, "awning stripe", emissiveIntensity={"base": 0.3}),
+    material("canvas-cream", "Cream canvas", "fabric", "#f3ead4", ["#ebe2cc"], 0.9, 0.0, "awning stripe", emissiveIntensity={"base": 0.3}),
+    material("brick", "Oven stone", "stone", "#a8553a", ["#9e4f35"], 0.9, 0.0, "stone pizza oven"),
+    material("fire", "Oven fire", "stone", "#ff9a3c", ["#ff9033"], 0.5, 0.0, "glowing oven mouth", emissiveIntensity={"base": 1.0}),
+    material("chalk", "Chalkboard", "stone", "#2b3a33", ["#27352e"], 0.8, 0.0, "chalkboard menu"),
     material("wood", "Wooden posts", "wood", "#a87a48", ["#9f7243"], 0.85, 0.0, "wooden sign posts"),
     material("sign-dark", "Sign board", "stone", "#212629", ["#1d2124"], 0.7, 0.0, "blank dark sign board (content open)"),
 ]
@@ -312,6 +354,8 @@ def rgba(h, a=1.0):
     return f"rgba({int(h[0:2], 16)}, {int(h[2:4], 16)}, {int(h[4:6], 16)}, {a})"
 
 
+used = {c["material"] for c in C}
+spec["materials"] = [m for m in spec["materials"] if m["id"] in used]      # each trailer keeps only its own materials
 mats = {m["id"]: m for m in spec["materials"]}
 for c in C:
     m = mats[c["material"]]
@@ -334,7 +378,7 @@ spec["featureReviewTargets"] = [
      "componentRefs": ["body", "skirt", "roof-band-S"]},
     {"id": "hatch", "name": "Warm-lit hatch with the lid lifted as an awning", "tier": "critical",
      "passIds": ["structural-pass", "form-refinement", "material-pass"], "minimumScore": 0.7, "mustPass": True,
-     "componentRefs": ["hatch-back", "awning", "counter"]},
+     "componentRefs": ["hatch-back", "awning-1" if PIZZA else "awning", "counter"]},
     {"id": "sign", "name": "Sign board on two wooden posts", "tier": "important",
      "passIds": ["form-refinement", "material-pass"], "minimumScore": 0.6, "mustPass": False,
      "componentRefs": ["sign-board", "sign-post-1"]},
