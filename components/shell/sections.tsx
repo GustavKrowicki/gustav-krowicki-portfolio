@@ -41,7 +41,7 @@ export function SectionContent({ id, openCase, onOpenCase, onOpenSection }: Sect
 
   switch (id) {
     case 'home':
-      return <HomeSection onOpenCase={onOpenCase} onOpenSection={onOpenSection} />;
+      return <HomeSection onOpenCase={onOpenCase} />;
     case 'work':
       return <WorkSection onOpenCase={onOpenCase} />;
     case 'hobbies':
