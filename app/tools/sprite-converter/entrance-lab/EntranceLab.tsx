@@ -419,10 +419,10 @@ const MODELS: Record<string, ModelConfig> = {
     reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
     restBounds: true,
   },
-  // The food truck square for the city (8 x 7: the three trailers and two beer tables) and its seated frames
+  // The food truck square for the city (8 x 7: the three trailers, four beer tables, guests) and its seated frames
   cateItSquare: {
     name: 'Food truck square',
-    create: createCateItSquareModel,
+    create: (options) => createCateItSquareModel(options, Number(new URLSearchParams(window.location.search).get('t') ?? 0)),   // ?t= guests' loop phase
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
     configure: stadium.configureAarhusStadiumRenderer,

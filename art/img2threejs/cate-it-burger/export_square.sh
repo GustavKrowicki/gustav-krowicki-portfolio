@@ -25,3 +25,41 @@ done
 for T in burger pizza african; do
   node art/img2threejs/tools/lab_render.mjs "cateItSquareSit&seat=$T" "$O" "cate-it-square-sit-${T}_south={\"view\":\"sprite\",\"yaw\":45,\"aim\":[4,3.5],$S}" | tail -1
 done
+# The guests' ambient loop: $NF frames of the south view (?t=i/NF). The pixels that change are cut out of the still south
+# sprite and the strip carries them for every frame (transparent ground stays transparent, so no ghost of the frame-0 pose
+# remains). Prints the crop for the `ambient` entry in lib/city/buildings.ts.
+NF=12; T="$W/renders/guests"; mkdir -p "$T"
+i=0
+while [ $i -lt $NF ]; do
+  f=$(python3 -c "print(round($i / $NF, 4))")
+  node art/img2threejs/tools/lab_render.mjs "cateItSquare&t=$f" "$T" "f$i={\"view\":\"sprite\",\"yaw\":45,\"aim\":[4,3.5],$S}" | tail -1
+  i=$((i + 1))
+done
+python3 - "$T" "$O" "$NF" <<'PY'
+import sys
+import numpy as np
+from PIL import Image
+T, O, N = sys.argv[1], sys.argv[2], int(sys.argv[3])
+fr = [np.asarray(Image.open(f'{T}/f{i}.png').convert('RGBA')).astype(int) for i in range(N)]
+mask = np.zeros(fr[0].shape[:2], bool)
+for f in fr[1:]:
+    mask |= (np.abs(f - fr[0]).max(axis=2) > 6)
+m = mask.copy()                                   # grow by 2 px so antialiased edges move with the guest
+for dy in (-2, -1, 0, 1, 2):
+    for dx in (-2, -1, 0, 1, 2):
+        m |= np.roll(np.roll(mask, dy, 0), dx, 1)
+ys, xs = np.nonzero(m)
+x0, y0 = int(xs.min()) // 2 * 2, int(ys.min()) // 2 * 2
+x1, y1 = (int(xs.max()) + 2) // 2 * 2, (int(ys.max()) + 2) // 2 * 2
+w, h = x1 - x0, y1 - y0
+sheet = np.zeros((h, w * N, 4), np.uint8)
+for i, f in enumerate(fr):
+    crop = f[y0:y1, x0:x1].copy()
+    crop[~m[y0:y1, x0:x1]] = 0
+    sheet[:, i * w:(i + 1) * w] = crop
+Image.fromarray(sheet).save(f'{O}/cate-it-square-guests_south.png')
+still = np.asarray(Image.open(f'{O}/cate-it-square_south.png').convert('RGBA')).copy()
+still[m] = 0
+Image.fromarray(still).save(f'{O}/cate-it-square_south.png')
+print('guests crop x', x0, 'y', y0, 'w', w, 'h', h, 'frames', N, 'moving px', int(m.sum()))
+PY

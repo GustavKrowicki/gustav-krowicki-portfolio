@@ -2693,6 +2693,8 @@ export class MainScene extends Phaser.Scene {
       if (info.buildingId !== buildingId) return;
       const sprite = this.buildingSprites.get(key);
       const textureKey = this.getBuildingTextureKey(building, info.orientation);
+      // The ambient loop is cut out of the still sprite: a seated frame is whole, so the loop pauses while the avatar sits
+      this.buildingSprites.get(`${key}_ambient`)?.setVisible(this.seated?.buildingId !== buildingId);
       if (!sprite || sprite.texture.key === textureKey || !this.textures.exists(textureKey)) return;
       const previous = this.add.image(sprite.x, sprite.y, sprite.texture.key);
       previous.setOrigin(0.5, 1);

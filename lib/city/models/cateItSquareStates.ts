@@ -38,7 +38,8 @@ const CREATE: Record<Truck, (options: Options) => THREE.Group> = {
   african: createStreetFoodTrailerModel,
 };
 
-export function createCateItSquareModel(options: Options = {}): THREE.Group {
+/** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite */
+export function createCateItSquareModel(options: Options = {}, t = 0): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
   // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
@@ -62,27 +63,28 @@ export function createCateItSquareModel(options: Options = {}): THREE.Group {
     const [x, z] = plan(t);
     group.add(beerTableSet(x, z, options));
   }
-  for (const guest of GUESTS) group.add(createGuest(guest, options));
+  GUESTS.forEach((guest, k) => group.add(createGuest(guest, options, t + k / GUESTS.length)));
   return group;
 }
 
 /** Guests at the tables, baked into the square's sprite: seat (plan tiles), facing (0 = south, 180 = north), their food,
  *  and clothes. They keep clear of the three seats the visitor's avatar uses (SEATS). */
-type Guest = { at: [number, number]; yawDeg: number; meal: Truck; skin: string; hair: string; jacket: string; tee: string; jeans: string };
+type Guest = { at: [number, number]; yawDeg: number; meal: Truck; move: 'bite' | 'look' | 'chat'; skin: string; hair: string; jacket: string; tee: string; jeans: string };
 export const GUESTS: Guest[] = [
-  { at: [6.7, 4.25], yawDeg: 0, meal: 'pizza', skin: '#c58c69', hair: '#2b211b', jacket: '#3f6b5a', tee: '#e9e4d8', jeans: '#3a3f4a' },
-  { at: [4.0, 4.75], yawDeg: 180, meal: 'african', skin: '#7a4e35', hair: '#1c1714', jacket: '#c9852f', tee: '#f1ece2', jeans: '#2f3440' },
-  { at: [3.7, 6.25], yawDeg: 0, meal: 'burger', skin: '#e6b79a', hair: '#b07a3e', jacket: '#7b3b4a', tee: '#e9e4d8', jeans: '#4a5568' },
-  { at: [4.3, 6.25], yawDeg: 0, meal: 'african', skin: '#5e3b28', hair: '#151110', jacket: '#2f4c6e', tee: '#d9c9a8', jeans: '#2b2f36' },
-  { at: [7.0, 6.75], yawDeg: 180, meal: 'burger', skin: '#d9a07c', hair: '#5a3b26', jacket: '#8c8f3a', tee: '#efe9dd', jeans: '#3b4252' },
+  { at: [6.7, 4.25], yawDeg: 0, meal: 'pizza', move: 'bite', skin: '#c58c69', hair: '#2b211b', jacket: '#3f6b5a', tee: '#e9e4d8', jeans: '#3a3f4a' },
+  { at: [4.0, 4.75], yawDeg: 180, meal: 'african', move: 'look', skin: '#7a4e35', hair: '#1c1714', jacket: '#c9852f', tee: '#f1ece2', jeans: '#2f3440' },
+  { at: [3.7, 6.25], yawDeg: 0, meal: 'burger', move: 'chat', skin: '#e6b79a', hair: '#b07a3e', jacket: '#7b3b4a', tee: '#e9e4d8', jeans: '#4a5568' },
+  { at: [4.3, 6.25], yawDeg: 0, meal: 'african', move: 'bite', skin: '#5e3b28', hair: '#151110', jacket: '#2f4c6e', tee: '#d9c9a8', jeans: '#2b2f36' },
+  { at: [7.0, 6.75], yawDeg: 180, meal: 'burger', move: 'look', skin: '#d9a07c', hair: '#5a3b26', jacket: '#8c8f3a', tee: '#efe9dd', jeans: '#3b4252' },
 ];
 
 const GUEST_COLOURS: Record<string, keyof Guest> = {
   skin: 'skin', hair: 'hair', 'hair-light': 'hair', jacket: 'jacket', 'jacket-shade': 'jacket', tee: 'tee', jeans: 'jeans',
 };
 
-/** One seated guest: the city avatar's model in other clothes, no glasses or laptop, with a meal in front */
-function createGuest(guest: Guest, options: Options): THREE.Group {
+/** One seated guest: the city avatar's model in other clothes, no glasses or laptop, with a meal in front. `u` is the
+ *  guest's own phase in the loop: a bite (right hand up to the mouth), a look around, or a lean in to chat. */
+function createGuest(guest: Guest, options: Options, u = 0): THREE.Group {
   const g = new THREE.Group();
   g.name = 'guest';
   const person = createGustavAvatar({ laptop: false, castShadow: options?.castShadow ?? true });
@@ -102,7 +104,21 @@ function createGuest(guest: Guest, options: Options): THREE.Group {
   const [x, z] = plan(guest.at);
   person.position.set(x, 0.02, z);
   person.rotation.y = THREE.MathUtils.degToRad(guest.yawDeg);
-  poseAvatarSit(person.userData.avatar as AvatarRig, 0.02 + BENCH_TOP);
+  const rig = person.userData.avatar as AvatarRig;
+  poseAvatarSit(rig, 0.02 + BENCH_TOP);
+  const w = Math.sin(2 * Math.PI * u);
+  if (guest.move === 'bite') {
+    const a = Math.max(0, w) ** 2;
+    rig.bones['upper-arm-r']?.rotateX(-0.55 * a);
+    rig.bones['forearm-r']?.rotateX(-1.1 * a);
+    rig.bones.head?.rotateX(0.15 * a);
+  } else if (guest.move === 'look') {
+    rig.bones.head?.rotateY(0.5 * w);
+  } else {
+    rig.bones.chest?.rotateX(0.12 * Math.max(0, w));
+    rig.bones.head?.rotateZ(0.12 * w);
+  }
+  person.updateMatrixWorld(true);
   const meal = createSquareMeal(guest.meal, options);
   meal.position.set(x, 0, z + (guest.yawDeg === 180 ? -0.22 : 0.22));
   g.add(person, meal);

@@ -497,6 +497,12 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       "table-pizza": "/game/pogicity/Building/landmark/cate-it-square-sit-pizza_south.png",
       "table-african": "/game/pogicity/Building/landmark/cate-it-square-sit-african_south.png",
     },
+    // The guests' loop (a bite, a look around, a lean in to chat): export_square.sh cuts the moving pixels out of the still
+    // south sprite and renders them per frame; paused while the visitor sits (the seated frames are whole)
+    ambient: {
+      sheet: "/game/pogicity/Building/landmark/cate-it-square-guests_south.png",
+      frames: 12, frameWidth: 290, frameHeight: 146, x: 204, y: 562, fps: 4,
+    },
     icon: "🚚",
     projectSlug: "cate-it",
     description: "Cate it: food trucks for events - Co-founder & Designer",
