@@ -38,8 +38,51 @@ const CREATE: Record<Truck, (options: Options) => THREE.Group> = {
   african: createStreetFoodTrailerModel,
 };
 
-/** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite */
-export function createCateItSquareModel(options: Options = {}, t = 0): THREE.Group {
+/** What the roof signs show: the Cate it logo on all three, each truck's food in neon letters, or blank boards */
+export type Signs = 'logo' | 'food' | 'blank';
+const FOOD_SIGN: Record<Truck, { text: string; color: string }> = {
+  burger: { text: 'BURGER', color: '#ff5a6e' },
+  pizza: { text: 'PIZZA', color: '#ffd166' },
+  african: { text: 'STREET FOOD', color: '#ff9a3c' },
+};
+
+/** The face of a truck's roof sign, in the trailer's own frame (the board: x -1.2..1.2, top 1.82..2.2, front at z -0.13) */
+function signFace(truck: Truck, signs: Signs): THREE.Mesh | null {
+  if (signs === 'blank') return null;
+  const material = new THREE.MeshBasicMaterial({ transparent: true });
+  if (signs === 'logo') {
+    const g = globalThis as { __labPending?: number };
+    g.__labPending = (g.__labPending ?? 0) + 1;
+    material.map = new THREE.TextureLoader().load('/game/pogicity/Building/logos/cate-it-sign.png', () => {
+      g.__labPending = (g.__labPending ?? 1) - 1;
+      material.needsUpdate = true;
+    });
+  } else {
+    const { text, color } = FOOD_SIGN[truck];
+    const c = document.createElement('canvas');
+    c.width = 1024; c.height = 155;
+    const ctx = c.getContext('2d');
+    if (ctx) {
+      ctx.font = `900 ${text.length > 8 ? 96 : 112}px "Arial Black", Arial, sans-serif`;
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.shadowColor = color; ctx.shadowBlur = 22;
+      ctx.fillStyle = color;
+      ctx.fillText(text, 512, 82);
+      ctx.shadowBlur = 0; ctx.fillStyle = '#fff4ec'; ctx.globalAlpha = 0.55;
+      ctx.fillText(text, 512, 82);   // a pale core, like a lit tube
+    }
+    material.map = new THREE.CanvasTexture(c);
+  }
+  material.map!.colorSpace = THREE.SRGBColorSpace;
+  const face = new THREE.Mesh(new THREE.PlaneGeometry(2.36, 0.36), material);
+  face.position.set(0, 2.01, -0.126);
+  face.name = 'sign-face';
+  return face;
+}
+
+/** `t` (0..1) is the phase of the guests' ambient loop (export_square.sh renders the frames); 0 is the still sprite.
+ *  `signs`: what the roof signs show. */
+export function createCateItSquareModel(options: Options = {}, t = 0, signs: Signs = 'logo'): THREE.Group {
   const group = new THREE.Group();
   group.name = 'Food truck square';
   // No pad of its own: the city draws its paving under the plot, so the ground stays transparent and only catches the
@@ -57,6 +100,8 @@ export function createCateItSquareModel(options: Options = {}, t = 0): THREE.Gro
     model.rotation.y = THREE.MathUtils.degToRad(yawDeg);
     model.name = `${truck}-trailer`;
     model.traverse((o) => { if (o.name === 'Ground pad') o.visible = false; });   // the trailer's own 4 x 2 pad
+    const face = signFace(truck, signs);
+    if (face) model.add(face);
     group.add(model);
   }
   for (const t of TABLES) {

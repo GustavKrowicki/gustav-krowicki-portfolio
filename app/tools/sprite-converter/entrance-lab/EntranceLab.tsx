@@ -13,7 +13,7 @@ import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates'
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
 import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
 import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
-import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Truck } from '@/lib/city/models/cateItSquareStates';
+import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Signs, type Truck } from '@/lib/city/models/cateItSquareStates';
 import { createLEGOHQAvatarRoofOnModel, createLEGOHQAvatarRoofOffModel, createLEGOHQAvatarDoorModel, createLEGOHQAvatarMomentModel, type CampusView } from '@/lib/city/models/legoHqAvatarStates';
 import { createValtechOfficeRoofOnModel, createValtechOfficeRoofOffModel } from '@/lib/city/models/valtechOfficeStates';
 import { poseAvatarSit, standAvatar } from '@/lib/city/models/gustavAvatarSit';
@@ -422,7 +422,11 @@ const MODELS: Record<string, ModelConfig> = {
   // The food truck square for the city (8 x 7: the three trailers, four beer tables, guests) and its seated frames
   cateItSquare: {
     name: 'Food truck square',
-    create: (options) => createCateItSquareModel(options, Number(new URLSearchParams(window.location.search).get('t') ?? 0)),   // ?t= guests' loop phase
+    // ?t= guests' loop phase, ?signs=logo|food|blank
+    create: (options) => {
+      const q = new URLSearchParams(window.location.search);
+      return createCateItSquareModel(options, Number(q.get('t') ?? 0), (q.get('signs') ?? 'logo') as Signs);
+    },
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
     configure: stadium.configureAarhusStadiumRenderer,
