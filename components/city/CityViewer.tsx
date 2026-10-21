@@ -158,6 +158,7 @@ export default function CityViewer({
   const hasManualViewportInteraction = useRef(false);
   const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
   const autoWalkTargetRef = useRef<string | null>(null);
+  const adventureOnRef = useRef(false);
   const currentEncounterRef = useRef<TourStop | null>(null);
   useEffect(() => {
     currentEncounterRef.current = currentEncounter;
@@ -344,12 +345,16 @@ export default function CityViewer({
   }, []);
 
   // Start Adventure Mode
-  // (fromAvatarTab: walk mode only to show the avatar while the visitor dresses it, not a mode choice to track)
-  const handleStartAdventure = useCallback((options?: { fromAvatarTab?: boolean }) => {
+  // (fromAvatarTab: walk mode only to show the avatar while the visitor dresses it, not a mode choice to track;
+  // onLoad: the new site starts walking by itself, also not a choice)
+  const handleStartAdventure = useCallback((options?: { fromAvatarTab?: boolean; onLoad?: boolean }) => {
+    // Once only: the load, the Avatar tab and a card's Walk in can all ask at the same moment
+    if (adventureOnRef.current) return;
+    adventureOnRef.current = true;
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
-    if (!options?.fromAvatarTab) trackModeSelected('adventure', 'gustav');
+    if (!options?.fromAvatarTab && !options?.onLoad) trackModeSelected('adventure', 'gustav');
     selectedModeRef.current = 'adventure';
 
     // Start adventure mode in Phaser
@@ -495,6 +500,9 @@ export default function CityViewer({
       // Storage blocked: the pick lasts for this visit
     }
   }, []);
+  // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
+  const look: CityLook = timeOfDay !== "auto" ? timeOfDay
+    : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
   useEffect(() => {
     if (urlTime.hour !== null) return;
     const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
@@ -541,11 +549,8 @@ export default function CityViewer({
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
         | { setLook?: (look: CityLook) => void; setHour?: (hour: number) => void } | undefined;
       if (scene?.setLook) {
-        // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
         // (night forced in the daytime shows the evening's windows)
         const pickedHour = HOUR_OF[timeOfDay];
-        const look: CityLook = timeOfDay !== "auto" ? timeOfDay
-          : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
         const sceneHour = pickedHour ?? hour;
         scene.setHour?.(look === "night" && !isNightHour(sceneHour) ? 21 : sceneHour);
         scene.setLook(look);
@@ -556,7 +561,7 @@ export default function CityViewer({
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
     return () => window.clearInterval(timer);
-  }, [urlTime.night, hour, timeOfDay]);
+  }, [look, hour, timeOfDay]);
 
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
@@ -569,6 +574,7 @@ export default function CityViewer({
   }, []);
 
   const handleStopAdventure = useCallback(() => {
+    adventureOnRef.current = false;
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
@@ -708,6 +714,33 @@ export default function CityViewer({
     [onProjectClick, gameMode]
   );
 
+
+  // The new site lands walking (POR-47): once the scene is up the avatar spawns by Valtech, the camera starts close on
+  // it and after a moment zooms out to street zoom (straight to street zoom with reduced motion). The Avatar tab, when
+  // a link opens on it, does its own focus.
+  const avatarTabOpenRef = useRef(avatarTabOpen);
+  avatarTabOpenRef.current = avatarTabOpen;
+  useEffect(() => {
+    if (!isShell) return;
+    let timer = 0;
+    const start = (left: number) => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number) => void }
+        | undefined;
+      if (!scene?.ready) {
+        if (left > 0) timer = window.setTimeout(() => start(left - 1), 150);
+        return;
+      }
+      if (adventureOnRef.current) return;
+      scene.keepFramingOnSpawn = true;
+      handleStartAdventure({ onLoad: true });
+      if (avatarTabOpenRef.current) return;
+      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200);
+    };
+    start(200);
+    return () => window.clearTimeout(timer);
+  }, [isShell, handleStartAdventure]);
 
   // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it
   // and it closed: back to street zoom on the avatar, ready to walk
@@ -946,12 +979,14 @@ export default function CityViewer({
           {/* Directional Compass */}
           <DirectionalCompass isMobile={isMobile} walkableDirections={walkableDirections} />
 
-          {/* Virtual Joystick (mobile) */}
-          <VirtualJoystick
-            isMobile={isMobile}
-            onDirectionChange={handleJoystickDirection}
-            contained={isShell}
-          />
+          {/* Virtual Joystick (mobile; the new site walks by tapping a spot instead) */}
+          {!isShell && (
+            <VirtualJoystick
+              isMobile={isMobile}
+              onDirectionChange={handleJoystickDirection}
+              contained={isShell}
+            />
+          )}
 
         </>
       )}
@@ -1015,19 +1050,22 @@ export default function CityViewer({
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Walk the avatar. In the shell it sits inside the city view (the panel and its phone sheet own the window's
-          edges): bottom-left on a desktop, bottom-right on a phone where the joystick takes the bottom-left */}
+      {/* Walk the avatar (the /city page; the new site is always walking, the yellow marker shows where). In the shell
+          the time of day button sits inside the city view (the panel and its phone sheet own the window's edges):
+          bottom-left on a desktop, bottom-right on a phone */}
       {!dialogShown && !avatarTabOpen && (
         <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
-          <button
-            onClick={isAdventureActive ? handleStopAdventure : () => handleStartAdventure()}
-            className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
-            style={PIXEL_INSET_CLIP}
-          >
-            {isAdventureActive ? "Stop walking" : "Walk"}
-          </button>
-          {/* Hidden while walking on a phone, where Stop walking is wider and runs under the joystick */}
-          {!(isMobile && isAdventureActive) && <TimeOfDayButton value={timeOfDay} onChange={pickTimeOfDay} />}
+          {!isShell && (
+            <button
+              onClick={isAdventureActive ? handleStopAdventure : () => handleStartAdventure()}
+              className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
+              style={PIXEL_INSET_CLIP}
+            >
+              {isAdventureActive ? "Stop walking" : "Walk"}
+            </button>
+          )}
+          {/* Hidden while walking on a phone on /city, where Stop walking is wider and runs under the joystick */}
+          {(isShell || !(isMobile && isAdventureActive)) && <TimeOfDayButton value={timeOfDay} look={look} onChange={pickTimeOfDay} />}
         </div>
       )}
     </div>

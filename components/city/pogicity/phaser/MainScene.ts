@@ -96,6 +96,9 @@ function getSnowTextureKey(x: number, y: number): string {
   return `snow_${variant}`;
 }
 
+// Keys that walk the avatar (PlayerController.handleKeyDown)
+const MOVE_KEYS = new Set(["ArrowUp", "ArrowDown", "ArrowLeft", "ArrowRight", "w", "a", "s", "d", "W", "A", "S", "D"]);
+
 export class MainScene extends Phaser.Scene {
   private readonly DEPTH_Y_MULT = 10000;
   // Ground tiles sit in their own layer under everything; light pools on the ground sit just above that layer, so a pool
@@ -533,8 +536,7 @@ export class MainScene extends Phaser.Scene {
     const shouldFollowPlayer =
       this.cameraFollowPlayer &&
       !this.manualCameraOverrideInAdventure &&
-      (playerState === PlayerState.AutoWalking ||
-       (isMobile && playerState === PlayerState.Walking));
+      (playerState === PlayerState.AutoWalking || playerState === PlayerState.Walking);
 
     if (shouldFollowPlayer) {
       // On mobile, always use smooth lerp follow (joystick AND auto-walk).
@@ -542,7 +544,7 @@ export class MainScene extends Phaser.Scene {
       // spans most of the screen, so the camera appears frozen during auto-walk.
       this.cameraFollowTarget.x = playerPos.worldX;
       this.cameraFollowTarget.y = playerPos.worldY;
-      this.startCameraFollow(isMobile || playerState === PlayerState.Walking ? "lerp" : "deadzone");
+      this.startCameraFollow(isMobile ? "lerp" : "deadzone");
     } else {
       this.stopCameraFollow();
     }
@@ -2162,12 +2164,14 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
+    const keepFraming = this.keepFramingOnSpawn;
+    this.keepFramingOnSpawn = false;
     if (this.skipNextSpawnFocus) {
       // focusOnPlayer glides there next; follow anyway, in case that focus never lands
       this.skipNextSpawnFocus = false;
       this.manualCameraOverrideInAdventure = false;
       this.cameraFollowPlayer = true;
-    } else if (this.isMobileViewport()) {
+    } else if (this.isMobileViewport() && !keepFraming) {
       const playerPos = this.playerController.getPosition();
       this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
       this.manualCameraOverrideInAdventure = false;
@@ -2295,7 +2299,16 @@ export class MainScene extends Phaser.Scene {
         }
       }
 
-      // Handle movement keys
+      // Handle movement keys: a step brings the camera back to the avatar, after a pan or zoom by hand too
+      // (during a glide to the avatar its own timer turns the follow on once it lands)
+      if (MOVE_KEYS.has(e.key)) {
+        // panned away by hand: glide back to the avatar's centre first, then follow
+        if (this.manualCameraOverrideInAdventure && !this.focusFollowTimer && this.playerController) {
+          this.focusOnPlayer(true, 400);
+        }
+        this.manualCameraOverrideInAdventure = false;
+        if (!this.focusFollowTimer) this.cameraFollowPlayer = true;
+      }
       this.playerController?.handleKeyDown(e.key);
     };
 
@@ -2557,25 +2570,46 @@ export class MainScene extends Phaser.Scene {
   }
   // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
   skipNextSpawnFocus = false;
-  focusOnPlayer(close = false): boolean {
+  // The new site starts walking on load: the avatar spawns while the camera keeps showing the whole city (landWalking)
+  keepFramingOnSpawn = false;
+  focusOnPlayer(close = false, durationMs = 800): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
     this.stopCameraMoves();
     this.stopCameraFollow();
     const camera = this.cameras.main;
     this.avatarFocusActive = !close;
-    const zoom = close ? ZOOM.street : this.avatarFocusZoom;
+    // phones walk a little closer than street zoom: at 2 the avatar is a few pixels tall in the small city strip
+    const zoom = close ? (this.isMobileViewport() ? 3 : ZOOM.street) : this.avatarFocusZoom;
     const y = p.worldY - (close ? 0 : 12);
     this.cameraFollowPlayer = false;
-    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, 800);
+    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, durationMs);
     this.manualCameraOverrideInAdventure = false;
     // follow again once the glide has landed (a follow during the tween would fight it)
     this.focusFollowTimer?.remove();
-    this.focusFollowTimer = this.time.delayedCall(820, () => {
+    this.focusFollowTimer = this.time.delayedCall(durationMs + 20, () => {
       this.focusFollowTimer = null;
       if (this.isAdventureActive) this.cameraFollowPlayer = true;
     });
     return true;
+  }
+
+  // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom (3 on a phone) to show the
+  // streets around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
+  landWalking(delayMs: number, glideMs: number): void {
+    if (!this.playerController) return;
+    if (delayMs > 0) {
+      const p = this.playerController.getPosition();
+      const camera = this.cameras.main;
+      this.stopCameraMoves();
+      this.cameraFollowPlayer = false;
+      this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(p.worldY - 12 - camera.height / 2), ZOOM.detail, 1);
+    }
+    const since = this.time.now;
+    this.time.delayedCall(delayMs, () => {
+      if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
+      this.focusOnPlayer(true, glideMs);
+    });
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {

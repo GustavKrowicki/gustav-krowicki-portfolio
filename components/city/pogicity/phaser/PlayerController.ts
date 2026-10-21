@@ -701,7 +701,8 @@ export class PlayerController {
     const head = this.sprite.displayHeight * this.sprite.originY;
     this.nameTag.setPosition(Math.round(x), Math.round(y - head - 1));
     this.nameTag.setVisible(this.sprite.visible);
-    this.nameTag.setDepth(19_999_999); // over the city, under the pointer
+    // At the avatar's own depth: a building in front hides the tag with the avatar (the pointer stays on top)
+    this.nameTag.setDepth(this.sprite.depth + 0.001);
   }
 
   private playChangeCue(): void {
