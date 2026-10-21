@@ -145,7 +145,7 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       lead: "The food truck community is open.",
       text: "Owners remember starting out. After each talk they sent us on to the next truck, so eight conversations came quickly.",
       caseStudy: true,
-      seat: { at: [3.7, 4.25], screens: [] },
+      seat: { at: [3.7, 6.25], screens: [] },
     },
     "table-african": {
       kicker: "Cate it · the hardest part",

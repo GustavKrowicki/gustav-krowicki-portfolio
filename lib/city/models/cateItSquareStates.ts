@@ -26,7 +26,7 @@ export const TRUCKS: Record<Truck, { at: [number, number]; yawDeg: number }> = {
 export const TABLES: [number, number][] = [[4.0, 4.5], [7.0, 4.5], [4.0, 6.5], [7.0, 6.5]];
 export const SEATS: Record<Truck, [number, number]> = {
   burger: [4.3, 4.25],
-  pizza: [3.7, 4.25],
+  pizza: [3.7, 6.25],      // the front-left table: clear of the corner banner's pole and edge
   african: [7.3, 4.25],
 };
 const PAD = 0.02;
@@ -116,8 +116,9 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
 /** The Cate it banner on two tall poles across the square's south-east corner (Gustav, 2026-10-21: food names on the
  *  trucks, Cate it on a banner in the corner, big). It runs diagonally from `from` to `to` (plan tiles), so it faces the
  *  default camera square on. High on purpose: from the city camera a thing at height h shows over the ground about
- *  1.2 h tiles further back, and at 3 wu it lands above the tables and between the back hatches, hiding no seat. */
-export const BANNER = { from: [6.2, 7.0] as [number, number], to: [8.0, 5.2] as [number, number], bottom: 3.1, top: 3.7 };
+ *  1.2 h tiles further back; with its bottom at 2.9 wu it stays just above the head of the visitor seated at the burger
+ *  and pizza table (lower, and it covers them), and the walking avatar is drawn over the plot anyway. */
+export const BANNER = { from: [6.2, 7.0] as [number, number], to: [8.0, 5.2] as [number, number], bottom: 2.9, top: 3.5 };
 
 function createBanner(options: Options): THREE.Group {
   const g = new THREE.Group();
@@ -158,7 +159,7 @@ type Guest = { at: [number, number]; yawDeg: number; meal: Truck; move: 'bite' |
 export const GUESTS: Guest[] = [
   { at: [6.7, 4.25], yawDeg: 0, meal: 'pizza', move: 'bite', skin: '#c58c69', hair: '#2b211b', jacket: '#3f6b5a', tee: '#e9e4d8', jeans: '#3a3f4a' },
   { at: [4.0, 4.75], yawDeg: 180, meal: 'african', move: 'look', skin: '#7a4e35', hair: '#1c1714', jacket: '#c9852f', tee: '#f1ece2', jeans: '#2f3440' },
-  { at: [3.7, 6.25], yawDeg: 0, meal: 'burger', move: 'chat', skin: '#e6b79a', hair: '#b07a3e', jacket: '#7b3b4a', tee: '#e9e4d8', jeans: '#4a5568' },
+  { at: [4.0, 6.75], yawDeg: 180, meal: 'burger', move: 'chat', skin: '#e6b79a', hair: '#b07a3e', jacket: '#7b3b4a', tee: '#e9e4d8', jeans: '#4a5568' },
   { at: [4.3, 6.25], yawDeg: 0, meal: 'african', move: 'bite', skin: '#5e3b28', hair: '#151110', jacket: '#2f4c6e', tee: '#d9c9a8', jeans: '#2b2f36' },
   { at: [7.0, 6.75], yawDeg: 180, meal: 'burger', move: 'look', skin: '#d9a07c', hair: '#5a3b26', jacket: '#8c8f3a', tee: '#efe9dd', jeans: '#3b4252' },
 ];

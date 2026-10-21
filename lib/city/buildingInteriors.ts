@@ -87,7 +87,7 @@ const CATE_IT_SQUARE: BuildingInterior = {
   entrance: { outside: [5, 7], inside: [5, 6] },
   standSpots: {
     "hatch-african": [2.5, 2.5], "hatch-burger": [6.5, 2.5], "hatch-pizza": [2.5, 5.5],
-    "table-burger": [4.5, 3.5], "table-pizza": [3.5, 3.5], "table-african": [7.5, 3.5],
+    "table-burger": [4.5, 3.5], "table-pizza": [3.5, 5.5], "table-african": [7.5, 3.5],
   },
 };
 
