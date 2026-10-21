@@ -139,13 +139,26 @@ function FindDetail({ find, foundAt, onBack }: { find: Find; foundAt: number | u
   const walkTarget = findWalkTarget(find, isFound);
   return (
     <div data-testid="find-detail">
-      <button
-        type="button"
-        onClick={onBack}
-        className="text-sm font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
-      >
-        All finds
-      </button>
+      {/* The walk button sits up top, so a phone shows it without scrolling */}
+      <div className="flex items-center justify-between gap-3">
+        <button
+          type="button"
+          onClick={onBack}
+          className="text-sm font-medium text-neutral-900 underline underline-offset-4 hover:text-neutral-600"
+        >
+          All finds
+        </button>
+        {walkTarget && (
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent(FIND_WALK_EVENT, { detail: walkTarget }))}
+            className="rounded-full bg-neutral-900 px-4 py-2 text-sm font-medium text-white hover:bg-neutral-700"
+            data-testid="find-walk"
+          >
+            {isFound ? 'Walk there' : 'Walk me close'}
+          </button>
+        )}
+      </div>
       <div className="relative mt-4 aspect-[3/2] overflow-hidden rounded-lg bg-neutral-800">
         {isFound ? (
           // eslint-disable-next-line @next/next/no-img-element
@@ -179,16 +192,6 @@ function FindDetail({ find, foundAt, onBack }: { find: Find; foundAt: number | u
             {find.where ? `Look around ${find.where}.` : 'A secret. It shows up when the moment is right.'}
           </p>
         </>
-      )}
-      {walkTarget && (
-        <button
-          type="button"
-          onClick={() => window.dispatchEvent(new CustomEvent(FIND_WALK_EVENT, { detail: walkTarget }))}
-          className="mt-6 w-full rounded-full bg-neutral-900 px-5 py-3 text-sm font-medium text-white hover:bg-neutral-700"
-          data-testid="find-walk"
-        >
-          {isFound ? 'Walk there' : 'Walk me close'}
-        </button>
       )}
     </div>
   );
