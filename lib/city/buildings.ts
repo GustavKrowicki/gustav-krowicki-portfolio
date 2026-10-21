@@ -477,7 +477,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
   },
   // Cate it: the food truck square (Linear POR-38), art/img2threejs/cate-it-burger (+ cate-it-pizza, cate-it-african): one
   // 8 x 7 walk-in plot with the street food and burger trailers along the back (hatches south), the pizza trailer on the west
-  // side (hatch east) and two beer tables (lib/city/models/cateItSquareStates.ts, lab model cateItSquare, export_square.sh).
+  // side (hatch east) and four beer tables (lib/city/models/cateItSquareStates.ts, lab model cateItSquare, export_square.sh).
   // At each hatch: Eat (the avatar sits at a table) or Book for an event (lib/city/interiorBeats.ts). Replaces the old 3 x 3
   // Cate it building; the id stays, so its tour stop and the places checklist keep working.
   "cate-it": {

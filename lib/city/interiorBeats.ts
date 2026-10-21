@@ -152,7 +152,7 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
       lead: "Three founders, three reasons to build.",
       text: "Shipping was easy. Agreeing on the scope was hard: we had to line up three different motivations first.",
       caseStudy: true,
-      seat: { at: [6.3, 5.25], screens: [] },
+      seat: { at: [7.3, 4.25], screens: [] },
     },
     booked: {
       kicker: "Inquiry sent",

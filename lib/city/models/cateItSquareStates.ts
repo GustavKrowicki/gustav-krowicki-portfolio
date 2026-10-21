@@ -5,7 +5,7 @@ import { createStreetFoodTrailerModel } from './cateItAfrican';
 import { BENCH_TOP, TABLE_TOP, beerTableSet, box } from './cateItSquareParts';
 
 // The food truck square for the city (Linear POR-38): one 8 x 7 walk-in plot with the three trailers around a small plaza
-// and two beer tables. Trucks stand square to the grid (a true half circle of 4 x 2 trucks needs 10 x 10): the street food
+// and four beer tables. Trucks stand square to the grid (a true half circle of 4 x 2 trucks needs 10 x 10): the street food
 // and burger trailers along the back (north) with their hatches south, the pizza trailer on the west side with its hatch
 // east, so every hatch faces the default camera. Model units are wu, the plot centred on the origin: X east (-4..4),
 // +Z south (-3.5..3.5). Plan tile (lx, ly) -> model (lx - 4, ly - 3.5). Walk map and beats: lib/city/buildingInteriors.ts,
@@ -21,11 +21,11 @@ export const TRUCKS: Record<Truck, { at: [number, number]; yawDeg: number }> = {
   pizza: { at: [1, 5], yawDeg: 90 },
 };
 /** Beer tables (centre, plan tiles, long side along X) and each truck's seat on a north bench (the avatar faces south) */
-export const TABLES: [number, number][] = [[4.0, 4.5], [6.0, 5.5]];
+export const TABLES: [number, number][] = [[4.0, 4.5], [7.0, 4.5], [4.0, 6.5], [7.0, 6.5]];
 export const SEATS: Record<Truck, [number, number]> = {
   burger: [4.3, 4.25],
   pizza: [3.7, 4.25],
-  african: [6.3, 5.25],
+  african: [7.3, 4.25],
 };
 const PAD = 0.02;
 const plan = (p: [number, number]): [number, number] => [p[0] - SQUARE.w / 2, p[1] - SQUARE.h / 2];
