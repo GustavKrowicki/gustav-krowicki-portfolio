@@ -223,23 +223,32 @@ for s, z in (("S", Z1 - 0.1), ("N", Z0 + 0.1)):
 bx("vent-grille", "Vent grille", "micro", "end", L / 2 - 0.004, L / 2 + 0.012, 0.9, 1.06, BZ - 0.26, BZ + 0.26, "band-dark", contact="flush-mount",
    importance=0.4, features=lf("vent-grille.slots", "contour", "dark vent grille high on the tow-bar end"))
 
-# north side (the back, closed): a staff door with a small window and a step, a sliding window, a power hookup
-DX0, DX1 = -1.18, -0.78        # door, 0.4 wu wide, at the far (west) end of the back (Gustav, 2026-10-20)
-DY0, DY1 = 0.38, 1.36          # 0.98 wu high (city door standard 1.0)
-bx("door-frame", "Staff door frame", "meso", "north", DX0 - 0.03, DX1 + 0.03, DY0 - 0.02, DY1 + 0.03, Z0 - 0.012, Z0 + 0.01, "steel-dark",
+# west end (the far end): the staff door in the end wall, since the kitchen runs along the inside of the back wall
+# (Gustav, 2026-10-21). The end wall is flat up to y = ZT - RT; the door frame stands a little proud so its top clears the
+# rounded corner.
+WX = -L / 2                    # end wall
+DZ0, DZ1 = BZ - 0.2, BZ + 0.2  # door, 0.4 wu wide, centred on the end
+DY0, DY1 = 0.38, 1.3           # 0.92 wu high: as tall as the flat part of the rounded end allows
+bx("door-frame", "Staff door frame", "meso", "west", WX - 0.03, WX + 0.12, DY0 - 0.02, DY1 + 0.04, DZ0 - 0.04, DZ1 + 0.04, "steel-dark",
    contact="flush-mount", importance=0.5)
-bx("door", "Staff door", "meso", "north", DX0, DX1, DY0, DY1, Z0 - 0.02, Z0 - 0.008, "steel", contact="flush-mount", importance=0.6,
-   features=lf("door.staff", "contour", "steel staff door on the back with a small window"))
-bx("door-window", "Door window", "micro", "north", DX0 + 0.08, DX1 - 0.08, 1.02, 1.26, Z0 - 0.026, Z0 - 0.02, "glass-dark", contact="flush-mount",
+bx("door", "Staff door", "meso", "west", WX - 0.045, WX - 0.03, DY0, DY1, DZ0, DZ1, "steel", contact="flush-mount", importance=0.6,
+   features=lf("door.staff", "contour", "steel staff door in the far end wall with a small window"))
+bx("door-window", "Door window", "micro", "west", WX - 0.052, WX - 0.045, 0.98, 1.2, DZ0 + 0.08, DZ1 - 0.08, "glass-dark", contact="flush-mount",
    importance=0.4)
-bx("door-handle", "Door handle", "micro", "north", DX1 - 0.1, DX1 - 0.04, 0.84, 0.88, Z0 - 0.04, Z0 - 0.02, "steel-dark", contact="flush-mount",
+bx("door-handle", "Door handle", "micro", "west", WX - 0.07, WX - 0.045, 0.8, 0.84, DZ1 - 0.1, DZ1 - 0.04, "steel-dark", contact="flush-mount",
    importance=0.2)
-bx("door-step", "Door step", "micro", "north", DX0 - 0.02, DX1 + 0.02, 0.2, 0.24, Z0 - 0.05, Z0 + 0.04, "steel-dark", importance=0.3)
-bx("side-window-frame", "Sliding window frame", "micro", "north", 0.08, 0.72, 0.92, 1.26, Z0 - 0.012, Z0 + 0.01, "steel-dark",
+bx("door-step", "Door step", "micro", "west", WX - 0.2, WX - 0.03, 0.2, 0.24, DZ0 - 0.02, DZ1 + 0.02, "steel-dark", importance=0.3)
+bx("west-marker-S", "Marker light WS", "micro", "west", WX - 0.012, WX + 0.004, 0.47, 0.55, Z1 - 0.15, Z1 - 0.05, "red-light",
+   contact="flush-mount", importance=0.3)
+bx("west-marker-N", "Marker light WN", "micro", "west", WX - 0.012, WX + 0.004, 0.47, 0.55, Z0 + 0.05, Z0 + 0.15, "red-light",
+   contact="flush-mount", importance=0.3)
+
+# north side (the back, closed): a warm sliding window over the kitchen line and a power hookup
+bx("side-window-frame", "Sliding window frame", "micro", "north", -0.32, 0.32, 0.92, 1.26, Z0 - 0.012, Z0 + 0.01, "steel-dark",
    contact="flush-mount", importance=0.4)
-bx("side-window", "Sliding window", "micro", "north", 0.11, 0.69, 0.95, 1.23, Z0 - 0.02, Z0 - 0.008, "glass-warm", contact="flush-mount",
+bx("side-window", "Sliding window", "micro", "north", -0.29, 0.29, 0.95, 1.23, Z0 - 0.02, Z0 - 0.008, "glass-warm", contact="flush-mount",
    importance=0.5, features=lf("side-window.lit", "contour", "small warm-lit sliding window on the back"))
-bx("side-window-mid", "Window slide bar", "micro", "north", 0.39, 0.41, 0.95, 1.23, Z0 - 0.026, Z0 - 0.02, "steel-dark", contact="flush-mount",
+bx("side-window-mid", "Window slide bar", "micro", "north", -0.01, 0.01, 0.95, 1.23, Z0 - 0.026, Z0 - 0.02, "steel-dark", contact="flush-mount",
    importance=0.2)
 bx("power-box", "Power hookup", "micro", "north", 1.16, 1.3, 0.44, 0.6, Z0 - 0.03, Z0 + 0.01, "band-dark", contact="flush-mount", importance=0.3)
 
@@ -292,6 +301,7 @@ spec["materials"] = [
     material("amber", "Marker lights", "glass", "#f2a33a", ["#ea9b33"], 0.3, 0.0, "amber marker lights", emissiveIntensity={"base": 0.7}),
     material("glass-dark", "Dark glass", "glass", "#2f3a44", ["#29333c"], 0.3, 0.0, "door window"),
     material("glass-warm", "Warm-lit glass", "glass", "#f1b77f", ["#e9af77"], 0.3, 0.0, "back window, lit from inside", emissiveIntensity={"base": 0.55}),
+    material("red-light", "Rear marker lights", "glass", "#d8423a", ["#cf3b34"], 0.3, 0.0, "red rear marker lights", emissiveIntensity={"base": 0.6}),
     material("wood", "Wooden posts", "wood", "#a87a48", ["#9f7243"], 0.85, 0.0, "wooden sign posts"),
     material("sign-dark", "Sign board", "stone", "#212629", ["#1d2124"], 0.7, 0.0, "blank dark sign board (content open)"),
 ]
