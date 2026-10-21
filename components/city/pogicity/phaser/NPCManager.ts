@@ -10,6 +10,7 @@ import {
 import { gridToScreen } from "./gameConfig";
 import { TourStop } from "@/lib/city/tourStops";
 import { playGifAnimation } from "./GifLoader";
+import { cityFont } from "@/lib/city/cityFont";
 
 export interface NPCSpawnData {
   buildingId: string;
@@ -228,7 +229,7 @@ export class NPCManager {
 
     // Number text
     const text = this.scene.add.text(0, 0, number.toString(), {
-      fontFamily: "'Press Start 2P', monospace",
+      fontFamily: cityFont(),
       fontSize: "10px",
       color: "#ffffff",
     });
@@ -245,7 +246,7 @@ export class NPCManager {
 
     if (!indicator) {
       indicator = this.scene.add.text(x, y, "!", {
-        fontFamily: "'Press Start 2P', monospace",
+        fontFamily: cityFont(),
         fontSize: "16px",
         color: "#ffff00",
         stroke: "#000000",
