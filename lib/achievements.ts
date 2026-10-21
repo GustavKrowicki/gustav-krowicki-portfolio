@@ -51,6 +51,11 @@ export const FINDS: Find[] = [
 const BY_ID = new Map(FINDS.map((find) => [find.id, find]));
 export const getFind = (id: string) => BY_ID.get(id);
 
+// Tile pictures, cropped from the city (public/images/finds). The hidden version is 12x8 px, shown as a dark mosaic.
+const imageName = (find: Find) => find.id.replace(':', '--');
+export const findImage = (find: Find) => `/images/finds/${imageName(find)}.webp`;
+export const findHiddenImage = (find: Find) => `/images/finds/${imageName(find)}-hidden.png`;
+
 const STORAGE_KEY = 'portfolio_finds';
 const SECONDS_KEY = 'portfolio_city_seconds';
 export const BOUNCE_RATE_SECONDS = 5 * 60;
