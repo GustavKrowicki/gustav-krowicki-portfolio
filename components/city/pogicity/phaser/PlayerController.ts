@@ -538,6 +538,11 @@ export class PlayerController {
     return walkable;
   }
 
+  /** Whether the player may stand on a tile (street rules, blocked tiles and walk-in interiors) */
+  canStandOn(x: number, y: number): boolean {
+    return this.isWalkable(x, y);
+  }
+
   private isWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     if (this.blockedTiles.has(`${x},${y}`)) return false;
