@@ -332,7 +332,13 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "dokk1-library",
     name: "Dokk1 Library",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
+    // The harbour library, rebuilt with img2threejs at the avatar's scale (art/img2threejs/harbour-library, Linear
+    // POR-49): blockout D on Figma board 732:3604, a low 7 x 7 plot with the top box's roof at 3.0 wu over a glass hall on a
+    // deck, a wide stair on the south side and the harbour along the east edge. Sprites at 2x density (768 px), drawn at
+    // 0.5, in slices so characters sort against each 1 wu column.
+    footprint: { width: 7, height: 7 },
+    slices: true,
+    spriteScale: 0.5,
     sprites: {
       south: "/game/pogicity/Building/landmark/dokk1-library_south.png",
       north: "/game/pogicity/Building/landmark/dokk1-library_north.png",
