@@ -507,7 +507,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     // (export_square.sh lights pass); two frames, every third bulb dimmer on the second, so the strings twinkle slowly
     nightLights: {
       sheet: "/game/pogicity/Building/landmark/cate-it-square-lights_south.png",
-      frames: 2, frameWidth: 616, frameHeight: 244, x: 54, y: 350, fps: 1,
+      frames: 2, frameWidth: 616, frameHeight: 400, x: 54, y: 350, fps: 1,
     },
     icon: "🚚",
     projectSlug: "cate-it",

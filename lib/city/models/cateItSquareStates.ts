@@ -111,7 +111,14 @@ export function createCateItSquareModel(options: Options = {}, t = 0, signs: Sig
   GUESTS.forEach((guest, k) => group.add(createGuest(guest, options, t + k / GUESTS.length)));
   group.add(createBanner(options));
   group.add(createFairyLights(options, twinkle));
-  if (lightsPass) toLightsPass(group);
+  if (lightsPass) {
+    toLightsPass(group);
+    // the pools reach past the plot: frame on the square alone, so the strip lines up with the south sprite
+    const outer = new THREE.Group();
+    outer.add(group, createNightGlow());
+    outer.userData.boundsFrom = group;
+    return outer;
+  }
   return group;
 }
 
@@ -216,6 +223,72 @@ function toLightsPass(group: THREE.Group): void {
     mesh.material = m;
     mesh.renderOrder = -1;   // depth first, so the lit parts behind it are hidden whatever the draw order
   });
+}
+
+/** Warm light at night (Gustav, 2026-10-21: the square felt dark and not welcoming): soft pools on the ground under the
+ *  strings, in front of each hatch and over the tables, and a small halo round every bulb. Lights pass only; the scene's
+ *  depth still hides the parts behind the trucks, tables and guests. Plan tiles, radius in wu, strength 0..1. */
+const GLOW_POOLS: { at: [number, number]; r: number; a: number }[] = [
+  { at: [4.6, 4.4], r: 4.2, a: 0.2 },                                                                         // the whole plaza
+  { at: [2.0, 2.4], r: 1.6, a: 0.6 }, { at: [6.0, 2.4], r: 1.6, a: 0.6 }, { at: [2.4, 5.0], r: 1.6, a: 0.6 },   // hatches
+  { at: [5.3, 5.2], r: 2.6, a: 0.5 },                                                                         // tables
+  { at: [3.0, 3.0], r: 1.8, a: 0.4 }, { at: [5.8, 3.4], r: 1.8, a: 0.4 }, { at: [7.0, 4.0], r: 1.4, a: 0.4 },  // under the strings
+  { at: [3.6, 6.4], r: 1.8, a: 0.4 },
+];
+
+function glowTexture(): THREE.Texture {
+  const c = document.createElement('canvas');
+  c.width = c.height = 128;
+  const ctx = c.getContext('2d');
+  if (ctx) {
+    const grad = ctx.createRadialGradient(64, 64, 0, 64, 64, 64);
+    grad.addColorStop(0, 'rgba(255, 214, 150, 1)');
+    grad.addColorStop(0.45, 'rgba(255, 196, 120, 0.55)');
+    grad.addColorStop(1, 'rgba(255, 180, 100, 0)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, 128, 128);
+  }
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  return t;
+}
+
+function createNightGlow(): THREE.Group {
+  const g = new THREE.Group();
+  g.name = 'night-glow';
+  const tex = glowTexture();
+  for (const { at, r, a } of GLOW_POOLS) {
+    const [x, z] = plan(at);
+    const pool = new THREE.Mesh(
+      new THREE.PlaneGeometry(2 * r, 2 * r),
+      new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: a, depthWrite: false }),
+    );
+    pool.rotation.x = -Math.PI / 2;
+    pool.position.set(x, 0.004, z);
+    pool.renderOrder = 1;
+    g.add(pool);
+  }
+  const halo = new THREE.SpriteMaterial({ map: tex, transparent: true, opacity: 0.55, depthWrite: false });
+  addHalos(g, halo);
+  return g;
+}
+
+/** A small glow sprite round every bulb of the fairy lights (same positions as createFairyLights) */
+function addHalos(g: THREE.Group, material: THREE.SpriteMaterial): void {
+  for (const { from, to } of LIGHT_STRINGS) {
+    const [ax, az] = plan([from[0], from[1]]), [bx, bz] = plan([to[0], to[1]]);
+    const a = new THREE.Vector3(ax, from[2], az), b = new THREE.Vector3(bx, to[2], bz);
+    const sag = 0.08 * a.distanceTo(b);
+    const count = Math.max(4, Math.round(a.distanceTo(b) / 0.32));
+    for (let i = 1; i < count; i++) {
+      const u = i / count;
+      const sprite = new THREE.Sprite(material);
+      sprite.position.lerpVectors(a, b, u).setY(a.y + (b.y - a.y) * u - sag * 4 * u * (1 - u) - 0.03);
+      sprite.scale.set(0.22, 0.22, 1);
+      sprite.renderOrder = 2;
+      g.add(sprite);
+    }
+  }
 }
 
 /** Guests at the tables, baked into the square's sprite: seat (plan tiles), facing (0 = south, 180 = north), their food,
