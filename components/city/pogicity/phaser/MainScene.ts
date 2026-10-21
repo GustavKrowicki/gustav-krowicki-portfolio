@@ -2162,12 +2162,14 @@ export class MainScene extends Phaser.Scene {
     // Spawn player
     this.playerController.spawn(spawnPos.x, spawnPos.y, characterType);
 
+    const keepFraming = this.keepFramingOnSpawn;
+    this.keepFramingOnSpawn = false;
     if (this.skipNextSpawnFocus) {
       // focusOnPlayer glides there next; follow anyway, in case that focus never lands
       this.skipNextSpawnFocus = false;
       this.manualCameraOverrideInAdventure = false;
       this.cameraFollowPlayer = true;
-    } else if (this.isMobileViewport()) {
+    } else if (this.isMobileViewport() && !keepFraming) {
       const playerPos = this.playerController.getPosition();
       this.focusCameraOnPlayerForMobile(playerPos.worldX, playerPos.worldY);
       this.manualCameraOverrideInAdventure = false;
@@ -2557,7 +2559,9 @@ export class MainScene extends Phaser.Scene {
   }
   // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
   skipNextSpawnFocus = false;
-  focusOnPlayer(close = false): boolean {
+  // The new site starts walking on load: the avatar spawns while the camera keeps showing the whole city (landWalking)
+  keepFramingOnSpawn = false;
+  focusOnPlayer(close = false, durationMs = 800): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
     this.stopCameraMoves();
@@ -2567,15 +2571,25 @@ export class MainScene extends Phaser.Scene {
     const zoom = close ? ZOOM.street : this.avatarFocusZoom;
     const y = p.worldY - (close ? 0 : 12);
     this.cameraFollowPlayer = false;
-    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, 800);
+    this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, durationMs);
     this.manualCameraOverrideInAdventure = false;
     // follow again once the glide has landed (a follow during the tween would fight it)
     this.focusFollowTimer?.remove();
-    this.focusFollowTimer = this.time.delayedCall(820, () => {
+    this.focusFollowTimer = this.time.delayedCall(durationMs + 20, () => {
       this.focusFollowTimer = null;
       if (this.isAdventureActive) this.cameraFollowPlayer = true;
     });
     return true;
+  }
+
+  // Landing walking (POR-47): the whole city for a moment, then a glide to the avatar at street zoom. A pan or zoom by
+  // hand in the meantime keeps the visitor's own framing.
+  landWalking(delayMs: number, glideMs: number): void {
+    const since = this.time.now;
+    this.time.delayedCall(delayMs, () => {
+      if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
+      this.focusOnPlayer(true, glideMs);
+    });
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {
