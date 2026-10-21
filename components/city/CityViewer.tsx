@@ -824,10 +824,16 @@ export default function CityViewer({
           }}
           onChoose={(choice) => {
             if (!shownCard) return;
-            trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
-            if (!choice.walk) { setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to }); return; }
+            if (!choice.walk) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+              setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to });
+              return;
+            }
             const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
-            scene?.serveThenWalk(shownCard.buildingId, shownCard.beat, choice.to);
+            // A second tap while the cook still serves is ignored, and not counted twice
+            if (scene?.serveThenWalk(shownCard.buildingId, shownCard.beat, choice.to)) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+            }
           }}
         />
       )}

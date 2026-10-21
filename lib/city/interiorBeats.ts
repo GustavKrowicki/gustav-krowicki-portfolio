@@ -108,6 +108,15 @@ export const INTERIOR_BEATS: Record<string, Record<string, InteriorBeat>> = {
   // table card tells one finding of the case) or books the truck for an event (the inquiry card, the same for all three).
   // Seats: lib/city/models/cateItSquareStates.ts SEATS, no screens, so the card stays. Draft texts for Gustav to edit.
   "cate-it": {
+    enter: {
+      kicker: "Cate it",
+      lead: "Step up to a hatch: eat, or book a truck for your event.",
+    },
+    leave: {
+      kicker: "Leaving the food trucks",
+      lead: "Cate it connects local food trucks with people who plan events.",
+      caseStudy: true,
+    },
     "hatch-burger": {
       zoomIn: true,
       kicker: "Cate it · burger trailer",

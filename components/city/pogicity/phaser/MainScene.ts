@@ -1662,6 +1662,9 @@ export class MainScene extends Phaser.Scene {
     this.activeBeat = key;
     this.beatSince = this.time.now;
     this.events.emit("interiorBeatChanged", next);
+    // Leaving the hatch while the cook still serves cancels the walk to the table
+    this.serveTimer?.remove();
+    this.serveTimer = null;
     this.updateBeatZoom(next && INTERIOR_BEATS[next.buildingId]?.[next.beat]?.zoomIn ? key : null);
   }
 
@@ -1672,9 +1675,11 @@ export class MainScene extends Phaser.Scene {
     const camera = this.cameras.main;
     const p = this.playerController!.getPosition();
     if (key && !this.beatZoomFrom) {
-      this.beatZoomFrom = { key, zoom: camera.zoom };
-      const target = Math.min(Math.floor(camera.zoom) + 1, 8);
-      this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
+      // Snap to the zoom step (powers of two) so a zoom-out still running does not leave an in-between zoom behind
+      const from = 2 ** Math.round(Math.log2(camera.zoom));
+      this.beatZoomFrom = { key, zoom: from };
+      const target = Math.min(from * 2, this.maxZoomNow());
+      if (target > from) this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
     } else if (!key && this.beatZoomFrom) {
       const zoom = this.beatZoomFrom.zoom;
       this.beatZoomFrom = null;
@@ -2293,6 +2298,8 @@ export class MainScene extends Phaser.Scene {
 
   private recordManualCameraInteraction(): void {
     this.lastManualCameraInteractionAt = this.time.now;
+    // A zoom by hand while a hatch card is open stays: leaving the hatch does not undo it
+    this.beatZoomFrom = null;
     this.stopCameraFollow();
     this.stopCameraMoves();
     if (this.isAdventureActive) {
@@ -2453,11 +2460,12 @@ export class MainScene extends Phaser.Scene {
       this.buildingSprites.delete(`${buildingKey}_ambient`);
     }
     this.ambients.delete(buildingKey);
-    for (let i = 0; this.buildingSprites.has(`${buildingKey}_reaction${i}`); i++) {
-      this.buildingSprites.get(`${buildingKey}_reaction${i}`)?.destroy();
-      this.buildingSprites.delete(`${buildingKey}_reaction${i}`);
-      this.reactions.delete(`${buildingKey}_reaction${i}`);
-    }
+    // By the reactions map, not by index: a reaction whose sheet failed to load leaves a gap in the numbers
+    [...this.reactions.keys()].filter((k) => k.startsWith(`${buildingKey}_reaction`)).forEach((k) => {
+      this.buildingSprites.get(k)?.destroy();
+      this.buildingSprites.delete(k);
+      this.reactions.delete(k);
+    });
     const lightsSprite = this.buildingSprites.get(`${buildingKey}_lights`);
     if (lightsSprite) {
       lightsSprite.destroy();
@@ -2780,7 +2788,10 @@ export class MainScene extends Phaser.Scene {
 
   /** The cook at a hatch hands the food over (its reaction's serve frames), then the avatar walks to `to` (a card's
    *  "Eat"). Without a reaction for the beat it walks at once. */
-  serveThenWalk(buildingId: string, beat: string, to: string): void {
+  private serveTimer: Phaser.Time.TimerEvent | null = null;
+  serveThenWalk(buildingId: string, beat: string, to: string): boolean {
+    // One serve at a time: a second tap on Eat while the cook serves does nothing
+    if (this.serveTimer) return false;
     let ms = 0;
     this.reactions.forEach((r) => {
       const def = getBuilding(r.buildingId)?.reactions?.[r.index];
@@ -2789,7 +2800,11 @@ export class MainScene extends Phaser.Scene {
       r.value = def.wave;
       ms = ((def.frames - def.wave) / def.fps) * 1000 + 250;
     });
-    this.time.delayedCall(ms, () => this.walkPlayerToBeat(buildingId, to));
+    this.serveTimer = this.time.delayedCall(ms, () => {
+      this.serveTimer = null;
+      if (this.activeBeat === `${buildingId}:${beat}`) this.walkPlayerToBeat(buildingId, to);
+    });
+    return true;
   }
 
   // Interior moments by `${building key}_moment${index}`: current frame position (0..frames)
