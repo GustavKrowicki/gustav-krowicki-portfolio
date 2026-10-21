@@ -71,9 +71,8 @@ export function lampsFromGrid(grid: GridCell[][]): StreetLamp[] {
   for (const row of grid) {
     for (const cell of row) {
       const type = cell.streetLamp;
-      if (!type || cell.type === TileType.Building) continue;
-      // A wire lamp needs a road to hang over
-      if (type === "wire" && !isRoad(grid, cell.x, cell.y)) continue;
+      // Same rule as the editor: a wire lamp over a road, a post or a lantern beside it (a tile repainted later drops it)
+      if (!type || !canPlaceStreetLamp(cell, type)) continue;
       let lamp: StreetLamp;
       if (type === "wire") {
         // Hung over the middle of the road, on a wire across it (along the shorter run of road) that reaches one

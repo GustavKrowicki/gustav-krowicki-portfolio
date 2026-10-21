@@ -97,10 +97,15 @@ export function findWindows(src: ImageData, shopfront: "left" | "right" | null):
         if (shopfront === "left" ? x >= cx : x <= cx) continue;
         const i = (y * w + x) * 4;
         if (data[i + 3] < 200 || a.data[i + 3] || b.data[i + 3]) continue;
-        const [, s, v] = hsv(data[i], data[i + 1], data[i + 2]);
-        const shop = v < 0.32 || (s < 0.18 && v > 0.35 && v < 0.8 && data[i + 2] >= data[i]);
+        const [hue, s, v] = hsv(data[i], data[i + 1], data[i + 2]);
+        // Dark or grey-blue glass; not black outlines, not brown wood or brick in shadow
+        if (v < 0.08 || (hue < 0.14 && s > 0.35)) continue;
+        const shop = (v < 0.32 && data[i + 2] >= data[i] - 8) || (s < 0.18 && v > 0.35 && v < 0.8 && data[i + 2] >= data[i]);
         if (!shop) continue;
-        front.data[i] = SHOP[0]; front.data[i + 1] = SHOP[1]; front.data[i + 2] = SHOP[2]; front.data[i + 3] = 220;
+        // Keep the art's detail: the light follows the pixel's own brightness (mullions stay darker than the panes)
+        const k = 0.55 + 0.45 * Math.min(1, v / 0.6);
+        front.data[i] = SHOP[0] * k; front.data[i + 1] = SHOP[1] * k; front.data[i + 2] = SHOP[2] * k;
+        front.data[i + 3] = 150 + 40 * k;
       }
     }
   }

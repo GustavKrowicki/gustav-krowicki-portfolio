@@ -38,6 +38,20 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
 
 const TIME_OF_DAY_KEY = "city-time-of-day";
 
+function readUrlTime(): { night: boolean | null; hour: number | null } {
+  try {
+    const search = new URLSearchParams(window.location.search);
+    const night = search.get("night");
+    const hour = search.get("hour");
+    return {
+      night: night === "1" ? true : night === "0" ? false : null,
+      hour: hour !== null && /^\d{1,2}$/.test(hour) && Number(hour) < 24 ? Number(hour) : null,
+    };
+  } catch {
+    return { night: null, hour: null };
+  }
+}
+
 interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
@@ -84,10 +98,10 @@ export default function CityViewer({
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
   const [isAdventureActive, setIsAdventureActive] = useState(false);
-  // Night in the city (the visitor's clock, or ?night=1 on the URL): the scene tints the city dark and turns building lights on
-  const [isNight, setIsNight] = useState(false);
+  // ?night=1 / ?night=0 and ?hour=0..23 on the URL, for links and screenshots (read once)
+  const [urlTime] = useState(() => readUrlTime());
   // The city's hour (the visitor's clock, or ?hour=): which windows are lit and how many people walk
-  const [hour, setHour] = useState(21);
+  const [hour, setHour] = useState(() => urlTime.hour ?? new Date().getHours());
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
   // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
   const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
@@ -131,7 +145,9 @@ export default function CityViewer({
   const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
   const autoWalkTargetRef = useRef<string | null>(null);
   const currentEncounterRef = useRef<TourStop | null>(null);
-  currentEncounterRef.current = currentEncounter;
+  useEffect(() => {
+    currentEncounterRef.current = currentEncounter;
+  }, [currentEncounter]);
   const selectedModeRef = useRef<'explore' | 'adventure'>('explore');
   const visitedBuildingsCountRef = useRef(0);
   useEffect(() => {
@@ -444,11 +460,13 @@ export default function CityViewer({
     }
   }, [gameMode, isAdventureActive, onProjectClick]);
 
-  // The city follows the visitor's own clock in their browser (night 19:00 to 07:00) unless they pick a time of day on
+  // The city follows the visitor's own clock in their browser (lookForHour) unless they pick a time of day on
   // the button next to Walk (remembered in this browser). ?night=1 / ?night=0 on the URL forces night or day (for links
   // and screenshots), and ?hour=0..23 stands in for the clock
   const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>(() => {
     try {
+      // A link with ?night= or ?hour= shows what the link asks for, whatever this browser picked before
+      if (urlTime.night !== null || urlTime.hour !== null) return "auto";
       const saved = window.localStorage.getItem(TIME_OF_DAY_KEY);
       return TIMES_OF_DAY.some((t) => t.id === saved) ? (saved as TimeOfDay) : "auto";
     } catch {
@@ -463,26 +481,11 @@ export default function CityViewer({
       // Storage blocked: the pick lasts for this visit
     }
   }, []);
-  const nightTouchedRef = useRef(false);
   useEffect(() => {
-    const search = new URLSearchParams(window.location.search);
-    const param = search.get("night");
-    const hourParam = search.get("hour");
-    const fixedHour = hourParam !== null && /^\d{1,2}$/.test(hourParam) && Number(hourParam) < 24 ? Number(hourParam) : null;
-    if (param === "1" || param === "0") {
-      nightTouchedRef.current = true;
-      setIsNight(param === "1");
-    }
-    const follow = () => {
-      const now = fixedHour ?? new Date().getHours();
-      setHour(now);
-      if (nightTouchedRef.current) return;
-      setIsNight(now >= 19 || now < 7);
-    };
-    follow();
-    const timer = window.setInterval(follow, 60_000);
+    if (urlTime.hour !== null) return;
+    const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
     return () => window.clearInterval(timer);
-  }, []);
+  }, [urlTime.hour]);
 
   // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
   useEffect(() => {
@@ -494,7 +497,7 @@ export default function CityViewer({
         // (night forced in the daytime shows the evening's windows)
         const pickedHour = HOUR_OF[timeOfDay];
         const look: CityLook = timeOfDay !== "auto" ? timeOfDay
-          : nightTouchedRef.current ? (isNight ? "night" : "day") : lookForHour(hour);
+          : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
         const sceneHour = pickedHour ?? hour;
         scene.setHour?.(look === "night" && !isNightHour(sceneHour) ? 21 : sceneHour);
         scene.setLook(look);
@@ -505,7 +508,7 @@ export default function CityViewer({
     if (apply()) return;
     const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
     return () => window.clearInterval(timer);
-  }, [isNight, hour, timeOfDay]);
+  }, [urlTime.night, hour, timeOfDay]);
 
   // Stop Adventure Mode
   // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)

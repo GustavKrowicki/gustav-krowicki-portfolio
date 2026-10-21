@@ -97,6 +97,10 @@ function getSnowTextureKey(x: number, y: number): string {
 
 export class MainScene extends Phaser.Scene {
   private readonly DEPTH_Y_MULT = 10000;
+  // Ground tiles sit in their own layer under everything; light pools on the ground sit just above that layer, so a pool
+  // lights the street and never a roof, a wall or a person in front of it
+  private static readonly GROUND_DEPTH = -100_000_000;
+  private static readonly POOL_DEPTH = -50_000_000;
 
   // Sprite containers
   private tileSprites: Map<string, Phaser.GameObjects.Image> = new Map();
@@ -1231,7 +1235,7 @@ export class MainScene extends Phaser.Scene {
       tileSprite = this.add.image(screenPos.x, screenPos.y, textureKey);
       tileSprite.setOrigin(0.5, 0);
       tileSprite.setScale(scale);
-      tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+      tileSprite.setDepth(MainScene.GROUND_DEPTH + this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
       this.tileSprites.set(key, tileSprite);
     }
   }
@@ -2325,7 +2329,7 @@ export class MainScene extends Phaser.Scene {
         const tileSprite = this.add.image(screenPos.x, screenPos.y, textureKey);
         tileSprite.setOrigin(0.5, 0);
         tileSprite.setScale(textureKey.startsWith("snow_") ? 0.5 * 1.02 : 1.02);
-        tileSprite.setDepth(this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
+        tileSprite.setDepth(MainScene.GROUND_DEPTH + this.depthFromSortPoint(screenPos.x, screenPos.y, 0));
         this.tileSprites.set(key, tileSprite);
 
         if (cell.type === TileType.Building && cell.isOrigin && cell.buildingId) {
@@ -2658,7 +2662,7 @@ export class MainScene extends Phaser.Scene {
         : { x: originX - 0.6, y: originY + fh / 2 };
       const ground = this.gridToScreen(at.x, at.y);
       const spill = this.add.image(ground.x, ground.y, this.spillTexture()).setBlendMode(Phaser.BlendModes.ADD);
-      spill.setDepth(this.depthFromSortPoint(ground.x, ground.y, 0.01)).setVisible(false).setAlpha(0);
+      spill.setDepth(MainScene.POOL_DEPTH).setVisible(false).setAlpha(0);
       this.buildingSprites.set(`${key}_spill`, spill);
       parts.push({ image: spill, group: "front", strength: 0.8 });
     }
@@ -2804,6 +2808,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   private buildStreetLamps(): void {
+    // Keep each lamp's level across a rebuild (an edit in the editor), so the other lamps do not blink off and on
+    const lampKey = (l: { type: string; x: number; y: number }) => `${l.type},${l.x},${l.y}`;
+    const levels = new Map(this.streetLamps.map((l) => [lampKey(l.lamp), l.level]));
     this.streetLamps.forEach((l) => l.objects.forEach((o) => o.destroy()));
     this.streetLamps = [];
     this.streetLampLit.clear();
@@ -2837,14 +2844,12 @@ export class MainScene extends Phaser.Scene {
       const head = gridToScreen(lamp.x, lamp.y, spec.height);
       const glow = this.add.image(head.x, head.y, glowKey).setBlendMode(Phaser.BlendModes.ADD);
       glow.setScale(lamp.type === "post" ? 1 : 0.75).setDepth(depth + 0.002).setAlpha(0).setVisible(false);
-      // The pool sits just above the farthest-forward ground tile it covers, so the tiles do not cut it
       const { rx, ry } = spec.pool;
-      const front = this.gridToScreen(lamp.x + rx, lamp.y + ry);
       const light = this.add.image(ground.x, ground.y, this.lampPoolTexture(lamp.type)).setBlendMode(Phaser.BlendModes.ADD);
-      light.setDepth(this.depthFromSortPoint(front.x, front.y, 0.01)).setAlpha(0).setVisible(false);
+      light.setDepth(MainScene.POOL_DEPTH).setAlpha(0).setVisible(false);
       objects.push(lit, glow, light);
       [lit, glow, light].forEach((o) => this.streetLampLit.add(o));
-      this.streetLamps.push({ lamp, level: 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, light });
+      this.streetLamps.push({ lamp, level: levels.get(lampKey(lamp)) ?? 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, light });
     }
     this.nightApplied = { tint: -1, count: -1 }; // re-tint so the new lamp bodies match the current night
   }
@@ -2860,7 +2865,8 @@ export class MainScene extends Phaser.Scene {
     this.streetLamps.forEach((l, i) => {
       const target = this.duskStart !== null && time >= this.duskStart + i * 70 ? 1 : 0;
       if (target > l.level) l.level = Math.min(target, l.level + dt / 220);
-      else l.level = Math.min(Math.max(0, l.level - dt / 450), this.night);
+      else if (target < l.level) l.level = Math.max(target, l.level - dt / 450);
+      l.level = Math.min(l.level, Math.max(this.night, target)); // never brighter than the night allows while fading out
       const on = l.level > 0;
       any ||= on;
       const dim = lampDimming(this.hour); // late at night the lamps dim, they never go out

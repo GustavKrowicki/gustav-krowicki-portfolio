@@ -76,7 +76,7 @@ export function seedFrom(key: string): number {
   return ((x >>> 0) % 10000) / 10000;
 }
 
-// The visitor's pick in the time of day menu (the shell's side rail). Auto follows their own clock
+// The visitor's pick on the time of day button (on the city canvas, next to Walk). Auto follows their own clock
 export type TimeOfDay = "auto" | "morning" | "day" | "evening" | "night";
 
 export const TIMES_OF_DAY: { id: TimeOfDay; label: string }[] = [
@@ -88,7 +88,7 @@ export const TIMES_OF_DAY: { id: TimeOfDay; label: string }[] = [
 ];
 
 // The hour each pick stands for (null: the visitor's clock)
-export const HOUR_OF: Record<TimeOfDay, number | null> = { auto: null, morning: 8, day: 13, evening: 20, night: 1 };
+export const HOUR_OF: Record<TimeOfDay, number | null> = { auto: null, morning: 8, day: 13, evening: 20, night: 23 };
 
 export const isNightHour = (hour: number) => hour >= 19 || hour < 7;
 
