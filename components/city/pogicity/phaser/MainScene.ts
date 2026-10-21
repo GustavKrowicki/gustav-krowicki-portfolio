@@ -893,6 +893,7 @@ export class MainScene extends Phaser.Scene {
     }
 
     const worldPoint = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    if (!pointer.wasTouch) this.hoverWalkIn(this.walkInBuildingAt(worldPoint.x, worldPoint.y));
     const gridPos = this.screenToGrid(worldPoint.x, worldPoint.y);
     const tileX = Math.floor(gridPos.x);
     const tileY = Math.floor(gridPos.y);
@@ -1004,6 +1005,7 @@ export class MainScene extends Phaser.Scene {
       const shouldTriggerTap = this.panPointerButton === "left";
       const wasTap = this.panDragDistance < this.TAP_DRAG_THRESHOLD;
       this.stopPanning();
+      if (shouldTriggerTap && wasTap && this.tapWalkIn(_pointer)) return;
       if (shouldTriggerTap && wasTap && this.hoverTile) {
         this.events_.onTileClick(this.hoverTile.x, this.hoverTile.y);
       }
@@ -1609,6 +1611,7 @@ export class MainScene extends Phaser.Scene {
     for (const id of Object.keys(BUILDING_INTERIORS)) this.setBuildingOpen(id, inside && here!.buildingId === id);
     // Door beats: tell React when the player crosses a walk-in building's main door, in or out
     const insideId = inside ? here!.buildingId : null;
+    if (insideId && this.walkIn) this.hideWalkIn();
     if (insideId !== this.insideBuilding) {
       if (this.insideBuilding) this.events.emit("interiorDoorCrossed", { buildingId: this.insideBuilding, inward: false });
       if (insideId) this.events.emit("interiorDoorCrossed", { buildingId: insideId, inward: true });
@@ -1709,6 +1712,134 @@ export class MainScene extends Phaser.Scene {
     else this.insideZoomFrom = null;
     const p = this.playerController!.getPosition();
     this.moveCamera(p.worldX - camera.width / 2, p.worldY - camera.height / 2, target);
+  }
+
+  // Walk in (while walking): hovering a walk-in building, or a first tap on it on a phone, shows its way in: a faint dashed
+  // line along its two camera-facing ground edges, a lit doormat on the approach tile and a "Walk in" label over the main
+  // door. A click, or a second tap, walks the avatar to the door and in. The roof still comes off only at the door.
+  private walkIn: { key: string; parts: Phaser.GameObjects.GameObject[] } | null = null;
+  private walkInTimer: ReturnType<typeof setTimeout> | null = null;
+  private walkInPending: string | null = null;
+
+  // The walk-in plot whose building is under a world point (its drawn pixels, or its footprint), or null
+  private walkInBuildingAt(wx: number, wy: number): string | null {
+    if (!this.isAdventureActive) return null;
+    for (const key of this.interiorPlots.keys()) {
+      const sprite = this.buildingSprites.get(key) as Phaser.GameObjects.Image | undefined;
+      if (!sprite?.visible || !sprite.getBounds().contains(wx, wy)) continue;
+      const fx = (wx - sprite.x) / sprite.scaleX + sprite.displayOriginX;
+      const fy = (wy - sprite.y) / sprite.scaleY + sprite.displayOriginY;
+      const frame = sprite.frame;
+      const alpha = this.textures.getPixelAlpha(Math.floor(fx), Math.floor(fy), sprite.texture.key, frame.name);
+      if (alpha && alpha > 0) return key;
+    }
+    const g = this.screenToGrid(wx, wy);
+    const t = this.interiorTiles.get(`${Math.floor(g.x)},${Math.floor(g.y)}`);
+    return t ? t.key : null;
+  }
+
+  private hoverWalkIn(key: string | null): void {
+    if (key === (this.walkIn?.key ?? null) && !this.walkInTimer) return;
+    if (key === this.walkInPending) return;
+    if (this.walkInTimer) clearTimeout(this.walkInTimer);
+    this.walkInTimer = null;
+    this.walkInPending = key;
+    if (!key) { this.hideWalkIn(); return; }
+    // a short wait, so moving the mouse across the city does not flash every building on the way
+    this.walkInTimer = setTimeout(() => {
+      this.walkInTimer = null;
+      this.walkInPending = null;
+      if (this.isAdventureActive) this.showWalkIn(key);
+    }, 200);
+  }
+
+  /** A tap on the city: true when it was used to show or follow a walk-in building's way in */
+  private tapWalkIn(pointer: Phaser.Input.Pointer): boolean {
+    const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const key = this.walkInBuildingAt(world.x, world.y);
+    if (!key) {
+      if (pointer.wasTouch) this.hideWalkIn();
+      return false;
+    }
+    if (pointer.wasTouch && this.walkIn?.key !== key) {
+      this.showWalkIn(key);
+      return true;
+    }
+    this.walkIntoPlot(key);
+    return true;
+  }
+
+  private walkIntoPlot(key: string): void {
+    const plot = this.interiorPlots.get(key);
+    const pc = this.playerController;
+    this.hideWalkIn();
+    if (!plot || !pc) return;
+    const cell = this.grid[plot.originY]?.[plot.originX];
+    const interior = cell?.buildingId ? BUILDING_INTERIORS[cell.buildingId] : undefined;
+    if (!interior) return;
+    const p = pc.getPosition();
+    if (this.insideBuildingId(p.gridX, p.gridY) === cell!.buildingId) return;
+    const [ix, iy] = interior.entrance.inside;
+    if (pc.walkToBuilding(plot.originX + ix, plot.originY + iy)) {
+      this.manualCameraOverrideInAdventure = false;
+      this.cameraFollowPlayer = true;
+    }
+  }
+
+  private showWalkIn(key: string): void {
+    if (this.walkIn?.key === key) return;
+    this.hideWalkIn();
+    const plot = this.interiorPlots.get(key);
+    const cell = plot && this.grid[plot.originY]?.[plot.originX];
+    const interior = cell?.buildingId ? BUILDING_INTERIORS[cell.buildingId] : undefined;
+    if (!plot || !interior) return;
+    const pc = this.playerController;
+    if (pc) {
+      const p = pc.getPosition();
+      if (this.insideBuildingId(p.gridX, p.gridY) === cell!.buildingId) return;
+    }
+    const corner = (x: number, y: number) => gridToScreen(plot.originX + x, plot.originY + y);
+    const { width: w, height: h } = plot;
+    const top = 19_000_000; // above the city, below the player's pointer
+
+    const line = this.add.graphics().setDepth(top);
+    line.lineStyle(1.5, 0xffffff, 0.7);
+    const dashed = (a: { x: number; y: number }, b: { x: number; y: number }) => {
+      const len = Math.hypot(b.x - a.x, b.y - a.y), dash = 4, gap = 3;
+      for (let d = 0; d < len; d += dash + gap) {
+        const t0 = d / len, t1 = Math.min(len, d + dash) / len;
+        line.lineBetween(a.x + (b.x - a.x) * t0, a.y + (b.y - a.y) * t0, a.x + (b.x - a.x) * t1, a.y + (b.y - a.y) * t1);
+      }
+    };
+    dashed(corner(0, h), corner(w, h));   // south edge
+    dashed(corner(w, 0), corner(w, h));   // east edge
+
+    // the doormat: the approach tile, in the city's warm night-light amber
+    const [ox, oy] = interior.entrance.outside;
+    const mat = this.add.graphics().setDepth(top);
+    const m = [corner(ox, oy), corner(ox + 1, oy), corner(ox + 1, oy + 1), corner(ox, oy + 1)];
+    mat.fillStyle(0xffc857, 0.45);
+    mat.fillPoints(m.map((q) => new Phaser.Math.Vector2(q.x, q.y)), true);
+    mat.lineStyle(1.5, 0xffc857, 0.95);
+    mat.strokePoints(m.map((q) => new Phaser.Math.Vector2(q.x, q.y)), true);
+
+    // the label over the door: the middle of the door's tile edge, lifted above a storey
+    const [ix, iy] = interior.entrance.inside;
+    const a = corner(ix + (ox > ix ? 1 : 0), iy + (oy > iy ? 1 : 0));
+    const b = corner(ix + (ox >= ix ? 1 : 0), iy + (oy >= iy ? 1 : 0));
+    const label = this.add.text((a.x + b.x) / 2, (a.y + b.y) / 2 - 44, "Walk in ▾", {
+      fontFamily: "ui-monospace, Menlo, monospace", fontSize: "9px", fontStyle: "bold", color: "#1e2321",
+      backgroundColor: "#ffc857", padding: { x: 4, y: 2 }, resolution: 4,
+    }).setOrigin(0.5, 1).setDepth(top + 1);
+    label.setInteractive({ useHandCursor: true });
+    label.on("pointerup", () => this.walkIntoPlot(key));
+
+    this.walkIn = { key, parts: [line, mat, label] };
+  }
+
+  private hideWalkIn(): void {
+    this.walkIn?.parts.forEach((p) => p.destroy());
+    this.walkIn = null;
   }
 
   // Just outside a walk-in plot on its south or east side the whole building is behind a character, but its big sprite
@@ -1896,6 +2027,7 @@ export class MainScene extends Phaser.Scene {
     this.standUp();
     this.insideBuilding = null;
     this.setInteriorBeat(null);
+    this.hideWalkIn();
 
     // Clean up
     if (this.playerController) {
