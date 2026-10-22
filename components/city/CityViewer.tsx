@@ -10,6 +10,8 @@ import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, isFound, m
 import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
 import RPGDialogBox from "./RPGDialogBox";
+import PlaceSheet from "./PlaceSheet";
+import FindPill from "./FindPill";
 import PeekCard from "./PeekCard";
 import WalkInCard from "./WalkInCard";
 import ScreensOverlay from "./ScreensOverlay";
@@ -67,6 +69,10 @@ interface CityViewerProps {
   // Shell only: the Avatar tab is showing. The avatar is put in the city and the camera holds it in view, so each
   // outfit change is seen on it; the walk controls wait until the panel closes.
   avatarTabOpen?: boolean;
+  // Shell only: the panel (on phones, the bottom sheet) is open. On a phone a place's card takes the sheet's spot, so the
+  // shell closes the panel when a place opens (onPlaceOpen), and an opening panel closes the place.
+  panelOpen?: boolean;
+  onPlaceOpen?: () => void;
 }
 
 
@@ -101,8 +107,21 @@ export default function CityViewer({
   e2eMode = false,
   variant = "page",
   avatarTabOpen = false,
+  panelOpen = false,
+  onPlaceOpen,
 }: CityViewerProps) {
   const isShell = variant === "shell";
+  // Phone width in the shell (the panel's md breakpoint): place cards open as a bottom sheet, peek cards sit at the
+  // bottom, finds show as a small pill (POR-23, modeled on tomjohn.design)
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsPhone(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const phoneShell = isShell && isPhone;
 
   // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
@@ -705,6 +724,19 @@ export default function CityViewer({
     return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
   }, [isAdventureActive, handleStartAdventure, walkInScene]);
 
+  // Phones: a place opened in place takes the sheet's spot, so the panel closes; a panel opened from the tab bar
+  // closes the place again
+  useEffect(() => {
+    if (phoneShell && walkInPeek) onPlaceOpen?.();
+  }, [phoneShell, walkInPeek, onPlaceOpen]);
+  const walkInPeekRef = useRef(walkInPeek);
+  useEffect(() => {
+    walkInPeekRef.current = walkInPeek;
+  }, [walkInPeek]);
+  useEffect(() => {
+    if (panelOpen && phoneShell && walkInPeekRef.current) walkInScene()?.closeWalkInPeek?.();
+  }, [panelOpen, phoneShell, walkInScene]);
+
   const handleReadCasePeek = useCallback(() => {
     const slug = walkInPeek ? getBuilding(walkInPeek)?.projectSlug : undefined;
     walkInScene()?.closeWalkInPeek?.();
@@ -1010,13 +1042,22 @@ export default function CityViewer({
         </>
       )}
 
-      {/* A walk-in building opened in place by a tap: walk in, or read the case */}
-      <WalkInCard
-        buildingId={avatarTabOpen ? null : walkInPeek}
-        onWalkIn={handleWalkInPeek}
-        onReadCase={handleReadCasePeek}
-        onClose={() => walkInScene()?.closeWalkInPeek?.()}
-      />
+      {/* A walk-in building opened in place by a tap: walk in, or read the case (a bottom sheet on phones) */}
+      {phoneShell ? (
+        <PlaceSheet
+          buildingId={avatarTabOpen ? null : walkInPeek}
+          onWalkIn={handleWalkInPeek}
+          onReadCase={handleReadCasePeek}
+          onClose={() => walkInScene()?.closeWalkInPeek?.()}
+        />
+      ) : (
+        <WalkInCard
+          buildingId={avatarTabOpen ? null : walkInPeek}
+          onWalkIn={handleWalkInPeek}
+          onReadCase={handleReadCasePeek}
+          onClose={() => walkInScene()?.closeWalkInPeek?.()}
+        />
+      )}
 
       {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
       {isAdventureActive && (
@@ -1024,6 +1065,8 @@ export default function CityViewer({
           beat={shownCard ? INTERIOR_BEATS[shownCard.buildingId]?.[shownCard.beat] ?? null : null}
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
           foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
+          atBottom={phoneShell}
+          plain={phoneShell}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
             if (!slug) return;
@@ -1056,7 +1099,11 @@ export default function CityViewer({
       )}
 
       {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
-      <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
+      {phoneShell ? (
+        <FindPill find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
+      ) : (
+        <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
+      )}
 
       {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox
@@ -1072,7 +1119,7 @@ export default function CityViewer({
       {/* Walk the avatar (the /city page; the new site is always walking, the yellow marker shows where). In the shell
           the time of day button sits inside the city view (the panel and its phone sheet own the window's edges):
           bottom-left on a desktop, bottom-right on a phone */}
-      {!dialogShown && !avatarTabOpen && (
+      {!dialogShown && !avatarTabOpen && !(phoneShell && walkInPeek) && (
         <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
           {!isShell && (
             <button

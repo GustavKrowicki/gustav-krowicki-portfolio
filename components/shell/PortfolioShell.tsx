@@ -9,7 +9,7 @@ import ShellPanel, { type PanelState } from './ShellPanel';
 import type { SectionId } from './sections';
 import { readView, viewToSearch, type ShellView } from './shellUrl';
 import { AVATAR_WALK_EVENT } from '@/lib/city/models/avatarPieces';
-import { FIND_WALK_EVENT } from '@/lib/achievements';
+import { FIND_OPEN_EVENT, FIND_WALK_EVENT } from '@/lib/achievements';
 
 // Phaser needs the browser, so the city loads on the client only.
 const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
@@ -125,6 +125,16 @@ export default function PortfolioShell() {
     return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
   }, []);
 
+  // The find pill in the city (phones) opens that find's page in the Achievements tab
+  useEffect(() => {
+    const onFindOpen = () => openSection('achievements');
+    window.addEventListener(FIND_OPEN_EVENT, onFindOpen);
+    return () => window.removeEventListener(FIND_OPEN_EVENT, onFindOpen);
+  }, [openSection]);
+
+  // Phones: a place opened in the city takes the sheet's spot (CityViewer onPlaceOpen)
+  const closePanelForPlace = useCallback(() => setPanel('closed'), []);
+
   // A project building in the city opens its case, with Back leading to Work.
   const handleProjectClick = useCallback(
     (slug: string) => {
@@ -157,6 +167,8 @@ export default function PortfolioShell() {
           onProjectClick={handleProjectClick}
           variant="shell"
           avatarTabOpen={panel !== 'closed' && section === 'avatar' && !openCase}
+          panelOpen={panel !== 'closed'}
+          onPlaceOpen={closePanelForPlace}
           e2eMode={e2eMode}
         />
       </div>
