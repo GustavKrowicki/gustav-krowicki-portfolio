@@ -255,6 +255,10 @@ BACK34 = [   # 3/4 up-right: hair over the crown, the ear on the right, the nape
 ]
 def paste_grid(im, grid, x0, bob):
     y0 = GROUND - 54 + bob
+    put = im.putpixel
+    def safe(xy, c):   # a hat in the run's flight frames reaches above the frame: clip it (a negative y wraps around)
+        if 0 <= xy[0] < FW and 0 <= xy[1] < FH: put(xy, c)
+    im = type('Clip', (), {'putpixel': staticmethod(safe)})()
     for y, row in enumerate(grid):
         for x, c in enumerate(row):
             if PAL[c]: im.putpixel((x0 + x, y0 + y), PAL[c] + (255,))
