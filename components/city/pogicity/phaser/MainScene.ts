@@ -1974,9 +1974,23 @@ export class MainScene extends Phaser.Scene {
       this.cameraFollowPlayer = false;
       this.moveCamera(Math.round(c.x - camera.width / 2), Math.round(c.y - 0.18 * view.height - camera.height / 2), camera.zoom);
     }
-    this.peekEscHandler = (e: KeyboardEvent) => { if (e.key === "Escape") this.closeWalkInPeek(); };
+    this.peekEscHandler = (e: KeyboardEvent) => { if (e.key === "Escape" && this.peekEscCloses) this.closeWalkInPeek(); };
     window.addEventListener("keydown", this.peekEscHandler);
     this.events.emit("walkInPeek", { buildingId });
+  }
+
+  /** Esc puts the roof back. Off with ?popups=slot, where the page's Esc goes one step back (case, place) instead */
+  peekEscCloses = true;
+
+  /** Open a walk-in building in place by its id (a place opened from a link), as a tap on it does */
+  openInPlace(buildingId: string): boolean {
+    this.ensureInteriorTiles();
+    for (const [key, plot] of this.interiorPlots) {
+      if (this.grid[plot.originY]?.[plot.originX]?.buildingId !== buildingId) continue;
+      if (this.peek?.key !== key) this.openWalkInPeek(key);
+      return true;
+    }
+    return false;
   }
 
   /** Put the roof back on the building opened in place (unless the avatar is inside it) and close its card */

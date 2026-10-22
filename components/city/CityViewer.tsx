@@ -16,6 +16,8 @@ import PeekCard from "./PeekCard";
 import WalkInCard from "./WalkInCard";
 import ScreensOverlay from "./ScreensOverlay";
 import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
+import { getPlace } from "@/lib/city/places";
+import { PLACE_WALK_IN_EVENT } from "@/lib/popupMode";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
@@ -73,6 +75,13 @@ interface CityViewerProps {
   // shell closes the panel when a place opens (onPlaceOpen), and an opening panel closes the place.
   panelOpen?: boolean;
   onPlaceOpen?: () => void;
+  // Shell only. "slot" (?popups=slot, Figma board F): a tap on any building (or its logo) opens its place in the shell's
+  // panel instead of a card in the city (onOpenPlace); the shell's open place comes back as openPlace, and a walk-in
+  // building's roof follows it. Finds are a pill on every screen, beat cards plain, and the old tour dialog never shows.
+  popups?: "cards" | "slot";
+  openPlace?: string | null;
+  onOpenPlace?: (buildingId: string) => void;
+  onClosePlace?: () => void;
 }
 
 
@@ -109,8 +118,23 @@ export default function CityViewer({
   avatarTabOpen = false,
   panelOpen = false,
   onPlaceOpen,
+  popups = "cards",
+  openPlace = null,
+  onOpenPlace,
+  onClosePlace,
 }: CityViewerProps) {
   const isShell = variant === "shell";
+  const slot = isShell && popups === "slot";
+  // For the Phaser event handlers, which are set up once
+  const slotRef = useRef(slot);
+  slotRef.current = slot;
+  const onOpenPlaceRef = useRef(onOpenPlace);
+  onOpenPlaceRef.current = onOpenPlace;
+  const onClosePlaceRef = useRef(onClosePlace);
+  onClosePlaceRef.current = onClosePlace;
+  const openPlaceRef = useRef(openPlace);
+  // The walk-in building whose roof is off for the shell's place (slot), so a closing roof closes that place only
+  const peekedPlaceRef = useRef<string | null>(null);
   // Phone width in the shell (the panel's md breakpoint): place cards open as a bottom sheet, peek cards sit at the
   // bottom, finds show as a small pill (POR-23, modeled on tomjohn.design)
   const [isPhone, setIsPhone] = useState(false);
@@ -145,6 +169,8 @@ export default function CityViewer({
   // Door beats (lib/city/interiorBeats.ts "enter" / "leave"): shown for a while after crossing a main door
   const [doorCard, setDoorCard] = useState<{ buildingId: string; beat: string } | null>(null);
   const doorTimerRef = useRef<number | undefined>(undefined);
+  // slot: the avatar stood still after a door card showed, so its next walk closes the card
+  const doorStoppedRef = useRef(false);
   useEffect(() => () => {
     window.clearTimeout(seatTimerRef.current);
     window.clearTimeout(doorTimerRef.current);
@@ -403,7 +429,9 @@ export default function CityViewer({
               }
             } else if (autoWalkTargetRef.current === buildingId) {
               autoWalkTargetRef.current = null;
-              setIsDialogOpen(true);
+              // slot: arriving where Walk there pointed opens the place in the panel
+              if (slotRef.current) onOpenPlaceRef.current?.(buildingId);
+              else setIsDialogOpen(true);
               if (tourStop.title) {
                 trackBuildingInteracted(tourStop.title, 'adventure', 'auto_walk');
               }
@@ -427,7 +455,9 @@ export default function CityViewer({
             const beat = inward ? "enter" : "leave";
             if (!INTERIOR_BEATS[buildingId]?.[beat]) { setDoorCard(null); return; }
             setDoorCard({ buildingId, beat });
-            doorTimerRef.current = window.setTimeout(() => setDoorCard(null), inward ? 6000 : 15000);
+            // slot: no timer, the card stays until the avatar walks on (playerPositionChanged)
+            doorStoppedRef.current = false;
+            if (!slotRef.current) doorTimerRef.current = window.setTimeout(() => setDoorCard(null), inward ? 6000 : 15000);
           });
 
           // the screens open a moment after the avatar sits, so the sit itself is seen
@@ -457,6 +487,10 @@ export default function CityViewer({
             if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
               autoWalkTargetRef.current = null;
             }
+            if (slotRef.current) {
+              if (data.state !== PlayerState.Walking) doorStoppedRef.current = true;
+              else if (doorStoppedRef.current) setDoorCard(null);
+            }
             setWalkableDirections(data.walkableDirections ?? []);
           });
 
@@ -470,6 +504,14 @@ export default function CityViewer({
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
+    // slot: a logo opens the same thing as its building, its place
+    if (slotRef.current) {
+      if (!getPlace(buildingId)) return;
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+      if (!scene?.openInPlace(buildingId)) gameBoardRef.current?.panToBuildingById(buildingId);
+      onOpenPlaceRef.current?.(buildingId);
+      return;
+    }
     // A logo opens the same thing as its building: the case, when there is one
     const building = getBuilding(buildingId);
     if (building?.interactable && building.projectSlug) {
@@ -661,6 +703,14 @@ export default function CityViewer({
     let timer = 0;
     const onPeek = (next: { buildingId: string } | null) => {
       setWalkInPeek(next?.buildingId ?? null);
+      // slot: the roof is the place's. Opening it opens the place in the panel; closing it (a tap elsewhere, walking in)
+      // closes that place, unless the shell has moved on to another one
+      if (slotRef.current) {
+        const was = peekedPlaceRef.current;
+        peekedPlaceRef.current = next?.buildingId ?? null;
+        if (next) onOpenPlaceRef.current?.(next.buildingId);
+        else if (was && openPlaceRef.current === was) onClosePlaceRef.current?.();
+      }
       if (!next) return;
       const building = getBuilding(next.buildingId);
       if (building) trackBuildingInteracted(building.name, selectedModeRef.current, 'open_in_place');
@@ -668,6 +718,8 @@ export default function CityViewer({
     const attach = () => {
       scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as typeof scene;
       if (!scene?.events) { timer = window.setTimeout(attach, 200); return; }
+      // slot: the page's Esc goes one step back (case, place); the roof follows the place
+      (scene as { peekEscCloses?: boolean }).peekEscCloses = !slotRef.current;
       scene.events.on("walkInPeek", onPeek);
     };
     attach();
@@ -680,10 +732,39 @@ export default function CityViewer({
   const walkInScene = useCallback(
     () =>
       gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-        | { walkIntoPeek?: () => boolean; closeWalkInPeek?: () => void }
+        | { walkIntoPeek?: () => boolean; closeWalkInPeek?: () => void; openInPlace?: (buildingId: string) => boolean }
         | undefined,
     []
   );
+
+  // slot: the shell's open place drives the city. A new place takes the roof off its walk-in building (a link that
+  // opens on it, or a place opened from the panel) or moves the camera to it; no place puts the last roof back.
+  useEffect(() => {
+    openPlaceRef.current = openPlace;
+    if (!slot) return;
+    const peeked = peekedPlaceRef.current;
+    if (peeked && peeked !== openPlace) walkInScene()?.closeWalkInPeek?.();
+    if (!openPlace || openPlace === peeked) return;
+    let tries = 0, timer = 0;
+    const go = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as { ready?: boolean } | undefined;
+      if (!scene?.ready) {
+        if (++tries < 100) timer = window.setTimeout(go, 150);
+        return;
+      }
+      if (!walkInScene()?.openInPlace?.(openPlace)) gameBoardRef.current?.panToBuildingById(openPlace);
+    };
+    go();
+    return () => window.clearTimeout(timer);
+  }, [slot, openPlace, walkInScene]);
+
+  // slot: the place's Walk in, from the panel
+  useEffect(() => {
+    if (!slot) return;
+    const onWalkIn = () => handleWalkInPeekRef.current();
+    window.addEventListener(PLACE_WALK_IN_EVENT, onWalkIn);
+    return () => window.removeEventListener(PLACE_WALK_IN_EVENT, onWalkIn);
+  }, [slot]);
 
   // The card's Walk in: start walking first when needed (the avatar spawns), then walk to the open building's door
   const handleWalkInPeek = useCallback(() => {
@@ -695,6 +776,8 @@ export default function CityViewer({
     };
     go();
   }, [isAdventureActive, handleStartAdventure, walkInScene]);
+  const handleWalkInPeekRef = useRef(handleWalkInPeek);
+  handleWalkInPeekRef.current = handleWalkInPeek;
 
   // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then run to the room's spot, in
   // through a building's door (a hidden room), or to the place. Zones passed on the way stay quiet; the place itself
@@ -727,15 +810,15 @@ export default function CityViewer({
   // Phones: a place opened in place takes the sheet's spot, so the panel closes; a panel opened from the tab bar
   // closes the place again
   useEffect(() => {
-    if (phoneShell && walkInPeek) onPlaceOpen?.();
-  }, [phoneShell, walkInPeek, onPlaceOpen]);
+    if (phoneShell && !slot && walkInPeek) onPlaceOpen?.();
+  }, [phoneShell, slot, walkInPeek, onPlaceOpen]);
   const walkInPeekRef = useRef(walkInPeek);
   useEffect(() => {
     walkInPeekRef.current = walkInPeek;
   }, [walkInPeek]);
   useEffect(() => {
-    if (panelOpen && phoneShell && walkInPeekRef.current) walkInScene()?.closeWalkInPeek?.();
-  }, [panelOpen, phoneShell, walkInScene]);
+    if (panelOpen && phoneShell && !slot && walkInPeekRef.current) walkInScene()?.closeWalkInPeek?.();
+  }, [panelOpen, phoneShell, slot, walkInScene]);
 
   const handleReadCasePeek = useCallback(() => {
     const slug = walkInPeek ? getBuilding(walkInPeek)?.projectSlug : undefined;
@@ -751,6 +834,14 @@ export default function CityViewer({
 
       trackBuildingInteracted(building.name, gameMode, 'click');
 
+      // slot: every building with a place opens it in the panel (walk-in buildings come through walkInPeek instead)
+      if (slot) {
+        if (!getPlace(buildingId)) return;
+        gameBoardRef.current?.panToBuildingById(buildingId);
+        onOpenPlace?.(buildingId);
+        return;
+      }
+
       if (building.interactable && building.projectSlug) {
         onProjectClick?.(building.projectSlug);
       } else {
@@ -762,7 +853,7 @@ export default function CityViewer({
         }
       }
     },
-    [onProjectClick, gameMode]
+    [onProjectClick, gameMode, slot, onOpenPlace]
   );
 
 
@@ -987,7 +1078,7 @@ export default function CityViewer({
   const seatHasScreens = !!(interiorBeat && INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat]?.seat?.screens.length);
   const shownCard = interiorBeat ? (isSeated && seatHasScreens ? null : choiceCard ?? interiorBeat) : doorCard;
   // The tour dialog does not show for buildings told by beat cards (it may still be "open" for them in state)
-  const dialogShown = isDialogOpen && !!currentEncounter && !BEAT_CARD_BUILDINGS.has(currentEncounter.buildingId ?? "");
+  const dialogShown = !slot && isDialogOpen && !!currentEncounter && !BEAT_CARD_BUILDINGS.has(currentEncounter.buildingId ?? "");
 
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
@@ -1043,7 +1134,7 @@ export default function CityViewer({
       )}
 
       {/* A walk-in building opened in place by a tap: walk in, or read the case (a bottom sheet on phones) */}
-      {phoneShell ? (
+      {slot ? null : phoneShell ? (
         <PlaceSheet
           buildingId={avatarTabOpen ? null : walkInPeek}
           onWalkIn={handleWalkInPeek}
@@ -1066,7 +1157,7 @@ export default function CityViewer({
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
           foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
           atBottom={phoneShell}
-          plain={phoneShell}
+          plain={phoneShell || slot}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
             if (!slug) return;
@@ -1099,7 +1190,7 @@ export default function CityViewer({
       )}
 
       {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
-      {phoneShell ? (
+      {phoneShell || slot ? (
         <FindPill find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
       ) : (
         <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
@@ -1119,7 +1210,7 @@ export default function CityViewer({
       {/* Walk the avatar (the /city page; the new site is always walking, the yellow marker shows where). In the shell
           the time of day button sits inside the city view (the panel and its phone sheet own the window's edges):
           bottom-left on a desktop, bottom-right on a phone */}
-      {!dialogShown && !avatarTabOpen && !(phoneShell && walkInPeek) && (
+      {!dialogShown && !avatarTabOpen && !(phoneShell && !slot && walkInPeek) && (
         <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
           {!isShell && (
             <button
