@@ -7,8 +7,8 @@ import {
   TileType,
   GRID_WIDTH,
   GRID_HEIGHT,
+  TILE_WIDTH,
   TILE_HEIGHT,
-  PLAYER_MOVE_LERP,
   getCharacterTextureKey,
   GridCell,
 } from "../types";
@@ -17,6 +17,7 @@ import { playGifAnimation } from "./GifLoader";
 import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 import { cityFont } from "@/lib/city/cityFont";
+import { WALK_SPEED_WU_PER_S } from "@/lib/city/units";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -61,8 +62,31 @@ export interface InteriorRules {
 
 // Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
 const ENTRANCE_GUIDE_MAX_STEPS = 12;
-// World px per frame on a run: about 15 tiles a second, so a walk across the city takes 2 to 3 s
-const RUN_PX_PER_FRAME = 6;
+// Speeds in tiles (wu) a second, the same on every screen (POR-53). Today's feel unless a preview asks for a set:
+// ?speeds=A|B|C, or ?walk= / ?run= in tiles a second. A = Tom's site 1:1, B = between, C = today.
+const SPEED_SETS = { A: { walk: 0.8, run: 2.8 }, B: { walk: 2, run: 7 }, C: { walk: 4, run: 12 } } as const;
+
+function readSpeeds(): { walk: number; run: number } {
+  let base: { walk: number; run: number } = SPEED_SETS.C;
+  if (typeof window === "undefined") return base;
+  const query = new URLSearchParams(window.location.search);
+  const set = query.get("speeds")?.toUpperCase();
+  if (set && set in SPEED_SETS) base = SPEED_SETS[set as keyof typeof SPEED_SETS];
+  const tilesPerSecond = (key: string) => {
+    const value = Number(query.get(key));
+    return value > 0 && value <= 40 ? value : null;
+  };
+  return { walk: tilesPerSecond("walk") ?? base.walk, run: tilesPerSecond("run") ?? base.run };
+}
+
+// World px of one step along a grid axis on the 2:1 view
+const TILE_STEP_PX = Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+// Up to full speed from a standstill, and down to a stop at the end of a walk (Tom's site: about a quarter second)
+const EASE_S = 0.2;
+// Slowest pace while easing to a stop, so the last step always lands (tiles a second)
+const MIN_SPEED = 0.5;
+// The walk frames are baked for WALK_SPEED_WU_PER_S; they play faster with the speed, up to this many times (no run cycle yet)
+const MAX_LEG_TIME_SCALE = 3;
 
 export class PlayerController {
   private scene: Phaser.Scene;
@@ -105,8 +129,11 @@ export class PlayerController {
   private isAutoWalking: boolean = false;
   // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
   private guideDirection: Direction | null = null;
-  // A long walk sent from the panel ("Walk there"): the avatar runs at a steady pace instead of easing into each tile
+  // A long walk sent from the panel ("Walk there"): the avatar runs instead of walking
   private running: boolean = false;
+  private readonly speeds = readSpeeds();
+  // Current pace in tiles a second (eases up from 0 at a start and down at the end of a walk)
+  private speedNow = 0;
 
   // External direction input (for mobile joystick)
   private externalDirection: Direction | null = null;
@@ -229,6 +256,10 @@ export class PlayerController {
       if (this.scene.textures.exists(textureKey)) {
         playGifAnimation(this.sprite, textureKey);
       }
+      // Legs keep up with the pace, so the feet do not slide
+      this.sprite.anims.timeScale = this.isMoving && this.speedNow > 0
+        ? Math.min(MAX_LEG_TIME_SCALE, this.speedNow / WALK_SPEED_WU_PER_S)
+        : 1;
     }
   }
 
@@ -269,60 +300,88 @@ export class PlayerController {
     return null;
   }
 
-  update(): void {
+  /** delta: ms since the last frame */
+  update(delta: number): void {
     if (!this.isReady) return;
+    const dt = Math.min(delta, 100) / 1000;
 
     // Handle auto-walk
     if (this.isAutoWalking) {
-      this.updateAutoWalk();
+      this.updateAutoWalk(dt);
       return;
     }
 
     // Get current input
     this.inputDirection = this.getCurrentInputDirection();
 
-    if (this.isMoving) {
-      // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
-
-      const dx = Math.abs(this.worldX - this.targetWorldX);
-      const dy = Math.abs(this.worldY - this.targetWorldY);
-
-      if (dx < 1 && dy < 1) {
-        // Snap to target
-        this.worldX = this.targetWorldX;
-        this.worldY = this.targetWorldY;
-        this.gridX = this.targetGridX;
-        this.gridY = this.targetGridY;
-        this.isMoving = false;
-        this.state = PlayerState.Idle;
-        this.emitPositionChange();
-      }
-    } else if (this.inputDirection) {
-      // Try to move in the input direction
-      const vec = directionVectors[this.inputDirection];
-      const newGridX = this.gridX + vec.dx;
-      const newGridY = this.gridY + vec.dy;
-
-      // Update facing direction
-      this.direction = this.inputDirection;
-
-      if (this.isWalkable(newGridX, newGridY) && this.canStep(this.gridX, this.gridY, newGridX, newGridY)) {
-        this.targetGridX = newGridX;
-        this.targetGridY = newGridY;
-
-        const targetScreen = gridToScreen(newGridX, newGridY);
-        this.targetWorldX = targetScreen.x;
-        this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
-
-        this.isMoving = true;
-        this.state = PlayerState.Walking;
-        this.emitPositionChange();
-      } else {
-        this.guideToEntrance(newGridX, newGridY);
-      }
+    if (this.isMoving && this.stepTowardTarget(dt, null) >= 0) {
+      this.gridX = this.targetGridX;
+      this.gridY = this.targetGridY;
+      this.isMoving = false;
+      this.state = PlayerState.Idle;
+      this.emitPositionChange();
     }
+
+    if (this.isMoving) return;
+    if (!this.inputDirection) {
+      this.speedNow = 0;
+      return;
+    }
+
+    // Try to move in the input direction (in the same frame as the last step landed, so a held key walks without a pause)
+    const vec = directionVectors[this.inputDirection];
+    const newGridX = this.gridX + vec.dx;
+    const newGridY = this.gridY + vec.dy;
+
+    // Update facing direction
+    this.direction = this.inputDirection;
+
+    if (this.isWalkable(newGridX, newGridY) && this.canStep(this.gridX, this.gridY, newGridX, newGridY)) {
+      this.targetGridX = newGridX;
+      this.targetGridY = newGridY;
+
+      const targetScreen = gridToScreen(newGridX, newGridY);
+      this.targetWorldX = targetScreen.x;
+      this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
+
+      this.isMoving = true;
+      this.state = PlayerState.Walking;
+      this.emitPositionChange();
+    } else {
+      this.speedNow = 0;
+      this.guideToEntrance(newGridX, newGridY);
+    }
+  }
+
+  // Moves toward the target tile at the current pace; the distance left over after landing there (px), or -1 when still
+  // on the way. remainingPx: what is left of an auto-walk after this step's target, so the pace eases to a stop at its end.
+  private stepTowardTarget(dt: number, remainingPx: number | null): number {
+    const top = this.running ? this.speeds.run : this.speeds.walk;
+    const ease = top / EASE_S; // tiles a second, per second
+    this.speedNow = Math.min(top, this.speedNow + ease * dt);
+
+    if (remainingPx !== null) {
+      const left = Math.hypot(this.targetWorldX - this.worldX, this.targetWorldY - this.worldY);
+      // The fastest pace that can still stop at the end of the walk
+      const stopping = Math.sqrt(2 * ease * ((left + remainingPx) / TILE_STEP_PX));
+      this.speedNow = Math.max(MIN_SPEED, Math.min(this.speedNow, stopping));
+    }
+
+    return this.moveTowardTarget(this.speedNow * TILE_STEP_PX * dt);
+  }
+
+  // Moves up to `px` toward the target tile: the distance left over after landing there, or -1 when still on the way
+  private moveTowardTarget(px: number): number {
+    const rx = this.targetWorldX - this.worldX, ry = this.targetWorldY - this.worldY;
+    const left = Math.hypot(rx, ry);
+    if (px >= left) {
+      this.worldX = this.targetWorldX;
+      this.worldY = this.targetWorldY;
+      return px - left;
+    }
+    this.worldX += (rx / left) * px;
+    this.worldY += (ry / left) * px;
+    return -1;
   }
 
   // Walking into a walk-in building's wall from outside: walk along to its main door and in, when the door is close
@@ -339,7 +398,7 @@ export class PlayerController {
     this.emitPositionChange();
   }
 
-  private updateAutoWalk(): void {
+  private updateAutoWalk(dt: number): void {
     if (this.autoWalkPath.length === 0 || this.autoWalkIndex >= this.autoWalkPath.length) {
       this.cancelAutoWalk();
       return;
@@ -352,64 +411,52 @@ export class PlayerController {
       return;
     }
 
-    if (this.isMoving) {
-      if (this.running) {
-        // A steady step per frame, so a run does not slow down at every tile
-        const rx = this.targetWorldX - this.worldX, ry = this.targetWorldY - this.worldY;
-        const left = Math.hypot(rx, ry);
-        const step = Math.min(RUN_PX_PER_FRAME, left);
-        if (left > 0) {
-          this.worldX += (rx / left) * step;
-          this.worldY += (ry / left) * step;
-        }
-      } else {
-        // Interpolate toward target position
-        this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-        this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
-      }
+    if (!this.isMoving) this.startNextAutoStep();
 
-      const dx = Math.abs(this.worldX - this.targetWorldX);
-      const dy = Math.abs(this.worldY - this.targetWorldY);
+    const stepsAfter = this.autoWalkPath.length - this.autoWalkIndex - 1;
+    let leftOver = this.stepTowardTarget(dt, stepsAfter * TILE_STEP_PX);
 
-      if (dx < 1 && dy < 1) {
-        // Snap to target
-        this.worldX = this.targetWorldX;
-        this.worldY = this.targetWorldY;
-        this.gridX = this.targetGridX;
-        this.gridY = this.targetGridY;
-        this.isMoving = false;
-        this.autoWalkIndex++;
-        this.emitPositionChange();
-
-        // Check if we've reached the end
-        if (this.autoWalkIndex >= this.autoWalkPath.length) {
-          this.cancelAutoWalk();
-        }
-      }
-    } else {
-      // Move to next path node
-      const nextNode = this.autoWalkPath[this.autoWalkIndex];
-
-      // Calculate direction
-      const dx = nextNode.x - this.gridX;
-      const dy = nextNode.y - this.gridY;
-
-      if (dx > 0) this.direction = Direction.Right;
-      else if (dx < 0) this.direction = Direction.Left;
-      else if (dy > 0) this.direction = Direction.Down;
-      else if (dy < 0) this.direction = Direction.Up;
-
-      this.targetGridX = nextNode.x;
-      this.targetGridY = nextNode.y;
-
-      const targetScreen = gridToScreen(nextNode.x, nextNode.y);
-      this.targetWorldX = targetScreen.x;
-      this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
-
-      this.isMoving = true;
-      this.state = PlayerState.AutoWalking;
+    while (leftOver >= 0) {
+      this.gridX = this.targetGridX;
+      this.gridY = this.targetGridY;
+      this.isMoving = false;
+      this.autoWalkIndex++;
       this.emitPositionChange();
+
+      // Check if we've reached the end
+      if (this.autoWalkIndex >= this.autoWalkPath.length) {
+        this.speedNow = 0;
+        this.cancelAutoWalk();
+        return;
+      }
+      // On to the next tile with the rest of this frame's distance, so the pace is the same at any frame rate
+      this.startNextAutoStep();
+      leftOver = this.moveTowardTarget(leftOver);
     }
+  }
+
+  private startNextAutoStep(): void {
+    const nextNode = this.autoWalkPath[this.autoWalkIndex];
+
+    // Calculate direction
+    const dx = nextNode.x - this.gridX;
+    const dy = nextNode.y - this.gridY;
+
+    if (dx > 0) this.direction = Direction.Right;
+    else if (dx < 0) this.direction = Direction.Left;
+    else if (dy > 0) this.direction = Direction.Down;
+    else if (dy < 0) this.direction = Direction.Up;
+
+    this.targetGridX = nextNode.x;
+    this.targetGridY = nextNode.y;
+
+    const targetScreen = gridToScreen(nextNode.x, nextNode.y);
+    this.targetWorldX = targetScreen.x;
+    this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
+
+    this.isMoving = true;
+    this.state = PlayerState.AutoWalking;
+    this.emitPositionChange();
   }
 
   walkToBuilding(targetGridX: number, targetGridY: number, buildingId?: string): boolean {
@@ -590,10 +637,6 @@ export class PlayerController {
     if (!isWalkableTile) return false;
 
     return true;
-  }
-
-  private lerp(a: number, b: number, t: number): number {
-    return a + (b - a) * t;
   }
 
   private sheetSet: string | null = null;

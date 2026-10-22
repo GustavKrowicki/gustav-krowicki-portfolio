@@ -442,7 +442,7 @@ export class MainScene extends Phaser.Scene {
 
     // Adventure mode updates
     if (this.isAdventureActive) {
-      this.updateAdventureMode();
+      this.updateAdventureMode(delta);
     }
 
     if (this.gridDirty) {
@@ -488,11 +488,11 @@ export class MainScene extends Phaser.Scene {
     this.lastPinchDist = currentDist;
   }
 
-  private updateAdventureMode(): void {
+  private updateAdventureMode(delta: number): void {
     if (!this.playerController || !this.triggerZoneManager || !this.npcManager) return;
 
     // Update player
-    this.playerController.update();
+    this.playerController.update(delta);
 
     // Get player position
     const playerPos = this.playerController.getPosition();
