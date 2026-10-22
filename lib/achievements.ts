@@ -73,6 +73,19 @@ export function findWalkTarget(find: Find, found: boolean): FindWalkTarget | nul
   return found ? { buildingId: head, beat: tail } : { buildingId: head, inside: true };
 }
 
+// The find pill in the city (phones): a tap opens that find's page in the Achievements tab. The shell opens the tab on
+// the event; the tab takes the waiting id when it mounts, or follows the event when it is already open.
+export const FIND_OPEN_EVENT = 'finds:open';
+let pendingFindId: string | null = null;
+export function requestFindOpen(id: string) {
+  pendingFindId = id;
+  window.dispatchEvent(new CustomEvent(FIND_OPEN_EVENT, { detail: id }));
+}
+export const pendingFind = () => pendingFindId;
+export function clearPendingFind() {
+  pendingFindId = null;
+}
+
 const STORAGE_KEY = 'portfolio_finds';
 const SECONDS_KEY = 'portfolio_city_seconds';
 export const BOUNCE_RATE_SECONDS = 5 * 60;

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import {
   FIND_GROUPS,
+  FIND_OPEN_EVENT,
   FINDS,
   FIND_WALK_EVENT,
   VISIT_STARTED_AT,
@@ -10,6 +11,8 @@ import {
   findWalkTarget,
   findImage,
   getFind,
+  pendingFind,
+  clearPendingFind,
   useFound,
   type Find,
 } from '@/lib/achievements';
@@ -23,7 +26,18 @@ export default function AchievementsSection({ onOpenSection }: { onOpenSection: 
   const found = useFound();
   const count = FINDS.filter((find) => found[find.id] !== undefined).length;
   const total = FINDS.length;
-  const [openId, setOpenId] = useState<string | null>(null);
+  // A tap on the find pill in the city opens its page here (requestFindOpen)
+  const [openId, setOpenId] = useState<string | null>(pendingFind);
+  useEffect(() => {
+    clearPendingFind();
+    const onOpen = () => {
+      const id = pendingFind();
+      clearPendingFind();
+      if (id) setOpenId(id);
+    };
+    window.addEventListener(FIND_OPEN_EVENT, onOpen);
+    return () => window.removeEventListener(FIND_OPEN_EVENT, onOpen);
+  }, []);
   const top = useRef<HTMLDivElement>(null);
 
   // Once per opening of the section, with the count it opened at

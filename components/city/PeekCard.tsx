@@ -14,21 +14,27 @@ interface PeekCardProps {
   onViewCaseStudy?: () => void;
   /** A button on the card was pressed (beat.choices) */
   onChoose?: (choice: NonNullable<InteriorBeat["choices"]>[number]) => void;
+  /** Phones show the card at the bottom of the city, in thumb reach and clear of an in-app browser's top bar */
+  atBottom?: boolean;
 }
 
 // A peek card over the top of the city view while the avatar stands on a beat's stand tile inside a walk-in building.
 // Real text (sharp on a phone), above the scene so the zone the avatar looks at stays in view below it; it does not
-// take pointer events, so walking (joystick, clicks on the map) goes on underneath and closes it.
-export default function PeekCard({ beat, beatKey, foundTag, onViewCaseStudy, onChoose }: PeekCardProps) {
+// take pointer events, so walking (joystick, clicks on the map) goes on underneath and closes it. On phones it sits at
+// the bottom of the city instead (atBottom).
+export default function PeekCard({ beat, beatKey, foundTag, onViewCaseStudy, onChoose, atBottom = false }: PeekCardProps) {
+  // At the bottom it sits above the time of day button (bottom-3, about 40 px high)
+  const place = atBottom ? "bottom-16" : "top-[max(0.75rem,env(safe-area-inset-top))]";
+  const slide = atBottom ? 8 : -8;
   return (
-    <div className="pointer-events-none absolute inset-x-0 top-[max(0.75rem,env(safe-area-inset-top))] z-30 flex justify-center px-3">
+    <div className={`pointer-events-none absolute inset-x-0 ${place} z-30 flex justify-center px-3`}>
       <AnimatePresence mode="wait">
         {beat && (
           <motion.div
             key={beatKey}
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: 0, y: slide }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
+            exit={{ opacity: 0, y: slide }}
             transition={{ duration: 0.18, ease: "easeOut" }}
             className={`${pixelPanelOuterClass} w-full max-w-[360px]`}
             style={PIXEL_PANEL_CLIP}
