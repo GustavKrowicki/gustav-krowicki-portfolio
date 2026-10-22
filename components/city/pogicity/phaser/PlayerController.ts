@@ -87,6 +87,8 @@ function readSpeeds(): { walk: number; run: number } {
 const TILE_STEP_PX = Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
 // Up to full speed from a standstill, and down to a stop at the end of a walk (Tom's site: about a quarter second)
 const EASE_S = 0.2;
+// A walk longer than this many tiles runs (Gustav's pick, 2026-10-22)
+const AUTO_RUN_TILES = 10;
 // Slowest pace while easing to a stop, so the last step always lands (tiles a second)
 const MIN_SPEED = 0.5;
 // Sheets baked before POR-53 carry no speed: their walk frames are drawn for 1.6 wu/s
@@ -135,7 +137,7 @@ export class PlayerController {
   private isAutoWalking: boolean = false;
   // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
   private guideDirection: Direction | null = null;
-  // A long walk sent from the panel ("Walk there"): the avatar runs instead of walking
+  // A far tap or a walk sent from the panel ("Walk there"): the avatar runs instead of walking
   private running: boolean = false;
   private readonly speeds = readSpeeds();
   // Current pace in tiles a second (eases up from 0 at a start and down at the end of a walk)
@@ -478,6 +480,8 @@ export class PlayerController {
     this.autoWalkIndex = 0;
     this.isAutoWalking = true;
     this.state = PlayerState.AutoWalking;
+    // A far tap runs by itself (POR-53: nothing to learn); a near one walks
+    this.running = this.autoWalkPath.length > AUTO_RUN_TILES;
 
     return true;
   }
