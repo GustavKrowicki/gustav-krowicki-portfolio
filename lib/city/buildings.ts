@@ -67,6 +67,10 @@ export interface BuildingDefinition {
   // south sprite (art/street-lamps/ground_mask.py), same size; each lamp's pool is multiplied by it and drawn over the
   // building, so the light lands on the paving and the stairs, never the deck or the walls. Default orientation only.
   groundMask?: string;
+  // A raised deck on that plot: lamps placed on a cell inside `outline` (plot tiles) stand up on the deck at `height` wu,
+  // pulled `inset` in from its edge so they are seen inside the railing; their pools light only `mask` (the deck's
+  // paving, art/street-lamps/ground_mask.py with the deck height)
+  deck?: { mask: string; height: number; outline: [number, number][]; inset: number };
   // Paving on the street tile in front of a walk-in building's main door (lib/city/buildingInteriors.ts entrance.outside),
   // always shown, so the way in reads at Street zoom without hovering: brick herringbone in `brick`; default orientation only
   entrancePaving?: { brick: number };
@@ -345,6 +349,13 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     spriteScale: 0.5,
     triggerZoneRadius: 5.5,           // the 8 x 8 plot: reach it from the plaza at the stair (the default 3.5 is inside the plot)
     groundMask: "/game/pogicity/Building/landmark/dokk1-library_south_ground.png",
+    // The deck (art/img2threejs/harbour-library/build_spec.py DECK, in plot tiles), its top at 1.2 wu
+    deck: {
+      mask: "/game/pogicity/Building/landmark/dokk1-library_south_deck.png",
+      height: 1.2,
+      outline: [[0.72, 1.48], [4.95, 0.65], [6.85, 1.62], [7.07, 4.72], [5.9, 6.95], [3.78, 7.11], [1.32, 6.23], [0.3, 3.09]],
+      inset: 0.7,
+    },
     sprites: {
       south: "/game/pogicity/Building/landmark/dokk1-library_south.png",
       north: "/game/pogicity/Building/landmark/dokk1-library_north.png",

@@ -20,7 +20,7 @@ export enum ToolType {
 }
 
 // Street lamps for the city at night (lib/city/streetLights.ts). A lamp sits on top of a cell and does not change its type
-export type StreetLampType = "wire" | "post" | "lantern";
+export type StreetLampType = "wire" | "post" | "lantern" | "bollard";
 
 export interface GridCell {
   type: TileType;

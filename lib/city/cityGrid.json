@@ -504,7 +504,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "bollard"
     },
     {
       "type": "building",
@@ -1377,7 +1378,7 @@
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
       "underlyingTileType": "tile",
-      "streetLamp": "post"
+      "streetLamp": "bollard"
     },
     {
       "type": "building",
@@ -1803,7 +1804,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "bollard"
     },
     {
       "type": "building",
@@ -2237,7 +2239,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "bollard"
     },
     {
       "type": "building",
@@ -2667,7 +2670,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "bollard"
     },
     {
       "type": "building",
