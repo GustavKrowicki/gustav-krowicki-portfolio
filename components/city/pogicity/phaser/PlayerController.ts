@@ -62,12 +62,12 @@ export interface InteriorRules {
 
 // Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
 const ENTRANCE_GUIDE_MAX_STEPS = 12;
-// Speeds in tiles (wu) a second, the same on every screen (POR-53). Today's feel unless a preview asks for a set:
-// ?speeds=A|B|C, or ?walk= / ?run= in tiles a second. A = Tom's site 1:1, B = between, C = today.
+// Speeds in tiles (wu) a second, the same on every screen (POR-53). B unless a preview asks for another set:
+// ?speeds=A|B|C, or ?walk= / ?run= in tiles a second. A = a reference site 1:1, B = picked, C = the old speeds.
 const SPEED_SETS = { A: { walk: 0.8, run: 2.8 }, B: { walk: 2, run: 7 }, C: { walk: 4, run: 12 } } as const;
 
 function readSpeeds(): { walk: number; run: number } {
-  let base: { walk: number; run: number } = SPEED_SETS.C;
+  let base: { walk: number; run: number } = SPEED_SETS.B;
   if (typeof window === "undefined") return base;
   const query = new URLSearchParams(window.location.search);
   const set = query.get("speeds")?.toUpperCase();
