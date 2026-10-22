@@ -29,6 +29,7 @@ const STREET_LAMP_TOOLS: Array<{ type: StreetLampType; name: string; sprite: str
   { type: "wire", name: "Wire lamp", sprite: "/game/pogicity/Props/night/wire_day.png", where: "Hangs over a road" },
   { type: "post", name: "Slim post", sprite: "/game/pogicity/Props/night/post_day.png", where: "Squares and paths" },
   { type: "lantern", name: "Old lantern", sprite: "/game/pogicity/Props/night/lantern_day.png", where: "Old streets" },
+  { type: "bollard", name: "Bollard", sprite: "/game/pogicity/Props/night/bollard_day.png", where: "Decks and terraces" },
 ];
 
 // Get the preview sprite for a building (prefer south, fall back to first available)

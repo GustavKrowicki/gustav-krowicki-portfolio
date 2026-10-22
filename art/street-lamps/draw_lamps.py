@@ -5,6 +5,7 @@ that glow). Run: python3 art/street-lamps/draw_lamps.py  -> public/game/pogicity
 - post:    slim grey pole about 3.5 m with a wide open cone on three arms; light goes down
 - wire:    rust-brown dome, gold inside, hung from a short rod on wires across a street
 - lantern: the old Pogicity lantern post without its wreath and snow, with a smoother cap and bigger glass
+- bollard: a knee-high dark grey post, about 0.9 m, with a lit band under its cap; for decks and terraces
 """
 import os
 from PIL import Image
@@ -110,5 +111,22 @@ def lantern():
         hline(day, y, a, b, iron)
     save(day, "lantern_day.png"); save(lit, "lantern_lit.png")
 
-post(); wire(); lantern()
+# ---------- bollard: 6 x 12 (0.45 wu), foot at bottom centre ----------
+def bollard():
+    day, lit = canvas(6, 12), canvas(6, 12)
+    # flat cap seen from above (rows 0-1), the light band (2-3), the body to the foot
+    hline(day, 0, 1, 4, OUTLINE)
+    hline(day, 1, 1, 4, hexc("6d737b")); day.putpixel((0, 1), OUTLINE); day.putpixel((5, 1), OUTLINE)
+    for y in range(2, 11):
+        day.putpixel((0, y), OUTLINE); day.putpixel((5, y), OUTLINE)
+        for x in range(1, 5):
+            if y <= 3:
+                day.putpixel((x, y), hexc("b9b2a2") if x < 3 else hexc("8f897c"))
+            else:
+                day.putpixel((x, y), hexc("5a6068") if x < 3 else hexc("3c4148"))
+    hline(day, 11, 1, 4, OUTLINE)
+    hline(lit, 2, 1, 4, hexc("fff1c8")); hline(lit, 3, 1, 4, hexc("f3c77c"))
+    save(day, "bollard_day.png"); save(lit, "bollard_lit.png")
+
+post(); wire(); lantern(); bollard()
 print("ok")

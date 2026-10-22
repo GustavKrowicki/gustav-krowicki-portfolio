@@ -269,6 +269,8 @@ export class MainScene extends Phaser.Scene {
         const path = building.nightWindows?.[group];
         if (path) this.load.image(`${building.id}_win_${group}`, path);
       }
+      if (building.groundMask) this.load.image(`${building.id}_ground`, building.groundMask);
+      if (building.deck) this.load.image(`${building.id}_deck`, building.deck.mask);
       if (building.nightLights) {
         this.load.spritesheet(`${building.id}_lights`, building.nightLights.sheet, {
           frameWidth: building.nightLights.frameWidth, frameHeight: building.nightLights.frameHeight,
@@ -3052,6 +3054,25 @@ export class MainScene extends Phaser.Scene {
   ): void {
     const s = sprite.scaleX;
     const fw = sprite.frame.width, fh = sprite.frame.height;
+    let n = 0;
+    for (const st of this.sliceStrips(fw, s, originX, originY, width, height)) {
+      let image = sprite;
+      if (n > 0) {
+        image = this.add.image(sprite.x, sprite.y, sprite.texture.key);
+        image.setOrigin(sprite.originX, sprite.originY);
+        image.setScale(s);
+        this.buildingSprites.set(`${key}_s${n}`, image);
+      }
+      image.setCrop(st.x0, 0, st.x1 - st.x0, fh);
+      image.setDepth(st.depth);
+      n++;
+    }
+  }
+
+  // The slices of a building sprite fw texture pixels wide at scale s: texture columns x0..x1 and each one's depth
+  private sliceStrips(
+    fw: number, s: number, originX: number, originY: number, width: number, height: number,
+  ): { x0: number; x1: number; depth: number }[] {
     const dFront = (width - 1) - (height - 1);                 // the sprite's x is the front tile's line
     const front = (d: number) => {                              // front-most tile on line d (local x - y = d)
       const lx = Math.min(width - 1, d + height - 1);
@@ -3069,21 +3090,9 @@ export class MainScene extends Phaser.Scene {
       strips.push({ x0: texX(d), x1: texX(d + 1), depth: depthOf(a.sum >= b.sum ? a : b) });
     }
     strips.push({ x0: texX(last), x1: fw, depth: depthOf(front(last)) });
-    let n = 0;
-    for (const st of strips) {
-      const x0 = Math.max(0, st.x0), x1 = Math.min(fw, st.x1);
-      if (x1 <= x0) continue;
-      let image = sprite;
-      if (n > 0) {
-        image = this.add.image(sprite.x, sprite.y, sprite.texture.key);
-        image.setOrigin(sprite.originX, sprite.originY);
-        image.setScale(s);
-        this.buildingSprites.set(`${key}_s${n}`, image);
-      }
-      image.setCrop(x0, 0, x1 - x0, fh);
-      image.setDepth(st.depth);
-      n++;
-    }
+    return strips
+      .map((st) => ({ x0: Math.max(0, st.x0), x1: Math.min(fw, st.x1), depth: st.depth }))
+      .filter((st) => st.x1 > st.x0);
   }
 
   // Ambient loops by building key (docs/city-rules.md section 9: every landmark has one); frame from the scene clock
@@ -3371,14 +3380,15 @@ export class MainScene extends Phaser.Scene {
   private streetLamps: {
     lamp: StreetLamp; level: number; strength: number; screen: { x: number; y: number };
     pool: { rx: number; ry: number };
-    objects: Phaser.GameObjects.GameObject[]; lit: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Image; light: Phaser.GameObjects.Image;
+    objects: Phaser.GameObjects.GameObject[]; lit: Phaser.GameObjects.Image; glow: Phaser.GameObjects.Image;
+    lights: { image: Phaser.GameObjects.Image; strength: number }[];
   }[] = [];
   private streetLampLit: Set<Phaser.GameObjects.GameObject> = new Set();
   private duskStart: number | null = null;
   private lastLampTime = 0;
   private playerLampTinted = false;
   private static readonly LAMP_COLOR: Record<StreetLampType, [number, number, number]> = {
-    post: [255, 232, 196], wire: [255, 196, 112], lantern: [255, 188, 104],
+    post: [255, 232, 196], wire: [255, 196, 112], lantern: [255, 188, 104], bollard: [255, 206, 140],
   };
 
   // A light pool texture, drawn in ground space: a soft ellipse with radii (rx, ry) in wu, projected to the 2:1 tiles
@@ -3414,12 +3424,15 @@ export class MainScene extends Phaser.Scene {
     this.streetLamps.forEach((l) => l.objects.forEach((o) => o.destroy()));
     this.streetLamps = [];
     this.streetLampLit.clear();
+    this.plotPoolKeys.forEach((k) => this.textures.remove(k));
+    this.plotPoolKeys = [];
     if (!this.textures.exists("lamp_post_day")) return;
     const glowKey = this.lampGlowTexture();
     for (const lamp of lampsFromGrid(this.grid)) {
       const spec = STREET_LAMPS[lamp.type];
-      const ground = this.gridToScreen(lamp.x, lamp.y);
-      const depth = this.depthFromSortPoint(ground.x, ground.y, 0.05);
+      const ground = gridToScreen(lamp.x, lamp.y, lamp.z ?? 0); // the lamp's foot (up on the deck for a deck lamp)
+      const plot = lamp.plot ? this.lampPlotPools(lamp) : null;
+      const depth = plot ? plot.depth : this.depthFromSortPoint(ground.x, ground.y, 0.05);
       const objects: Phaser.GameObjects.GameObject[] = [];
       let body: Phaser.GameObjects.Image;
       if (lamp.wire && spec.hangHeight !== undefined) {
@@ -3441,17 +3454,75 @@ export class MainScene extends Phaser.Scene {
       objects.push(body);
       const lit = this.add.image(body.x, body.y, `lamp_${lamp.type}_lit`).setOrigin(body.originX, body.originY);
       lit.setDepth(depth + 0.001).setAlpha(0).setVisible(false);
-      const head = gridToScreen(lamp.x, lamp.y, spec.height);
+      const head = gridToScreen(lamp.x, lamp.y, (lamp.z ?? 0) + spec.height);
       const glow = this.add.image(head.x, head.y, glowKey).setBlendMode(Phaser.BlendModes.ADD);
-      glow.setScale(lamp.type === "post" ? 1 : 0.75).setDepth(depth + 0.002).setAlpha(0).setVisible(false);
+      glow.setScale(lamp.type === "post" ? 1 : lamp.type === "bollard" ? 0.5 : 0.75).setDepth(depth + 0.002).setAlpha(0).setVisible(false);
       const { rx, ry } = spec.pool;
-      const light = this.add.image(ground.x, ground.y, this.lampPoolTexture(lamp.type)).setBlendMode(Phaser.BlendModes.ADD);
-      light.setDepth(MainScene.POOL_DEPTH).setAlpha(0).setVisible(false);
-      objects.push(lit, glow, light);
-      [lit, glow, light].forEach((o) => this.streetLampLit.add(o));
-      this.streetLamps.push({ lamp, level: levels.get(lampKey(lamp)) ?? 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, light });
+      // The pool on the ground; a lamp on a building's plot also lights the paving drawn in the building's sprite, and a
+      // lamp up on a deck lights only the deck
+      const lights = plot?.pools.slice() ?? [];
+      if (lamp.z === undefined) {
+        const light = this.add.image(ground.x, ground.y, this.lampPoolTexture(lamp.type)).setBlendMode(Phaser.BlendModes.ADD);
+        light.setDepth(MainScene.POOL_DEPTH).setAlpha(0).setVisible(false);
+        lights.unshift({ image: light, strength: spec.pool.strength });
+      }
+      objects.push(lit, glow, ...lights.map((p) => p.image));
+      [lit, glow, ...lights.map((p) => p.image)].forEach((o) => this.streetLampLit.add(o));
+      this.streetLamps.push({ lamp, level: levels.get(lampKey(lamp)) ?? 0, strength: spec.pool.strength, screen: ground, pool: { rx, ry }, objects, lit, glow, lights });
     }
     this.nightApplied = { tint: -1, count: -1 }; // re-tint so the new lamp bodies match the current night
+  }
+
+  // A lamp on a building's paved plot: the paving is part of the building's sprite, so the pool in the ground layer
+  // sits under it. A second pool, cut by the building's ground mask (only the open paving and the stairs; for a lamp up on
+  // the deck, the deck mask), is drawn over the building in the building's own slices, so whatever stands in front of a slice still covers its light. Lighter
+  // than a ground pool: added onto the pale paving, the full pool washes it out to white. The lamp sorts with the
+  // building like its decor
+  private static readonly PLOT_POOL_STRENGTH = 0.6;
+  private plotPoolKeys: string[] = [];
+  private lampPlotPools(lamp: StreetLamp): { depth: number; pools: { image: Phaser.GameObjects.Image; strength: number }[] } | null {
+    const { buildingId, originX, originY } = lamp.plot!;
+    const building = getBuilding(buildingId);
+    const maskKey = lamp.z === undefined ? `${buildingId}_ground` : `${buildingId}_deck`;
+    if (!building || !this.textures.exists(maskKey)) return null;
+    const footprint = getBuildingFootprint(building, Direction.Down);
+    const front = this.gridToScreen(originX + footprint.width - 1, originY + footprint.height - 1);
+    const buildingDepth = this.depthFromSortPoint(front.x, front.y + TILE_HEIGHT / 2, 0.05);
+    const depth = buildingDepth + this.footprintSortOffset(lamp.x - originX, lamp.y - originY);
+
+    const pool = this.textures.get(this.lampPoolTexture(lamp.type)).getSourceImage() as HTMLCanvasElement;
+    const mask = this.textures.get(maskKey).getSourceImage() as HTMLImageElement;
+    const key = `lamp_pool_plot_${lamp.x}_${lamp.y}`;
+    if (this.textures.exists(key)) this.textures.remove(key);
+    const canvas = this.textures.createCanvas(key, pool.width, pool.height);
+    if (!canvas) return null;
+    const ctx = canvas.getContext();
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(pool, 0, 0);
+    // The mask lies where the building's sprite does: bottom centre on the plot's front corner, at the sprite's scale
+    const scale = building.spriteScale ?? 1;
+    const ground = gridToScreen(lamp.x, lamp.y, lamp.z ?? 0);
+    const poolLeft = ground.x - pool.width / 2, poolTop = ground.y - pool.height / 2;
+    const spriteLeft = front.x - (mask.width * scale) / 2;
+    ctx.globalCompositeOperation = "destination-in";
+    ctx.drawImage(mask, spriteLeft - poolLeft, front.y + TILE_HEIGHT - mask.height * scale - poolTop, mask.width * scale, mask.height * scale);
+    canvas.refresh();
+    this.plotPoolKeys.push(key);
+
+    const strength = STREET_LAMPS[lamp.type].pool.strength * MainScene.PLOT_POOL_STRENGTH;
+    const pools: { image: Phaser.GameObjects.Image; strength: number }[] = [];
+    const strips = building.slices
+      ? this.sliceStrips(mask.width, scale, originX, originY, footprint.width, footprint.height)
+      : [{ x0: 0, x1: mask.width, depth: buildingDepth }];
+    for (const st of strips) {
+      const x0 = Math.max(0, spriteLeft + st.x0 * scale - poolLeft), x1 = Math.min(pool.width, spriteLeft + st.x1 * scale - poolLeft);
+      if (x1 <= x0) continue;
+      const image = this.add.image(ground.x, ground.y, key).setBlendMode(Phaser.BlendModes.ADD);
+      image.setCrop(x0, 0, x1 - x0, pool.height);
+      image.setDepth(st.depth + 0.29).setAlpha(0).setVisible(false); // over its slice, under the lamps on the plot
+      pools.push({ image, strength });
+    }
+    return { depth, pools };
   }
 
   private updateStreetLamps(time: number): void {
@@ -3472,7 +3543,7 @@ export class MainScene extends Phaser.Scene {
       const dim = lampDimming(this.hour); // late at night the lamps dim, they never go out
       l.lit.setVisible(on).setAlpha(l.level);
       l.glow.setVisible(on).setAlpha(l.level * 0.85 * dim);
-      l.light.setVisible(on).setAlpha(l.level * l.strength * dim);
+      l.lights.forEach((p) => p.image.setVisible(on).setAlpha(l.level * p.strength * dim));
     });
     this.lightPlayer(any);
   }
