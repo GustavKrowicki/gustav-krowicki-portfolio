@@ -117,7 +117,7 @@ export default function AvatarSection() {
                     type="button"
                     aria-pressed={selected}
                     onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
-                    className={`flex h-[4.5rem] w-full flex-col items-center justify-center gap-0.5 rounded-lg border bg-white text-xs ${
+                    className={`flex h-[4.5rem] w-full flex-col items-center justify-center gap-0.5 rounded-lg border bg-[#FDFDFD] text-xs ${
                       selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
                     }`}
                   >

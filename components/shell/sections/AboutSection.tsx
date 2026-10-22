@@ -55,7 +55,7 @@ export default function AboutSection() {
 
       <ul className="mt-8 grid grid-cols-2 gap-4">
         {HOBBIES.map(({ title, text, place, image, icon: Icon }) => (
-          <li key={title} className="overflow-hidden rounded-lg bg-white">
+          <li key={title} className="overflow-hidden rounded-lg bg-[#FDFDFD]">
             <span className="relative flex aspect-[4/3] items-center justify-center bg-neutral-100">
               {image ? (
                 <Image src={image} alt="" fill sizes="160px" className="object-cover" />

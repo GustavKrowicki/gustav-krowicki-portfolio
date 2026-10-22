@@ -27,7 +27,7 @@ export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string)
               <button
                 type="button"
                 onClick={() => onOpenCase(project.slug)}
-                className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-white"
+                className="flex w-full items-center gap-3 rounded-lg px-2 py-2 text-left transition-colors hover:bg-neutral-100"
               >
                 <Image
                   src={project.coverImage}
