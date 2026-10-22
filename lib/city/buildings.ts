@@ -339,6 +339,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     footprint: { width: 8, height: 8 },
     slices: true,
     spriteScale: 0.5,
+    triggerZoneRadius: 5.5,           // the 8 x 8 plot: reach it from the plaza at the stair (the default 3.5 is inside the plot)
     sprites: {
       south: "/game/pogicity/Building/landmark/dokk1-library_south.png",
       north: "/game/pogicity/Building/landmark/dokk1-library_north.png",

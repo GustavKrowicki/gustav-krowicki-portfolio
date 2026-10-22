@@ -2,7 +2,7 @@
 //   street: Street zoom 2, centred on the avatar standing on the plaza by the south stair
 //   wide:   zoom 1, centred between the stadium and the library
 // Usage: LAB_PORT=3115 node art/img2threejs/harbour-library/city_shots.mjs <outDir> <prefix> [gridX] [gridY]
-// CITY_QUERY adds URL flags (default night=0).
+// CITY_QUERY adds URL flags (default night=0). WIDE_AT=x,y centres the wide shot on that grid point (default 21,7).
 import { chromium } from 'playwright';
 import { mkdirSync } from 'node:fs';
 const [, , out, prefix, gx = '22.6', gy = '16.3'] = process.argv;
@@ -15,7 +15,7 @@ await page.waitForFunction(() => { const s = window.__CITY_E2E__?.getScene(); re
 await page.evaluate(async () => { await new Promise((r) => setTimeout(r, 1500)); window.__CITY_E2E__.startAdventure(); await new Promise((r) => setTimeout(r, 1500)); });
 await page.waitForFunction(() => !!window.__CITY_E2E__.getScene().playerController?.isReady, null, { timeout: 60000 });
 await page.evaluate(([x, y]) => { const pc = window.__CITY_E2E__.getScene().playerController; pc.spawn(x, y, pc.characterType); }, [Number(gx), Number(gy)]);
-for (const [name, z, at] of [['street', 2, null], ['wide', 1, [21, 7]]]) {
+for (const [name, z, at] of [['street', 2, null], ['wide', 1, (process.env.WIDE_AT ?? '21,7').split(',').map(Number)]]) {
   const r = await page.evaluate(async ([z, at]) => {
     const api = window.__CITY_E2E__; const s = api.getScene(); const pc = s.playerController; const cam = s.cameras.main;
     await new Promise((r) => setTimeout(r, 900));
