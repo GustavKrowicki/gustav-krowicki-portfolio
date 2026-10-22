@@ -49,7 +49,7 @@ export default function CvSection() {
         </div>
       </div>
       {/* Phones: the buttons stay in reach above the tab bar. */}
-      <div className="sticky bottom-0 border-t border-neutral-200 bg-[#F3F0EC] px-6 py-3 md:hidden">
+      <div className="sticky bottom-0 border-t border-neutral-200 bg-[#FDFDFD] px-6 py-3 md:hidden">
         <CvButtons />
       </div>
     </div>

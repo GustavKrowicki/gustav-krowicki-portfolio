@@ -29,7 +29,7 @@ const styles = {
     caseLink: "pointer-events-auto mt-2 font-mono text-[12px] uppercase tracking-[0.1em] text-[#6b5a1e] underline",
   },
   plain: {
-    box: "rounded-2xl border border-neutral-200 bg-[#F3F0EC] px-5 py-4 text-neutral-900 shadow-[0_4px_18px_rgba(0,0,0,0.22)]",
+    box: "rounded-2xl border border-neutral-200 bg-[#FDFDFD] px-5 py-4 text-neutral-900 shadow-[0_4px_18px_rgba(0,0,0,0.22)]",
     kicker: "text-xs font-medium uppercase tracking-[0.08em] text-neutral-500",
     found: "shrink-0 text-xs font-medium text-[#3d7a3a]",
     primary: "h-11 flex-auto whitespace-nowrap rounded-full bg-neutral-900 px-4 text-[15px] font-medium text-white active:bg-neutral-700",

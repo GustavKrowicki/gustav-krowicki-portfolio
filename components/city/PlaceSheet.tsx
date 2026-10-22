@@ -33,7 +33,7 @@ export default function PlaceSheet({ buildingId, onWalkIn, onReadCase, onClose }
           onDragEnd={(_, info) => {
             if (info.offset.y > 60 || info.velocity.y > 400) onClose();
           }}
-          className="absolute inset-x-0 bottom-0 z-30 touch-none rounded-t-2xl border-t border-neutral-200 bg-[#F3F0EC] px-5 pb-5 text-neutral-900 shadow-[0_-8px_24px_rgba(0,0,0,0.18)]"
+          className="absolute inset-x-0 bottom-0 z-30 touch-none rounded-t-2xl border-t border-neutral-200 bg-[#FDFDFD] px-5 pb-5 text-neutral-900 shadow-[0_-8px_24px_rgba(0,0,0,0.18)]"
           role="dialog"
           aria-label={beats.enter?.kicker}
           data-testid="place-sheet"

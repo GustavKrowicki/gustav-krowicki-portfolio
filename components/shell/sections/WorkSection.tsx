@@ -10,7 +10,7 @@ export default function WorkSection({ onOpenCase }: { onOpenCase: (slug: string)
         {getAllProjects().map((project) => (
           <li key={project.slug}>
             <button type="button" onClick={() => onOpenCase(project.slug)} className="group block w-full text-left">
-              <span className="relative block aspect-[16/9] overflow-hidden rounded-lg bg-white">
+              <span className="relative block aspect-[16/9] overflow-hidden rounded-lg bg-[#FDFDFD]">
                 <Image
                   src={project.coverImage}
                   alt=""
