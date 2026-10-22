@@ -38,7 +38,7 @@ export function trackContactClicked(method: 'email' | 'phone' | 'linkedin') {
   capture('contact_clicked', { method });
 }
 
-export function trackCvDownloaded(source: 'contact' | 'panel') {
+export function trackCvDownloaded(source: 'contact' | 'panel' | 'note') {
   capture('cv_downloaded', { source });
 }
 
