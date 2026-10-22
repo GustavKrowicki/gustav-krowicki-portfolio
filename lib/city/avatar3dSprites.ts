@@ -23,8 +23,15 @@ type Manifest = {
   frameHeight: number;
   origin: [number, number];
   displayScale?: number;
-  animations: Record<string, { file: string; outlineFile: string; frames: number; fps: number }>;
+  // speedWuPerS: the pace the frames are drawn for (walk and run); sheets baked before it walk at 1.6 wu/s
+  animations: Record<string, { file: string; outlineFile: string; frames: number; fps: number; speedWuPerS?: number }>;
 };
+
+// Pace each loaded clip is drawn for, by texture key, so the legs can play in step with the avatar's speed
+const clipSpeeds = new Map<string, number>();
+export function avatarClipSpeed(textureKey: string): number | undefined {
+  return clipSpeeds.get(textureKey);
+}
 
 const BAKED = new Set(AVATAR_BAKED_LOOKS.map(avatarLookKey));
 
@@ -103,6 +110,7 @@ async function fetchSheets(
       ([name, a]) =>
         new Promise<void>((resolve, reject) => {
           const key = `${prefix}_${name}`;
+          if (a.speedWuPerS) clipSpeeds.set(key, a.speedWuPerS);
           if (scene.textures.exists(key)) return resolve();
           const img = new Image();
           img.onload = () => {

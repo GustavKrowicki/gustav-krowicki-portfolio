@@ -35,12 +35,14 @@ export function footprintTiles(realWidthMetres: number): number {
 
 // ==================== WALKING ====================
 
-export const WALK_SPEED_WU_PER_S = 1.6;
-export const RUN_SPEED_WU_PER_S = 3.2;
-export const WALK_STEP_WU = 0.45;
-export const RUN_STEP_WU = 0.7;
+// Set B of POR-53 (picked 2026-10-22): a short visit needs game speeds, not real time. The run keeps a reference
+// site's run-to-walk ratio of about 3.5.
+export const WALK_SPEED_WU_PER_S = 2;
+export const RUN_SPEED_WU_PER_S = 7;
+export const WALK_STEP_WU = 0.28;
+export const RUN_STEP_WU = 1.0;
 
-// One animation cycle is two steps, so feet never slide: walk 0.56 s, run 0.44 s.
+// One animation cycle is two steps, so feet never slide: walk 0.28 s, run 0.29 s.
 export function cycleDurationMs(speedWuPerS: number, stepWu: number): number {
   return (2 * stepWu / speedWuPerS) * 1000;
 }

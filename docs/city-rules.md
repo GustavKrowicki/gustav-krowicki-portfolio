@@ -117,9 +117,9 @@ and the model is built from it:
 
 | Rule | Standard |
 | --- | --- |
-| Speeds | walk 1.6 wu/s, run 3.2 wu/s (game speeds: brisk, not real time) |
-| Stride | step length 0.45 wu (walk), 0.7 wu (run); cadence = speed / step |
-| Animation | walk cycle = 2 steps = 0.56 s; run cycle = 0.44 s; feet never slide (cycle derived from speed) |
+| Speeds | walk 2 wu/s, run 7 wu/s (game speeds: brisk, not real time; the same on every screen, moved per second) |
+| Stride | step length 0.28 wu (walk), 1.0 wu (run, flight included); cadence = speed / step |
+| Animation | walk cycle = 2 steps = 0.28 s; run cycle = 0.29 s, its own frames; feet never slide (cycle derived from speed, each sheet says the speed it is drawn for) |
 | Integration | time based: `pos += velocity * dt`, ease in 0.08 s and out 0.12 s; no per-frame lerp |
 | Directions | 8, chosen relative to the camera yaw; facing changes with a small hysteresis so it does not flicker |
 | Paths | 8-way grid path, no corner cutting, diagonal cost sqrt(2), smoothed to straight segments; ends on the approach tile |

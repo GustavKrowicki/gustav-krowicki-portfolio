@@ -14,10 +14,10 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix, avatarClipSpeed } from "@/lib/city/avatar3dSprites";
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 import { cityFont } from "@/lib/city/cityFont";
-import { WALK_SPEED_WU_PER_S } from "@/lib/city/units";
+import { RUN_SPEED_WU_PER_S, WALK_SPEED_WU_PER_S } from "@/lib/city/units";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -64,7 +64,11 @@ export interface InteriorRules {
 const ENTRANCE_GUIDE_MAX_STEPS = 12;
 // Speeds in tiles (wu) a second, the same on every screen (POR-53). B unless a preview asks for another set:
 // ?speeds=A|B|C, or ?walk= / ?run= in tiles a second. A = a reference site 1:1, B = picked, C = the old speeds.
-const SPEED_SETS = { A: { walk: 0.8, run: 2.8 }, B: { walk: 2, run: 7 }, C: { walk: 4, run: 12 } } as const;
+const SPEED_SETS = {
+  A: { walk: 0.8, run: 2.8 },
+  B: { walk: WALK_SPEED_WU_PER_S, run: RUN_SPEED_WU_PER_S },
+  C: { walk: 4, run: 12 },
+} as const;
 
 function readSpeeds(): { walk: number; run: number } {
   let base: { walk: number; run: number } = SPEED_SETS.B;
@@ -85,7 +89,9 @@ const TILE_STEP_PX = Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
 const EASE_S = 0.2;
 // Slowest pace while easing to a stop, so the last step always lands (tiles a second)
 const MIN_SPEED = 0.5;
-// The walk frames are baked for WALK_SPEED_WU_PER_S; they play faster with the speed, up to this many times (no run cycle yet)
+// Sheets baked before POR-53 carry no speed: their walk frames are drawn for 1.6 wu/s
+const OLD_SHEET_SPEED = 1.6;
+// The legs play in step with the pace, up to this many times their drawn rate (a run on a sheet with no run frames)
 const MAX_LEG_TIME_SCALE = 3;
 
 export class PlayerController {
@@ -258,7 +264,7 @@ export class PlayerController {
       }
       // Legs keep up with the pace, so the feet do not slide
       this.sprite.anims.timeScale = this.isMoving && this.speedNow > 0
-        ? Math.min(MAX_LEG_TIME_SCALE, this.speedNow / WALK_SPEED_WU_PER_S)
+        ? Math.min(MAX_LEG_TIME_SCALE, this.speedNow / (avatarClipSpeed(textureKey) ?? OLD_SHEET_SPEED))
         : 1;
     }
   }
@@ -645,8 +651,10 @@ export class PlayerController {
     const key = getCharacterTextureKey(this.characterType, this.direction);
     if (this.characterType !== CharacterType.Gustav) return key;
     // The avatar builder's sheets, same compass naming as the GIFs, walk or idle by state
-    const clip = this.state === PlayerState.Idle && !this.seatWalk ? "idle" : "walk";
-    return `${avatar3dPrefix()}_${clip}_${key.slice(key.indexOf("_") + 1)}`;
+    const compass = key.slice(key.indexOf("_") + 1);
+    if (this.state === PlayerState.Idle && !this.seatWalk) return `${avatar3dPrefix()}_idle_${compass}`;
+    const run = `${avatar3dPrefix()}_run_${compass}`;
+    return this.running && this.scene.textures.exists(run) ? run : `${avatar3dPrefix()}_walk_${compass}`;
   }
 
   private emitPositionChange(): void {
