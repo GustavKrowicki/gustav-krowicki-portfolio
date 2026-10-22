@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { type ReactNode, useEffect, useRef, useState } from 'react';
 import { Document, Page, pdfjs } from 'react-pdf';
 import 'react-pdf/dist/Page/TextLayer.css';
 import 'react-pdf/dist/Page/AnnotationLayer.css';
@@ -14,10 +14,13 @@ interface PDFViewerProps {
   width?: number;
   // Show a "Page 1 of 3" counter that follows the scroll (long documents such as the CV).
   showPageCounter?: boolean;
+  // Draw the first page as the top of a small paper stack, with something pinned to it (the CV's "Take one" note).
+  firstPageStack?: boolean;
+  firstPageOverlay?: ReactNode;
 }
 
 // Draws every page of a PDF in one column, with the text layer (select, copy, search) and the link layer on.
-export default function PDFViewer({ url, width, showPageCounter = false }: PDFViewerProps) {
+export default function PDFViewer({ url, width, showPageCounter = false, firstPageStack = false, firstPageOverlay }: PDFViewerProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [measured, setMeasured] = useState(0);
   const [numPages, setNumPages] = useState(0);
@@ -71,8 +74,17 @@ export default function PDFViewer({ url, width, showPageCounter = false }: PDFVi
         >
           <div className="flex flex-col gap-4">
             {Array.from({ length: numPages }, (_, i) => (
-              <div key={i} data-page={i + 1} className="overflow-hidden rounded bg-white shadow-sm">
-                <Page pageNumber={i + 1} width={pageWidth} />
+              <div key={i} data-page={i + 1} className="relative">
+                {i === 0 && firstPageStack && (
+                  <>
+                    <div aria-hidden className="absolute inset-0 translate-x-[5px] translate-y-[6px] rotate-[0.8deg] rounded bg-white shadow-sm" />
+                    <div aria-hidden className="absolute inset-0 translate-x-[2px] translate-y-[3px] -rotate-[0.5deg] rounded bg-white shadow-sm" />
+                  </>
+                )}
+                <div className="relative overflow-hidden rounded bg-white shadow-sm">
+                  <Page pageNumber={i + 1} width={pageWidth} />
+                </div>
+                {i === 0 && firstPageOverlay}
               </div>
             ))}
           </div>
