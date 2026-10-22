@@ -1,78 +1,92 @@
 [
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 0,
       "isOrigin": true,
       "originX": 0,
-      "originY": 0
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 0,
-      "isOrigin": true,
-      "originX": 1,
-      "originY": 0
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 0,
-      "isOrigin": true,
-      "originX": 2,
-      "originY": 0
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 3,
       "y": 0,
-      "isOrigin": true,
-      "originX": 3,
+      "isOrigin": false,
+      "originX": 0,
       "originY": 0,
-      "buildingId": "flower-bush",
-      "buildingOrientation": "left",
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 4,
       "y": 0,
-      "isOrigin": true,
-      "originX": 4,
+      "isOrigin": false,
+      "originX": 0,
       "originY": 0,
-      "buildingId": "flower-bush",
-      "buildingOrientation": "left",
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 5,
       "y": 0,
-      "isOrigin": true,
-      "originX": 5,
+      "isOrigin": false,
+      "originX": 0,
       "originY": 0,
-      "buildingId": "flower-bush",
-      "buildingOrientation": "left",
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 6,
       "y": 0,
-      "isOrigin": true,
-      "originX": 6,
+      "isOrigin": false,
+      "originX": 0,
       "originY": 0,
-      "buildingId": "flower-bush",
-      "buildingOrientation": "left",
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 0,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
@@ -416,61 +430,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 1,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 0,
-      "originY": 1
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 1,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 1
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 6,
       "y": 1,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 1,
-      "buildingId": "flower-bush",
-      "buildingOrientation": "left",
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 1,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
@@ -820,58 +865,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 2,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 0,
-      "originY": 2
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 2,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 2,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 2,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 2,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 2,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 2,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 2
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 2,
-      "isOrigin": true,
-      "originX": 7,
-      "originY": 2
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
@@ -1223,60 +1302,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 3,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 3,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 3,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 3,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 3,
-      "isOrigin": true,
-      "originX": 4,
-      "originY": 3
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 3,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 3
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 3,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 3
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 3,
-      "isOrigin": true,
-      "originX": 7,
-      "originY": 3
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "tile",
@@ -1422,92 +1533,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 3,
       "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 3
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 3,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 3
     },
     {
       "type": "grass",
@@ -1660,67 +1747,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 4,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 0,
-      "originY": 4
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 4,
-      "isOrigin": true,
-      "originX": 1,
-      "originY": 4
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 4,
-      "isOrigin": true,
-      "originX": 2,
-      "originY": 4
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 4,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 4,
-      "isOrigin": true,
-      "originX": 4,
-      "originY": 4
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 4,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 4
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 4,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 4
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 4,
-      "isOrigin": true,
-      "originX": 7,
-      "originY": 4,
-      "streetLamp": "post"
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "tile",
@@ -1858,92 +1970,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 4,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 4
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 4,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 4
     },
     {
       "type": "grass",
@@ -2112,68 +2200,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 5,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 0,
-      "originY": 5
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 5,
-      "isOrigin": true,
-      "originX": 1,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 2,
       "y": 5,
-      "isOrigin": true,
-      "originX": 2,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 5,
-      "isOrigin": true,
-      "originX": 3,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 5,
-      "isOrigin": true,
-      "originX": 4,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 5,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 5,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 5,
-      "isOrigin": true,
-      "originX": 7,
-      "originY": 5
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "tile",
@@ -2311,92 +2423,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 5,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 5
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 5,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 5
     },
     {
       "type": "building",
@@ -2569,69 +2657,92 @@
   ],
   [
     {
-      "type": "tile",
+      "type": "building",
       "x": 0,
       "y": 6,
-      "isOrigin": true,
+      "isOrigin": false,
       "originX": 0,
-      "originY": 6
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 6,
-      "isOrigin": true,
-      "originX": 1,
-      "originY": 6
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 2,
       "y": 6,
-      "isOrigin": true,
-      "originX": 2,
-      "originY": 6,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "right",
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 6,
-      "isOrigin": true,
-      "originX": 3,
-      "originY": 6
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 6,
-      "isOrigin": true,
-      "originX": 4,
-      "originY": 6
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 6,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 6
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 6,
-      "isOrigin": true,
-      "originX": 6,
-      "originY": 6
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 7,
       "y": 6,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
@@ -2779,92 +2890,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 6,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 6
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 6,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 6
     },
     {
       "type": "building",
@@ -3021,69 +3108,91 @@
   ],
   [
     {
-      "type": "grass",
+      "type": "building",
       "x": 0,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 1,
       "y": 7,
-      "isOrigin": true,
-      "originX": 1,
-      "originY": 7
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 2,
       "y": 7,
-      "isOrigin": true,
-      "originX": 2,
-      "originY": 7,
-      "buildingId": "victorian-bench",
-      "buildingOrientation": "right",
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 3,
       "y": 7,
-      "isOrigin": true,
-      "originX": 3,
-      "originY": 7
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 4,
       "y": 7,
-      "isOrigin": true,
-      "originX": 4,
-      "originY": 7
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 5,
       "y": 7,
-      "isOrigin": true,
-      "originX": 5,
-      "originY": 7
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 6,
       "y": 7,
-      "isOrigin": true
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
+      "underlyingTileType": "tile"
     },
     {
       "type": "building",
       "x": 7,
       "y": 7,
-      "isOrigin": true,
-      "originX": 7,
-      "originY": 7,
-      "buildingId": "modern-bench",
-      "buildingOrientation": "right",
+      "isOrigin": false,
+      "originX": 0,
+      "originY": 0,
+      "buildingId": "dokk1-library",
+      "buildingOrientation": "down",
       "underlyingTileType": "tile"
     },
     {
@@ -3205,92 +3314,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 7,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 7
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 7,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 7
     },
     {
       "type": "snow",
@@ -3612,92 +3697,68 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 8,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 8
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 8,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 8
     },
     {
       "type": "snow",
@@ -4065,92 +4126,68 @@
       "streetLamp": "post"
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 9,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 9
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 9,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 9
     },
     {
       "type": "snow",
@@ -4491,92 +4528,68 @@
       "isOrigin": true
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 22,
       "y": 10,
-      "isOrigin": false,
+      "isOrigin": true,
       "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 23,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 23,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 24,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 24,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 25,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 25,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 26,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 26,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 27,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 27,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 28,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 28,
+      "originY": 10
     },
     {
-      "type": "building",
+      "type": "tile",
       "x": 29,
       "y": 10,
-      "isOrigin": false,
-      "originX": 22,
-      "originY": 3,
-      "buildingId": "dokk1-library",
-      "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "isOrigin": true,
+      "originX": 29,
+      "originY": 10
     },
     {
       "type": "grass",
