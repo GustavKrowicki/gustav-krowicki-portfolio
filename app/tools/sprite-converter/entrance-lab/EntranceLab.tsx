@@ -13,6 +13,7 @@ import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates'
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
 import * as harbourLibrary from '@/lib/city/models/harbourLibrary';
 import * as cityBike from '@/lib/city/models/cityBike';
+import * as mountainBike from '@/lib/city/models/mountainBike';
 import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
 import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
 import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Signs, type Truck } from '@/lib/city/models/cateItSquareStates';
@@ -161,6 +162,27 @@ function avatarCityBikeScene(): THREE.Group {
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
   group.userData.boundsFrom = bike;
+  return group;
+}
+
+// The mountain bike (art/img2threejs/bike-mtb) with the avatar beside it, same framing as the city bike's bench.
+// With both, the city bike stands beside it (to the right in the south view) and the avatar to the left, for the scale check.
+function avatarMountainBikeScene(both = false): THREE.Group {
+  const q = new URLSearchParams(window.location.search);
+  const group = new THREE.Group();
+  const bike = mountainBike.createMountainBikeModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(bike, avatar);
+  avatar.position.set(Number(q.get('ax') ?? (both ? -0.45 : -0.05)), 0, Number(q.get('az') ?? (both ? 0.45 : -0.32)));
+  avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
+  if (both) {
+    const city = cityBike.createCityBikeModel({ castShadow: true, receiveShadow: true });
+    city.position.set(0.58, 0, -0.58);
+    group.add(city);
+  }
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  group.userData.boundsFrom = both ? undefined : bike;
   return group;
 }
 
@@ -422,6 +444,39 @@ const MODELS: Record<string, ModelConfig> = {
   'avatar-city-bike': {
     name: 'Gustav avatar beside the city bike',
     create: () => avatarCityBikeScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 1024, height: 1024, halfW: 0.62, target: [0, 0.35, 0] },
+    restBounds: true,
+  },
+  // Mountain bike (art/img2threejs/bike-mtb): a 1 x 1 prop, alone, beside the avatar, and with the city bike
+  mountainBike: {
+    name: 'Mountain bike',
+    create: mountainBike.createMountainBikeModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 1024, height: 1024, halfW: 0.62, target: [0, 0.3, 0] },
+  },
+  'avatar-mountain-bike': {
+    name: 'Gustav avatar beside the mountain bike',
+    create: () => avatarMountainBikeScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 1024, height: 1024, halfW: 0.62, target: [0, 0.35, 0] },
+    restBounds: true,
+  },
+  'avatar-both-bikes': {
+    name: 'Gustav avatar between the mountain bike and the city bike',
+    create: () => avatarMountainBikeScene(true),
     lights: stadium.createAarhusStadiumLookDevLights,
     environment: stadium.createAarhusStadiumEnvironment,
     configure: stadium.configureAarhusStadiumRenderer,
