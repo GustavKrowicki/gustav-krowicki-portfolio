@@ -1533,7 +1533,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 3,
       "isOrigin": true,
@@ -1541,7 +1541,7 @@
       "originY": 3
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 3,
       "isOrigin": true,
@@ -1549,7 +1549,7 @@
       "originY": 3
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 3,
       "isOrigin": true,
@@ -1557,7 +1557,7 @@
       "originY": 3
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 3,
       "isOrigin": true,
@@ -1565,36 +1565,28 @@
       "originY": 3
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 26,
       "y": 3,
-      "isOrigin": true,
-      "originX": 26,
-      "originY": 3
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 27,
       "y": 3,
-      "isOrigin": true,
-      "originX": 27,
-      "originY": 3
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 28,
       "y": 3,
-      "isOrigin": true,
-      "originX": 28,
-      "originY": 3
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 29,
       "y": 3,
-      "isOrigin": true,
-      "originX": 29,
-      "originY": 3
+      "isOrigin": true
     },
     {
       "type": "grass",
@@ -1970,7 +1962,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 4,
       "isOrigin": true,
@@ -1978,7 +1970,7 @@
       "originY": 4
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 4,
       "isOrigin": true,
@@ -1986,7 +1978,7 @@
       "originY": 4
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 4,
       "isOrigin": true,
@@ -1994,7 +1986,7 @@
       "originY": 4
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 4,
       "isOrigin": true,
@@ -2002,36 +1994,28 @@
       "originY": 4
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 26,
       "y": 4,
-      "isOrigin": true,
-      "originX": 26,
-      "originY": 4
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 27,
       "y": 4,
-      "isOrigin": true,
-      "originX": 27,
-      "originY": 4
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 28,
       "y": 4,
-      "isOrigin": true,
-      "originX": 28,
-      "originY": 4
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 29,
       "y": 4,
-      "isOrigin": true,
-      "originX": 29,
-      "originY": 4
+      "isOrigin": true
     },
     {
       "type": "grass",
@@ -2423,7 +2407,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 5,
       "isOrigin": true,
@@ -2431,7 +2415,7 @@
       "originY": 5
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 5,
       "isOrigin": true,
@@ -2439,7 +2423,7 @@
       "originY": 5
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 5,
       "isOrigin": true,
@@ -2447,7 +2431,7 @@
       "originY": 5
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 5,
       "isOrigin": true,
@@ -2455,7 +2439,7 @@
       "originY": 5
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 26,
       "y": 5,
       "isOrigin": true,
@@ -2463,28 +2447,22 @@
       "originY": 5
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 27,
       "y": 5,
-      "isOrigin": true,
-      "originX": 27,
-      "originY": 5
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 28,
       "y": 5,
-      "isOrigin": true,
-      "originX": 28,
-      "originY": 5
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 29,
       "y": 5,
-      "isOrigin": true,
-      "originX": 29,
-      "originY": 5
+      "isOrigin": true
     },
     {
       "type": "building",
@@ -2890,7 +2868,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 6,
       "isOrigin": true,
@@ -2898,7 +2876,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 6,
       "isOrigin": true,
@@ -2906,7 +2884,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 6,
       "isOrigin": true,
@@ -2914,7 +2892,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 6,
       "isOrigin": true,
@@ -2922,7 +2900,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 26,
       "y": 6,
       "isOrigin": true,
@@ -2930,7 +2908,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 27,
       "y": 6,
       "isOrigin": true,
@@ -2938,7 +2916,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 28,
       "y": 6,
       "isOrigin": true,
@@ -2946,7 +2924,7 @@
       "originY": 6
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 29,
       "y": 6,
       "isOrigin": true,
@@ -3314,7 +3292,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 7,
       "isOrigin": true,
@@ -3322,7 +3300,7 @@
       "originY": 7
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 7,
       "isOrigin": true,
@@ -3330,7 +3308,7 @@
       "originY": 7
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 7,
       "isOrigin": true,
@@ -3338,23 +3316,19 @@
       "originY": 7
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 7,
-      "isOrigin": true,
-      "originX": 25,
-      "originY": 7
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 26,
       "y": 7,
-      "isOrigin": true,
-      "originX": 26,
-      "originY": 7
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 27,
       "y": 7,
       "isOrigin": true,
@@ -3362,7 +3336,7 @@
       "originY": 7
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 28,
       "y": 7,
       "isOrigin": true,
@@ -3370,7 +3344,7 @@
       "originY": 7
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 29,
       "y": 7,
       "isOrigin": true,
@@ -3697,7 +3671,7 @@
       "underlyingTileType": "tile"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 8,
       "isOrigin": true,
@@ -3705,7 +3679,7 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 8,
       "isOrigin": true,
@@ -3713,7 +3687,7 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 8,
       "isOrigin": true,
@@ -3721,23 +3695,19 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 8,
-      "isOrigin": true,
-      "originX": 25,
-      "originY": 8
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 26,
       "y": 8,
-      "isOrigin": true,
-      "originX": 26,
-      "originY": 8
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 27,
       "y": 8,
       "isOrigin": true,
@@ -3745,7 +3715,7 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 28,
       "y": 8,
       "isOrigin": true,
@@ -3753,12 +3723,15 @@
       "originY": 8
     },
     {
-      "type": "tile",
+      "type": "building",
       "x": 29,
       "y": 8,
       "isOrigin": true,
       "originX": 29,
-      "originY": 8
+      "originY": 8,
+      "buildingId": "snowman",
+      "buildingOrientation": "down",
+      "underlyingTileType": "snow"
     },
     {
       "type": "snow",
@@ -4126,7 +4099,7 @@
       "streetLamp": "post"
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 22,
       "y": 9,
       "isOrigin": true,
@@ -4134,7 +4107,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 23,
       "y": 9,
       "isOrigin": true,
@@ -4142,7 +4115,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 24,
       "y": 9,
       "isOrigin": true,
@@ -4150,7 +4123,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 25,
       "y": 9,
       "isOrigin": true,
@@ -4158,7 +4131,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 26,
       "y": 9,
       "isOrigin": true,
@@ -4166,7 +4139,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 27,
       "y": 9,
       "isOrigin": true,
@@ -4174,7 +4147,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 28,
       "y": 9,
       "isOrigin": true,
@@ -4182,7 +4155,7 @@
       "originY": 9
     },
     {
-      "type": "tile",
+      "type": "snow",
       "x": 29,
       "y": 9,
       "isOrigin": true,
@@ -4528,68 +4501,52 @@
       "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 22,
       "y": 10,
-      "isOrigin": true,
-      "originX": 22,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 23,
       "y": 10,
-      "isOrigin": true,
-      "originX": 23,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 24,
       "y": 10,
-      "isOrigin": true,
-      "originX": 24,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 25,
       "y": 10,
-      "isOrigin": true,
-      "originX": 25,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 26,
       "y": 10,
-      "isOrigin": true,
-      "originX": 26,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 27,
       "y": 10,
-      "isOrigin": true,
-      "originX": 27,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 28,
       "y": 10,
-      "isOrigin": true,
-      "originX": 28,
-      "originY": 10
+      "isOrigin": true
     },
     {
-      "type": "tile",
+      "type": "grass",
       "x": 29,
       "y": 10,
-      "isOrigin": true,
-      "originX": 29,
-      "originY": 10
+      "isOrigin": true
     },
     {
       "type": "grass",
