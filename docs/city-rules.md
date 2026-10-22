@@ -117,13 +117,13 @@ and the model is built from it:
 
 | Rule | Standard |
 | --- | --- |
-| Speeds | walk 2 wu/s, run 7 wu/s (game speeds: brisk, not real time; the same on every screen, moved per second) |
+| Speeds | walk 2 wu/s, run 7 wu/s, ride 10 wu/s (game speeds: brisk, not real time; the same on every screen, moved per second) |
 | Stride | step length 0.28 wu (walk), 1.0 wu (run, flight included); cadence = speed / step |
-| Animation | walk cycle = 2 steps = 0.28 s; run cycle = 0.29 s, its own frames; feet never slide (cycle derived from speed, each sheet says the speed it is drawn for) |
+| Animation | walk cycle = 2 steps = 0.28 s; run cycle = 0.29 s, its own frames; feet never slide (cycle derived from speed, each sheet says the speed it is drawn for); ride: the city bike (art/img2threejs/bike-velorbis) seen from the city camera with the doll on it (builder-2d/ride.py), pedals 2 turns a second at full speed, its own frame size and ground point |
 | Integration | time based: `pos += velocity * dt`, ease in 0.08 s and out 0.12 s; no per-frame lerp |
 | Directions | 8, chosen relative to the camera yaw; facing changes with a small hysteresis so it does not flicker |
 | Paths | 8-way grid path, no corner cutting, diagonal cost sqrt(2), smoothed to straight segments; ends on the approach tile |
-| Input | tap or click ground: walk, run when the path is more than 10 tiles; on a building or person: walk to its approach tile; drag: pan; pinch / wheel: zoom |
+| Input | tap or click ground: walk, run when the path is more than 10 tiles, ride the bike when it is more than 25; on a building or person: walk to its approach tile; drag: pan; pinch / wheel: zoom |
 
 ## 8. Depth and overlap
 

@@ -14,10 +14,10 @@ import {
 } from "../types";
 import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
-import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix, avatarClipSpeed } from "@/lib/city/avatar3dSprites";
+import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix, avatarClipOrigin, avatarClipSpeed } from "@/lib/city/avatar3dSprites";
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 import { cityFont } from "@/lib/city/cityFont";
-import { RUN_SPEED_WU_PER_S, WALK_SPEED_WU_PER_S } from "@/lib/city/units";
+import { RIDE_SPEED_WU_PER_S, RUN_SPEED_WU_PER_S, WALK_SPEED_WU_PER_S } from "@/lib/city/units";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -70,9 +70,9 @@ const SPEED_SETS = {
   C: { walk: 4, run: 12 },
 } as const;
 
-function readSpeeds(): { walk: number; run: number } {
+function readSpeeds(): { walk: number; run: number; ride: number } {
   let base: { walk: number; run: number } = SPEED_SETS.B;
-  if (typeof window === "undefined") return base;
+  if (typeof window === "undefined") return { ...base, ride: RIDE_SPEED_WU_PER_S };
   const query = new URLSearchParams(window.location.search);
   const set = query.get("speeds")?.toUpperCase();
   if (set && set in SPEED_SETS) base = SPEED_SETS[set as keyof typeof SPEED_SETS];
@@ -80,7 +80,11 @@ function readSpeeds(): { walk: number; run: number } {
     const value = Number(query.get(key));
     return value > 0 && value <= 40 ? value : null;
   };
-  return { walk: tilesPerSecond("walk") ?? base.walk, run: tilesPerSecond("run") ?? base.run };
+  return {
+    walk: tilesPerSecond("walk") ?? base.walk,
+    run: tilesPerSecond("run") ?? base.run,
+    ride: tilesPerSecond("ride") ?? RIDE_SPEED_WU_PER_S,
+  };
 }
 
 // World px of one step along a grid axis on the 2:1 view
@@ -89,6 +93,8 @@ const TILE_STEP_PX = Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
 const EASE_S = 0.2;
 // A walk longer than this many tiles runs (Gustav's pick, 2026-10-22)
 const AUTO_RUN_TILES = 10;
+// and a walk longer than this rides the bike (Gustav's pick: a very far tap)
+const AUTO_RIDE_TILES = 25;
 // Slowest pace while easing to a stop, so the last step always lands (tiles a second)
 const MIN_SPEED = 0.5;
 // Sheets baked before POR-53 carry no speed: their walk frames are drawn for 1.6 wu/s
@@ -139,6 +145,8 @@ export class PlayerController {
   private guideDirection: Direction | null = null;
   // A far tap or a walk sent from the panel ("Walk there"): the avatar runs instead of walking
   private running: boolean = false;
+  private riding: boolean = false;
+  private originKey: string | null = null;
   private readonly speeds = readSpeeds();
   // Current pace in tiles a second (eases up from 0 at a start and down at the end of a walk)
   private speedNow = 0;
@@ -364,7 +372,7 @@ export class PlayerController {
   // Moves toward the target tile at the current pace; the distance left over after landing there (px), or -1 when still
   // on the way. remainingPx: what is left of an auto-walk after this step's target, so the pace eases to a stop at its end.
   private stepTowardTarget(dt: number, remainingPx: number | null): number {
-    const top = this.running ? this.speeds.run : this.speeds.walk;
+    const top = this.riding ? this.speeds.ride : this.running ? this.speeds.run : this.speeds.walk;
     const ease = top / EASE_S; // tiles a second, per second
     this.speedNow = Math.min(top, this.speedNow + ease * dt);
 
@@ -482,6 +490,9 @@ export class PlayerController {
     this.state = PlayerState.AutoWalking;
     // A far tap runs by itself (POR-53: nothing to learn); a near one walks
     this.running = this.autoWalkPath.length > AUTO_RUN_TILES;
+    // Only a look with ride sheets rides; any other runs
+    this.riding = this.autoWalkPath.length > AUTO_RIDE_TILES && this.characterType === CharacterType.Gustav
+      && this.scene.textures.exists(`${avatar3dPrefix()}_ride_east`);
 
     return true;
   }
@@ -513,6 +524,7 @@ export class PlayerController {
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
     this.running = false;
+    this.riding = false;
     this.guideDirection = null;
     this.autoWalkPath = [];
     this.autoWalkIndex = 0;
@@ -657,6 +669,8 @@ export class PlayerController {
     // The avatar builder's sheets, same compass naming as the GIFs, walk or idle by state
     const compass = key.slice(key.indexOf("_") + 1);
     if (this.state === PlayerState.Idle && !this.seatWalk) return `${avatar3dPrefix()}_idle_${compass}`;
+    const ride = `${avatar3dPrefix()}_ride_${compass}`;
+    if (this.riding && this.scene.textures.exists(ride)) return ride;
     const run = `${avatar3dPrefix()}_run_${compass}`;
     return this.running && this.scene.textures.exists(run) ? run : `${avatar3dPrefix()}_walk_${compass}`;
   }
@@ -695,9 +709,14 @@ export class PlayerController {
           this.sprite.setOrigin(0.5, 1);
           this.sprite.setScale(1);
         } else {
-          this.sprite.setOrigin(...avatar3dOrigin());
           this.sprite.setScale(avatar3dDisplayScale());
         }
+        this.originKey = null;
+      }
+      // The ride's frame is bigger than the walk's: each clip stands on its own ground point
+      if (sheetSet !== "gif" && textureKey !== this.originKey && this.scene.textures.exists(textureKey)) {
+        this.originKey = textureKey;
+        this.sprite.setOrigin(...(avatarClipOrigin(textureKey) ?? avatar3dOrigin()));
       }
       // a 3 px hop right after an outfit change (playChangeCue)
       const hop = this.scene.time.now < this.hopUntil ? 3 : 0;

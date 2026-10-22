@@ -23,14 +23,23 @@ type Manifest = {
   frameHeight: number;
   origin: [number, number];
   displayScale?: number;
-  // speedWuPerS: the pace the frames are drawn for (walk and run); sheets baked before it walk at 1.6 wu/s
-  animations: Record<string, { file: string; outlineFile: string; frames: number; fps: number; speedWuPerS?: number }>;
+  // speedWuPerS: the pace the frames are drawn for (walk and run); sheets baked before it walk at 1.6 wu/s.
+  // A clip may have its own frame size and origin (the ride: the bike needs a bigger frame).
+  animations: Record<string, {
+    file: string; outlineFile: string; frames: number; fps: number; speedWuPerS?: number;
+    frameWidth?: number; frameHeight?: number; origin?: [number, number];
+  }>;
 };
 
 // Pace each loaded clip is drawn for, by texture key, so the legs can play in step with the avatar's speed
 const clipSpeeds = new Map<string, number>();
 export function avatarClipSpeed(textureKey: string): number | undefined {
   return clipSpeeds.get(textureKey);
+}
+// Clips with their own origin, by texture key; the rest use the sheet set's
+const clipOrigins = new Map<string, [number, number]>();
+export function avatarClipOrigin(textureKey: string): [number, number] | undefined {
+  return clipOrigins.get(textureKey);
 }
 
 const BAKED = new Set(AVATAR_BAKED_LOOKS.map(avatarLookKey));
@@ -111,10 +120,14 @@ async function fetchSheets(
         new Promise<void>((resolve, reject) => {
           const key = `${prefix}_${name}`;
           if (a.speedWuPerS) clipSpeeds.set(key, a.speedWuPerS);
+          if (a.origin) clipOrigins.set(key, a.origin);
           if (scene.textures.exists(key)) return resolve();
           const img = new Image();
           img.onload = () => {
-            scene.textures.addSpriteSheet(key, img, { frameWidth: manifest.frameWidth, frameHeight: manifest.frameHeight });
+            scene.textures.addSpriteSheet(key, img, {
+              frameWidth: a.frameWidth ?? manifest.frameWidth,
+              frameHeight: a.frameHeight ?? manifest.frameHeight,
+            });
             scene.anims.create({
               key: `${key}_anim`,
               frames: scene.anims.generateFrameNumbers(key, { start: 0, end: a.frames - 1 }),

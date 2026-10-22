@@ -39,6 +39,8 @@ export function footprintTiles(realWidthMetres: number): number {
 // site's run-to-walk ratio of about 3.5.
 export const WALK_SPEED_WU_PER_S = 2;
 export const RUN_SPEED_WU_PER_S = 7;
+// The bike (Velorbis, a far tap) rides at 10; its pedals turn at the slower pace Gustav picked, 2 turns a second.
+export const RIDE_SPEED_WU_PER_S = 10;
 export const WALK_STEP_WU = 0.28;
 export const RUN_STEP_WU = 1.0;
 

@@ -117,6 +117,66 @@
    "repeat": -1,
    "durationS": 0.286,
    "speedWuPerS": 7.0
+  },
+  "ride_east": {
+   "file": "ride-east.png",
+   "outlineFile": "ride-east.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_north": {
+   "file": "ride-north.png",
+   "outlineFile": "ride-north.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_west": {
+   "file": "ride-west.png",
+   "outlineFile": "ride-west.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_south": {
+   "file": "ride-south.png",
+   "outlineFile": "ride-south.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
   }
  }
 }
