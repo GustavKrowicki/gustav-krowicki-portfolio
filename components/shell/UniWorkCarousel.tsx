@@ -57,7 +57,7 @@ export default function UniWorkCarousel({ items }: { items: Post[] }) {
           <li
             key={item.embedUrl}
             aria-label={`${i + 1} of ${items.length}`}
-            className="w-full shrink-0 snap-start overflow-hidden rounded-lg border border-neutral-200 bg-white"
+            className="w-full shrink-0 snap-start overflow-hidden rounded-lg border border-neutral-200 bg-[#FDFDFD]"
           >
             {item.type === 'pdf' ? (
               <div className="flex h-full flex-col">
@@ -90,7 +90,7 @@ export default function UniWorkCarousel({ items }: { items: Post[] }) {
           onClick={() => goTo(index - 1)}
           disabled={index === 0}
           aria-label="Previous"
-          className="rounded-full p-1.5 text-neutral-700 hover:bg-white disabled:opacity-30"
+          className="rounded-full p-1.5 text-neutral-700 hover:bg-neutral-100 disabled:opacity-30"
         >
           <ChevronLeft className="h-5 w-5" />
         </button>
@@ -102,7 +102,7 @@ export default function UniWorkCarousel({ items }: { items: Post[] }) {
           onClick={() => goTo(index + 1)}
           disabled={index === items.length - 1}
           aria-label="Next"
-          className="rounded-full p-1.5 text-neutral-700 hover:bg-white disabled:opacity-30"
+          className="rounded-full p-1.5 text-neutral-700 hover:bg-neutral-100 disabled:opacity-30"
         >
           <ChevronRight className="h-5 w-5" />
         </button>

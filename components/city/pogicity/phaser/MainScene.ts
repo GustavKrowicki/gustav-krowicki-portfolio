@@ -524,12 +524,6 @@ export class MainScene extends Phaser.Scene {
       (x, y) => this.frontOfPlotDepth(x, y)
     );
 
-    // Render numbered markers
-    this.npcManager.renderMarkers(
-      this.visitedBuildings,
-      (x, y, offset) => this.depthFromSortPoint(x, y, offset)
-    );
-
     // Camera follow player
     const playerState = this.playerController.getState();
     const isMobile = this.isMobileViewport();

@@ -33,7 +33,7 @@ export default function FindPill({ find, count, hint }: { find: Find | null; cou
             transition={{ duration: 0.2, ease: "easeOut" }}
             onClick={() => requestFindOpen(find.id)}
             aria-label={`Found ${count} of ${FINDS.length}: ${find.title}. Open it`}
-            className="pointer-events-auto flex h-11 min-w-0 items-center gap-2 rounded-full border border-neutral-200 bg-[#F3F0EC] px-4 text-neutral-900 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
+            className="pointer-events-auto flex h-11 min-w-0 items-center gap-2 rounded-full border border-neutral-200 bg-[#FDFDFD] px-4 text-neutral-900 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
             data-testid="find-pill"
           >
             <span className="text-[15px] text-[#3d7a3a]" aria-hidden>★</span>
@@ -54,7 +54,7 @@ export default function FindPill({ find, count, hint }: { find: Find | null; cou
             exit={{ opacity: 0, y: -8 }}
             transition={{ duration: 0.2, ease: "easeOut" }}
             role="status"
-            className="max-w-[300px] rounded-2xl border border-neutral-200 bg-[#F3F0EC] px-4 py-2.5 text-[14px] leading-snug text-neutral-900 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
+            className="max-w-[300px] rounded-2xl border border-neutral-200 bg-[#FDFDFD] px-4 py-2.5 text-[14px] leading-snug text-neutral-900 shadow-[0_4px_14px_rgba(0,0,0,0.2)]"
             data-testid="find-hint"
           >
             {hint}
