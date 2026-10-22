@@ -63,6 +63,10 @@ export interface BuildingDefinition {
   // it while the roof is off; each plays at `fps` while the player is within `radius` of `at` (local tiles): forward once
   // and holds, or round and round with `loop`; it goes back to frame 0 when the player leaves
   moments?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; loop?: boolean }[];
+  // Street lamps may stand on this building's plot (the lamp tab in /city/editor): the plot's open paving cut out of the
+  // south sprite (art/street-lamps/ground_mask.py), same size; each lamp's pool is multiplied by it and drawn over the
+  // building, so the light lands on the paving and the stairs, never the deck or the walls. Default orientation only.
+  groundMask?: string;
   // Paving on the street tile in front of a walk-in building's main door (lib/city/buildingInteriors.ts entrance.outside),
   // always shown, so the way in reads at Street zoom without hovering: brick herringbone in `brick`; default orientation only
   entrancePaving?: { brick: number };
@@ -340,6 +344,7 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     slices: true,
     spriteScale: 0.5,
     triggerZoneRadius: 5.5,           // the 8 x 8 plot: reach it from the plaza at the stair (the default 3.5 is inside the plot)
+    groundMask: "/game/pogicity/Building/landmark/dokk1-library_south_ground.png",
     sprites: {
       south: "/game/pogicity/Building/landmark/dokk1-library_south.png",
       north: "/game/pogicity/Building/landmark/dokk1-library_north.png",

@@ -4,7 +4,8 @@
 // wire runs.
 
 import type { GridCell, StreetLampType } from "@/components/city/pogicity/types";
-import { TileType } from "@/components/city/pogicity/types";
+import { Direction, TileType } from "@/components/city/pogicity/types";
+import { getBuilding } from "@/lib/city/buildings";
 
 export type { StreetLampType };
 
@@ -15,6 +16,9 @@ export interface StreetLamp {
   order: number;  // switch-on order at dusk, along each street
   // Wire lamps: the wire runs across the street between these two ground points (grid units), at WIRE_HEIGHT
   wire?: { x0: number; y0: number; x1: number; y1: number };
+  // A lamp standing on a building's paved plot (building.groundMask): the building's origin, so the scene can light
+  // the paving in its sprite and sort the lamp with the building
+  plot?: { buildingId: string; originX: number; originY: number };
 }
 
 export interface StreetLampSpec {
@@ -47,9 +51,18 @@ const isRoad = (grid: GridCell[][], x: number, y: number) => {
   return type === TileType.Road || type === TileType.Asphalt;
 };
 
-// A wire lamp hangs over a road; the post and the lantern stand beside it, never on the road or in a building
+// A building whose plot is paving the lamps can stand on (its groundMask), in the orientation that has the mask
+export function lampPlot(cell: GridCell | undefined): boolean {
+  if (cell?.type !== TileType.Building || !cell.buildingId) return false;
+  const orientation = cell.buildingOrientation ?? Direction.Down;
+  return !!getBuilding(cell.buildingId)?.groundMask && orientation === Direction.Down;
+}
+
+// A wire lamp hangs over a road; the post and the lantern stand beside it, never on the road or in a building (only on
+// the paved plot of a building that has one, like the library's square)
 export function canPlaceStreetLamp(cell: GridCell | undefined, type: StreetLampType): boolean {
-  if (!cell || cell.type === TileType.Building) return false;
+  if (!cell) return false;
+  if (cell.type === TileType.Building) return type !== "wire" && lampPlot(cell);
   const onRoad = cell.type === TileType.Road || cell.type === TileType.Asphalt;
   return type === "wire" ? onRoad : !onRoad;
 }
@@ -90,6 +103,9 @@ export function lampsFromGrid(grid: GridCell[][]): StreetLamp[] {
         }
       } else {
         lamp = { type, x: cell.x + 0.5, y: cell.y + 0.5, order: 0 };
+        if (cell.type === TileType.Building && cell.buildingId) {
+          lamp.plot = { buildingId: cell.buildingId, originX: cell.originX ?? cell.x, originY: cell.originY ?? cell.y };
+        }
       }
       // Two clicks on the same road crossing give one lamp
       const key = `${type},${lamp.x},${lamp.y}`;

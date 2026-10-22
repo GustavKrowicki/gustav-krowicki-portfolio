@@ -1376,7 +1376,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -2654,7 +2655,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -3127,7 +3129,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "post"
     },
     {
       "type": "building",
@@ -3160,7 +3163,8 @@
       "originY": 0,
       "buildingId": "dokk1-library",
       "buildingOrientation": "down",
-      "underlyingTileType": "tile"
+      "underlyingTileType": "tile",
+      "streetLamp": "post"
     },
     {
       "type": "building",
