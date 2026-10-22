@@ -91,9 +91,8 @@ export default function PDFViewer({ url, width, showPageCounter = false, firstPa
         </Document>
       )}
 
-      {/* On phones it sits above the CV's sticky button bar. */}
       {showPageCounter && numPages > 1 && (
-        <div className="pointer-events-none sticky bottom-20 mt-4 flex justify-center md:bottom-4">
+        <div className="pointer-events-none sticky bottom-4 mt-4 flex justify-center">
           <span className="rounded-full bg-neutral-900/90 px-3.5 py-1.5 text-[13px] font-medium text-white">
             Page {currentPage} of {numPages}
           </span>

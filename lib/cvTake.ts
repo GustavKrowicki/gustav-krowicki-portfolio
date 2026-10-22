@@ -5,7 +5,7 @@
 // Strong curves from Emil Kowalski's animation skills: ease-out for the lift, ease-in-out for the travel.
 const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 const EASE_IN_OUT = 'cubic-bezier(0.77, 0, 0.175, 1)';
-// About 1 s in all: the lift, a short beat in the hand, then the flight (Gustav found 0.6 s a bit quick).
+// About 1 s in all: the lift, a short beat in the hand, then the flight.
 const LIFT_MS = 220;
 const HOLD_MS = 120;
 const TRAVEL_MS = 680;
@@ -15,7 +15,7 @@ type Spot =
   | { kind: 'button' };
 
 // Where each browser shows a new download, as a point just outside the viewport.
-// In-app browsers (LinkedIn, Facebook, Instagram) have no downloads place, so the sheet folds into the button.
+// In-app browsers (LinkedIn, Facebook, Instagram) have no downloads place, so the sheet folds back into the note.
 export function downloadSpot(): Spot {
   if (typeof navigator === 'undefined') return { kind: 'button' };
   const ua = navigator.userAgent;
