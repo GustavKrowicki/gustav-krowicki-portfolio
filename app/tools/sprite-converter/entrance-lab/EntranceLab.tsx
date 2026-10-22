@@ -11,6 +11,7 @@ import * as valtech from '@/lib/city/models/valtechOffice';
 import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
+import * as harbourLibrary from '@/lib/city/models/harbourLibrary';
 import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
 import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
 import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Signs, type Truck } from '@/lib/city/models/cateItSquareStates';
@@ -112,6 +113,21 @@ function avatarStadiumScene(): THREE.Group {
   avatar.position.set(0.6, 0.04, 2.15);
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The avatar on the plaza at the foot of the harbour library's west stair flight (both in wu), so the 0.9 wu avatar reads against
+// the 1.2 wu deck and the 3.0 wu roof (art/img2threejs/harbour-library, POR-49). ?ax=&az= move it for scale tries.
+function avatarHarbourLibraryScene(): THREE.Group {
+  const q = new URLSearchParams(window.location.search);
+  const group = new THREE.Group();
+  const building = harbourLibrary.createHarbourLibraryModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(building, avatar);
+  avatar.position.set(Number(q.get('ax') ?? -2.5), 0.08, Number(q.get('az') ?? 3.4));
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  group.userData.boundsFrom = building;
   return group;
 }
 
@@ -352,6 +368,28 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 2.4, target: [0, 0, 0] },
+  },
+  // Harbour library (art/img2threejs/harbour-library, Linear POR-49): 7 x 7 footprint
+  harbourLibrary: {
+    name: 'Harbour library',
+    create: harbourLibrary.createHarbourLibraryModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 3.6, target: [0, 0, 0] },
+  },
+  'avatar-harbour-library': {
+    name: 'Gustav avatar at the harbour library stair',
+    create: () => avatarHarbourLibraryScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 384, height: 384, halfW: 3.6, target: [0, 0, 0] },
+    restBounds: true,
   },
   // Burger trailer for the food truck square (art/img2threejs/cate-it-burger, Linear POR-38): 4 x 2 footprint
   cateItBurger: {
