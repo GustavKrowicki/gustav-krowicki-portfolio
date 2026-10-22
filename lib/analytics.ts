@@ -64,3 +64,12 @@ export function trackSpotifyInteracted(
 export function trackBeatChoice(buildingId: string, beat: string, choice: string) {
   capture('beat_choice', { building_id: buildingId, beat, choice });
 }
+
+// Finds (lib/achievements.ts): one event per new find, with how many this browser has found so far
+export function trackFind(findId: string, group: string, foundCount: number) {
+  capture('find_made', { find_id: findId, group, found_count: foundCount });
+}
+
+export function trackAchievementsOpened(foundCount: number) {
+  capture('achievements_opened', { found_count: foundCount });
+}
