@@ -1066,6 +1066,7 @@ export default function CityViewer({
           beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
           foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
           atBottom={phoneShell}
+          plain={phoneShell}
           onViewCaseStudy={() => {
             const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
             if (!slug) return;
