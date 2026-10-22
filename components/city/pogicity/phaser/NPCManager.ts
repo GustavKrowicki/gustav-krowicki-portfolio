@@ -23,7 +23,6 @@ export class NPCManager {
   private scene: Phaser.Scene;
   private npcs: Map<string, NPCData> = new Map();
   private sprites: Map<string, Phaser.GameObjects.Sprite> = new Map();
-  private markerSprites: Map<string, Phaser.GameObjects.Container> = new Map();
 
   // NPC appearance settings (using existing character sprites)
   private npcCharacterType: CharacterType = CharacterType.Apple; // Gustav is an apple!
@@ -161,84 +160,6 @@ export class NPCManager {
     }
   }
 
-  renderMarkers(
-    visitedBuildings: Set<string>,
-    depthFromSortPoint: (x: number, y: number, offset: number) => number
-  ): void {
-    let markerNumber = 1;
-
-    for (const [npcId, npc] of this.npcs) {
-      // Skip visited buildings
-      if (visitedBuildings.has(npc.buildingId)) {
-        // Remove marker if exists
-        const existingMarker = this.markerSprites.get(npc.buildingId);
-        if (existingMarker) {
-          existingMarker.destroy();
-          this.markerSprites.delete(npc.buildingId);
-        }
-        continue;
-      }
-
-      const screenPos = gridToScreen(npc.gridX - 1, npc.gridY - 1); // Above the building
-      let marker = this.markerSprites.get(npc.buildingId);
-
-      if (!marker) {
-        marker = this.createMarker(markerNumber, npc.tourStopIndex);
-        marker.setPosition(screenPos.x, screenPos.y - 80);
-        this.markerSprites.set(npc.buildingId, marker);
-
-        // Add floating animation
-        this.scene.tweens.add({
-          targets: marker,
-          y: screenPos.y - 90,
-          duration: 800,
-          yoyo: true,
-          repeat: -1,
-          ease: "Sine.easeInOut",
-        });
-      }
-
-      marker.setDepth(1_700_000);
-      markerNumber++;
-    }
-  }
-
-  private createMarker(number: number, tourStopIndex: number): Phaser.GameObjects.Container {
-    const container = this.scene.add.container(0, 0);
-
-    // Background circle
-    const graphics = this.scene.add.graphics();
-
-    // Get color based on category (we'll use a generic gradient)
-    const colors = [0x3b82f6, 0x22c55e, 0xa855f7, 0xeab308, 0xec4899];
-    const color = colors[tourStopIndex % colors.length];
-
-    // Glow effect
-    graphics.fillStyle(color, 0.3);
-    graphics.fillCircle(0, 0, 20);
-
-    // Main circle
-    graphics.fillStyle(color, 1);
-    graphics.fillCircle(0, 0, 14);
-
-    // Inner highlight
-    graphics.fillStyle(0xffffff, 0.3);
-    graphics.fillCircle(-3, -3, 6);
-
-    container.add(graphics);
-
-    // Number text
-    const text = this.scene.add.text(0, 0, number.toString(), {
-      fontFamily: cityFont(),
-      fontSize: "10px",
-      color: "#ffffff",
-    });
-    text.setOrigin(0.5, 0.5);
-    container.add(text);
-
-    return container;
-  }
-
   private alertIndicators: Map<string, Phaser.GameObjects.Text> = new Map();
 
   private showAlertIndicator(npcId: string, x: number, y: number): void {
@@ -288,12 +209,6 @@ export class NPCManager {
       sprite.destroy();
     }
     this.sprites.clear();
-
-    // Destroy markers
-    for (const [, marker] of this.markerSprites) {
-      marker.destroy();
-    }
-    this.markerSprites.clear();
 
     // Destroy alert indicators
     for (const [, indicator] of this.alertIndicators) {
