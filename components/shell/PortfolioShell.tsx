@@ -147,7 +147,7 @@ export default function PortfolioShell() {
   return (
     <div className="fixed inset-0 flex flex-col bg-[#73645F] md:flex-row" data-testid="shell-root">
       <aside
-        className={`order-2 flex shrink-0 flex-col-reverse overflow-hidden bg-[#F3F0EC] md:order-1 md:h-full md:flex-row md:transition-[width] md:duration-200 ${WIDTH_ON_DESKTOP[panel]}`}
+        className={`order-2 flex shrink-0 flex-col-reverse overflow-hidden bg-[#FDFDFD] md:order-1 md:h-full md:flex-row md:transition-[width] md:duration-200 ${WIDTH_ON_DESKTOP[panel]}`}
       >
         <ShellRail active={panel === 'closed' ? null : section} onSelect={openSection} />
         <ShellPanel
