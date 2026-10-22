@@ -5,8 +5,10 @@
 // Strong curves from Emil Kowalski's animation skills: ease-out for the lift, ease-in-out for the travel.
 const EASE_OUT = 'cubic-bezier(0.23, 1, 0.32, 1)';
 const EASE_IN_OUT = 'cubic-bezier(0.77, 0, 0.175, 1)';
-const LIFT_MS = 150;
-const TRAVEL_MS = 450;
+// About 1 s in all: the lift, a short beat in the hand, then the flight (Gustav found 0.6 s a bit quick).
+const LIFT_MS = 220;
+const HOLD_MS = 120;
+const TRAVEL_MS = 680;
 
 type Spot =
   | { kind: 'edge'; x: (w: number, h: number) => number; y: (w: number, h: number) => number }
@@ -94,11 +96,12 @@ export function flyCvToDownloads(page: HTMLElement | null, button: HTMLElement |
     const dx = tx - (rect.left + rect.width / 2);
     const dy = ty - (rect.top + rect.height / 2);
     const tilt = dx >= 0 ? -1 : 1;
-    const total = LIFT_MS + TRAVEL_MS;
+    const total = LIFT_MS + HOLD_MS + TRAVEL_MS;
     animation = flyer.animate(
       [
         { transform: 'none', opacity: 1, easing: EASE_OUT },
-        { transform: `translate(-2px, -8px) scale(1.03) rotate(${tilt}deg)`, opacity: 1, offset: LIFT_MS / total, easing: EASE_IN_OUT },
+        { transform: `translate(-2px, -10px) scale(1.03) rotate(${tilt}deg)`, opacity: 1, offset: LIFT_MS / total },
+        { transform: `translate(-2px, -10px) scale(1.03) rotate(${tilt}deg)`, opacity: 1, offset: (LIFT_MS + HOLD_MS) / total, easing: EASE_IN_OUT },
         { transform: `translate(${dx}px, ${dy}px) scale(0.08) rotate(${tilt * 12}deg)`, opacity: 0.3 },
       ],
       { duration: total, fill: 'forwards' }
