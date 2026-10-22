@@ -14,20 +14,24 @@ type Spot =
   | { kind: 'edge'; x: (w: number, h: number) => number; y: (w: number, h: number) => number }
   | { kind: 'button' };
 
+// iPhone and iPad, in any browser or app: they all run on WebKit, and a PDF link there opens the PDF over the
+// page (seen in an in-app browser) instead of saving it. So on these devices the CV goes to the share sheet.
+export function isAppleTouch(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent;
+  return /iPhone|iPod|iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1);
+}
+
 // Where each browser shows a new download, as a point just outside the viewport.
-// In-app browsers (LinkedIn, Facebook, Instagram) have no downloads place, so the sheet folds back into the note.
 export function downloadSpot(): Spot {
   if (typeof navigator === 'undefined') return { kind: 'button' };
   const ua = navigator.userAgent;
-  const touchMac = /Macintosh/.test(ua) && navigator.maxTouchPoints > 1;
-
+  // iPhone and iPad: the share sheet rises from the bottom, so the sheet drops into it.
+  if (isAppleTouch()) return { kind: 'edge', x: (w) => w / 2, y: (_, h) => h + 40 };
+  // In-app browsers elsewhere (LinkedIn, Facebook, Instagram) have no downloads place: the sheet folds into the note.
   if (/LinkedInApp|FBAN|FBAV|Instagram/i.test(ua)) return { kind: 'button' };
-  // iPhone and iPad Safari: the download arrow shows at the left of the address bar, which sits at the bottom.
-  if ((/iPhone|iPod|iPad/.test(ua) || touchMac) && !/CriOS|FxiOS|EdgiOS/.test(ua)) {
-    return { kind: 'edge', x: () => 56, y: (_, h) => h + 40 };
-  }
   // Android and the other phone browsers: the download message slides up from the bottom.
-  if (/Android|CriOS|FxiOS|EdgiOS/.test(ua)) return { kind: 'edge', x: (w) => w / 2, y: (_, h) => h + 40 };
+  if (/Android/.test(ua)) return { kind: 'edge', x: (w) => w / 2, y: (_, h) => h + 40 };
   // Desktop: every browser keeps its downloads mark at the top right of the toolbar.
   // Windows puts the minimise, maximise and close buttons to its right, so the mark sits further in.
   if (/Windows/.test(ua)) return { kind: 'edge', x: (w) => w - 170, y: () => -40 };
@@ -40,7 +44,7 @@ export function downloadSpot(): Spot {
 let running: { animation: Animation; flyer: HTMLElement } | null = null;
 
 // Plays the motion. It never delays the download: the caller starts the real download on the same tap.
-// `onLanded` runs when the sheet arrives (or at once with reduced motion), for the "Saved" state.
+// `onLanded` runs when the sheet arrives (or at once with reduced motion).
 export function flyCvToDownloads(page: HTMLElement | null, button: HTMLElement | null, onLanded: () => void) {
   if (running) {
     running.animation.cancel();

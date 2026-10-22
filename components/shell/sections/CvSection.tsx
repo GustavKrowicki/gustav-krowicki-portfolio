@@ -1,39 +1,73 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState, type MouseEvent } from 'react';
 import { ArrowUpRight, Check, Download } from 'lucide-react';
 import { trackCvDownloaded, trackPdfOpened } from '@/lib/analytics';
-import { flyCvToDownloads } from '@/lib/cvTake';
+import { flyCvToDownloads, isAppleTouch } from '@/lib/cvTake';
 
 // react-pdf needs the browser and is large, so it loads only when the CV section opens.
 const PDFViewer = dynamic(() => import('@/components/home/PDFViewer'), { ssr: false });
 
 const CV_URL = '/cv/CV-Gustav-Krowicki.pdf';
+const CV_FILE_NAME = 'CV-Gustav-Krowicki.pdf';
 const SAVED_MS = 2000;
 
 // The real CV PDF, with selectable text and live links. The shell widens the panel to reading width for it.
 // The first page lies on a small stack with a "Take one" note, the one way to download: taking it starts the
-// download, and a copy flies to the browser's own downloads (lib/cvTake.ts) while the next copy stays underneath.
+// download (or the share sheet on iPhone), and a copy flies to the browser's own downloads (lib/cvTake.ts) while
+// the next copy stays underneath.
 export default function CvSection() {
   const rootRef = useRef<HTMLDivElement>(null);
   const noteRef = useRef<HTMLAnchorElement>(null);
   const [saved, setSaved] = useState(false);
   const savedTimer = useRef<ReturnType<typeof setTimeout>>(undefined);
 
+  // The PDF as a file for the share sheet on iPhone and iPad. It is fetched up front, because the share
+  // sheet only opens straight from the tap.
+  const fileRef = useRef<File | null>(null);
+  useEffect(() => {
+    if (!isAppleTouch() || typeof navigator.canShare !== 'function') return;
+    let cancelled = false;
+    fetch(CV_URL)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const file = new File([blob], CV_FILE_NAME, { type: 'application/pdf' });
+        if (!cancelled && navigator.canShare({ files: [file] })) fileRef.current = file;
+      })
+      .catch(() => {});
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
   useEffect(() => () => clearTimeout(savedTimer.current), []);
 
-  // The link's own download runs as normal; the motion only plays alongside it.
-  const take = useCallback(() => {
-    trackCvDownloaded('note');
-    const page = rootRef.current?.querySelector<HTMLElement>('[data-page="1"]') ?? null;
-    clearTimeout(savedTimer.current);
-    setSaved(false);
-    flyCvToDownloads(page, noteRef.current, () => {
-      setSaved(true);
-      savedTimer.current = setTimeout(() => setSaved(false), SAVED_MS);
-    });
+  const showSaved = useCallback(() => {
+    setSaved(true);
+    savedTimer.current = setTimeout(() => setSaved(false), SAVED_MS);
   }, []);
+
+  // Elsewhere the link's own download runs as normal, and the motion plays alongside it. On iPhone and iPad the
+  // share sheet opens instead ("Save to Files", Mail, AirDrop), so the visitor stays in the city; the sheet drops
+  // into it, and the note says "Saved" only if they saved or sent it.
+  const take = useCallback(
+    (event: MouseEvent<HTMLAnchorElement>) => {
+      trackCvDownloaded('note');
+      const page = rootRef.current?.querySelector<HTMLElement>('[data-page="1"]') ?? null;
+      clearTimeout(savedTimer.current);
+      setSaved(false);
+      const file = fileRef.current;
+      if (file) {
+        event.preventDefault();
+        navigator.share({ files: [file] }).then(showSaved, () => {});
+        flyCvToDownloads(page, noteRef.current, () => {});
+        return;
+      }
+      flyCvToDownloads(page, noteRef.current, showSaved);
+    },
+    [showSaved]
+  );
 
   const note = (
     <a
