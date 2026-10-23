@@ -83,3 +83,37 @@ test("an unknown section or case in the URL falls back to Home", async ({ page }
   await expect(rail.getByRole("button", { name: "Home" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByTestId("shell-panel").getByRole("button", { name: /^Back to/ })).toHaveCount(0);
 });
+
+// The live scene through the city's test API (?e2e=1), for the walk-in building opened in place
+// (the callbacks run in the page, so each one reads it from window itself)
+type SlotScene = { ready?: boolean; openInPlace: (id: string) => boolean; peek: { buildingId: string } | null };
+type SlotWindow = { __CITY_E2E__?: { getScene: () => SlotScene | null; pauseGame: () => boolean } };
+
+test("?popups=slot: a building's place opens in the panel, and Back goes one step at a time", async ({ page }) => {
+  await page.goto("/new?popups=slot&e2e=1");
+  const panel = page.getByTestId("shell-panel");
+  await page.waitForFunction(() => !!(window as unknown as SlotWindow).__CITY_E2E__?.getScene()?.ready);
+
+  // A tap on a walk-in building takes its roof off; its place opens in the panel, with the case's cover. The city
+  // pauses after, so a software-rendered WebGL canvas does not slow the clicks below.
+  await page.evaluate(() => {
+    const city = (window as unknown as SlotWindow).__CITY_E2E__!;
+    city.getScene()!.openInPlace("valtech-office");
+    city.pauseGame();
+  });
+  await expect(page.getByTestId("place-section")).toBeVisible();
+  await expect(page).toHaveURL(/place=valtech-office/);
+
+  await panel.getByRole("button", { name: "Read the case" }).click();
+  await expect(page).toHaveURL(/place=valtech-office&case=valtech/);
+
+  // Back: the case goes back to the place, the place back to Home, and the roof goes back on
+  await panel.getByRole("button", { name: "Back to Valtech" }).click();
+  await expect(page.getByTestId("place-section")).toBeVisible();
+  await panel.getByRole("button", { name: "Back to Home" }).click();
+  await expect(page.getByTestId("place-section")).toHaveCount(0);
+  await expect(page).not.toHaveURL(/place=/);
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as SlotWindow).__CITY_E2E__!.getScene()!.peek?.buildingId ?? null))
+    .toBeNull();
+});
