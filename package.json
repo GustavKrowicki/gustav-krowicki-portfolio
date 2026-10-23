@@ -20,6 +20,7 @@
     "cf:preview": "npm run cf:preview:build && cf previews deploy --prebuilt"
   },
   "dependencies": {
+    "@base-ui/react": "^1.8.0",
     "d3": "^7.9.0",
     "framer-motion": "^12.23.26",
     "gifuct-js": "^2.1.2",
