@@ -115,7 +115,7 @@ export default function ShellPanel({
               onClick={place ? onClosePlace : onClose}
               onPointerDown={(e) => e.stopPropagation()}
               onPointerUp={(e) => e.stopPropagation()}
-              aria-label="Close"
+              aria-label={place ? 'Close' : 'Close panel'}
               className="absolute right-2 flex h-11 w-11 items-center justify-center text-neutral-500"
             >
               <X className="h-5 w-5" />

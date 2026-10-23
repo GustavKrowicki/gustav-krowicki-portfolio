@@ -33,11 +33,11 @@ const READING_SECTIONS: SectionId[] = ['cv'];
 const isPhoneWidth = () => !window.matchMedia('(min-width: 768px)').matches;
 
 // One-page portfolio: the panel (rail + content) beside the live city. Phones stack the city above a bottom sheet.
-// With ?popups=slot (Figma board F) a building tapped in the city opens its place in the same panel, a case opens over
+// One slot (Figma board F; ?popups=cards for the old cards): a building tapped in the city opens its place in the same panel, a case opens over
 // the place, and Back goes one step: case, place, section.
 export default function PortfolioShell() {
-  // read after hydration: the page is a static export, so the server's HTML is always the default (cards)
-  const [slot, setSlot] = useState(false);
+  // read after hydration: the page is a static export, so the server's HTML is always the default (slot)
+  const [slot, setSlot] = useState(true);
   useEffect(() => setSlot(readSlotPopups()), []);
   // ?e2e=1 exposes the city's test API (window.__CITY_E2E__), as on /city; CityViewer renders on the client only
   const [e2eMode] = useState(() => typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('e2e') === '1');
