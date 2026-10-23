@@ -8,12 +8,16 @@ import type { Post } from '@/components/home/LinkedInPosts';
 // react-pdf needs the browser and is large, so it loads when the letter slide is reached.
 const PDFViewer = dynamic(() => import('@/components/home/PDFViewer'), { ssr: false });
 
-// LinkedIn embeds cannot report their height, so it was measured (2026-10-14, document posts, ?collapsed=1):
-// 581px at 318px wide and 547px from 494px wide; all three posts are the same. LinkedIn's cookie banner adds
-// about 256px on top until a visitor answers it. It is left out, so visitors who answered see no empty space;
-// before that, the post's bottom row scrolls inside the frame.
+// LinkedIn embeds cannot report their height, so it was measured (2026-10-23, ?collapsed=1, iframe width):
+// 605px below 315px (the name and the Share button wrap), 581px below 345px (Share wraps), 547px from 345px;
+// all three posts are the same. LinkedIn's cookie banner adds about 256px on top until a visitor answers it.
+// It is left out, so visitors who answered see no empty space; before that, the post's bottom row scrolls
+// inside the frame. `width` is the track, which includes the slide's 1px borders, and 3px is kept spare.
 function embedHeight(width: number) {
-  return width < 494 ? 585 : 550;
+  const frame = width - 2;
+  if (frame < 315) return 608;
+  if (frame < 345) return 584;
+  return 550;
 }
 
 // Uni work, one item at a time: the LinkedIn posts, then the recommendation letter. Swipe (phones) or the arrows.
