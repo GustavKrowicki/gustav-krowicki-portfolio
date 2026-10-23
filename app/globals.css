@@ -88,6 +88,11 @@ html {
   outline-offset: 2px;
 }
 
+/* Rail buttons fill the gaps between icons; the focus outline moves to the round icon instead */
+.shell-rail-button:focus-visible {
+  outline: none;
+}
+
 /* Rail tooltips (components/shell/ShellRail.tsx): grow out of the icon, fast; neighbours after the first open instantly */
 .shell-tooltip {
   transform-origin: var(--transform-origin);

@@ -19,6 +19,8 @@ const useCanHover = () =>
   useSyncExternalStore(subscribeHover, () => window.matchMedia(HOVER_QUERY).matches, () => false);
 
 // Vertical icon rail on desktop (left edge of the panel), horizontal tab bar on phones (under the sheet).
+// Each button fills the rail width and the space up to its neighbours, so the pointer never crosses a gap
+// that would close the tooltip (Emil: fill gaps to keep hover state).
 // The provider shares one delay: the first tooltip waits, its neighbours open at once (no delay, no animation).
 export default function ShellRail({ active, onSelect }: ShellRailProps) {
   const canHover = useCanHover();
@@ -26,7 +28,7 @@ export default function ShellRail({ active, onSelect }: ShellRailProps) {
     <Tooltip.Provider delay={500} timeout={400}>
       <nav
         aria-label="Portfolio sections"
-        className="flex shrink-0 items-start justify-around border-t border-neutral-200 px-2 pt-2 pb-1 md:w-[72px] md:flex-col md:items-center md:justify-start md:gap-5 md:border-t-0 md:border-r md:px-0 md:py-4"
+        className="flex shrink-0 items-start justify-around border-t border-neutral-200 px-2 pt-2 pb-1 md:w-[72px] md:flex-col md:items-stretch md:justify-start md:border-t-0 md:border-r md:px-0 md:py-4"
       >
         {SECTIONS.map(({ id, label, icon: Icon }) => {
           const isActive = id === active;
@@ -39,12 +41,12 @@ export default function ShellRail({ active, onSelect }: ShellRailProps) {
                     onClick={() => onSelect(id)}
                     aria-label={label}
                     aria-current={isActive ? 'page' : undefined}
-                    className={`group flex flex-col items-center gap-0.5 rounded-lg md:rounded-full ${id === 'home' ? 'md:mb-4' : ''}`}
+                    className={`group flex flex-col items-center gap-0.5 shell-rail-button rounded-lg md:py-2.5 ${id === 'home' ? 'md:pb-6' : ''}`}
                   />
                 }
               >
                 <span
-                  className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors ${
+                  className={`flex h-10 w-10 items-center justify-center rounded-full transition-colors group-focus-visible:outline-2 group-focus-visible:outline-offset-2 group-focus-visible:outline-[var(--accent)] ${
                     isActive ? 'bg-white text-neutral-900 shadow-sm' : 'text-neutral-500 group-hover:text-neutral-900'
                   }`}
                 >
