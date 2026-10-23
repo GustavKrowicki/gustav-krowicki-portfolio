@@ -108,10 +108,11 @@ export default function ShellPanel({
           >
             <span className="h-1 w-10 rounded-full bg-neutral-300" />
           </button>
-          {isPeek && place && (
+          {/* the short sheet hides the header, so it keeps its own close: a place closes to Home, Home closes the sheet */}
+          {isPeek && (
             <button
               type="button"
-              onClick={onClosePlace}
+              onClick={place ? onClosePlace : onClose}
               onPointerDown={(e) => e.stopPropagation()}
               onPointerUp={(e) => e.stopPropagation()}
               aria-label="Close"
