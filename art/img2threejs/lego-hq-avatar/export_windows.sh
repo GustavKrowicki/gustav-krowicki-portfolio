@@ -10,6 +10,6 @@ export LAB_PORT="${LAB_PORT:-3111}"
 V='"view":"sprite","yaw":45,"aim":[7.5,5.5],"pitch":30,"zoom":1.0128,"voff":0,"size":1536,"rig":"converter"'
 cd "$R"
 node art/img2threejs/tools/lab_render.mjs hqAvatar "$O" \
-  "lego-hq-avatar-win-a_south={$V,\"glow\":\"^(upper-[NSEW]-\\\\d+-\\\\d+-win-\\\\d+|roof-w\\\\d+-win-\\\\d+|upper-S-door-glass)\$\"}" \
+  "lego-hq-avatar-win-a_south={$V,\"glow\":\"^(upper-[NSEW]-\\\\d+-\\\\d+-win-\\\\d+|roof-w\\\\d+-win-\\\\d+|upper-S-door-glass|roof-hq-sign-face)\$\"}" \
   "lego-hq-avatar-win-b_south={$V,\"glow\":\"^(roof-(yellow-bar|yellow-block|round|atrium)-mass|wall-C-\\\\d+|upper-C-\\\\d+)\$\"}" | grep -v '^console'
 python3 -I art/img2threejs/tools/glass_mask.py "$O/lego-hq-avatar-win-b_south.png" "$O/lego-hq-avatar_south.png" "$O/lego-hq-avatar-win-b_south.png"
