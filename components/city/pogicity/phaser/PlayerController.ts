@@ -491,8 +491,7 @@ export class PlayerController {
     // A far tap runs by itself (POR-53: nothing to learn); a near one walks
     this.running = this.autoWalkPath.length > AUTO_RUN_TILES;
     // Only a look with ride sheets rides; any other runs
-    this.riding = this.autoWalkPath.length > AUTO_RIDE_TILES && this.characterType === CharacterType.Gustav
-      && this.scene.textures.exists(`${avatar3dPrefix()}_ride_east`);
+    this.riding = this.autoWalkPath.length > AUTO_RIDE_TILES && this.canRide();
 
     return true;
   }
@@ -519,6 +518,19 @@ export class PlayerController {
   /** Run the walk that just started; it ends with the walk */
   run(): void {
     if (this.isAutoWalking) this.running = true;
+  }
+
+  /** Whether this look can ride (its sheets carry the bike) */
+  canRide(): boolean {
+    return this.characterType === CharacterType.Gustav && this.scene.textures.exists(`${avatar3dPrefix()}_ride_east`);
+  }
+
+  /** Walk, run or ride the walk that just started, whatever its length (the long-press menu); a look without
+   * ride sheets runs instead */
+  setGait(gait: "walk" | "run" | "ride"): void {
+    if (!this.isAutoWalking) return;
+    this.riding = gait === "ride" && this.canRide();
+    this.running = gait === "run" || (gait === "ride" && !this.riding);
   }
 
   cancelAutoWalk(): void {

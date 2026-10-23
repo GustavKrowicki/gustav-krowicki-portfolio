@@ -123,7 +123,7 @@ and the model is built from it:
 | Integration | time based: `pos += velocity * dt`, ease in 0.08 s and out 0.12 s; no per-frame lerp |
 | Directions | 8, chosen relative to the camera yaw; facing changes with a small hysteresis so it does not flicker |
 | Paths | 8-way grid path, no corner cutting, diagonal cost sqrt(2), smoothed to straight segments; ends on the approach tile |
-| Input | tap or click ground: walk, run when the path is more than 10 tiles, ride the bike when it is more than 25; on a building or person: walk to its approach tile; drag: pan; pinch / wheel: zoom |
+| Input | tap or click ground: walk, run when the path is more than 10 tiles, ride the bike when it is more than 25; long press (phone) or right click (desktop): Walk / Run / Bike here pills, also keys 1 / 2 / 3; on a building or person: walk to its approach tile; drag: pan; pinch / wheel: zoom |
 
 ## 8. Depth and overlap
 
