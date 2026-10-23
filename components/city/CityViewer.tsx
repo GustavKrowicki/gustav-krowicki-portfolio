@@ -33,7 +33,7 @@ import {
   trackBeatChoice,
   trackFind,
 } from "@/lib/analytics";
-import { INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, isIntroActive, reportCityBoot, reportCityReady, setCityFramingReader } from "@/lib/intro/progress";
+import { closeIntroLog, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, isIntroActive, logIntro, reportCityBoot, reportCityReady, setCityFramingReader } from "@/lib/intro/progress";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -485,6 +485,7 @@ export default function CityViewer({
 
           // Player position changed (for auto-walk state + walkable directions)
           scene.events.on("playerPositionChanged", (data: PlayerData) => {
+            if (moveLogLeftRef.current > 0) { moveLogLeftRef.current--; logIntro("avatar.at", `${data.gridX},${data.gridY} ${data.state}`); }
             if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
               autoWalkTargetRef.current = null;
             }
@@ -865,9 +866,42 @@ export default function CityViewer({
   avatarTabOpenRef.current = avatarTabOpen;
   // true once the landing camera is set, so the overlay reads a camera that is where a first visit starts
   const landedRef = useRef(false);
+  // the hand-over report (lib/intro/progress.ts logIntro): the avatar's first moves after it stands
+  const moveLogLeftRef = useRef(0);
   useEffect(() => {
     if (!isShell) return;
     let timer = 0;
+    const timers: number[] = [];
+    const where = () => {
+      const cam = gameBoardRef.current?.getCameraState();
+      const sc = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { playerController?: { getPosition(): { gridX: number; gridY: number }; getState(): string } | null }
+        | undefined;
+      const pc = sc?.playerController;
+      const p = pc?.getPosition();
+      const box = viewerRootRef.current?.getBoundingClientRect();
+      return `camera ${cam ? `${cam.scrollX},${cam.scrollY} zoom ${cam.zoom}` : "none"}; avatar ${p ? `${p.gridX},${p.gridY} ${pc?.getState()}` : "none"}; city ${Math.round(box?.width ?? 0)}x${Math.round(box?.height ?? 0)} of ${window.innerWidth}x${window.innerHeight}`;
+    };
+    const landed = (how: string) => {
+      landedRef.current = true;
+      moveLogLeftRef.current = 12;
+      logIntro("city-ready", `${how}; ${where()}`);
+      timers.push(window.setTimeout(() => { logIntro("city-ready+3s", where()); }, 3000));
+      timers.push(window.setTimeout(() => { logIntro("city-ready+20s", where()); closeIntroLog(); }, 20_000));
+    };
+    // taps, touches and keys on the page around the hand-over: where, and on what
+    const onInput = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      const root = viewerRootRef.current?.getBoundingClientRect();
+      const pt = e as PointerEvent;
+      const at = typeof pt.clientX === "number" && root ? ` at ${Math.round(pt.clientX - root.left)},${Math.round(pt.clientY - root.top)} in the city box (${pt.pointerType ?? e.type})` : "";
+      const name = t ? `${t.tagName.toLowerCase()}${t.getAttribute?.("data-testid") ? "[" + t.getAttribute("data-testid") + "]" : ""}${t.textContent ? " '" + t.textContent.trim().slice(0, 24) + "'" : ""}` : "?";
+      logIntro(`input.${e.type}`, `${name}${at}`);
+    };
+    const inputs = ["pointerdown", "pointerup", "touchstart", "keydown", "click"] as const;
+    for (const n of inputs) window.addEventListener(n, onInput, { capture: true, passive: true });
+    const onDone = () => { logIntro("intro-done", where()); };
+    window.addEventListener(INTRO_DONE_EVENT, onDone);
     const start = (left: number) => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
         | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number, afterEvent?: string) => void }
@@ -877,14 +911,14 @@ export default function CityViewer({
         else reportCityReady(); // a scene that never comes up still ends the load intro
         return;
       }
-      if (adventureOnRef.current) { landedRef.current = true; reportCityReady(); return; }
+      if (adventureOnRef.current) { landed("walking already"); reportCityReady(); return; }
       scene.keepFramingOnSpawn = true;
       handleStartAdventure({ onLoad: true });
-      if (avatarTabOpenRef.current) { landedRef.current = true; reportCityReady(); return; }
+      if (avatarTabOpenRef.current) { landed("avatar tab open"); reportCityReady(); return; }
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
       // with the load intro over the city, the hold and glide wait for its hand-over
       scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200, isIntroActive() ? INTRO_DONE_EVENT : undefined);
-      landedRef.current = true;
+      landed(isIntroActive() ? "landing, hand-over from the intro" : "landing, no intro");
       // the first frame a visitor sees is in place: the load intro may hand over to it (lib/intro/progress.ts)
       reportCityReady();
     };
@@ -895,7 +929,7 @@ export default function CityViewer({
         | undefined;
       if (!scene?.ready || !adventureOnRef.current) return;
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      if (scene.replayLanding?.(reduced ? 0 : 1000, reduced ? 1 : 1200, INTRO_DONE_EVENT)) landedRef.current = true;
+      if (scene.replayLanding?.(reduced ? 0 : 1000, reduced ? 1 : 1200, INTRO_DONE_EVENT)) { landedRef.current = true; logIntro("replay", where()); }
     };
     window.addEventListener(INTRO_REPLAY_EVENT, onReplay);
     // the overlay fades into the frame the camera is really on (lib/intro/progress.ts getCityFraming)
@@ -906,7 +940,14 @@ export default function CityViewer({
     });
     reportCityBoot();
     start(200);
-    return () => { window.clearTimeout(timer); window.removeEventListener(INTRO_REPLAY_EVENT, onReplay); setCityFramingReader(null); };
+    return () => {
+      window.clearTimeout(timer);
+      for (const t of timers) window.clearTimeout(t);
+      for (const n of inputs) window.removeEventListener(n, onInput, { capture: true });
+      window.removeEventListener(INTRO_DONE_EVENT, onDone);
+      window.removeEventListener(INTRO_REPLAY_EVENT, onReplay);
+      setCityFramingReader(null);
+    };
   }, [isShell, handleStartAdventure]);
 
   // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it

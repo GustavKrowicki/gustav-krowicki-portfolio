@@ -18,6 +18,7 @@ import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix, avatarClipOrigin,
 import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
 import { cityFont } from "@/lib/city/cityFont";
 import { RIDE_SPEED_WU_PER_S, RUN_SPEED_WU_PER_S, WALK_SPEED_WU_PER_S } from "@/lib/city/units";
+import { logIntro } from "@/lib/intro/progress";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -199,6 +200,7 @@ export class PlayerController {
   private seatWalk = false;
 
   walkToSeat(worldX: number, worldY: number, done: () => void): void {
+    logIntro("avatar.walkToSeat", `${Math.round(worldX)},${Math.round(worldY)}`);
     this.seatTween?.stop();
     this.direction = Direction.Up;   // the chairs face their desks, to the north
     const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
@@ -245,6 +247,7 @@ export class PlayerController {
   }
 
   spawn(gridX: number, gridY: number, characterType: CharacterType): void {
+    logIntro("avatar.spawn", `${gridX},${gridY}`);
     this.gridX = gridX;
     this.gridY = gridY;
     this.targetGridX = gridX;
@@ -284,10 +287,12 @@ export class PlayerController {
   }
 
   setInputDirection(direction: Direction | null): void {
+    if (direction && direction !== this.externalDirection) logIntro("avatar.inputDirection", direction);
     this.externalDirection = direction;
   }
 
   handleKeyDown(key: string): void {
+    if (keyDirectionMap[key] && !this.pressedKeys.has(key)) logIntro("avatar.key", key);
     this.pressedKeys.add(key);
 
     // Cancel auto-walk on any movement key, except the held one (and its key repeats) that started a walk to the door
@@ -476,6 +481,7 @@ export class PlayerController {
   }
 
   walkToBuilding(targetGridX: number, targetGridY: number, buildingId?: string): boolean {
+    logIntro("avatar.walkTo", `${targetGridX},${targetGridY}${buildingId ? " " + buildingId : ""} from ${this.gridX},${this.gridY}`);
     // Find path using A*
     const path = this.findPath(this.gridX, this.gridY, targetGridX, targetGridY);
 
@@ -497,6 +503,7 @@ export class PlayerController {
   }
 
   moveTo(gridX: number, gridY: number): void {
+    logIntro("avatar.moveTo", `${gridX},${gridY} from ${this.gridX},${this.gridY}`);
     this.cancelAutoWalk();
 
     this.gridX = gridX;

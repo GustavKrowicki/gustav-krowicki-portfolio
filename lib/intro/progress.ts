@@ -104,6 +104,26 @@ export function getCityFraming(): CityFraming | null {
   try { return framingReader?.() ?? null; } catch { return null; }
 }
 
+// The hand-over report: what the city did around the hand-over, written by CityViewer (camera and avatar at
+// city-ready, at intro-done and 3 s later; taps, touches and keys on the page; the avatar's first moves) and by
+// PlayerController (every entry point that moves the avatar). The lab's Measure tab shows it with a Copy button, so a
+// phone can tell what moved the avatar or the camera; window.__introLog for the tests. Capped, and closed by
+// closeIntroLog 20 s after city-ready.
+export interface IntroLogEntry { t: number; what: string; detail?: string }
+const introLog: IntroLogEntry[] = [];
+let introLogOpen = true;
+export function logIntro(what: string, detail?: string): void {
+  if (!introLogOpen || introLog.length >= 80) return;
+  introLog.push({ t: Math.round(performance.now()), what, detail });
+  try { (window as unknown as { __introLog?: IntroLogEntry[] }).__introLog = introLog; } catch { /* no window */ }
+}
+export function getIntroLog(): IntroLogEntry[] { return introLog; }
+export function closeIntroLog(): void { introLogOpen = false; }
+export function introLogText(): string {
+  const ready = introLog.find((e) => e.what === "city-ready")?.t ?? introLog[0]?.t ?? 0;
+  return introLog.map((e) => `${((e.t - ready) / 1000).toFixed(2).padStart(7)} s  ${e.what}${e.detail ? "  " + e.detail : ""}`).join("\n");
+}
+
 // Test and lab hook: start over as if nothing had loaded (the lab replays the intro over a loaded city instead)
 export function resetCityLoadForTests(): void {
   state = { phase: "idle", assets: 0, startedAt: 0, readyAt: null };

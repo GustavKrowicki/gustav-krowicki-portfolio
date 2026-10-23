@@ -5,7 +5,7 @@
 // the panel: the city's pixel look stays inside the canvas.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { labStore, loadCurve, saveGlsl, shareSearch, useLabState } from '@/lib/intro/labState';
-import { INTRO_DONE_EVENT } from '@/lib/intro/progress';
+import { getCityLoad, getIntroLog, INTRO_DONE_EVENT, introLogText } from '@/lib/intro/progress';
 import { INTRO_PRESETS, presetById } from '@/lib/intro/presets';
 import { SNAPSHOT, fnv1a } from '@/lib/intro/snapshot';
 import cityGrid from '@/lib/city/cityGrid.json';
@@ -66,15 +66,24 @@ export default function IntroLabDrawer() {
   useEffect(() => () => { if (stepAside.current) { window.removeEventListener(INTRO_DONE_EVENT, stepAside.current.onDone); window.clearTimeout(stepAside.current.timer); } }, []);
   const replay = (patch: Partial<typeof lab> = {}) => { labStore.set((s) => ({ mode: 'replay', scrubMs: null, run: s.run + 1, ...patch })); replayAside(); };
   const scrubTo = (ms: number) => labStore.set({ mode: 'replay', scrubMs: Math.min(total, Math.max(0, ms)) });
-  const pick = (id: string) => labStore.set((s) => ({ preset: id, run: s.run + 1, scrubMs: s.scrubMs, mode: s.scrubMs !== null ? 'replay' : s.mode }));
+  // a look picked once the city has loaded replays (a real-mode run over a loaded city is a 0.8 s flash, not the look)
+  const pick = (id: string) => {
+    const replayNow = getCityLoad().phase === 'ready';
+    labStore.set((s) => ({ preset: id, run: s.run + 1, scrubMs: s.scrubMs, mode: s.scrubMs !== null || replayNow ? 'replay' : s.mode }));
+    if (replayNow) replayAside();
+  };
   const copy = async (value: string) => { try { await navigator.clipboard.writeText(value); } catch { window.prompt('Copy', value); } };
   const siteLink = () => `${window.location.origin}/new${shareSearch(lab)}`;
   const labLink = () => `${window.location.origin}/tools/intro-lab${shareSearch(lab)}`;
 
   const [marks, setMarks] = useState<{ name: string; t: number }[]>([]);
+  const [report, setReport] = useState('');
   useEffect(() => {
     if (tab !== 'measure') return;
-    const read = () => setMarks(performance.getEntriesByType('mark').filter((m) => /^(city-|intro-)/.test(m.name)).map((m) => ({ name: m.name, t: m.startTime })));
+    const read = () => {
+      setMarks(performance.getEntriesByType('mark').filter((m) => /^(city-|intro-)/.test(m.name)).map((m) => ({ name: m.name, t: m.startTime })));
+      setReport(introLogText());
+    };
     read();
     const id = window.setInterval(read, 1000);
     return () => window.clearInterval(id);
@@ -251,6 +260,14 @@ export default function IntroLabDrawer() {
               <dt className="font-mono">city-ready</dt><dd>the avatar stands and the camera is close on it: the intro settles and hands over from here</dd>
               <dt className="font-mono">intro-done</dt><dd>the overlay is gone; the landing hold and glide start</dd>
             </dl>
+            <section className="rounded-md bg-neutral-50 p-2 text-[12px] text-neutral-600">
+              <div className="mb-1 flex items-baseline justify-between">
+                <h3 className="text-xs font-medium uppercase tracking-wide text-neutral-500">Hand-over report</h3>
+                <button type="button" onClick={() => copy(introLogText())} className="rounded-md px-2 py-0.5 ring-1 ring-neutral-300">Copy</button>
+              </div>
+              <p className="mb-1">Seconds from city-ready: the camera and the avatar at the marks, every tap, touch and key on the page, and each entry point that moves the avatar. Closes 20 s after city-ready.</p>
+              <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words font-mono text-[11px] leading-snug text-neutral-800">{report || (getIntroLog().length ? introLogText() : 'Nothing yet.')}</pre>
+            </section>
             <section className="rounded-md bg-neutral-50 p-2 text-[12px] text-neutral-600">
               <h3 className="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">The real city&apos;s image</h3>
               <p>
