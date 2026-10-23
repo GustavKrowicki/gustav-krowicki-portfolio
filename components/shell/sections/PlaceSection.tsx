@@ -12,12 +12,14 @@ interface PlaceSectionProps {
   onWalkIn: () => void;
   /** Phones: the sheet is at its short height, so a tap on the card grows it */
   onGrow?: () => void;
+  /** Phones: the playlist's song list opened, so grow the sheet one step */
+  onGrowForList?: () => void;
 }
 
 // A building opened from the city (?popups=slot): its place in the panel or the sheet. It leads with the case's cover
 // (recruiters look at the work first), then the logo, the title and one line, then Read the case and Walk in. The
 // rest sits below, for the half sheet and the desktop panel. Modeled on tomjohn.design's place card.
-export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow }: PlaceSectionProps) {
+export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow, onGrowForList }: PlaceSectionProps) {
   // Focus follows the slot: a screen reader or keyboard lands on the place that just opened
   const headingRef = useRef<HTMLHeadingElement>(null);
   useEffect(() => headingRef.current?.focus({ preventScroll: true }), [place.buildingId]);
@@ -86,7 +88,7 @@ export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow }: Pl
         {place.text && <p className="mt-6 leading-relaxed text-neutral-700">{place.text}</p>}
         {place.extra === 'playlist' && (
           <div className="mt-6">
-            <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} variant="plain" />
+            <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} variant="plain" onOpen={onGrowForList} />
           </div>
         )}
         {place.extra === 'books' && (

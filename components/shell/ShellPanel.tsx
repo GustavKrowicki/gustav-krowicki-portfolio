@@ -166,6 +166,8 @@ export default function ShellPanel({
             onOpenCase={onOpenCase}
             onWalkIn={() => onWalkIn?.()}
             onGrow={isPeek ? onGrow : undefined}
+            // the song list needs the tall sheet: from peek that is two steps
+            onGrowForList={isExpanded ? undefined : isPeek ? () => (onGrow?.(), onGrow?.()) : onGrow}
           />
         ) : (
           <SectionContent
