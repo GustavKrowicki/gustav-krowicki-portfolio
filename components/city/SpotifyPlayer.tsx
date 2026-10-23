@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { Pause, Play, SkipBack, SkipForward } from "lucide-react";
 import { trackSpotifyInteracted } from "@/lib/analytics";
 
 export const NORTHSIDE_PLAYLIST_URL = "https://open.spotify.com/playlist/3EauLdytT4srscIeLfXD2H?si=613af6771c324e08";
@@ -25,6 +26,8 @@ const TRACKS = [
 
 interface SpotifyPlayerProps {
   playlistUrl: string;
+  /** plain: the side panel's web style (?popups=slot); pixel: the city's dialog box */
+  variant?: "pixel" | "plain";
 }
 
 declare global {
@@ -33,7 +36,7 @@ declare global {
   }
 }
 
-export default function SpotifyPlayer({ playlistUrl }: SpotifyPlayerProps) {
+export default function SpotifyPlayer({ playlistUrl, variant = "pixel" }: SpotifyPlayerProps) {
   const [isPaused, setIsPaused] = useState(true);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
@@ -142,6 +145,64 @@ export default function SpotifyPlayer({ playlistUrl }: SpotifyPlayerProps) {
   }, [currentIndex]);
 
   const progress = duration > 0 ? position / duration : 0;
+
+  if (variant === "plain") {
+    const roundButton =
+      "flex h-11 w-11 items-center justify-center rounded-full text-neutral-900 hover:bg-neutral-100 active:bg-neutral-100";
+    return (
+      <section aria-label="Northside playlist" className="rounded-2xl border border-neutral-200 bg-white p-4">
+        <div className="flex items-baseline justify-between text-sm">
+          <span className="font-medium text-neutral-500">Now playing</span>
+          {currentIndex >= 0 && (
+            <span className="tabular-nums text-neutral-400">
+              {currentIndex + 1} of {TRACKS.length}
+            </span>
+          )}
+        </div>
+        <p className="mt-1 truncate font-medium text-neutral-900">{currentTrack?.name || "Select a track"}</p>
+        <p className="truncate text-sm text-neutral-500">{currentTrack?.artist || "\u00A0"}</p>
+
+        {/* Spotify embed (hidden but functional) */}
+        <div className="absolute h-0 w-0 overflow-hidden">
+          <div ref={embedRef} />
+        </div>
+
+        <div className="mt-3 h-1 overflow-hidden rounded-full bg-neutral-200">
+          <div
+            className="h-full rounded-full bg-neutral-900 transition-[width] duration-200"
+            style={{ width: `${progress * 100}%` }}
+          />
+        </div>
+
+        <div className="mt-2 flex items-center gap-1">
+          <button type="button" onClick={prevTrack} className={roundButton} aria-label="Previous track">
+            <SkipBack className="h-5 w-5" fill="currentColor" />
+          </button>
+          <button
+            type="button"
+            onClick={togglePlay}
+            disabled={!ready}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-neutral-900 text-white hover:bg-neutral-700 active:bg-neutral-700 disabled:opacity-40"
+            aria-label={isPaused ? "Play" : "Pause"}
+          >
+            {isPaused ? <Play className="h-5 w-5 translate-x-px" fill="currentColor" /> : <Pause className="h-5 w-5" fill="currentColor" />}
+          </button>
+          <button type="button" onClick={nextTrack} className={roundButton} aria-label="Next track">
+            <SkipForward className="h-5 w-5" fill="currentColor" />
+          </button>
+          <div className="flex-1" />
+          <a
+            href={playlistUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-neutral-600 underline underline-offset-4 hover:text-neutral-900"
+          >
+            Open in Spotify
+          </a>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="border-[3px] border-[#14181b] bg-[#504d42] p-3">

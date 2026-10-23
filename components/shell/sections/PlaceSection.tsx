@@ -86,12 +86,12 @@ export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow }: Pl
         {place.text && <p className="mt-6 leading-relaxed text-neutral-700">{place.text}</p>}
         {place.extra === 'playlist' && (
           <div className="mt-6">
-            <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} />
+            <SpotifyPlayer playlistUrl={NORTHSIDE_PLAYLIST_URL} variant="plain" />
           </div>
         )}
         {place.extra === 'books' && (
           <div className="mt-6">
-            <BookShelf />
+            <BookShelf variant="plain" />
           </div>
         )}
       </div>
