@@ -1,14 +1,17 @@
 'use client';
 
 // The load intro (POR-40): a shader over the city area from the first paint until the city is ready, then a short
-// hand-over and it is gone. It never takes a tap (pointer-events: none) and the panel beside it is readable the
-// whole time. Settings come from lib/intro/labState.ts; the lab (/tools/intro-lab) edits them live.
+// hand-over and it is gone. While the city loads it takes the taps on the city area and drops them (a tap on a city
+// that is not showing yet would walk the avatar somewhere unseen); from the hand-over on it lets them through. The
+// panel beside it is readable and usable the whole time. The frame it fades into is read from the city's own camera
+// (lib/intro/progress.ts getCityFraming), not only computed. Settings come from lib/intro/labState.ts; the lab
+// (/tools/intro-lab) edits them live.
 import { useEffect, useRef, useState } from 'react';
 import { HOUR_OF, type TimeOfDay } from '@/lib/city/nightSchedule';
 import { GAME_HEIGHT, GAME_WIDTH, closeUpFraming, fitFraming, isPhoneViewport, lerpFraming, stageFor, streetFraming, worldFromContainer } from '@/lib/intro/camera';
 import { labStore, loadCurve, markIntroSeen, useLabState } from '@/lib/intro/labState';
 import { presetById } from '@/lib/intro/presets';
-import { getCityLoad, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, mark, overallProgress, subscribeCityLoad } from '@/lib/intro/progress';
+import { getCityFraming, getCityLoad, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, mark, overallProgress, subscribeCityLoad } from '@/lib/intro/progress';
 import { IntroRenderer } from '@/lib/intro/renderer';
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
@@ -28,8 +31,9 @@ function visitorHour(): number {
   return d.getHours() + d.getMinutes() / 60;
 }
 
-// Where on the timeline the overlay is: what the shader gets, and whether it is over
-interface Moment { progress: number; reveal: number; done: boolean; time: number }
+// Where on the timeline the overlay is: what the shader gets, whether the load is over (settle and reveal run), and
+// whether it is over
+interface Moment { progress: number; reveal: number; landed: boolean; after: number; done: boolean; time: number }
 
 export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
   const lab = useLabState();
@@ -72,6 +76,8 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     const phone = isPhoneViewport();
     const reduced = s.reduced ?? (window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false);
     const seed = Math.random();
+    // the lab and the e2e tests read the framing the overlay is on (window.__introFraming)
+    const debug = s.lab || /[?&]e2e=1(&|$)/.test(window.location.search);
     const startAt = performance.now();
     mark('intro-start');
     let readyAt: number | null = null;
@@ -80,6 +86,9 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     let frames = 0; let frameMs = 0; let worst = 0; let statsAt = startAt;
     let finished = false;
     let raf = 0;
+    // the framing the overlay was on when the load ended: it eases from there onto the city's real camera over the
+    // settle, so the reveal fades between two frames of the same place
+    let atLanding: { scrollX: number; scrollY: number; zoom: number } | null = null;
 
     // real mode: the city's own load; it may already be ready (a lab restart while the city is up, or a fast cache)
     const unsubscribe = subscribeCityLoad(() => { /* read each frame */ });
@@ -101,13 +110,13 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
         loadEnd = readyAt === null ? Infinity : readyAt - startAt;
         pNow = readyAt === null ? overallProgress(load, t) : progressAtReady;
       }
-      if (t < loadEnd) return { progress: pNow, reveal: 0, done: false, time: t / 1000 };
+      if (t < loadEnd) return { progress: pNow, reveal: 0, landed: false, after: 0, done: false, time: t / 1000 };
       const after = t - loadEnd;
       const settle = Math.max(1, st.settleMs);
       const pEnd = st.mode === 'replay' ? loadCurve(st.curve, 1) : progressAtReady;
       const progress = pEnd + (1 - pEnd) * easeOut(after / settle);
       const reveal = after < settle ? 0 : easeOut((after - settle) / Math.max(1, st.revealMs));
-      return { progress, reveal, done: after >= settle + st.revealMs, time: t / 1000 };
+      return { progress, reveal, landed: true, after, done: after >= settle + st.revealMs, time: t / 1000 };
     };
 
     const onPointer = (e: PointerEvent) => {
@@ -136,6 +145,9 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
       const m = momentAt(nowMs);
       if (m.done && st.scrubMs === null) { finish(); return; }
+      // taps on a city that is not showing yet are dropped here; from the hand-over on they reach the city (the lab
+      // keeps its controls reachable throughout)
+      root.style.pointerEvents = m.reveal > 0 || st.lab ? 'none' : 'auto';
 
       // the camera: from the whole city down to where the real city's first frame is
       const stage = stageFor(r.width, r.height, phone);
@@ -143,7 +155,13 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       const landing = reduced ? streetFraming(phone) : closeUpFraming();
       // the whole city holds for the first third of the load, then the camera comes down to the avatar
       const camT = preset.camera === 'fit' ? 0 : preset.camera === 'close' || reduced ? 1 : easeInOut(smoothstep(0.3, 1, m.progress));
-      const framing = lerpFraming(fit, landing, camT);
+      const planned = lerpFraming(fit, landing, camT);
+      // once the load is over, the frame to fade into is the one the city's camera is really on (an avatar that has
+      // walked off, a camera moved by hand); the planned frame is the same on a plain first visit, so nothing moves
+      const live = m.landed ? getCityFraming() : null;
+      if (!m.landed) atLanding = planned;
+      const framing = live ? lerpFraming(atLanding ?? planned, live, easeOut(m.after / Math.max(1, st.settleMs))) : planned;
+      if (debug) (window as unknown as { __introFraming?: typeof framing }).__introFraming = framing;
       const w2s = worldFromContainer(framing, stage);
       const cssPerCanvas = r.width / w;
       renderer?.render({

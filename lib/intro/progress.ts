@@ -93,6 +93,17 @@ let introActiveFlag = false;
 export function setIntroActive(active: boolean): void { introActiveFlag = active; }
 export function isIntroActive(): boolean { return introActiveFlag; }
 
+// Where the city's camera really is, read each frame by the overlay for its hand-over (CityViewer registers the
+// reader). The overlay computes the first frame on its own (lib/intro/camera.ts) while the city loads, but the frame
+// it fades into is the one the camera is on: an avatar that has moved, or a camera moved by hand, is followed, not
+// guessed. Null until the landing camera is in place.
+export interface CityFraming { scrollX: number; scrollY: number; zoom: number }
+let framingReader: (() => CityFraming | null) | null = null;
+export function setCityFramingReader(reader: (() => CityFraming | null) | null): void { framingReader = reader; }
+export function getCityFraming(): CityFraming | null {
+  try { return framingReader?.() ?? null; } catch { return null; }
+}
+
 // Test and lab hook: start over as if nothing had loaded (the lab replays the intro over a loaded city instead)
 export function resetCityLoadForTests(): void {
   state = { phase: "idle", assets: 0, startedAt: 0, readyAt: null };

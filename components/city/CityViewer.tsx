@@ -33,7 +33,7 @@ import {
   trackBeatChoice,
   trackFind,
 } from "@/lib/analytics";
-import { INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, isIntroActive, reportCityBoot, reportCityReady } from "@/lib/intro/progress";
+import { INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, isIntroActive, reportCityBoot, reportCityReady, setCityFramingReader } from "@/lib/intro/progress";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -863,6 +863,8 @@ export default function CityViewer({
   // a link opens on it, does its own focus.
   const avatarTabOpenRef = useRef(avatarTabOpen);
   avatarTabOpenRef.current = avatarTabOpen;
+  // true once the landing camera is set, so the overlay reads a camera that is where a first visit starts
+  const landedRef = useRef(false);
   useEffect(() => {
     if (!isShell) return;
     let timer = 0;
@@ -875,13 +877,14 @@ export default function CityViewer({
         else reportCityReady(); // a scene that never comes up still ends the load intro
         return;
       }
-      if (adventureOnRef.current) { reportCityReady(); return; }
+      if (adventureOnRef.current) { landedRef.current = true; reportCityReady(); return; }
       scene.keepFramingOnSpawn = true;
       handleStartAdventure({ onLoad: true });
-      if (avatarTabOpenRef.current) { reportCityReady(); return; }
+      if (avatarTabOpenRef.current) { landedRef.current = true; reportCityReady(); return; }
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
       // with the load intro over the city, the hold and glide wait for its hand-over
       scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200, isIntroActive() ? INTRO_DONE_EVENT : undefined);
+      landedRef.current = true;
       // the first frame a visitor sees is in place: the load intro may hand over to it (lib/intro/progress.ts)
       reportCityReady();
     };
@@ -892,12 +895,18 @@ export default function CityViewer({
         | undefined;
       if (!scene?.ready || !adventureOnRef.current) return;
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      scene.replayLanding?.(reduced ? 0 : 1000, reduced ? 1 : 1200, INTRO_DONE_EVENT);
+      if (scene.replayLanding?.(reduced ? 0 : 1000, reduced ? 1 : 1200, INTRO_DONE_EVENT)) landedRef.current = true;
     };
     window.addEventListener(INTRO_REPLAY_EVENT, onReplay);
+    // the overlay fades into the frame the camera is really on (lib/intro/progress.ts getCityFraming)
+    setCityFramingReader(() => {
+      if (!landedRef.current) return null;
+      const cam = gameBoardRef.current?.getCameraState();
+      return cam ? { scrollX: cam.scrollX, scrollY: cam.scrollY, zoom: cam.zoom } : null;
+    });
     reportCityBoot();
     start(200);
-    return () => { window.clearTimeout(timer); window.removeEventListener(INTRO_REPLAY_EVENT, onReplay); };
+    return () => { window.clearTimeout(timer); window.removeEventListener(INTRO_REPLAY_EVENT, onReplay); setCityFramingReader(null); };
   }, [isShell, handleStartAdventure]);
 
   // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it

@@ -5,6 +5,7 @@
 // the panel: the city's pixel look stays inside the canvas.
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { labStore, loadCurve, saveGlsl, shareSearch, useLabState } from '@/lib/intro/labState';
+import { INTRO_DONE_EVENT } from '@/lib/intro/progress';
 import { INTRO_PRESETS, presetById } from '@/lib/intro/presets';
 import { SNAPSHOT, fnv1a } from '@/lib/intro/snapshot';
 import cityGrid from '@/lib/city/cityGrid.json';
@@ -47,7 +48,23 @@ export default function IntroLabDrawer() {
     timer.current = window.setTimeout(() => saveGlsl(preset.id, value === preset.glsl ? null : value), 300);
   };
 
-  const replay = (patch: Partial<typeof lab> = {}) => labStore.set((s) => ({ mode: 'replay', scrubMs: null, run: s.run + 1, ...patch }));
+  // On a phone the card covers most of the city, so a replay steps aside: the card closes and comes back once the
+  // replayed intro has handed over and the landing has glided out (the "Intro lab" pill brings it back sooner)
+  const stepAside = useRef<{ onDone: () => void; timer: number } | null>(null);
+  const replayAside = () => {
+    if (window.innerWidth >= 768) return;
+    if (stepAside.current) { window.removeEventListener(INTRO_DONE_EVENT, stepAside.current.onDone); window.clearTimeout(stepAside.current.timer); }
+    const back = () => { stepAside.current = null; setOpen(true); };
+    const onDone = () => {
+      window.removeEventListener(INTRO_DONE_EVENT, onDone);
+      if (stepAside.current) { window.clearTimeout(stepAside.current.timer); stepAside.current.timer = window.setTimeout(back, 2600); }
+    };
+    stepAside.current = { onDone, timer: window.setTimeout(back, 30_000) };
+    window.addEventListener(INTRO_DONE_EVENT, onDone);
+    setOpen(false);
+  };
+  useEffect(() => () => { if (stepAside.current) { window.removeEventListener(INTRO_DONE_EVENT, stepAside.current.onDone); window.clearTimeout(stepAside.current.timer); } }, []);
+  const replay = (patch: Partial<typeof lab> = {}) => { labStore.set((s) => ({ mode: 'replay', scrubMs: null, run: s.run + 1, ...patch })); replayAside(); };
   const scrubTo = (ms: number) => labStore.set({ mode: 'replay', scrubMs: Math.min(total, Math.max(0, ms)) });
   const pick = (id: string) => labStore.set((s) => ({ preset: id, run: s.run + 1, scrubMs: s.scrubMs, mode: s.scrubMs !== null ? 'replay' : s.mode }));
   const copy = async (value: string) => { try { await navigator.clipboard.writeText(value); } catch { window.prompt('Copy', value); } };
@@ -73,7 +90,7 @@ export default function IntroLabDrawer() {
     return (
       <button
         type="button"
-        onClick={() => setOpen(true)}
+        onClick={() => { if (stepAside.current) { window.removeEventListener(INTRO_DONE_EVENT, stepAside.current.onDone); window.clearTimeout(stepAside.current.timer); stepAside.current = null; } setOpen(true); }}
         className="fixed right-4 top-[max(1rem,env(safe-area-inset-top))] z-50 rounded-full bg-white/95 px-3 py-1.5 text-sm font-medium text-neutral-900 shadow-md ring-1 ring-black/10"
       >
         Intro lab
@@ -143,7 +160,7 @@ export default function IntroLabDrawer() {
               </div>
               <input id="lab-scrub" type="range" min={0} max={total} step={10} value={lab.scrubMs ?? 0} onChange={(e) => scrubTo(Number(e.target.value))} className="mt-1 w-full" aria-label="Scrub the timeline" />
               <div className="mt-1 flex flex-wrap gap-1.5">
-                <button type="button" onClick={() => labStore.set({ scrubMs: null, mode: 'replay', run: lab.run + 1 })} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Play from start</button>
+                <button type="button" onClick={() => replay()} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Play from start</button>
                 <button type="button" onClick={() => scrubTo(lab.waitMs * 0.5)} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Half loaded</button>
                 <button type="button" onClick={() => scrubTo(lab.waitMs + lab.settleMs + lab.revealMs * 0.5)} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Mid reveal</button>
               </div>
