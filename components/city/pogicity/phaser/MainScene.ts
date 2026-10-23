@@ -2237,7 +2237,7 @@ export class MainScene extends Phaser.Scene {
     this.events.emit("walkInPeek", { buildingId });
   }
 
-  /** Esc puts the roof back. Off with ?popups=slot, where the page's Esc goes one step back (case, place) instead */
+  /** Esc puts the roof back. Off on /new, where the page's Esc goes one step back (case, place) instead */
   peekEscCloses = true;
 
   /** Open a walk-in building in place by its id (a place opened from a link), as a tap on it does */

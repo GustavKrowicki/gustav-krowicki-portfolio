@@ -75,7 +75,7 @@ interface CityViewerProps {
   // shell closes the panel when a place opens (onPlaceOpen), and an opening panel closes the place.
   panelOpen?: boolean;
   onPlaceOpen?: () => void;
-  // Shell only. "slot" (?popups=slot, Figma board F): a tap on any building (or its logo) opens its place in the shell's
+  // Shell only. "slot" (Figma board F): a tap on any building (or its logo) opens its place in the shell's
   // panel instead of a card in the city (onOpenPlace); the shell's open place comes back as openPlace, and a walk-in
   // building's roof follows it. Finds are a pill on every screen, beat cards plain, and the old tour dialog never shows.
   popups?: "cards" | "slot";

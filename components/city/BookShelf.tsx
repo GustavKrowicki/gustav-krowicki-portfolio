@@ -16,7 +16,7 @@ const CURRENTLY_READING = [
 ];
 
 interface BookShelfProps {
-  /** plain: the side panel's web style (?popups=slot); pixel: the city's dialog box */
+  /** plain: the side panel's web style; pixel: the city's dialog box */
   variant?: "pixel" | "plain";
 }
 

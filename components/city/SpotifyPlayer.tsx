@@ -27,7 +27,7 @@ const TRACKS = [
 
 interface SpotifyPlayerProps {
   playlistUrl: string;
-  /** plain: the side panel's web style (?popups=slot); pixel: the city's dialog box */
+  /** plain: the side panel's web style; pixel: the city's dialog box */
   variant?: "pixel" | "plain";
   /** plain: the song list opened (phones grow the sheet so it shows) */
   onOpen?: () => void;
