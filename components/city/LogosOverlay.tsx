@@ -125,20 +125,19 @@ export default function LogosOverlay({
             key={logo.buildingId}
             type="button"
             onClick={onLogoClick ? () => onLogoClick(logo.buildingId) : undefined}
-            className="absolute flex items-center justify-center rounded-[8px] border border-neutral-200 bg-white shadow-[0_2px_8px_rgba(0,0,0,0.25)]"
+            className="absolute overflow-hidden rounded-[7px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.18),0_2px_6px_rgba(0,0,0,0.25)]"
             style={{
               left: logo.cssX - tileSize / 2,
               top: logo.cssY - tileSize,
               width: tileSize,
               height: tileSize,
-              padding: 2,
               pointerEvents: onLogoClick ? "auto" : "none",
               cursor: onLogoClick ? "pointer" : "default",
             }}
             aria-label={getPlace(logo.buildingId)?.title ?? logo.buildingId}
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={logo.logoUrl} alt="" draggable={false} className="h-full w-full rounded-[6px] object-contain" />
+            <img src={logo.logoUrl} alt="" draggable={false} className="h-full w-full object-cover" />
           </button>
         ))}
 
