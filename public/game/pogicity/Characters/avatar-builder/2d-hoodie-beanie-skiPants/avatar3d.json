@@ -18,33 +18,37 @@
    "file": "walk-east.png",
    "outlineFile": "walk-east.png",
    "frames": 8,
-   "fps": 44.62,
+   "fps": 28.23,
    "repeat": -1,
-   "durationS": 0.179
+   "durationS": 0.283,
+   "speedWuPerS": 2.0
   },
   "walk_north": {
    "file": "walk-north.png",
    "outlineFile": "walk-north.png",
    "frames": 8,
-   "fps": 44.62,
+   "fps": 28.23,
    "repeat": -1,
-   "durationS": 0.179
+   "durationS": 0.283,
+   "speedWuPerS": 2.0
   },
   "walk_west": {
    "file": "walk-west.png",
    "outlineFile": "walk-west.png",
    "frames": 8,
-   "fps": 44.62,
+   "fps": 28.23,
    "repeat": -1,
-   "durationS": 0.179
+   "durationS": 0.283,
+   "speedWuPerS": 2.0
   },
   "walk_south": {
    "file": "walk-south.png",
    "outlineFile": "walk-south.png",
    "frames": 8,
-   "fps": 44.62,
+   "fps": 28.23,
    "repeat": -1,
-   "durationS": 0.179
+   "durationS": 0.283,
+   "speedWuPerS": 2.0
   },
   "idle_east": {
    "file": "idle-east.png",
@@ -52,7 +56,7 @@
    "frames": 4,
    "fps": 1.3333333333333333,
    "repeat": -1,
-   "durationS": 3
+   "durationS": 3.0
   },
   "idle_north": {
    "file": "idle-north.png",
@@ -60,7 +64,7 @@
    "frames": 4,
    "fps": 1.3333333333333333,
    "repeat": -1,
-   "durationS": 3
+   "durationS": 3.0
   },
   "idle_west": {
    "file": "idle-west.png",
@@ -68,7 +72,7 @@
    "frames": 4,
    "fps": 1.3333333333333333,
    "repeat": -1,
-   "durationS": 3
+   "durationS": 3.0
   },
   "idle_south": {
    "file": "idle-south.png",
@@ -76,7 +80,103 @@
    "frames": 4,
    "fps": 1.3333333333333333,
    "repeat": -1,
-   "durationS": 3
+   "durationS": 3.0
+  },
+  "run_east": {
+   "file": "run-east.png",
+   "outlineFile": "run-east.png",
+   "frames": 8,
+   "fps": 28.0,
+   "repeat": -1,
+   "durationS": 0.286,
+   "speedWuPerS": 7.0
+  },
+  "run_north": {
+   "file": "run-north.png",
+   "outlineFile": "run-north.png",
+   "frames": 8,
+   "fps": 28.0,
+   "repeat": -1,
+   "durationS": 0.286,
+   "speedWuPerS": 7.0
+  },
+  "run_west": {
+   "file": "run-west.png",
+   "outlineFile": "run-west.png",
+   "frames": 8,
+   "fps": 28.0,
+   "repeat": -1,
+   "durationS": 0.286,
+   "speedWuPerS": 7.0
+  },
+  "run_south": {
+   "file": "run-south.png",
+   "outlineFile": "run-south.png",
+   "frames": 8,
+   "fps": 28.0,
+   "repeat": -1,
+   "durationS": 0.286,
+   "speedWuPerS": 7.0
+  },
+  "ride_east": {
+   "file": "ride-east.png",
+   "outlineFile": "ride-east.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_north": {
+   "file": "ride-north.png",
+   "outlineFile": "ride-north.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_west": {
+   "file": "ride-west.png",
+   "outlineFile": "ride-west.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
+  },
+  "ride_south": {
+   "file": "ride-south.png",
+   "outlineFile": "ride-south.png",
+   "frames": 8,
+   "fps": 16.67,
+   "repeat": -1,
+   "durationS": 0.48,
+   "speedWuPerS": 10.0,
+   "frameWidth": 144,
+   "frameHeight": 176,
+   "origin": [
+    0.5,
+    0.81818
+   ]
   }
  }
 }

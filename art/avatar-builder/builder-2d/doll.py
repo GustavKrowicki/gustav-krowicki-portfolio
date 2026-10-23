@@ -3,9 +3,11 @@ Limbs are the sheet's vector parts in two segments (thigh/shin, upper arm/forear
 turned per frame, rasterised at 8x and reduced to clean pixel clusters in the sheet palette (lit, mid, shade,
 edge per part), with an upper-left rim and a 1 px edge in a darker shade of each colour (the city's look).
 The faces are hand-drawn 13 px heads pasted on top: a reduced vector face blurs.
+Also an 8-frame run (POR-53): forward lean, elbows bent, a flight phase with both feet off the ground.
 Facings: down-left and up-right are drawn (up-right from the mirrored 3/4 geometry with back details);
 down-right and up-left are their mirrors with the shade redrawn for the upper-left light.
-  python3 doll.py <out_dir>  ->  walk-<facing>.png (8 frames of 36 x 66 each)"""
+  python3 doll.py <out_dir> [<city_dir> [looks]]  ->  walk-<facing>.png (8 frames of 36 x 66 each); with a city_dir,
+  the city sheets (walk, idle, run) per look"""
 import os, subprocess, sys
 from PIL import Image
 here = os.path.dirname(os.path.abspath(__file__))
@@ -78,18 +80,33 @@ POCKETS = ('<path d="M120 452 L176 452 L174 500 L148 508 L122 500 Z" fill="none"
 
 # 8-frame walk. Per frame: hip swing of the near leg (+ = foot forward, to the left for the drawn facing); the far
 # leg mirrors it. Knee bend on the leg passing forward, heel lift on the leg behind, a 1 px bob.
-LEG = [9, 5, 0, -5, -9, -5, 0, 5]
-KNEE = {'near': [0, 0, 0, 0, 6, 22, 30, 16], 'far': [6, 22, 30, 16, 0, 0, 0, 0]}   # degrees, shin swings back
-HEEL = {'near': [0, 0, 0, 10, 18, 4, 0, 0], 'far': [18, 4, 0, 0, 0, 0, 0, 10]}     # heel lifts about the toe
-LIFT = {'near': [0, 0, 0, 0, 0, 8, 16, 6], 'far': [0, 8, 16, 6, 0, 0, 0, 0]}       # units: the swing foot clears the ground
+# POR-53: the city walks at 2 wu/s; a wider swing (18 deg, was 9) gives a longer step, so the legs cycle at a
+# readable pace instead of a blur.
+LEG = [18, 10, 0, -10, -18, -10, 0, 10]
+KNEE = {'near': [0, 0, 0, 0, 8, 30, 40, 22], 'far': [8, 30, 40, 22, 0, 0, 0, 0]}   # degrees, shin swings back
+HEEL = {'near': [0, 0, 0, 14, 24, 6, 0, 0], 'far': [24, 6, 0, 0, 0, 0, 0, 14]}     # heel lifts about the toe
+LIFT = {'near': [0, 0, 0, 0, 0, 12, 24, 9], 'far': [0, 12, 24, 9, 0, 0, 0, 0]}     # units: the swing foot clears the ground
 BOB = [0, 1, 0, -1, 0, 1, 0, -1]
+# 8-frame run, near leg; the far leg is the same four frames later. Per step: contact, stance (knee gives), push-off
+# (heel up), flight (both feet off, the back leg folds), then the leg swings through with a high knee and reaches.
+RUN_LEG = [22, 4, -26, -22, -6, 16, 30, 28]
+RUN_KNEE = [12, 30, 18, 60, 85, 75, 35, 15]
+RUN_HEEL = [0, 0, 25, 30, 10, 0, 0, 0]
+RUN_LIFT = [0, -25, 0, 30, 50, 60, 30, 10]   # units, the whole leg: down on the bent stance, up on the swing
+RUN_BOB = [0, 1, 0, -2, 0, 1, 0, -2]   # px: down on the stance, up in the flight
+RUN_LEAN = 0.11                        # forward lean: px of shift per px of height (about 6 deg)
+RUN_STEP_WU = 1.0                      # ground covered per step, flight included
 IDLE_BOB = [0, 0, 1, 0]              # a slow breath: the body sinks 1 px on the third frame
 IDLE_BLINK = 3                       # eyes shut on the last idle frame
 POSE = None                          # set to 'idle' to draw the standing pose
 
 def leg_g(side, i):
     p = PARTS[side]; a = LEG[i] if side == 'near' else -LEG[i]
-    k = -KNEE[side][i]; h = -HEEL[side][i]
+    k = -KNEE[side][i]; h = -HEEL[side][i]; lift = LIFT[side][i] + KNEE[side][i] * 0.9
+    if POSE == 'run':
+        j = i if side == 'near' else (i + 4) % 8
+        a = RUN_LEG[j]
+        k = -RUN_KNEE[j]; h = -RUN_HEEL[j]; lift = RUN_LIFT[j]
     if POSE == 'idle':
         var = LEGS34.get(OUTFIT['legs'], {}).get(side, {})
         return (f'<g transform="rotate({1.5 if side == "near" else -1.5} {p["hip"][0]} {p["hip"][1]})">'
@@ -98,12 +115,16 @@ def leg_g(side, i):
     thigh, shin_parts = var.get('thigh', p['thigh']), var.get('shin', p['shin'])
     shoe = f'<g transform="rotate({h} {p["toe"][0]} {p["toe"][1]})">' + ''.join(p['shoe']) + '</g>'
     shin = f'<g transform="rotate({k} {p["knee"][0]} {p["knee"][1]})">' + ''.join(shin_parts) + shoe + '</g>'
-    return (f'<g transform="translate(0 {-LIFT[side][i] - (KNEE[side][i] * 0.9)}) rotate({a} {p["hip"][0]} {p["hip"][1]})">'
+    return (f'<g transform="translate(0 {-lift}) rotate({a} {p["hip"][0]} {p["hip"][1]})">'
             + ''.join(thigh) + shin + '</g>')
 def arm_g(side, i):
     p = PARTS[side]; a = LEG[i] if side == 'near' else -LEG[i]
     swing = -0.9 * a if POSE != 'idle' else 0.0   # arms against the legs
     bend = 12 + max(0.0, swing) * 0.5      # elbow always a little bent, more on the forward swing
+    if POSE == 'run':                      # elbows bent near square, pumping against the legs
+        j = i if side == 'near' else (i + 4) % 8
+        swing = -1.1 * RUN_LEG[j]
+        bend = 75 + max(0.0, swing) * 0.4
     cover = SLEEVES.get(OUTFIT['top'], {}).get(side, {})
     fore = f'<g transform="rotate({bend} {p["elbow"][0]} {p["elbow"][1]})">' + ''.join(p['fore'] + cover.get('fore', [])) + '</g>'
     return (f'<g transform="rotate({swing} {p["shoulder"][0]} {p["shoulder"][1]})">' + ''.join(p['upper'] + cover.get('upper', []))
@@ -113,7 +134,7 @@ def frame_svg(i, back=False):
     body = [arm_g('far', i), leg_g('far', i), leg_g('near', i), ''.join(torso()) + (POCKETS if back else ''), arm_g('near', i)]
     if back:   # seen from behind: the same 3/4 geometry mirrored, so the near side is on the right
         body = ['<g transform="translate(400 0) scale(-1 1)">' + ''.join(body) + '</g>']
-    bob = (IDLE_BOB[i] if POSE == 'idle' else BOB[i]) / S
+    bob = (IDLE_BOB[i] if POSE == 'idle' else RUN_BOB[i] if POSE == 'run' else BOB[i]) / S
     vx = (CX_U_BACK if back else CX_U) - (FW / 2) / S; vy = FOOT_U - GROUND / S
     return (f'<svg xmlns="http://www.w3.org/2000/svg" width="{FW*SS}" height="{FH*SS}" viewBox="{vx} {vy} {FW / S} {FH / S}">'
             f'<defs>{SOFTF}</defs><g transform="translate(0 {bob})">' + warp(''.join(body)) + '</g></svg>')
@@ -234,6 +255,10 @@ BACK34 = [   # 3/4 up-right: hair over the crown, the ear on the right, the nape
 ]
 def paste_grid(im, grid, x0, bob):
     y0 = GROUND - 54 + bob
+    put = im.putpixel
+    def safe(xy, c):   # a hat in the run's flight frames reaches above the frame: clip it (a negative y wraps around)
+        if 0 <= xy[0] < FW and 0 <= xy[1] < FH: put(xy, c)
+    im = type('Clip', (), {'putpixel': staticmethod(safe)})()
     for y, row in enumerate(grid):
         for x, c in enumerate(row):
             if PAL[c]: im.putpixel((x0 + x, y0 + y), PAL[c] + (255,))
@@ -250,18 +275,24 @@ def paste_grid(im, grid, x0, bob):
 def render_frames(out, back, n=8):
     frames = []
     for i in range(n):
-        tag = ('b' if back else 'f') + ('i' if POSE == 'idle' else '')
+        tag = ('b' if back else 'f') + ({'idle': 'i', 'run': 'r'}.get(POSE, ''))
         svgp = f'{out}/frames/{tag}{i}.svg'; open(svgp, 'w').write(frame_svg(i, back))
         subprocess.run(['node', f'{here}/render-alpha.cjs', svgp, f'{out}/frames/{tag}{i}-8x.png', str(FW * SS), str(FH * SS)], check=True)
-        sm = reduce(Image.open(f'{out}/frames/{tag}{i}-8x.png').convert('RGBA'))
-        bob = IDLE_BOB[i] if POSE == 'idle' else BOB[i]
+        big = Image.open(f'{out}/frames/{tag}{i}-8x.png').convert('RGBA')
+        if POSE == 'run':   # lean forward from the feet: the drawn facing runs to the left (front) or right (back)
+            lean = -RUN_LEAN if back else RUN_LEAN
+            big = big.transform(big.size, Image.AFFINE, (1, -lean, lean * GROUND * SS, 0, 1, 0), Image.NEAREST)
+        sm = reduce(big)
+        bob = IDLE_BOB[i] if POSE == 'idle' else RUN_BOB[i] if POSE == 'run' else BOB[i]
+        # the head leans with the body: shifted as far as the middle of the head (48 px above the ground)
+        shift = round(RUN_LEAN * 48) if POSE == 'run' else 0
         if back:
             sm = relight(sm)
-            paste_grid(sm, BACK34, FW - 11 - 13, bob)
+            paste_grid(sm, BACK34, FW - 11 - 13 + shift, bob)
         else:
             sm = rim(sm)
             head = HEAD34 if not (POSE == 'idle' and i == IDLE_BLINK) else [r.replace('e', 'E') for r in HEAD34]
-            paste_grid(sm, head, 11, bob)
+            paste_grid(sm, head, 11 - shift, bob)
         frames.append(edge(sm))
     return frames
 
@@ -277,18 +308,21 @@ def stride_wu():
     leg_u = FOOT_U - W(PARTS['near']['hip'][1])          # the hip after the proportion pass (warp.py)
     step_u = 2 * leg_u * math.sin(math.radians(max(LEG)))
     return 2 * step_u * S / 60          # street px -> wu: 60 px per wu (0.9 wu = 54 px)
-def bake(look_dir, walk, idle):
+WALK_SPEED, RUN_SPEED = 2.0, 7.0      # wu/s, as the city moves (lib/city/units.ts)
+def bake(look_dir, walk, idle, run):
     import json
     os.makedirs(look_dir, exist_ok=True)
-    walk_fps = round(1.6 / stride_wu() * 8, 2)   # the city walks at 1.6 wu/s: feet must not slide
+    walk_fps = round(WALK_SPEED / stride_wu() * 8, 2)        # feet must not slide
+    run_fps = round(RUN_SPEED / (2 * RUN_STEP_WU) * 8, 2)    # two steps a cycle
     anims = {}
-    for clip, sets, fps, dur in (('walk', walk, walk_fps, 8 / walk_fps), ('idle', idle, 4 / 3, 3)):
+    for clip, sets, fps, speed in (('walk', walk, walk_fps, WALK_SPEED), ('idle', idle, 4 / 3, 0), ('run', run, run_fps, RUN_SPEED)):
         for facing, frames in sets.items():
             strip = Image.new('RGBA', (FW * 2 * len(frames), FH * 2), (0, 0, 0, 0))
             for i, f in enumerate(frames): strip.alpha_composite(f.resize((FW * 2, FH * 2), Image.NEAREST), (i * FW * 2, 0))
             name = f'{clip}-{COMPASS[facing]}.png'; strip.save(f'{look_dir}/{name}')
             anims[f'{clip}_{COMPASS[facing]}'] = {'file': name, 'outlineFile': name, 'frames': len(frames), 'fps': fps,
-                                                  'repeat': -1, 'durationS': round(dur, 3)}
+                                                  'repeat': -1, 'durationS': round(len(frames) / fps, 3)}
+            if speed: anims[f'{clip}_{COMPASS[facing]}']['speedWuPerS'] = speed   # the pace the frames are drawn for
     manifest = {'frameWidth': FW * 2, 'frameHeight': FH * 2, 'origin': [0.5, round(GROUND / FH, 5)], 'displayScale': 0.25,
                 'note': '2D paper doll (art/avatar-builder/builder-2d/doll.py): hand-drawn heads, limb layers turned per frame, '
                         '2 sheet px per street px. origin = the ground point under the feet.',
@@ -306,11 +340,13 @@ if __name__ == '__main__':
         walk = facings(render_frames(out, back=False), render_frames(out, back=True))
         POSE = 'idle'
         idle = facings(render_frames(out, back=False, n=4), render_frames(out, back=True, n=4))
+        POSE = 'run'
+        run = facings(render_frames(out, back=False), render_frames(out, back=True))
         POSE = None
         for name, frames in walk.items():
             strip = Image.new('RGBA', (FW * 8, FH), (0, 0, 0, 0))
             for i, f in enumerate(frames): strip.alpha_composite(f, (i * FW, 0))
             strip.save(f'{out}/walk-{look}-{name}.png')
         if len(sys.argv) > 2:
-            print(look, 'walk fps', bake(f'{sys.argv[2]}/2d-{look}', walk, idle))
+            print(look, 'walk fps', bake(f'{sys.argv[2]}/2d-{look}', walk, idle, run))
     print('ok')

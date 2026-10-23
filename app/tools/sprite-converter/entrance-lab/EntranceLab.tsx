@@ -12,6 +12,7 @@ import * as stadium from '@/lib/city/models/aarhusStadium';
 import { createStadionhallFlagModel } from '@/lib/city/models/stadionHallStates';
 import * as burgerTrailer from '@/lib/city/models/cateItBurger';
 import * as harbourLibrary from '@/lib/city/models/harbourLibrary';
+import * as cityBike from '@/lib/city/models/cityBike';
 import * as pizzaTrailer from '@/lib/city/models/cateItPizza';
 import * as streetFoodTrailer from '@/lib/city/models/cateItAfrican';
 import { createCateItSquareModel, createSquareMeal, squarePlanToModel, SEATS, BENCH_TOP, type Signs, type Truck } from '@/lib/city/models/cateItSquareStates';
@@ -144,6 +145,22 @@ function avatarBurgerScene(create = burgerTrailer.createBurgerTrailerModel): THR
   avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
   group.userData.avatar = avatar.userData.avatar;
   group.userData.avatarGroup = avatar;
+  return group;
+}
+
+// The city bike (art/img2threejs/bike-velorbis) with the avatar standing beside it, both in wu, for the scale check.
+// ?ax=&az=&ayaw= (degrees) move and turn the avatar.
+function avatarCityBikeScene(): THREE.Group {
+  const q = new URLSearchParams(window.location.search);
+  const group = new THREE.Group();
+  const bike = cityBike.createCityBikeModel({ castShadow: true, receiveShadow: true });
+  const avatar = createGustavAvatar({ ...AVATAR_PARAMS(), castShadow: true });
+  group.add(bike, avatar);
+  avatar.position.set(Number(q.get('ax') ?? -0.05), 0, Number(q.get('az') ?? -0.32));
+  avatar.rotation.y = (Number(q.get('ayaw') ?? 0) * Math.PI) / 180;
+  group.userData.avatar = avatar.userData.avatar;
+  group.userData.avatarGroup = avatar;
+  group.userData.boundsFrom = bike;
   return group;
 }
 
@@ -389,6 +406,28 @@ const MODELS: Record<string, ModelConfig> = {
     leaves: {},
     travel: 0,
     reference: { width: 384, height: 384, halfW: 3.6, target: [0, 0, 0] },
+    restBounds: true,
+  },
+  // City bike (art/img2threejs/bike-velorbis): a 1 x 1 prop, alone and beside the avatar
+  cityBike: {
+    name: 'City bike',
+    create: cityBike.createCityBikeModel,
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 1024, height: 1024, halfW: 0.62, target: [0, 0.3, 0] },
+  },
+  'avatar-city-bike': {
+    name: 'Gustav avatar beside the city bike',
+    create: () => avatarCityBikeScene(),
+    lights: stadium.createAarhusStadiumLookDevLights,
+    environment: stadium.createAarhusStadiumEnvironment,
+    configure: stadium.configureAarhusStadiumRenderer,
+    leaves: {},
+    travel: 0,
+    reference: { width: 1024, height: 1024, halfW: 0.62, target: [0, 0.35, 0] },
     restBounds: true,
   },
   // Burger trailer for the food truck square (art/img2threejs/cate-it-burger, Linear POR-38): 4 x 2 footprint

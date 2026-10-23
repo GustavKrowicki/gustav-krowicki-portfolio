@@ -52,7 +52,7 @@ import { findWindows } from "@/lib/city/nightWindows";
 import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSprites";
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
-import { redrawWhenCityFontLoads } from "@/lib/city/cityFont";
+import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -444,7 +444,7 @@ export class MainScene extends Phaser.Scene {
 
     // Adventure mode updates
     if (this.isAdventureActive) {
-      this.updateAdventureMode();
+      this.updateAdventureMode(delta);
     }
 
     if (this.gridDirty) {
@@ -490,11 +490,11 @@ export class MainScene extends Phaser.Scene {
     this.lastPinchDist = currentDist;
   }
 
-  private updateAdventureMode(): void {
+  private updateAdventureMode(delta: number): void {
     if (!this.playerController || !this.triggerZoneManager || !this.npcManager) return;
 
     // Update player
-    this.playerController.update();
+    this.playerController.update(delta);
 
     // Get player position
     const playerPos = this.playerController.getPosition();
@@ -1023,6 +1023,13 @@ export class MainScene extends Phaser.Scene {
   handlePointerDown(pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
 
+    // An open Bike here pill takes the next press: a pill picks on release, anywhere else closes it
+    if (this.moveMenu) {
+      this.movePill = this.movePillAt(pointer);
+      if (!this.movePill) this.closeMoveMenu();
+      return;
+    }
+
     if (pointer.rightButtonDown()) {
       this.startPanning(pointer, "right");
       return;
@@ -1034,6 +1041,17 @@ export class MainScene extends Phaser.Scene {
 
       if (shouldPan) {
         this.startPanning(pointer, "left");
+        if (this.longPress !== null) window.clearTimeout(this.longPress);
+        if (pointer.wasTouch && this.isAdventureActive) {
+          this.longPress = window.setTimeout(() => {
+            this.longPress = null;
+            if (!this.isPanning || this.panDragDistance >= this.TAP_DRAG_THRESHOLD || this.input.pointer2.isDown) return;
+            if (this.openMoveMenu(pointer)) {
+              this.longPressFired = true;
+              this.stopPanning();
+            }
+          }, MainScene.LONG_PRESS_MS);
+        }
         return;
       }
 
@@ -1067,10 +1085,24 @@ export class MainScene extends Phaser.Scene {
   handlePointerUp(_pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
 
+    if (this.longPress !== null) window.clearTimeout(this.longPress);
+    this.longPress = null;
+    if (this.longPressFired) {   // the press opened the menu: its release is not a tap
+      this.longPressFired = false;
+      return;
+    }
+    if (this.moveMenu) {
+      const pill = this.movePillAt(_pointer);
+      if (pill && pill === this.movePill) this.pickMove(pill);
+      return;
+    }
+
     if (this.isPanning) {
       const shouldTriggerTap = this.panPointerButton === "left";
       const wasTap = this.panDragDistance < this.TAP_DRAG_THRESHOLD;
+      const rightClick = this.panPointerButton === "right" && wasTap;
       this.stopPanning();
+      if (rightClick && this.isAdventureActive && this.openMoveMenu(_pointer)) return;
       if (shouldTriggerTap && wasTap && this.tapWalkIn(_pointer)) return;
       if (shouldTriggerTap && wasTap && this.hoverTile) {
         this.events_.onTileClick(this.hoverTile.x, this.hoverTile.y);
@@ -1943,9 +1975,10 @@ export class MainScene extends Phaser.Scene {
     this.input.setDefaultCursor("pointer");
   }
 
-  private walkToTarget(target: { x: number; y: number }): boolean {
+  private walkToTarget(target: { x: number; y: number }, gait?: "walk" | "run" | "ride"): boolean {
     const pc = this.playerController;
     if (!pc?.walkToBuilding(target.x, target.y)) return false;
+    if (gait) pc.setGait(gait);
     this.manualCameraOverrideInAdventure = false;
     this.cameraFollowPlayer = true;
     this.walkMarker?.destroy();
@@ -1955,6 +1988,77 @@ export class MainScene extends Phaser.Scene {
     this.walkMarker = marker;
     this.tweens.add({ targets: marker, alpha: 0, delay: 700, duration: 600, onComplete: () => marker.destroy() });
     return true;
+  }
+
+  // Bike here: a long press on a phone or a right click on a desktop opens a pill above the tile; the pill, or the key 1,
+  // rides there. A plain tap still walks, runs or rides by distance. (Tom's menu also has Walk and Run; Gustav kept the
+  // bike only, 2026-10-23.)
+  private moveMenu: { target: { x: number; y: number }; box: Phaser.GameObjects.Container; pills: { gait: "walk" | "run" | "ride"; text: Phaser.GameObjects.Text }[]; onKey: (e: KeyboardEvent) => void } | null = null;
+  private movePill: "walk" | "run" | "ride" | null = null;
+  private longPress: number | null = null;   // a wall-clock timer: the scene clock can lag on a busy phone
+  private longPressFired = false;
+  private static readonly LONG_PRESS_MS = 450;
+
+  private openMoveMenu(pointer: Phaser.Input.Pointer): boolean {
+    const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const g = this.screenToGrid(world.x, world.y);
+    const target = this.walkTargetAt(Math.floor(g.x), Math.floor(g.y), this.walkInBuildingAt(world.x, world.y));
+    const pc = this.playerController;
+    if (!target || !pc?.canRide()) return false;
+    this.closeMoveMenu();
+    const choices: { gait: "walk" | "run" | "ride"; label: string }[] = [{ gait: "ride", label: "Bike here" }];
+    const box = this.add.container(0, 0).setDepth(19_000_001);
+    const pills = choices.map((c, i) => {
+      const text = this.add.text(0, i * 15, c.label, {
+        fontFamily: cityFont(),
+        fontSize: "8px",
+        color: "#ffffff",
+        backgroundColor: "#1d1b18",
+        padding: { x: 4, y: 3 },
+        resolution: 4,
+      }).setOrigin(0.5, 0);
+      box.add(text);
+      return { gait: c.gait, text };
+    });
+    // Above the tile, snapped to whole pixels so the pixel font stays crisp
+    const p = gridToScreen(target.x, target.y);
+    box.setPosition(Math.round(p.x), Math.round(p.y - 8 - choices.length * 15));
+    this.walkMarker?.destroy();
+    const marker = this.add.graphics().setDepth(19_000_000);
+    marker.fillStyle(0xffd23f, 0.3).lineStyle(1.5, 0xffd23f, 1);
+    this.tileDiamond(marker, target.x, target.y);
+    this.walkMarker = marker;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") this.closeMoveMenu();
+      const pick = pills[Number(e.key) - 1];
+      if (pick) this.pickMove(pick.gait);
+    };
+    window.addEventListener("keydown", onKey);
+    this.moveMenu = { target, box, pills, onKey };
+    return true;
+  }
+
+  private closeMoveMenu(): void {
+    if (!this.moveMenu) return;
+    window.removeEventListener("keydown", this.moveMenu.onKey);
+    this.moveMenu.box.destroy();
+    this.walkMarker?.destroy();
+    this.walkMarker = null;
+    this.moveMenu = null;
+    this.movePill = null;
+  }
+
+  private pickMove(gait: "walk" | "run" | "ride"): void {
+    const target = this.moveMenu?.target;
+    this.closeMoveMenu();
+    if (target) this.walkToTarget(target, gait);
+  }
+
+  // The pill under the pointer, or null
+  private movePillAt(pointer: Phaser.Input.Pointer): "walk" | "run" | "ride" | null {
+    if (!this.moveMenu) return null;
+    const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    return this.moveMenu.pills.find((p) => p.text.getBounds().contains(world.x, world.y))?.gait ?? null;
   }
 
   /** Open a walk-in building in place: roof off, its outline, and the card in React */
