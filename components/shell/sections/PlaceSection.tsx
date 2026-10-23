@@ -16,7 +16,7 @@ interface PlaceSectionProps {
   onGrowForList?: () => void;
 }
 
-// A building opened from the city (?popups=slot): its place in the panel or the sheet. It leads with the case's cover
+// A building opened from the city: its place in the panel or the sheet. It leads with the case's cover
 // (recruiters look at the work first), then the logo, the title and one line, then Read the case and Walk in. The
 // rest sits below, for the half sheet and the desktop panel. Modeled on tomjohn.design's place card.
 export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow, onGrowForList }: PlaceSectionProps) {
