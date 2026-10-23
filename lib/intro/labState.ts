@@ -29,6 +29,8 @@ export interface LabState {
   lab: boolean;                 // the lab page is showing its controls
   stats: LabStats | null;
   compile: { ok: boolean; error?: string } | null;
+  // the real city's image: null until the small one is in, then preview, then exact (lib/intro/renderer.ts)
+  city: "preview" | "exact" | null;
 }
 
 // The look the site plays on a first visit. null until Gustav picks one: then only ?intro=<look> shows it.
@@ -52,6 +54,7 @@ const DEFAULTS: LabState = {
   lab: false,
   stats: null,
   compile: null,
+  city: null,
 };
 
 let state: LabState = DEFAULTS;

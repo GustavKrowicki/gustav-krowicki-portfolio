@@ -1,6 +1,7 @@
 // GLSL shared by every intro look (lib/intro/presets.ts): uniforms, the city's isometric projection, the lot data
-// texture (lib/intro/lots.ts), a few noise helpers and the "block city": the real grid drawn as flat-shaded blocks
-// before a single building image has arrived. A preset only writes `vec4 intro(vec2 px)`.
+// texture (lib/intro/lots.ts), a few noise helpers, the "real city" (a snapshot of the scene, lib/intro/snapshot.ts,
+// with an id map that says which building drew each pixel) and, for the moment before that snapshot has arrived,
+// the "block city": the grid as flat-shaded blocks. A preset only writes `vec4 intro(vec2 px)`.
 import { GRID_ORIGIN } from "./camera";
 import { LOTS } from "./lots";
 
@@ -19,6 +20,10 @@ uniform vec3 u_w2s;          // world px = canvas px * x + yz (y down from the t
 uniform vec2 u_pointer;      // canvas px of the pointer, (-1,-1) when none
 uniform sampler2D u_lots;    // one texel per tile, see lib/intro/lots.ts
 uniform vec4 u_stage;        // where the city's canvas sits in this canvas (x, y, w, h): outside it the city shows its ground colour
+uniform sampler2D u_city;    // the real city by day (lib/intro/snapshot.ts), lossy first, lossless when that has arrived
+uniform sampler2D u_ids;     // which building drew each pixel of it: R = placement order / 255 (0 the ground), 1.0 nothing
+uniform vec4 u_cityRect;     // where that image sits in world px (x, y, w, h)
+uniform float u_cityReady;   // 1 once the image and the ids are here; before that the looks draw the block city
 
 const float TW = 44.0;                 // tile width in world px (lib/city/units.ts)
 const float TH = 22.0;                 // tile height
@@ -27,6 +32,7 @@ const vec2 GRID = vec2(${LOTS.width}.0, ${LOTS.height}.0);
 const vec2 GRID_ORIGIN = vec2(${GRID_ORIGIN.x.toFixed(1)}, ${GRID_ORIGIN.y.toFixed(1)});
 const vec2 SPAWN = vec2(${LOTS.spawn[0]}.5, ${LOTS.spawn[1]}.5);
 const float MAX_DIST = ${LOTS.maxDist.toFixed(3)};
+const float BUILDINGS = ${LOTS.buildings}.0;
 
 // ---- the city's own colours (pogicity art and the ground colour the shell paints while loading)
 const vec3 GROUND = vec3(0.451, 0.392, 0.373);   // #73645F
@@ -107,13 +113,14 @@ float line(float distPx, float widthPx) { return 1.0 - smoothstep(widthPx * 0.5,
 // (the +y side), 3 right wall (the +x side). gOut: the ground tile under the hit. hScale scales every height,
 // showBelow hides blocks whose placement order is above it.
 bool blockShown(vec4 l, float hScale, float showBelow) { return lotClass(l) >= 4.0 && lotOrder(l) <= showBelow; }
-// a block just placed rises out of the ground with a small overshoot (none with reduced motion)
+// a building just placed rises out of the ground with a small overshoot (none with reduced motion)
 const float GROW_WINDOW = 0.035;
-float blockGrow(vec4 l, float showBelow) {
+float growAt(float order, float showBelow) {
   if (u_reduced > 0.5 || showBelow >= 1.0) return 1.0;
-  float t = clamp((showBelow - lotOrder(l)) / GROW_WINDOW, 0.0, 1.0);
+  float t = clamp((showBelow - order) / GROW_WINDOW, 0.0, 1.0);
   return easeOut(t) + 0.22 * sin(t * 3.14159) * (1.0 - t);
 }
+float blockGrow(vec4 l, float showBelow) { return growAt(lotOrder(l), showBelow); }
 float blockTop(vec4 l, float hScale, float showBelow) { return lotHeight(l) * hScale * blockGrow(l, showBelow); }
 const float RAY_C = KUP / TH;   // grid units per world unit of height along the ray
 vec4 castBlocks(vec2 world, float hScale, float showBelow, out vec2 gOut) {
@@ -146,7 +153,7 @@ vec3 groundColor(float cls) {
   if (cls == 2.0) return PAVED;
   if (cls == 3.0) return SNOW;
   if (cls == 0.0) return GROUND;
-  return mix(GRASS, PAVED, 0.5);   // under a block (flat lots)
+  return PAVED;   // under a building: the scene lays a paved tile there
 }
 vec3 blockColor(vec4 hit) {
   float tone = 0.92 + 0.16 * hash12(vec2(hit.z * 97.0, 3.0));   // a little variation per building
@@ -161,6 +168,60 @@ vec3 blockCity(vec2 px, float hScale, float showBelow) {
   vec3 c = blockColor(hit);
   if (hit.x == 0.0) c = mix(c, c * 0.8, line(tileEdgePx(g), 1.0) * 0.35);   // faint tile seams on the ground
   return c;
+}
+
+// ---- the real city: a snapshot of the scene by day (art/intro/snapshot.mjs), the very pixels the visitor sees after
+// the load, since the city is pixel art drawn at whole-number zooms. It arrives within the first second or so.
+vec2 cityUv(vec2 world) { return (world - u_cityRect.xy) / u_cityRect.zw; }
+bool inCity(vec2 uv) { return uv.x >= 0.0 && uv.y >= 0.0 && uv.x < 1.0 && uv.y < 1.0; }
+vec3 cityPixel(vec2 world) {
+  vec2 uv = cityUv(world);
+  if (u_cityReady < 0.5 || !inCity(uv)) return GROUND;
+  return texture2D(u_city, uv).rgb;
+}
+// who drew this pixel: x = placement order 0..1 (0 = the ground), y = 1 for a building or prop, z = 1 if anything
+vec3 cityId(vec2 world) {
+  vec2 uv = cityUv(world);
+  if (u_cityReady < 0.5 || !inCity(uv)) return vec3(0.0);
+  float r = texture2D(u_ids, uv).r * 255.0;
+  if (r > 254.5) return vec3(0.0);
+  return vec3(r / BUILDINGS, r >= 0.5 ? 1.0 : 0.0, 1.0);
+}
+// the tile where a building has not come yet
+vec3 bareLot(vec2 world) {
+  vec2 g = toGrid(world);
+  vec3 c = groundColor(lotClass(lotAt(g)));
+  return mix(c, c * 0.8, line(tileEdgePx(g), 1.0) * 0.35);
+}
+// The real city with its buildings placed up to showBelow (0..1 in placement order, outward from the avatar). A
+// building whose turn has come rises out of its lot over risePx and lands with a small flash; one still to come
+// leaves its bare tile.
+vec3 realCity(vec2 world, float showBelow, float risePx) {
+  vec3 id = cityId(world);
+  if (id.z < 0.5 || id.y < 0.5) return cityPixel(world);
+  if (id.x > showBelow) return bareLot(world);
+  float grow = growAt(id.x, showBelow);
+  float flash = 1.0 + max(grow - 1.0, 0.0) * 1.2;
+  float d = (1.0 - min(grow, 1.0)) * risePx;
+  if (d < 0.5) return cityPixel(world) * flash;
+  vec2 ws = world - vec2(0.0, d);   // the building sits d px lower while rising: its pixel for here is from above
+  vec3 id2 = cityId(ws);
+  if (id2.z > 0.5 && abs(id2.x - id.x) < 0.25 / BUILDINGS) return cityPixel(ws) * flash;
+  return bareLot(world);
+}
+// what a look draws: the real city once it is here, the block city for the moment before
+vec3 cityNow(vec2 px, float showBelow) {
+  if (u_cityReady > 0.5) return realCity(toWorld(px), showBelow, 24.0);
+  return blockCity(px, 1.0, showBelow);
+}
+// The city's look by the hour (lib/city/nightSchedule.ts LOOKS): what the scene multiplies its sprites by. The
+// snapshot is by day; a look multiplies by this so a night visitor's intro is a night city.
+vec3 hourTint(float h) {
+  h = mod(h, 24.0);
+  if (h >= 5.0 && h < 9.0) return vec3(200.0, 182.0, 176.0) / 255.0;
+  if (h >= 9.0 && h < 18.0) return vec3(1.0);
+  if (h >= 18.0 && h < 21.0) return vec3(148.0, 160.0, 180.0) / 255.0;
+  return vec3(77.0, 92.0, 148.0) / 255.0;
 }
 `;
 

@@ -6,6 +6,8 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { labStore, loadCurve, saveGlsl, shareSearch, useLabState } from '@/lib/intro/labState';
 import { INTRO_PRESETS, presetById } from '@/lib/intro/presets';
+import { SNAPSHOT, fnv1a } from '@/lib/intro/snapshot';
+import cityGrid from '@/lib/city/cityGrid.json';
 
 const WAITS = [2000, 5000, 10000];
 const RES = [0.25, 0.5, 1];
@@ -62,6 +64,10 @@ export default function IntroLabDrawer() {
   }, [tab]);
 
   const progressNow = lab.scrubMs !== null ? loadCurve(lab.curve, Math.min(1, lab.scrubMs / Math.max(1, lab.waitMs))) : null;
+  // the snapshot of the real city is taken by hand (art/intro/snapshot.mjs); say so when the grid has moved on since
+  const gridNow = useMemo(() => fnv1a(JSON.stringify(cityGrid)), []);
+  const snapshotStale = gridNow !== SNAPSHOT.gridHash;
+  const kb = (n: number) => `${Math.round(n / 1024)} KB`;
 
   if (!open) {
     return (
@@ -221,10 +227,22 @@ export default function IntroLabDrawer() {
             </table>
             <dl className="grid grid-cols-[auto_1fr] gap-x-3 gap-y-1 text-[12px] text-neutral-600">
               <dt className="font-mono">city-boot</dt><dd>the city&apos;s script starts downloading</dd>
+              <dt className="font-mono">intro-city</dt><dd>the real city&apos;s image is in: the look draws real buildings from here</dd>
+              <dt className="font-mono">intro-city-exact</dt><dd>the lossless image has replaced it: the hand-over is pixel for pixel</dd>
               <dt className="font-mono">city-assets</dt><dd>every image has arrived</dd>
               <dt className="font-mono">city-ready</dt><dd>the scene is up (the intro settles and reveals from here)</dd>
               <dt className="font-mono">intro-done</dt><dd>the overlay is gone; the landing hold and glide start</dd>
             </dl>
+            <section className="rounded-md bg-neutral-50 p-2 text-[12px] text-neutral-600">
+              <h3 className="mb-1 text-xs font-medium uppercase tracking-wide text-neutral-500">The real city&apos;s image</h3>
+              <p>
+                {SNAPSHOT.w} × {SNAPSHOT.h} px of the scene by day: small {kb(SNAPSHOT.bytes.preview)}, lossless {kb(SNAPSHOT.bytes.exact)}, ids {kb(SNAPSHOT.bytes.ids)}.
+                {' '}Now showing: {lab.city === 'exact' ? 'the lossless one' : lab.city === 'preview' ? 'the small one' : 'blocks (none in yet)'}.
+              </p>
+              {snapshotStale
+                ? <p className="mt-1 font-medium text-amber-700">The city grid has changed since this image was taken. Run <code>node art/intro/build-lots.mjs</code> and <code>node art/intro/snapshot.mjs</code> against a running dev server.</p>
+                : <p className="mt-1">Taken from the current city grid.</p>}
+            </section>
           </div>
         )}
       </div>

@@ -45,7 +45,12 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
-    if (!rendererRef.current) rendererRef.current = new IntroRenderer(canvas);
+    if (!rendererRef.current) {
+      const renderer = new IntroRenderer(canvas);
+      // the real city's image: a stage mark when the small one is in, another when the lossless one has replaced it
+      renderer.onCity = (stage) => { mark(stage === 'preview' ? 'intro-city' : 'intro-city-exact'); labStore.set({ city: stage }); };
+      rendererRef.current = renderer;
+    }
     const result = rendererRef.current.setFragment(glsl);
     labStore.set({ compile: result });
     if (!result.ok && !lab.lab) {
