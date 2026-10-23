@@ -54,7 +54,7 @@ import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isI
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 import { getPlace } from "@/lib/city/places";
-import { reportCityAssets, reportCityReady } from "@/lib/intro/progress";
+import { reportCityAssets, reportCityScene } from "@/lib/intro/progress";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -357,7 +357,7 @@ export class MainScene extends Phaser.Scene {
       this.initializeGrid();
     }
     this.isReady = true;
-    reportCityReady();
+    reportCityScene();
 
     // Enable input
     this.input.on("pointermove", this.handlePointerMove, this);
@@ -2897,7 +2897,15 @@ export class MainScene extends Phaser.Scene {
       const camera = this.cameras.main;
       this.stopCameraMoves();
       this.cameraFollowPlayer = false;
-      this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(p.worldY - 12 - camera.height / 2), ZOOM.detail, 1);
+      // set at once, not tweened: the load intro hands over to this very frame (lib/intro/camera.ts draws the same)
+      camera.setZoom(ZOOM.detail);
+      camera.scrollX = Math.round(p.worldX - camera.width / 2);
+      camera.scrollY = Math.round(p.worldY - 12 - camera.height / 2);
+      this.baseScrollX = camera.scrollX;
+      this.baseScrollY = camera.scrollY;
+      this.zoomLevel = ZOOM.detail;
+      this.zoomHandledInternally = true;
+      this.events.emit("zoomChanged", ZOOM.detail);
     }
     const go = () => {
       const since = this.time.now;
@@ -2919,6 +2927,21 @@ export class MainScene extends Phaser.Scene {
     window.addEventListener(afterEvent, start);
     this.time.delayedCall(6000, start);
     this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => window.removeEventListener(afterEvent, start));
+  }
+
+  // The intro lab's Replay: back to where a first visit starts (the avatar on its spawn tile, the camera close on it),
+  // then the landing again once the replayed intro hands over
+  replayLanding(delayMs: number, glideMs: number, afterEvent?: string): boolean {
+    const pc = this.playerController;
+    if (!pc || !this.isAdventureActive) return false;
+    this.stopCameraMoves();
+    this.stopCameraFollow();
+    this.hideWalkHint();
+    const spawn = this.findSpawnPosition(15, 30);
+    pc.moveTo(spawn.x, spawn.y);
+    this.manualCameraOverrideInAdventure = false;
+    this.landWalking(delayMs, glideMs, afterEvent);
+    return true;
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {

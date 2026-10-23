@@ -230,7 +230,8 @@ export default function IntroLabDrawer() {
               <dt className="font-mono">intro-city</dt><dd>the real city&apos;s image is in: the look draws real buildings from here</dd>
               <dt className="font-mono">intro-city-exact</dt><dd>the lossless image has replaced it: the hand-over is pixel for pixel</dd>
               <dt className="font-mono">city-assets</dt><dd>every image has arrived</dd>
-              <dt className="font-mono">city-ready</dt><dd>the scene is up (the intro settles and reveals from here)</dd>
+              <dt className="font-mono">city-scene</dt><dd>the scene is up and drawn</dd>
+              <dt className="font-mono">city-ready</dt><dd>the avatar stands and the camera is close on it: the intro settles and hands over from here</dd>
               <dt className="font-mono">intro-done</dt><dd>the overlay is gone; the landing hold and glide start</dd>
             </dl>
             <section className="rounded-md bg-neutral-50 p-2 text-[12px] text-neutral-600">

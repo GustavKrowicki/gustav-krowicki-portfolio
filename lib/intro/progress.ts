@@ -1,6 +1,7 @@
-// How far the city has loaded, for the load intro (POR-40). The city reports here from three places: CityViewer when
+// How far the city has loaded, for the load intro (POR-40). The city reports here from four places: CityViewer when
 // the Phaser chunk starts downloading (boot), MainScene.preload as the images arrive (assets), MainScene.create when
-// the scene is ready. The intro overlay (components/city/IntroOverlay.tsx) reads one number from it, 0 to 1.
+// the scene is up (scene), CityViewer once the avatar has spawned and the camera is close on it (ready). The intro
+// overlay (components/city/IntroOverlay.tsx) reads one number from it, 0 to 1, and hands over on ready.
 
 export type CityLoadPhase = "idle" | "boot" | "assets" | "ready";
 
@@ -50,6 +51,18 @@ export function reportCityAssets(progress: number): void {
   emit();
 }
 
+// The scene is up (MainScene.create): every image is in, the grid is drawn. Not yet ready for the intro's hand-over:
+// the avatar has not spawned and the camera is not where a first visit starts
+export function reportCityScene(): void {
+  if (state.phase === "ready") return;
+  state = { ...state, phase: "assets", assets: 1 };
+  mark("city-scene");
+  emit();
+}
+
+// The first frame a visitor sees is in place (CityViewer: the avatar spawned, the camera close on it): the intro may
+// hand over now. Measured: the scene reports up to 0.7 s before this on a phone, and the close-up came a frame later
+// still, so a hand-over on "scene up" showed the whole city at zoom 1 and then snapped to the avatar
 export function reportCityReady(): void {
   if (state.phase === "ready") return;
   state = { ...state, phase: "ready", assets: 1, readyAt: performance.now() };
@@ -73,6 +86,8 @@ export function mark(name: string): void {
 
 // The intro tells the city when its reveal has ended, so the landing glide starts from a city the visitor can see
 export const INTRO_DONE_EVENT = "city:intro-done";
+// The lab's Replay: the city goes back to the close-up on the spawn and runs its landing again after the hand-over
+export const INTRO_REPLAY_EVENT = "city:intro-replay";
 
 let introActiveFlag = false;
 export function setIntroActive(active: boolean): void { introActiveFlag = active; }

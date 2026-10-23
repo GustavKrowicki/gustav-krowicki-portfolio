@@ -8,7 +8,7 @@ import { HOUR_OF, type TimeOfDay } from '@/lib/city/nightSchedule';
 import { GAME_HEIGHT, GAME_WIDTH, closeUpFraming, fitFraming, isPhoneViewport, lerpFraming, stageFor, streetFraming, worldFromContainer } from '@/lib/intro/camera';
 import { labStore, loadCurve, markIntroSeen, useLabState } from '@/lib/intro/labState';
 import { presetById } from '@/lib/intro/presets';
-import { getCityLoad, INTRO_DONE_EVENT, mark, overallProgress, subscribeCityLoad } from '@/lib/intro/progress';
+import { getCityLoad, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, mark, overallProgress, subscribeCityLoad } from '@/lib/intro/progress';
 import { IntroRenderer } from '@/lib/intro/renderer';
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
@@ -84,6 +84,8 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     // real mode: the city's own load; it may already be ready (a lab restart while the city is up, or a fast cache)
     const unsubscribe = subscribeCityLoad(() => { /* read each frame */ });
     if (s.mode === 'real' && getCityLoad().phase === 'ready') { readyAt = startAt; progressAtReady = 1; }
+    // a replay in the lab: the city goes back to where a first visit starts (the close-up on the spawn) and lands again
+    if (s.lab && s.mode === 'replay') window.dispatchEvent(new CustomEvent(INTRO_REPLAY_EVENT));
 
     const momentAt = (nowMs: number): Moment => {
       const st = labRef.current;
