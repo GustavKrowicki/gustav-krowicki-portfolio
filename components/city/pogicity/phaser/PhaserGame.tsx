@@ -392,7 +392,7 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           overflow: "hidden",
           touchAction: "none",
           overscrollBehavior: "none",
-          // a long press opens the city's Walk / Run / Bike menu, not the phone's own (iOS callout, text selection)
+          // a long press opens the city's Bike here pill, not the phone's own (iOS callout, text selection)
           WebkitTouchCallout: "none",
           WebkitUserSelect: "none",
           userSelect: "none",

@@ -1021,7 +1021,7 @@ export class MainScene extends Phaser.Scene {
   handlePointerDown(pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
 
-    // An open Walk / Run / Bike menu takes the next press: a pill picks on release, anywhere else closes it
+    // An open Bike here pill takes the next press: a pill picks on release, anywhere else closes it
     if (this.moveMenu) {
       this.movePill = this.movePillAt(pointer);
       if (!this.movePill) this.closeMoveMenu();
@@ -1988,8 +1988,9 @@ export class MainScene extends Phaser.Scene {
     return true;
   }
 
-  // Walk / Run / Bike here (Tom's pattern): a long press on a phone or a right click on a desktop opens pills above the
-  // tile; a pill, or the key 1 / 2 / 3, sends the avatar that way. A plain tap still picks by distance.
+  // Bike here: a long press on a phone or a right click on a desktop opens a pill above the tile; the pill, or the key 1,
+  // rides there. A plain tap still walks, runs or rides by distance. (Tom's menu also has Walk and Run; Gustav kept the
+  // bike only, 2026-10-23.)
   private moveMenu: { target: { x: number; y: number }; box: Phaser.GameObjects.Container; pills: { gait: "walk" | "run" | "ride"; text: Phaser.GameObjects.Text }[]; onKey: (e: KeyboardEvent) => void } | null = null;
   private movePill: "walk" | "run" | "ride" | null = null;
   private longPress: number | null = null;   // a wall-clock timer: the scene clock can lag on a busy phone
@@ -2001,16 +2002,12 @@ export class MainScene extends Phaser.Scene {
     const g = this.screenToGrid(world.x, world.y);
     const target = this.walkTargetAt(Math.floor(g.x), Math.floor(g.y), this.walkInBuildingAt(world.x, world.y));
     const pc = this.playerController;
-    if (!target || !pc) return false;
+    if (!target || !pc?.canRide()) return false;
     this.closeMoveMenu();
-    const choices: { gait: "walk" | "run" | "ride"; label: string }[] = [
-      { gait: "walk", label: "Walk here" },
-      { gait: "run", label: "Run here" },
-      ...(pc.canRide() ? [{ gait: "ride" as const, label: "Bike here" }] : []),
-    ];
+    const choices: { gait: "walk" | "run" | "ride"; label: string }[] = [{ gait: "ride", label: "Bike here" }];
     const box = this.add.container(0, 0).setDepth(19_000_001);
     const pills = choices.map((c, i) => {
-      const text = this.add.text(0, i * 15, `${i + 1}  ${c.label}`, {
+      const text = this.add.text(0, i * 15, c.label, {
         fontFamily: cityFont(),
         fontSize: "8px",
         color: "#ffffff",
