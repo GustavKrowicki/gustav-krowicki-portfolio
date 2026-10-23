@@ -12,6 +12,6 @@ cd "$R"
 HX=$(python3 -c "print($FOOTPRINT_W / 2)"); HZ=$(python3 -c "print($FOOTPRINT_H / 2)")
 V="\"view\":\"sprite\",\"yaw\":45,\"aim\":[$HX,$HZ],\"pitch\":30,\"zoom\":${ZOOM:-0.8656},\"voff\":0,\"size\":768,\"rig\":\"converter\""
 node art/img2threejs/tools/lab_render.mjs valtech "$O" \
-  "valtech-office-avatar-win-a_south={$V,\"glow\":\"^(louvre-[NSEW]-[02]|top-core)\$\"}" \
+  "valtech-office-avatar-win-a_south={$V,\"glow\":\"^(louvre-[NSEW]-[02]|top-core|sign-hq-face)\$\"}" \
   "valtech-office-avatar-win-b_south={$V,\"glow\":\"^louvre-[NSEW]-1\$\"}" \
   "valtech-office-avatar-win-f_south={$V,\"glow\":\"^shop-glass-S-\\\\d+\$\"}" | grep -v '^console'

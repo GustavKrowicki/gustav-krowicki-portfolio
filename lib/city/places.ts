@@ -15,6 +15,7 @@ export interface Place {
   logoUrl?: string;
   /** The case's cover, when the building has a case: the card leads with it */
   coverImage?: string;
+  coverPosition?: string;
   caseSlug?: string;
   /** A walk-in building: Walk in goes through its door */
   walkIn: boolean;
@@ -34,6 +35,7 @@ export function getPlace(buildingId: string): Place | null {
     buildingId,
     logoUrl: building.logoUrl,
     coverImage: project?.coverImage,
+    coverPosition: project?.coverPosition,
     caseSlug: project?.slug,
     walkIn: !!beats,
     extra: buildingId === 'northside-stage' ? 'playlist' : buildingId === 'dokk1-library' ? 'books' : undefined,

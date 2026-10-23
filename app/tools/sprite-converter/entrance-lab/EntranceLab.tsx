@@ -771,7 +771,8 @@ export default function EntranceLab() {
           if (!mesh.visible) continue;
           const id = (mesh.userData.sculptComponent as { id?: string } | undefined)?.id ?? meshNode.get(mesh) ?? '';
           // the glass draws after every hiding mesh, so what stands in front of it (a slat, a column) cuts it
-          if (lit.test(id)) { mesh.material = glowMat; mesh.renderOrder = 1; }
+          // a self-lit part (a sign's face) keeps its own unlit material: the night layer shows it as it is
+          if (lit.test(id)) { if (!mesh.userData.selfLit) mesh.material = glowMat; mesh.renderOrder = 1; }
           else if ((original.get(mesh) as THREE.Material).transparent) mesh.visible = false;
           else mesh.material = hideMat;
         }

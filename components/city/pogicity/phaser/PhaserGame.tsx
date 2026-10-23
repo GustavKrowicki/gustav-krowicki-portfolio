@@ -44,6 +44,7 @@ export interface PhaserGameHandle {
     buildingId: string;
     screenX: number;
     screenY: number;
+    topY?: number;
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;

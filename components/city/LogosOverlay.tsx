@@ -1,36 +1,30 @@
 "use client";
 
 import { useMemo } from "react";
+import { getBuilding } from "@/lib/city/buildings";
+import { getPlace } from "@/lib/city/places";
 
-const LOGO_SPIN_STYLE = `
-@keyframes logo-spin {
-  from { transform: perspective(200px) rotateY(0deg); }
-  to { transform: perspective(200px) rotateY(360deg); }
-}
-`;
-
-// ============================================
-// LOGO PLACEMENT CONFIG - TWEAK THESE VALUES
-// ============================================
+// Building names over the city (POR-54, the way tomjohn.design does it). Close up the buildings name themselves (signs on
+// the buildings), so nothing floats over them; a pill with the logo and the name shows only on intent: the building under
+// the mouse (over its roof), or the one the avatar stands at (over the avatar's head). Zoomed out, every building shows its logo as a flat rounded-square tile.
+// Nothing spins, and no logo is cut into a circle.
 const LOGO_CONFIG = {
-  // Base size of logos in CSS pixels (constant regardless of zoom)
-  baseSize: 32,
-
-  // Vertical offset in CSS pixels above the building center (screen-space, zoom-independent)
-  offsetY: 40,
-
-  // Scale multiplier for logo size (1 = normal, 2 = double size)
-  sizeMultiplier: 1,
-
-  // Animation duration in seconds for one full rotation
-  spinDuration: 3,
+  // Below this camera zoom the city reads as a map: the logo tiles show (street zoom is 2, phones 3)
+  mapZoom: 1.5,
+  // Tile size in CSS pixels (desktop; phones 0.85 of it), the same at every zoom
+  tileSize: 30,
+  // Gap in CSS pixels between the building's anchor and the tile or the pill above it
+  gap: 6,
+  // The avatar's height in world pixels: the pill at a door sits this far over its feet
+  avatarHeight: 34,
 };
-// ============================================
 
 export interface LogoPosition {
   buildingId: string;
   screenX: number;
   screenY: number;
+  /** World y of the top of the drawn building, when known */
+  topY?: number;
   logoUrl: string;
   logoOffset: { x: number; y: number };
 }
@@ -47,6 +41,12 @@ interface LogosOverlayProps {
   cameraX: number;
   cameraY: number;
   zoom: number;
+  /** The building under the mouse */
+  hoverId?: string | null;
+  /** The building the avatar stands at */
+  nearId?: string | null;
+  /** The avatar's feet in world space, while it stands at nearId: that pill sits over its head */
+  nearAt?: { x: number; y: number } | null;
   onLogoClick?: (buildingId: string) => void;
 }
 
@@ -62,12 +62,13 @@ export default function LogosOverlay({
   cameraX,
   cameraY,
   zoom,
+  hoverId = null,
+  nearId = null,
+  nearAt = null,
   onLogoClick,
 }: LogosOverlayProps) {
-  const logoSize = useMemo(() => {
-    const mobileScale = isMobile ? 0.72 : 1;
-    return LOGO_CONFIG.baseSize * LOGO_CONFIG.sizeMultiplier * mobileScale;
-  }, [isMobile]);
+  const tileSize = LOGO_CONFIG.tileSize * (isMobile ? 0.85 : 1);
+  const mapView = zoom < LOGO_CONFIG.mapZoom;
 
   const screenLogos = useMemo(() => {
     const displayScaleX = viewportWidth / worldWidth;
@@ -79,100 +80,81 @@ export default function LogosOverlay({
     const halfH = worldHeight / 2;
 
     return logos.map((logo) => {
-      // World position → canvas pixel (accounting for Phaser's center-based zoom)
       const canvasX = (logo.screenX - cameraX - halfW) * zoom + halfW;
       const canvasY = (logo.screenY - cameraY - halfH) * zoom + halfH;
-
-      // Canvas pixel → CSS pixel
-      const cssX = canvasX * displayScaleX;
-      const cssY = canvasY * displayScaleY;
-
-      // logoOffset is in world-space, scale by zoom and displayScale
-      const offsetX = logo.logoOffset.x * zoom * displayScaleX;
-      const offsetY = logo.logoOffset.y * zoom * displayScaleY;
-
+      // Above the drawn building's top; without it, logoOffset (world space, from the building's centre up)
+      const topCanvasY =
+        logo.topY !== undefined ? (logo.topY - cameraY - halfH) * zoom + halfH : canvasY - logo.logoOffset.y * zoom;
       return {
         ...logo,
-        cssX: cssX + offsetX,
-        cssY: cssY - offsetY - LOGO_CONFIG.offsetY,
+        cssX: canvasX * displayScaleX,
+        cssY: topCanvasY * displayScaleY - LOGO_CONFIG.gap,
       };
     });
   }, [logos, cameraX, cameraY, zoom, viewportWidth, viewportHeight, worldWidth, worldHeight]);
 
-  if (
-    logos.length === 0 ||
-    viewportWidth === 0 ||
-    viewportHeight === 0 ||
-    worldWidth === 0 ||
-    worldHeight === 0
-  ) {
+  if (logos.length === 0 || viewportWidth === 0 || viewportHeight === 0 || worldWidth === 0 || worldHeight === 0) {
     return null;
   }
+
+  const pillId = mapView ? null : hoverId ?? nearId;
+  const found = pillId ? screenLogos.find((l) => l.buildingId === pillId) : undefined;
+  // At a door (no hover) the pill sits over the avatar's head, where the eyes are, like tomjohn.design's "E Intradiem";
+  // on a phone the roof is often out of view there
+  const pill =
+    found && !hoverId && nearAt
+      ? {
+          ...found,
+          cssX: ((nearAt.x - cameraX - worldWidth / 2) * zoom + worldWidth / 2) * (viewportWidth / worldWidth),
+          cssY:
+            ((nearAt.y - LOGO_CONFIG.avatarHeight - cameraY - worldHeight / 2) * zoom + worldHeight / 2) *
+              (viewportHeight / worldHeight) -
+            LOGO_CONFIG.gap,
+        }
+      : found;
+  const pillName = pill ? getPlace(pill.buildingId)?.title ?? getBuilding(pill.buildingId)?.name ?? "" : "";
 
   return (
     <div
       className="absolute pointer-events-none"
-      style={{
-        left: viewportLeft,
-        top: viewportTop,
-        width: viewportWidth,
-        height: viewportHeight,
-        zIndex: 20,
-        overflow: "hidden",
-      }}
+      style={{ left: viewportLeft, top: viewportTop, width: viewportWidth, height: viewportHeight, zIndex: 20, overflow: "hidden" }}
     >
-      <style dangerouslySetInnerHTML={{ __html: LOGO_SPIN_STYLE }} />
+      {mapView &&
+        screenLogos.map((logo) => (
+          <button
+            key={logo.buildingId}
+            type="button"
+            onClick={onLogoClick ? () => onLogoClick(logo.buildingId) : undefined}
+            className="absolute overflow-hidden rounded-[7px] bg-white shadow-[0_0_0_1px_rgba(0,0,0,0.18),0_2px_6px_rgba(0,0,0,0.25)]"
+            style={{
+              left: logo.cssX - tileSize / 2,
+              top: logo.cssY - tileSize,
+              width: tileSize,
+              height: tileSize,
+              pointerEvents: onLogoClick ? "auto" : "none",
+              cursor: onLogoClick ? "pointer" : "default",
+            }}
+            aria-label={getPlace(logo.buildingId)?.title ?? logo.buildingId}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={logo.logoUrl} alt="" draggable={false} className="h-full w-full object-cover" />
+          </button>
+        ))}
 
-      {screenLogos.map((logo) => (
+      {pill && (
         <button
-          key={logo.buildingId}
-          onClick={onLogoClick ? () => onLogoClick(logo.buildingId) : undefined}
-          style={{
-            position: "absolute",
-            left: logo.cssX - logoSize / 2,
-            top: logo.cssY - logoSize / 2,
-            width: logoSize,
-            height: logoSize,
-            pointerEvents: onLogoClick ? "auto" : "none",
-            background: "transparent",
-            border: "none",
-            cursor: onLogoClick ? "pointer" : "default",
-            padding: 0,
-          }}
-          aria-label={`Go to ${logo.buildingId}`}
+          key={pill.buildingId}
+          type="button"
+          onClick={onLogoClick ? () => onLogoClick(pill.buildingId) : undefined}
+          className="absolute flex h-8 -translate-x-1/2 -translate-y-full items-center gap-2 whitespace-nowrap rounded-full border border-neutral-200 bg-[#FDFDFD] pl-1.5 pr-3 text-[13px] font-medium text-neutral-900 shadow-[0_4px_14px_rgba(0,0,0,0.2)] motion-safe:animate-[place-pill-in_160ms_ease-out]"
+          style={{ left: Math.round(pill.cssX), top: Math.round(pill.cssY), pointerEvents: onLogoClick ? "auto" : "none" }}
         >
-          <img
-            src={logo.logoUrl}
-            alt=""
-            width={logoSize}
-            height={logoSize}
-            style={{
-              animation: `logo-spin ${LOGO_CONFIG.spinDuration}s linear infinite`,
-              borderRadius: "50%",
-              objectFit: "contain",
-            }}
-            draggable={false}
-            onError={(e) => {
-              // Fallback: show a colored circle if logo fails to load
-              const target = e.currentTarget;
-              target.style.display = "none";
-              const fallback = target.nextElementSibling as HTMLElement;
-              if (fallback) fallback.style.display = "block";
-            }}
-          />
-          <div
-            style={{
-              display: "none",
-              width: logoSize,
-              height: logoSize,
-              borderRadius: "50%",
-              backgroundColor: "#6366f1",
-              border: "2px solid white",
-              animation: `logo-spin ${LOGO_CONFIG.spinDuration}s linear infinite`,
-            }}
-          />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={pill.logoUrl} alt="" draggable={false} className="h-5 w-5 rounded-[5px] border border-neutral-200 bg-white object-contain p-px" />
+          {pillName}
         </button>
-      ))}
+      )}
+      <style>{`@keyframes place-pill-in { from { opacity: 0; margin-top: 4px; } }`}</style>
     </div>
   );
 }
