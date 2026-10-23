@@ -54,6 +54,7 @@ import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isI
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 import { getPlace } from "@/lib/city/places";
+import { reportCityAssets, reportCityReady } from "@/lib/intro/progress";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -230,6 +231,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
+    // The load intro (components/city/IntroOverlay.tsx) follows the images as they arrive
+    this.load.on(Phaser.Loader.Events.PROGRESS, (p: number) => reportCityAssets(p));
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => reportCityAssets(1));
     // Load tile textures
     this.load.image("grass", "/game/pogicity/Tiles/1x1grass.png");
     this.load.image("road", "/game/pogicity/Tiles/1x1square_tile.png");
@@ -353,6 +357,7 @@ export class MainScene extends Phaser.Scene {
       this.initializeGrid();
     }
     this.isReady = true;
+    reportCityReady();
 
     // Enable input
     this.input.on("pointermove", this.handlePointerMove, this);
@@ -2883,7 +2888,9 @@ export class MainScene extends Phaser.Scene {
 
   // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom (3 on a phone) to show the
   // streets around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
-  landWalking(delayMs: number, glideMs: number): void {
+  // afterEvent (the load intro, lib/intro/progress.ts INTRO_DONE_EVENT): the close-up is set at once, so the intro's
+  // hand-over fades into it, and the hold and glide start when that event fires (or after 6 s, whichever is first).
+  landWalking(delayMs: number, glideMs: number, afterEvent?: string): void {
     if (!this.playerController) return;
     if (delayMs > 0) {
       const p = this.playerController.getPosition();
@@ -2892,13 +2899,26 @@ export class MainScene extends Phaser.Scene {
       this.cameraFollowPlayer = false;
       this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(p.worldY - 12 - camera.height / 2), ZOOM.detail, 1);
     }
-    const since = this.time.now;
-    this.time.delayedCall(delayMs, () => {
-      if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
-      this.focusOnPlayer(true, glideMs);
-    });
-    // the first-visit hint once the camera has landed on the avatar (phones only)
-    this.time.delayedCall(delayMs + glideMs + 300, () => this.showWalkHint());
+    const go = () => {
+      const since = this.time.now;
+      this.time.delayedCall(delayMs, () => {
+        if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
+        this.focusOnPlayer(true, glideMs);
+      });
+      // the first-visit hint once the camera has landed on the avatar (phones only)
+      this.time.delayedCall(delayMs + glideMs + 300, () => this.showWalkHint());
+    };
+    if (!afterEvent) { go(); return; }
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      window.removeEventListener(afterEvent, start);
+      go();
+    };
+    window.addEventListener(afterEvent, start);
+    this.time.delayedCall(6000, start);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => window.removeEventListener(afterEvent, start));
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {

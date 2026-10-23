@@ -33,6 +33,7 @@ import {
   trackBeatChoice,
   trackFind,
 } from "@/lib/analytics";
+import { INTRO_DONE_EVENT, isIntroActive, reportCityBoot } from "@/lib/intro/progress";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -867,7 +868,7 @@ export default function CityViewer({
     let timer = 0;
     const start = (left: number) => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number) => void }
+        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number, afterEvent?: string) => void }
         | undefined;
       if (!scene?.ready) {
         if (left > 0) timer = window.setTimeout(() => start(left - 1), 150);
@@ -878,8 +879,10 @@ export default function CityViewer({
       handleStartAdventure({ onLoad: true });
       if (avatarTabOpenRef.current) return;
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200);
+      // with the load intro over the city, the hold and glide wait for its hand-over
+      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200, isIntroActive() ? INTRO_DONE_EVENT : undefined);
     };
+    reportCityBoot();
     start(200);
     return () => window.clearTimeout(timer);
   }, [isShell, handleStartAdventure]);

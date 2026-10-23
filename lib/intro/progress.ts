@@ -1,0 +1,85 @@
+// How far the city has loaded, for the load intro (POR-40). The city reports here from three places: CityViewer when
+// the Phaser chunk starts downloading (boot), MainScene.preload as the images arrive (assets), MainScene.create when
+// the scene is ready. The intro overlay (components/city/IntroOverlay.tsx) reads one number from it, 0 to 1.
+
+export type CityLoadPhase = "idle" | "boot" | "assets" | "ready";
+
+export interface CityLoadState {
+  phase: CityLoadPhase;
+  // the Phaser loader's own 0..1 (assets phase)
+  assets: number;
+  startedAt: number;
+  readyAt: number | null;
+}
+
+// Share of the bar each phase gets. The boot phase has no real progress (a script download), so the overlay creeps
+// through its share on time; the images then take the rest.
+export const BOOT_SHARE = 0.15;
+export const ASSETS_SHARE = 0.8;
+
+let state: CityLoadState = { phase: "idle", assets: 0, startedAt: 0, readyAt: null };
+const listeners = new Set<(s: CityLoadState) => void>();
+
+function emit() {
+  for (const l of listeners) l(state);
+}
+
+export function getCityLoad(): CityLoadState {
+  return state;
+}
+
+export function subscribeCityLoad(listener: (s: CityLoadState) => void): () => void {
+  listeners.add(listener);
+  return () => { listeners.delete(listener); };
+}
+
+export function reportCityBoot(): void {
+  if (state.phase !== "idle") return;
+  state = { ...state, phase: "boot", startedAt: performance.now() };
+  mark("city-boot");
+  emit();
+}
+
+export function reportCityAssets(progress: number): void {
+  if (state.phase === "ready") return;
+  const p = Math.max(state.assets, Math.min(1, Math.max(0, progress)));
+  if (state.phase === "assets" && p === state.assets) return;
+  if (state.phase === "idle") state = { ...state, startedAt: performance.now() };
+  state = { ...state, phase: "assets", assets: p };
+  if (p >= 1) mark("city-assets");
+  emit();
+}
+
+export function reportCityReady(): void {
+  if (state.phase === "ready") return;
+  state = { ...state, phase: "ready", assets: 1, readyAt: performance.now() };
+  mark("city-ready");
+  emit();
+}
+
+// Overall 0..1 for an overlay that has been showing for `elapsedMs`. The boot share creeps up on time so the bar
+// never sits still; the assets share is the loader's own number.
+export function overallProgress(s: CityLoadState, elapsedMs: number): number {
+  if (s.phase === "ready") return 1;
+  const creep = BOOT_SHARE * (1 - Math.exp(-elapsedMs / 1500));
+  if (s.phase === "idle" || s.phase === "boot") return creep;
+  return BOOT_SHARE + ASSETS_SHARE * s.assets;
+}
+
+// Stage marks for the Performance panel and for measuring (the brief's "stage table")
+export function mark(name: string): void {
+  try { performance.mark(name); } catch { /* old browser */ }
+}
+
+// The intro tells the city when its reveal has ended, so the landing glide starts from a city the visitor can see
+export const INTRO_DONE_EVENT = "city:intro-done";
+
+let introActiveFlag = false;
+export function setIntroActive(active: boolean): void { introActiveFlag = active; }
+export function isIntroActive(): boolean { return introActiveFlag; }
+
+// Test and lab hook: start over as if nothing had loaded (the lab replays the intro over a loaded city instead)
+export function resetCityLoadForTests(): void {
+  state = { phase: "idle", assets: 0, startedAt: 0, readyAt: null };
+  emit();
+}
