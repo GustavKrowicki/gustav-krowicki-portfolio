@@ -959,6 +959,7 @@ export class MainScene extends Phaser.Scene {
     if (!pointer.wasTouch) {
       const key = this.walkInBuildingAt(worldPoint.x, worldPoint.y);
       this.hoverWalkIn(key);
+      this.hoverPlace(this.placeBuildingAt(worldPoint.x, worldPoint.y));
       const g = this.screenToGrid(worldPoint.x, worldPoint.y);
       this.hoverWalkTarget(this.walkTargetAt(Math.floor(g.x), Math.floor(g.y), key));
     }
@@ -1879,6 +1880,36 @@ export class MainScene extends Phaser.Scene {
     return t ? t.key : null;
   }
 
+  // A building with a logo under a world point (its drawn pixels, frontmost first, or the tile), or null. Hovering one
+  // (mouse) names it in a pill over the city (LogosOverlay, "placeHover"), like the hover label on tomjohn.design
+  private hoveredPlace: string | null = null;
+
+  private placeBuildingAt(wx: number, wy: number): string | null {
+    let best: { id: string; depth: number } | null = null;
+    for (const [key, info] of this.buildingSpriteInfo) {
+      if (!getBuilding(info.buildingId)?.logoUrl) continue;
+      for (let n = 0; ; n++) {
+        const sprite = this.buildingSprites.get(n ? `${key}_s${n}` : key) as Phaser.GameObjects.Image | undefined;
+        if (!sprite) break;
+        if (!sprite.visible || (best && sprite.depth <= best.depth) || !sprite.getBounds().contains(wx, wy)) continue;
+        const fx = (wx - sprite.x) / sprite.scaleX + sprite.displayOriginX;
+        const fy = (wy - sprite.y) / sprite.scaleY + sprite.displayOriginY;
+        const alpha = this.textures.getPixelAlpha(Math.floor(fx), Math.floor(fy), sprite.texture.key, sprite.frame.name);
+        if (alpha && alpha > 0) best = { id: info.buildingId, depth: sprite.depth };
+      }
+    }
+    if (best) return best.id;
+    const g = this.screenToGrid(wx, wy);
+    const id = this.grid?.[Math.floor(g.y)]?.[Math.floor(g.x)]?.buildingId;
+    return id && getBuilding(id)?.logoUrl ? id : null;
+  }
+
+  private hoverPlace(id: string | null): void {
+    if (id === this.hoveredPlace) return;
+    this.hoveredPlace = id;
+    this.events.emit("placeHover", id);
+  }
+
   private hoverWalkIn(key: string | null): void {
     if (key && key === this.peek?.key) key = null; // already open: its own line shows
     this.input.setDefaultCursor(key ? "pointer" : "default");
@@ -2757,10 +2788,33 @@ export class MainScene extends Phaser.Scene {
   // ==================== LOGO OVERLAY API ====================
 
   // Get portfolio building positions for 3D logo overlay
+  // The first row of a texture with an opaque pixel (building sprites carry empty sky above the roof), cached per texture
+  private opaqueTops = new Map<string, number>();
+  private opaqueTop(textureKey: string): number {
+    const cached = this.opaqueTops.get(textureKey);
+    if (cached !== undefined) return cached;
+    let top = 0;
+    const source = this.textures.get(textureKey).getSourceImage() as HTMLImageElement | HTMLCanvasElement;
+    const canvas = document.createElement("canvas");
+    canvas.width = source.width;
+    canvas.height = source.height;
+    const ctx = canvas.getContext("2d", { willReadFrequently: true });
+    if (ctx && source.width && source.height) {
+      ctx.drawImage(source, 0, 0);
+      const { data, width, height } = ctx.getImageData(0, 0, source.width, source.height);
+      find: for (let y = 0; y < height; y++) {
+        for (let x = 0; x < width; x++) if (data[(y * width + x) * 4 + 3] > 0) { top = y; break find; }
+      }
+    }
+    this.opaqueTops.set(textureKey, top);
+    return top;
+  }
+
   getPortfolioBuildingPositions(): Array<{
     buildingId: string;
     screenX: number;
     screenY: number;
+    topY?: number;
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }> {
@@ -2768,6 +2822,7 @@ export class MainScene extends Phaser.Scene {
       buildingId: string;
       screenX: number;
       screenY: number;
+      topY?: number;
       logoUrl: string;
       logoOffset: { x: number; y: number };
     }> = [];
@@ -2793,10 +2848,15 @@ export class MainScene extends Phaser.Scene {
         // Convert to screen position
         const screenPos = this.gridToScreen(centerX, centerY);
 
+        // the top of the drawn building (the sprite's first opaque row): the name pill and the map tile sit above it
+        const sprite = this.buildingSprites.get(`building_${x},${y}`) as Phaser.GameObjects.Image | undefined;
+        const topY = sprite ? sprite.getBounds().y + this.opaqueTop(sprite.texture.key) * Math.abs(sprite.scaleY) : undefined;
+
         positions.push({
           buildingId: cell.buildingId,
           screenX: screenPos.x,
           screenY: screenPos.y,
+          topY,
           logoUrl: building.logoUrl,
           logoOffset: building.logoOffset || { x: 0, y: 60 },
         });

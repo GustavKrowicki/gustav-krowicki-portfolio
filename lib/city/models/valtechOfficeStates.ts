@@ -8,8 +8,8 @@ import { createValtechOfficeModel, type ProceduralModelOptions } from './valtech
 import { FAR_SIDES, type CampusView } from './legoHqAvatarStates';
 import { applyValtechOfficeDetail } from './valtechOfficeDetail';
 
-// Upper storeys: slabs, louvre bands, parapets, roof deck, glass top floor
-const UPPER = ['slab-', 'louvre-', 'parapet-', 'roof-deck', 'top-'];
+// Upper storeys: slabs, louvre bands, parapets, roof deck, glass top floor, the rooftop sign
+const UPPER = ['slab-', 'louvre-', 'parapet-', 'roof-deck', 'top-', 'sign-'];
 // Cafe front and the gate pieces above or beside the walk-in path
 const FRONT = ['shop-core', 'col-S-', 'shop-glass-S-', 'shop-light-S-', 'awning-', 'gate-lintel', 'gate-soffit', 'gate-back',
   'gate-brick-w', 'gate-door', 'gate-art', 'gate-sign'];

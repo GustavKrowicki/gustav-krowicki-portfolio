@@ -7,6 +7,9 @@
 //   *-screen-<n>-display  a downscaled case image (public/game/pogicity/Building/landmark/valtech-office-screen-<n>.png)
 //   *-planter-leaf-*, *-planter-crown-*  a low-poly sphere (8 x 5) instead of the factory's 16 x 12: flat leaves at
 //   sprite size do not need more, and the plant drops from about 4,400 to about 1,000 triangles
+//   sign-roof  a rooftop sign on the south parapet (POR-54, 2026-10-23): the Valtech logo in white on a dark board, standing
+//   in front of the glass top floor. The building names itself, so the city needs no floating badge. The face is unlit
+//   (selfLit), so the night window pass draws it as it is: a lit box sign
 // The case images load asynchronously; the entrance lab waits for __labPending to reach 0 before it renders.
 import * as THREE from 'three';
 
@@ -182,9 +185,100 @@ function lowPolyEllipsoid(mesh: THREE.Mesh): void {
   old.dispose();
 }
 
+// The rooftop sign: 2.4 x 0.56 wu, its face 0.94 of that; the logo is the city badge's file, trimmed to its ink and drawn white
+const SIGN = { w: 2.4, h: 0.56, d: 0.06, x: 0.3, face: 0.94 };
+const SIGN_BOARD = '#22262b';
+
+function signFaceTexture(): THREE.Texture {
+  const c = document.createElement('canvas');
+  c.width = 1024;
+  c.height = Math.round((1024 * SIGN.h) / SIGN.w);
+  const g = c.getContext('2d')!;
+  g.fillStyle = SIGN_BOARD;
+  g.fillRect(0, 0, c.width, c.height);
+  const t = new THREE.CanvasTexture(c);
+  t.colorSpace = THREE.SRGBColorSpace;
+  t.anisotropy = 8;
+  const lab = globalThis as LabGlobal;
+  lab.__labPending = (lab.__labPending ?? 0) + 1;
+  const done = () => { lab.__labPending = Math.max(0, (lab.__labPending ?? 1) - 1); };
+  const img = new Image();
+  img.onload = () => {
+    // the svg is square with the wordmark in the middle: draw it big, find the ink, then draw only the ink, white
+    const src = document.createElement('canvas');
+    src.width = src.height = 1024;
+    const sg = src.getContext('2d', { willReadFrequently: true })!;
+    sg.drawImage(img, 0, 0, 1024, 1024);
+    const { data } = sg.getImageData(0, 0, 1024, 1024);
+    let x0 = 1024, y0 = 1024, x1 = -1, y1 = -1;
+    for (let y = 0; y < 1024; y++) {
+      for (let x = 0; x < 1024; x++) {
+        const i = (y * 1024 + x) * 4;
+        if (data[i + 3] < 128 || data[i] > 128) continue;   // dark, opaque pixels are the ink
+        if (x < x0) x0 = x;
+        if (x > x1) x1 = x;
+        if (y < y0) y0 = y;
+        if (y > y1) y1 = y;
+      }
+    }
+    if (x1 > x0) {
+      const ink = document.createElement('canvas');
+      ink.width = x1 - x0 + 1;
+      ink.height = y1 - y0 + 1;
+      const ig = ink.getContext('2d')!;
+      ig.drawImage(src, x0, y0, ink.width, ink.height, 0, 0, ink.width, ink.height);
+      // keep the ink's shape, paint it white: the darker a pixel, the more opaque (the svg's white background turns clear)
+      const id = ig.getImageData(0, 0, ink.width, ink.height);
+      for (let i = 0; i < id.data.length; i += 4) {
+        const dark = 255 - Math.min(id.data[i], id.data[i + 1], id.data[i + 2]);
+        id.data[i] = id.data[i + 1] = id.data[i + 2] = 255;
+        id.data[i + 3] = Math.round((dark * id.data[i + 3]) / 255);
+      }
+      ig.putImageData(id, 0, 0);
+      const h = c.height * 0.66, w = (ink.width / ink.height) * h;
+      const scale = Math.min(1, (c.width * 0.86) / w);
+      g.drawImage(ink, (c.width - w * scale) / 2, (c.height - h * scale) / 2, w * scale, h * scale);
+      t.needsUpdate = true;
+    }
+    done();
+  };
+  img.onerror = done;
+  img.src = '/game/pogicity/Building/logos/valtech-office.svg';
+  return t;
+}
+
+function addRoofSign(model: THREE.Object3D, meshes: Record<string, THREE.Mesh>): void {
+  const parapet = meshes['parapet-S'];
+  const parent = parapet?.parent;
+  if (!parapet || !parent) return;
+  // parapet-S is a box scaled to its size: its top and front face give the sign's foot and plane
+  const top = parapet.position.y + parapet.scale.y / 2;
+  const front = parapet.position.z + parapet.scale.z / 2;
+  const group = new THREE.Group();
+  group.name = 'sign-roof';
+  group.position.set(SIGN.x, top + SIGN.h / 2, front - SIGN.d / 2);
+  const board = new THREE.Mesh(
+    new THREE.BoxGeometry(SIGN.w, SIGN.h, SIGN.d),
+    new THREE.MeshStandardMaterial({ color: SIGN_BOARD, roughness: 0.8, metalness: 0.1 }),
+  );
+  board.userData.sculptComponent = { id: 'sign-roof-board' };
+  const face = new THREE.Mesh(
+    new THREE.PlaneGeometry(SIGN.w * SIGN.face, SIGN.h * 0.84),
+    new THREE.MeshBasicMaterial({ map: signFaceTexture(), color: new THREE.Color(0.94, 0.94, 0.94) }),
+  );
+  face.position.z = SIGN.d / 2 + 0.002;
+  face.userData.sculptComponent = { id: 'sign-roof-face' };
+  face.userData.selfLit = true;
+  group.add(board, face);
+  parent.add(group);
+  const nodes: Record<string, THREE.Object3D> | undefined = model.userData.sculptRuntime?.nodes;
+  if (nodes) nodes['sign-roof'] = group;
+}
+
 export function applyValtechOfficeDetail(model: THREE.Object3D): void {
   if (typeof document === 'undefined') return;
   const meshes: Record<string, THREE.Mesh> = model.userData.sculptRuntime?.meshes ?? {};
+  addRoofSign(model, meshes);
   for (const [id, mesh] of Object.entries(meshes)) {
     const s = mesh.scale;   // the factory scales unit primitives to the part's size (wu)
     if (/^side-[NWE]-.*brick/.test(id)) textured(mesh, canvasTexture(brickImage(), s.x / BRICK_TILE_WU.w, s.y / BRICK_TILE_WU.h));

@@ -39,14 +39,14 @@ export default function PlaceSection({ place, onOpenCase, onWalkIn, onGrow, onGr
           aria-hidden
           className="relative block aspect-[3/1] w-full overflow-hidden border-b border-neutral-200 bg-white md:aspect-[16/9]"
         >
-          <Image src={place.coverImage} alt="" fill sizes="(min-width: 768px) 440px, 100vw" className="object-cover" />
+          <Image src={place.coverImage} alt="" fill sizes="(min-width: 768px) 440px, 100vw" className="object-cover" style={{ objectPosition: place.coverPosition }} />
         </button>
       )}
       <div className="px-6 pb-6 pt-4">
         <div className="flex items-center gap-2.5">
           {place.logoUrl && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={place.logoUrl} alt="" className="h-7 w-7 shrink-0 rounded-full border border-neutral-200 bg-white object-contain p-0.5" />
+            <img src={place.logoUrl} alt="" className="h-7 w-7 shrink-0 rounded-md border border-neutral-200 bg-white object-contain p-0.5" />
           )}
           <h2 ref={headingRef} tabIndex={-1} className="text-xl font-semibold text-neutral-900" style={{ outline: 'none' }}>
             {place.title}

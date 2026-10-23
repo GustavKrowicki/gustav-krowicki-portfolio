@@ -176,6 +176,10 @@ export default function CityViewer({
     window.clearTimeout(doorTimerRef.current);
   }, []);   // at once; the screens (interiorSeat) follow a moment later
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
+  const [hoverPlace, setHoverPlace] = useState<string | null>(null);
+  // Where the avatar stands (the name pill at a door sits over its head); read when the overlay renders, which follows
+  // the camera, so walking does not re-render the viewer
+  const avatarAtRef = useRef<{ x: number; y: number } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
 
@@ -492,12 +496,17 @@ export default function CityViewer({
               else if (doorStoppedRef.current) setDoorCard(null);
             }
             setWalkableDirections(data.walkableDirections ?? []);
+            avatarAtRef.current = { x: data.worldX, y: data.worldY };
           });
 
           // Building visited
           scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
             setVisitedBuildings((prev) => new Set([...prev, buildingId]));
           });
+
+          // The building under the mouse, named in a pill (LogosOverlay)
+          scene.events.off("placeHover");
+          scene.events.on("placeHover", (id: string | null) => setHoverPlace(id));
         }
       }
     }
@@ -1097,7 +1106,7 @@ export default function CityViewer({
         </div>
       )}
 
-      {/* 3D Spinning Logos Overlay */}
+      {/* Building names: a pill on hover or at the door, logo tiles when zoomed out (POR-54) */}
       {!e2eMode && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
           isMobile={isMobile}
@@ -1111,6 +1120,9 @@ export default function CityViewer({
           cameraX={cameraState.scrollX}
           cameraY={cameraState.scrollY}
           zoom={cameraState.zoom}
+          hoverId={hoverPlace}
+          nearId={currentEncounter?.buildingId ?? null}
+          nearAt={currentEncounter ? avatarAtRef.current : null}
           onLogoClick={handleLogoClick}
         />
       )}
