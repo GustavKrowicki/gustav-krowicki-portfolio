@@ -35,7 +35,7 @@ The rank uses three criteria, in this order:
 | --- | --- | --- | --- | --- |
 | 1 | Case studies get seconds | All reviewers | 5 of 5 reviewers stayed 6 to 35 s on each case. | Open. This is content work (section 4). |
 | 2 | The city is a one-way door | Reviewers who open the city | A case closes the city. 55% of the sessions from the city to a case do not go back. A return starts from zero. Reviewer A started the city 3 times. | Solved in the shell. The city stays live, a case opens in the panel with Back, and the URL keeps the section and the case (`?s=work&case=lego`), so a link or a return visit opens the same view. |
-| 3 | City and classic are two products | All visitors, mainly reviewers | Reviewers use the city as a menu for 19 to 38 s. Then they read in classic. | Partly solved: one page. Open: the character of the city in the design of the panel. |
+| 3 | City and classic are two products | All visitors, mainly reviewers | Reviewers use the city as a menu for 19 to 38 s. Then they read in classic. | Solved: one page. Decision (2026-10-21): the panel stays a clean, plain web page next to the city. Do not give the panel the pixel look of the city. Work to make the panel better reads in the sidebar issue. |
 | 4 | Adventure goes nowhere | Reviewers: all 4 selected Adventure first | 91 starts and 2 completions. "Next Stop" did not seem to respond. Visitors clicked the hint text. | Adventure is not in the shell. Shell step 3 (walk and peek card) and step 5 (achievements) replace it. |
 | 5 | The city does not reward exploration | All visitors in the city | A click on scenery gives no result. 7 of 12 stops show only text. | Open: shell steps 3 and 5. The branch `living-city-polish` has click feedback, but it is not merged. |
 | 6 | Phones get the weakest version | Mainly visitors from LinkedIn | 48% of city sessions are on phones. 46% of phone sessions do not get to a building (desktop: 26%). 15 of 19 sessions with rage clicks are on phones. | Partly solved: the bottom sheet. Open: touch gestures and tests on real phones. |
@@ -89,17 +89,17 @@ A design lead in an interview (October 2026):
 
 ## 6. Smaller problems
 
-These problems were found on 2026-10-10 or later:
+These problems were found on 2026-10-10 or later. All are closed (2026-10-21):
 
-- The Viz generator case is not in the city.
+- ~~The Viz generator case is not in the city.~~ Not planned: the case stays in the panel.
 - ~~A click on the LEGO logo opens a pop-up, but a click on the LEGO building opens the case.~~ Fixed: a logo now opens the same thing as its building.
-- The building highlight stays on the screen when a visitor stops the tour early.
-- The key G shows a debug overlay to visitors.
-- The city code uses a pixel font, but the site does not load it.
-- Day and night are in the code but not in use. The branch `living-city-polish` uses them.
-- The image `erhvervsakademiet_east.png` is missing (status 404). The file in the repository has a space in its name.
-- The city tour data shows the Swinburne logo for the University of Melbourne.
-- The PDF viewer shows the CV and the recommendation letter as images. Visitors cannot select the text, and the links do not operate. Fixed on the branch for POR-18: the viewer has the text and link layers, and the uni letter file has real text.
+- ~~The building highlight stays on the screen when a visitor stops the tour early.~~ Not relevant: the tour is removed.
+- ~~The key G shows a debug overlay to visitors.~~ Fixed: the overlay is deleted.
+- ~~The city code uses a pixel font, but the site does not load it.~~ Fixed: the city uses Geist Mono, and the site loads it.
+- ~~Day and night are in the code but not in use.~~ Fixed: the city has night, with lamps and a time-of-day button.
+- ~~The image `erhvervsakademiet_east.png` is missing (status 404).~~ Fixed: the file name has no space now.
+- ~~The city tour data shows the Swinburne logo for the University of Melbourne.~~ Not relevant: the tour data is removed.
+- ~~The PDF viewer shows the CV and the recommendation letter as images.~~ Fixed: the viewer has the text and link layers, and the uni letter file has real text.
 
 ## 7. Keep this document current
 
