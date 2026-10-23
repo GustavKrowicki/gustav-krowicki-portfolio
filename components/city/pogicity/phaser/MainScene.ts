@@ -2909,11 +2909,16 @@ export class MainScene extends Phaser.Scene {
   // past the usual MAX_ZOOM because the city view beside or above the panel is small, and keep following it.
   // close = true glides back to street zoom for walking once the tab closes.
   avatarFocusZoom = 6;
+  // Phones dress the avatar in the city (no figure in the sheet, POR-48): close enough to see each piece change
+  avatarFocusZoomPhone = 16;
+  private avatarZoom(): number {
+    return this.isMobileViewport() ? this.avatarFocusZoomPhone : this.avatarFocusZoom;
+  }
   private focusFollowTimer: Phaser.Time.TimerEvent | null = null;
   // While the Avatar tab holds the camera close, wheel and pinch may go up to that zoom instead of snapping to 4
   private avatarFocusActive = false;
   private maxZoomNow(): number {
-    return this.avatarFocusActive ? Math.max(MainScene.MAX_ZOOM, this.avatarFocusZoom) : MainScene.MAX_ZOOM;
+    return this.avatarFocusActive ? Math.max(MainScene.MAX_ZOOM, this.avatarZoom()) : MainScene.MAX_ZOOM;
   }
   // The Avatar tab starts walk mode only to show the avatar: skip the phone's snap to it, focusOnPlayer glides there
   skipNextSpawnFocus = false;
@@ -2927,8 +2932,9 @@ export class MainScene extends Phaser.Scene {
     const camera = this.cameras.main;
     this.avatarFocusActive = !close;
     // phones walk a little closer than street zoom: at 2 the avatar is a few pixels tall in the small city strip
-    const zoom = close ? (this.isMobileViewport() ? 3 : ZOOM.street) : this.avatarFocusZoom;
-    const y = p.worldY - (close ? 0 : 12);
+    const zoom = close ? (this.isMobileViewport() ? 3 : ZOOM.street) : this.avatarZoom();
+    // the middle of the figure, not its feet
+    const y = p.worldY - (close ? 0 : 14);
     this.cameraFollowPlayer = false;
     this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(y - camera.height / 2), zoom, durationMs);
     this.manualCameraOverrideInAdventure = false;
