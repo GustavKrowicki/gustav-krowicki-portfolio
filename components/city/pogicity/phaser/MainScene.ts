@@ -53,6 +53,7 @@ import { followAvatarBuilder, loadAvatar3dSprites } from "@/lib/city/avatar3dSpr
 import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isInteriorDoor } from "@/lib/city/buildingInteriors";
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
+import { getPlace } from "@/lib/city/places";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -438,6 +439,7 @@ export class MainScene extends Phaser.Scene {
 
     this.updateCharacters();
     this.updateCars();
+    this.drawTouchMarks();
     this.updateCamera(delta);
     this.renderCars();
     this.renderCharacters();
@@ -1022,6 +1024,8 @@ export class MainScene extends Phaser.Scene {
 
   handlePointerDown(pointer: Phaser.Input.Pointer): void {
     if (!this.isReady) return;
+    this.touchTap = pointer.wasTouch;
+    this.hideWalkHint();
 
     // An open Bike here pill takes the next press: a pill picks on release, anywhere else closes it
     if (this.moveMenu) {
@@ -1104,6 +1108,7 @@ export class MainScene extends Phaser.Scene {
       this.stopPanning();
       if (rightClick && this.isAdventureActive && this.openMoveMenu(_pointer)) return;
       if (shouldTriggerTap && wasTap && this.tapWalkIn(_pointer)) return;
+      if (shouldTriggerTap && wasTap && _pointer.wasTouch) this.cantGoAt(_pointer);
       if (shouldTriggerTap && wasTap && this.hoverTile) {
         this.events_.onTileClick(this.hoverTile.x, this.hoverTile.y);
       }
@@ -1982,12 +1987,161 @@ export class MainScene extends Phaser.Scene {
     this.manualCameraOverrideInAdventure = false;
     this.cameraFollowPlayer = true;
     this.walkMarker?.destroy();
+    this.walkMarker = null;
+    try { window.localStorage.setItem(MainScene.WALK_HINT_KEY, "1"); } catch { /* private window: the hint may show again */ }
+    if (this.touchTap) {
+      this.touchMarks.held = { x: target.x, y: target.y, at: this.time.now, arriveAt: null };
+      this.touchMarks.cantGo = null;
+      return true;
+    }
     const marker = this.add.graphics().setDepth(19_000_000);
     marker.fillStyle(0xffd23f, 0.3).lineStyle(1.5, 0xffd23f, 1);
     this.tileDiamond(marker, target.x, target.y);
     this.walkMarker = marker;
     this.tweens.add({ targets: marker, alpha: 0, delay: 700, duration: 600, onComplete: () => marker.destroy() });
     return true;
+  }
+
+  // Point and walk on phones (POR-44; desktop keeps the tile above, Gustav 2026-10-23): the tapped tile gets a ring that
+  // pops in and stays, with a dark-edged core, until the avatar gets there; a tap the avatar can't walk to gets a white
+  // ring with an X; the first visit shows a pulsing ring next to the avatar with "Tap to walk". All of it is drawn again
+  // every frame in screen pixels, so it reads the same at every zoom.
+  private touchTap = false;
+  private touchMarks: {
+    held: { x: number; y: number; at: number; arriveAt: number | null } | null;
+    cantGo: { x: number; y: number; at: number } | null;
+    hint: { x: number; y: number; at: number } | null;
+  } = { held: null, cantGo: null, hint: null };
+  private touchMarksGfx: Phaser.GameObjects.Graphics | null = null;
+  private walkHintPill: Phaser.GameObjects.Text | null = null;
+  private static readonly WALK_HINT_KEY = "city.walkHintSeen";
+  private static readonly POP_MS = 160;
+  private static readonly ARRIVE_MS = 150;
+  private static readonly CANT_GO_MS = 500;
+
+  private reducedMotion(): boolean {
+    return window.matchMedia?.("(prefers-reduced-motion: reduce)").matches ?? false;
+  }
+
+  // Screen (css) pixels per world pixel: the camera zoom times how much the page scales the canvas down
+  private cssPerWorld(): number {
+    const canvas = this.game.canvas;
+    const shown = canvas.getBoundingClientRect().width;
+    return this.cameras.main.zoom * (shown > 0 ? shown / canvas.width : 1);
+  }
+
+  private markDiamond(g: Phaser.GameObjects.Graphics, x: number, y: number, scale: number, k: number,
+    line: { color: number; alpha: number; width: number }, fill?: { color: number; alpha: number }): void {
+    const c = gridToScreen(x + 0.5, y + 0.5);
+    const pts = [gridToScreen(x, y), gridToScreen(x + 1, y), gridToScreen(x + 1, y + 1), gridToScreen(x, y + 1)]
+      .map((p) => new Phaser.Math.Vector2(c.x + (p.x - c.x) * scale, c.y + (p.y - c.y) * scale));
+    if (fill) g.fillStyle(fill.color, fill.alpha).fillPoints(pts, true);
+    g.lineStyle(line.width / k, line.color, line.alpha).strokePoints(pts, true);
+  }
+
+  // The held marker: a ring on the tile and a small dark-edged core
+  private drawHeldMark(g: Phaser.GameObjects.Graphics, x: number, y: number, ring: number, core: number, k: number): void {
+    this.markDiamond(g, x, y, ring, k, { color: 0xffd23f, alpha: 1, width: 2 }, { color: 0xffd23f, alpha: 0.25 });
+    if (core > 0) this.markDiamond(g, x, y, core, k, { color: 0x1d1b18, alpha: 1, width: 1.5 }, { color: 0xffd23f, alpha: 1 });
+  }
+
+  private drawTouchMarks(): void {
+    const m = this.touchMarks;
+    if (!m.held && !m.cantGo && !m.hint) {
+      if (this.touchMarksGfx?.visible) this.touchMarksGfx.clear().setVisible(false);
+      return;
+    }
+    if (!this.touchMarksGfx) this.touchMarksGfx = this.add.graphics().setDepth(19_000_000);
+    const g = this.touchMarksGfx.clear().setVisible(true);
+    const k = this.cssPerWorld();
+    const now = this.time.now;
+    const still = this.reducedMotion();
+
+    if (m.hint) {
+      const pulse = still ? 0 : (Math.sin((now - m.hint.at) / 220) + 1) / 2;
+      this.markDiamond(g, m.hint.x, m.hint.y, 1.2 + 0.15 * pulse, k, { color: 0xffd23f, alpha: 1, width: 2 });
+      this.markDiamond(g, m.hint.x, m.hint.y, 0.4, k, { color: 0x1d1b18, alpha: 1, width: 1.5 }, { color: 0xffd23f, alpha: 1 });
+      const pill = this.walkHintPill;
+      if (pill) {
+        const p = gridToScreen(m.hint.x + 1, m.hint.y + 1);   // under the ring's bottom corner
+        pill.setScale(1 / k).setPosition(p.x, p.y + 10 / k);
+      }
+    }
+
+    if (m.held) {
+      const pc = this.playerController;
+      if (m.held.arriveAt === null && !pc?.isWalkingToTarget()) m.held.arriveAt = now;
+      if (m.held.arriveAt !== null) {
+        const t = still ? 1 : (now - m.held.arriveAt) / MainScene.ARRIVE_MS;
+        if (t >= 1) m.held = null;
+        else this.drawHeldMark(g, m.held.x, m.held.y, 1 - 0.6 * t, 0.4 * (1 - t), k);
+      } else {
+        const t = still ? 1 : Math.min(1, (now - m.held.at) / MainScene.POP_MS);
+        const ring = 1 + 1.2 * (1 - t) * (1 - t);   // starts at 2.2 times the tile, eases out onto it
+        this.drawHeldMark(g, m.held.x, m.held.y, ring, 0.4, k);
+      }
+    }
+
+    if (m.cantGo) {
+      const t = (now - m.cantGo.at) / MainScene.CANT_GO_MS;
+      if (t >= 1) m.cantGo = null;
+      else {
+        const alpha = t < 0.6 ? 1 : 1 - (t - 0.6) / 0.4;
+        const shake = still ? 0 : Math.sin(t * Math.PI * 6) * (1 - t) * 3 / k;
+        const c = gridToScreen(m.cantGo.x + 0.5, m.cantGo.y + 0.5);
+        this.markDiamond(g, m.cantGo.x + shake / TILE_WIDTH, m.cantGo.y - shake / TILE_WIDTH, 0.9, k, { color: 0xffffff, alpha: 0.9 * alpha, width: 2 });
+        const r = 5 / k, cx = c.x + shake;
+        for (const [w, color] of [[4, 0x1d1b18], [2, 0xffffff]] as const) {
+          g.lineStyle(w / k, color, alpha);
+          g.lineBetween(cx - r, c.y - r, cx + r, c.y + r);
+          g.lineBetween(cx - r, c.y + r, cx + r, c.y - r);
+        }
+      }
+    }
+  }
+
+  // A touch tap that neither walked nor hit a place: the white X, so the tap does not look lost
+  private cantGoAt(pointer: Phaser.Input.Pointer): void {
+    if (!this.isAdventureActive) return;
+    const world = this.cameras.main.getWorldPoint(pointer.x, pointer.y);
+    const g = this.screenToGrid(world.x, world.y);
+    const x = Math.floor(g.x), y = Math.floor(g.y);
+    if (x < 0 || y < 0 || x >= GRID_WIDTH || y >= GRID_HEIGHT) return;
+    const id = this.grid[y]?.[x]?.buildingId;
+    if (id && (getPlace(id) || getBuilding(id)?.interactable)) return;   // its tap opens the place
+    this.touchMarks.cantGo = { x, y, at: this.time.now };
+  }
+
+  // The first visit on a phone: a pulsing ring on an open tile next to the avatar and "Tap to walk" under it, until the
+  // first tap. Shown again on a later visit only if the visitor never walked.
+  showWalkHint(): void {
+    const pc = this.playerController;
+    if (!pc || !this.isAdventureActive || this.touchMarks.hint) return;
+    if (!window.matchMedia?.("(hover: none) and (pointer: coarse)").matches) return;
+    try { if (window.localStorage.getItem(MainScene.WALK_HINT_KEY)) return; } catch { /* no storage: show it */ }
+    const { gridX, gridY } = pc.getPosition();
+    const open = (x: number, y: number) => pc.canStandOn(x, y) && this.grid[y]?.[x]?.type !== TileType.Building;
+    // down the screen from the avatar first, so the pill under the ring stays clear of it
+    const spot = [[2, 1], [1, 2], [2, 2], [2, 0], [0, 2], [3, 1], [1, 3], [3, 2], [2, 3]]
+      .map(([dx, dy]) => ({ x: gridX + dx, y: gridY + dy }))
+      .find((t) => open(t.x, t.y));
+    if (!spot) return;
+    this.touchMarks.hint = { ...spot, at: this.time.now };
+    this.walkHintPill = this.add.text(0, 0, "Tap to walk", {
+      fontFamily: cityFont(),
+      fontSize: "12px",
+      color: "#ffffff",
+      backgroundColor: "#1d1b18",
+      padding: { x: 7, y: 5 },
+      resolution: Math.max(2, Math.ceil(window.devicePixelRatio * 2)),
+    }).setOrigin(0.5, 0).setDepth(19_000_002);
+  }
+
+  private hideWalkHint(): void {
+    if (!this.touchMarks.hint) return;
+    this.touchMarks.hint = null;
+    this.walkHintPill?.destroy();
+    this.walkHintPill = null;
   }
 
   // Bike here: a long press on a phone or a right click on a desktop opens a pill above the tile; the pill, or the key 1,
@@ -2743,6 +2897,8 @@ export class MainScene extends Phaser.Scene {
       if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
       this.focusOnPlayer(true, glideMs);
     });
+    // the first-visit hint once the camera has landed on the avatar (phones only)
+    this.time.delayedCall(delayMs + glideMs + 300, () => this.showWalkHint());
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {

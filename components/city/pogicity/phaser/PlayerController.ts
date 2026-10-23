@@ -533,6 +533,11 @@ export class PlayerController {
     this.running = gait === "run" || (gait === "ride" && !this.riding);
   }
 
+  /** Whether a walk to a tapped spot (or a building) is under way */
+  isWalkingToTarget(): boolean {
+    return this.isAutoWalking;
+  }
+
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
     this.running = false;
