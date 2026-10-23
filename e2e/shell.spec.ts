@@ -89,8 +89,8 @@ test("an unknown section or case in the URL falls back to Home", async ({ page }
 type SlotScene = { ready?: boolean; openInPlace: (id: string) => boolean; peek: { buildingId: string } | null };
 type SlotWindow = { __CITY_E2E__?: { getScene: () => SlotScene | null; pauseGame: () => boolean } };
 
-test("?popups=slot: a building's place opens in the panel, and Back goes one step at a time", async ({ page }) => {
-  await page.goto("/new?popups=slot&e2e=1");
+test("a building's place opens in the panel, and Back goes one step at a time", async ({ page }) => {
+  await page.goto("/new?e2e=1");
   const panel = page.getByTestId("shell-panel");
   await page.waitForFunction(() => !!(window as unknown as SlotWindow).__CITY_E2E__?.getScene()?.ready);
 

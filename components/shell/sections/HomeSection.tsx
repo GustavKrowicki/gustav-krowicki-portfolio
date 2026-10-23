@@ -6,9 +6,9 @@ import { posts } from '@/components/home/LinkedInPosts';
 import UniWorkCarousel from '../UniWorkCarousel';
 
 
-// Short version of the classic home: introduction, case studies, uni work and contact. Compact (?popups=slot): the cases
-// come right after the first line, so a phone's short sheet shows the work first; the rest of the intro follows them.
-export default function HomeSection({ onOpenCase, compact = false }: { onOpenCase: (slug: string) => void; compact?: boolean }) {
+// Short version of the classic home: introduction, case studies, uni work and contact. The cases come right after the
+// first line, so a phone's short sheet shows the work first; the rest of the intro follows them.
+export default function HomeSection({ onOpenCase }: { onOpenCase: (slug: string) => void }) {
   const cases = (
     <section>
       <h3 className="text-sm font-medium text-neutral-500">Case studies</h3>
@@ -39,34 +39,18 @@ export default function HomeSection({ onOpenCase, compact = false }: { onOpenCas
   );
 
   return (
-    <div className={compact ? 'space-y-8 px-6 pb-6 pt-2 md:space-y-10 md:pt-6' : 'space-y-10 px-6 py-6'}>
-      {compact ? (
-        <>
-          <section>
-            <h2 className="text-xl font-semibold text-neutral-900 md:text-2xl">Hello, I am Gustav</h2>
-            <p className="mt-1.5 leading-snug text-neutral-700">
-              I design digital products with a focus on user research, strategic thinking, and emerging technologies.
-            </p>
-          </section>
-          {cases}
-          <p className="leading-relaxed text-neutral-700">
-            Currently working on ML-assisted tools at the LEGO group. Happy to chat on new opportunities in second
-            half&nbsp;2026.
-          </p>
-        </>
-      ) : (
-        <>
-          <section>
-            <h2 className="text-2xl font-semibold text-neutral-900">Hello, I am Gustav</h2>
-            <p className="mt-3 leading-relaxed text-neutral-700">
-              I design digital products with a focus on user research, strategic thinking, and emerging technologies.
-              Currently working on ML-assisted tools at the LEGO group. Happy to chat on new opportunities in second
-              half&nbsp;2026.
-            </p>
-          </section>
-          {cases}
-        </>
-      )}
+    <div className="space-y-8 px-6 pb-6 pt-2 md:space-y-10 md:pt-6">
+      <section>
+        <h2 className="text-xl font-semibold text-neutral-900 md:text-2xl">Hello, I am Gustav</h2>
+        <p className="mt-1.5 leading-snug text-neutral-700">
+          I design digital products with a focus on user research, strategic thinking, and emerging technologies.
+        </p>
+      </section>
+      {cases}
+      <p className="leading-relaxed text-neutral-700">
+        Currently working on ML-assisted tools at the LEGO group. Happy to chat on new opportunities in second
+        half&nbsp;2026.
+      </p>
 
       <section>
         <h3 className="text-sm font-medium text-neutral-500">Uni work</h3>

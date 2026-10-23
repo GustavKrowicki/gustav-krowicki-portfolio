@@ -10,7 +10,7 @@ import type { SectionId } from './sections';
 import { readView, viewToSearch, type ShellView } from './shellUrl';
 import { AVATAR_WALK_EVENT } from '@/lib/city/models/avatarPieces';
 import { FIND_OPEN_EVENT, FIND_WALK_EVENT } from '@/lib/achievements';
-import { PLACE_WALK_IN_EVENT, readSlotPopups } from '@/lib/popupMode';
+import { PLACE_WALK_IN_EVENT } from '@/lib/popupMode';
 import { getPlace } from '@/lib/city/places';
 
 // Phaser needs the browser, so the city loads on the client only.
@@ -33,19 +33,16 @@ const READING_SECTIONS: SectionId[] = ['cv'];
 const isPhoneWidth = () => !window.matchMedia('(min-width: 768px)').matches;
 
 // One-page portfolio: the panel (rail + content) beside the live city. Phones stack the city above a bottom sheet.
-// One slot (Figma board F; ?popups=cards for the old cards): a building tapped in the city opens its place in the same panel, a case opens over
+// One slot (Figma board F): a building tapped in the city opens its place in the same panel, a case opens over
 // the place, and Back goes one step: case, place, section.
 export default function PortfolioShell() {
-  // read after hydration: the page is a static export, so the server's HTML is always the default (slot)
-  const [slot, setSlot] = useState(true);
-  useEffect(() => setSlot(readSlotPopups()), []);
   // ?e2e=1 exposes the city's test API (window.__CITY_E2E__), as on /city; CityViewer renders on the client only
   const [e2eMode] = useState(() => typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('e2e') === '1');
   const [section, setSection] = useState<SectionId>('home');
   const [panel, setPanel] = useState<PanelState>('open');
   // A case study opens over the section it came from and widens the panel for reading.
   const [openCase, setOpenCase] = useState<string | null>(null);
-  // ?popups=slot: the building opened from the city, and the panel's state before it opened (restored on close)
+  // The building opened from the city, and the panel's state before it opened (restored on close)
   const [openPlace, setOpenPlace] = useState<string | null>(null);
   const panelBeforePlace = useRef<PanelState | null>(null);
   const place = openPlace ? getPlace(openPlace) : null;
@@ -56,11 +53,11 @@ export default function PortfolioShell() {
       const view = readView(window.location.search);
       setSection(view.section);
       setOpenCase(view.openCase);
-      setOpenPlace(slot ? view.openPlace ?? null : null);
+      setOpenPlace(view.openPlace ?? null);
       setPanel((current) =>
         view.openCase || READING_SECTIONS.includes(view.section)
           ? 'expanded'
-          : slot && isPhoneWidth() && (view.openPlace || view.section === 'home')
+          : isPhoneWidth() && (view.openPlace || view.section === 'home')
             ? current === 'closed' && !view.openPlace ? 'closed' : 'peek'
             : current === 'expanded' || current === 'peek'
               ? 'open'
@@ -70,7 +67,7 @@ export default function PortfolioShell() {
     applyUrl();
     window.addEventListener('popstate', applyUrl);
     return () => window.removeEventListener('popstate', applyUrl);
-  }, [slot]);
+  }, []);
 
   // Each step a visitor takes (section, case, Back) becomes a browser history entry.
   const pushView = useCallback((view: ShellView) => {
@@ -110,7 +107,7 @@ export default function PortfolioShell() {
     pushView({ section, openCase: null, openPlace });
   }, [section, openPlace, pushView]);
 
-  // ?popups=slot: a building tapped in the city opens its place in the panel (phones: the short sheet). It replaces a
+  // A building tapped in the city opens its place in the panel (phones: the short sheet). It replaces a
   // place or case that was open; closing it puts the panel back as it was.
   const openPlaceFromCity = useCallback(
     (buildingId: string) => {
@@ -137,9 +134,8 @@ export default function PortfolioShell() {
     [openPlace, section, pushView]
   );
 
-  // ?popups=slot: Esc goes one step back, as Back does
+  // Esc goes one step back, as Back does
   useEffect(() => {
-    if (!slot) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return;
       if (openCase) closeCaseStudy();
@@ -147,9 +143,9 @@ export default function PortfolioShell() {
     };
     window.addEventListener('keydown', onKey);
     return () => window.removeEventListener('keydown', onKey);
-  }, [slot, openCase, openPlace, closeCaseStudy, closePlace]);
+  }, [openCase, openPlace, closeCaseStudy, closePlace]);
 
-  // Phones (?popups=slot): the grabber grows the sheet a step (short, half, full) or shrinks it; below short, a place
+  // Phones: the grabber grows the sheet a step (short, half, full) or shrinks it; below short, a place
   // closes, and Home closes the sheet
   const growPanel = useCallback(
     () => setPanel((current) => (current === 'closed' ? 'peek' : current === 'peek' ? 'open' : 'expanded')),
@@ -191,7 +187,7 @@ export default function PortfolioShell() {
   useEffect(() => {
     const onFindWalk = () => {
       if (!isPhoneWidth()) return;
-      // a place's own Walk there (?popups=slot) leaves the place; it opens again when the avatar arrives
+      // a place's own Walk there leaves the place; it opens again when the avatar arrives
       if (openPlace) closePlace(false);
       setPanel('closed');
     };
@@ -221,7 +217,7 @@ export default function PortfolioShell() {
   return (
     <div className="fixed inset-0 flex flex-col bg-[#73645F] md:flex-row" data-testid="shell-root">
       <aside
-        className={`order-2 flex shrink-0 flex-col-reverse overflow-hidden bg-[#FDFDFD] md:order-1 md:h-full md:flex-row md:transition-[width] ${slot ? SLOT_MOTION_DESKTOP : 'md:duration-200'} ${WIDTH_ON_DESKTOP[panel]}`}
+        className={`order-2 flex shrink-0 flex-col-reverse overflow-hidden bg-[#FDFDFD] md:order-1 md:h-full md:flex-row md:transition-[width] ${SLOT_MOTION_DESKTOP} ${WIDTH_ON_DESKTOP[panel]}`}
       >
         <ShellRail active={panel === 'closed' ? null : section} onSelect={openSection} />
         <ShellPanel
@@ -229,7 +225,6 @@ export default function PortfolioShell() {
           state={panel}
           openCase={openCase}
           place={place}
-          slot={slot}
           onOpenCase={openCaseStudy}
           onOpenSection={openSection}
           onCloseCase={closeCaseStudy}
@@ -252,7 +247,7 @@ export default function PortfolioShell() {
           avatarTabOpen={panel !== 'closed' && section === 'avatar' && !openCase}
           panelOpen={panel !== 'closed'}
           onPlaceOpen={closePanelForPlace}
-          popups={slot ? 'slot' : 'cards'}
+          popups="slot"
           openPlace={openPlace}
           onOpenPlace={openPlaceFromCity}
           onClosePlace={() => closePlace()}

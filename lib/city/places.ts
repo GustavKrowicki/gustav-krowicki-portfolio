@@ -3,7 +3,7 @@ import { INTERIOR_BEATS } from './interiorBeats';
 import { TOUR_STOPS } from './tourStops';
 import { getProjectBySlug } from '../projects';
 
-// A place: what the slot shows for a building tapped in the city (?popups=slot). Built from the texts that exist
+// A place: what the slot shows for a building tapped in the city. Built from the texts that exist
 // today: the walk-in cards (lib/city/interiorBeats.ts), the old tour dialog (lib/city/tourStops.ts) and the projects.
 export interface Place {
   buildingId: string;

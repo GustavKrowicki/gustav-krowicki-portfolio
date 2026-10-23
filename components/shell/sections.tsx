@@ -30,12 +30,10 @@ interface SectionContentProps {
   openCase: string | null;
   onOpenCase: (slug: string) => void;
   onOpenSection: (id: SectionId) => void;
-  /** ?popups=slot: Home puts the cases first, so the phone's short sheet shows the work */
-  compactHome?: boolean;
 }
 
 // An open case replaces the section it was opened from; the panel header then shows Back.
-export function SectionContent({ id, openCase, onOpenCase, onOpenSection, compactHome = false }: SectionContentProps) {
+export function SectionContent({ id, openCase, onOpenCase, onOpenSection }: SectionContentProps) {
   if (openCase) {
     const Case = CASES[openCase];
     return Case ? <Case /> : <Placeholder title="Case not found" note={openCase} />;
@@ -43,7 +41,7 @@ export function SectionContent({ id, openCase, onOpenCase, onOpenSection, compac
 
   switch (id) {
     case 'home':
-      return <HomeSection onOpenCase={onOpenCase} compact={compactHome} />;
+      return <HomeSection onOpenCase={onOpenCase} />;
     case 'work':
       return <WorkSection onOpenCase={onOpenCase} />;
     case 'hobbies':

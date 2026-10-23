@@ -4,7 +4,7 @@ import { SECTIONS, type SectionId } from './sections';
 
 // The open section, place and case live in the query string (?s=work&place=valtech-office&case=valtech), so a link or
 // a reload opens the same view. The site is a static export, so this is client-side state only: the server always
-// serves the same page. A place (a building opened from the city) only exists with ?popups=slot.
+// serves the same page. A place is a building opened from the city.
 export interface ShellView {
   section: SectionId;
   openCase: string | null;
