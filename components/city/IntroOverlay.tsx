@@ -91,6 +91,10 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     let atLanding: { scrollX: number; scrollY: number; zoom: number } | null = null;
     // for the hand-over report: how many frames the intro drew and its longest stall, and the first frame of the reveal
     let frameCount = 0; let lastFrameAt = startAt; let longestGap = 0; let gapAt = 0; let revealLogged = false;
+    // the hand-over waits out a stall: once the city stands, a long task (a texture upload, a garbage collection, a
+    // phone catching its breath) must not eat the settle and the fade, so the time such a frame took beyond a normal
+    // one is taken back out of the clock, and the settle and fade are measured in frames the visitor can see
+    let stallMs = 0; let wasLanded = false;
     const fmt = (f: { scrollX: number; scrollY: number; zoom: number } | null) => f ? `${Math.round(f.scrollX)},${Math.round(f.scrollY)} zoom ${Number(f.zoom.toFixed(3))}` : 'none';
 
     // real mode: the city's own load; it may already be ready (a lab restart while the city is up, or a fast cache)
@@ -101,7 +105,7 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
 
     const momentAt = (nowMs: number): Moment => {
       const st = labRef.current;
-      const t = st.scrubMs !== null ? st.scrubMs : nowMs - startAt;
+      const t = st.scrubMs !== null ? st.scrubMs : nowMs - startAt - stallMs;
       let loadEnd: number;
       let pNow: number;
       if (st.mode === 'replay') {
@@ -132,7 +136,7 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       if (finished) return;
       finished = true;
       if (!revealLogged) logIntro('intro-reveal', `skipped: no frame was drawn between the settle and the end of the reveal (frame ${frameCount}, ${((performance.now() - lastFrameAt)).toFixed(0)} ms since the last one)`);
-      logIntro('intro-frames', `${frameCount} frames in ${((performance.now() - startAt) / 1000).toFixed(2)} s, longest gap ${Math.round(longestGap)} ms at ${(gapAt / 1000).toFixed(2)} s`);
+      logIntro('intro-frames', `${frameCount} frames in ${((performance.now() - startAt) / 1000).toFixed(2)} s, longest gap ${Math.round(longestGap)} ms at ${(gapAt / 1000).toFixed(2)} s, ${Math.round(stallMs)} ms of stalls waited out after the city stood`);
       mark('intro-done');
       if (!labRef.current.lab) markIntroSeen();
       window.dispatchEvent(new CustomEvent(INTRO_DONE_EVENT));
@@ -149,9 +153,12 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       const h = Math.max(1, Math.round(r.height * dpr * st.resScale));
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
       frameCount++;
-      if (nowMs - lastFrameAt > longestGap) { longestGap = nowMs - lastFrameAt; gapAt = nowMs - startAt; }
+      const gap = nowMs - lastFrameAt;
+      if (gap > longestGap) { longestGap = gap; gapAt = nowMs - startAt; }
+      if (wasLanded && gap > 150 && st.scrubMs === null) stallMs += gap - 100;
       lastFrameAt = nowMs;
       const m = momentAt(nowMs);
+      wasLanded = m.landed;
       if (m.done && st.scrubMs === null) { finish(); return; }
       // taps on a city that is not showing yet are dropped here; from the hand-over on they reach the city (the lab
       // keeps its controls reachable throughout)

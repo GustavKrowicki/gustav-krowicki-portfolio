@@ -1,0 +1,58 @@
+{
+  "banana_north": {
+    "file": "/game/pogicity/Characters/sheets/bananawalknorth.png",
+    "frameWidth": 20,
+    "frameHeight": 37,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "banana_south": {
+    "file": "/game/pogicity/Characters/sheets/bananawalksouth.png",
+    "frameWidth": 20,
+    "frameHeight": 37,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "banana_east": {
+    "file": "/game/pogicity/Characters/sheets/bananawalkeast.png",
+    "frameWidth": 20,
+    "frameHeight": 37,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "banana_west": {
+    "file": "/game/pogicity/Characters/sheets/bananawalkwest.png",
+    "frameWidth": 20,
+    "frameHeight": 37,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "apple_north": {
+    "file": "/game/pogicity/Characters/sheets/applewalknorth.png",
+    "frameWidth": 24,
+    "frameHeight": 29,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "apple_south": {
+    "file": "/game/pogicity/Characters/sheets/applewalksouth.png",
+    "frameWidth": 24,
+    "frameHeight": 29,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "apple_east": {
+    "file": "/game/pogicity/Characters/sheets/applewalkeast.png",
+    "frameWidth": 24,
+    "frameHeight": 29,
+    "frames": 31,
+    "frameRate": 33
+  },
+  "apple_west": {
+    "file": "/game/pogicity/Characters/sheets/applewalkwest.png",
+    "frameWidth": 24,
+    "frameHeight": 29,
+    "frames": 31,
+    "frameRate": 33
+  }
+}

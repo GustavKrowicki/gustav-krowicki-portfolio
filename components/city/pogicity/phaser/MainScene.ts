@@ -40,7 +40,8 @@ import {
   getBuildingFootprint,
   BuildingDefinition,
 } from "@/lib/city/buildings";
-import { loadGifAsAnimation, playGifAnimation } from "./GifLoader";
+import { playGifAnimation } from "./GifLoader";
+import NPC_SHEETS from "@/lib/city/npcSheets.json";
 import { PlayerController } from "./PlayerController";
 import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
@@ -289,6 +290,12 @@ export class MainScene extends Phaser.Scene {
       this.load.image(`lamp_${type}_lit`, spec.lit);
     }
 
+    // The people on the streets: sheets baked from the pogicity GIFs (art/npc/gif-sheets.py). They used to be decoded
+    // in the browser after the scene stood, a half-second block right in the load intro's hand-over.
+    for (const [key, sheet] of Object.entries(NPC_SHEETS)) {
+      this.load.spritesheet(key, sheet.file, { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
+    }
+
     // Load car textures
     const carTypes = ["jeep", "taxi"];
     const directions = ["n", "s", "e", "w"];
@@ -407,24 +414,20 @@ export class MainScene extends Phaser.Scene {
   }
 
   private async loadCharacterAnimations(): Promise<void> {
-    const charTypes = ["banana", "apple"];
-    const charDirs = ["north", "south", "east", "west"];
-
-    const loadPromises: Promise<void>[] = [];
-
-    for (const char of charTypes) {
-      for (const dir of charDirs) {
-        const key = `${char}_${dir}`;
-        const url = `/game/pogicity/Characters/${char}walk${dir}.gif`;
-        loadPromises.push(loadGifAsAnimation(this, key, url));
-      }
+    // The people's walk cycles, from the sheets preload() brought in (lib/city/npcSheets.json)
+    for (const [key, sheet] of Object.entries(NPC_SHEETS)) {
+      if (!this.textures.exists(key) || this.anims.exists(`${key}_anim`)) continue;
+      this.anims.create({
+        key: `${key}_anim`,
+        frames: this.anims.generateFrameNumbers(key, { start: 0, end: sheet.frames - 1 }),
+        frameRate: sheet.frameRate,
+        repeat: -1,
+      });
     }
 
-    // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit); the GIFs are NPCs.
-    loadPromises.push(loadAvatar3dSprites(this));
-
     try {
-      await Promise.all(loadPromises);
+      // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit)
+      await loadAvatar3dSprites(this);
       this.gifsLoaded = true;
       if (this.characters.length > 0) {
         this.renderCharacters();
