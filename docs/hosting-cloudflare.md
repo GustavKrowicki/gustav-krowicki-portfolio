@@ -444,7 +444,7 @@ Do a test of each class change on a preview before you deploy it.
 
 ## 11. Changes for daily work
 
-- A push to `main` does not deploy the site until you add the GitHub Actions workflow.
+- A push to `main` deploys the site to www through `.github/workflows/cloudflare-deploy.yml`.
 - `next start` does not work. Use `npm run cf:dev`.
 - Do not use `npx cf init .`, `npx cf build`, or `npx cf dev`. Use the `cf:` scripts in `package.json`.
 - Previews and local builds use the original images. Only `npm run cf:build:live` uses Image Transformations.
