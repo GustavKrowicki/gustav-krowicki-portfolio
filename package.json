@@ -17,7 +17,7 @@
     "cf:dev": "cf-wrangler dev --port 3100",
     "cf:deploy": "npm run cf:build:live && cf deploy --prebuilt",
     "cf:preview:build": "NEXT_PUBLIC_POSTHOG_KEY= next build && CLOUDFLARE_PREVIEW_BUILD=true cf-wrangler build",
-    "cf:preview": "npm run cf:preview:build && cf previews deploy --prebuilt"
+    "cf:preview": "npm run cf:preview:build && CLOUDFLARE_PREVIEW_BUILD=true cf previews deploy --prebuilt"
   },
   "dependencies": {
     "@base-ui/react": "^1.8.0",
