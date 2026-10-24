@@ -69,102 +69,109 @@ export default function AvatarSection() {
     document.documentElement.dataset.avatarReadyMs = String(ms);
   };
 
+  // Phones get a smaller figure, so the slots and the bottom bar fit the half-height sheet
+  const [figureHeight] = useState(() =>
+    typeof window !== 'undefined' && !window.matchMedia('(min-width: 768px)').matches ? 150 : 220
+  );
+
   const current = AVATAR_SLOTS.find((s) => s.id === slot)!;
 
+  // Phones: the bar sits at the bottom of the sheet; desktop: right under the slots
   return (
-    <div className="px-6 py-6">
-      <h2 className="text-2xl font-semibold text-neutral-900">Create your own avatar</h2>
-      <p className="mt-2 text-sm leading-relaxed text-neutral-600">
-        Dress me in my own clothes, then walk the city with it.
-      </p>
+    <div className="flex min-h-full flex-col md:min-h-0">
+      <div className="flex-1 px-4 pt-4 pb-4 md:px-6 md:pt-6">
+        <h2 className="text-xl font-semibold text-neutral-900 md:text-2xl">Create your own avatar</h2>
+        {/* phones: the title and the Walk button say it, and the sheet has no room for a second line */}
+        <p className="mt-2 hidden text-sm leading-relaxed text-neutral-600 md:block">
+          Dress me in my own clothes, then walk the city with it.
+        </p>
 
-      {/* Avatar beside the slots, so a half-height panel shows both without scrolling */}
-      <div className="mt-4 flex items-start gap-4">
-        <div className="flex shrink-0 flex-col items-center rounded-lg bg-[#e9e4da] px-2 pb-3">
-          <AvatarLayerView choice={choice} expression={smile ? 'smile' : 'neutral'} onReady={onReady} />
-          <span className="-mt-1 max-w-[7rem] truncate rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
-            {name.trim() || 'Your name'}
-          </span>
-          <span className="mt-2 max-w-[7rem] text-center text-[11px] leading-tight text-neutral-500">
-            This is you in the city
-          </span>
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <div role="tablist" aria-label="Avatar slots" className="flex flex-wrap gap-1.5">
-            {AVATAR_SLOTS.map((s) => (
-              <button
-                key={s.id}
-                type="button"
-                role="tab"
-                aria-selected={s.id === slot}
-                onClick={() => setSlot(s.id)}
-                className={`rounded-full px-3 py-1 text-sm ${
-                  s.id === slot ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
-                }`}
-              >
-                {s.label}
-              </button>
-            ))}
+        {/* Avatar beside the slots, so a half-height panel shows both without scrolling */}
+        <div className="mt-3 flex items-start gap-3 md:mt-4 md:gap-4">
+          <div className="flex shrink-0 flex-col items-center rounded-lg bg-[#e9e4da] px-2 pb-2 md:pb-3">
+            <AvatarLayerView choice={choice} height={figureHeight} expression={smile ? 'smile' : 'neutral'} onReady={onReady} />
+            <span className="-mt-1 max-w-[7rem] truncate rounded bg-neutral-900 px-2 py-0.5 text-xs font-medium text-white">
+              {name.trim() || 'Your name'}
+            </span>
+            <button
+              type="button"
+              aria-pressed={smile}
+              onClick={() => setSmile((v) => !v)}
+              className={`mt-2 rounded-full px-3 py-1 text-xs ${smile ? 'bg-neutral-900 text-white' : 'bg-white/70 text-neutral-600'}`}
+            >
+              Smile
+            </button>
           </div>
 
-          <ul role="tabpanel" aria-label={current.label} className="mt-3 grid grid-cols-2 gap-2">
-            {current.options.map((o) => {
-              const selected = choice[current.id] === o.id;
-              return (
-                <li key={o.id}>
-                  <button
-                    type="button"
-                    aria-pressed={selected}
-                    onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
-                    className={`flex h-[4.5rem] w-full flex-col items-center justify-center gap-0.5 rounded-lg border bg-[#FDFDFD] text-xs ${
-                      selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
-                    }`}
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element -- tiny static PNG, no resizing needed */}
-                    <img
-                      src={avatarThumbUrl(o.id)}
-                      alt=""
-                      width={40}
-                      height={40}
-                      className="h-10 w-10 object-contain"
-                    />
-                    <span className="px-1 text-center leading-tight">{o.label}</span>
-                  </button>
-                </li>
-              );
-            })}
-          </ul>
+          <div className="min-w-0 flex-1">
+            <div role="tablist" aria-label="Avatar slots" className="flex flex-wrap gap-1.5">
+              {AVATAR_SLOTS.map((s) => (
+                <button
+                  key={s.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={s.id === slot}
+                  onClick={() => setSlot(s.id)}
+                  className={`rounded-full px-3 py-1 text-sm ${
+                    s.id === slot ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600 hover:bg-neutral-200'
+                  }`}
+                >
+                  {s.label}
+                </button>
+              ))}
+            </div>
 
-          <button
-            type="button"
-            aria-pressed={smile}
-            onClick={() => setSmile((v) => !v)}
-            className={`mt-3 rounded-full px-3 py-1 text-xs ${smile ? 'bg-neutral-900 text-white' : 'bg-neutral-100 text-neutral-600'}`}
-          >
-            Smile
-          </button>
-          <label className="mt-3 block">
-            <span className="text-xs font-medium text-neutral-500">Name tag</span>
-            <input
-              type="text"
-              value={name}
-              maxLength={16}
-              onChange={(event) => setName(event.target.value)}
-              placeholder="Your name"
-              className="mt-1 w-full rounded-lg border border-neutral-300 bg-white px-3 py-1.5 text-sm text-neutral-900 focus:border-neutral-900 focus:outline-none"
-            />
-          </label>
+            <ul role="tabpanel" aria-label={current.label} className="mt-3 grid grid-cols-2 gap-2">
+              {current.options.map((o) => {
+                const selected = choice[current.id] === o.id;
+                return (
+                  <li key={o.id}>
+                    <button
+                      type="button"
+                      aria-pressed={selected}
+                      onClick={() => setChoice((c) => ({ ...c, [current.id]: o.id }))}
+                      className={`flex h-14 w-full flex-col items-center justify-center gap-0.5 rounded-lg border bg-[#FDFDFD] text-xs md:h-[4.5rem] ${
+                        selected ? 'border-neutral-900 text-neutral-900' : 'border-neutral-200 text-neutral-500 hover:border-neutral-400'
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element -- tiny static PNG, no resizing needed */}
+                      <img
+                        src={avatarThumbUrl(o.id)}
+                        alt=""
+                        width={40}
+                        height={40}
+                        className="h-8 w-8 object-contain md:h-10 md:w-10"
+                      />
+                      <span className="px-1 text-center leading-tight">{o.label}</span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
         </div>
       </div>
 
-      <button
-        type="button"
-        onClick={() => window.dispatchEvent(new Event(AVATAR_WALK_EVENT))}
-        className="mt-5 w-full rounded-full bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
-      >
-        Walk the city as this avatar
-      </button>
+      {/* Name and Walk stay at the bottom of the panel, so a phone sees them without a scroll (POR-48) */}
+      <div className="sticky bottom-0 flex items-center gap-2 border-t border-neutral-200 bg-[#FDFDFD] px-4 py-3 md:px-6">
+        <input
+          type="text"
+          value={name}
+          maxLength={16}
+          onChange={(event) => setName(event.target.value)}
+          placeholder="Your name"
+          aria-label="Name tag"
+          // 16 px text, so iPhone Safari does not zoom in on focus
+          className="min-w-0 flex-1 rounded-full border border-neutral-300 bg-white px-4 py-2 text-base text-neutral-900 focus:border-neutral-900 focus:outline-none md:text-sm"
+        />
+        <button
+          type="button"
+          onClick={() => window.dispatchEvent(new Event(AVATAR_WALK_EVENT))}
+          className="shrink-0 rounded-full bg-neutral-900 px-4 py-2.5 text-sm font-medium text-white hover:bg-neutral-700"
+        >
+          Walk the city
+        </button>
+      </div>
     </div>
   );
 }
