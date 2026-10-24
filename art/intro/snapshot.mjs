@@ -33,22 +33,51 @@ await page.goto(`${base}/new?e2e=1&hour=13&intro=0`, { waitUntil: "domcontentloa
 await page.waitForFunction(() => performance.getEntriesByName("city-ready").length > 0 && window.__CITY_E2E__?.getCameraState?.() !== null, null, { timeout: 180_000 });
 // let the landing (close-up, glide, walk ring) run out, then take the avatar and every hint away
 await page.waitForTimeout(3500);
-await page.evaluate(() => {
+// The camera must sit at zoom 1, scroll (0, 0): then a canvas pixel is a world pixel, and the intro can place the
+// image where the city draws. The landing leaves a follow on the avatar and a pan or zoom still easing; both would
+// move the camera back onto the avatar within the next second, and the snapshot would land 330 px off (it once did).
+const parkCamera = () => page.evaluate(() => {
   const api = window.__CITY_E2E__;
   api.stopAdventure();
   const scene = api.getScene();
+  const camera = scene.cameras.main;
   scene.tweens.killAll();
+  camera.stopFollow();
+  camera.panEffect.reset();
+  camera.zoomEffect.reset();
   scene.walkHintPill?.destroy();
   scene.walkHintPill = null;
   scene.walkHover?.setVisible(false);
   scene.touchMarksGfx?.setVisible(false);
   scene.statsText?.setVisible(false);
-  scene.cameras.main.setZoom(1);
-  scene.cameras.main.setScroll(0, 0);
+  camera.setZoom(1);
+  camera.setScroll(0, 0);
+  // MainScene.updateCamera writes its own base scroll back every frame; it must say (0, 0) too
+  scene.baseScrollX = 0;
+  scene.baseScrollY = 0;
+  scene.zoomLevel = 1;
 });
+const cameraAt = () => page.evaluate(() => {
+  const camera = window.__CITY_E2E__.getScene().cameras.main;
+  return { scrollX: camera.scrollX, scrollY: camera.scrollY, zoom: camera.zoom, following: Boolean(camera._follow) };
+});
+await parkCamera();
 await page.waitForTimeout(1200);
+let cam = await cameraAt();
+if (cam.scrollX !== 0 || cam.scrollY !== 0 || cam.zoom !== 1) {
+  console.log(`camera moved after parking (${JSON.stringify(cam)}), parking it again`);
+  await parkCamera();
+  await page.waitForTimeout(1200);
+  cam = await cameraAt();
+}
 await page.evaluate(() => window.__CITY_E2E__.pauseGame());
 await page.waitForTimeout(300);
+cam = await cameraAt();
+if (cam.scrollX !== 0 || cam.scrollY !== 0 || cam.zoom !== 1) {
+  await browser.close();
+  throw new Error(`camera not at zoom 1, scroll (0, 0) before the snapshot: ${JSON.stringify(cam)}`);
+}
+console.log(`camera parked: ${JSON.stringify(cam)}`);
 
 const snap = () => page.evaluate(() => new Promise((resolve) => {
   const scene = window.__CITY_E2E__.getScene();
