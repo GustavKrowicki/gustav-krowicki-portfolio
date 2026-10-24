@@ -11,7 +11,7 @@ import { HOUR_OF, type TimeOfDay } from '@/lib/city/nightSchedule';
 import { GAME_HEIGHT, GAME_WIDTH, closeUpFraming, fitFraming, isPhoneViewport, lerpFraming, stageFor, streetFraming, worldFromContainer } from '@/lib/intro/camera';
 import { labStore, loadCurve, markIntroSeen, useLabState } from '@/lib/intro/labState';
 import { presetById } from '@/lib/intro/presets';
-import { getCityFraming, getCityLoad, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, mark, overallProgress, subscribeCityLoad } from '@/lib/intro/progress';
+import { getCityFraming, getCityLoad, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, logIntro, mark, overallProgress, setIntroFrame, subscribeCityLoad } from '@/lib/intro/progress';
 import { IntroRenderer } from '@/lib/intro/renderer';
 
 const easeOut = (t: number) => 1 - Math.pow(1 - Math.min(1, Math.max(0, t)), 3);
@@ -89,6 +89,9 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     // the framing the overlay was on when the load ended: it eases from there onto the city's real camera over the
     // settle, so the reveal fades between two frames of the same place
     let atLanding: { scrollX: number; scrollY: number; zoom: number } | null = null;
+    // for the hand-over report: how many frames the intro drew and its longest stall, and the first frame of the reveal
+    let frameCount = 0; let lastFrameAt = startAt; let longestGap = 0; let gapAt = 0; let revealLogged = false;
+    const fmt = (f: { scrollX: number; scrollY: number; zoom: number } | null) => f ? `${Math.round(f.scrollX)},${Math.round(f.scrollY)} zoom ${Number(f.zoom.toFixed(3))}` : 'none';
 
     // real mode: the city's own load; it may already be ready (a lab restart while the city is up, or a fast cache)
     const unsubscribe = subscribeCityLoad(() => { /* read each frame */ });
@@ -128,6 +131,8 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
     const finish = () => {
       if (finished) return;
       finished = true;
+      if (!revealLogged) logIntro('intro-reveal', `skipped: no frame was drawn between the settle and the end of the reveal (frame ${frameCount}, ${((performance.now() - lastFrameAt)).toFixed(0)} ms since the last one)`);
+      logIntro('intro-frames', `${frameCount} frames in ${((performance.now() - startAt) / 1000).toFixed(2)} s, longest gap ${Math.round(longestGap)} ms at ${(gapAt / 1000).toFixed(2)} s`);
       mark('intro-done');
       if (!labRef.current.lab) markIntroSeen();
       window.dispatchEvent(new CustomEvent(INTRO_DONE_EVENT));
@@ -143,6 +148,9 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       const w = Math.max(1, Math.round(r.width * dpr * st.resScale));
       const h = Math.max(1, Math.round(r.height * dpr * st.resScale));
       if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; }
+      frameCount++;
+      if (nowMs - lastFrameAt > longestGap) { longestGap = nowMs - lastFrameAt; gapAt = nowMs - startAt; }
+      lastFrameAt = nowMs;
       const m = momentAt(nowMs);
       if (m.done && st.scrubMs === null) { finish(); return; }
       // taps on a city that is not showing yet are dropped here; from the hand-over on they reach the city (the lab
@@ -162,6 +170,11 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       if (!m.landed) atLanding = planned;
       const framing = live ? lerpFraming(atLanding ?? planned, live, easeOut(m.after / Math.max(1, st.settleMs))) : planned;
       if (debug) (window as unknown as { __introFraming?: typeof framing }).__introFraming = framing;
+      setIntroFrame({ framing, stage, root: { left: r.left, top: r.top, width: r.width, height: r.height }, canvas: { width: w, height: h }, dpr, reveal: m.reveal });
+      if (m.reveal > 0 && !revealLogged) {
+        revealLogged = true;
+        logIntro('intro-reveal', `${((nowMs - startAt) / 1000).toFixed(2)} s into the intro, frame ${frameCount}; planned ${fmt(atLanding ?? planned)}; camera ${fmt(live)}; drawing ${fmt(framing)}; root ${Math.round(r.width)}x${Math.round(r.height)} at ${Math.round(r.left)},${Math.round(r.top)}; canvas ${w}x${h} @${dpr}; stage ${stage.scale.toFixed(4)} ${stage.offX.toFixed(1)},${stage.offY.toFixed(1)}`);
+      }
       const w2s = worldFromContainer(framing, stage);
       const cssPerCanvas = r.width / w;
       renderer?.render({
@@ -195,6 +208,7 @@ export default function IntroOverlay({ onDone }: { onDone?: () => void }) {
       cancelAnimationFrame(raf);
       window.clearTimeout(safety);
       window.removeEventListener('pointermove', onPointer);
+      setIntroFrame(null);
       unsubscribe();
     };
     // the loop reads live settings through labRef; only a restart (run) or the look's camera remounts it

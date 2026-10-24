@@ -82,6 +82,7 @@ export function overallProgress(s: CityLoadState, elapsedMs: number): number {
 // Stage marks for the Performance panel and for measuring (the brief's "stage table")
 export function mark(name: string): void {
   try { performance.mark(name); } catch { /* old browser */ }
+  logIntro(`mark ${name}`);
 }
 
 // The intro tells the city when its reveal has ended, so the landing glide starts from a city the visitor can see
@@ -104,16 +105,32 @@ export function getCityFraming(): CityFraming | null {
   try { return framingReader?.() ?? null; } catch { return null; }
 }
 
+// The overlay's last drawn frame (IntroOverlay sets it every frame), for the report's geometry check: CityViewer
+// compares where the intro draws the spawn tile on the page with where the city's canvas puts it
+export interface IntroFrame {
+  framing: CityFraming;
+  stage: { scale: number; offX: number; offY: number };
+  root: { left: number; top: number; width: number; height: number };
+  canvas: { width: number; height: number };
+  dpr: number;
+  reveal: number;
+}
+let introFrame: IntroFrame | null = null;
+export function setIntroFrame(frame: IntroFrame | null): void { introFrame = frame; }
+export function getIntroFrame(): IntroFrame | null { return introFrame; }
+
 // The hand-over report: what the city did around the hand-over, written by CityViewer (camera and avatar at
 // city-ready, at intro-done and 3 s later; taps, touches and keys on the page; the avatar's first moves) and by
-// PlayerController (every entry point that moves the avatar). The lab's Measure tab shows it with a Copy button, so a
-// phone can tell what moved the avatar or the camera; window.__introLog for the tests. Capped, and closed by
-// closeIntroLog 20 s after city-ready.
+// PlayerController (every entry point that moves the avatar), the overlay (the first frame of the reveal, its frame
+// count and longest stall), the stage marks, the city's first drawn frames after it stands and a geometry check (the
+// spawn tile on the page, as the city's canvas puts it and as the intro draws it). The lab's Measure tab and
+// /new?report=1 show it with a Copy button, so a phone can tell what moved the avatar or the camera, or which side drew
+// the wrong place; window.__introLog for the tests. Capped, and closed by closeIntroLog 20 s after city-ready.
 export interface IntroLogEntry { t: number; what: string; detail?: string }
 const introLog: IntroLogEntry[] = [];
 let introLogOpen = true;
 export function logIntro(what: string, detail?: string): void {
-  if (!introLogOpen || introLog.length >= 80) return;
+  if (!introLogOpen || introLog.length >= 160) return;
   introLog.push({ t: Math.round(performance.now()), what, detail });
   try { (window as unknown as { __introLog?: IntroLogEntry[] }).__introLog = introLog; } catch { /* no window */ }
 }
