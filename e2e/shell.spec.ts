@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "@playwright/test";
 
-// The one-page portfolio shell at /new: the panel (rail + content) beside the live city.
+// The one-page portfolio at /: the panel (rail + content) beside the live city.
 // The checks use roles and state, not section text: the sections are placeholders that step 2 replaces.
 
 const canvas = (page: Page) => page.locator('[data-testid="city-canvas"] canvas');
@@ -11,7 +11,7 @@ async function canvasSize(page: Page) {
 }
 
 test("panel and rail sit beside the city", async ({ page }) => {
-  await page.goto("/new");
+  await page.goto("/");
   const rail = page.getByRole("navigation", { name: "Portfolio sections" });
 
   await expect(page.getByTestId("shell-panel")).toBeVisible();
@@ -23,7 +23,7 @@ test("panel and rail sit beside the city", async ({ page }) => {
 });
 
 test("a case study opens in the panel and Back returns to the list", async ({ page }) => {
-  await page.goto("/new");
+  await page.goto("/");
   const panel = page.getByTestId("shell-panel");
 
   await page.getByRole("navigation", { name: "Portfolio sections" }).getByRole("button", { name: "Work" }).click();
@@ -38,7 +38,7 @@ test("a case study opens in the panel and Back returns to the list", async ({ pa
 });
 
 test("closing the panel gives the city more room", async ({ page }, testInfo) => {
-  await page.goto("/new");
+  await page.goto("/");
   // Desktop: the panel is a column left of the city. Phones: a sheet under it.
   const axis = testInfo.project.name.startsWith("mobile") ? "height" : "width";
 
@@ -54,7 +54,7 @@ test("closing the panel gives the city more room", async ({ page }, testInfo) =>
 });
 
 test("the URL keeps the open section and case", async ({ page }) => {
-  await page.goto("/new?s=work&case=lego");
+  await page.goto("/?s=work&case=lego");
   const panel = page.getByTestId("shell-panel");
   const rail = page.getByRole("navigation", { name: "Portfolio sections" });
 
@@ -78,7 +78,7 @@ test("the URL keeps the open section and case", async ({ page }) => {
 });
 
 test("an unknown section or case in the URL falls back to Home", async ({ page }) => {
-  await page.goto("/new?s=nope&case=nope");
+  await page.goto("/?s=nope&case=nope");
   const rail = page.getByRole("navigation", { name: "Portfolio sections" });
   await expect(rail.getByRole("button", { name: "Home" })).toHaveAttribute("aria-current", "page");
   await expect(page.getByTestId("shell-panel").getByRole("button", { name: /^Back to/ })).toHaveCount(0);
@@ -90,7 +90,7 @@ type SlotScene = { ready?: boolean; openInPlace: (id: string) => boolean; peek: 
 type SlotWindow = { __CITY_E2E__?: { getScene: () => SlotScene | null; pauseGame: () => boolean } };
 
 test("a building's place opens in the panel, and Back goes one step at a time", async ({ page }) => {
-  await page.goto("/new?e2e=1");
+  await page.goto("/?e2e=1");
   const panel = page.getByTestId("shell-panel");
   await page.waitForFunction(() => !!(window as unknown as SlotWindow).__CITY_E2E__?.getScene()?.ready);
 

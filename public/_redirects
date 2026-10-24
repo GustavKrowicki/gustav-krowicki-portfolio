@@ -1,21 +1,23 @@
 # Cloudflare applies static rules only when they come before every dynamic (splat) rule, so the
-# static rules are listed first and the two splats last.
+# static rules are listed first and the two splats last. A target without a query keeps the incoming
+# query string (UTM tags on CV links, ?s= and ?case= on old /new links).
 
-# The classic site at / was removed; the one-page portfolio at /new replaces / at launch.
-/  /new  307
+# The portfolio moved from /new to /; the standalone city page is now the city inside the portfolio.
+/new   /  307
+/city  /  307
 
 # The previous portfolio used /projects/<slug>; those URLs still get visits.
-/projects/internship-at-valtech-2024  /new?s=work&case=valtech  307
+/projects/internship-at-valtech-2024  /?s=work&case=valtech  307
 
 # The classic site's pages, removed in the redo; they still get visits and links.
-/work/valtech        /new?s=work&case=valtech        307
-/work/lego           /new?s=work&case=lego           307
-/work/cate-it        /new?s=work&case=cate-it        307
-/work/viz-generator  /new?s=work&case=viz-generator  307
-/work                /new?s=work                     307
-/about               /new?s=hobbies                  307
-/contact             /new                            307
+/work/valtech        /?s=work&case=valtech        307
+/work/lego           /?s=work&case=lego           307
+/work/cate-it        /?s=work&case=cate-it        307
+/work/viz-generator  /?s=work&case=viz-generator  307
+/work                /?s=work                     307
+/about               /?s=hobbies                  307
+/contact             /                            307
 
 # Dynamic rules
-/projects/*  /new?s=work  307
-/work/*      /new?s=work  307
+/projects/*  /?s=work  307
+/work/*      /?s=work  307
