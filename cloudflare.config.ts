@@ -6,6 +6,7 @@ export default defineConfig({
   worker: {
     name: "portfolio",
     compatibilityDate: "2026-10-14",
+    domains: ["www.gustavkrowicki.com"],
     previewUrls: true,
     observability: { enabled: true },
     assets: {
