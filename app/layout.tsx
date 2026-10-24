@@ -91,6 +91,7 @@ const geistMono = localFont({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.gustavkrowicki.com"),
   title: {
     default: "Gustav Krowicki - Product Designer",
     template: "%s | Gustav Krowicki"

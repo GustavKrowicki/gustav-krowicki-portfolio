@@ -53,7 +53,7 @@ async function callCityHook<T>(
 }
 
 export async function gotoCityE2E(page: Page) {
-  await page.goto("/city?e2e=1");
+  await page.goto("/?e2e=1");
   await waitForCityHarness(page);
 }
 

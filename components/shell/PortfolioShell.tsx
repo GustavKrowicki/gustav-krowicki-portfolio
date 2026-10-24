@@ -38,7 +38,7 @@ const isPhoneWidth = () => !window.matchMedia('(min-width: 768px)').matches;
 // One slot (Figma board F): a building tapped in the city opens its place in the same panel, a case opens over
 // the place, and Back goes one step: case, place, section.
 export default function PortfolioShell() {
-  // ?e2e=1 exposes the city's test API (window.__CITY_E2E__), as on /city; CityViewer renders on the client only
+  // ?e2e=1 exposes the city's test API (window.__CITY_E2E__); CityViewer renders on the client only
   const [e2eMode] = useState(() => typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('e2e') === '1');
   const [section, setSection] = useState<SectionId>('home');
   // The load intro (POR-40) over the city area: on when the page asks for it (lib/intro/labState.ts)
