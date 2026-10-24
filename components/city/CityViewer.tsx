@@ -21,6 +21,7 @@ import { PLACE_WALK_IN_EVENT } from "@/lib/popupMode";
 import VirtualJoystick from "./VirtualJoystick";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
+import IntroReportPill from "./IntroReportPill";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
@@ -33,6 +34,8 @@ import {
   trackBeatChoice,
   trackFind,
 } from "@/lib/analytics";
+import { closeIntroLog, getIntroFrame, INTRO_DONE_EVENT, INTRO_REPLAY_EVENT, isIntroActive, logIntro, reportCityBoot, reportCityReady, setCityFramingReader } from "@/lib/intro/progress";
+import { worldFromContainer } from "@/lib/intro/camera";
 
 // Dynamically import GameBoard to avoid SSR issues
 const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
@@ -488,6 +491,7 @@ export default function CityViewer({
 
           // Player position changed (for auto-walk state + walkable directions)
           scene.events.on("playerPositionChanged", (data: PlayerData) => {
+            if (moveLogLeftRef.current > 0) { moveLogLeftRef.current--; logIntro("avatar.at", `${data.gridX},${data.gridY} ${data.state}`); }
             if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
               autoWalkTargetRef.current = null;
             }
@@ -871,26 +875,155 @@ export default function CityViewer({
   // a link opens on it, does its own focus.
   const avatarTabOpenRef = useRef(avatarTabOpen);
   avatarTabOpenRef.current = avatarTabOpen;
+  // true once the landing camera is set, so the overlay reads a camera that is where a first visit starts
+  const landedRef = useRef(false);
+  // /?report=1: the hand-over report pill on the real page (components/city/IntroReportPill.tsx)
+  const [reportPill, setReportPill] = useState(false);
+  useEffect(() => { if (isShell && /[?&]report=1(&|$)/.test(window.location.search)) setReportPill(true); }, [isShell]);
+  // the hand-over report (lib/intro/progress.ts logIntro): the avatar's first moves after it stands
+  const moveLogLeftRef = useRef(0);
   useEffect(() => {
     if (!isShell) return;
     let timer = 0;
+    const timers: number[] = [];
+    type ReportScene = {
+      playerController?: { getPosition(): { gridX: number; gridY: number; worldX: number; worldY: number }; getState(): string } | null;
+      cameras?: { main: { scrollX: number; scrollY: number; zoom: number; width: number; height: number } };
+      events?: { on(name: string, fn: () => void): unknown; off(name: string, fn: () => void): unknown };
+      time?: { now: number };
+    };
+    const reportScene = () => gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as ReportScene | undefined;
+    const r1 = (n: number) => Math.round(n * 10) / 10;
+    const where = () => {
+      const cam = gameBoardRef.current?.getCameraState();
+      const sc = reportScene();
+      const real = sc?.cameras?.main;
+      const pc = sc?.playerController;
+      const p = pc?.getPosition();
+      const box = viewerRootRef.current?.getBoundingClientRect();
+      // the camera the overlay is told about (the scene's base scroll) and, when it differs, the one Phaser draws with
+      const drift = cam && real && (Math.abs(cam.scrollX - real.scrollX) > 0.5 || Math.abs(cam.scrollY - real.scrollY) > 0.5) ? ` (drawn at ${r1(real.scrollX)},${r1(real.scrollY)})` : "";
+      return `camera ${cam ? `${cam.scrollX},${cam.scrollY} zoom ${cam.zoom}` : "none"}${drift}; avatar ${p ? `${p.gridX},${p.gridY} ${pc?.getState()}` : "none"}; city ${Math.round(box?.width ?? 0)}x${Math.round(box?.height ?? 0)} of ${window.innerWidth}x${window.innerHeight}`;
+    };
+    // the geometry check: where the city's canvas puts the spawn tile on the page against where the intro draws it,
+    // with everything both of them computed that from (a phone that shows the two frames in different places tells
+    // here which side is off, and by how much)
+    const geometry = () => {
+      const game = gameBoardRef.current?.getGameInstance() as
+        | { canvas?: HTMLCanvasElement; scale?: { displaySize: { width: number; height: number }; parentSize: { width: number; height: number } }; loop?: { frame: number; actualFps: number; inFocus?: boolean; delta?: number; rawDelta?: number; _coolDown?: number } }
+        | undefined;
+      const sc = reportScene();
+      const cam = sc?.cameras?.main;
+      const p = sc?.playerController?.getPosition();
+      const box = viewerRootRef.current?.getBoundingClientRect();
+      const cr = game?.canvas?.getBoundingClientRect();
+      if (!cam || !p || !box || !cr) return "no city yet";
+      // Phaser: internal px = (world - scroll - mid) * zoom + mid, and the canvas is scaled into its box
+      const cityX = cr.left - box.left + ((p.worldX - cam.scrollX - cam.width / 2) * cam.zoom + cam.width / 2) * (cr.width / cam.width);
+      const cityY = cr.top - box.top + ((p.worldY - cam.scrollY - cam.height / 2) * cam.zoom + cam.height / 2) * (cr.height / cam.height);
+      const f = getIntroFrame();
+      let intro = "intro gone";
+      if (f && f.root.width > 0) {
+        const w2s = worldFromContainer(f.framing, f.stage);
+        const introX = f.root.left - box.left + (p.worldX - w2s.offX) / w2s.scale;
+        const introY = f.root.top - box.top + (p.worldY - w2s.offY) / w2s.scale;
+        intro = `intro ${r1(introX)},${r1(introY)} (gap ${r1(introX - cityX)},${r1(introY - cityY)}); intro root ${r1(f.root.width)}x${r1(f.root.height)} at ${r1(f.root.left - box.left)},${r1(f.root.top - box.top)}, canvas ${f.canvas.width}x${f.canvas.height} @${f.dpr}, drawing ${Math.round(f.framing.scrollX)},${Math.round(f.framing.scrollY)} zoom ${Number(f.framing.zoom.toFixed(3))}, stage ${f.stage.scale.toFixed(4)} ${r1(f.stage.offX)},${r1(f.stage.offY)}, reveal ${f.reveal.toFixed(2)}`;
+      }
+      const vv = window.visualViewport;
+      const sz = game?.scale;
+      return `spawn on the page: city ${r1(cityX)},${r1(cityY)}; ${intro}; city canvas ${r1(cr.width)}x${r1(cr.height)} at ${r1(cr.left - box.left)},${r1(cr.top - box.top)} (phaser display ${sz ? `${r1(sz.displaySize.width)}x${r1(sz.displaySize.height)} in ${r1(sz.parentSize.width)}x${r1(sz.parentSize.height)}` : "?"}, internal ${cam.width}x${cam.height}); drawn camera ${r1(cam.scrollX)},${r1(cam.scrollY)} zoom ${Number(cam.zoom.toFixed(3))}; viewport ${vv ? `${r1(vv.width)}x${r1(vv.height)} scale ${vv.scale} at ${r1(vv.offsetLeft)},${r1(vv.offsetTop)}` : "none"}, dpr ${window.devicePixelRatio}; phaser frame ${game?.loop?.frame ?? "?"} fps ${Math.round(game?.loop?.actualFps ?? 0)} (delta ${r1(game?.loop?.delta ?? 0)} of ${r1(game?.loop?.rawDelta ?? 0)} ms, ${game?.loop?.inFocus === false ? "not in focus" : "in focus"}, cool down ${game?.loop?._coolDown ?? "?"}), scene clock ${sc?.time ? (sc.time.now / 1000).toFixed(2) : "?"} s`;
+    };
+    // the city's first frames drawn after it stands: when they came, and with which camera
+    let renderOff: (() => void) | null = null;
+    const watchRenders = () => {
+      const sc = reportScene();
+      const game = gameBoardRef.current?.getGameInstance() as { loop?: { frame: number } } | undefined;
+      if (!sc?.events) return;
+      renderOff?.();
+      let n = 0;
+      const onRender = () => {
+        n++;
+        const real = sc.cameras?.main;
+        logIntro(`render#${n}`, `phaser frame ${game?.loop?.frame ?? "?"}; drawn camera ${real ? `${r1(real.scrollX)},${r1(real.scrollY)} zoom ${Number(real.zoom.toFixed(3))}` : "none"}`);
+        if (n >= 3) renderOff?.();
+      };
+      sc.events.on("render", onRender);
+      renderOff = () => { sc.events?.off("render", onRender); renderOff = null; };
+    };
+    const landed = (how: string) => {
+      landedRef.current = true;
+      moveLogLeftRef.current = 12;
+      logIntro("city-ready", `${how}; ${where()}`);
+      logIntro("geometry", geometry());
+      watchRenders();
+      timers.push(window.setTimeout(() => { logIntro("city-ready+3s", where()); logIntro("geometry", geometry()); }, 3000));
+      timers.push(window.setTimeout(() => { logIntro("city-ready+20s", where()); closeIntroLog(); }, 20_000));
+    };
+    // taps, touches and keys on the page around the hand-over: where, and on what
+    const onInput = (e: Event) => {
+      const t = e.target as HTMLElement | null;
+      const root = viewerRootRef.current?.getBoundingClientRect();
+      const pt = e as PointerEvent;
+      const at = typeof pt.clientX === "number" && root ? ` at ${Math.round(pt.clientX - root.left)},${Math.round(pt.clientY - root.top)} in the city box (${pt.pointerType ?? e.type})` : "";
+      const name = t ? `${t.tagName.toLowerCase()}${t.getAttribute?.("data-testid") ? "[" + t.getAttribute("data-testid") + "]" : ""}${t.textContent ? " '" + t.textContent.trim().slice(0, 24) + "'" : ""}` : "?";
+      logIntro(`input.${e.type}`, `${name}${at}`);
+    };
+    const inputs = ["pointerdown", "pointerup", "touchstart", "keydown", "click"] as const;
+    for (const n of inputs) window.addEventListener(n, onInput, { capture: true, passive: true });
+    // the window's focus and the page's visibility: Phaser clamps its clock after a focus and while blurred
+    const onWindowState = (e: Event) => { logIntro(`window.${e.type}`, e.type === "visibilitychange" ? document.visibilityState : document.hasFocus() ? "has focus" : "no focus"); };
+    const windowStates = ["focus", "blur", "visibilitychange", "pageshow", "pagehide"] as const;
+    for (const n of windowStates) window.addEventListener(n, onWindowState);
+    const onDone = () => { logIntro("intro-done", where()); logIntro("geometry", geometry()); };
+    window.addEventListener(INTRO_DONE_EVENT, onDone);
     const start = (left: number) => {
       const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
-        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number) => void }
+        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number, afterEvent?: string) => void }
         | undefined;
       if (!scene?.ready) {
         if (left > 0) timer = window.setTimeout(() => start(left - 1), 150);
+        else reportCityReady(); // a scene that never comes up still ends the load intro
         return;
       }
-      if (adventureOnRef.current) return;
+      if (adventureOnRef.current) { landed("walking already"); reportCityReady(); return; }
       scene.keepFramingOnSpawn = true;
       handleStartAdventure({ onLoad: true });
-      if (avatarTabOpenRef.current) return;
+      if (avatarTabOpenRef.current) { landed("avatar tab open"); reportCityReady(); return; }
       const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
-      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200);
+      // with the load intro over the city, the hold and glide wait for its hand-over
+      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200, isIntroActive() ? INTRO_DONE_EVENT : undefined);
+      landed(isIntroActive() ? "landing, hand-over from the intro" : "landing, no intro");
+      // the first frame a visitor sees is in place: the load intro may hand over to it (lib/intro/progress.ts)
+      reportCityReady();
     };
+    // the intro lab's Replay: a landing again, from the close-up on the spawn (the ready poll covers a city still loading)
+    const onReplay = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { ready?: boolean; replayLanding?: (delayMs: number, glideMs: number, afterEvent?: string) => boolean }
+        | undefined;
+      if (!scene?.ready || !adventureOnRef.current) return;
+      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      if (scene.replayLanding?.(reduced ? 0 : 1000, reduced ? 1 : 1200, INTRO_DONE_EVENT)) { landedRef.current = true; logIntro("replay", where()); }
+    };
+    window.addEventListener(INTRO_REPLAY_EVENT, onReplay);
+    // the overlay fades into the frame the camera is really on (lib/intro/progress.ts getCityFraming)
+    setCityFramingReader(() => {
+      if (!landedRef.current) return null;
+      const cam = gameBoardRef.current?.getCameraState();
+      return cam ? { scrollX: cam.scrollX, scrollY: cam.scrollY, zoom: cam.zoom } : null;
+    });
+    reportCityBoot();
     start(200);
-    return () => window.clearTimeout(timer);
+    return () => {
+      window.clearTimeout(timer);
+      for (const t of timers) window.clearTimeout(t);
+      for (const n of inputs) window.removeEventListener(n, onInput, { capture: true });
+      for (const n of windowStates) window.removeEventListener(n, onWindowState);
+      window.removeEventListener(INTRO_DONE_EVENT, onDone);
+      window.removeEventListener(INTRO_REPLAY_EVENT, onReplay);
+      renderOff?.();
+      setCityFramingReader(null);
+    };
   }, [isShell, handleStartAdventure]);
 
   // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it
@@ -1098,6 +1231,7 @@ export default function CityViewer({
         onBuildingClick={handleBuildingClick}
         testId="city-canvas"
       />
+      {reportPill && <IntroReportPill />}
 
       {/* Portfolio mode toggle */}
       {!isShell && !isAdventureActive && (

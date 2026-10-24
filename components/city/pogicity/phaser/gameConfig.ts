@@ -45,6 +45,13 @@ export function createGameConfig(
     input: {
       activePointers: 2,
     },
+    // Phaser's time step clamps each frame's delta to the 60 fps target for 120 frames after the window gets focus
+    // (its "cool down" after a resume). On a phone drawing 30 to 45 fps that halves game time for the first seconds
+    // of a visit, so the landing hold and glide after the load intro ran late. No cool down: the clock keeps real time
+    // (the 200 ms sanity limit on a single frame stays).
+    fps: {
+      panicMax: 0,
+    },
     scale: {
       mode: window.innerWidth < 768 ? Phaser.Scale.ENVELOP : Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

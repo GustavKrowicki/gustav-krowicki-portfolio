@@ -40,7 +40,8 @@ import {
   getBuildingFootprint,
   BuildingDefinition,
 } from "@/lib/city/buildings";
-import { loadGifAsAnimation, playGifAnimation } from "./GifLoader";
+import { playGifAnimation } from "./GifLoader";
+import NPC_SHEETS from "@/lib/city/npcSheets.json";
 import { PlayerController } from "./PlayerController";
 import { NPCManager } from "./NPCManager";
 import { TriggerZoneManager, TriggerZoneCallbacks } from "./TriggerZoneManager";
@@ -54,6 +55,7 @@ import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isI
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 import { getPlace } from "@/lib/city/places";
+import { logIntro, reportCityAssets, reportCityScene } from "@/lib/intro/progress";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -230,6 +232,9 @@ export class MainScene extends Phaser.Scene {
   }
 
   preload(): void {
+    // The load intro (components/city/IntroOverlay.tsx) follows the images as they arrive
+    this.load.on(Phaser.Loader.Events.PROGRESS, (p: number) => reportCityAssets(p));
+    this.load.once(Phaser.Loader.Events.COMPLETE, () => reportCityAssets(1));
     // Load tile textures
     this.load.image("grass", "/game/pogicity/Tiles/1x1grass.png");
     this.load.image("road", "/game/pogicity/Tiles/1x1square_tile.png");
@@ -283,6 +288,12 @@ export class MainScene extends Phaser.Scene {
     for (const [type, spec] of Object.entries(STREET_LAMPS)) {
       this.load.image(`lamp_${type}_day`, spec.day);
       this.load.image(`lamp_${type}_lit`, spec.lit);
+    }
+
+    // The people on the streets: sheets baked from the pogicity GIFs (art/npc/gif-sheets.py). They used to be decoded
+    // in the browser after the scene stood, a half-second block right in the load intro's hand-over.
+    for (const [key, sheet] of Object.entries(NPC_SHEETS)) {
+      this.load.spritesheet(key, sheet.file, { frameWidth: sheet.frameWidth, frameHeight: sheet.frameHeight });
     }
 
     // Load car textures
@@ -353,6 +364,7 @@ export class MainScene extends Phaser.Scene {
       this.initializeGrid();
     }
     this.isReady = true;
+    reportCityScene();
 
     // Enable input
     this.input.on("pointermove", this.handlePointerMove, this);
@@ -402,24 +414,20 @@ export class MainScene extends Phaser.Scene {
   }
 
   private async loadCharacterAnimations(): Promise<void> {
-    const charTypes = ["banana", "apple"];
-    const charDirs = ["north", "south", "east", "west"];
-
-    const loadPromises: Promise<void>[] = [];
-
-    for (const char of charTypes) {
-      for (const dir of charDirs) {
-        const key = `${char}_${dir}`;
-        const url = `/game/pogicity/Characters/${char}walk${dir}.gif`;
-        loadPromises.push(loadGifAsAnimation(this, key, url));
-      }
+    // The people's walk cycles, from the sheets preload() brought in (lib/city/npcSheets.json)
+    for (const [key, sheet] of Object.entries(NPC_SHEETS)) {
+      if (!this.textures.exists(key) || this.anims.exists(`${key}_anim`)) continue;
+      this.anims.create({
+        key: `${key}_anim`,
+        frames: this.anims.generateFrameNumbers(key, { start: 0, end: sheet.frames - 1 }),
+        frameRate: sheet.frameRate,
+        repeat: -1,
+      });
     }
 
-    // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit); the GIFs are NPCs.
-    loadPromises.push(loadAvatar3dSprites(this));
-
     try {
-      await Promise.all(loadPromises);
+      // The player wears the avatar builder's 2D sheets (the saved look, else the base outfit)
+      await loadAvatar3dSprites(this);
       this.gifsLoaded = true;
       if (this.characters.length > 0) {
         this.renderCharacters();
@@ -1589,6 +1597,7 @@ export class MainScene extends Phaser.Scene {
         this.zoomLevel = targetZoom;
         this.zoomHandledInternally = true;
         this.events.emit("zoomChanged", targetZoom);
+        if (this.landingGlideLog) { this.landingGlideLog = false; logIntro("glide-end", `zoom ${targetZoom}`); }
         // A running follow keeps the dead zone it got at the old zoom; restart it next frame, sized for this one
         this.stopCameraFollow();
       }
@@ -2924,6 +2933,8 @@ export class MainScene extends Phaser.Scene {
   skipNextSpawnFocus = false;
   // The new site starts walking on load: the avatar spawns while the camera keeps showing the whole city (landWalking)
   keepFramingOnSpawn = false;
+  // the hand-over report (lib/intro/progress.ts): the landing glide's end is logged once
+  private landingGlideLog = false;
   focusOnPlayer(close = false, durationMs = 800): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
@@ -2949,22 +2960,63 @@ export class MainScene extends Phaser.Scene {
 
   // Landing walking (POR-47): a moment close on the avatar ("this is you"), then out to street zoom (3 on a phone) to show the
   // streets around it. A pan or zoom by hand in the meantime keeps the visitor's own framing.
-  landWalking(delayMs: number, glideMs: number): void {
+  // afterEvent (the load intro, lib/intro/progress.ts INTRO_DONE_EVENT): the close-up is set at once, so the intro's
+  // hand-over fades into it, and the hold and glide start when that event fires (or after 6 s, whichever is first).
+  landWalking(delayMs: number, glideMs: number, afterEvent?: string): void {
     if (!this.playerController) return;
     if (delayMs > 0) {
       const p = this.playerController.getPosition();
       const camera = this.cameras.main;
       this.stopCameraMoves();
       this.cameraFollowPlayer = false;
-      this.moveCamera(Math.round(p.worldX - camera.width / 2), Math.round(p.worldY - 12 - camera.height / 2), ZOOM.detail, 1);
+      // set at once, not tweened: the load intro hands over to this very frame (lib/intro/camera.ts draws the same)
+      camera.setZoom(ZOOM.detail);
+      camera.scrollX = Math.round(p.worldX - camera.width / 2);
+      camera.scrollY = Math.round(p.worldY - 12 - camera.height / 2);
+      this.baseScrollX = camera.scrollX;
+      this.baseScrollY = camera.scrollY;
+      this.zoomLevel = ZOOM.detail;
+      this.zoomHandledInternally = true;
+      this.events.emit("zoomChanged", ZOOM.detail);
     }
-    const since = this.time.now;
-    this.time.delayedCall(delayMs, () => {
-      if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
-      this.focusOnPlayer(true, glideMs);
-    });
-    // the first-visit hint once the camera has landed on the avatar (phones only)
-    this.time.delayedCall(delayMs + glideMs + 300, () => this.showWalkHint());
+    const go = () => {
+      const since = this.time.now;
+      logIntro("hold-start", `${delayMs} ms hold, then a ${glideMs} ms glide`);
+      this.time.delayedCall(delayMs, () => {
+        if ((this.lastManualCameraInteractionAt ?? -1) >= since) { logIntro("glide-skipped", "the camera was moved by hand"); return; }
+        this.landingGlideLog = true;
+        logIntro("glide-start", `zoom ${this.cameras.main.zoom}`);
+        this.focusOnPlayer(true, glideMs);
+      });
+      // the first-visit hint once the camera has landed on the avatar (phones only)
+      this.time.delayedCall(delayMs + glideMs + 300, () => this.showWalkHint());
+    };
+    if (!afterEvent) { go(); return; }
+    let started = false;
+    const start = () => {
+      if (started) return;
+      started = true;
+      window.removeEventListener(afterEvent, start);
+      go();
+    };
+    window.addEventListener(afterEvent, start);
+    this.time.delayedCall(6000, start);
+    this.events.once(Phaser.Scenes.Events.SHUTDOWN, () => window.removeEventListener(afterEvent, start));
+  }
+
+  // The intro lab's Replay: back to where a first visit starts (the avatar on its spawn tile, the camera close on it),
+  // then the landing again once the replayed intro hands over
+  replayLanding(delayMs: number, glideMs: number, afterEvent?: string): boolean {
+    const pc = this.playerController;
+    if (!pc || !this.isAdventureActive) return false;
+    this.stopCameraMoves();
+    this.stopCameraFollow();
+    this.hideWalkHint();
+    const spawn = this.findSpawnPosition(15, 30);
+    pc.moveTo(spawn.x, spawn.y);
+    this.manualCameraOverrideInAdventure = false;
+    this.landWalking(delayMs, glideMs, afterEvent);
+    return true;
   }
 
   private focusCameraOnPlayerForMobile(playerWorldX: number, playerWorldY: number): void {

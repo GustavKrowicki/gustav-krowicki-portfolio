@@ -12,6 +12,8 @@ import { AVATAR_WALK_EVENT } from '@/lib/city/models/avatarPieces';
 import { FIND_OPEN_EVENT, FIND_WALK_EVENT } from '@/lib/achievements';
 import { PLACE_WALK_IN_EVENT } from '@/lib/popupMode';
 import { getPlace } from '@/lib/city/places';
+import IntroOverlay from '@/components/city/IntroOverlay';
+import { useLabState } from '@/lib/intro/labState';
 
 // Phaser needs the browser, so the city loads on the client only.
 const CityViewer = dynamic(() => import('@/components/city/CityViewer'), {
@@ -39,6 +41,8 @@ export default function PortfolioShell() {
   // ?e2e=1 exposes the city's test API (window.__CITY_E2E__); CityViewer renders on the client only
   const [e2eMode] = useState(() => typeof window !== 'undefined' && new URLSearchParams(window.location.search).get('e2e') === '1');
   const [section, setSection] = useState<SectionId>('home');
+  // The load intro (POR-40) over the city area: on when the page asks for it (lib/intro/labState.ts)
+  const intro = useLabState();
   const [panel, setPanel] = useState<PanelState>('open');
   // A case study opens over the section it came from and widens the panel for reading.
   const [openCase, setOpenCase] = useState<string | null>(null);
@@ -253,6 +257,7 @@ export default function PortfolioShell() {
           onClosePlace={() => closePlace()}
           e2eMode={e2eMode}
         />
+        {intro.showIntro && <IntroOverlay key={intro.run} />}
       </div>
     </div>
   );
