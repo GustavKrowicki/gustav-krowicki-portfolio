@@ -4,3 +4,13 @@
 # The previous portfolio used /projects/<slug>; those URLs still get visits.
 /projects/internship-at-valtech-2024  /new?s=work&case=valtech  307
 /projects/*                           /new?s=work               307
+
+# The classic site's pages, removed in the redo; they still get visits and links.
+/work/valtech        /new?s=work&case=valtech        307
+/work/lego           /new?s=work&case=lego           307
+/work/cate-it        /new?s=work&case=cate-it        307
+/work/viz-generator  /new?s=work&case=viz-generator  307
+/work                /new?s=work                     307
+/work/*              /new?s=work                     307
+/about               /new?s=hobbies                  307
+/contact             /new                             307
