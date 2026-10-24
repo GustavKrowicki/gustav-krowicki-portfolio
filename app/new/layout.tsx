@@ -8,10 +8,10 @@ export const viewport: Viewport = {
   userScalable: false,
 };
 
-// Work in progress: the one-page portfolio shell stays out of search results until it replaces /.
+// The one-page portfolio is the site: / redirects here (public/_redirects), so this is the canonical page.
+// The title and description come from the root layout.
 export const metadata: Metadata = {
-  title: "Portfolio (new)",
-  robots: { index: false, follow: false },
+  alternates: { canonical: "/new" },
 };
 
 export default function ShellLayout({ children }: { children: React.ReactNode }) {
