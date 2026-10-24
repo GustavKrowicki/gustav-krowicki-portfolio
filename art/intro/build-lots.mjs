@@ -3,9 +3,10 @@
 //
 //   node art/intro/build-lots.mjs
 //
-// Per tile: class (grass, paved, snow, building, prop), the building's placement order counted outward from the
-// avatar's spawn tile, the building's height in tenths of a world unit (from its south sprite's pixel height), and
-// the tile's distance from the spawn. Run it again after Save City in /city/editor or a new building sprite.
+// Per tile: class (grass, paved, snow, building, prop), the building's placement order (the key buildings first, then
+// outward from the avatar's spawn tile), the building's height in tenths of a world unit (from its south sprite's
+// pixel height), and the tile's distance from the spawn. Run it again after Save City in /city/editor or a new
+// building sprite, then art/intro/snapshot.mjs (its id image carries the same order).
 import { readFileSync, writeFileSync, mkdtempSync } from "node:fs";
 import { execFileSync } from "node:child_process";
 import { tmpdir } from "node:os";
@@ -16,6 +17,9 @@ const ROOT = new URL("../../", import.meta.url).pathname;
 const TILE_WIDTH = 44, TILE_HEIGHT = 22;
 const PX_PER_WU_UP = (TILE_WIDTH / Math.SQRT2) * Math.cos(Math.asin(TILE_HEIGHT / TILE_WIDTH));
 const SPAWN = [15, 30];
+// The key buildings take the first places in the order (Gustav, 2026-10-24: the two places that matter most should
+// load first); the looks single them out as landmarks (lib/intro/glsl.ts isLandmark)
+const PRIORITY = ["valtech-office", "lego-hq"];
 
 // The building registry is TypeScript: bundle it once for node
 const out = join(mkdtempSync(join(tmpdir(), "lots-")), "buildings.mjs");
@@ -75,8 +79,11 @@ for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
   }
 }
 
-// Placement order: outward from the spawn, so every reveal starts at the avatar
-origins.sort((a, b) => a.d - b.d);
+// Placement order: the key buildings first, then outward from the spawn, so every reveal starts at the avatar
+const rank = (o) => { const i = PRIORITY.indexOf(o.def.id); return i < 0 ? PRIORITY.length : i; };
+origins.sort((a, b) => rank(a) - rank(b) || a.d - b.d);
+const placed = PRIORITY.filter((id) => origins.some((o) => o.def.id === id));
+if (placed.length !== PRIORITY.length) console.warn("key buildings not in the grid:", PRIORITY.filter((id) => !placed.includes(id)).join(", "));
 const dirOf = { down: "south", up: "north", right: "east", left: "west" };
 const spriteOf = (o) => (o.orientation && o.def.sprites[dirOf[o.orientation]]) || o.def.sprites.south;
 const opaque = opaqueHeights([...new Set(origins.map((o) => join(ROOT, "public", spriteOf(o))))]);
@@ -102,7 +109,7 @@ origins.forEach((o, n) => {
 
 const maxDist = Math.max(...dist);
 const data = {
-  width: W, height: H, spawn: SPAWN, buildings: origins.length, maxDist: Number(maxDist.toFixed(3)),
+  width: W, height: H, spawn: SPAWN, buildings: origins.length, priority: placed.length, maxDist: Number(maxDist.toFixed(3)),
   cls, order, heights: height, dist: dist.map((d) => Math.round((d / maxDist) * 255)),
 };
 writeFileSync(join(ROOT, "lib/intro/lots.json"), JSON.stringify(data));

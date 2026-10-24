@@ -1,12 +1,12 @@
 // The city grid as shader data (lib/intro/lots.json, built by art/intro/build-lots.mjs). One texel per tile, RGBA:
 //   R  tile class x 40: 1 grass, 2 paved, 3 snow, 4 building, 5 prop
-//   G  building placement order, 0..1, counted outward from the avatar's spawn tile (0 = no building)
+//   G  building placement order, 0..1: the key buildings first, then outward from the avatar's spawn tile (0 = no building)
 //   B  building height in tenths of a world unit
 //   A  distance from the spawn tile, 0..1 of the farthest tile
 import lotsJson from "./lots.json";
 
 interface LotsJson {
-  width: number; height: number; spawn: [number, number]; buildings: number; maxDist: number;
+  width: number; height: number; spawn: [number, number]; buildings: number; priority: number; maxDist: number;
   cls: number[]; order: number[]; heights: number[]; dist: number[];
 }
 
@@ -17,6 +17,7 @@ export const LOTS = {
   height: data.height,
   spawn: data.spawn,
   buildings: data.buildings,
+  priority: data.priority,     // how many key buildings lead the order (art/intro/build-lots.mjs PRIORITY)
   maxDist: data.maxDist,
 };
 

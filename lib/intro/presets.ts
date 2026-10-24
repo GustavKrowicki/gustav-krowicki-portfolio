@@ -42,15 +42,19 @@ vec4 intro(vec2 px) {
 }
 `;
 
-const fog = /* glsl */ `// Fog lifts: the avatar alone in fog of war, which thins outward as the city loads.
+const fog = /* glsl */ `// Fog lifts: the avatar alone in fog of war, which thins outward as the city loads. The key buildings stand out of
+// the fog within the first moments, landmarks to walk towards, long before the fog has thinned out to them.
 vec4 intro(vec2 px) {
-  vec2 g = toGrid(toWorld(px));
+  vec2 w = toWorld(px);
+  vec2 g = toGrid(w);
   vec3 city = cityNow(px, 1.0) * hourTint(u_hour);
   float t = u_reduced > 0.5 ? 0.0 : u_time;
   float n = fbm(g * 0.35 + vec2(t * 0.06, -t * 0.04));
   float radius = 1.5 + easeOut(u_progress) * MAX_DIST * 1.1;
   float d = gridDist(g) + (n - 0.5) * 6.0;
   float fogged = smoothstep(radius - 3.0, radius + 4.0, d);
+  float order = u_cityReady > 0.5 ? cityId(w).x : lotOrder(lotAt(g));
+  if (isLandmark(order)) fogged *= 1.0 - easeOut(clamp(u_progress / 0.15, 0.0, 1.0)) * 0.92;   // a little haze stays
   vec3 fogColor = mix(vec3(0.70, 0.73, 0.76), vec3(0.86, 0.88, 0.90), n) * mix(vec3(1.0), hourTint(u_hour), 0.6);
   vec3 c = mix(city, fogColor, fogged * 0.97);
   c = mix(c, LINE, spawnMark(px, 9.0 / max(u_pixel, 0.5)) * 0.8);
@@ -92,7 +96,8 @@ vec4 intro(vec2 px) {
 }
 `;
 
-const tycoon = /* glsl */ `// Tycoon placement: the ground first, then every building rises onto its lot in order, with a small flash.
+const tycoon = /* glsl */ `// Tycoon placement: the key buildings first, onto the bare plot; then the ground spreads from the avatar, and
+// every other building rises onto its lot in order, with a small flash.
 vec4 intro(vec2 px) {
   vec2 w = toWorld(px);
   vec2 g = toGrid(w);
@@ -101,6 +106,11 @@ vec4 intro(vec2 px) {
   float showBelow = clamp((p - 0.3) / 0.7, 0.0, 1.0) * 1.04;
   vec4 l = lotAt(g);
   float here = step(lotDist(l), ground);
+  float order = u_cityReady > 0.5 ? cityId(w).x : lotOrder(l);
+  if (isLandmark(order)) {
+    showBelow = max(showBelow, easeOut(clamp(p / 0.15, 0.0, 1.0)) * (landmarkCut() + GROW_WINDOW));
+    if (order <= showBelow) here = 1.0;   // the landmark stands before the ground has reached it
+  }
   vec3 c = mix(GROUND, cityNow(px, showBelow), here);
   return vec4(c * hourTint(u_hour), 1.0 - u_reveal);
 }
@@ -167,10 +177,10 @@ vec4 intro(vec2 px) {
 
 export const INTRO_PRESETS: IntroPreset[] = [
   { id: "blueprint", name: "Blueprint", blurb: "The grid draws itself, buildings rise as their turn comes.", camera: "fly", line: "Laying out the city", glsl: blueprint },
-  { id: "fog", name: "Fog lifts", blurb: "The avatar alone in fog of war; it thins outward as the city loads.", camera: "fly", line: "The buildings are the places I have worked and studied.", glsl: fog },
+  { id: "fog", name: "Fog lifts", blurb: "The avatar alone in fog of war; the key buildings stand out first, then it thins outward as the city loads.", camera: "fly", line: "The buildings are the places I have worked and studied.", glsl: fog },
   { id: "dawn", name: "Dawn at your hour", blurb: "Night to the visitor's own light, lamps switching off.", camera: "fly", glsl: dawn },
   { id: "dither", name: "Dither reveal", blurb: "A Bayer dissolve from the avatar outward, and the same for the hand-over.", camera: "fly", glsl: dither },
-  { id: "tycoon", name: "Tycoon placement", blurb: "The ground first, then every building rises onto its lot.", camera: "fly", glsl: tycoon },
+  { id: "tycoon", name: "Tycoon placement", blurb: "The key buildings first, then the ground and every other building onto its lot.", camera: "fly", glsl: tycoon },
   { id: "train", name: "Arriving by train", blurb: "The city streaks past the window, slows, and stops.", camera: "close", line: "Next stop: Gustav's city", glsl: train },
   { id: "clouds", name: "Cloud shadows", blurb: "Shadows drift over a bare plot and leave buildings behind.", camera: "fly", glsl: clouds },
   { id: "radar", name: "Radar ping", blurb: "Rings sweep out from the avatar and leave bands of city.", camera: "fly", line: "There are things to find.", glsl: radar },

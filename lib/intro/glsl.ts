@@ -21,7 +21,8 @@ uniform vec2 u_pointer;      // canvas px of the pointer, (-1,-1) when none
 uniform sampler2D u_lots;    // one texel per tile, see lib/intro/lots.ts
 uniform vec4 u_stage;        // where the city's canvas sits in this canvas (x, y, w, h): outside it the city shows its ground colour
 uniform sampler2D u_city;    // the real city by day (lib/intro/snapshot.ts), lossy first, lossless when that has arrived
-uniform sampler2D u_ids;     // which building drew each pixel of it: R = placement order / 255 (0 the ground), 1.0 nothing
+uniform sampler2D u_ids;     // which building drew each pixel of it: R = placement order / 255 (0 the ground), 1.0 nothing;
+                             // the first PRIORITY orders are the key buildings
 uniform vec4 u_cityRect;     // where that image sits in world px (x, y, w, h)
 uniform float u_cityReady;   // 1 once the image and the ids are here; before that the looks draw the block city
 
@@ -33,6 +34,7 @@ const vec2 GRID_ORIGIN = vec2(${GRID_ORIGIN.x.toFixed(1)}, ${GRID_ORIGIN.y.toFix
 const vec2 SPAWN = vec2(${LOTS.spawn[0]}.5, ${LOTS.spawn[1]}.5);
 const float MAX_DIST = ${LOTS.maxDist.toFixed(3)};
 const float BUILDINGS = ${LOTS.buildings}.0;
+const float PRIORITY = ${LOTS.priority}.0;   // the key buildings lead the placement order (art/intro/build-lots.mjs)
 
 // ---- the city's own colours (pogicity art and the ground colour the shell paints while loading)
 const vec3 GROUND = vec3(0.451, 0.392, 0.373);   // #73645F
@@ -66,10 +68,13 @@ vec4 lotAt(vec2 g) {
   return texture2D(u_lots, (floor(g) + 0.5) / GRID);
 }
 float lotClass(vec4 l) { return floor(l.r * 255.0 / 40.0 + 0.5); }   // 0 none 1 grass 2 paved 3 snow 4 building 5 prop
-float lotOrder(vec4 l) { return l.g; }                              // 0..1 outward from the spawn, 0 = none
+float lotOrder(vec4 l) { return l.g; }                              // 0..1, key buildings first, then outward from the spawn, 0 = none
 float lotHeight(vec4 l) { return l.b * 255.0 / 10.0; }              // world units
 float lotDist(vec4 l) { return l.a; }                               // 0..1 of MAX_DIST
 float gridDist(vec2 g) { return length(g - SPAWN); }                 // tiles from the spawn
+// the key buildings (the landmarks): the first PRIORITY places in the order, so a look can bring them in first
+float landmarkCut() { return (PRIORITY + 0.5) / BUILDINGS; }
+bool isLandmark(float order) { return order > 0.0 && order <= landmarkCut(); }
 
 // ---- noise
 float hash12(vec2 p) { vec3 p3 = fract(vec3(p.xyx) * 0.1031); p3 += dot(p3, p3.yzx + 33.33); return fract((p3.x + p3.y) * p3.z); }
@@ -193,7 +198,8 @@ vec3 bareLot(vec2 world) {
   vec3 c = groundColor(lotClass(lotAt(g)));
   return mix(c, c * 0.8, line(tileEdgePx(g), 1.0) * 0.35);
 }
-// The real city with its buildings placed up to showBelow (0..1 in placement order, outward from the avatar). A
+// The real city with its buildings placed up to showBelow (0..1 in placement order: the key buildings, then outward
+// from the avatar). A
 // building whose turn has come rises out of its lot over risePx and lands with a small flash; one still to come
 // leaves its bare tile.
 vec3 realCity(vec2 world, float showBelow, float risePx) {
