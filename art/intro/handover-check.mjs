@@ -119,7 +119,7 @@ for (const [label, options] of [
   await page.addInitScript(CAPTURE);
   const query = new URLSearchParams({ e2e: "1", hour: "13", report: "1" });
   if (look) query.set("intro", look);
-  await page.goto(`${base}/new?${query}`, { waitUntil: "domcontentloaded" });
+  await page.goto(`${base}/?${query}`, { waitUntil: "domcontentloaded" });
   await page.waitForFunction(() => performance.getEntriesByName("intro-done").length > 0, null, { timeout: 300_000 });
   const r = await page.evaluate(compare);
   const file = join(out, `${label}.jpg`);

@@ -73,7 +73,7 @@ export default function IntroLabDrawer() {
     if (replayNow) replayAside();
   };
   const copy = async (value: string) => { try { await navigator.clipboard.writeText(value); } catch { window.prompt('Copy', value); } };
-  const siteLink = () => `${window.location.origin}/new${shareSearch(lab)}`;
+  const siteLink = () => `${window.location.origin}/${shareSearch(lab)}`;
   const labLink = () => `${window.location.origin}/tools/intro-lab${shareSearch(lab)}`;
 
   const [marks, setMarks] = useState<{ name: string; t: number }[]>([]);
@@ -204,10 +204,10 @@ export default function IntroLabDrawer() {
             <section>
               <h3 className="mb-1.5 text-xs font-medium uppercase tracking-wide text-neutral-500">Share</h3>
               <div className="flex flex-wrap gap-1.5">
-                <button type="button" onClick={() => copy(siteLink())} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Copy link for /new</button>
+                <button type="button" onClick={() => copy(siteLink())} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Copy link for the site</button>
                 <button type="button" onClick={() => copy(labLink())} className="rounded-md px-2 py-1 ring-1 ring-neutral-300">Copy lab link</button>
               </div>
-              <p className="mt-1.5 text-[12px] text-neutral-500">The /new link plays this look over the real load, once, on a phone.</p>
+              <p className="mt-1.5 text-[12px] text-neutral-500">The site link plays this look over the real load, once, on a phone.</p>
             </section>
           </div>
         )}
@@ -265,7 +265,7 @@ export default function IntroLabDrawer() {
                 <h3 className="text-xs font-medium uppercase tracking-wide text-neutral-500">Hand-over report</h3>
                 <button type="button" onClick={() => copy(introLogText())} className="rounded-md px-2 py-0.5 ring-1 ring-neutral-300">Copy</button>
               </div>
-              <p className="mb-1">Seconds from city-ready: the stage marks, the camera and the avatar at the marks, every tap, touch and key on the page, each entry point that moves the avatar, the first frame of the reveal, the city&apos;s first drawn frames, and the geometry check (where the spawn tile sits on the page: as the city draws it, and as the intro draws it; a gap means the two frames are in different places). Closes 20 s after city-ready. The same report on the real page: /new?report=1.</p>
+              <p className="mb-1">Seconds from city-ready: the stage marks, the camera and the avatar at the marks, every tap, touch and key on the page, each entry point that moves the avatar, the first frame of the reveal, the city&apos;s first drawn frames, and the geometry check (where the spawn tile sits on the page: as the city draws it, and as the intro draws it; a gap means the two frames are in different places). Closes 20 s after city-ready. The same report on the real page: /?report=1.</p>
               <pre className="max-h-48 overflow-auto whitespace-pre-wrap break-words font-mono text-[11px] leading-snug text-neutral-800">{report || (getIntroLog().length ? introLogText() : 'Nothing yet.')}</pre>
             </section>
             <section className="rounded-md bg-neutral-50 p-2 text-[12px] text-neutral-600">

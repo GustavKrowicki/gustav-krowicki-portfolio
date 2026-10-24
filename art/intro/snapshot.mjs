@@ -29,7 +29,7 @@ const browser = await chromium.launch({
 });
 const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, deviceScaleFactor: 1 });
 page.on("pageerror", (e) => console.log("page error:", e.message));
-await page.goto(`${base}/new?e2e=1&hour=13&intro=0`, { waitUntil: "domcontentloaded" });
+await page.goto(`${base}/?e2e=1&hour=13&intro=0`, { waitUntil: "domcontentloaded" });
 await page.waitForFunction(() => performance.getEntriesByName("city-ready").length > 0 && window.__CITY_E2E__?.getCameraState?.() !== null, null, { timeout: 180_000 });
 // let the landing (close-up, glide, walk ring) run out, then take the avatar and every hint away
 await page.waitForTimeout(3500);

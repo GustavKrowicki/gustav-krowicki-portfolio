@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from "next";
 
-// Same viewport as /new: pinch gestures go to the city canvas, not to page zoom.
+// Same viewport as the portfolio page: pinch gestures go to the city canvas, not to page zoom.
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,

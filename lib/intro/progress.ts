@@ -124,7 +124,7 @@ export function getIntroFrame(): IntroFrame | null { return introFrame; }
 // PlayerController (every entry point that moves the avatar), the overlay (the first frame of the reveal, its frame
 // count and longest stall), the stage marks, the city's first drawn frames after it stands and a geometry check (the
 // spawn tile on the page, as the city's canvas puts it and as the intro draws it). The lab's Measure tab and
-// /new?report=1 show it with a Copy button, so a phone can tell what moved the avatar or the camera, or which side drew
+// /?report=1 show it with a Copy button, so a phone can tell what moved the avatar or the camera, or which side drew
 // the wrong place; window.__introLog for the tests. Capped, and closed by closeIntroLog 20 s after city-ready.
 export interface IntroLogEntry { t: number; what: string; detail?: string }
 const introLog: IntroLogEntry[] = [];

@@ -877,7 +877,7 @@ export default function CityViewer({
   avatarTabOpenRef.current = avatarTabOpen;
   // true once the landing camera is set, so the overlay reads a camera that is where a first visit starts
   const landedRef = useRef(false);
-  // /new?report=1: the hand-over report pill on the real page (components/city/IntroReportPill.tsx)
+  // /?report=1: the hand-over report pill on the real page (components/city/IntroReportPill.tsx)
   const [reportPill, setReportPill] = useState(false);
   useEffect(() => { if (isShell && /[?&]report=1(&|$)/.test(window.location.search)) setReportPill(true); }, [isShell]);
   // the hand-over report (lib/intro/progress.ts logIntro): the avatar's first moves after it stands

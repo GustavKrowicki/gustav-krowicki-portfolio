@@ -1,6 +1,6 @@
 'use client';
 
-// The hand-over report on the real site: /new?report=1 shows a small pill after the load; it opens the report
+// The hand-over report on the real site: /?report=1 shows a small pill after the load; it opens the report
 // (lib/intro/progress.ts logIntro) with a Copy button, so a phone can send what happened at the hand-over on the
 // real page, not only in the lab. Off without the parameter.
 import { useEffect, useState } from 'react';
