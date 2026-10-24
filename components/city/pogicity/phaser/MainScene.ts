@@ -55,7 +55,7 @@ import { BUILDING_INTERIORS, BuildingInterior, interiorCode, isEntranceStep, isI
 import { INTERIOR_BEATS, beatAtTile } from "@/lib/city/interiorBeats";
 import { cityFont, redrawWhenCityFontLoads } from "@/lib/city/cityFont";
 import { getPlace } from "@/lib/city/places";
-import { reportCityAssets, reportCityScene } from "@/lib/intro/progress";
+import { logIntro, reportCityAssets, reportCityScene } from "@/lib/intro/progress";
 
 // Event types for React communication
 export interface SceneEvents {
@@ -1596,6 +1596,7 @@ export class MainScene extends Phaser.Scene {
         this.zoomLevel = targetZoom;
         this.zoomHandledInternally = true;
         this.events.emit("zoomChanged", targetZoom);
+        if (this.landingGlideLog) { this.landingGlideLog = false; logIntro("glide-end", `zoom ${targetZoom}`); }
         // A running follow keeps the dead zone it got at the old zoom; restart it next frame, sized for this one
         this.stopCameraFollow();
       }
@@ -2867,6 +2868,8 @@ export class MainScene extends Phaser.Scene {
   skipNextSpawnFocus = false;
   // The new site starts walking on load: the avatar spawns while the camera keeps showing the whole city (landWalking)
   keepFramingOnSpawn = false;
+  // the hand-over report (lib/intro/progress.ts): the landing glide's end is logged once
+  private landingGlideLog = false;
   focusOnPlayer(close = false, durationMs = 800): boolean {
     if (!this.playerController || !this.isAdventureActive) return false;
     const p = this.playerController.getPosition();
@@ -2912,8 +2915,11 @@ export class MainScene extends Phaser.Scene {
     }
     const go = () => {
       const since = this.time.now;
+      logIntro("hold-start", `${delayMs} ms hold, then a ${glideMs} ms glide`);
       this.time.delayedCall(delayMs, () => {
-        if ((this.lastManualCameraInteractionAt ?? -1) >= since) return;
+        if ((this.lastManualCameraInteractionAt ?? -1) >= since) { logIntro("glide-skipped", "the camera was moved by hand"); return; }
+        this.landingGlideLog = true;
+        logIntro("glide-start", `zoom ${this.cameras.main.zoom}`);
         this.focusOnPlayer(true, glideMs);
       });
       // the first-visit hint once the camera has landed on the avatar (phones only)

@@ -901,7 +901,7 @@ export default function CityViewer({
     // here which side is off, and by how much)
     const geometry = () => {
       const game = gameBoardRef.current?.getGameInstance() as
-        | { canvas?: HTMLCanvasElement; scale?: { displaySize: { width: number; height: number }; parentSize: { width: number; height: number } }; loop?: { frame: number; actualFps: number } }
+        | { canvas?: HTMLCanvasElement; scale?: { displaySize: { width: number; height: number }; parentSize: { width: number; height: number } }; loop?: { frame: number; actualFps: number; inFocus?: boolean; delta?: number; rawDelta?: number; _coolDown?: number } }
         | undefined;
       const sc = reportScene();
       const cam = sc?.cameras?.main;
@@ -922,7 +922,7 @@ export default function CityViewer({
       }
       const vv = window.visualViewport;
       const sz = game?.scale;
-      return `spawn on the page: city ${r1(cityX)},${r1(cityY)}; ${intro}; city canvas ${r1(cr.width)}x${r1(cr.height)} at ${r1(cr.left - box.left)},${r1(cr.top - box.top)} (phaser display ${sz ? `${r1(sz.displaySize.width)}x${r1(sz.displaySize.height)} in ${r1(sz.parentSize.width)}x${r1(sz.parentSize.height)}` : "?"}, internal ${cam.width}x${cam.height}); drawn camera ${r1(cam.scrollX)},${r1(cam.scrollY)} zoom ${Number(cam.zoom.toFixed(3))}; viewport ${vv ? `${r1(vv.width)}x${r1(vv.height)} scale ${vv.scale} at ${r1(vv.offsetLeft)},${r1(vv.offsetTop)}` : "none"}, dpr ${window.devicePixelRatio}; phaser frame ${game?.loop?.frame ?? "?"} fps ${Math.round(game?.loop?.actualFps ?? 0)}, scene clock ${sc?.time ? (sc.time.now / 1000).toFixed(2) : "?"} s`;
+      return `spawn on the page: city ${r1(cityX)},${r1(cityY)}; ${intro}; city canvas ${r1(cr.width)}x${r1(cr.height)} at ${r1(cr.left - box.left)},${r1(cr.top - box.top)} (phaser display ${sz ? `${r1(sz.displaySize.width)}x${r1(sz.displaySize.height)} in ${r1(sz.parentSize.width)}x${r1(sz.parentSize.height)}` : "?"}, internal ${cam.width}x${cam.height}); drawn camera ${r1(cam.scrollX)},${r1(cam.scrollY)} zoom ${Number(cam.zoom.toFixed(3))}; viewport ${vv ? `${r1(vv.width)}x${r1(vv.height)} scale ${vv.scale} at ${r1(vv.offsetLeft)},${r1(vv.offsetTop)}` : "none"}, dpr ${window.devicePixelRatio}; phaser frame ${game?.loop?.frame ?? "?"} fps ${Math.round(game?.loop?.actualFps ?? 0)} (delta ${r1(game?.loop?.delta ?? 0)} of ${r1(game?.loop?.rawDelta ?? 0)} ms, ${game?.loop?.inFocus === false ? "not in focus" : "in focus"}, cool down ${game?.loop?._coolDown ?? "?"}), scene clock ${sc?.time ? (sc.time.now / 1000).toFixed(2) : "?"} s`;
     };
     // the city's first frames drawn after it stands: when they came, and with which camera
     let renderOff: (() => void) | null = null;
@@ -961,6 +961,10 @@ export default function CityViewer({
     };
     const inputs = ["pointerdown", "pointerup", "touchstart", "keydown", "click"] as const;
     for (const n of inputs) window.addEventListener(n, onInput, { capture: true, passive: true });
+    // the window's focus and the page's visibility: Phaser clamps its clock after a focus and while blurred
+    const onWindowState = (e: Event) => { logIntro(`window.${e.type}`, e.type === "visibilitychange" ? document.visibilityState : document.hasFocus() ? "has focus" : "no focus"); };
+    const windowStates = ["focus", "blur", "visibilitychange", "pageshow", "pagehide"] as const;
+    for (const n of windowStates) window.addEventListener(n, onWindowState);
     const onDone = () => { logIntro("intro-done", where()); logIntro("geometry", geometry()); };
     window.addEventListener(INTRO_DONE_EVENT, onDone);
     const start = (left: number) => {
@@ -1005,6 +1009,7 @@ export default function CityViewer({
       window.clearTimeout(timer);
       for (const t of timers) window.clearTimeout(t);
       for (const n of inputs) window.removeEventListener(n, onInput, { capture: true });
+      for (const n of windowStates) window.removeEventListener(n, onWindowState);
       window.removeEventListener(INTRO_DONE_EVENT, onDone);
       window.removeEventListener(INTRO_REPLAY_EVENT, onReplay);
       renderOff?.();
