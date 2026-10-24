@@ -33,8 +33,8 @@ export interface LabState {
   city: "preview" | "exact" | null;
 }
 
-// The look the site plays on a first visit. null until Gustav picks one: then only ?intro=<look> shows it.
-export const INTRO_DEFAULT: string | null = null;
+// The look the site plays on a first visit (Gustav picked Fog lifts, 2026-10-24); null would show it only with ?intro=<look>
+export const INTRO_DEFAULT: string | null = "fog";
 export const INTRO_SEEN_KEY = "city.introSeen";
 
 const DEFAULTS: LabState = {
