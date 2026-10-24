@@ -1,0 +1,16 @@
+{
+  "redirects": [
+    { "source": "/new", "destination": "/", "permanent": false },
+    { "source": "/city", "destination": "/", "permanent": false },
+    { "source": "/projects/internship-at-valtech-2024", "destination": "/?s=work&case=valtech", "permanent": false },
+    { "source": "/work/valtech", "destination": "/?s=work&case=valtech", "permanent": false },
+    { "source": "/work/lego", "destination": "/?s=work&case=lego", "permanent": false },
+    { "source": "/work/cate-it", "destination": "/?s=work&case=cate-it", "permanent": false },
+    { "source": "/work/viz-generator", "destination": "/?s=work&case=viz-generator", "permanent": false },
+    { "source": "/work", "destination": "/?s=work", "permanent": false },
+    { "source": "/about", "destination": "/?s=hobbies", "permanent": false },
+    { "source": "/contact", "destination": "/", "permanent": false },
+    { "source": "/projects/:path*", "destination": "/?s=work", "permanent": false },
+    { "source": "/work/:path*", "destination": "/?s=work", "permanent": false }
+  ]
+}
