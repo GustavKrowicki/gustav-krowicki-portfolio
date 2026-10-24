@@ -199,3 +199,17 @@ and the model is built from it:
 | Depth | whole building sprites | column slices + player silhouette | renderer |
 | Camera | Phaser follow (lerp / dead zone); pans and zooms timed by section 10; pixels snap at integer zoom; wheel and pinch zoom freely; canvas scaled by CSS (`Scale.FIT`); world-fixed light | zoom presets, computed timing, camera-space light, canvas at device resolution | presets on input, `Scale.RESIZE`, converter light |
 | Site | `/city` separate route, torn down on case open | one page, panel + sheet, URL state | site integration |
+
+## 13. Load intro (rebuild after any city change)
+
+The load intro (`components/city/IntroOverlay.tsx`, `lib/intro/`) draws a snapshot of the real city while Phaser loads,
+and hands over to the live city on the spawn tile. Its data is built from the city, so after any change to
+`lib/city/cityGrid.json`, a building sprite or the spawn tile:
+
+1. `node art/intro/build-lots.mjs` (placement order; `PRIORITY` names the buildings that appear first).
+2. `node art/intro/snapshot.mjs <dev url>` (the city image; the camera is parked at zoom 1, scroll 0,0 on purpose).
+3. `node art/intro/handover-check.mjs <dev url>` (the intro's last frame against the city's first frame, by pixels;
+   good is a mean difference of 6 to 15 of 255).
+
+The lab at `/tools/intro-lab` warns when the snapshot is older than the grid. The learnings and the reasons behind
+these steps are in the "Welcome intro learnings" document in the project's notes.
