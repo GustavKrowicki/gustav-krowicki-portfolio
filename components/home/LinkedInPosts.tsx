@@ -13,32 +13,33 @@ const PDFViewer = dynamic(() => import('./PDFViewer'), {
   ),
 });
 
-interface Post {
+export interface Post {
   type: 'linkedin' | 'pdf';
   embedUrl: string;
   title?: string;
 }
 
-const posts: Post[] = [
+// Also used by the portfolio shell (Home, Uni work).
+export const posts: Post[] = [
   {
     type: 'linkedin',
     embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7391793210458722304?collapsed=1',
-    title: 'Post 1',
+    title: 'Aduro student project',
   },
   {
     type: 'linkedin',
     embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7386496614867177472?collapsed=1',
-    title: 'Post 2',
+    title: 'Bedre Psykiatri, Kolding',
   },
   {
     type: 'linkedin',
     embedUrl: 'https://www.linkedin.com/embed/feed/update/urn:li:ugcPost:7374141334649069569?collapsed=1',
-    title: 'Post 3',
+    title: 'Intimacy matches',
   },
   {
     type: 'pdf',
     embedUrl: '/recommendations/Recommendation%20letter,%20Gustav%20Krowicki.pdf',
-    title: 'Recommendation',
+    title: 'Recommendation letter',
   },
 ];
 

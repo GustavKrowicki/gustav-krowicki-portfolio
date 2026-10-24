@@ -1,0 +1,445 @@
+{
+  "targetName": "Harbour Library",
+  "sourceImage": "ref/style-grey.png",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "architecture: a wide, low harbour library (a lopsided many-sided top box over a glass hall on a deck), as a toy-like 7 x 7 tile city building",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "architectural",
+        "faceted",
+        "sharp corners"
+      ],
+      "structureKind": [
+        "stacked plates",
+        "repeated modules (columns, railing bars, skylights, panel joints)"
+      ],
+      "motionPotential": [
+        "static"
+      ],
+      "materialFamilies": [
+        "light grey perforated metal",
+        "blue-green glass band",
+        "dark glass",
+        "grey roof",
+        "light stone",
+        "harbour water"
+      ],
+      "notes": "Style = the grey AI result (730:3605); proportions = blockout D (7 x 7, roof at 3.0 wu); scale = docs/city-rules.md against the 0.9 wu avatar."
+    },
+    "complexity": {
+      "tier": "moderate",
+      "scores": {
+        "silhouetteComplexity": 2,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 2,
+        "localDetailDensity": 2,
+        "occlusionRisk": 2,
+        "actionReadinessNeed": 1
+      },
+      "estimatedCounts": {
+        "macroComponents": 25,
+        "mesoComponents": 60,
+        "microFeatureGroups": 5,
+        "materialLayers": 16,
+        "repetitionSystems": 4
+      },
+      "reasoning": [
+        "Silhouette: a wide flat lopsided 8-sided box hanging far out over a thinner 8-sided deck; about 2.3 times as wide as tall.",
+        "Repetition: ~20 round columns, ~180 railing bars, 9 skylights, panel joints on every facade face.",
+        "Identity is the hovering grey box with its single blue-green band over a dark glass hall, on a deck with a stair.",
+        "Occlusion: the glass hall and the open ground floor sit in the shadow of the box and the deck."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "moderate",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": false,
+      "rationale": "The railing, columns and band only read as real geometry at sprite scale (62 px per wu)."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Footprint 7 x 7 tiles, blockout D (Gustav 2026-10-21): low, roof at 3.0 wu.",
+      "Outlines (deck, top box) and the hall square from the code blockout, in wu from the plot's north-west corner.",
+      "The harbour lies along the east edge; the plot has room for only a narrow strip of water there, wider in the south-east.",
+      "Signs (letters on the corner glass, the tall sign on a column), the light rail and the interior are later steps.",
+      "South side first; the other sides wait for Gustav's OK."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3 on ref/style-grey.png",
+      "targetMinDetails": 6,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "top-box",
+          "kind": "contour",
+          "description": "Lopsided many-sided top box, flat on top, sharp corners, hanging far out.",
+          "region": {
+            "x": 0.22,
+            "y": 0.0,
+            "width": 0.57,
+            "height": 0.5,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "box-facade.skin"
+          },
+          "evidenceRef": "./detail-zones/zone-r0c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "band",
+          "kind": "contour",
+          "description": "One thin blue-green window band all round the top box.",
+          "region": {
+            "x": 0.22,
+            "y": 0.2,
+            "width": 0.57,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "box-band.teal"
+          },
+          "evidenceRef": "./detail-zones/zone-r1c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "soffit",
+          "kind": "contour",
+          "description": "Underside of the top box sloping in toward the glass hall.",
+          "region": {
+            "x": 0.3,
+            "y": 0.4,
+            "width": 0.4,
+            "height": 0.1,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "soffit-1.slope"
+          },
+          "evidenceRef": "./detail-zones/zone-r1c1.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "roof",
+          "kind": "contour",
+          "description": "Flat grey roof with a grid of small white skylight boxes and solar panels.",
+          "region": {
+            "x": 0.22,
+            "y": 0.0,
+            "width": 0.57,
+            "height": 0.4,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "skylight-1.box"
+          },
+          "evidenceRef": "./detail-zones/zone-r0c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "hall",
+          "kind": "contour",
+          "description": "Dark glass library floor set back under the box, with mullions.",
+          "region": {
+            "x": 0.33,
+            "y": 0.4,
+            "width": 0.35,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "hall-glass.dark"
+          },
+          "evidenceRef": "./detail-zones/zone-r1c1.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "deck",
+          "kind": "contour",
+          "description": "Deck on round grey columns with a fine metal railing; dark open space under it.",
+          "region": {
+            "x": 0.22,
+            "y": 0.35,
+            "width": 0.6,
+            "height": 0.45,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "railing-bar.fine"
+          },
+          "evidenceRef": "./detail-zones/zone-r2c1.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "stair",
+          "kind": "contour",
+          "description": "Wide light stone stair from the deck down to the plaza on the front-left (south) side.",
+          "region": {
+            "x": 0.24,
+            "y": 0.55,
+            "width": 0.18,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "stair-1.step"
+          },
+          "evidenceRef": "./detail-zones/zone-r2c0.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "quay",
+          "kind": "contour",
+          "description": "Harbour water on the right (east) with a light stone quay edge and dark bollards.",
+          "region": {
+            "x": 0.5,
+            "y": 0.5,
+            "width": 0.5,
+            "height": 0.5,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "quay-edge.coping"
+          },
+          "evidenceRef": "./detail-zones/zone-r2c2.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "panel-joints",
+          "kind": "linework",
+          "description": "Perforated panel joints on the light grey skin.",
+          "region": {
+            "x": 0.22,
+            "y": 0.2,
+            "width": 0.57,
+            "height": 0.3,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "panel-joint.line"
+          },
+          "evidenceRef": "./detail-zones/zone-r1c2.png",
+          "confidence": 0.6
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "ref/style-grey.png"
+  },
+  "qualityContract": {
+    "qualityBar": "moderate",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 2,
+      "mesoComponents": 3,
+      "microFeatureGroups": 2,
+      "materialLayers": 2,
+      "repetitionSystems": 0,
+      "reviewViewpoints": 3
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "Harbour Library",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "62f2831e1d52eeb6dbb94a87c44fa25b1f4926626a7b1f8c2bcadc63e04e9471"
+    },
+    "matches": [
+      {
+        "record_id": "core.shader-mapping-customshadermaterial-csm-weathering-hooks",
+        "file_path": "docs/raw/img2threejs-skill-dataset.json",
+        "heading": null,
+        "key_path": "categories.rendering_shader_mapping[1]",
+        "score": 3.256486414944,
+        "snippets": [
+          "Extension library exposing csm_* output variables to inject procedural noise/masks into an otherwise-standard lit material, used for dynamic tarnish/patina effects. Th\u01b0 vi\u1ec7n m\u1edf r\u1ed9ng cung c\u1ea5p c\u00e1c bi\u1ebfn \u0111\u1ea7u ra csm_* \u0111\u1ec3 ch\u00e8n nhi\u1ec5u/m\u1eb7t n\u1ea1 th\u1ee7 t\u1ee5c v\u00e0o ..."
+        ],
+        "source_refs": [
+          {
+            "path": "docs/raw/img2threejs-skill-dataset.json",
+            "heading": null,
+            "key_path": "categories.rendering_shader_mapping[1]"
+          }
+        ],
+        "evidence_refs": [
+          {
+            "kind": "source",
+            "ref": "docs/raw/img2threejs-skill-dataset.json",
+            "note": "img2threejs NotebookLM research distillation"
+          }
+        ]
+      }
+    ]
+  }
+}

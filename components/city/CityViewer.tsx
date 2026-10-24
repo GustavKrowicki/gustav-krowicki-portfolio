@@ -1,30 +1,37 @@
 "use client";
 
+import { HOUR_OF, TIMES_OF_DAY, isNightHour, lookForHour, type CityLook, type TimeOfDay } from "@/lib/city/nightSchedule";
+import TimeOfDayButton from "./TimeOfDayButton";
 import { useState, useCallback, useRef, useEffect } from "react";
 import dynamic from "next/dynamic";
 import { GridCell, CharacterType, Direction, PlayerState, PlayerData, GameMode } from "./pogicity/types";
 import { getBuilding } from "@/lib/city/buildings";
+import { BOUNCE_RATE_SECONDS, FINDS, FIND_WALK_EVENT, addCitySeconds, isFound, markFound, onFound, type Find, type FindWalkTarget } from "@/lib/achievements";
+import FoundToast from "./FoundToast";
 import { TourStop, findBuildingPosition, TOUR_STOPS } from "@/lib/city/tourStops";
-import WelcomeOverlay from "./WelcomeOverlay";
-import TourGuide from "./TourGuide";
 import RPGDialogBox from "./RPGDialogBox";
+import PlaceSheet from "./PlaceSheet";
+import FindPill from "./FindPill";
+import PeekCard from "./PeekCard";
+import WalkInCard from "./WalkInCard";
+import ScreensOverlay from "./ScreensOverlay";
+import { BEAT_CARD_BUILDINGS, INTERIOR_BEATS } from "@/lib/city/interiorBeats";
+import { getPlace } from "@/lib/city/places";
+import { PLACE_WALK_IN_EVENT } from "@/lib/popupMode";
 import VirtualJoystick from "./VirtualJoystick";
-import AdventureHUD from "./AdventureHUD";
 import DirectionalCompass from "./DirectionalCompass";
 import LogosOverlay, { LogoPosition } from "./LogosOverlay";
 import { PIXEL_INSET_CLIP, pixelButtonClass } from "./pixelModalStyles";
 import PortfolioModeToggle from "@/components/ui/PortfolioModeToggle";
 import type { GameBoardHandle } from "./pogicity/GameBoard";
+import type { MainScene } from "./pogicity/phaser/MainScene";
 import {
   trackModeSelected,
   trackBuildingInteracted,
   trackProjectOpened,
-  trackAdventureCompleted,
-  trackAdventureExited,
-  trackTourStopViewed,
-  trackTourCompleted,
-  trackTourExited,
   trackCityExited,
+  trackBeatChoice,
+  trackFind,
 } from "@/lib/analytics";
 
 // Dynamically import GameBoard to avoid SSR issues
@@ -37,15 +44,48 @@ const GameBoard = dynamic(() => import("./pogicity/GameBoard"), {
   ),
 });
 
+const TIME_OF_DAY_KEY = "city-time-of-day";
+const FIND_TOTAL = FINDS.length;
+
+function readUrlTime(): { night: boolean | null; hour: number | null } {
+  try {
+    const search = new URLSearchParams(window.location.search);
+    const night = search.get("night");
+    const hour = search.get("hour");
+    return {
+      night: night === "1" ? true : night === "0" ? false : null,
+      hour: hour !== null && /^\d{1,2}$/.test(hour) && Number(hour) < 24 ? Number(hour) : null,
+    };
+  } catch {
+    return { night: null, hour: null };
+  }
+}
+
 interface CityViewerProps {
   initialGrid: GridCell[][];
   onProjectClick?: (projectSlug: string) => void;
   e2eMode?: boolean;
+  // "page" is the standalone /city route, with its own mode toggle and a Walk button for the avatar.
+  // "shell" sits beside the portfolio panel, which owns the navigation, so the city hides those.
+  variant?: "page" | "shell";
+  // Shell only: the Avatar tab is showing. The avatar is put in the city and the camera holds it in view, so each
+  // outfit change is seen on it; the walk controls wait until the panel closes.
+  avatarTabOpen?: boolean;
+  // Shell only: the panel (on phones, the bottom sheet) is open. On a phone a place's card takes the sheet's spot, so the
+  // shell closes the panel when a place opens (onPlaceOpen), and an opening panel closes the place.
+  panelOpen?: boolean;
+  onPlaceOpen?: () => void;
+  // Shell only. "slot" (Figma board F): a tap on any building (or its logo) opens its place in the shell's
+  // panel instead of a card in the city (onOpenPlace); the shell's open place comes back as openPlace, and a walk-in
+  // building's roof follows it. Finds are a pill on every screen, beat cards plain, and the old tour dialog never shows.
+  popups?: "cards" | "slot";
+  openPlace?: string | null;
+  onOpenPlace?: (buildingId: string) => void;
+  onClosePlace?: () => void;
 }
 
 
 interface CityE2EApi {
-  dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
@@ -58,27 +98,89 @@ interface CityE2EApi {
   stopAdventure: () => void;
   pauseGame: () => boolean;
   resumeGame: () => boolean;
+  getCameraState: () => CityE2ECameraState | null;
+  // The live MainScene, for probing in e2e mode (camera, player, walk-in buildings)
+  getScene: () => MainScene | null;
+}
+
+interface CityE2ECameraState {
+  webgl: boolean;
+  zoom: number;
+  view: { x: number; y: number; width: number; height: number };
+  player: { x: number; y: number } | null;
 }
 
 export default function CityViewer({
   initialGrid,
   onProjectClick,
   e2eMode = false,
+  variant = "page",
+  avatarTabOpen = false,
+  panelOpen = false,
+  onPlaceOpen,
+  popups = "cards",
+  openPlace = null,
+  onOpenPlace,
+  onClosePlace,
 }: CityViewerProps) {
-  // Mode state
-  const [showWelcome, setShowWelcome] = useState(true);
+  const isShell = variant === "shell";
+  const slot = isShell && popups === "slot";
+  // For the Phaser event handlers, which are set up once
+  const slotRef = useRef(slot);
+  slotRef.current = slot;
+  const onOpenPlaceRef = useRef(onOpenPlace);
+  onOpenPlaceRef.current = onOpenPlace;
+  const onClosePlaceRef = useRef(onClosePlace);
+  onClosePlaceRef.current = onClosePlace;
+  const openPlaceRef = useRef(openPlace);
+  // The walk-in building whose roof is off for the shell's place (slot), so a closing roof closes that place only
+  const peekedPlaceRef = useRef<string | null>(null);
+  // Phone width in the shell (the panel's md breakpoint): place cards open as a bottom sheet, peek cards sit at the
+  // bottom, finds show as a small pill (POR-23, modeled on tomjohn.design)
+  const [isPhone, setIsPhone] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const update = () => setIsPhone(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const phoneShell = isShell && isPhone;
+
+  // Mode state: Viewer pans the camera, Adventure walks the avatar (the shell's walk step reuses it)
   const [gameMode, setGameMode] = useState<GameMode>(GameMode.Viewer);
-
-  // Tour state (classic tour mode)
-  const [isTourActive, setIsTourActive] = useState(false);
-  const [currentTourStop, setCurrentTourStop] = useState(0);
-
-  // Adventure mode state
   const [isAdventureActive, setIsAdventureActive] = useState(false);
+  // ?night=1 / ?night=0 and ?hour=0..23 on the URL, for links and screenshots (read once)
+  const [urlTime] = useState(() => readUrlTime());
+  // The city's hour (the visitor's clock, or ?hour=): which windows are lit and how many people walk
+  const [hour, setHour] = useState(() => urlTime.hour ?? new Date().getHours());
   const [visitedBuildings, setVisitedBuildings] = useState<Set<string>>(new Set());
+  // Peek card inside a walk-in building (MainScene "interiorBeatChanged")
+  const [interiorBeat, setInteriorBeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  // A walk-in building opened in place by a tap (roof off, MainScene "walkInPeek"): its card shows
+  const [walkInPeek, setWalkInPeek] = useState<string | null>(null);
+  // Sit-and-look moment: the beat the avatar sits at (MainScene "interiorSeatChanged"), shown by ScreensOverlay
+  const [interiorSeat, setInteriorSeat] = useState<{ buildingId: string; beat: string } | null>(null);
+  const seatTimerRef = useRef<number | undefined>(undefined);
+  const [isSeated, setIsSeated] = useState(false);
+  // A card's button changed the card in place (beat.choices without walk, e.g. "Book for an event"); cleared on the next beat
+  const [choiceCard, setChoiceCard] = useState<{ buildingId: string; beat: string } | null>(null);
+  useEffect(() => setChoiceCard(null), [interiorBeat]);
+  // Door beats (lib/city/interiorBeats.ts "enter" / "leave"): shown for a while after crossing a main door
+  const [doorCard, setDoorCard] = useState<{ buildingId: string; beat: string } | null>(null);
+  const doorTimerRef = useRef<number | undefined>(undefined);
+  // slot: the avatar stood still after a door card showed, so its next walk closes the card
+  const doorStoppedRef = useRef(false);
+  useEffect(() => () => {
+    window.clearTimeout(seatTimerRef.current);
+    window.clearTimeout(doorTimerRef.current);
+  }, []);   // at once; the screens (interiorSeat) follow a moment later
   const [currentEncounter, setCurrentEncounter] = useState<TourStop | null>(null);
+  const [hoverPlace, setHoverPlace] = useState<string | null>(null);
+  // Where the avatar stands (the name pill at a door sits over its head); read when the overlay renders, which follows
+  // the camera, so walking does not re-render the viewer
+  const avatarAtRef = useRef<{ x: number; y: number } | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isAutoWalking, setIsAutoWalking] = useState(false);
   const [walkableDirections, setWalkableDirections] = useState<Direction[]>([]);
 
   // Logo overlay state
@@ -104,14 +206,13 @@ export default function CityViewer({
   const hasSpawnedAmbientLife = useRef(false);
   const hasManualViewportInteraction = useRef(false);
   const updateLogosAndCameraRef = useRef<(() => void) | null>(null);
-  const adventureStartTimeRef = useRef<number | null>(null);
-  const tourStartTimeRef = useRef<number | null>(null);
-  const hasTrackedAdventureCompletionRef = useRef(false);
-  const maxTourStopViewedRef = useRef(0);
   const autoWalkTargetRef = useRef<string | null>(null);
+  const adventureOnRef = useRef(false);
   const currentEncounterRef = useRef<TourStop | null>(null);
-  currentEncounterRef.current = currentEncounter;
-  const selectedModeRef = useRef<'none' | 'tour' | 'explore' | 'adventure'>('none');
+  useEffect(() => {
+    currentEncounterRef.current = currentEncounter;
+  }, [currentEncounter]);
+  const selectedModeRef = useRef<'explore' | 'adventure'>('explore');
   const visitedBuildingsCountRef = useRef(0);
   useEffect(() => {
     visitedBuildingsCountRef.current = visitedBuildings.size;
@@ -279,7 +380,7 @@ export default function CityViewer({
       window.setTimeout(() => {
         updateLogosAndCameraRef.current?.();
 
-        if (showWelcome || !hasManualViewportInteraction.current) {
+        if (!hasManualViewportInteraction.current) {
           gameBoardRef.current?.fitCityView();
         }
       }, 300);
@@ -290,38 +391,20 @@ export default function CityViewer({
     return () => {
       window.removeEventListener("orientationchange", handleOrientationChange);
     };
-  }, [showWelcome]);
-
-  // Handle welcome overlay actions
-  const handleStartTour = useCallback(() => {
-    setShowWelcome(false);
-    setGameMode(GameMode.Viewer);
-    setIsTourActive(true);
-    setCurrentTourStop(0);
-    trackModeSelected('tour');
-    selectedModeRef.current = 'tour';
-    tourStartTimeRef.current = Date.now();
-    maxTourStopViewedRef.current = 0;
-  }, []);
-
-  const handleExploreFreely = useCallback(() => {
-    setShowWelcome(false);
-    setGameMode(GameMode.Viewer);
-    setIsTourActive(false);
-    trackModeSelected('explore');
-    selectedModeRef.current = 'explore';
   }, []);
 
   // Start Adventure Mode
-  const handleStartAdventure = useCallback(() => {
-    setShowWelcome(false);
+  // (fromAvatarTab: walk mode only to show the avatar while the visitor dresses it, not a mode choice to track;
+  // onLoad: the new site starts walking by itself, also not a choice)
+  const handleStartAdventure = useCallback((options?: { fromAvatarTab?: boolean; onLoad?: boolean }) => {
+    // Once only: the load, the Avatar tab and a card's Walk in can all ask at the same moment
+    if (adventureOnRef.current) return;
+    adventureOnRef.current = true;
     setGameMode(GameMode.Adventure);
     setIsAdventureActive(true);
     setVisitedBuildings(new Set());
-    trackModeSelected('adventure', 'gustav');
+    if (!options?.fromAvatarTab && !options?.onLoad) trackModeSelected('adventure', 'gustav');
     selectedModeRef.current = 'adventure';
-    adventureStartTimeRef.current = Date.now();
-    hasTrackedAdventureCompletionRef.current = false;
 
     // Start adventure mode in Phaser
     const gameBoard = gameBoardRef.current;
@@ -336,6 +419,12 @@ export default function CityViewer({
           // Suppress dialog when passing through zones en route to a different target
           scene.events.on("playerEnteredZone", ({ buildingId, tourStop }: { buildingId: string; tourStop: TourStop }) => {
             setCurrentEncounter(tourStop);
+            markFound(`zone:${buildingId}`);
+            // buildings told by beat cards never open the tour dialog (it would stay "open" unseen and hide Walk)
+            if (BEAT_CARD_BUILDINGS.has(buildingId)) {
+              if (autoWalkTargetRef.current === buildingId) autoWalkTargetRef.current = null;
+              return;
+            }
 
             if (!autoWalkTargetRef.current) {
               setIsDialogOpen(true);
@@ -344,11 +433,44 @@ export default function CityViewer({
               }
             } else if (autoWalkTargetRef.current === buildingId) {
               autoWalkTargetRef.current = null;
-              setIsDialogOpen(true);
+              // slot: arriving where Walk there pointed opens the place in the panel
+              if (slotRef.current) onOpenPlaceRef.current?.(buildingId);
+              else setIsDialogOpen(true);
               if (tourStop.title) {
                 trackBuildingInteracted(tourStop.title, 'adventure', 'auto_walk');
               }
             }
+          });
+
+          // Walk may be pressed again later: drop the interior listeners from the last time before adding them
+          for (const name of ["interiorBeatChanged", "interiorDoorCrossed", "interiorSeatChanged"]) scene.events.off(name);
+
+          // Peek card: the avatar stands on (or leaves) a beat's stand tile inside a walk-in building
+          scene.events.on("interiorBeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            setInteriorBeat(next);
+            if (next) markFound(`${next.buildingId}:${next.beat}`);
+            if (next) setDoorCard((card) => (card?.beat === "enter" ? null : card));
+          });
+          // enter card on the way in (until a stand tile opens its own card, or 6 s), leave card on the way out (15 s)
+          scene.events.on("interiorDoorCrossed", ({ buildingId, inward }: { buildingId: string; inward: boolean }) => {
+            if (inward && walkHintRef.current === buildingId) showWalkHint(buildingId);
+            walkHintRef.current = null;
+            window.clearTimeout(doorTimerRef.current);
+            const beat = inward ? "enter" : "leave";
+            if (!INTERIOR_BEATS[buildingId]?.[beat]) { setDoorCard(null); return; }
+            setDoorCard({ buildingId, beat });
+            // slot: no timer, the card stays until the avatar walks on (playerPositionChanged)
+            doorStoppedRef.current = false;
+            if (!slotRef.current) doorTimerRef.current = window.setTimeout(() => setDoorCard(null), inward ? 6000 : 15000);
+          });
+
+          // the screens open a moment after the avatar sits, so the sit itself is seen
+          scene.events.on("interiorSeatChanged", (next: { buildingId: string; beat: string } | null) => {
+            window.clearTimeout(seatTimerRef.current);
+            setIsSeated(!!next);
+            if (!next) { setInteriorSeat(null); return; }
+            const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+            seatTimerRef.current = window.setTimeout(() => setInteriorSeat(next), reduced ? 150 : 700);
           });
 
           // Player exited trigger zone
@@ -369,20 +491,44 @@ export default function CityViewer({
             if (data.state === PlayerState.Walking && autoWalkTargetRef.current) {
               autoWalkTargetRef.current = null;
             }
-            setIsAutoWalking(data.state === PlayerState.AutoWalking);
+            if (slotRef.current) {
+              if (data.state !== PlayerState.Walking) doorStoppedRef.current = true;
+              else if (doorStoppedRef.current) setDoorCard(null);
+            }
             setWalkableDirections(data.walkableDirections ?? []);
+            avatarAtRef.current = { x: data.worldX, y: data.worldY };
           });
 
           // Building visited
           scene.events.on("buildingVisited", ({ buildingId }: { buildingId: string }) => {
             setVisitedBuildings((prev) => new Set([...prev, buildingId]));
           });
+
+          // The building under the mouse, named in a pill (LogosOverlay)
+          scene.events.off("placeHover");
+          scene.events.on("placeHover", (id: string | null) => setHoverPlace(id));
         }
       }
     }
   }, []);
 
   const handleLogoClick = useCallback((buildingId: string) => {
+    // slot: a logo opens the same thing as its building, its place
+    if (slotRef.current) {
+      if (!getPlace(buildingId)) return;
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+      if (!scene?.openInPlace(buildingId)) gameBoardRef.current?.panToBuildingById(buildingId);
+      onOpenPlaceRef.current?.(buildingId);
+      return;
+    }
+    // A logo opens the same thing as its building: the case, when there is one
+    const building = getBuilding(buildingId);
+    if (building?.interactable && building.projectSlug) {
+      trackBuildingInteracted(building.name, gameMode, 'logo_click');
+      onProjectClick?.(building.projectSlug);
+      return;
+    }
+
     if (isAdventureActive) {
       autoWalkTargetRef.current = buildingId;
       gameBoardRef.current?.walkPlayerToBuilding(buildingId);
@@ -403,26 +549,130 @@ export default function CityViewer({
       setCurrentEncounter(stop);
       setIsDialogOpen(true);
     }
-  }, [gameMode, isAdventureActive]);
+  }, [gameMode, isAdventureActive, onProjectClick]);
+
+  // The city follows the visitor's own clock in their browser (lookForHour) unless they pick a time of day on
+  // the button next to Walk (remembered in this browser). ?night=1 / ?night=0 on the URL forces night or day (for links
+  // and screenshots), and ?hour=0..23 stands in for the clock
+  const [timeOfDay, setTimeOfDay] = useState<TimeOfDay>(() => {
+    try {
+      // A link with ?night= or ?hour= shows what the link asks for, whatever this browser picked before
+      if (urlTime.night !== null || urlTime.hour !== null) return "auto";
+      const saved = window.localStorage.getItem(TIME_OF_DAY_KEY);
+      return TIMES_OF_DAY.some((t) => t.id === saved) ? (saved as TimeOfDay) : "auto";
+    } catch {
+      return "auto"; // Storage blocked: stay on Auto
+    }
+  });
+  const pickTimeOfDay = useCallback((value: TimeOfDay) => {
+    setTimeOfDay(value);
+    try {
+      window.localStorage.setItem(TIME_OF_DAY_KEY, value);
+    } catch {
+      // Storage blocked: the pick lasts for this visit
+    }
+  }, []);
+  // A picked time of day wins; Auto takes the look from the hour, and ?night=1 / ?night=0 forces night or day
+  const look: CityLook = timeOfDay !== "auto" ? timeOfDay
+    : urlTime.night !== null ? (urlTime.night ? "night" : "day") : lookForHour(hour);
+  useEffect(() => {
+    if (urlTime.hour !== null) return;
+    const timer = window.setInterval(() => setHour(new Date().getHours()), 60_000);
+    return () => window.clearInterval(timer);
+  }, [urlTime.hour]);
+
+  // Finds (lib/achievements.ts). A beat card shows its own "Found" tag; every other find gets a short toast.
+  const [freshFinds, setFreshFinds] = useState<Record<string, string>>({});
+  const [toast, setToast] = useState<{ find: Find; count: number } | null>(null);
+  const toastTimerRef = useRef<number | undefined>(undefined);
+  useEffect(() => {
+    const off = onFound((find, count) => {
+      trackFind(find.id, find.group, count);
+      if (find.onCard) {
+        setFreshFinds((prev) => ({ ...prev, [find.id]: `Found · ${count} of ${FIND_TOTAL}` }));
+        return;
+      }
+      window.clearTimeout(toastTimerRef.current);
+      setToast({ find, count });
+      toastTimerRef.current = window.setTimeout(() => setToast(null), 5000);
+    });
+    return () => {
+      off();
+      window.clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+  // After a hidden find's "Walk me close": in through the door, say how many finds still hide in these rooms
+  const [walkHint, setWalkHint] = useState<string | null>(null);
+  const walkHintTimerRef = useRef<number | undefined>(undefined);
+  const showWalkHint = (buildingId: string) => {
+    const left = FINDS.filter((find) => find.id.startsWith(`${buildingId}:`) && !isFound(find.id)).length;
+    if (left === 0) return;
+    window.clearTimeout(walkHintTimerRef.current);
+    setWalkHint(`${left} ${left === 1 ? "find hides" : "finds hide"} in here. Tap a room to walk in and look.`);
+    walkHintTimerRef.current = window.setTimeout(() => setWalkHint(null), 7000);
+  };
+  useEffect(() => () => window.clearTimeout(walkHintTimerRef.current), []);
+  // Night owl: the city after midnight, on the visitor's own clock (or ?hour=0..4)
+  useEffect(() => {
+    if (hour < 5) markFound("night-owl");
+  }, [hour]);
+  // Bounce rate: five minutes in the city, counted across every visit while the tab is in view
+  useEffect(() => {
+    const step = 15;
+    const timer = window.setInterval(() => {
+      if (document.hidden) return;
+      if (addCitySeconds(step) >= BOUNCE_RATE_SECONDS) markFound("bounce-rate");
+    }, step * 1000);
+    return () => window.clearInterval(timer);
+  }, []);
+
+  // Hand the night state to the scene, waiting for it to exist on first load (however long that takes)
+  useEffect(() => {
+    const apply = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { setLook?: (look: CityLook) => void; setHour?: (hour: number) => void } | undefined;
+      if (scene?.setLook) {
+        // (night forced in the daytime shows the evening's windows)
+        const pickedHour = HOUR_OF[timeOfDay];
+        const sceneHour = pickedHour ?? hour;
+        scene.setHour?.(look === "night" && !isNightHour(sceneHour) ? 21 : sceneHour);
+        scene.setLook(look);
+        return true;
+      }
+      return false;
+    };
+    if (apply()) return;
+    const timer = window.setInterval(() => { if (apply()) window.clearInterval(timer); }, 250);
+    return () => window.clearInterval(timer);
+  }, [look, hour, timeOfDay]);
 
   // Stop Adventure Mode
-  const handleStopAdventure = useCallback(() => {
-    if (adventureStartTimeRef.current && !hasTrackedAdventureCompletionRef.current) {
-      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
-      trackAdventureExited(duration, visitedBuildings.size);
-    }
+  // Close the screens: the avatar stands up from its chair (the scene then emits interiorSeatChanged null)
+  const handleStandUp = useCallback(() => {
+    const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as { standUp?: () => void } | undefined;
+    scene?.standUp?.();
+    window.clearTimeout(seatTimerRef.current);
+    setIsSeated(false);
+    setInteriorSeat(null);
+  }, []);
 
+  const handleStopAdventure = useCallback(() => {
+    adventureOnRef.current = false;
     setIsAdventureActive(false);
     setGameMode(GameMode.Viewer);
     setCurrentEncounter(null);
     setIsDialogOpen(false);
+    setInteriorBeat(null);
+    setInteriorSeat(null);
+    setIsSeated(false);
+    setDoorCard(null);
     autoWalkTargetRef.current = null;
 
     const gameBoard = gameBoardRef.current;
     if (gameBoard) {
       gameBoard.stopAdventureMode();
     }
-  }, [visitedBuildings.size]);
+  }, []);
 
   // Handle dialog close
   const handleDialogClose = useCallback(() => {
@@ -434,18 +684,6 @@ export default function CityViewer({
       setVisitedBuildings((prev) => new Set([...prev, currentEncounter.buildingId!]));
     }
   }, [currentEncounter]);
-
-  // Handle "Next Stop" button in AdventureHUD
-  const handleNextStop = useCallback(() => {
-    // Find next unvisited building
-    for (const stop of TOUR_STOPS) {
-      if (stop.buildingId && !visitedBuildings.has(stop.buildingId)) {
-        autoWalkTargetRef.current = stop.buildingId;
-        gameBoardRef.current?.walkPlayerToBuilding(stop.buildingId);
-        break;
-      }
-    }
-  }, [visitedBuildings]);
 
   // Handle joystick direction change
   const handleJoystickDirection = useCallback((direction: Direction | null) => {
@@ -466,75 +704,136 @@ export default function CityViewer({
     onProjectClick?.(projectSlug);
   }, [currentEncounter, onProjectClick]);
 
-  // Tour navigation (classic mode)
-  const handleTourNextStop = useCallback(() => {
-    if (currentTourStop < TOUR_STOPS.length - 1) {
-      const nextIndex = currentTourStop + 1;
-      setCurrentTourStop(nextIndex);
-      const stop = TOUR_STOPS[nextIndex];
-      if (stop) {
-        trackTourStopViewed(stop.title, nextIndex);
-        maxTourStopViewedRef.current = Math.max(maxTourStopViewedRef.current, nextIndex);
+  // A tap on a walk-in building opens it in place (MainScene openWalkInPeek): follow it here for the card. The scene may
+  // still be booting, so wait for it.
+  useEffect(() => {
+    type PeekListener = (next: { buildingId: string } | null) => void;
+    let scene: { events?: { on: (name: string, fn: PeekListener) => void; off: (name: string, fn: PeekListener) => void } } | undefined;
+    let timer = 0;
+    const onPeek = (next: { buildingId: string } | null) => {
+      setWalkInPeek(next?.buildingId ?? null);
+      // slot: the roof is the place's. Opening it opens the place in the panel; closing it (a tap elsewhere, walking in)
+      // closes that place, unless the shell has moved on to another one
+      if (slotRef.current) {
+        const was = peekedPlaceRef.current;
+        peekedPlaceRef.current = next?.buildingId ?? null;
+        if (next) onOpenPlaceRef.current?.(next.buildingId);
+        else if (was && openPlaceRef.current === was) onClosePlaceRef.current?.();
       }
-    }
-  }, [currentTourStop]);
+      if (!next) return;
+      const building = getBuilding(next.buildingId);
+      if (building) trackBuildingInteracted(building.name, selectedModeRef.current, 'open_in_place');
+    };
+    const attach = () => {
+      scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as typeof scene;
+      if (!scene?.events) { timer = window.setTimeout(attach, 200); return; }
+      // slot: the page's Esc goes one step back (case, place); the roof follows the place
+      (scene as { peekEscCloses?: boolean }).peekEscCloses = !slotRef.current;
+      scene.events.on("walkInPeek", onPeek);
+    };
+    attach();
+    return () => {
+      window.clearTimeout(timer);
+      scene?.events?.off("walkInPeek", onPeek);
+    };
+  }, []);
 
-  const handlePreviousStop = useCallback(() => {
-    if (currentTourStop > 0) {
-      setCurrentTourStop((prev) => prev - 1);
-    }
-  }, [currentTourStop]);
+  const walkInScene = useCallback(
+    () =>
+      gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { walkIntoPeek?: () => boolean; closeWalkInPeek?: () => void; openInPlace?: (buildingId: string) => boolean }
+        | undefined,
+    []
+  );
 
-  const handleEndTour = useCallback(() => {
-    if (tourStartTimeRef.current) {
-      const duration = Math.round((Date.now() - tourStartTimeRef.current) / 1000);
-      const isLastStop = currentTourStop >= TOUR_STOPS.length - 1;
-      if (isLastStop) {
-        trackTourCompleted(duration);
-      } else {
-        trackTourExited(duration, maxTourStopViewedRef.current + 1);
-      }
-    }
-    setIsTourActive(false);
-    setCurrentTourStop(0);
-  }, [currentTourStop]);
-
-  // Handle tour stop changes - pan camera to building
-  // Skip zoom/pan for the Welcome step (first stop) - only start panning from step 2 onwards
-  const handleStopChange = useCallback(
-    (stop: TourStop) => {
-      const gameBoard = gameBoardRef.current;
-      if (!gameBoard) return;
-
-      // Skip zoom/pan for the Welcome step - keep showing whole city
-      if (stop.id === "welcome") {
+  // slot: the shell's open place drives the city. A new place takes the roof off its walk-in building (a link that
+  // opens on it, or a place opened from the panel) or moves the camera to it; no place puts the last roof back.
+  useEffect(() => {
+    openPlaceRef.current = openPlace;
+    if (!slot) return;
+    const peeked = peekedPlaceRef.current;
+    if (peeked && peeked !== openPlace) walkInScene()?.closeWalkInPeek?.();
+    if (!openPlace || openPlace === peeked) return;
+    let tries = 0, timer = 0;
+    const go = () => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as { ready?: boolean } | undefined;
+      if (!scene?.ready) {
+        if (++tries < 100) timer = window.setTimeout(go, 150);
         return;
       }
+      if (!walkInScene()?.openInPlace?.(openPlace)) gameBoardRef.current?.panToBuildingById(openPlace);
+    };
+    go();
+    return () => window.clearTimeout(timer);
+  }, [slot, openPlace, walkInScene]);
 
-      let position: { x: number; y: number } | null = null;
+  // slot: the place's Walk in, from the panel
+  useEffect(() => {
+    if (!slot) return;
+    const onWalkIn = () => handleWalkInPeekRef.current();
+    window.addEventListener(PLACE_WALK_IN_EVENT, onWalkIn);
+    return () => window.removeEventListener(PLACE_WALK_IN_EVENT, onWalkIn);
+  }, [slot]);
 
-      if (stop.buildingId) {
-        position = findBuildingPosition(initialGrid, stop.buildingId);
-      } else if (stop.gridPosition) {
-        position = stop.gridPosition;
-      }
+  // The card's Walk in: start walking first when needed (the avatar spawns), then walk to the open building's door
+  const handleWalkInPeek = useCallback(() => {
+    if (!isAdventureActive) handleStartAdventure();
+    let tries = 0;
+    const go = () => {
+      if (walkInScene()?.walkIntoPeek?.()) return;
+      if (++tries < 30) window.setTimeout(go, 100);
+    };
+    go();
+  }, [isAdventureActive, handleStartAdventure, walkInScene]);
+  const handleWalkInPeekRef = useRef(handleWalkInPeek);
+  handleWalkInPeekRef.current = handleWalkInPeek;
 
-      if (position) {
-        const isMobile = window.innerWidth < 768;
-        const offset = isMobile
-          ? (stop.cameraOffsetMobile ?? stop.cameraOffset)
-          : stop.cameraOffset;
-        const offsetX = offset?.x ?? 0;
-        const offsetY = offset?.y ?? 0;
-        gameBoard.panToPosition(position.x + offsetX, position.y + offsetY, { dialogVisible: true });
-        hasManualViewportInteraction.current = true;
-      }
+  // A find's "Walk there" in the panel: start walking when needed (the avatar spawns), then run to the room's spot, in
+  // through a building's door (a hidden room), or to the place. Zones passed on the way stay quiet; the place itself
+  // greets the avatar as a logo walk does.
+  const walkHintRef = useRef<string | null>(null);
+  useEffect(() => {
+    const onFindWalk = (e: Event) => {
+      const { buildingId, beat, inside } = (e as CustomEvent<FindWalkTarget>).detail;
+      if (!isAdventureActive) handleStartAdventure();
+      walkInScene()?.closeWalkInPeek?.();
+      walkHintRef.current = inside ? buildingId : null;
+      let tries = 0;
+      const go = () => {
+        const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+        let started = beat ? !!scene?.walkPlayerToBeat(buildingId, beat) : inside ? !!scene?.walkPlayerIntoBuilding(buildingId) : false;
+        if (!started && !beat && !inside) {
+          if (!BEAT_CARD_BUILDINGS.has(buildingId)) autoWalkTargetRef.current = buildingId;
+          started = !!gameBoardRef.current?.walkPlayerToBuilding(buildingId);
+          if (!started) autoWalkTargetRef.current = null;
+        }
+        if (started) { scene?.runPlayer(); return; }
+        if (++tries < 30) window.setTimeout(go, 100);
+      };
+      go();
+    };
+    window.addEventListener(FIND_WALK_EVENT, onFindWalk);
+    return () => window.removeEventListener(FIND_WALK_EVENT, onFindWalk);
+  }, [isAdventureActive, handleStartAdventure, walkInScene]);
 
-      // Highlight the building if it exists
-      gameBoard.highlightBuilding(stop.buildingId || null);
-    },
-    [initialGrid]
-  );
+  // Phones: a place opened in place takes the sheet's spot, so the panel closes; a panel opened from the tab bar
+  // closes the place again
+  useEffect(() => {
+    if (phoneShell && !slot && walkInPeek) onPlaceOpen?.();
+  }, [phoneShell, slot, walkInPeek, onPlaceOpen]);
+  const walkInPeekRef = useRef(walkInPeek);
+  useEffect(() => {
+    walkInPeekRef.current = walkInPeek;
+  }, [walkInPeek]);
+  useEffect(() => {
+    if (panelOpen && phoneShell && !slot && walkInPeekRef.current) walkInScene()?.closeWalkInPeek?.();
+  }, [panelOpen, phoneShell, slot, walkInScene]);
+
+  const handleReadCasePeek = useCallback(() => {
+    const slug = walkInPeek ? getBuilding(walkInPeek)?.projectSlug : undefined;
+    walkInScene()?.closeWalkInPeek?.();
+    if (slug) handleViewCaseStudy(slug);
+  }, [walkInPeek, handleViewCaseStudy, walkInScene]);
 
   // Handle building click
   const handleBuildingClick = useCallback(
@@ -542,9 +841,15 @@ export default function CityViewer({
       const building = getBuilding(buildingId);
       if (!building) return;
 
-      if (isTourActive) return;
-
       trackBuildingInteracted(building.name, gameMode, 'click');
+
+      // slot: every building with a place opens it in the panel (walk-in buildings come through walkInPeek instead)
+      if (slot) {
+        if (!getPlace(buildingId)) return;
+        gameBoardRef.current?.panToBuildingById(buildingId);
+        onOpenPlace?.(buildingId);
+        return;
+      }
 
       if (building.interactable && building.projectSlug) {
         onProjectClick?.(building.projectSlug);
@@ -557,9 +862,82 @@ export default function CityViewer({
         }
       }
     },
-    [onProjectClick, isTourActive, gameMode]
+    [onProjectClick, gameMode, slot, onOpenPlace]
   );
 
+
+  // The new site lands walking (POR-47): once the scene is up the avatar spawns by Valtech, the camera starts close on
+  // it and after a moment zooms out to street zoom (straight to street zoom with reduced motion). The Avatar tab, when
+  // a link opens on it, does its own focus.
+  const avatarTabOpenRef = useRef(avatarTabOpen);
+  avatarTabOpenRef.current = avatarTabOpen;
+  useEffect(() => {
+    if (!isShell) return;
+    let timer = 0;
+    const start = (left: number) => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { ready?: boolean; keepFramingOnSpawn?: boolean; landWalking?: (delayMs: number, glideMs: number) => void }
+        | undefined;
+      if (!scene?.ready) {
+        if (left > 0) timer = window.setTimeout(() => start(left - 1), 150);
+        return;
+      }
+      if (adventureOnRef.current) return;
+      scene.keepFramingOnSpawn = true;
+      handleStartAdventure({ onLoad: true });
+      if (avatarTabOpenRef.current) return;
+      const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+      scene.landWalking?.(reduced ? 0 : 1000, reduced ? 1 : 1200);
+    };
+    start(200);
+    return () => window.clearTimeout(timer);
+  }, [isShell, handleStartAdventure]);
+
+  // The Avatar tab opened: the avatar stands in the city (walk mode, so it exists) and the camera goes to it
+  // and it closed: back to street zoom on the avatar, ready to walk
+  const avatarTabWasOpen = useRef(false);
+  useEffect(() => {
+    const focus = (close = false) => {
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { focusOnPlayer?: (close?: boolean) => boolean }
+        | undefined;
+      return scene?.focusOnPlayer?.(close) ?? false;
+    };
+    if (!avatarTabOpen) {
+      if (avatarTabWasOpen.current) {
+        avatarTabWasOpen.current = false;
+        const t = window.setTimeout(() => focus(true), 250);   // after the canvas grows back
+        return () => window.clearTimeout(t);
+      }
+      return;
+    }
+    avatarTabWasOpen.current = true;
+    walkInScene()?.closeWalkInPeek?.(); // the tab hides the card, so put the roof back too
+    // Wait for the scene (a deep link to the tab can arrive before Phaser has booted), start walk mode so the
+    // avatar exists, then focus once the player has spawned and the canvas has resized to the open panel.
+    let timer = 0;
+    let started = isAdventureActive;
+    const step = (left: number) => {
+      if (left <= 0) return;
+      const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as
+        | { ready?: boolean; skipNextSpawnFocus?: boolean }
+        | undefined;
+      if (!started) {
+        if (!scene?.ready) {
+          timer = window.setTimeout(() => step(left - 1), 150);
+          return;
+        }
+        scene.skipNextSpawnFocus = true;
+        handleStartAdventure({ fromAvatarTab: true });
+        started = true;
+      }
+      if (focus()) return;
+      timer = window.setTimeout(() => step(left - 1), 150);
+    };
+    timer = window.setTimeout(() => step(60), 300);
+    return () => window.clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- only when the tab opens or closes
+  }, [avatarTabOpen]);
 
   useEffect(() => {
     if (!e2eMode || typeof window === "undefined") return;
@@ -587,15 +965,10 @@ export default function CityViewer({
     };
 
     (window as any).__CITY_E2E__ = ({
-      dismissWelcome: () => {
-        handleExploreFreely();
-      },
       focusBuilding: (buildingId: string) => {
         const building = getBuilding(buildingId);
         if (!building) return false;
 
-        setShowWelcome(false);
-        setIsTourActive(false);
         setGameMode(GameMode.Viewer);
         gameBoardRef.current?.highlightBuilding(buildingId);
 
@@ -676,6 +1049,24 @@ export default function CityViewer({
         if (scene.scene.isPaused()) scene.scene.resume();
         return !scene.scene.isPaused();
       },
+      getScene: () => {
+        const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+        return scene ?? null;
+      },
+      // Visible world rectangle (world pixels) and the player's feet, for camera tests
+      getCameraState: () => {
+        const game = gameBoardRef.current?.getGameInstance();
+        const scene = game?.scene.getScene("MainScene") as MainScene | undefined;
+        // null until create() has run, so tests can wait for a camera that accepts commands
+        if (!game || !scene || !scene.scene.isActive()) return null;
+        const { zoom, worldView } = scene.cameras.main;
+        return {
+          webgl: game.renderer.type === 2, // Phaser.WEBGL
+          zoom,
+          view: { x: worldView.x, y: worldView.y, width: worldView.width, height: worldView.height },
+          player: scene.getPlayerWorldPosition(),
+        };
+      },
     }) satisfies CityE2EApi;
 
     return () => {
@@ -684,7 +1075,6 @@ export default function CityViewer({
   }, [
     e2eMode,
     currentEncounter?.id,
-    handleExploreFreely,
     handleStartAdventure,
     handleStopAdventure,
     initialGrid,
@@ -692,21 +1082,12 @@ export default function CityViewer({
     visitedBuildings,
   ]);
 
-  // Track adventure completion when all buildings are visited
-  const adventureBuildingCount = TOUR_STOPS.filter((s) => s.buildingId).length;
-  useEffect(() => {
-    if (
-      isAdventureActive &&
-      visitedBuildings.size >= adventureBuildingCount &&
-      !hasTrackedAdventureCompletionRef.current &&
-      adventureStartTimeRef.current
-    ) {
-      hasTrackedAdventureCompletionRef.current = true;
-      const duration = Math.round((Date.now() - adventureStartTimeRef.current) / 1000);
-      trackAdventureCompleted(duration, visitedBuildings.size);
-    }
-  }, [isAdventureActive, visitedBuildings.size, adventureBuildingCount]);
-
+  // The card on screen: a stand-tile beat first (hidden while seated), else a door beat
+  // While seated, the screens overlay replaces the card, unless the seat has no screens (the card stays, e.g. at a table)
+  const seatHasScreens = !!(interiorBeat && INTERIOR_BEATS[interiorBeat.buildingId]?.[interiorBeat.beat]?.seat?.screens.length);
+  const shownCard = interiorBeat ? (isSeated && seatHasScreens ? null : choiceCard ?? interiorBeat) : doorCard;
+  // The tour dialog does not show for buildings told by beat cards (it may still be "open" for them in state)
+  const dialogShown = !slot && isDialogOpen && !!currentEncounter && !BEAT_CARD_BUILDINGS.has(currentEncounter.buildingId ?? "");
 
   return (
     <div ref={viewerRootRef} className="relative w-full h-full" data-testid="city-root">
@@ -719,14 +1100,14 @@ export default function CityViewer({
       />
 
       {/* Portfolio mode toggle */}
-      {!showWelcome && !isAdventureActive && (
+      {!isShell && !isAdventureActive && (
         <div className="fixed z-40 md:top-4 top-[max(0.75rem,env(safe-area-inset-top))] left-4 right-4">
           <PortfolioModeToggle activeMode="city" showIdentity />
         </div>
       )}
 
-      {/* 3D Spinning Logos Overlay */}
-      {!e2eMode && !showWelcome && viewportRect.width > 0 && viewportRect.height > 0 && (
+      {/* Building names: a pill on hover or at the door, logo tiles when zoomed out (POR-54) */}
+      {!e2eMode && viewportRect.width > 0 && viewportRect.height > 0 && (
         <LogosOverlay
           isMobile={isMobile}
           logos={logoPositions}
@@ -739,97 +1120,123 @@ export default function CityViewer({
           cameraX={cameraState.scrollX}
           cameraY={cameraState.scrollY}
           zoom={cameraState.zoom}
+          hoverId={hoverPlace}
+          nearId={currentEncounter?.buildingId ?? null}
+          nearAt={currentEncounter ? avatarAtRef.current : null}
           onLogoClick={handleLogoClick}
         />
       )}
 
-      {/* Welcome Overlay */}
-      <WelcomeOverlay
-        isMobile={isMobile}
-        isVisible={showWelcome}
-        onStartTour={handleStartTour}
-        onExploreFreely={handleExploreFreely}
-        onStartAdventure={handleStartAdventure}
-      />
-
-      {/* Tour Guide (classic tour mode) */}
-      {gameMode === GameMode.Viewer && (
-        <TourGuide
-          isMobile={isMobile}
-          isActive={isTourActive}
-          currentStopIndex={currentTourStop}
-          onNext={handleTourNextStop}
-          onPrevious={handlePreviousStop}
-          onEnd={handleEndTour}
-          onStopChange={handleStopChange}
-        />
-      )}
-
-      {/* Adventure Mode UI */}
-      {isAdventureActive && (
+      {/* Adventure Mode UI (held back while the Avatar tab is showing: the visitor is dressing, not walking) */}
+      {isAdventureActive && !avatarTabOpen && (
         <>
-          {/* Adventure HUD */}
-          <AdventureHUD
-            isMobile={isMobile}
-            visitedBuildings={visitedBuildings}
-            onNextStop={handleNextStop}
-            onExitAdventure={handleStopAdventure}
-            isAutoWalking={isAutoWalking}
-          />
-
           {/* Directional Compass */}
           <DirectionalCompass isMobile={isMobile} walkableDirections={walkableDirections} />
 
-          {/* Virtual Joystick (mobile) */}
-          <VirtualJoystick
-            isMobile={isMobile}
-            onDirectionChange={handleJoystickDirection}
-          />
+          {/* Virtual Joystick (mobile; the new site walks by tapping a spot instead) */}
+          {!isShell && (
+            <VirtualJoystick
+              isMobile={isMobile}
+              onDirectionChange={handleJoystickDirection}
+              contained={isShell}
+            />
+          )}
 
         </>
       )}
 
-      {/* RPG Dialog Box - shown in adventure mode and on logo click */}
+      {/* A walk-in building opened in place by a tap: walk in, or read the case (a bottom sheet on phones) */}
+      {slot ? null : phoneShell ? (
+        <PlaceSheet
+          buildingId={avatarTabOpen ? null : walkInPeek}
+          onWalkIn={handleWalkInPeek}
+          onReadCase={handleReadCasePeek}
+          onClose={() => walkInScene()?.closeWalkInPeek?.()}
+        />
+      ) : (
+        <WalkInCard
+          buildingId={avatarTabOpen ? null : walkInPeek}
+          onWalkIn={handleWalkInPeek}
+          onReadCase={handleReadCasePeek}
+          onClose={() => walkInScene()?.closeWalkInPeek?.()}
+        />
+      )}
+
+      {/* Peek card while the avatar stands on a beat's stand tile inside a walk-in building */}
+      {isAdventureActive && (
+        <PeekCard
+          beat={shownCard ? INTERIOR_BEATS[shownCard.buildingId]?.[shownCard.beat] ?? null : null}
+          beatKey={shownCard ? `${shownCard.buildingId}:${shownCard.beat}` : null}
+          foundTag={shownCard ? freshFinds[`${shownCard.buildingId}:${shownCard.beat}`] : undefined}
+          atBottom={phoneShell}
+          plain={phoneShell || slot}
+          onViewCaseStudy={() => {
+            const slug = shownCard ? getBuilding(shownCard.buildingId)?.projectSlug : undefined;
+            if (!slug) return;
+            window.clearTimeout(doorTimerRef.current);
+            setDoorCard(null);
+            handleViewCaseStudy(slug);
+          }}
+          onChoose={(choice) => {
+            if (!shownCard) return;
+            if (!choice.walk) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+              setChoiceCard({ buildingId: shownCard.buildingId, beat: choice.to });
+              markFound(`${shownCard.buildingId}:${choice.to}`);
+              return;
+            }
+            const scene = gameBoardRef.current?.getGameInstance()?.scene.getScene("MainScene") as MainScene | undefined;
+            // A second tap while the cook still serves is ignored, and not counted twice
+            if (scene?.serveThenWalk(shownCard.buildingId, shownCard.beat, choice.to)) {
+              trackBeatChoice(shownCard.buildingId, shownCard.beat, choice.id);
+            }
+          }}
+        />
+      )}
+      {isAdventureActive && (
+        <ScreensOverlay
+          beat={interiorSeat ? INTERIOR_BEATS[interiorSeat.buildingId]?.[interiorSeat.beat] ?? null : null}
+          beatKey={interiorSeat ? `${interiorSeat.buildingId}:${interiorSeat.beat}` : null}
+          onClose={handleStandUp}
+        />
+      )}
+
+      {/* A find away from the beat cards (a place, the night, the minutes): a short note in the city */}
+      {phoneShell || slot ? (
+        <FindPill find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
+      ) : (
+        <FoundToast find={toast?.find ?? null} count={toast?.count ?? 0} hint={toast ? null : walkHint} />
+      )}
+
+      {/* Dialog for a building without a case study, on logo click or when the avatar reaches it */}
       <RPGDialogBox
         isMobile={isMobile}
         tourStop={currentEncounter}
-        isVisible={isDialogOpen}
+        isVisible={dialogShown}
         onClose={handleDialogClose}
         onViewCaseStudy={handleViewCaseStudy}
         disableTypingAnimation={e2eMode}
         logoUrl={currentEncounter?.buildingId ? getBuilding(currentEncounter.buildingId)?.logoUrl : null}
       />
 
-      {/* Mode switch buttons (when not in welcome and not in tour/adventure) */}
-      {!showWelcome && !isTourActive && !isAdventureActive && (
-        <div className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2">
-          <button
-            onClick={() => {
-              setIsTourActive(true);
-              setCurrentTourStop(0);
-            }}
-            className={pixelButtonClass("ghost")}
-            style={PIXEL_INSET_CLIP}
-          >
-            Take Tour
-          </button>
-          <button
-            onClick={handleStartAdventure}
-            className={pixelButtonClass("primary")}
-            style={PIXEL_INSET_CLIP}
-          >
-            Adventure
-          </button>
+      {/* Walk the avatar (the /city page; the new site is always walking, the yellow marker shows where). In the shell
+          the time of day button sits inside the city view (the panel and its phone sheet own the window's edges):
+          bottom-left on a desktop, bottom-right on a phone */}
+      {!dialogShown && !avatarTabOpen && !(phoneShell && !slot && walkInPeek) && (
+        <div className={isShell ? "absolute bottom-3 right-3 z-30 flex gap-2 md:left-3 md:right-auto" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-30 flex gap-2"}>
+          {!isShell && (
+            <button
+              onClick={isAdventureActive ? handleStopAdventure : () => handleStartAdventure()}
+              className={pixelButtonClass(isAdventureActive ? "ghost" : "primary")}
+              style={PIXEL_INSET_CLIP}
+            >
+              {isAdventureActive ? "Stop walking" : "Walk"}
+            </button>
+          )}
+          {/* Hidden while walking on a phone on /city, where Stop walking is wider and runs under the joystick */}
+          {(isShell || !(isMobile && isAdventureActive)) && <TimeOfDayButton value={timeOfDay} look={look} onChange={pickTimeOfDay} />}
         </div>
       )}
-
-      {/* Mobile zoom controls hidden for now
-      {isMobile && !showWelcome && !isAdventureActive && !isDialogOpen && !isModalOpen && (
-        <div className="fixed right-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-30 flex flex-col gap-2">
-          ...
-        </div>
-      )}
-      */}
     </div>
   );
 }

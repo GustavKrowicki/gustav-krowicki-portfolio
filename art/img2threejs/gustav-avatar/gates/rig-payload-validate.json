@@ -1,0 +1,35 @@
+{
+  "schemaVersion": 1,
+  "passed": true,
+  "errors": [],
+  "warnings": [],
+  "summary": {
+    "jointCount": 19,
+    "rootJointCount": 1,
+    "admittedZeroLengthBoneCount": 0,
+    "vertexCount": 5784,
+    "maxInfluences": 4,
+    "activeVertexCountByJoint": [
+      425,
+      592,
+      2811,
+      550,
+      547,
+      167,
+      255,
+      213,
+      172,
+      255,
+      214,
+      359,
+      292,
+      352,
+      292,
+      316,
+      136,
+      2923,
+      2745
+    ]
+  },
+  "evidenceBoundary": "structural payload only; runtime deformation and screenshot gates are separate"
+}

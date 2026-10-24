@@ -57,6 +57,8 @@ export const projects: Project[] = [
     tags: ['Client Work', 'Research', 'Prototyping', 'Design Systems'],
     featured: false,
     coverImage: '/images/valtech/valtech cover.png',
+    // the wordmark sits at the left of a wide cover: a 16:9 card crops from the left, not the middle
+    coverPosition: 'left center',
     order: 3,
     city: {
       district: 'corporate',
@@ -87,10 +89,6 @@ export const projects: Project[] = [
     },
   },
 ];
-
-export const getFeaturedProjects = (): Project[] => {
-  return projects.filter(project => project.featured).sort((a, b) => a.order - b.order);
-};
 
 export const getProjectBySlug = (slug: string): Project | undefined => {
   return projects.find(project => project.slug === slug);

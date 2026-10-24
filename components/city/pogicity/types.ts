@@ -15,8 +15,12 @@ export enum ToolType {
   Tile = "tile",
   Snow = "snow",
   Building = "building", // Generic - actual building ID stored separately
+  StreetLamp = "streetLamp", // Actual lamp type stored separately
   Eraser = "eraser",
 }
+
+// Street lamps for the city at night (lib/city/streetLights.ts). A lamp sits on top of a cell and does not change its type
+export type StreetLampType = "wire" | "post" | "lantern" | "bollard";
 
 export interface GridCell {
   type: TileType;
@@ -32,6 +36,8 @@ export interface GridCell {
   buildingOrientation?: Direction;
   // For props, store the underlying tile type (so props don't render their own floor)
   underlyingTileType?: TileType;
+  // A street lamp placed on this cell in the editor
+  streetLamp?: StreetLampType;
 }
 
 export enum Direction {
@@ -124,9 +130,8 @@ export const GRID_HEIGHT = 48;
 
 export const CAR_SPEED = 0.05;
 
-// Isometric tile dimensions (44x22 isometric diamond)
-export const TILE_WIDTH = 44;
-export const TILE_HEIGHT = 22;
+// Isometric tile dimensions (44x22 isometric diamond); the world-unit standard lives in lib/city/units
+export { TILE_WIDTH, TILE_HEIGHT } from "@/lib/city/units";
 
 // Tile sizes for different types (in grid cells) - this is the FOOTPRINT
 export const TILE_SIZES: Record<TileType, { w: number; h: number }> = {
@@ -143,31 +148,9 @@ export const CHARACTER_PIXELS_PER_FRAME_X = 13 / 58;
 export const CHARACTER_PIXELS_PER_FRAME_Y = 5 / 58;
 export const CHARACTER_SPEED = 0.015;
 
-// Convert grid coordinates to isometric screen coordinates
-export function gridToIso(
-  gridX: number,
-  gridY: number
-): { x: number; y: number } {
-  return {
-    x: (gridX - gridY) * (TILE_WIDTH / 2),
-    y: (gridX + gridY) * (TILE_HEIGHT / 2),
-  };
-}
-
-// Convert isometric screen coordinates back to grid coordinates
-export function isoToGrid(
-  isoX: number,
-  isoY: number
-): { x: number; y: number } {
-  return {
-    x: (isoX / (TILE_WIDTH / 2) + isoY / (TILE_HEIGHT / 2)) / 2,
-    y: (isoY / (TILE_HEIGHT / 2) - isoX / (TILE_WIDTH / 2)) / 2,
-  };
-}
-
 // Adventure Mode Types
 export enum GameMode {
-  Viewer = "viewer",       // Classic tour mode with TourGuide panel
+  Viewer = "viewer",       // Camera pans between buildings; no avatar
   Adventure = "adventure", // Pokemon Go-style exploration
 }
 
@@ -213,5 +196,4 @@ export interface TriggerZone {
 
 // Player movement constants
 export const PLAYER_SPEED = 0.08; // Faster than NPCs for responsive feel
-export const PLAYER_MOVE_LERP = 0.20; // Interpolation factor for smooth movement
 export const TRIGGER_ZONE_RADIUS = 3.5; // Tiles around landmark to trigger interaction

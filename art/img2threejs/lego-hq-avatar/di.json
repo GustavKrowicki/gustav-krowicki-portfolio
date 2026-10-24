@@ -1,0 +1,232 @@
+{
+  "sourceImage": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/ref/ai-studio-campus.jpg",
+  "zonesDir": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3 on the AI Studio campus image",
+    "targetMinDetails": 10,
+    "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+    "details": [
+      {
+        "id": "green-roofs",
+        "kind": "contour",
+        "description": "Flat green roofs with a dark parapet ring on every block.",
+        "region": {
+          "x": 0.25,
+          "y": 0.1,
+          "width": 0.7,
+          "height": 0.55,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-north-top.parapet"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/ref/ai-studio-campus.jpg",
+        "confidence": 0.9
+      },
+      {
+        "id": "skylight",
+        "kind": "contour",
+        "description": "Atrium roof: white disc with 19 blue domes in rings.",
+        "region": {
+          "x": 0.45,
+          "y": 0.33,
+          "width": 0.2,
+          "height": 0.15,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-skylight.domes"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "round-building",
+        "kind": "contour",
+        "description": "Round building with dark glass bands, brick plinth and a round courtyard.",
+        "region": {
+          "x": 0.03,
+          "y": 0.17,
+          "width": 0.3,
+          "height": 0.25,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-round-mass.bands"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r0c0.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "yellow-frames",
+        "kind": "contour",
+        "description": "Yellow-framed boxes on top: a bar on the north wing, a block over the south-east corner.",
+        "region": {
+          "x": 0.55,
+          "y": 0.07,
+          "width": 0.4,
+          "height": 0.7,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-yellow-block.frame"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/ref/ai-studio-campus.jpg",
+        "confidence": 0.85
+      },
+      {
+        "id": "perforated",
+        "kind": "linework",
+        "description": "Terrace building: white perforated facade panels.",
+        "region": {
+          "x": 0.03,
+          "y": 0.42,
+          "width": 0.4,
+          "height": 0.25,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "facade-perf.dots"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c0.png",
+        "confidence": 0.75
+      },
+      {
+        "id": "greenhouse",
+        "kind": "contour",
+        "description": "Small glass greenhouse and yellow benches on the terrace roof.",
+        "region": {
+          "x": 0.1,
+          "y": 0.38,
+          "width": 0.25,
+          "height": 0.15,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-greenhouse.glass"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c0.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "window-bands",
+        "kind": "linework",
+        "description": "Dark recessed windows, one per bay, on every storey.",
+        "region": {
+          "x": 0.45,
+          "y": 0.55,
+          "width": 0.5,
+          "height": 0.4,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-north-upper.windows"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c2.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "canopy-plate",
+        "kind": "contour",
+        "description": "Yellow 2 x 4 plate with studs over the glass entrance.",
+        "region": {
+          "x": 0.45,
+          "y": 0.52,
+          "width": 0.1,
+          "height": 0.08,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "canopy.studs"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "minifigure",
+        "kind": "contour",
+        "description": "Giant minifigure statue on the plaza: blue legs, red torso, yellow head.",
+        "region": {
+          "x": 0.33,
+          "y": 0.62,
+          "width": 0.08,
+          "height": 0.12,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "minifig-torso.figure"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c1.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "atrium-bracing",
+        "kind": "linework",
+        "description": "Atrium glass walls with yellow diagonal bracing.",
+        "region": {
+          "x": 0.35,
+          "y": 0.42,
+          "width": 0.3,
+          "height": 0.15,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "roof-atrium-upper.bracing"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "brick-plinth",
+        "kind": "stain",
+        "description": "Red-brown brick ground storey under the yellow block.",
+        "region": {
+          "x": 0.45,
+          "y": 0.7,
+          "width": 0.35,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "brick.coursing"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c1.png",
+        "confidence": 0.7
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

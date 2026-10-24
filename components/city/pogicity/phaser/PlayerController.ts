@@ -9,12 +9,15 @@ import {
   GRID_HEIGHT,
   TILE_WIDTH,
   TILE_HEIGHT,
-  PLAYER_MOVE_LERP,
   getCharacterTextureKey,
   GridCell,
 } from "../types";
-import { GRID_OFFSET_X, GRID_OFFSET_Y } from "./gameConfig";
+import { gridToScreen } from "./gameConfig";
 import { playGifAnimation } from "./GifLoader";
+import { avatar3dDisplayScale, avatar3dOrigin, avatar3dPrefix, avatarClipOrigin, avatarClipSpeed } from "@/lib/city/avatar3dSprites";
+import { AVATAR_CHANGE_EVENT, avatarLookKey, readAvatarName, type AvatarChoice } from "@/lib/city/models/avatarPieces";
+import { cityFont } from "@/lib/city/cityFont";
+import { RIDE_SPEED_WU_PER_S, RUN_SPEED_WU_PER_S, WALK_SPEED_WU_PER_S } from "@/lib/city/units";
 
 // Direction vectors for movement
 const directionVectors: Record<Direction, { dx: number; dy: number }> = {
@@ -49,11 +52,68 @@ export interface PathNode {
   parent: PathNode | null;
 }
 
+export interface InteriorRules {
+  /** null when (x, y) is not inside a walk-in building */
+  isWalkable(x: number, y: number): boolean | null;
+  canStep(fromX: number, fromY: number, toX: number, toY: number): boolean;
+  /** A blocked step from outside into a walk-in building's wall: the tile just inside its main door, or null */
+  entranceGuide?(fromX: number, fromY: number, toX: number, toY: number): { x: number; y: number } | null;
+}
+
+// Longest walk a wall bump may turn into (tiles); farther doors are left for the visitor to find
+const ENTRANCE_GUIDE_MAX_STEPS = 12;
+// Speeds in tiles (wu) a second, the same on every screen (POR-53). B unless a preview asks for another set:
+// ?speeds=A|B|C, or ?walk= / ?run= in tiles a second. A = a reference site 1:1, B = picked, C = the old speeds.
+const SPEED_SETS = {
+  A: { walk: 0.8, run: 2.8 },
+  B: { walk: WALK_SPEED_WU_PER_S, run: RUN_SPEED_WU_PER_S },
+  C: { walk: 4, run: 12 },
+} as const;
+
+function readSpeeds(): { walk: number; run: number; ride: number } {
+  let base: { walk: number; run: number } = SPEED_SETS.B;
+  if (typeof window === "undefined") return { ...base, ride: RIDE_SPEED_WU_PER_S };
+  const query = new URLSearchParams(window.location.search);
+  const set = query.get("speeds")?.toUpperCase();
+  if (set && set in SPEED_SETS) base = SPEED_SETS[set as keyof typeof SPEED_SETS];
+  const tilesPerSecond = (key: string) => {
+    const value = Number(query.get(key));
+    return value > 0 && value <= 40 ? value : null;
+  };
+  return {
+    walk: tilesPerSecond("walk") ?? base.walk,
+    run: tilesPerSecond("run") ?? base.run,
+    ride: tilesPerSecond("ride") ?? RIDE_SPEED_WU_PER_S,
+  };
+}
+
+// World px of one step along a grid axis on the 2:1 view
+const TILE_STEP_PX = Math.hypot(TILE_WIDTH / 2, TILE_HEIGHT / 2);
+// Up to full speed from a standstill, and down to a stop at the end of a walk (Tom's site: about a quarter second)
+const EASE_S = 0.2;
+// A walk longer than this many tiles runs (Gustav's pick, 2026-10-22)
+const AUTO_RUN_TILES = 10;
+// and a walk longer than this rides the bike (Gustav's pick: a very far tap)
+const AUTO_RIDE_TILES = 25;
+// Slowest pace while easing to a stop, so the last step always lands (tiles a second)
+const MIN_SPEED = 0.5;
+// Sheets baked before POR-53 carry no speed: their walk frames are drawn for 1.6 wu/s
+const OLD_SHEET_SPEED = 1.6;
+// The legs play in step with the pace, up to this many times their drawn rate (a run on a sheet with no run frames)
+const MAX_LEG_TIME_SCALE = 3;
+
 export class PlayerController {
   private scene: Phaser.Scene;
   private grid: GridCell[][];
   private sprite: Phaser.GameObjects.Sprite | null = null;
   private pointer: Phaser.GameObjects.Graphics | null = null;
+  // The visitor's name from the avatar builder, over the avatar's head ('' = no tag)
+  private nameTag: Phaser.GameObjects.Text | null = null;
+  private nameTagText = "";
+  private unfollowName: (() => void) | null = null;
+  // Outfit-change cue: a short hop and a ring at the feet, so the eye goes from the builder tile to the city
+  private lastLook: string | null = null;
+  private hopUntil = 0;
   private pointerBounceOffset: number = 0;
   private pointerBounceDirection: number = 1;
 
@@ -81,6 +141,15 @@ export class PlayerController {
   private autoWalkPath: { x: number; y: number }[] = [];
   private autoWalkIndex: number = 0;
   private isAutoWalking: boolean = false;
+  // The direction held when a wall bump started a walk to the door: holding it does not cancel that walk
+  private guideDirection: Direction | null = null;
+  // A far tap or a walk sent from the panel ("Walk there"): the avatar runs instead of walking
+  private running: boolean = false;
+  private riding: boolean = false;
+  private originKey: string | null = null;
+  private readonly speeds = readSpeeds();
+  // Current pace in tiles a second (eases up from 0 at a start and down at the end of a walk)
+  private speedNow = 0;
 
   // External direction input (for mobile joystick)
   private externalDirection: Direction | null = null;
@@ -91,6 +160,12 @@ export class PlayerController {
 
   // Tiles blocked by building collision padding
   private blockedTiles: Set<string> = new Set();
+
+  // Walk-in buildings (lib/city/buildingInteriors.ts): per-tile walkability inside footprints and per-step door rules
+  private interiorRules: InteriorRules | null = null;
+
+  // Drawn above a walk-in building while the player stands in its footprint (null = normal depth sort)
+  private depthOverride: number | null = null;
 
   // Ready state
   private isReady: boolean = false;
@@ -108,6 +183,63 @@ export class PlayerController {
     this.blockedTiles = tiles;
   }
 
+  setInteriorRules(rules: InteriorRules | null): void {
+    this.interiorRules = rules;
+  }
+
+  setDepthOverride(depth: number | null): void {
+    this.depthOverride = depth;
+  }
+
+  // Sit-and-look moments (MainScene.sitDown): the sprite walks from the player's tile to a chair point (world px), then
+  // hides while the building shows its seated sprite. The player's grid position does not change, so any move stands
+  // it up from its stand tile. Reduced motion: no walk, it sits at once.
+  private seatPose: { x: number; y: number; hidden: boolean } | null = null;
+  private seatTween: Phaser.Tweens.Tween | null = null;
+  private seatWalk = false;
+
+  walkToSeat(worldX: number, worldY: number, done: () => void): void {
+    this.seatTween?.stop();
+    this.direction = Direction.Up;   // the chairs face their desks, to the north
+    const reduced = typeof window !== "undefined" && window.matchMedia?.("(prefers-reduced-motion: reduce)").matches;
+    if (reduced) {
+      this.seatPose = { x: worldX, y: worldY, hidden: true };
+      done();
+      return;
+    }
+    const from = { x: this.worldX, y: this.worldY };
+    const p = { t: 0 };
+    this.seatWalk = true;
+    this.seatPose = { ...from, hidden: false };
+    this.seatTween = this.scene.tweens.add({
+      targets: p, t: 1, duration: 420, ease: "Sine.easeInOut",
+      onUpdate: () => {
+        this.seatPose = { x: from.x + (worldX - from.x) * p.t, y: from.y + (worldY - from.y) * p.t, hidden: false };
+      },
+      onComplete: () => {
+        this.seatWalk = false;
+        this.seatTween = null;
+        this.seatPose = { x: worldX, y: worldY, hidden: true };
+        done();
+      },
+    });
+  }
+
+  standFromSeat(): void {
+    this.seatTween?.stop();
+    this.seatTween = null;
+    this.seatWalk = false;
+    this.seatPose = null;
+  }
+
+  isSeated(): boolean {
+    return this.seatPose !== null;
+  }
+
+  private canStep(fromX: number, fromY: number, toX: number, toY: number): boolean {
+    return this.interiorRules ? this.interiorRules.canStep(fromX, fromY, toX, toY) : true;
+  }
+
   setOnReachDestination(callback: (buildingId: string) => void): void {
     this.onReachDestination = callback;
   }
@@ -122,7 +254,7 @@ export class PlayerController {
     this.state = PlayerState.Idle;
 
     // Calculate world position
-    const screenPos = this.gridToScreen(gridX, gridY);
+    const screenPos = gridToScreen(gridX, gridY);
     this.worldX = screenPos.x;
     this.worldY = screenPos.y + TILE_HEIGHT / 2;
     this.targetWorldX = this.worldX;
@@ -140,6 +272,10 @@ export class PlayerController {
       if (this.scene.textures.exists(textureKey)) {
         playGifAnimation(this.sprite, textureKey);
       }
+      // Legs keep up with the pace, so the feet do not slide
+      this.sprite.anims.timeScale = this.isMoving && this.speedNow > 0
+        ? Math.min(MAX_LEG_TIME_SCALE, this.speedNow / (avatarClipSpeed(textureKey) ?? OLD_SHEET_SPEED))
+        : 1;
     }
   }
 
@@ -154,8 +290,8 @@ export class PlayerController {
   handleKeyDown(key: string): void {
     this.pressedKeys.add(key);
 
-    // Cancel auto-walk on any movement key
-    if (keyDirectionMap[key]) {
+    // Cancel auto-walk on any movement key, except the held one (and its key repeats) that started a walk to the door
+    if (keyDirectionMap[key] && keyDirectionMap[key] !== this.guideDirection) {
       this.cancelAutoWalk();
     }
   }
@@ -180,119 +316,163 @@ export class PlayerController {
     return null;
   }
 
-  update(): void {
+  /** delta: ms since the last frame */
+  update(delta: number): void {
     if (!this.isReady) return;
+    const dt = Math.min(delta, 100) / 1000;
 
     // Handle auto-walk
     if (this.isAutoWalking) {
-      this.updateAutoWalk();
+      this.updateAutoWalk(dt);
       return;
     }
 
     // Get current input
     this.inputDirection = this.getCurrentInputDirection();
 
-    if (this.isMoving) {
-      // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+    if (this.isMoving && this.stepTowardTarget(dt, null) >= 0) {
+      this.gridX = this.targetGridX;
+      this.gridY = this.targetGridY;
+      this.isMoving = false;
+      this.state = PlayerState.Idle;
+      this.emitPositionChange();
+    }
 
-      const dx = Math.abs(this.worldX - this.targetWorldX);
-      const dy = Math.abs(this.worldY - this.targetWorldY);
+    if (this.isMoving) return;
+    if (!this.inputDirection) {
+      this.speedNow = 0;
+      return;
+    }
 
-      if (dx < 1 && dy < 1) {
-        // Snap to target
-        this.worldX = this.targetWorldX;
-        this.worldY = this.targetWorldY;
-        this.gridX = this.targetGridX;
-        this.gridY = this.targetGridY;
-        this.isMoving = false;
-        this.state = PlayerState.Idle;
-        this.emitPositionChange();
-      }
-    } else if (this.inputDirection) {
-      // Try to move in the input direction
-      const vec = directionVectors[this.inputDirection];
-      const newGridX = this.gridX + vec.dx;
-      const newGridY = this.gridY + vec.dy;
+    // Try to move in the input direction (in the same frame as the last step landed, so a held key walks without a pause)
+    const vec = directionVectors[this.inputDirection];
+    const newGridX = this.gridX + vec.dx;
+    const newGridY = this.gridY + vec.dy;
 
-      // Update facing direction
-      this.direction = this.inputDirection;
+    // Update facing direction
+    this.direction = this.inputDirection;
 
-      if (this.isWalkable(newGridX, newGridY)) {
-        this.targetGridX = newGridX;
-        this.targetGridY = newGridY;
+    if (this.isWalkable(newGridX, newGridY) && this.canStep(this.gridX, this.gridY, newGridX, newGridY)) {
+      this.targetGridX = newGridX;
+      this.targetGridY = newGridY;
 
-        const targetScreen = this.gridToScreen(newGridX, newGridY);
-        this.targetWorldX = targetScreen.x;
-        this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
+      const targetScreen = gridToScreen(newGridX, newGridY);
+      this.targetWorldX = targetScreen.x;
+      this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
 
-        this.isMoving = true;
-        this.state = PlayerState.Walking;
-        this.emitPositionChange();
-      }
+      this.isMoving = true;
+      this.state = PlayerState.Walking;
+      this.emitPositionChange();
+    } else {
+      this.speedNow = 0;
+      this.guideToEntrance(newGridX, newGridY);
     }
   }
 
-  private updateAutoWalk(): void {
+  // Moves toward the target tile at the current pace; the distance left over after landing there (px), or -1 when still
+  // on the way. remainingPx: what is left of an auto-walk after this step's target, so the pace eases to a stop at its end.
+  private stepTowardTarget(dt: number, remainingPx: number | null): number {
+    const top = this.riding ? this.speeds.ride : this.running ? this.speeds.run : this.speeds.walk;
+    const ease = top / EASE_S; // tiles a second, per second
+    this.speedNow = Math.min(top, this.speedNow + ease * dt);
+
+    if (remainingPx !== null) {
+      const left = Math.hypot(this.targetWorldX - this.worldX, this.targetWorldY - this.worldY);
+      // The fastest pace that can still stop at the end of the walk
+      const stopping = Math.sqrt(2 * ease * ((left + remainingPx) / TILE_STEP_PX));
+      this.speedNow = Math.max(MIN_SPEED, Math.min(this.speedNow, stopping));
+    }
+
+    return this.moveTowardTarget(this.speedNow * TILE_STEP_PX * dt);
+  }
+
+  // Moves up to `px` toward the target tile: the distance left over after landing there, or -1 when still on the way
+  private moveTowardTarget(px: number): number {
+    const rx = this.targetWorldX - this.worldX, ry = this.targetWorldY - this.worldY;
+    const left = Math.hypot(rx, ry);
+    if (px >= left) {
+      this.worldX = this.targetWorldX;
+      this.worldY = this.targetWorldY;
+      return px - left;
+    }
+    this.worldX += (rx / left) * px;
+    this.worldY += (ry / left) * px;
+    return -1;
+  }
+
+  // Walking into a walk-in building's wall from outside: walk along to its main door and in, when the door is close
+  private guideToEntrance(toX: number, toY: number): void {
+    const goal = this.interiorRules?.entranceGuide?.(this.gridX, this.gridY, toX, toY);
+    if (!goal) return;
+    const path = this.findPath(this.gridX, this.gridY, goal.x, goal.y);
+    if (path.length < 2 || path.length - 1 > ENTRANCE_GUIDE_MAX_STEPS) return;
+    this.autoWalkPath = path.slice(1);
+    this.autoWalkIndex = 0;
+    this.isAutoWalking = true;
+    this.guideDirection = this.inputDirection;
+    this.state = PlayerState.AutoWalking;
+    this.emitPositionChange();
+  }
+
+  private updateAutoWalk(dt: number): void {
     if (this.autoWalkPath.length === 0 || this.autoWalkIndex >= this.autoWalkPath.length) {
       this.cancelAutoWalk();
       return;
     }
 
     // Check for manual input interruption
-    if (this.getCurrentInputDirection() && !this.externalDirection) {
+    const input = this.getCurrentInputDirection();
+    if (input && !this.externalDirection && input !== this.guideDirection) {
       this.cancelAutoWalk();
       return;
     }
 
-    if (this.isMoving) {
-      // Interpolate toward target position
-      this.worldX = this.lerp(this.worldX, this.targetWorldX, PLAYER_MOVE_LERP);
-      this.worldY = this.lerp(this.worldY, this.targetWorldY, PLAYER_MOVE_LERP);
+    if (!this.isMoving) this.startNextAutoStep();
 
-      const dx = Math.abs(this.worldX - this.targetWorldX);
-      const dy = Math.abs(this.worldY - this.targetWorldY);
+    const stepsAfter = this.autoWalkPath.length - this.autoWalkIndex - 1;
+    let leftOver = this.stepTowardTarget(dt, stepsAfter * TILE_STEP_PX);
 
-      if (dx < 1 && dy < 1) {
-        // Snap to target
-        this.worldX = this.targetWorldX;
-        this.worldY = this.targetWorldY;
-        this.gridX = this.targetGridX;
-        this.gridY = this.targetGridY;
-        this.isMoving = false;
-        this.autoWalkIndex++;
-        this.emitPositionChange();
-
-        // Check if we've reached the end
-        if (this.autoWalkIndex >= this.autoWalkPath.length) {
-          this.cancelAutoWalk();
-        }
-      }
-    } else {
-      // Move to next path node
-      const nextNode = this.autoWalkPath[this.autoWalkIndex];
-
-      // Calculate direction
-      const dx = nextNode.x - this.gridX;
-      const dy = nextNode.y - this.gridY;
-
-      if (dx > 0) this.direction = Direction.Right;
-      else if (dx < 0) this.direction = Direction.Left;
-      else if (dy > 0) this.direction = Direction.Down;
-      else if (dy < 0) this.direction = Direction.Up;
-
-      this.targetGridX = nextNode.x;
-      this.targetGridY = nextNode.y;
-
-      const targetScreen = this.gridToScreen(nextNode.x, nextNode.y);
-      this.targetWorldX = targetScreen.x;
-      this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
-
-      this.isMoving = true;
-      this.state = PlayerState.AutoWalking;
+    while (leftOver >= 0) {
+      this.gridX = this.targetGridX;
+      this.gridY = this.targetGridY;
+      this.isMoving = false;
+      this.autoWalkIndex++;
       this.emitPositionChange();
+
+      // Check if we've reached the end
+      if (this.autoWalkIndex >= this.autoWalkPath.length) {
+        this.speedNow = 0;
+        this.cancelAutoWalk();
+        return;
+      }
+      // On to the next tile with the rest of this frame's distance, so the pace is the same at any frame rate
+      this.startNextAutoStep();
+      leftOver = this.moveTowardTarget(leftOver);
     }
+  }
+
+  private startNextAutoStep(): void {
+    const nextNode = this.autoWalkPath[this.autoWalkIndex];
+
+    // Calculate direction
+    const dx = nextNode.x - this.gridX;
+    const dy = nextNode.y - this.gridY;
+
+    if (dx > 0) this.direction = Direction.Right;
+    else if (dx < 0) this.direction = Direction.Left;
+    else if (dy > 0) this.direction = Direction.Down;
+    else if (dy < 0) this.direction = Direction.Up;
+
+    this.targetGridX = nextNode.x;
+    this.targetGridY = nextNode.y;
+
+    const targetScreen = gridToScreen(nextNode.x, nextNode.y);
+    this.targetWorldX = targetScreen.x;
+    this.targetWorldY = targetScreen.y + TILE_HEIGHT / 2;
+
+    this.isMoving = true;
+    this.state = PlayerState.AutoWalking;
+    this.emitPositionChange();
   }
 
   walkToBuilding(targetGridX: number, targetGridY: number, buildingId?: string): boolean {
@@ -308,6 +488,10 @@ export class PlayerController {
     this.autoWalkIndex = 0;
     this.isAutoWalking = true;
     this.state = PlayerState.AutoWalking;
+    // A far tap runs by itself (POR-53: nothing to learn); a near one walks
+    this.running = this.autoWalkPath.length > AUTO_RUN_TILES;
+    // Only a look with ride sheets rides; any other runs
+    this.riding = this.autoWalkPath.length > AUTO_RIDE_TILES && this.canRide();
 
     return true;
   }
@@ -320,7 +504,7 @@ export class PlayerController {
     this.targetGridX = gridX;
     this.targetGridY = gridY;
 
-    const screenPos = this.gridToScreen(gridX, gridY);
+    const screenPos = gridToScreen(gridX, gridY);
     this.worldX = screenPos.x;
     this.worldY = screenPos.y + TILE_HEIGHT / 2;
     this.targetWorldX = this.worldX;
@@ -331,8 +515,34 @@ export class PlayerController {
     this.emitPositionChange();
   }
 
+  /** Run the walk that just started; it ends with the walk */
+  run(): void {
+    if (this.isAutoWalking) this.running = true;
+  }
+
+  /** Whether this look can ride (its sheets carry the bike) */
+  canRide(): boolean {
+    return this.characterType === CharacterType.Gustav && this.scene.textures.exists(`${avatar3dPrefix()}_ride_east`);
+  }
+
+  /** Walk, run or ride the walk that just started, whatever its length (the long-press menu); a look without
+   * ride sheets runs instead */
+  setGait(gait: "walk" | "run" | "ride"): void {
+    if (!this.isAutoWalking) return;
+    this.riding = gait === "ride" && this.canRide();
+    this.running = gait === "run" || (gait === "ride" && !this.riding);
+  }
+
+  /** Whether a walk to a tapped spot (or a building) is under way */
+  isWalkingToTarget(): boolean {
+    return this.isAutoWalking;
+  }
+
   cancelAutoWalk(): void {
     this.isAutoWalking = false;
+    this.running = false;
+    this.riding = false;
+    this.guideDirection = null;
     this.autoWalkPath = [];
     this.autoWalkIndex = 0;
     this.state = this.isMoving ? PlayerState.Walking : PlayerState.Idle;
@@ -385,6 +595,7 @@ export class PlayerController {
 
         if (closedSet.has(neighborKey)) continue;
         if (!this.isWalkable(neighbor.x, neighbor.y)) continue;
+        if (!this.canStep(current.x, current.y, neighbor.x, neighbor.y)) continue;
 
         const g = current.g + 1;
         const h = this.heuristic(neighbor.x, neighbor.y, endX, endY);
@@ -428,16 +639,23 @@ export class PlayerController {
     const walkable: Direction[] = [];
     for (const dir of [Direction.Up, Direction.Down, Direction.Left, Direction.Right]) {
       const vec = directionVectors[dir];
-      if (this.isWalkable(this.gridX + vec.dx, this.gridY + vec.dy)) {
+      if (this.isWalkable(this.gridX + vec.dx, this.gridY + vec.dy) && this.canStep(this.gridX, this.gridY, this.gridX + vec.dx, this.gridY + vec.dy)) {
         walkable.push(dir);
       }
     }
     return walkable;
   }
 
+  /** Whether the player may stand on a tile (street rules, blocked tiles and walk-in interiors) */
+  canStandOn(x: number, y: number): boolean {
+    return this.isWalkable(x, y);
+  }
+
   private isWalkable(x: number, y: number): boolean {
     if (x < 0 || x >= GRID_WIDTH || y < 0 || y >= GRID_HEIGHT) return false;
     if (this.blockedTiles.has(`${x},${y}`)) return false;
+    const inside = this.interiorRules?.isWalkable(x, y);
+    if (inside !== null && inside !== undefined) return inside;
     const cell = this.grid[y]?.[x];
     if (!cell) return false;
 
@@ -460,19 +678,18 @@ export class PlayerController {
     return true;
   }
 
-  private gridToScreen(gridX: number, gridY: number): { x: number; y: number } {
-    return {
-      x: GRID_OFFSET_X + (gridX - gridY) * (TILE_WIDTH / 2),
-      y: GRID_OFFSET_Y + (gridX + gridY) * (TILE_HEIGHT / 2),
-    };
-  }
-
-  private lerp(a: number, b: number, t: number): number {
-    return a + (b - a) * t;
-  }
+  private sheetSet: string | null = null;
 
   private getTextureKey(): string {
-    return getCharacterTextureKey(this.characterType, this.direction);
+    const key = getCharacterTextureKey(this.characterType, this.direction);
+    if (this.characterType !== CharacterType.Gustav) return key;
+    // The avatar builder's sheets, same compass naming as the GIFs, walk or idle by state
+    const compass = key.slice(key.indexOf("_") + 1);
+    if (this.state === PlayerState.Idle && !this.seatWalk) return `${avatar3dPrefix()}_idle_${compass}`;
+    const ride = `${avatar3dPrefix()}_ride_${compass}`;
+    if (this.riding && this.scene.textures.exists(ride)) return ride;
+    const run = `${avatar3dPrefix()}_run_${compass}`;
+    return this.running && this.scene.textures.exists(run) ? run : `${avatar3dPrefix()}_walk_${compass}`;
   }
 
   private emitPositionChange(): void {
@@ -497,18 +714,37 @@ export class PlayerController {
       // Create sprite
       if (this.scene.textures.exists(textureKey)) {
         this.sprite = this.scene.add.sprite(this.worldX, this.worldY, textureKey, 0);
-        this.sprite.setOrigin(0.5, 1);
       }
     }
 
     if (this.sprite) {
-      this.sprite.setPosition(this.worldX, this.worldY);
+      // Origin and scale follow the sheet set, which can change while the city runs (the avatar builder)
+      const sheetSet = this.characterType === CharacterType.Gustav ? avatar3dPrefix() : "gif";
+      if (sheetSet !== this.sheetSet && this.scene.textures.exists(textureKey)) {
+        this.sheetSet = sheetSet;
+        if (sheetSet === "gif") {
+          this.sprite.setOrigin(0.5, 1);
+          this.sprite.setScale(1);
+        } else {
+          this.sprite.setScale(avatar3dDisplayScale());
+        }
+        this.originKey = null;
+      }
+      // The ride's frame is bigger than the walk's: each clip stands on its own ground point
+      if (sheetSet !== "gif" && textureKey !== this.originKey && this.scene.textures.exists(textureKey)) {
+        this.originKey = textureKey;
+        this.sprite.setOrigin(...(avatarClipOrigin(textureKey) ?? avatar3dOrigin()));
+      }
+      // a 3 px hop right after an outfit change (playChangeCue)
+      const hop = this.scene.time.now < this.hopUntil ? 3 : 0;
+      this.sprite.setPosition(this.seatPose?.x ?? this.worldX, (this.seatPose?.y ?? this.worldY) - hop);
+      this.sprite.setVisible(!this.seatPose?.hidden);
 
       // Calculate depth from grid position (consistent with NPCs and characters)
       // This ensures correct depth sorting with buildings while keeping smooth movement
-      const screenPos = this.gridToScreen(this.gridX, this.gridY);
+      const screenPos = gridToScreen(this.gridX, this.gridY);
       const groundY = screenPos.y + TILE_HEIGHT / 2;
-      this.sprite.setDepth(depthFromSortPoint(screenPos.x, groundY, 0.3));
+      this.sprite.setDepth(this.depthOverride ?? depthFromSortPoint(screenPos.x, groundY, 0.3));
 
       // Update animation
       if (this.scene.textures.exists(textureKey)) {
@@ -526,11 +762,76 @@ export class PlayerController {
       if (this.pointerBounceOffset > 4) this.pointerBounceDirection = -1;
       if (this.pointerBounceOffset < 0) this.pointerBounceDirection = 1;
 
+      this.updateNameTag();
+
       // Position pointer above player (with bounce)
-      const pointerY = this.worldY - 80 - this.pointerBounceOffset;
-      this.pointer.setPosition(this.worldX, pointerY);
+      // (the builder's sheets: just above the head, or above the name tag; the GIF keeps its tuned offset)
+      const above = this.sheetSet === "gif" || !this.sprite
+        ? 80
+        : this.sprite.displayHeight * this.sprite.originY + 16 + (this.nameTag?.visible ? 12 : 0);
+      const pointerY = (this.seatPose?.y ?? this.worldY) - above - this.pointerBounceOffset;
+      this.pointer.setPosition(this.seatPose?.x ?? this.worldX, pointerY);
+      this.pointer.setVisible(!this.seatPose);
       this.pointer.setDepth(20_000_000); // Always on top
     }
+  }
+
+  // Follows the builder's name field live (it saves before firing AVATAR_CHANGE_EVENT).
+  private updateNameTag(): void {
+    if (!this.sprite) return;
+    if (!this.unfollowName && typeof window !== "undefined") {
+      this.nameTagText = readAvatarName();
+      const onChange = (event: Event) => {
+        this.nameTagText = readAvatarName();
+        const choice = (event as CustomEvent<AvatarChoice | null>).detail;
+        const look = choice ? avatarLookKey(choice) : null;
+        if (look && this.lastLook !== null && look !== this.lastLook) this.playChangeCue();
+        if (look) this.lastLook = look;
+      };
+      window.addEventListener(AVATAR_CHANGE_EVENT, onChange);
+      this.unfollowName = () => window.removeEventListener(AVATAR_CHANGE_EVENT, onChange);
+    }
+    if (!this.nameTagText) {
+      this.nameTag?.setVisible(false);
+      return;
+    }
+    if (!this.nameTag) {
+      this.nameTag = this.scene.add.text(0, 0, "", {
+        fontFamily: cityFont(),
+        fontSize: "8px",
+        color: "#ffffff",
+        backgroundColor: "#1d1b18",
+        padding: { x: 3, y: 2 },
+        resolution: 4,
+      });
+      this.nameTag.setOrigin(0.5, 1);
+    }
+    if (this.nameTag.text !== this.nameTagText) this.nameTag.setText(this.nameTagText);
+    const x = this.seatPose?.x ?? this.worldX;
+    const y = this.seatPose?.y ?? this.worldY;
+    // Just above the head, snapped to whole pixels so the pixel font stays crisp
+    const head = this.sprite.displayHeight * this.sprite.originY;
+    this.nameTag.setPosition(Math.round(x), Math.round(y - head - 1));
+    this.nameTag.setVisible(this.sprite.visible);
+    // At the avatar's own depth: a building in front hides the tag with the avatar (the pointer stays on top)
+    this.nameTag.setDepth(this.sprite.depth + 0.001);
+  }
+
+  private playChangeCue(): void {
+    if (!this.sprite || this.seatPose) return;
+    this.hopUntil = this.scene.time.now + 220;
+    const x = this.worldX, y = this.worldY;
+    const ring = this.scene.add.graphics();
+    ring.setPosition(x, y);
+    ring.setDepth(this.sprite.depth - 0.01);
+    const state = { r: 6, a: 0.9 };
+    const draw = () => {
+      ring.clear();
+      ring.lineStyle(2, 0xfff3b0, state.a);
+      ring.strokeEllipse(0, 0, state.r * 2, state.r);
+    };
+    draw();
+    this.scene.tweens.add({ targets: state, r: 22, a: 0, duration: 700, ease: "Cubic.easeOut", onUpdate: draw, onComplete: () => ring.destroy() });
   }
 
   private drawPointer(): void {
@@ -558,6 +859,10 @@ export class PlayerController {
     this.pointer.fillRect(-1, 6, 2, 4);    // Third row inner
   }
 
+  getSprite(): Phaser.GameObjects.Sprite | null {
+    return this.sprite;
+  }
+
   getPosition(): { gridX: number; gridY: number; worldX: number; worldY: number } {
     return {
       gridX: this.gridX,
@@ -565,6 +870,10 @@ export class PlayerController {
       worldX: this.worldX,
       worldY: this.worldY,
     };
+  }
+
+  getTargetGrid(): { x: number; y: number } {
+    return { x: this.targetGridX, y: this.targetGridY };
   }
 
   getDirection(): Direction {
@@ -588,6 +897,10 @@ export class PlayerController {
       this.pointer.destroy();
       this.pointer = null;
     }
+    this.unfollowName?.();
+    this.unfollowName = null;
+    this.nameTag?.destroy();
+    this.nameTag = null;
     this.isReady = false;
   }
 }

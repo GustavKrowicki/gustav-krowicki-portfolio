@@ -1,0 +1,85 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.839,
+  "estimatedFidelity": 0.839,
+  "targetThreshold": 0.7,
+  "materialId": "louvre",
+  "sourceImage": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-crops/louvre.png",
+  "outDir": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre",
+  "palette": [
+    "#2E2923",
+    "#231F1A",
+    "#3C372F",
+    "#161410",
+    "#575044"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre/louvre_albedo.png",
+      "url": "louvre_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre/louvre_roughness.png",
+      "url": "louvre_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre/louvre_height.png",
+      "url": "louvre_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre/louvre_normal.png",
+      "url": "louvre_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/louvre/louvre_ao.png",
+      "url": "louvre_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 960,
+    "sourceHeight": 48,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 960,
+      "height": 48
+    },
+    "mask": {
+      "backgroundColor": "#D8D9D7",
+      "backgroundNoise": 173.79,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.1771
+    },
+    "mapStats": {
+      "valueRange": 0.2005,
+      "heightP90Gradient": 0.04139,
+      "roughnessBase": 0.684,
+      "roughnessVariation": 0.071,
+      "normalStrength": 0.205,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#2E2923",
+      "#231F1A",
+      "#3C372F",
+      "#161410",
+      "#575044"
+    ]
+  },
+  "warnings": [
+    "low value range weakens height/roughness inference"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

@@ -44,6 +44,7 @@ export interface PhaserGameHandle {
     buildingId: string;
     screenX: number;
     screenY: number;
+    topY?: number;
     logoUrl: string;
     logoOffset: { x: number; y: number };
   }>;
@@ -279,6 +280,16 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
       const game = new Phaser.Game(config);
       gameRef.current = game;
 
+      // The container can resize without a window resize (the portfolio panel opens or closes beside the city).
+      // Phaser only re-measures its parent every 500 ms of game loop, so refit the canvas as soon as the
+      // container changes. refresh() reuses the last measured parent size, so measure it first.
+      const resizeObserver = new ResizeObserver(() => {
+        if (!game.isBooted) return;
+        game.scale.getParentBounds();
+        game.scale.refresh();
+      });
+      resizeObserver.observe(container);
+
       // Wait for the game to boot and scene to be ready
       game.events.once("ready", () => {
         const events: SceneEvents = {
@@ -296,6 +307,7 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
       });
 
       return () => {
+        resizeObserver.disconnect();
         container.removeEventListener("contextmenu", handleContextMenu);
         container.removeEventListener("wheel", handleWheel);
         gameRef.current?.destroy(true);
@@ -381,6 +393,10 @@ const PhaserGame = forwardRef<PhaserGameHandle, PhaserGameProps>(
           overflow: "hidden",
           touchAction: "none",
           overscrollBehavior: "none",
+          // a long press opens the city's Bike here pill, not the phone's own (iOS callout, text selection)
+          WebkitTouchCallout: "none",
+          WebkitUserSelect: "none",
+          userSelect: "none",
         }}
       >
         <style jsx global>{`

@@ -1,4 +1,5 @@
 // Building Registry - Single source of truth for all buildings
+import type { NightKind } from "./nightSchedule";
 // Includes both Pogicity buildings and custom portfolio buildings
 
 export type BuildingCategory =
@@ -35,6 +36,63 @@ export interface BuildingDefinition {
     north?: string;
     east?: string;
   };
+  // Library props drawn on the building's own footprint (props cannot occupy footprint tiles in the grid): the prop's
+  // own sprite, scaled, with its ground point at local tile coordinates (x right, y down from the origin tile)
+  decor?: { prop: string; x: number; y: number; scale: number }[];
+  // Animated main door: a strip of frames (closed .. open) cropped from the south sprite at full resolution (x, y = the
+  // crop's top-left in sprite pixels), drawn over the building and played when the player is near the door point
+  door?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number };
+  // Ambient loop (docs/city-rules.md section 9): a strip of frames cropped from the south sprite like `door` (x, y = the
+  // crop's top-left in sprite pixels), drawn over the building and played in a loop at `fps`
+  ambient?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number };
+  // Reactions to the visitor (the food truck cooks): strips of frames cropped from the south sprite like `ambient` (the
+  // moving pixels are cut out of the still sprite, so frame 0 is always drawn). When the player comes within `radius` of
+  // `at` (local tiles) frames 1..wave-1 play once (a wave); serve() plays frames wave..frames-1 and holds (the hand-over);
+  // away again, it goes back to frame 0. `beat` ties it to a walk-in stand tile (lib/city/interiorBeats.ts).
+  reactions?: { beat: string; sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; wave: number }[];
+  // Lights on at night (docs/city-rules.md section 9): frames cropped from the south sprite like `ambient`, in a grid
+  // sheet, drawn untinted over the night-tinted building while the city is dark (MainScene.setNight)
+  // `hours`: on from..to on the city's hour (wraps past midnight), off otherwise; no hours = on all night
+  nightLights?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; fps: number; hours?: [number, number] };
+  // Lit windows from the 3D model (POR-39 step 4): full-size south sprites of the glass alone, rendered from the model in
+  // flat warm light with everything else hiding what is behind it (entrance lab `glow`; the building's export_windows.sh).
+  // `a` and `b` are two groups of windows switched by `kind`'s hours (lib/city/nightSchedule.ts); `front` is the ground
+  // floor shopfront, on by `frontKind`'s hours. Hidden while the roof is off. Default orientation only.
+  nightWindows?: { a: string; b?: string; front?: string; kind: NightKind; frontKind?: NightKind };
+  // Interior moments (walk-in buildings): strips of frames cropped from the roof-off south sprite like `door`, drawn over
+  // it while the roof is off; each plays at `fps` while the player is within `radius` of `at` (local tiles): forward once
+  // and holds, or round and round with `loop`; it goes back to frame 0 when the player leaves
+  moments?: { sheet: string; frames: number; frameWidth: number; frameHeight: number; x: number; y: number; at: [number, number]; radius: number; fps: number; loop?: boolean }[];
+  // Street lamps may stand on this building's plot (the lamp tab in /city/editor): the plot's open paving cut out of the
+  // south sprite (art/street-lamps/ground_mask.py), same size; each lamp's pool is multiplied by it and drawn over the
+  // building, so the light lands on the paving and the stairs, never the deck or the walls. Default orientation only.
+  groundMask?: string;
+  // A raised deck on that plot: lamps placed on a cell inside `outline` (plot tiles) stand up on the deck at `height` wu,
+  // pulled `inset` in from its edge so they are seen inside the railing; their pools light only `mask` (the deck's
+  // paving, art/street-lamps/ground_mask.py with the deck height)
+  deck?: { mask: string; height: number; outline: [number, number][]; inset: number };
+  // Paving on the street tile in front of a walk-in building's main door (lib/city/buildingInteriors.ts entrance.outside),
+  // always shown, so the way in reads at Street zoom without hovering: brick herringbone in `brick`; default orientation only
+  entrancePaving?: { brick: number };
+  // Display scale for sprites rendered at a higher texel density (docs/city-rules.md section 4: 2x sprites use 0.5)
+  spriteScale?: number;
+  // Draw the sprite as vertical slices, one per tile diagonal, each sorted by its own front tile (docs/city-rules.md
+  // section 8), so a building or character in front of one part is not painted over by the whole sprite. Opt-in.
+  slices?: boolean;
+  // Roof-off state, shown while the player is inside the building's trigger zone (same size and anchor as sprites);
+  // walk-in buildings (lib/city/buildingInteriors.ts) show it while the player is inside, past the main door
+  openSprites?: {
+    south: string;
+    west?: string;
+    north?: string;
+    east?: string;
+  };
+  // Display scale of the openSprites when they have their own texel density (default: spriteScale); they share the
+  // anchor (bottom centre = the footprint's front corner), so they may be trimmed around it
+  openSpriteScale?: number;
+  // Roof-off south sprite with the avatar seated at a beat's chair (lib/city/interiorBeats.ts seat), same frame and
+  // scale as openSprites.south; shown while the avatar sits there (the player sprite is hidden meanwhile)
+  seatSprites?: Record<string, string>;
   icon: string; // Emoji for UI
   supportsRotation?: boolean;
   isDecoration?: boolean; // If true, preserves underlying tile (like props)
@@ -80,34 +138,109 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "lego-hq",
     name: "LEGO HQ",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
-    triggerZoneRadius: 5.5,
+    // The campus on the real outline (art/img2threejs/lego-hq-avatar, plan.py; Linear POR-25): 15 x 11 with the plaza
+    // row; two storeys with a three-storey glass atrium over the lobby, green roofs with courtyards, the round building at
+    // the west, the terrace building, the yellow bar and block. The main door is on the south front facing the plaza,
+    // under the yellow 2x4 plate: the real forecourt notch is filled in, because the south-east leg hides a door at its
+    // back from the city camera. Inside: five open areas on the route from the board (node 651:3604), still a grey box.
+    // Sprites at 2x density (1536 px, converter zoom 1.0128, front corner at the bottom centre), drawn at 0.5. Walk-in:
+    // the roof comes off when the player walks through the main door (lib/city/buildingInteriors.ts).
+    footprint: { width: 15, height: 11 },
+    triggerZoneRadius: 6,
+    spriteScale: 0.5,
+    // Sliding glass doors (art/img2threejs/lego-hq-avatar: lab model hqAvatarDoor, door=0..1, export_door.sh)
+    door: {
+      sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-door_south.png",
+      frames: 7, frameWidth: 94, frameHeight: 78, x: 482, y: 1302, at: [8.5, 10.0], radius: 1.5,
+    },
+    // Test room moment: the screen plays what the model does and the tester's "?" turns into "!" (lab model
+    // hqAvatarMoment, moment=0..7, export_moment.sh)
+    // and the team room's screen loops a clip from the tests (&clip=0..7, export_moment.sh team clip)
+    moments: [
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-moment_south.png",
+        frames: 8, frameWidth: 126, frameHeight: 74, x: 818, y: 1266, at: [11.5, 6.5], radius: 2, fps: 5,
+      },
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-team_south.png",
+        frames: 8, frameWidth: 70, frameHeight: 84, x: 868, y: 1060, at: [7, 1.5], radius: 3, fps: 4, loop: true,
+      },
+      // the map room's round wall: the lines colour in, the notes appear, the one line lights up (&map=0..7,
+      // export_moment.sh map map)
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-map_south.png",
+        frames: 8, frameWidth: 218, frameHeight: 96, x: 308, y: 1050, at: [2.5, 6.5], radius: 2.5, fps: 4,
+      },
+      // the AI lab's template screen: the steps tick and the sign-up list fills (&ai=0..7, export_moment.sh ai ai)
+      {
+        sheet: "/game/pogicity/Building/landmark/lego-hq-avatar-ai_south.png",
+        frames: 8, frameWidth: 52, frameHeight: 60, x: 876, y: 1194, at: [11, 3.5], radius: 2.5, fps: 4,
+      },
+    ],
+    // Pogicity trees, downsized to the avatar scale, in the two planters and on the front grass (trees behind the building
+    // would draw over its roof)
+    decor: [
+      { prop: "tree-4", x: 2.7, y: 9.4, scale: 0.45 },
+      { prop: "tree-4", x: 3.55, y: 9.4, scale: 0.45 },
+      { prop: "tree-1", x: 1.2, y: 9.5, scale: 0.55 },
+      { prop: "tree-1", x: 13.3, y: 9.6, scale: 0.5 },
+      { prop: "tree-1", x: 14.2, y: 2.6, scale: 0.55 },
+    ],
     sprites: {
-      south: "/game/pogicity/Building/landmark/lego-hq_south.png",
-      north: "/game/pogicity/Building/landmark/lego-hq_north.png",
-      east: "/game/pogicity/Building/landmark/lego-hq_east.png",
-      west: "/game/pogicity/Building/landmark/lego-hq_west.png",
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar_west.png",
+    },
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/lego-hq-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/lego-hq-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/lego-hq-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/lego-hq-avatar-open_west.png",
     },
     icon: "🧱",
     projectSlug: "lego",
     description: "ML-Assisted Internal Product",
     interactable: true,
-    supportsRotation: true,
+    supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/lego-hq.svg",
-    logoOffset: { x: 0, y: 100 },
+    logoOffset: { x: 0, y: 34 },
+    // At night (art/img2threejs/lego-hq-avatar/export_windows.sh): a, the office wings' windows, the roof pavilions and the
+    // door glass; b, the glass of the round building, the atrium and the yellow blocks. Lit all night (a walk-in)
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/lego-hq-avatar-win-a_south.png",
+      b: "/game/pogicity/Building/landmark/lego-hq-avatar-win-b_south.png",
+      kind: "walkin",
+    },
   },
   "valtech-office": {
     id: "valtech-office",
     name: "Valtech Office",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
-    collisionPadding: { left: 2, top: 2 },
+    // Rebuilt with img2threejs at the avatar's scale (art/img2threejs/valtech-office, Linear POR-35): a 6 x 2 block (Gustav,
+    // 2026-10-16: wide enough for the street-level interior; it was 4 x 2), long side south; ground storey with five cafe
+    // bays under green awnings and the gate (the entrance, east bay of the south side, approach tile in front of it),
+    // 3 louvre storeys, recessed glass top floor. Sprites at 2x density (768 px, converter zoom 0.8656, front corner at the
+    // bottom centre), drawn at 0.5. Turned a quarter, the footprint is 2 x 6.
+    footprint: { width: 6, height: 2 },
+    footprintByOrientation: { east: { width: 2, height: 6 }, west: { width: 2, height: 6 } },
+    spriteScale: 0.5,
     sprites: {
-      south: "/game/pogicity/Building/landmark/valtech-office_south.png",
-      north: "/game/pogicity/Building/landmark/valtech-office_north.png",
-      east: "/game/pogicity/Building/landmark/valtech-office_east.png",
-      west: "/game/pogicity/Building/landmark/valtech-office_west.png",
+      south: "/game/pogicity/Building/landmark/valtech-office-avatar_south.png",
+      north: "/game/pogicity/Building/landmark/valtech-office-avatar_north.png",
+      east: "/game/pogicity/Building/landmark/valtech-office-avatar_east.png",
+      west: "/game/pogicity/Building/landmark/valtech-office-avatar_west.png",
+    },
+    // Street-level interior (Figma board 597-3604, beat sheet 2026-10-16): the upper storeys and the cafe front come off
+    // when the player walks in through the gate (lib/city/buildingInteriors.ts). Detail pass: 4x density (trimmed around
+    // the anchor), drawn at 0.25, so the desk zone is 1:1 at Detail zoom.
+    openSpriteScale: 0.25,
+    seatSprites: { desk: "/game/pogicity/Building/landmark/valtech-office-avatar-open-sit-desk_south.png" },
+    openSprites: {
+      south: "/game/pogicity/Building/landmark/valtech-office-avatar-open_south.png",
+      north: "/game/pogicity/Building/landmark/valtech-office-avatar-open_north.png",
+      east: "/game/pogicity/Building/landmark/valtech-office-avatar-open_east.png",
+      west: "/game/pogicity/Building/landmark/valtech-office-avatar-open_west.png",
     },
     icon: "💼",
     projectSlug: "valtech",
@@ -116,6 +249,17 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/valtech-office.svg",
     logoOffset: { x: 20, y: 80 },
+    // brick herringbone on the approach tile in the gate awning's colour (build_spec.py GATE_AWNINGS "a")
+    entrancePaving: { brick: 0x9a4a36 },
+    // At night: the louvre storeys and the glass top floor lit as an office (a: storeys 1 and 3 with the top floor, b: the
+    // middle storey; lit all night as a walk-in), the cafe glass on the ground floor as a cafe (art/img2threejs/valtech-office/export_windows.sh)
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/valtech-office-avatar-win-a_south.png",
+      b: "/game/pogicity/Building/landmark/valtech-office-avatar-win-b_south.png",
+      front: "/game/pogicity/Building/landmark/valtech-office-avatar-win-f_south.png",
+      kind: "walkin",
+      frontKind: "food",
+    },
   },
   "melbourne-uni": {
     id: "melbourne-uni",
@@ -196,7 +340,22 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "dokk1-library",
     name: "Dokk1 Library",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
+    // The harbour library, rebuilt with img2threejs at the avatar's scale (art/img2threejs/harbour-library, Linear
+    // POR-49): blockout D on Figma board 732:3604, a low 7 x 7 building with the top box's roof at 3.0 wu over a glass hall on
+    // a deck, two stair flights along the south facade, on an 8 x 8 plot so the harbour wraps its east and north sides.
+    // Sprites at 2x density (768 px), drawn at 0.5, in slices so characters sort against each 1 wu column.
+    footprint: { width: 8, height: 8 },
+    slices: true,
+    spriteScale: 0.5,
+    triggerZoneRadius: 5.5,           // the 8 x 8 plot: reach it from the plaza at the stair (the default 3.5 is inside the plot)
+    groundMask: "/game/pogicity/Building/landmark/dokk1-library_south_ground.png",
+    // The deck (art/img2threejs/harbour-library/build_spec.py DECK, in plot tiles), its top at 1.2 wu
+    deck: {
+      mask: "/game/pogicity/Building/landmark/dokk1-library_south_deck.png",
+      height: 1.2,
+      outline: [[0.72, 1.48], [4.95, 0.65], [6.85, 1.62], [7.07, 4.72], [5.9, 6.95], [3.78, 7.11], [1.32, 6.23], [0.3, 3.09]],
+      inset: 0.7,
+    },
     sprites: {
       south: "/game/pogicity/Building/landmark/dokk1-library_south.png",
       north: "/game/pogicity/Building/landmark/dokk1-library_north.png",
@@ -214,8 +373,16 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     id: "aarhus-stadium",
     name: "Aarhus Stadium",
     category: "portfolio",
-    footprint: { width: 4, height: 4 },
-    collisionPadding: { left: 2, top: 2 },
+    // The new stadium (opens 2027), rebuilt with img2threejs at the avatar's scale
+    // (art/img2threejs/aarhus-stadium, Linear POR-36): shape A on Figma board 611:3604, a 6 x 5 plot with the white roof
+    // ring at 2.6 wu on 26 curved ribs; 8 x 5 since 2026-10-17 (Gustav: wider than shape A's 6 x 5), AARHUS in the seats.
+    // The red hall (stadionhallerne) stands centred on its south side as the entrance and a brick link joins them. Sprites
+    // at 2x density (768 px), drawn at 0.5. Turned a quarter, the footprint is 5 x 8. Drawn in slices, so the hall in front
+    // of it (and characters) sort against each 1 wu column.
+    footprint: { width: 8, height: 5 },
+    footprintByOrientation: { east: { width: 5, height: 8 }, west: { width: 5, height: 8 } },
+    slices: true,
+    spriteScale: 0.5,
     triggerZoneRadius: 4,
     sprites: {
       south: "/game/pogicity/Building/landmark/aarhus-stadium_south.png",
@@ -229,6 +396,45 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     supportsRotation: true,
     logoUrl: "/game/pogicity/Building/logos/aarhus-stadium.svg",
     logoOffset: { x: 0, y: 80 },
+    // Floodlights at night: the lit bowl, 40 lamps on the roof's inner edge with a slow wave round the ring, and a haze
+    // over the roof (art/img2threejs/aarhus-stadium/export_floodlights.py, made from the south sprite)
+    nightLights: {
+      sheet: "/game/pogicity/Building/landmark/aarhus-stadium-lights_south.png",
+      frames: 12, frameWidth: 416, frameHeight: 240, x: 110, y: 364, fps: 4,
+      hours: [17, 23], // an evening match: on from 17:00, off at 23:00 (a stadium is dark on an ordinary night)
+    },
+  },
+  // The red heritage hall (Stadionhallerne) on the stadium's south side, as its entrance
+  // (Gustav, 2026-10-17): art/img2threejs/stadium-hall, a 4 x 2 plot, two gabled brick halls either side of the lobby.
+  stadionhallerne: {
+    id: "stadionhallerne",
+    name: "Stadionhallerne",
+    category: "portfolio",
+    footprint: { width: 4, height: 2 },
+    footprintByOrientation: { east: { width: 2, height: 4 }, west: { width: 2, height: 4 } },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Building/landmark/stadionhallerne_south.png",
+      north: "/game/pogicity/Building/landmark/stadionhallerne_north.png",
+      east: "/game/pogicity/Building/landmark/stadionhallerne_east.png",
+      west: "/game/pogicity/Building/landmark/stadionhallerne_west.png",
+    },
+    icon: "🏛️",
+    // A Danish flag waving on the lobby roof (lib/city/models/stadionHallStates.ts, export_flag.sh)
+    ambient: {
+      sheet: "/game/pogicity/Building/landmark/stadionhallerne-flag_south.png",
+      frames: 8, frameWidth: 34, frameHeight: 34, x: 208, y: 294, fps: 8,
+    },
+    description: "The stadium entrance",
+    interactable: false,
+    supportsRotation: true,
+    // Lit on a match night with the stadium's floodlights (art/img2threejs/stadium-hall/export_windows.sh): the halls'
+    // windows, and the lobby's windows and door
+    nightWindows: {
+      a: "/game/pogicity/Building/landmark/stadionhallerne-win-a_south.png",
+      front: "/game/pogicity/Building/landmark/stadionhallerne-win-f_south.png",
+      kind: "venue",
+    },
   },
   "aeroguest": {
     id: "aeroguest",
@@ -333,24 +539,52 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
     interactable: false,
     supportsRotation: true,
   },
+  // Cate it: the food truck square (Linear POR-38), art/img2threejs/cate-it-burger (+ cate-it-pizza, cate-it-african): one
+  // 8 x 7 walk-in plot with the street food and burger trailers along the back (hatches south), the pizza trailer on the west
+  // side (hatch east) and four beer tables (lib/city/models/cateItSquareStates.ts, lab model cateItSquare, export_square.sh).
+  // At each hatch: Eat (the avatar sits at a table) or Book for an event (lib/city/interiorBeats.ts). Replaces the old 3 x 3
+  // Cate it building; the id stays, so its tour stop and the places checklist keep working.
   "cate-it": {
     id: "cate-it",
     name: "Cate it",
     category: "portfolio",
-    footprint: { width: 3, height: 3 },
-    collisionPadding: { right: 0, top: 0 },
-    triggerZoneRadius: 3.5,
+    footprint: { width: 8, height: 7 },
+    spriteScale: 0.5,
     sprites: {
-      south: "/game/pogicity/Building/landmark/cate-it_south.png",
-      north: "/game/pogicity/Building/landmark/cate-it_north.png",
-      east: "/game/pogicity/Building/landmark/cate-it_east.png",
-      west: "/game/pogicity/Building/landmark/cate-it_west.png",
+      south: "/game/pogicity/Building/landmark/cate-it-square_south.png",
+      north: "/game/pogicity/Building/landmark/cate-it-square_north.png",
+      east: "/game/pogicity/Building/landmark/cate-it-square_east.png",
+      west: "/game/pogicity/Building/landmark/cate-it-square_west.png",
+    },
+    seatSprites: {
+      "table-burger": "/game/pogicity/Building/landmark/cate-it-square-sit-burger_south.png",
+      "table-pizza": "/game/pogicity/Building/landmark/cate-it-square-sit-pizza_south.png",
+      "table-african": "/game/pogicity/Building/landmark/cate-it-square-sit-african_south.png",
+    },
+    // The guests' loop (a bite, a look around, a lean in to chat): export_square.sh cuts the moving pixels out of the still
+    // south sprite and renders them per frame; paused while the visitor sits (the seated frames are whole)
+    ambient: {
+      sheet: "/game/pogicity/Building/landmark/cate-it-square-guests_south.png",
+      frames: 12, frameWidth: 396, frameHeight: 146, x: 210, y: 560, fps: 4,
+    },
+    // The cooks: a wave when the visitor steps up to the hatch, the hand-over after "Eat" (export_square.sh, frames 0 idle,
+    // 1-5 wave, 6-9 serve)
+    reactions: [
+      { beat: "hatch-burger", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-burger_south.png", frames: 10, frameWidth: 56, frameHeight: 72, x: 522, y: 526, at: [6.5, 2.5], radius: 1, fps: 7, wave: 6 },
+      { beat: "hatch-pizza", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-pizza_south.png", frames: 10, frameWidth: 34, frameHeight: 38, x: 178, y: 502, at: [2.5, 5.5], radius: 1, fps: 7, wave: 6 },
+      { beat: "hatch-african", sheet: "/game/pogicity/Building/landmark/cate-it-square-cook-african_south.png", frames: 10, frameWidth: 54, frameHeight: 72, x: 356, y: 442, at: [2.5, 2.5], radius: 1, fps: 7, wave: 6 },
+    ],
+    // Lit at night: the hatches, the neon food names, the fairy lights across the trucks, the marker lights and the banner
+    // (export_square.sh lights pass); two frames, every third bulb dimmer on the second, so the strings twinkle slowly
+    nightLights: {
+      sheet: "/game/pogicity/Building/landmark/cate-it-square-lights_south.png",
+      frames: 2, frameWidth: 616, frameHeight: 400, x: 54, y: 348, fps: 1,
     },
     icon: "🚚",
     projectSlug: "cate-it",
-    description: "AI-powered catering platform - Co-founder & Designer",
+    description: "Cate it: food trucks for events - Co-founder & Designer",
     interactable: true,
-    supportsRotation: true,
+    supportsRotation: false,
     logoUrl: "/game/pogicity/Building/logos/cate-it logo.png",
     logoOffset: { x: 0, y: 70 },
   },
@@ -504,6 +738,34 @@ export const BUILDINGS: Record<string, BuildingDefinition> = {
       south: "/game/pogicity/Props/1x1tree4.png",
     },
     icon: "🎋",
+    isDecoration: true,
+  },
+  // Kongelunden forest round the new stadium (Linear POR-36, round 5): the maple and birch trees at half size, so they
+  // match the avatar-scale stadium and don't cover its columns
+  "forest-tree-1": {
+    id: "forest-tree-1",
+    name: "Forest Maple",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    renderSize: { width: 4, height: 4 },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Props/1x1tree2.png",
+    },
+    icon: "🌳",
+    isDecoration: true,
+  },
+  "forest-tree-2": {
+    id: "forest-tree-2",
+    name: "Forest Birch",
+    category: "props",
+    footprint: { width: 1, height: 1 },
+    renderSize: { width: 4, height: 4 },
+    spriteScale: 0.5,
+    sprites: {
+      south: "/game/pogicity/Props/1x1tree4.png",
+    },
+    icon: "🌳",
     isDecoration: true,
   },
   "stadium-fan-1": {

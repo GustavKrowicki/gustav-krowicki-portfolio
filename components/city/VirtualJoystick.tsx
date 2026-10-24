@@ -11,11 +11,14 @@ import {
 interface VirtualJoystickProps {
   isMobile: boolean;
   onDirectionChange: (direction: Direction | null) => void;
+  /** Inside the city view rather than the window (the shell, where the panel sheet takes the bottom of the screen) */
+  contained?: boolean;
 }
 
 export default function VirtualJoystick({
   isMobile,
   onDirectionChange,
+  contained = false,
 }: VirtualJoystickProps) {
   const [isActive, setIsActive] = useState(false);
   const [position, setPosition] = useState({ x: 0, y: 0 });
@@ -98,7 +101,7 @@ export default function VirtualJoystick({
 
   return (
     <div
-      className="fixed bottom-[max(1rem,env(safe-area-inset-bottom))] left-4 z-40 flex gap-4"
+      className={`${contained ? "absolute bottom-3" : "fixed bottom-[max(1rem,env(safe-area-inset-bottom))]"} left-4 z-40 flex gap-4`}
       data-testid="city-joystick"
     >
       {/* Joystick */}
@@ -110,11 +113,15 @@ export default function VirtualJoystick({
         onTouchCancel={handleTouchEnd}
         className="relative h-32 w-32 touch-none"
       >
-        <div className={`${pixelPanelOuterClass} absolute inset-0`} style={PIXEL_INSET_CLIP}>
-          <div className={`${pixelPanelInnerClass} h-full w-full bg-[#5f5a4c]`} style={PIXEL_INSET_CLIP}>
-            <div className="absolute inset-3 border-[3px] border-[#14181b] bg-[#3d3a31]">
-              <div className="absolute left-1/2 top-0 h-full w-[3px] -translate-x-1/2 bg-[#5f7a59]" />
-              <div className="absolute top-1/2 left-0 h-[3px] w-full -translate-y-1/2 bg-[#5f7a59]" />
+        {/* the panel class sets position: relative, so it fills an absolute wrapper instead of taking inset-0 itself
+            (with both, relative won and the base collapsed to a thin dark bar) */}
+        <div className="absolute inset-0">
+          <div className={`${pixelPanelOuterClass} h-full w-full`} style={PIXEL_INSET_CLIP}>
+            <div className={`${pixelPanelInnerClass} h-full w-full bg-[#5f5a4c]`} style={PIXEL_INSET_CLIP}>
+              <div className="absolute inset-3 border-[3px] border-[#14181b] bg-[#3d3a31]">
+                <div className="absolute left-1/2 top-0 h-full w-[3px] -translate-x-1/2 bg-[#5f7a59]" />
+                <div className="absolute top-1/2 left-0 h-[3px] w-full -translate-y-1/2 bg-[#5f7a59]" />
+              </div>
             </div>
           </div>
         </div>

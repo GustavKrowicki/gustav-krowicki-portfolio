@@ -26,6 +26,7 @@
 
   /* Typography */
   --font-sans: var(--font-gt-standard), ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   /* Font Sizes - Generous Scale */
   --font-size-xs: 0.75rem;
@@ -85,4 +86,31 @@ html {
 :focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
+}
+
+/* Rail buttons fill the gaps between icons; the focus outline moves to the round icon instead */
+.shell-rail-button:focus-visible {
+  outline: none;
+}
+
+/* Rail tooltips (components/shell/ShellRail.tsx): grow out of the icon, fast; neighbours after the first open instantly */
+.shell-tooltip {
+  transform-origin: var(--transform-origin);
+  transition:
+    transform 125ms cubic-bezier(0.23, 1, 0.32, 1),
+    opacity 125ms cubic-bezier(0.23, 1, 0.32, 1);
+}
+.shell-tooltip[data-starting-style],
+.shell-tooltip[data-ending-style] {
+  opacity: 0;
+  transform: scale(0.97);
+}
+.shell-tooltip[data-instant] {
+  transition-duration: 0ms;
+}
+@media (prefers-reduced-motion: reduce) {
+  .shell-tooltip[data-starting-style],
+  .shell-tooltip[data-ending-style] {
+    transform: none;
+  }
 }

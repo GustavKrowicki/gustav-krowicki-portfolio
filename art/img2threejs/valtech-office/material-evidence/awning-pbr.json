@@ -1,0 +1,87 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.735,
+  "estimatedFidelity": 0.735,
+  "targetThreshold": 0.7,
+  "materialId": "awning",
+  "sourceImage": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-crops/awning.png",
+  "outDir": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning",
+  "palette": [
+    "#3A5650",
+    "#38544D",
+    "#36544E",
+    "#33504A",
+    "#577771"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning/awning_albedo.png",
+      "url": "awning_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning/awning_roughness.png",
+      "url": "awning_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning/awning_height.png",
+      "url": "awning_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning/awning_normal.png",
+      "url": "awning_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/awning/awning_ao.png",
+      "url": "awning_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 110,
+    "sourceHeight": 24,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 0,
+      "y": 0,
+      "width": 110,
+      "height": 24
+    },
+    "mask": {
+      "backgroundColor": "#3A554F",
+      "backgroundNoise": 4.583,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 1.0
+    },
+    "mapStats": {
+      "valueRange": 0.08,
+      "heightP90Gradient": 0.01724,
+      "roughnessBase": 0.688,
+      "roughnessVariation": 0.05,
+      "normalStrength": 0.176,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#3A5650",
+      "#38544D",
+      "#36544E",
+      "#33504A",
+      "#577771"
+    ]
+  },
+  "warnings": [
+    "image is not clearly isolated from background; using most pixels as material evidence",
+    "object/background separation is weak",
+    "low value range weakens height/roughness inference"
+  ],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

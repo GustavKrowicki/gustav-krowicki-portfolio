@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useRef, useEffect, useCallback } from "react";
+import { ChevronDown, Pause, Play, SkipBack, SkipForward } from "lucide-react";
+import { SLOT_MOTION } from "@/components/shell/ShellPanel";
 import { trackSpotifyInteracted } from "@/lib/analytics";
 
 export const NORTHSIDE_PLAYLIST_URL = "https://open.spotify.com/playlist/3EauLdytT4srscIeLfXD2H?si=613af6771c324e08";
@@ -25,6 +27,10 @@ const TRACKS = [
 
 interface SpotifyPlayerProps {
   playlistUrl: string;
+  /** plain: the side panel's web style; pixel: the city's dialog box */
+  variant?: "pixel" | "plain";
+  /** plain: the song list opened (phones grow the sheet so it shows) */
+  onOpen?: () => void;
 }
 
 declare global {
@@ -33,13 +39,14 @@ declare global {
   }
 }
 
-export default function SpotifyPlayer({ playlistUrl }: SpotifyPlayerProps) {
+export default function SpotifyPlayer({ playlistUrl, variant = "pixel", onOpen }: SpotifyPlayerProps) {
   const [isPaused, setIsPaused] = useState(true);
   const [position, setPosition] = useState(0);
   const [duration, setDuration] = useState(0);
   const [currentUri, setCurrentUri] = useState(TRACKS[0].uri);
   const [ready, setReady] = useState(false);
   const [scriptLoaded, setScriptLoaded] = useState(false);
+  const [open, setOpen] = useState(false);
 
   const embedRef = useRef<HTMLDivElement>(null);
   const controllerRef = useRef<any>(null);
@@ -141,7 +148,152 @@ export default function SpotifyPlayer({ playlistUrl }: SpotifyPlayerProps) {
     controllerRef.current?.loadUri(TRACKS[prevIndex].uri);
   }, [currentIndex]);
 
+  const playTrack = useCallback((index: number) => {
+    trackSpotifyInteracted("play", "city_player", TRACKS[index].name);
+    setCurrentUri(TRACKS[index].uri);
+    controllerRef.current?.loadUri(TRACKS[index].uri);
+    controllerRef.current?.play();
+  }, []);
+
+  // Opening also brings the list into view: the phone sheet grows, then the panel scrolls to the card
+  const cardRef = useRef<HTMLElement>(null);
+  const toggleOpen = useCallback(() => {
+    if (!open) {
+      // Only phones grow the sheet; on desktop "grow" would widen the panel
+      if (window.matchMedia("(max-width: 767px)").matches) onOpen?.();
+      window.setTimeout(() => cardRef.current?.scrollIntoView({ block: "start", behavior: "smooth" }), 420);
+    }
+    setOpen(!open);
+  }, [open, onOpen]);
+
   const progress = duration > 0 ? position / duration : 0;
+
+  if (variant === "plain") {
+    const roundButton =
+      "flex h-11 w-11 items-center justify-center rounded-full text-white hover:bg-white/10 active:bg-white/10";
+    // A tap on the dark card (not on a button or the link) opens or closes the song list
+    const onCardClick = (e: React.MouseEvent) => {
+      if ((e.target as HTMLElement).closest("button, a")) return;
+      toggleOpen();
+    };
+    return (
+      <section
+        ref={cardRef}
+        aria-label="Northside playlist"
+        onClick={onCardClick}
+        className="cursor-pointer rounded-2xl bg-neutral-900 p-4 text-white"
+      >
+        <button
+          type="button"
+          onClick={toggleOpen}
+          aria-expanded={open}
+          aria-controls="northside-songs"
+          aria-label={open ? "Show fewer songs" : "Show all songs"}
+          className="flex w-full items-baseline justify-between text-left text-sm"
+        >
+          <span className="font-medium text-neutral-400">Now playing</span>
+          <span className="flex items-center gap-1.5 text-neutral-400">
+            {TRACKS.length} songs
+            <ChevronDown
+              className={`h-4 w-4 self-center transition-transform ${SLOT_MOTION} ${open ? "rotate-180" : ""}`}
+            />
+          </span>
+        </button>
+        <p className="mt-1 truncate font-medium">{currentTrack?.name || "Select a track"}</p>
+        <p className="truncate text-sm text-neutral-400">{currentTrack?.artist || "\u00A0"}</p>
+
+        {/* Spotify embed (hidden but functional) */}
+        <div className="absolute h-0 w-0 overflow-hidden">
+          <div ref={embedRef} />
+        </div>
+
+        <div className="mt-3 h-1 overflow-hidden rounded-full bg-neutral-700">
+          <div
+            className="h-full rounded-full bg-white transition-[width] duration-200"
+            style={{ width: `${progress * 100}%` }}
+          />
+        </div>
+
+        <div className="mt-2 flex items-center gap-1">
+          <button type="button" onClick={prevTrack} className={roundButton} aria-label="Previous track">
+            <SkipBack className="h-5 w-5" fill="currentColor" />
+          </button>
+          <button
+            type="button"
+            onClick={togglePlay}
+            disabled={!ready}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white text-neutral-900 hover:bg-neutral-200 active:bg-neutral-200 disabled:opacity-40"
+            aria-label={isPaused ? "Play" : "Pause"}
+          >
+            {isPaused ? <Play className="h-5 w-5 translate-x-px" fill="currentColor" /> : <Pause className="h-5 w-5" fill="currentColor" />}
+          </button>
+          <button type="button" onClick={nextTrack} className={roundButton} aria-label="Next track">
+            <SkipForward className="h-5 w-5" fill="currentColor" />
+          </button>
+          <div className="flex-1" />
+          <a
+            href={playlistUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-sm font-medium text-neutral-300 underline underline-offset-4 hover:text-white"
+          >
+            Open in Spotify
+          </a>
+        </div>
+
+        {/* The song list grows in place with the slot's motion */}
+        <div
+          id="northside-songs"
+          className={`grid transition-[grid-template-rows] ${SLOT_MOTION} ${open ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
+          inert={!open}
+        >
+          <div className="overflow-hidden">
+            <ol className="mt-3 border-t border-neutral-800 pt-1">
+              {TRACKS.map((track, i) => {
+                const playing = track.uri === currentUri;
+                return (
+                  <li key={track.uri}>
+                    <button
+                      type="button"
+                      onClick={() => playTrack(i)}
+                      aria-current={playing ? "true" : undefined}
+                      className="flex w-full items-center gap-3 rounded-lg py-2.5 text-left hover:bg-white/5"
+                    >
+                      <span className="flex w-4 shrink-0 justify-center text-[13px] tabular-nums text-neutral-500">
+                        {playing ? (
+                          <svg width="14" height="14" viewBox="0 0 14 14" fill="white" aria-hidden>
+                            <rect x="0" y="6" width="3" height="8" />
+                            <rect x="5.5" y="0" width="3" height="14" />
+                            <rect x="11" y="4" width="3" height="10" />
+                          </svg>
+                        ) : (
+                          i + 1
+                        )}
+                      </span>
+                      <span className="min-w-0">
+                        <span className={`block truncate text-[15px] font-medium ${playing ? "text-white" : "text-neutral-300"}`}>
+                          {track.name}
+                        </span>
+                        <span className="block truncate text-[13px] text-neutral-500">{track.artist}</span>
+                      </span>
+                    </button>
+                  </li>
+                );
+              })}
+            </ol>
+            <button
+              type="button"
+              onClick={toggleOpen}
+              className="flex w-full items-center justify-center gap-1.5 py-2.5 text-sm font-medium text-neutral-300 hover:text-white"
+            >
+              Show less
+              <ChevronDown className="h-4 w-4 rotate-180" />
+            </button>
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <div className="border-[3px] border-[#14181b] bg-[#504d42] p-3">

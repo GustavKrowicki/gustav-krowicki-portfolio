@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "kind": "rigging.clip-features-v1",
+  "provenance": {
+    "provider": "character",
+    "version": "0.1.0"
+  },
+  "figureHeight": 0.9,
+  "clipCount": 3,
+  "scaleTripwire": {
+    "limit": 0.0,
+    "tripped": false,
+    "clips": [],
+    "note": "A non-zero scaleDelta means the source rig scales joints, which changes what Stage R2 may legally do to skin weights. Surface it before anything else proceeds."
+  },
+  "clips": [
+    {
+      "sourceName": "idle",
+      "features": {
+        "sourceName": "idle",
+        "figureHeight": 0.9,
+        "sampleCount": 25,
+        "duration": 3.0,
+        "travel": 0.0,
+        "rise": 0.0,
+        "speed": 0.0,
+        "handRange": 0.2549669222222222,
+        "footRange": 0.11188938,
+        "headRise": 0.0003725466666665906,
+        "scaleDelta": 0.0,
+        "scalesJoints": false,
+        "poseReturn": 0.12490792,
+        "hipReturn": 0.0,
+        "landmarkRanges": {
+          "hip": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "head": [
+            0.00012221111111111112,
+            0.0003725466666665906,
+            0.024243867777777775
+          ],
+          "hand.l": [
+            0.007937755555555565,
+            0.0065081833333333365,
+            0.030894164444444448
+          ],
+          "hand.r": [
+            0.014445277777777783,
+            0.004023764444444448,
+            0.03937872444444444
+          ],
+          "foot.l": [
+            0.0,
+            0.0,
+            0.0
+          ],
+          "foot.r": [
+            0.0,
+            0.0,
+            0.0
+          ]
+        }
+      },
+      "classification": {
+        "labels": [
+          "idle",
+          "in-place"
+        ],
+        "primary": "idle",
+        "reasons": {
+          "idle": "travel 0.0000 < 0.02 and rise 0.0000 < 0.02",
+          "in-place": "travel 0.0000 < 0.3"
+        },
+        "thresholds": {
+          "idleTravel": 0.02,
+          "idleRise": 0.02,
+          "inPlaceTravel": 0.3,
+          "walkSpeed": 0.3,
+          "runSpeed": 0.6,
+          "dashSpeed": 1.5,
+          "jumpRise": 0.15,
+          "leapTravel": 0.5,
+          "plantedFootRange": 0.1,
+          "gestureHandRange": 0.4,
+          "provenance": "single-subject (11 clips, one rig, H = 1.0)"
+        }
+      },
+      "loop": {
+        "loop": true,
+        "reason": "poseReturn 0.125 deg <= 0.5 and ||hip(T) - hip(0)|| 0.0000H <= 0.01H",
+        "poseReturn": 0.12490792,
+        "hipReturn": 0.0,
+        "poseReturnLimit": 0.5,
+        "hipTolerance": 0.01
+      },
+      "name": {
+        "sourceName": "idle",
+        "id": "idle",
+        "label": "idle",
+        "measured": "travel 0.000H, rise 0.000H",
+        "inferred": false,
+        "loop": true
+      }
+    },
+    {
+      "sourceName": "walk",
+      "features": {
+        "sourceName": "walk",
+        "figureHeight": 0.9,
+        "sampleCount": 25,
+        "duration": 1.0,
+        "travel": 0.4024878088888889,
+        "rise": 0.020009602222222242,
+        "speed": 0.4024878088888889,
+        "handRange": 0.5705114333333333,
+        "footRange": 0.6037355888888889,
+        "headRise": 0.020009407777777807,
+        "scaleDelta": 0.0,
+        "scalesJoints": false,
+        "poseReturn": 0.148153771,
+        "hipReturn": 0.4024878088888889,
+        "landmarkRanges": {
+          "hip": [
+            0.0,
+            0.020009602222222242,
+            0.4024878088888889
+          ],
+          "head": [
+            0.0004269777777777777,
+            0.020009407777777807,
+            0.4024878088888889
+          ],
+          "hand.l": [
+            0.00680649666666667,
+            0.021613982222222217,
+            0.40248781
+          ],
+          "hand.r": [
+            0.0036530766666666775,
+            0.035898000000000006,
+            0.46322741777777776
+          ],
+          "foot.l": [
+            0.0,
+            0.03473413444444444,
+            0.4024965455555556
+          ],
+          "foot.r": [
+            0.0,
+            0.03473413444444444,
+            0.4024998355555555
+          ]
+        }
+      },
+      "classification": {
+        "labels": [
+          "walk"
+        ],
+        "primary": "walk",
+        "reasons": {
+          "walk": "0.3 <= speed 0.4025 < 0.6"
+        },
+        "thresholds": {
+          "idleTravel": 0.02,
+          "idleRise": 0.02,
+          "inPlaceTravel": 0.3,
+          "walkSpeed": 0.3,
+          "runSpeed": 0.6,
+          "dashSpeed": 1.5,
+          "jumpRise": 0.15,
+          "leapTravel": 0.5,
+          "plantedFootRange": 0.1,
+          "gestureHandRange": 0.4,
+          "provenance": "single-subject (11 clips, one rig, H = 1.0)"
+        }
+      },
+      "loop": {
+        "loop": false,
+        "reason": "||hip(T) - hip(0)|| 0.4025H > 0.01H",
+        "poseReturn": 0.148153771,
+        "hipReturn": 0.4024878088888889,
+        "poseReturnLimit": 0.5,
+        "hipTolerance": 0.01
+      },
+      "name": {
+        "sourceName": "walk",
+        "id": "walk",
+        "label": "walk",
+        "measured": "speed 0.402 H/s, rise 0.020H",
+        "inferred": false,
+        "loop": false
+      }
+    },
+    {
+      "sourceName": "walk-in-place",
+      "features": {
+        "sourceName": "walk-in-place",
+        "figureHeight": 0.9,
+        "sampleCount": 25,
+        "duration": 1.0,
+        "travel": 0.0,
+        "rise": 0.020009602222222242,
+        "speed": 0.0,
+        "handRange": 0.24548716333333334,
+        "footRange": 0.24364226333333333,
+        "headRise": 0.020009407777777807,
+        "scaleDelta": 0.0,
+        "scalesJoints": false,
+        "poseReturn": 0.148153771,
+        "hipReturn": 0.0,
+        "landmarkRanges": {
+          "hip": [
+            0.0,
+            0.020009602222222242,
+            0.0
+          ],
+          "head": [
+            0.0004269777777777777,
+            0.020009407777777807,
+            7.471111111110687e-06
+          ],
+          "hand.l": [
+            0.00680649666666667,
+            0.021613982222222217,
+            0.07486761777777777
+          ],
+          "hand.r": [
+            0.0036530766666666775,
+            0.035898000000000006,
+            0.24204927222222222
+          ],
+          "foot.l": [
+            0.0,
+            0.03473413444444444,
+            0.24364226333333333
+          ],
+          "foot.r": [
+            0.0,
+            0.03473413444444444,
+            0.24364226333333333
+          ]
+        }
+      },
+      "classification": {
+        "labels": [
+          "in-place"
+        ],
+        "primary": "in-place",
+        "reasons": {
+          "in-place": "travel 0.0000 < 0.3"
+        },
+        "thresholds": {
+          "idleTravel": 0.02,
+          "idleRise": 0.02,
+          "inPlaceTravel": 0.3,
+          "walkSpeed": 0.3,
+          "runSpeed": 0.6,
+          "dashSpeed": 1.5,
+          "jumpRise": 0.15,
+          "leapTravel": 0.5,
+          "plantedFootRange": 0.1,
+          "gestureHandRange": 0.4,
+          "provenance": "single-subject (11 clips, one rig, H = 1.0)"
+        }
+      },
+      "loop": {
+        "loop": true,
+        "reason": "poseReturn 0.148 deg <= 0.5 and ||hip(T) - hip(0)|| 0.0000H <= 0.01H",
+        "poseReturn": 0.148153771,
+        "hipReturn": 0.0,
+        "poseReturnLimit": 0.5,
+        "hipTolerance": 0.01
+      },
+      "name": {
+        "sourceName": "walk-in-place",
+        "id": "in-place",
+        "label": "in-place",
+        "measured": "travel 0.000H, rise 0.020H",
+        "inferred": false,
+        "loop": true
+      }
+    }
+  ]
+}

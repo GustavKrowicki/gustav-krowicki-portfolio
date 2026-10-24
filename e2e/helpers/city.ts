@@ -1,7 +1,6 @@
 import { expect, Page } from "@playwright/test";
 
 type CityE2EApi = {
-  dismissWelcome: () => void;
   focusBuilding: (buildingId: string) => boolean;
   startAdventure: () => boolean;
   walkToBuilding: (buildingId: string) => Promise<boolean>;
@@ -14,6 +13,14 @@ type CityE2EApi = {
   stopAdventure: () => void;
   pauseGame: () => boolean;
   resumeGame: () => boolean;
+  getCameraState: () => CameraState | null;
+};
+
+export type CameraState = {
+  webgl: boolean;
+  zoom: number;
+  view: { x: number; y: number; width: number; height: number };
+  player: { x: number; y: number } | null;
 };
 
 declare global {
@@ -50,24 +57,10 @@ export async function gotoCityE2E(page: Page) {
   await waitForCityHarness(page);
 }
 
-export async function dismissWelcome(page: Page) {
-  await waitForCityHarness(page);
-  await callCityHook(page, "dismissWelcome");
-  await expect(page.getByTestId("city-welcome-overlay")).toBeHidden();
-}
-
 export async function startAdventure(page: Page) {
   await waitForCityHarness(page);
   await callCityHook(page, "startAdventure");
-  await expect(page.getByTestId("city-adventure-hud")).toBeVisible();
   await expect.poll(() => getPlayerState(page)).toBeTruthy();
-}
-
-export async function openEncounter(page: Page, stopId: string) {
-  await waitForCityHarness(page);
-  const opened = await callCityHook<boolean>(page, "openEncounter", stopId);
-  expect(opened).toBe(true);
-  await expect(page.getByTestId("city-rpg-dialog")).toBeVisible();
 }
 
 export async function focusBuilding(page: Page, buildingId: string) {
@@ -87,11 +80,6 @@ export async function getPlayerState(page: Page) {
   return callCityHook<string | null>(page, "getPlayerState");
 }
 
-export async function getCurrentEncounterId(page: Page) {
-  await waitForCityHarness(page);
-  return callCityHook<string | null>(page, "getCurrentEncounterId");
-}
-
 export async function getVisitedBuildings(page: Page) {
   await waitForCityHarness(page);
   return callCityHook<string[]>(page, "getVisitedBuildings");
@@ -102,25 +90,13 @@ export async function setVisitedBuildings(page: Page, buildingIds: string[]) {
   await callCityHook(page, "setVisitedBuildings", buildingIds);
 }
 
-export async function pauseGame(page: Page) {
+export async function getCameraState(page: Page) {
   await waitForCityHarness(page);
-  // Poll: the game instance can be transiently unavailable (e.g. remount).
-  await expect
-    .poll(() => callCityHook<boolean>(page, "pauseGame"), { timeout: 10000 })
-    .toBe(true);
+  return callCityHook<CameraState | null>(page, "getCameraState");
 }
 
-// Wait until the canvas stops changing (textures loaded, camera settled).
-// Don't use waitForLoadState("networkidle") for this: PostHog recording
-// flushes and dev-overlay polling keep the network busy forever.
-export async function waitForCanvasStable(page: Page) {
-  const canvas = page.locator('[data-testid="city-canvas"] canvas');
-  let prev = await canvas.screenshot();
-  for (let i = 0; i < 20; i++) {
-    await page.waitForTimeout(500);
-    const cur = await canvas.screenshot();
-    if (cur.equals(prev)) return;
-    prev = cur;
-  }
-  throw new Error("Canvas never stabilized — something is still animating");
+// The harness exists before Phaser has created the scene; camera commands are ignored until then.
+export async function waitForCamera(page: Page) {
+  await expect.poll(() => getCameraState(page), { timeout: 30000 }).not.toBeNull();
 }
+

@@ -1,0 +1,83 @@
+{
+  "ok": true,
+  "verdict": "pass",
+  "confidence": 0.856,
+  "estimatedFidelity": 0.856,
+  "targetThreshold": 0.7,
+  "materialId": "glass",
+  "sourceImage": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-crops/glass.png",
+  "outDir": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass",
+  "palette": [
+    "#96AEBC",
+    "#92A8B6",
+    "#9BB2C0",
+    "#8292A3",
+    "#4F5862"
+  ],
+  "maps": {
+    "albedo": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass/glass_albedo.png",
+      "url": "glass_albedo.png",
+      "channel": "albedo",
+      "source": "reference-pixel-extraction"
+    },
+    "roughness": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass/glass_roughness.png",
+      "url": "glass_roughness.png",
+      "channel": "roughness",
+      "source": "reference-pixel-extraction"
+    },
+    "height": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass/glass_height.png",
+      "url": "glass_height.png",
+      "channel": "height",
+      "source": "reference-pixel-extraction"
+    },
+    "normal": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass/glass_normal.png",
+      "url": "glass_normal.png",
+      "channel": "normal",
+      "source": "reference-pixel-extraction"
+    },
+    "ao": {
+      "path": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/material-evidence/glass/glass_ao.png",
+      "url": "glass_ao.png",
+      "channel": "ao",
+      "source": "reference-pixel-extraction"
+    }
+  },
+  "diagnostics": {
+    "sourceWidth": 70,
+    "sourceHeight": 40,
+    "mapSize": 1024,
+    "cropBBoxPixels": {
+      "x": 3,
+      "y": 0,
+      "width": 67,
+      "height": 40
+    },
+    "mask": {
+      "backgroundColor": "#C2C3BE",
+      "backgroundNoise": 76.818,
+      "transparentPixelFraction": 0.0,
+      "foregroundCoverage": 0.8021
+    },
+    "mapStats": {
+      "valueRange": 0.2662,
+      "heightP90Gradient": 0.03473,
+      "roughnessBase": 0.693,
+      "roughnessVariation": 0.057,
+      "normalStrength": 0.197,
+      "blurRadius": 21
+    },
+    "palette": [
+      "#96AEBC",
+      "#92A8B6",
+      "#9BB2C0",
+      "#8292A3",
+      "#4F5862"
+    ]
+  },
+  "warnings": [],
+  "limitation": "single-image PBR extraction is an estimate; 70%+ extraction confidence still needs render screenshot review"
+}

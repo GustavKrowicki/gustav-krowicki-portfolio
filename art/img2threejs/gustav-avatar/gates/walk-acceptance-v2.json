@@ -1,0 +1,136 @@
+{
+  "accepted": true,
+  "band": "walk",
+  "complete": false,
+  "criteria": [
+    {
+      "criterion": "band-containment",
+      "detail": {
+        "band": "walk",
+        "inside": [
+          "duration",
+          "speed",
+          "travel",
+          "rise",
+          "handRange",
+          "footRange",
+          "contact",
+          "poseReturn",
+          "scaleDelta"
+        ],
+        "ok": true,
+        "outside": [],
+        "unevaluated": []
+      },
+      "reason": "walk: all 9 features inside band",
+      "status": "pass"
+    },
+    {
+      "criterion": "classifier-agreement",
+      "detail": {
+        "intended": "walk",
+        "labels": [
+          "walk"
+        ],
+        "primary": "walk"
+      },
+      "reason": "\u00a72 classified the authored clip as 'walk' (labels ['walk']), intended 'walk'",
+      "status": "pass"
+    },
+    {
+      "criterion": "foot-slide",
+      "detail": {
+        "figureHeight": 0.9,
+        "limit": 0.01,
+        "maxSlideFraction": 4.3177759607134385e-05,
+        "perStance": [
+          {
+            "contactTime": 0.0,
+            "frames": 14,
+            "interval": [
+              0.0,
+              0.58
+            ],
+            "landmark": "foot.l",
+            "maxSlide": 3.885998364642095e-05,
+            "maxSlideFraction": 4.3177759607134385e-05,
+            "worstTime": 0.541666667
+          },
+          {
+            "contactTime": 0.0,
+            "frames": 2,
+            "interval": [
+              0.0,
+              0.08000000000000007
+            ],
+            "landmark": "foot.r",
+            "maxSlide": 3.874945160902139e-05,
+            "maxSlideFraction": 4.305494623224599e-05,
+            "worstTime": 0.041666667
+          },
+          {
+            "contactTime": 0.5,
+            "frames": 13,
+            "interval": [
+              0.5,
+              1.0
+            ],
+            "landmark": "foot.r",
+            "maxSlide": 3.5477910944698145e-05,
+            "maxSlideFraction": 3.9419901049664606e-05,
+            "worstTime": 0.541666667
+          }
+        ],
+        "reason": "footSlide 4.31778e-05H <= 0.01H over 3 stance interval(s)",
+        "status": "pass",
+        "unmeasured": []
+      },
+      "reason": "footSlide 4.31778e-05H <= 0.01H over 3 stance interval(s)",
+      "status": "pass"
+    },
+    {
+      "criterion": "no-joint-scale",
+      "detail": {
+        "scaleDelta": 0.0
+      },
+      "reason": "scaleDelta = 0.0, required exactly 0",
+      "status": "pass"
+    },
+    {
+      "criterion": "pose-return-loop",
+      "detail": {
+        "declaredLoop": false,
+        "poseReturn": 0.148153771
+      },
+      "reason": "clip is not declared a loop, so \u00a74's poseReturn bound is out of scope for it",
+      "status": "unevaluated"
+    },
+    {
+      "criterion": "joint-range-vs-source",
+      "detail": {},
+      "reason": "no source clips exist for this rig, so there is no measured joint range to bound the authored one \u2014 the criterion is out of evidence, not satisfied",
+      "status": "unevaluated"
+    }
+  ],
+  "figureHeight": 0.9,
+  "gate": "R4",
+  "intendedClass": "walk",
+  "kind": "rigging.action-acceptance-v1",
+  "measuredFeatures": {
+    "contact": 0.5800000000000001,
+    "duration": 1.0,
+    "footRange": 0.24213776333333328,
+    "handRange": 0.2447911633333334,
+    "headRise": 0.0198854866666667,
+    "poseReturn": 0.148153771,
+    "rise": 0.019885683333333293,
+    "scaleDelta": 0.0,
+    "speed": 0.40000016888888884,
+    "travel": 0.40000016888888884
+  },
+  "provenance": {
+    "provider": "character",
+    "version": "0.1.0"
+  },
+  "verdict": "accepted-with-unevaluated"
+}

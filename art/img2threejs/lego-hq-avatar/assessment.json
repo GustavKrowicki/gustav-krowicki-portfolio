@@ -1,0 +1,461 @@
+{
+  "targetName": "LEGO HQ Avatar Scale",
+  "sourceImage": "ref/ai-studio-campus.jpg",
+  "preSpecAssessment": {
+    "objectClass": {
+      "primaryType": "architecture: the LEGO campus as a toy-like game building with walk-in rooms (roof on / roof off)",
+      "primaryDomain": "object",
+      "formLanguage": [
+        "hard-surface",
+        "architectural",
+        "cut-away when open"
+      ],
+      "structureKind": [
+        "compound object",
+        "repeated modules (windows, wall pieces, studs, domes, chairs)"
+      ],
+      "motionPotential": [
+        "state switch (roof on / roof off per view)",
+        "entrance doors slide"
+      ],
+      "materialFamilies": [
+        "painted plaster (flat)",
+        "glass",
+        "painted metal (yellow frame)",
+        "brick",
+        "timber (props)",
+        "grass"
+      ],
+      "notes": "Style = AI Studio campus image; layout = the approved 8 x 8 board plan; scale = docs/city-rules.md against the 3D avatar (0.9 wu)."
+    },
+    "complexity": {
+      "tier": "complex",
+      "scores": {
+        "silhouetteComplexity": 3,
+        "componentCount": 3,
+        "hierarchyDepth": 2,
+        "repetitionDensity": 3,
+        "materialLayerCount": 3,
+        "localDetailDensity": 2,
+        "occlusionRisk": 3,
+        "actionReadinessNeed": 3
+      },
+      "estimatedCounts": {
+        "macroComponents": 20,
+        "mesoComponents": 150,
+        "microFeatureGroups": 8,
+        "materialLayers": 30,
+        "repetitionSystems": 6
+      },
+      "reasoning": [
+        "Silhouette: 2-storey wings, 3-storey atrium and yellow blocks, a ring building, on an 8 x 8 plot.",
+        "Two states from one model: roof-on (closed campus) and roof-off (cutaway, far walls high, others low).",
+        "Repetition: windows on a 1 wu bay, wall pieces split at doors, skylight domes, studs, chairs.",
+        "Occlusion: interiors are hidden in the roof-on state and must read from above in the roof-off state.",
+        "Action readiness: walls and roofs are separate nodes so the game can switch states per view."
+      ]
+    },
+    "specDepthDecision": {
+      "requiredDepth": "complex",
+      "minimumComponentLevels": [
+        "macro",
+        "meso",
+        "micro"
+      ],
+      "needsRepetitionSystems": true,
+      "needsMaterialLocalOverrides": true,
+      "needsMultipleReviewViews": true,
+      "needsActionReadyHierarchy": true,
+      "rationale": "Identity = the real campus look at character scale; the state switch needs the ground storey split into a low part and an upper part per wall side."
+    },
+    "unknownsToResolveBeforeImplementation": [
+      "Layout: the 8 x 8 board plan (section 529:3604), approved by Gustav on 2026-10-15.",
+      "Heights: wings 2 storeys (2.6 wu), atrium and yellow blocks 3 (3.8 wu), board decision B.",
+      "Entrance: south side of the atrium under the yellow 2 x 4 plate, board decision C.",
+      "Interiors: not in the reference; one or two large objects per room from the board; the Workshop gets full detail first.",
+      "Logo: red square placeholder until the real LEGO logo artwork is supplied."
+    ],
+    "detailInventory": {
+      "scanMethod": "grid-3x3 on the AI Studio campus image",
+      "targetMinDetails": 10,
+      "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+      "details": [
+        {
+          "id": "green-roofs",
+          "kind": "contour",
+          "description": "Flat green roofs with a dark parapet ring on every block.",
+          "region": {
+            "x": 0.25,
+            "y": 0.1,
+            "width": 0.7,
+            "height": 0.55,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-north-top.parapet"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/ref/ai-studio-campus.jpg",
+          "confidence": 0.9
+        },
+        {
+          "id": "skylight",
+          "kind": "contour",
+          "description": "Atrium roof: white disc with 19 blue domes in rings.",
+          "region": {
+            "x": 0.45,
+            "y": 0.33,
+            "width": 0.2,
+            "height": 0.15,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-skylight.domes"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+          "confidence": 0.9
+        },
+        {
+          "id": "round-building",
+          "kind": "contour",
+          "description": "Round building with dark glass bands, brick plinth and a round courtyard.",
+          "region": {
+            "x": 0.03,
+            "y": 0.17,
+            "width": 0.3,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-round-mass.bands"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r0c0.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "yellow-frames",
+          "kind": "contour",
+          "description": "Yellow-framed boxes on top: a bar on the north wing, a block over the south-east corner.",
+          "region": {
+            "x": 0.55,
+            "y": 0.07,
+            "width": 0.4,
+            "height": 0.7,
+            "units": "normalized"
+          },
+          "scale": "macro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-yellow-block.frame"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/ref/ai-studio-campus.jpg",
+          "confidence": 0.85
+        },
+        {
+          "id": "perforated",
+          "kind": "linework",
+          "description": "Terrace building: white perforated facade panels.",
+          "region": {
+            "x": 0.03,
+            "y": 0.42,
+            "width": 0.4,
+            "height": 0.25,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "facade-perf.dots"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c0.png",
+          "confidence": 0.75
+        },
+        {
+          "id": "greenhouse",
+          "kind": "contour",
+          "description": "Small glass greenhouse and yellow benches on the terrace roof.",
+          "region": {
+            "x": 0.1,
+            "y": 0.38,
+            "width": 0.25,
+            "height": 0.15,
+            "units": "normalized"
+          },
+          "scale": "micro",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-greenhouse.glass"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c0.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "window-bands",
+          "kind": "linework",
+          "description": "Dark recessed windows, one per bay, on every storey.",
+          "region": {
+            "x": 0.45,
+            "y": 0.55,
+            "width": 0.5,
+            "height": 0.4,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-north-upper.windows"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c2.png",
+          "confidence": 0.8
+        },
+        {
+          "id": "canopy-plate",
+          "kind": "contour",
+          "description": "Yellow 2 x 4 plate with studs over the glass entrance.",
+          "region": {
+            "x": 0.45,
+            "y": 0.52,
+            "width": 0.1,
+            "height": 0.08,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "canopy.studs"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+          "confidence": 0.8
+        },
+        {
+          "id": "minifigure",
+          "kind": "contour",
+          "description": "Giant minifigure statue on the plaza: blue legs, red torso, yellow head.",
+          "region": {
+            "x": 0.33,
+            "y": 0.62,
+            "width": 0.08,
+            "height": 0.12,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "minifig-torso.figure"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c1.png",
+          "confidence": 0.85
+        },
+        {
+          "id": "atrium-bracing",
+          "kind": "linework",
+          "description": "Atrium glass walls with yellow diagonal bracing.",
+          "region": {
+            "x": 0.35,
+            "y": 0.42,
+            "width": 0.3,
+            "height": 0.15,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "geometry",
+          "mapsTo": {
+            "type": "component.localFeatures",
+            "ref": "roof-atrium-upper.bracing"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r1c1.png",
+          "confidence": 0.7
+        },
+        {
+          "id": "brick-plinth",
+          "kind": "stain",
+          "description": "Red-brown brick ground storey under the yellow block.",
+          "region": {
+            "x": 0.45,
+            "y": 0.7,
+            "width": 0.35,
+            "height": 0.2,
+            "units": "normalized"
+          },
+          "scale": "meso",
+          "affects": "material",
+          "mapsTo": {
+            "type": "material.localOverrides",
+            "ref": "brick.coursing"
+          },
+          "evidenceRef": "/Users/gustavkrowicki/portfolio-lego-hq/art/img2threejs/lego-hq-avatar/detail-zones/zone-r2c1.png",
+          "confidence": 0.7
+        }
+      ]
+    },
+    "anatomy": {
+      "applies": false,
+      "styleHeads": 0.0,
+      "proportions": {
+        "headUnit": 0.0,
+        "torso": 0.0,
+        "legs": 0.0,
+        "shoulderWidth": 0.0,
+        "hipWidth": 0.0
+      },
+      "pose": {
+        "type": "unassessed",
+        "jointAngles": {}
+      },
+      "faceLandmarks": {
+        "eyeLine": 0.0,
+        "eyeSpacing": 0.0,
+        "noseBase": 0.0,
+        "mouthLine": 0.0,
+        "hairline": 0.0
+      },
+      "features": [],
+      "confidence": 0.0,
+      "note": "Only meaningful when objectClass.primaryDomain is character or hybrid. Set applies=true and fill from forge/stage1_intake/extract_landmarks.py. See grimoire/character/reconstruction.md and grimoire/character/likeness_maximization.md."
+    },
+    "sourceImage": "ref/ai-studio-campus.jpg"
+  },
+  "qualityContract": {
+    "qualityBar": "complex",
+    "definitionOfDone": [
+      "The rendered model matches the reference silhouette, primary proportions, visible component hierarchy, material response, and most recognizable local features for the selected fidelity tier."
+    ],
+    "minimumSpecDepth": {
+      "macroComponents": 3,
+      "mesoComponents": 8,
+      "microFeatureGroups": 5,
+      "materialLayers": 3,
+      "repetitionSystems": 1,
+      "reviewViewpoints": 4
+    },
+    "featureGroups": [
+      {
+        "id": "overall-silhouette",
+        "name": "Overall silhouette and proportions",
+        "required": true,
+        "qualityCriteria": [
+          "Bounding shape, dominant curves, negative spaces, and scale relationships are explicitly described."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model reads as a generic placeholder instead of the reference object",
+          "major proportions are guessed without evidence"
+        ]
+      },
+      {
+        "id": "primary-structure",
+        "name": "Primary structure and hierarchy",
+        "required": true,
+        "qualityCriteria": [
+          "Major parts, joints, seams, contact points, and parent-child relationships are named before code generation."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "large visible parts are merged into one mesh",
+          "component hierarchy is too shallow for the observed complexity"
+        ]
+      },
+      {
+        "id": "attachment-joint-correctness",
+        "name": "Attachment and joint correctness",
+        "required": true,
+        "qualityCriteria": [
+          "Every visible child appendage, branch, limb, handle, connector, tube, cable, horn, wing, leg, or hinged part has an attachment contract with parent socket, localStart/localEnd, contact type, embed/overlap, and gap tolerance."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "child part root floats away from the parent",
+          "branch/limb/tube is centered in space instead of pivoting from its root",
+          "parent-child transform mixes world and local coordinates"
+        ]
+      },
+      {
+        "id": "surface-material-response",
+        "name": "Surface material response",
+        "required": true,
+        "qualityCriteria": [
+          "Albedo zones, roughness, normal/bump/displacement intent, cavity dirt, edge wear, and local overrides are specified where visible.",
+          "Important materials define independent albedo, roughness, height/normal, and AO responses instead of reusing one texture for unrelated PBR channels.",
+          "Surface response is decomposed into macro, meso, and micro frequency bands with scale and amplitude tied to object scale."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "surface looks like flat plastic",
+          "local material variation is missing or not tied to image evidence"
+        ]
+      },
+      {
+        "id": "reference-lookdev",
+        "name": "Reference color, material, and lighting response",
+        "required": true,
+        "qualityCriteria": [
+          "Material-pass names the reference-derived albedo palette, roughness variation, tactile normal/bump/displacement response, and local masks.",
+          "When a source image is available, run reference PBR extraction and require confidence >= 0.7 before treating maps as implementation-ready.",
+          "Lighting-pass names key/fill/rim or environment light, exposure, tone mapping, background, and contact shadow behavior.",
+          "Neutral, grazing-angle, and reference-matched renders prove that surface relief survives relighting and is not painted into albedo."
+        ],
+        "evidenceRefs": [
+          "full-object"
+        ],
+        "failureModes": [
+          "model has acceptable shape but reads as flat shaded or plastic",
+          "colors are a generic average instead of reference-observed local color zones",
+          "lighting is evenly ambient and cannot reproduce the source value range"
+        ]
+      }
+    ],
+    "visualDeltaChecks": [
+      "silhouette and negative-space delta",
+      "component hierarchy depth delta",
+      "repetition density and distribution delta",
+      "material albedo/roughness/normal response delta",
+      "local feature placement and scale delta"
+    ],
+    "antiShallowSpecRules": [
+      "Do not proceed to code if qualityContract.qualityBar is unassessed.",
+      "Do not proceed to code if the spec only contains a root component for a moderate or complex object.",
+      "Do not proceed to code if required featureGroups are not represented by componentTree, materials, or repetitionSystems.",
+      "Do not proceed to code if visible local features are described only in prose and not attached to components/materials/evidenceRefs.",
+      "Do not proceed past structural-pass if attached child parts lack attachment.parentSocket, localStart, localEnd, embedDepth/overlap, and gapTolerance.",
+      "Do not pass material look-dev when albedo is reused as roughness, height, normal, or AO.",
+      "Do not pass material look-dev without macro, meso, and micro surface frequency bands for close-up materials.",
+      "Do not pass reference-fidelity material look-dev from a source image without usable referencePbr maps or an explicit documented limitation.",
+      "Do not patch a spec with extracted PBR maps when extraction confidence is below the target threshold unless the user explicitly accepts lower fidelity.",
+      "Do not place adjacent separate-geometry parts below 0.02 world-unit seam overlap (source: grimoire/build/geometry_patterns.md).",
+      "Do not satisfy raised or recessed relief, fasteners, or grip structure with a map alone when the feature affects form; use geometry or displacement (source: grimoire/build/geometry_patterns.md)."
+    ]
+  },
+  "authoringInstruction": "Fill observed object class, complexity reasoning, featureGroups, visualDeltaChecks, and unknowns before generating or implementing ObjectSculptSpec.",
+  "localSpecSearch": {
+    "collection": "core_3d",
+    "query": "LEGO HQ Avatar Scale",
+    "index": {
+      "status": "hit",
+      "reason": "current",
+      "fingerprint": "62f2831e1d52eeb6dbb94a87c44fa25b1f4926626a7b1f8c2bcadc63e04e9471"
+    },
+    "matches": []
+  }
+}

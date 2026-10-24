@@ -1,0 +1,192 @@
+{
+  "sourceImage": "ref/ai-studio-room-fit.png",
+  "zonesDir": "detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3 on the AI Studio reference + photos",
+    "targetMinDetails": 6,
+    "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+    "details": [
+      {
+        "id": "marker-list",
+        "kind": "linework",
+        "description": "Handwritten list in black marker on the left of the whiteboard: a heading, underline and 5 bulleted lines.",
+        "region": {
+          "x": 0.08,
+          "y": 0.25,
+          "width": 0.22,
+          "height": 0.3,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "whiteboard.markerList"
+        },
+        "evidenceRef": "detail-zones/zone-r0c0.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "sticky-grid",
+        "kind": "decal",
+        "description": "Three column headings with yellow, lime and orange sticky notes in a loose grid at shoulder height.",
+        "region": {
+          "x": 0.27,
+          "y": 0.15,
+          "width": 0.26,
+          "height": 0.23,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "whiteboard.stickyGrid"
+        },
+        "evidenceRef": "detail-zones/zone-r0c1.png",
+        "confidence": 0.75
+      },
+      {
+        "id": "whiteboard-gloss",
+        "kind": "gloss",
+        "description": "Wall-sized painted whiteboard with large soft specular highlights.",
+        "region": {
+          "x": 0.05,
+          "y": 0.05,
+          "width": 0.55,
+          "height": 0.55,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "whiteboard.gloss"
+        },
+        "evidenceRef": "ref/ai-studio-room-fit.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "concrete-column",
+        "kind": "contour",
+        "description": "Round exposed-concrete column, floor to ceiling, near the end wall.",
+        "region": {
+          "x": 0.63,
+          "y": 0.08,
+          "width": 0.1,
+          "height": 0.35,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "column.boardMarks"
+        },
+        "evidenceRef": "detail-zones/zone-r0c2.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "table-notes",
+        "kind": "decal",
+        "description": "Sticky notes and paper strewn over the oak table between laptops.",
+        "region": {
+          "x": 0.32,
+          "y": 0.45,
+          "width": 0.36,
+          "height": 0.2,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "table.stickyNotes"
+        },
+        "evidenceRef": "detail-zones/zone-r1c1.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "laptops",
+        "kind": "contour",
+        "description": "Open silver laptops along the table edge with dark screens.",
+        "region": {
+          "x": 0.35,
+          "y": 0.46,
+          "width": 0.27,
+          "height": 0.22,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "laptop-1.screen"
+        },
+        "evidenceRef": "detail-zones/zone-r1c1.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "chair-teal",
+        "kind": "contour",
+        "description": "Swivel chairs: teal upholstered seat and back, white frame and star base.",
+        "region": {
+          "x": 0.22,
+          "y": 0.4,
+          "width": 0.53,
+          "height": 0.4,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "chair-1.frame"
+        },
+        "evidenceRef": "detail-zones/zone-r2c1.png",
+        "confidence": 0.75
+      },
+      {
+        "id": "teal-carpet",
+        "kind": "stain",
+        "description": "Dark teal carpet across the floor.",
+        "region": {
+          "x": 0.1,
+          "y": 0.4,
+          "width": 0.85,
+          "height": 0.55,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "carpet.tone"
+        },
+        "evidenceRef": "detail-zones/zone-r2c0.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "radiator",
+        "kind": "contour",
+        "description": "Low white radiator panel under the end wall.",
+        "region": {
+          "x": 0.6,
+          "y": 0.28,
+          "width": 0.05,
+          "height": 0.08,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "radiator.panel"
+        },
+        "evidenceRef": "ref/ai-studio-room-fit.png",
+        "confidence": 0.55
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

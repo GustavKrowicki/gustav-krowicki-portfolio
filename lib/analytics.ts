@@ -9,28 +9,20 @@ export function trackCityEntered(device: 'mobile' | 'desktop') {
   capture('city_entered', { device });
 }
 
-export function trackModeSelected(mode: 'tour' | 'explore' | 'adventure', character?: string) {
+export function trackModeSelected(mode: 'explore' | 'adventure', character?: string) {
   capture('mode_selected', { mode, ...(character && { character }) });
 }
 
 export function trackBuildingInteracted(
   buildingName: string,
   mode: string,
-  method: 'click' | 'keyboard' | 'mobile_button' | 'logo_click' | 'zone_entry' | 'auto_walk'
+  method: 'click' | 'keyboard' | 'mobile_button' | 'logo_click' | 'zone_entry' | 'auto_walk' | 'open_in_place'
 ) {
   capture('building_interacted', { building_name: buildingName, mode, method });
 }
 
 export function trackProjectOpened(projectSlug: string, source: 'city') {
   capture('project_opened', { project_slug: projectSlug, source });
-}
-
-export function trackAdventureCompleted(durationSeconds: number, buildingsVisitedCount: number) {
-  capture('adventure_completed', { duration_seconds: durationSeconds, buildings_visited_count: buildingsVisitedCount });
-}
-
-export function trackAdventureExited(durationSeconds: number, buildingsVisitedCount: number) {
-  capture('adventure_exited', { duration_seconds: durationSeconds, buildings_visited_count: buildingsVisitedCount });
 }
 
 export function trackCityExited(durationSeconds: number, mode: string, buildingsVisitedCount: number) {
@@ -42,29 +34,17 @@ export function trackCityExited(durationSeconds: number, mode: string, buildings
   );
 }
 
-export function trackTourStopViewed(stopTitle: string, stopIndex: number) {
-  capture('tour_stop_viewed', { stop_title: stopTitle, stop_index: stopIndex });
-}
-
-export function trackTourCompleted(durationSeconds: number) {
-  capture('tour_completed', { duration_seconds: durationSeconds });
-}
-
-export function trackTourExited(durationSeconds: number, stopsViewedCount: number) {
-  capture('tour_exited', { duration_seconds: durationSeconds, stops_viewed_count: stopsViewedCount });
-}
-
-// Classic events
-export function trackProjectCardClicked(projectSlug: string, page: 'home' | 'work') {
-  capture('project_card_clicked', { project_slug: projectSlug, page });
-}
-
 export function trackContactClicked(method: 'email' | 'phone' | 'linkedin') {
   capture('contact_clicked', { method });
 }
 
-export function trackCvDownloaded(source: 'header' | 'contact' | 'mobile_nav') {
+export function trackCvDownloaded(source: 'contact' | 'panel' | 'note') {
   capture('cv_downloaded', { source });
+}
+
+// "Open PDF" on the CV (opens the browser's own PDF viewer)
+export function trackPdfOpened(document: 'cv') {
+  capture('pdf_opened', { document });
 }
 
 // Cross-cutting
@@ -78,4 +58,18 @@ export function trackSpotifyInteracted(
   trackName?: string
 ) {
   capture('spotify_interacted', { action, source, track_name: trackName });
+}
+
+// Walk-in beat cards: a button on a card (e.g. the food truck hatch: "eat" or "book")
+export function trackBeatChoice(buildingId: string, beat: string, choice: string) {
+  capture('beat_choice', { building_id: buildingId, beat, choice });
+}
+
+// Finds (lib/achievements.ts): one event per new find, with how many this browser has found so far
+export function trackFind(findId: string, group: string, foundCount: number) {
+  capture('find_made', { find_id: findId, group, found_count: foundCount });
+}
+
+export function trackAchievementsOpened(foundCount: number) {
+  capture('achievements_opened', { found_count: foundCount });
 }

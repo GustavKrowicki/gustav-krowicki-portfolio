@@ -82,7 +82,16 @@ const gtStandard = localFont({
   variable: "--font-gt-standard",
 });
 
+// Geist Mono (free, SIL Open Font License) for the city's labels and cards (Linear POR-12)
+const geistMono = localFont({
+  src: "./fonts/GeistMono-Variable.woff2",
+  weight: "100 900",
+  display: "swap",
+  variable: "--font-geist-mono",
+});
+
 export const metadata: Metadata = {
+  metadataBase: new URL("https://www.gustavkrowicki.com"),
   title: {
     default: "Gustav Krowicki - Product Designer",
     template: "%s | Gustav Krowicki"
@@ -106,7 +115,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={gtStandard.variable}>
+    <html lang="en" className={`${gtStandard.variable} ${geistMono.variable}`}>
       <body className="antialiased min-h-screen flex flex-col">
         <PostHogProvider>
           <LayoutContent>

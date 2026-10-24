@@ -1,0 +1,272 @@
+{
+  "sourceImage": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/ref/photo-6.jpg",
+  "zonesDir": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones",
+  "detailInventory": {
+    "scanMethod": "grid-3x3 on ref/photo-6.jpg (straight front)",
+    "targetMinDetails": 10,
+    "note": "Enumerate every identity-defining small detail before authoring the spec. Each detail must map to a component.localFeatures entry or material.localOverrides entry, never prose only. Use forge/stage1_intake/build_detail_inventory.py to scan zones.",
+    "details": [
+      {
+        "id": "louvre-bands",
+        "kind": "linework",
+        "description": "Continuous horizontal bands of white cast-concrete slats ~0.12 wu apart over dark windows, on every office storey.",
+        "region": {
+          "x": 0.08,
+          "y": 0.33,
+          "width": 0.8,
+          "height": 0.3,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "louvre-S-1.slats"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r1c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "louvre-fins",
+        "kind": "linework",
+        "description": "Thin vertical fins divide each louvre band into panels (one per 1 wu bay at city scale).",
+        "region": {
+          "x": 0.08,
+          "y": 0.33,
+          "width": 0.8,
+          "height": 0.3,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "louvre-S-1.fins"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r1c1.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "slab-bands",
+        "kind": "contour",
+        "description": "Thick white bands (slab + high parapet) between the louvre bands.",
+        "region": {
+          "x": 0.08,
+          "y": 0.28,
+          "width": 0.8,
+          "height": 0.36,
+          "units": "normalized"
+        },
+        "scale": "macro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "slab-1.edge"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r1c0.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "top-glass",
+        "kind": "linework",
+        "description": "Recessed top floor: a continuous band of glass with white frames and mullions.",
+        "region": {
+          "x": 0.23,
+          "y": 0.1,
+          "width": 0.63,
+          "height": 0.17,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "top-glass-S.mullions"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r0c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "top-setback",
+        "kind": "contour",
+        "description": "Top floor set back from the facade, with a roof terrace at the west end.",
+        "region": {
+          "x": 0.09,
+          "y": 0.24,
+          "width": 0.15,
+          "height": 0.07,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "top-core.setback"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r0c0.png",
+        "confidence": 0.75
+      },
+      {
+        "id": "awnings",
+        "kind": "contour",
+        "description": "Dark green awnings over the cafe bays of the ground storey.",
+        "region": {
+          "x": 0.26,
+          "y": 0.65,
+          "width": 0.43,
+          "height": 0.04,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "awning-S-1.slope"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c1.png",
+        "confidence": 0.9
+      },
+      {
+        "id": "columns",
+        "kind": "contour",
+        "description": "White square columns on the facade line; the ground storey glazing is set back behind them.",
+        "region": {
+          "x": 0.2,
+          "y": 0.65,
+          "width": 0.5,
+          "height": 0.1,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "col-S-1.pier"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c1.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "gate",
+        "kind": "contour",
+        "description": "Gate: a dark passage through the ground storey, brick-lined, at the east end of the front.",
+        "region": {
+          "x": 0.7,
+          "y": 0.67,
+          "width": 0.1,
+          "height": 0.11,
+          "units": "normalized"
+        },
+        "scale": "meso",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "gate-void.passage"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c2.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "gate-door",
+        "kind": "contour",
+        "description": "Glazed entrance door with a house-number plate beside the gate.",
+        "region": {
+          "x": 0.82,
+          "y": 0.67,
+          "width": 0.05,
+          "height": 0.13,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "gate-door.glazed"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c2.png",
+        "confidence": 0.8
+      },
+      {
+        "id": "art-panel",
+        "kind": "stain",
+        "description": "Red and blue art panel on the wall next to the entrance door.",
+        "region": {
+          "x": 0.87,
+          "y": 0.67,
+          "width": 0.03,
+          "height": 0.13,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "gate-art.stripes"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c2.png",
+        "confidence": 0.7
+      },
+      {
+        "id": "planters",
+        "kind": "contour",
+        "description": "Black box planters with green shrubs along the front.",
+        "region": {
+          "x": 0.05,
+          "y": 0.76,
+          "width": 0.83,
+          "height": 0.07,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "geometry",
+        "mapsTo": {
+          "type": "component.localFeatures",
+          "ref": "planter-1.shrub"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c1.png",
+        "confidence": 0.85
+      },
+      {
+        "id": "boardmarks",
+        "kind": "stain",
+        "description": "Board-marked concrete on the white bands: below sprite size, flat white.",
+        "region": {
+          "x": 0.1,
+          "y": 0.3,
+          "width": 0.8,
+          "height": 0.3,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "white.boardmarks"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r1c1.png",
+        "confidence": 0.6
+      },
+      {
+        "id": "shop-light",
+        "kind": "stain",
+        "description": "Warm interior light behind the dark ground-storey glazing.",
+        "region": {
+          "x": 0.25,
+          "y": 0.68,
+          "width": 0.42,
+          "height": 0.08,
+          "units": "normalized"
+        },
+        "scale": "micro",
+        "affects": "material",
+        "mapsTo": {
+          "type": "material.localOverrides",
+          "ref": "shop-glass.warm-light"
+        },
+        "evidenceRef": "/Users/gustavkrowicki/portfolio-valtech/art/img2threejs/valtech-office/detail-zones/zone-r2c1.png",
+        "confidence": 0.7
+      }
+    ]
+  },
+  "authoringInstruction": "Open each zone crop under zonesDir and replace every detail stub's kind, description, scale, affects, mapsTo, and confidence with what is actually observed. Add more detail entries per zone if a single zone contains multiple distinct marks; do not leave stubs unfilled or unlinked (mapsTo must reference a real component.localFeatures or material.localOverrides entry)."
+}

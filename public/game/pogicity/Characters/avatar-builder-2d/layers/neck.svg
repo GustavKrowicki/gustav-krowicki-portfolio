@@ -1,0 +1,2 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 1010"><defs><filter id="soft" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="4"/></filter></defs><path d="M 178 226 L 222 226 L 224 266 Q 200 280 176 266 Z" fill="#e6b89a" stroke="#9a6551" stroke-width="3" stroke-linejoin="round" />
+<path d="M 178 230 Q 200 250 222 230 L 222 246 Q 200 262 178 246 Z" fill="#c9937a" opacity="1.0" filter="url(#soft)"/></svg>

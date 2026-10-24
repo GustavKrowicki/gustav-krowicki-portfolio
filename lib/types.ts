@@ -21,38 +21,9 @@ export interface Project {
   tags: string[];
   featured: boolean;
   coverImage: string;
+  /** Where a cropped cover keeps its focus (CSS object-position), so the logo stays inside the card's box */
+  coverPosition?: string;
   link?: string;
   order: number;
   city?: CityBuildingConfig;
-}
-
-export interface InterestNode {
-  id: string;
-  label: string;
-  description: string;
-  category?: 'design' | 'business' | 'tech' | 'research';
-  x?: number;
-  y?: number;
-}
-
-export interface InterestConnection {
-  source: string;
-  target: string;
-  strength?: number;
-}
-
-export interface WorkflowStep {
-  id: string;
-  title: string;
-  description: string;
-  icon?: string;
-}
-
-export interface Challenge {
-  id: string;
-  category: string;
-  title: string;
-  description: string;
-  solution?: string;
-  color?: string;
 }
